@@ -15,6 +15,6 @@
   },
   "dependencies": {
     "debug": "^2.6.3",
-    "node-home-assistant": "^0.0.2"
+    "node-home-assistant": "0.0.3"
   }
 }

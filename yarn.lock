@@ -8,12 +8,6 @@ axios@^0.15.3:
   dependencies:
     follow-redirects "1.0.0"
 
-axios@^0.16.0:
-  version "0.16.0"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.16.0.tgz#6ed9771d815f429e7510f2838262957c4953d3b6"
-  dependencies:
-    follow-redirects "1.0.0"
-
 debug@^2.2.0, debug@^2.6.3:
   version "2.6.3"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.3.tgz#0f7eb8c30965ec08c72accfa0130c8b79984141d"
@@ -36,9 +30,9 @@ ms@0.7.2:
   version "0.7.2"
   resolved "https://registry.yarnpkg.com/ms/-/ms-0.7.2.tgz#ae25cf2512b3885a1d95d7f037868d8431124765"
 
-node-home-assistant@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/node-home-assistant/-/node-home-assistant-0.0.2.tgz#b7da535049dde137022fdf72d6fa6c5e499c9d56"
+node-home-assistant@0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/node-home-assistant/-/node-home-assistant-0.0.3.tgz#f33afe2bd48203506b02ace1617ea540ae625448"
   dependencies:
     axios "^0.15.3"
     debug "^2.6.3"
