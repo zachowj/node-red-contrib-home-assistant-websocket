@@ -1,0 +1,60 @@
+<script type="text/x-red" data-template-name="service-call">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <!--<div class="form-tips"><b>Tip:</b> This is here to help.</div>-->
+
+    <div class="form-row">
+        <label for="node-input-server"><i class="fa fa-dot-circle-o"></i> Server</label>
+        <input type="text" id="node-input-server" />
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-servicedomain"><i class="fa fa-dot-circle-o"></i> Domain</label>
+        <input type="text" id="node-input-servicedomain" placeholder="light"/>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-service"><i class="fa fa-dot-circle-o"></i> Service</label>
+        <input type="text" id="node-input-service" placeholder="toggle"/>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-data"><i class="fa fa-dot-circle-o"></i> Data</label>
+        <input type="text" id="node-input-data" placeholder="{ entity_id: light.livingroom }"/>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="service-call">
+    <p>Call a Home Assistant service</p>
+    <p>Set the node's domain, service and data defaults or allow the incoming message to define them, or both.</p>
+    <p>If the incoming message has a `payload` property with `domain`, `service` or `data`
+        set it will override any defaults(if any) set within the node configuration.</p>
+    <p>All other `msg.payload` properties are ignored</p>
+    <p>Output is the server response from Home Assistant if needed</p>
+    <p> NOTE: Service and Domain have to be set, either by node config or incoming message for a service call to be made</p>
+</script>
+
+<script type="text/javascript">
+    // TODO: Look for autocomplete modules to allow a select drop down (with autocomplete)
+    // the options would be populated by the api query of services on the server node
+
+    RED.nodes.registerType('service-call', {
+        category: 'home_assistant',
+        color:    '#52C0F2',
+        // NOTE: 'domain' seems to be a nodered 'reserved' word as we get an error about enter not being a function
+        // when trying to be used as a default below.
+        defaults: {
+            name:          { value: '' },
+            server:        { value: '', type: 'server' },
+            servicedomain: { value: '' },
+            service:       { value: '' },
+            data:          { value: '' }
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "arrow-out.png",
+        label: function() { return this.name || 'call service'; }
+    });
+</script>

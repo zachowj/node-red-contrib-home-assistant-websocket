@@ -1,0 +1,91 @@
+<script type="text/javascript">
+    // TODO: Add an option to only output changes in state (ie, state on, state on === no msg emitted)
+    // TODO: Add a node that passes state messages along, and if X time passes without state changing send event?
+    RED.nodes.registerType('events-state-changed', {
+        category: 'home_assistant',
+        color:    '#038FC7',
+        defaults: {
+            name:   { value: '' },
+            // TODO: Set as credentials http://nodered.org/docs/creating-nodes/credentials
+            server:            { value: '', type:                  'server' },
+            eventtypefilter:   { value: 'state_changed', required: true },
+            entityidfilter:    { value: '', },
+            entityidblacklist: { value: 'sensor.time,sensor.date__time,dark_sky,sun.sun' },
+            skipnochange:      { value: true }
+        },
+        inputs: 0,
+        outputs: 1,
+        icon: "arrow-in.png",
+        label: function() { return (this.name) ? `Events: ${this.name}` : `Events: ${this.eventtypefilter}:${this.eventidfilter || 'all'}`},
+        oneditprepare: function() {
+            // TODO: How to get list of events that were fetched from HA
+            // into the UI side? Server is id below
+            // Below doesn't work on UI side (getNode doesn't exist);
+            // const theServer = RED.nodes.getNode(server);
+            // const availableEventTypes = this.server.eventTypes;
+            // debugger;
+            // console.log('eventtypes');
+            // console.log(availableEventTypes);
+            // $('#node-input-eventtypefilter')
+        }
+    });
+</script>
+
+
+<script type="text/x-red" data-template-name="events-state-changed">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <!--<div class="form-tips"><b>Tip:</b> This is here to help.</div>-->
+
+    <div class="form-row">
+        <label for="node-input-server"><i class="fa fa-dot-circle-o"></i> Server</label>
+        <input type="text" id="node-input-server" />
+    </div>
+
+     <div class="form-row">
+        <label for="node-input-eventtypefilter"><i class="fa fa-tag"></i> EventType Filter</label>
+        <select type="text" id="node-input-eventtypefilter" style="width:72%;" id="node-input-eventtypefilter">
+            <option selected value="state_changed">state_changed</option>
+            <option value="all">all</option>
+        </select>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-entityidfilter"><i class="fa fa-dot-circle-o"></i> EntityID Filter</label>
+        <input type="text" id="node-input-entityidfilter" placeholder="binary_sensor"/>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-entityidblacklist"><i class="fa fa-dot-circle-o"></i> EntityID Blacklist</label>
+        <input type="text" id="node-input-entityidblacklist" placeholder="sensor.time,sensor.date__time,dark_sky,sun.sun" />
+    </div>
+
+    <div class="form-row">
+        <label>&nbsp;</label>
+        <input type="checkbox" id="node-input-skipnochange" style="display: inline-block; width: auto; vertical-align: top;">
+        <label for="node-input-skipnochange" style="width: 80%;"> Exclude Duplicate States</label>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="events-state-changed">
+    <p>Outputs events received from the home assistant server.</p>
+    <p>NOTE: The filters are simple substring matches, you can add multiple by comma seperated list</p>
+    <br/>
+    <p>Event Type Filter:    Only events that subtring match event_type field</p>
+    <p>Entity ID Filter:     Only events that subtring match entity_id field</p>
+    <p>Entity ID Blacklist:  Exclude events that substring match entity_id</p>
+    <p>By default will exclude events if (oldstate === newstate)</p>
+
+    <p>The outputted message object contains the following data, underscored values are straight from home assistant</p>
+    <table style="width: 100%;" border="1" cellpadding="10">
+        <tbody>
+            <tr> <td>event_type</td> <td>event_type</td>                               </tr>
+            <tr> <td>entity_id</td>  <td>entity_id || null</td>                        </tr>
+            <tr> <td>topic</td>      <td>event_type:entity_id || event_type</td>       </tr>
+            <tr> <td>payload</td>    <td>event.new_state.state || original event</td>  </tr>
+            <tr> <td>event</td>      <td>Original event</td>                           </tr>
+        </tbody>
+    </table>
+</script>
