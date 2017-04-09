@@ -25,10 +25,10 @@ const incomingEvents = {
         }
         return shouldSkip;
     },
-    shouldExcludeEvent: function shouldExcludeEvent(entityId, { entityIdFilter, entityIdBlacklist }) {
+    shouldIncludeEvent: function shouldIncludeEvent(entityId, { entityIdFilter, entityIdBlacklist }) {
         const findings = {};
         // If include filter is null then set to found
-        if (!entityIdFilter) { findings.includeFound = true; }
+        if (!entityIdFilter) { findings.included = true; }
 
         if (entityIdFilter && entityIdFilter.length) {
             const found = entityIdFilter.filter(iStr => (entityId.indexOf(iStr) >= 0));
@@ -36,14 +36,14 @@ const incomingEvents = {
         }
 
         // If include filter is null then set to found
-        if (!entityIdBlacklist) { findings.excludeFound = false; }
+        if (!entityIdBlacklist) { findings.excluded = false; }
 
         if (entityIdBlacklist && entityIdBlacklist.length) {
             const found = entityIdBlacklist.filter(blStr => (entityId.indexOf(blStr) >= 0));
             findings.excluded =  (found.length > 0);
         }
 
-        return !findings.included && findings.excluded;
+        return findings.included && !findings.excluded;
     },
     /* eslint-disable consistent-return */
     onIncomingMessage: function onIncomingMessage(evt, node) {
@@ -64,11 +64,11 @@ const incomingEvents = {
         if (!node.settings.entityIdFilter && !node.settings.entityIdBlacklist) {
             node.send(msg);
         // If include or blacklist do not send if filtered
-        } else if (incomingEvents.shouldExcludeEvent(entity_id, node.settings)) {
-            debug('Skipping event due to include or blacklist filter');
+        } else if (incomingEvents.shouldIncludeEvent(entity_id, node.settings)) {
+            node.send(msg);
         // Sending because filter check passed
         } else {
-            node.send(msg);
+            debug('Skipping event due to include or blacklist filter');
         }
     }
 }
@@ -98,5 +98,5 @@ module.exports = function(RED) {
         }
     }
 
-    RED.nodes.registerType('events-state-changed', EventsStateChange);
+    RED.nodes.registerType('server-events', EventsStateChange);
 };

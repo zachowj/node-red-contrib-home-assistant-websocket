@@ -1,7 +1,7 @@
 <script type="text/javascript">
     // TODO: Add an option to only output changes in state (ie, state on, state on === no msg emitted)
     // TODO: Add a node that passes state messages along, and if X time passes without state changing send event?
-    RED.nodes.registerType('events-state-changed', {
+    RED.nodes.registerType('server-events', {
         category: 'home_assistant',
         color:    '#038FC7',
         defaults: {
@@ -16,7 +16,7 @@
         inputs: 0,
         outputs: 1,
         icon: "arrow-in.png",
-        label: function() { return (this.name) ? `Events: ${this.name}` : `Events: ${this.eventtypefilter}:${this.eventidfilter || 'all'}`},
+        label: function() { return (this.name) ? `HA Events: ${this.name}` : `HA Events: ${this.eventtypefilter}:${this.entityidfilter || 'all'}`},
         oneditprepare: function() {
             // TODO: How to get list of events that were fetched from HA
             // into the UI side? Server is id below
@@ -32,7 +32,7 @@
 </script>
 
 
-<script type="text/x-red" data-template-name="events-state-changed">
+<script type="text/x-red" data-template-name="server-events">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
@@ -59,17 +59,17 @@
 
     <div class="form-row">
         <label for="node-input-entityidblacklist"><i class="fa fa-dot-circle-o"></i> EntityID Blacklist</label>
-        <input type="text" id="node-input-entityidblacklist" placeholder="sensor.time,sensor.date__time,dark_sky,sun.sun" />
+        <input type="text" id="node-input-entityidblacklist" />
     </div>
 
     <div class="form-row">
         <label>&nbsp;</label>
         <input type="checkbox" id="node-input-skipnochange" style="display: inline-block; width: auto; vertical-align: top;">
-        <label for="node-input-skipnochange" style="width: 80%;"> Exclude Duplicate States</label>
+        <label for="node-input-skipnochange" style="width: 90%;"> Exclude Duplicate States</label>
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="events-state-changed">
+<script type="text/x-red" data-help-name="server-events">
     <p>Outputs events received from the home assistant server.</p>
     <p>NOTE: The filters are simple substring matches, you can add multiple by comma seperated list</p>
     <br/>
