@@ -12,7 +12,12 @@
 
     <div class="form-row">
         <label for="node-input-entityid"><i class="fa fa-dot-circle-o"></i> Entity ID</label>
-        <input type="text" id="node-input-entityid" placeholder="light"/>
+        <input type="text" id="node-input-entityid" placeholder="light.livingroom_light"/>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-haltif"><i class="fa fa-dot-circle-o"></i> Halt If</label>
+        <input type="text" id="node-input-haltif" placeholder="off"/>
     </div>
 
 </script>
@@ -22,6 +27,9 @@
     <p>Uses the nodes config entity id setting, if set, and outputs the current state of that entity</p>
     <p>If the incoming message has a `payload` property with `entity_id` set it will override the config value and output that entities state</p>
     <p>All other `msg.payload` properties are ignored</p>
+    <p>The 'Halt If' value will stop the current flow if the entities state === this value.
+        For instance, you could get the state of an 'input_boolean' switch from home assistant and set 'Half If' to "off" which would cause
+        the flow execution to stop unless that input_boolean was 'turned on' within home assistant</p>
     <p> NOTE: Entity ID must be set, either through config or from incoming message, if not set then nothing will be outputed</p>
 </script>
 
@@ -32,7 +40,8 @@
         defaults: {
             name:          { value: '' },
             server:        { value: '', type: 'server' },
-            entityid:      { value: '' }
+            entityid:      { value: '' },
+            haltif:        { value: '' }
         },
         inputs: 1,
         outputs: 1,
