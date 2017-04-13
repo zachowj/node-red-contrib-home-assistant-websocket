@@ -25,6 +25,8 @@ module.exports = function(RED) {
             node.availableServices = ha.availableServices;
             node.availableEvents   = ha.availableEvents;
         }
+
+
     }
     RED.nodes.registerType('server', ConfigServer);
 }

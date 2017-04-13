@@ -20,9 +20,8 @@ const incomingEvents = {
         if (!node.settings.skipNoChange) { return false; }
         if (!e.event || !e.event.old_state || !e.event.new_state) { return false; }
         const shouldSkip = (e.event.old_state.state === e.event.new_state.state);
-        if (shouldSkip) {
-            debug('Skipping event, state unchanged new vs. old');
-        }
+
+        if (shouldSkip) { debug('Skipping event, state unchanged new vs. old'); }
         return shouldSkip;
     },
     shouldIncludeEvent: function shouldIncludeEvent(entityId, { entityIdFilter, entityIdBlacklist }) {

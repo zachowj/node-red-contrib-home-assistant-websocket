@@ -1,0 +1,42 @@
+<script type="text/x-red" data-template-name="current-state">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <!--<div class="form-tips"><b>Tip:</b> This is here to help.</div>-->
+
+    <div class="form-row">
+        <label for="node-input-server"><i class="fa fa-dot-circle-o"></i> Server</label>
+        <input type="text" id="node-input-server" />
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-entityid"><i class="fa fa-dot-circle-o"></i> Entity ID</label>
+        <input type="text" id="node-input-entityid" placeholder="light"/>
+    </div>
+
+</script>
+
+<script type="text/x-red" data-help-name="current-state">
+    <p>Current state of an Entity</p>
+    <p>Uses the nodes config entity id setting, if set, and outputs the current state of that entity</p>
+    <p>If the incoming message has a `payload` property with `entity_id` set it will override the config value and output that entities state</p>
+    <p>All other `msg.payload` properties are ignored</p>
+    <p> NOTE: Entity ID must be set, either through config or from incoming message, if not set then nothing will be outputed</p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('current-state', {
+        category: 'home_assistant',
+        color:    '#52C0F2',
+        defaults: {
+            name:          { value: '' },
+            server:        { value: '', type: 'server' },
+            entityid:      { value: '' }
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "arrow-out.png",
+        label: function() { return this.name ? `Get State: ${this.name}` : `Get State`; }
+    });
+</script>
