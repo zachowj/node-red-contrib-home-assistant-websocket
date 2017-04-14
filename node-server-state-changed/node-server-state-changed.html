@@ -1,0 +1,64 @@
+<script type="text/javascript">
+    RED.nodes.registerType('server-state-changed', {
+        category: 'home_assistant',
+        color:    '#038FC7',
+        defaults: {
+            name:              { value: '' },
+            server:            { value: '', type: 'server' },
+            entityidfilter:    { value: '' },
+            entityidblacklist: { value: 'sensor.time,sensor.date__time,dark_sky,sun.sun' },
+            skipifstate:       { value: '' }
+        },
+        inputs: 0,
+        outputs: 1,
+        icon: "arrow-in.png",
+        label: function() { return (this.name) ? `HA State Changed: ${this.name}` : `HA State Changed: ${this.entityidfilter || 'all'}`}
+    });
+</script>
+
+
+<script type="text/x-red" data-template-name="server-state-changed">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-server"><i class="fa fa-dot-circle-o"></i> Server</label>
+        <input type="text" id="node-input-server" />
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-entityidfilter"><i class="fa fa-dot-circle-o"></i> EntityID Filter</label>
+        <input type="text" id="node-input-entityidfilter" placeholder="binary_sensor"/>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-entityidblacklist"><i class="fa fa-dot-circle-o"></i> EntityID Blacklist</label>
+        <input type="text" id="node-input-entityidblacklist" />
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-skipifstate"><i class="fa fa-dot-circle-o"></i> Skip If State</label>
+        <input type="text" id="node-input-skipifstate" />
+    </div>
+
+</script>
+
+<script type="text/x-red" data-help-name="server-state-changed">
+    <p>Outputs 'state_changed' event types sent from Home Assistant</p>
+    <p>NOTE: The filters are simple substring matches, you can add multiple by comma seperated list and each entry will be matched separately</p>
+    <br/>
+    <p>Entity ID Filter:     Only state changes that subtring match entity_id field</p>
+    <p>Entity ID Blacklist:  Exclude state changes that substring match entity_id</p>
+    <p>Skip If State:        If the new_state === this setting then do -not- send the event</p>
+
+    <p>The outputted message object contains the following data, underscored values are straight from home assistant</p>
+    <table style="width: 100%;" border="1" cellpadding="10">
+        <tbody>
+            <tr> <td>topic</td>      <td>entity_id</td>             </tr>
+            <tr> <td>payload</td>    <td>event.new_state.state</td> </tr>
+            <tr> <td>event</td>      <td>original event object</td> </tr>
+        </tbody>
+    </table>
+</script>

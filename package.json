@@ -8,10 +8,11 @@
     ],
     "node-red": {
         "nodes": {
-            "server":        "config-server/config-server.js",
-            "server-events": "node-server-events/node-server-events.js",
-            "service-call":  "node-service-call/node-service-call.js",
-            "current-state": "node-current-state/node-current-state.js"
+            "server":               "config-server/config-server.js",
+            "server-events":        "node-server-events/node-server-events.js",
+            "server-state-changed": "node-server-state-changed/node-server-state-changed.js",
+            "service-call":         "node-service-call/node-service-call.js",
+            "current-state":        "node-current-state/node-current-state.js"
         }
     },
     "dependencies": {
