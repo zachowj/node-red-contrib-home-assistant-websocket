@@ -1,18 +1,51 @@
 <script type="text/javascript">
     RED.nodes.registerType('current-state', {
-        category: 'home_assistant',
-        color:    '#038FC7',
-        defaults: {
+        category:     'home_assistant',
+        color:        '#038FC7',
+        inputs:       1,
+        outputs:      1,
+        icon:         "arrow-top-right.png",
+        paletteLabel: 'current state',
+        label:        function() { return this.name || `current_state: ${this.entity_id}`; },
+        defaults:     {
             name:          { value: '' },
             server:        { value: '', type: 'server' },
-            entityid:      { value: '' },
-            haltif:        { value: '' }
+            halt_if:       { value: '' },
+            entity_id:     {
+                value:    '',
+                required: true,
+                validate: function (v) {
+                    // TODO: One page load, if already configured with invalid entry it will not be
+                    // picked up as invalid due to async load of this.availableEntities.
+                    if (this.availableEntities) { return (this.availableEntities.indexOf(v) >= 0) };
+                    return true;
+                }
+            }
         },
-        inputs: 1,
-        outputs: 1,
-        icon: "arrow-top-right.png",
-        paletteLabel: 'current state',
-        label: function() { return this.name || `current_state:${this.entity_id}`; }
+        oneditprepare: function () {
+            const $entityIdField = $('#entity_id');
+            $entityIdField.val(this.entity_id);
+
+            $.get('/homeassistant/entities')
+                .done((entities) => {
+                    this.availableEntities = JSON.parse(entities);
+                    $entityIdField.autocomplete({
+                        source:   this.availableEntities,
+                        disabled: false,
+                        change:   (evt,ui) => {
+                            const validSelection = (this.availableEntities.indexOf($(evt.target).val()) > -1);
+                            if (validSelection) { $(evt.target).removeClass('input-error'); }
+                            else { $(evt.target).addClass('input-error'); }
+                        }
+                    });
+
+                    const validSelection = (this.availableEntities.indexOf(this.entity_id) > -1);
+                    if (validSelection) { $entityIdField.removeClass('input-error'); }
+                    else { $entityIdField.addClass('input-error'); }
+                })
+                .fail((err) => RED.notify(err.responseText, 'error'));
+        },
+        oneditsave: function() { this.entity_id = $("#entity_id").val(); }
     });
 </script>
 
@@ -23,29 +56,57 @@
     </div>
 
     <div class="form-row">
-        <label for="node-input-server"><i class="fa fa-dot-circle-o"></i> Server</label>
+        <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
         <input type="text" id="node-input-server" />
     </div>
 
     <div class="form-row">
-        <label for="node-input-entityid"><i class="fa fa-dot-circle-o"></i> Entity ID</label>
-        <input type="text" id="node-input-entityid" placeholder="light.livingroom_light"/>
+        <label for="entity_id"><i class="fa fa-cube"></i> Entity ID</label>
+        <input type="text" id="entity_id">
     </div>
 
     <div class="form-row">
-        <label for="node-input-haltif"><i class="fa fa-dot-circle-o"></i> Halt If</label>
-        <input type="text" id="node-input-haltif" placeholder="off"/>
+        <label for="node-input-halt_if"><i class="fa fa-hand-paper-o"></i> Halt If</label>
+        <input type="text" id="node-input-halt_if" placeholder="off"/>
     </div>
 
 </script>
 
 <script type="text/x-red" data-help-name="current-state">
-    <p>Current state of an Entity</p>
-    <p>Uses the nodes config entity id setting, if set, and outputs the current state of that entity</p>
-    <p>If the incoming message has a `payload` property with `entity_id` set it will override the config value and output that entities state</p>
-    <p>All other `msg.payload` properties are ignored</p>
-    <p>The 'Halt If' value will stop the current flow if the entities state === this value.
-        For instance, you could get the state of an 'input_boolean' switch from home assistant and set 'Half If' to "off" which would cause
-        the flow execution to stop unless that input_boolean was 'turned on' within home assistant</p>
-    <p> NOTE: Entity ID must be set, either through config or from incoming message, if not set then nothing will be outputed</p>
+    <p>Get the current state of an Entity</p>
+
+    <h3>Inputs</h3>
+        <dl class="message-properties">
+            <dt class="optional">payload.entity_id <span class="property-type">string</span> </dt>
+            <dd> Overrides or sets the entity_id for which the current state is being fetched </dd>
+        </dl>
+
+    <h3>Outputs</h3>
+        <dl class="message-properties">
+            <dt>payload <span class="property-type">object</span></dt>
+            <dd>Latest current state object received from home assistant</dd>
+
+            <dt>payload.state <span class="property-type">string</span></dt>
+            <dd>Main attribute state value, examples: 'on', 'off', 'home', 'open', 'closed', etc...</dd>
+
+            <dt>payload.entity_id <span class="property-type">string</span></dt>
+            <dd>The entity to which this state belongs</dd>
+
+            <dt>payload.attributes <span class="property-type">object</span></dt>
+            <dd>Supported attributes of state set by homeassistant</dd>
+
+            <dt>payload.last_changed <span class="property-type">string</span></dt>
+            <dd>ISO Date string of last time entity state changed</dd>
+
+            <dt>payload.last_updated <span class="property-type">string</span></dt>
+            <dd>ISO Date string of last time entity state was updated</dd>
+        </dl>
+
+    <h3>Details</h3>
+        <p>Returns the current state of an entity. Useful for using as conditional logic to automation flows.</p>
+
+    <h3>References</h3>
+        <ul>
+            <li><a href="https://home-assistant.io/docs/configuration/state_object/">Home Assistant State Objects</a></li>
+        </ul>
 </script>

@@ -1,27 +1,25 @@
 'use strict';
-const debug = require('debug')('ha-eventer:current-state');
+const debug = require('debug')('home-assistant:current-state');
 
 const _int = {
-    getSettings: function(config) {
-        return {
-            entity_id: config.entityid,
-            haltIf:    config.haltif
-        };
+    getSettings: function(config, node) {
+        node.entity_id = config.entity_id;
+        node.halt_if   = config.halt_if;
     },
     onInput: function(msg, node) {
-        const entityId = (msg.payload && msg.payload.entity_id)
+        const entity_id = (msg.payload && msg.payload.entity_id)
             ? msg.payload.entity_id
-            : node.settings.entity_id;
+            : node.entity_id;
 
-        if (!entityId) {
-            node.warn('Entity ID not set, no state to output');
+        if (!entity_id) {
+            node.warn('Entity ID not set, cannot get current state');
         } else {
-            const currentState = node.server.homeAssistant.states[entityId];
+            const currentState = node.server.homeAssistant.states[entity_id];
             if (!currentState) {
-                node.warn(`State not found for entity_id: ${entityId}`);
+                node.warn(`State not found for entity_id: ${entity_id}`);
             // Stop the flow execution if 'halt if' setting is set and true
-            } else if (node.settings.haltIf) {
-                if (currentState.state === node.settings.haltIf) { node.log('Halting flow, current state === haltIf setting'); }
+            } else if (node.halt_if) {
+                if (currentState.state === node.halt_if) { debug(`Halting flow, current state of ${entity_id} === ${node.halt_if}`); }
                 else { node.send({ payload: currentState }); }
             // Else just send on
             } else {
@@ -36,8 +34,8 @@ module.exports = function(RED) {
     function CurrentState(config) {
         const node = this;
         RED.nodes.createNode(this, config);
-        node.server   = RED.nodes.getNode(config.server);
-        node.settings = _int.getSettings(config);
+        node.server = RED.nodes.getNode(config.server);
+        _int.getSettings(config, node);
 
         node.on('input', (msg) => _int.onInput(msg, node));
     }

@@ -1,5 +1,5 @@
 'use strict';
-const debug = require('debug')('ha-eventer:server-state-changed');
+const debug = require('debug')('home-assistant:server-state-changed');
 
 const incomingEvents = {
     getSettings: function getSettings(config) {

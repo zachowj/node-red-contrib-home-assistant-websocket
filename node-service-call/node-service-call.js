@@ -1,5 +1,5 @@
 'use strict';
-const debug = require('debug')('ha-eventer:service-call');
+const debug = require('debug')('home-assistant:service-call');
 
 const _int = {
     getSettings: function(config) {
