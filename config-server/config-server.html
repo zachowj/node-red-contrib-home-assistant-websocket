@@ -2,28 +2,29 @@
     RED.nodes.registerType('server', {
         category: 'config',
         defaults: {
-            name: { value: '', required: false },
+            name: { value: 'Home Assistant', required: false },
             // TODO: Set as credentials http://nodered.org/docs/creating-nodes/credentials
             url:  { value: '', required: true  },
             pass: { value: '', required: false }
         },
         icon: "home.png",
-        label: function() { return this.name || this.url || 'Home Assistant'; },
-        oneditprepare: function() {
-            console.dir(this);
-        }
+        label: function() { return this.name || this.url }
     });
 </script>
 
-
 <script type="text/x-red" data-template-name="server">
     <div class="form-row">
-        <label for="node-config-input-url"><i class="fa fa-dot-circle-o"></i> Base URL</label>
+        <label for="node-config-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-config-input-name" />
+    </div>
+
+    <div class="form-row">
+        <label for="node-config-input-url"><i class="fa fa-link"></i> Base URL</label>
         <input type="text" id="node-config-input-url" placeholder="http://localhost:8123" />
     </div>
 
     <div class="form-row">
-        <label for="node-config-input-pass"><i class="fa fa-dot-circle-o"></i> API Pass</label>
+        <label for="node-config-input-pass"><i class="fa fa-user-secret"></i> API Pass</label>
         <input type="text" id="node-config-input-pass" placeholder="your-super-secret-password" />
     </div>
 </script>
