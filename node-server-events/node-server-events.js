@@ -3,10 +3,7 @@ const debug = require('debug')('ha-eventer:server-events');
 
 const incomingEvents = {
     getSettings: function getSettings(config) {
-        const settings = {
-            eventTypeFilter:   config.eventtypefilter
-        };
-
+        const settings = {}
         return settings;
     },
     setStatus: function setStatus(isConnected, node) {
@@ -17,7 +14,7 @@ const incomingEvents = {
 
 
 module.exports = function(RED) {
-    function EventsStateChange(config) {
+    function EventsAll(config) {
         RED.nodes.createNode(this, config);
         const node = this;
         node.settings = incomingEvents.getSettings(config);
@@ -30,9 +27,10 @@ module.exports = function(RED) {
             if (node.server.connected) {  incomingEvents.setStatus(true, node); }
             const eventsClient = node.server.events;
 
-            eventsClient.on(`ha_events:${node.settings.eventTypeFilter}`, (evt) => {
+            eventsClient.on('ha_events:all', (evt) => {
                 node.send({ event_type: evt.event_type, topic: evt.event_type, payload: evt});
             });
+
             eventsClient.on('ha_events:close', () => incomingEvents.setStatus(false, node));
             eventsClient.on('ha_events:open', () => incomingEvents.setStatus(true, node));
             eventsClient.on('ha_events:error', (err) => {
@@ -42,5 +40,5 @@ module.exports = function(RED) {
         }
     }
 
-    RED.nodes.registerType('server-events', EventsStateChange);
+    RED.nodes.registerType('server-events', EventsAll);
 };

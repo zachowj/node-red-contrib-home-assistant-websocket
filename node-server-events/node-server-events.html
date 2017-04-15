@@ -4,24 +4,13 @@
         color:    '#038FC7',
         defaults: {
             name:   { value: '' },
-            server:            { value: '', type:                  'server' },
-            eventtypefilter:   { value: 'all', required: true },
+            server:            { value: '', type:                  'server' }
         },
         inputs: 0,
         outputs: 1,
-        icon: "arrow-in.png",
-        label: function() { return (this.name) ? `HA Events: ${this.name}` : `HA Events: ${this.eventtypefilter}`},
-        oneditprepare: function() {
-            // TODO: How to get list of events that were fetched from HA
-            // into the UI side? Server is id below
-            // Below doesn't work on UI side (getNode doesn't exist);
-            // const theServer = RED.nodes.getNode(server);
-            // const availableEventTypes = this.server.eventTypes;
-            // debugger;
-            // console.log('eventtypes');
-            // console.log(availableEventTypes);
-            // $('#node-input-eventtypefilter')
-        }
+        icon: "arrow-right-bold.png",
+        paletteLabel: 'events: all',
+        label: function() { return this.name || `events_all: ${this.eventtypefilter}` }
     });
 </script>
 
@@ -36,21 +25,10 @@
         <label for="node-input-server"><i class="fa fa-dot-circle-o"></i> Server</label>
         <input type="text" id="node-input-server" />
     </div>
-
-     <div class="form-row">
-        <label for="node-input-eventtypefilter"><i class="fa fa-tag"></i> EventType Filter</label>
-        <select type="text" id="node-input-eventtypefilter" style="width:72%;" id="node-input-eventtypefilter">
-            <option selected value="all">all</option>
-            <option value="state_changed">state_changed</option>
-        </select>
-    </div>
 </script>
 
 <script type="text/x-red" data-help-name="server-events">
     <p>Outputs events received from the home assistant server.</p>
-    <p>NOTE: The filters are simple substring matches, you can add multiple by comma seperated list</p>
-    <br/>
-    <p>Event Type Filter:    Only events that subtring match event_type field</p>
 
     <p>The outputted message object contains the following data, underscored values are straight from home assistant</p>
     <table style="width: 100%;" border="1" cellpadding="10">

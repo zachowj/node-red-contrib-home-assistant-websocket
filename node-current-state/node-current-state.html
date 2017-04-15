@@ -1,3 +1,21 @@
+<script type="text/javascript">
+    RED.nodes.registerType('current-state', {
+        category: 'home_assistant',
+        color:    '#038FC7',
+        defaults: {
+            name:          { value: '' },
+            server:        { value: '', type: 'server' },
+            entityid:      { value: '' },
+            haltif:        { value: '' }
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "arrow-top-right.png",
+        paletteLabel: 'current state',
+        label: function() { return this.name || `current_state:${this.entity_id}`; }
+    });
+</script>
+
 <script type="text/x-red" data-template-name="current-state">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
@@ -30,21 +48,4 @@
         For instance, you could get the state of an 'input_boolean' switch from home assistant and set 'Half If' to "off" which would cause
         the flow execution to stop unless that input_boolean was 'turned on' within home assistant</p>
     <p> NOTE: Entity ID must be set, either through config or from incoming message, if not set then nothing will be outputed</p>
-</script>
-
-<script type="text/javascript">
-    RED.nodes.registerType('current-state', {
-        category: 'home_assistant',
-        color:    '#52C0F2',
-        defaults: {
-            name:          { value: '' },
-            server:        { value: '', type: 'server' },
-            entityid:      { value: '' },
-            haltif:        { value: '' }
-        },
-        inputs: 1,
-        outputs: 1,
-        icon: "arrow-out.png",
-        label: function() { return this.name ? `Get State: ${this.name}` : `Get State`; }
-    });
 </script>

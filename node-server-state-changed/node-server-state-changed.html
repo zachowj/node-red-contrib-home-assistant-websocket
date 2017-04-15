@@ -11,8 +11,9 @@
         },
         inputs: 0,
         outputs: 1,
-        icon: "arrow-in.png",
-        label: function() { return (this.name) ? `HA State Changed: ${this.name}` : `HA State Changed: ${this.entityidfilter || 'all'}`}
+        icon: "arrow-right-bold-hexagon-outline.png",
+        paletteLabel: 'events: state',
+        label: function() { return this.name || `state_changed: ${this.entityidfilter || 'all entities'}` }
     });
 </script>
 
