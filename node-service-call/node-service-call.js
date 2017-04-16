@@ -2,12 +2,11 @@
 const debug = require('debug')('home-assistant:service-call');
 
 const _int = {
-    getSettings: function(config) {
-        return {
-            domain:  config.servicedomain,
-            service: config.service,
-            data:    config.data
-        };
+    getSettings: function(config, node) {
+        node.service_domain = config.service_domain;
+        node.service        = config.service;
+        node.data           = config.data;
+        return node;
     },
     flashStatus: function (node) {
         let status = false;
@@ -19,7 +18,10 @@ const _int = {
         setTimeout(() => { clearInterval(flash); node.status({}); }, 1000);
     },
     onInput: function(msg, node) {
-        const { domain, service, data } = Object.assign({}, node.settings, msg.payload);
+        const p = msg.payload;
+        const domain  = p.domain || node.service_domain;
+        const service = p.service || node.service;
+        const data    = p.data ? Object.assign({}, node.data, p.data) : node.data;
 
         if (!domain || !service) {
             node.warn('Domain or Service not set, skipping call service');
@@ -27,8 +29,11 @@ const _int = {
             _int.flashStatus(node);
             debug(`Calling Service: ${domain}:${service} -- ${JSON.stringify(data)}`);
             node.server.api.callService(domain, service, data)
-                .then(res => node.send({ payload: { status: res.status, data: res.data } }))
-                .catch(err => node.error(err));
+                .catch(err => {
+                    node.warn('Error calling service, home assistant api error');
+                    node.warn(err);
+                    node.error(err);
+                });
         }
     }
 };
@@ -39,7 +44,7 @@ module.exports = function(RED) {
         const node = this;
         RED.nodes.createNode(this, config);
         node.server   = RED.nodes.getNode(config.server);
-        node.settings = _int.getSettings(config);
+        _int.getSettings(config, node);
 
         node.on('input', (msg) => _int.onInput(msg, node));
     }
