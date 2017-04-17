@@ -1,0 +1,121 @@
+<script type="text/javascript">
+    RED.nodes.registerType('current-state', {
+        category:     'home_assistant',
+        color:        '#038FC7',
+        inputs:       1,
+        outputs:      1,
+        icon:         "arrow-top-right.png",
+        paletteLabel: 'current state',
+        label:        function() { return this.name || `current_state: ${this.entity_id}`; },
+        defaults:     {
+            name:          { value: '' },
+            server:        { value: '', type: 'server' },
+            halt_if:       { value: '' },
+            entity_id:     {
+                value:    '',
+                required: true,
+                validate: function (v) {
+                    // TODO: One page load, if already configured with invalid entry it will not be
+                    // picked up as invalid due to async load of this.availableEntities.
+                    if (this.availableEntities) { return (this.availableEntities.indexOf(v) >= 0) };
+                    return true;
+                }
+            }
+        },
+        oneditprepare: function () {
+            // Set current value to input
+            const $entityIdField = $('#entity_id');
+            $entityIdField.val(this.entity_id);
+
+            // Check that proper config is set
+            const config = RED.nodes.node($('#node-input-server').val());
+            const isConfigValid = (config && config.valid);
+            // TODO: Doesn't seem to be working
+            if (!isConfigValid) { $entityIdField.addClass('disabled'); }
+            else { $entityIdField.removeClass('disabled'); }
+
+            $.get('/homeassistant/entities')
+                .done((entities) => {
+                    this.availableEntities = JSON.parse(entities);
+
+                    $entityIdField.autocomplete({
+                        source:   this.availableEntities,
+                        minLength: 0,
+                        change:   (evt,ui) => {
+                            const validSelection = (this.availableEntities.indexOf($(evt.target).val()) > -1);
+                            if (validSelection) { $(evt.target).removeClass('input-error'); }
+                            else { $(evt.target).addClass('input-error'); }
+                        }
+                    });
+
+                    const validSelection = (this.availableEntities.indexOf(this.entity_id) > -1);
+                    if (validSelection) { $entityIdField.removeClass('input-error'); }
+                    else { $entityIdField.addClass('input-error'); }
+                })
+                .fail((err) => RED.notify(err.responseText, 'error'));
+        },
+        oneditsave: function() { this.entity_id = $("#entity_id").val(); }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="current-state">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
+        <input type="text" id="node-input-server" />
+    </div>
+
+    <div class="form-row">
+        <label for="entity_id"><i class="fa fa-cube"></i> Entity ID</label>
+        <input type="text" id="entity_id">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-halt_if"><i class="fa fa-hand-paper-o"></i> Halt If</label>
+        <input type="text" id="node-input-halt_if" placeholder="off"/>
+    </div>
+
+</script>
+
+<script type="text/x-red" data-help-name="current-state">
+    <p>Get the current state of an Entity</p>
+
+    <h3>Inputs</h3>
+        <dl class="message-properties">
+            <dt class="optional">payload.entity_id <span class="property-type">string</span> </dt>
+            <dd> Overrides or sets the entity_id for which the current state is being fetched </dd>
+        </dl>
+
+    <h3>Outputs</h3>
+        <dl class="message-properties">
+            <dt>payload <span class="property-type">object</span></dt>
+            <dd>Latest current state object received from home assistant</dd>
+
+            <dt>payload.state <span class="property-type">string</span></dt>
+            <dd>Main attribute state value, examples: 'on', 'off', 'home', 'open', 'closed', etc...</dd>
+
+            <dt>payload.entity_id <span class="property-type">string</span></dt>
+            <dd>The entity to which this state belongs</dd>
+
+            <dt>payload.attributes <span class="property-type">object</span></dt>
+            <dd>Supported attributes of state set by homeassistant</dd>
+
+            <dt>payload.last_changed <span class="property-type">string</span></dt>
+            <dd>ISO Date string of last time entity state changed</dd>
+
+            <dt>payload.last_updated <span class="property-type">string</span></dt>
+            <dd>ISO Date string of last time entity state was updated</dd>
+        </dl>
+
+    <h3>Details</h3>
+        <p>Returns the current state of an entity. Useful for using as conditional logic to automation flows.</p>
+
+    <h3>References</h3>
+        <ul>
+            <li><a href="https://home-assistant.io/docs/configuration/state_object/">Home Assistant State Objects</a></li>
+        </ul>
+</script>

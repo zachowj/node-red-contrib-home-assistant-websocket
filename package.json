@@ -1,16 +1,28 @@
 {
   "name": "node-red-contrib-home-assistant",
-  "version": "0.0.3",
+  "description": "node-red nodes to visually construct home automation with home assistant",
+  "version": "0.1.2",
+  "homepage": "https://github.com/AYapejian/node-red-contrib-home-assistant",
+  "bugs": {
+    "url": "https://github.com/AYapejian/node-red-contrib-home-assistant/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AYapejian/node-red-contrib-home-assistant"
+  },
   "license": "MIT",
   "keywords": [
     "node-red",
-    "home-assistant"
+    "home-assistant",
+    "home automation"
   ],
   "node-red": {
     "nodes": {
-      "server": "server/server.js",
-      "server-events": "server-events/server-events.js",
-      "service-call": "service-call/service-call.js"
+      "server": "config-server/config-server.js",
+      "server-events": "node-server-events/node-server-events.js",
+      "server-state-changed": "node-server-state-changed/node-server-state-changed.js",
+      "service-call": "node-service-call/node-service-call.js",
+      "current-state": "node-current-state/node-current-state.js"
     }
   },
   "dependencies": {
