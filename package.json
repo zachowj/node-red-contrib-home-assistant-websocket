@@ -1,14 +1,14 @@
 {
   "name": "node-red-contrib-home-assistant",
   "description": "node-red nodes to visually construct home automation with home assistant",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "homepage": "https://github.com/AYapejian/node-red-contrib-home-assistant",
   "bugs": {
-      "url": "https://github.com/AYapejian/node-red-contrib-home-assistant/issues"
+    "url": "https://github.com/AYapejian/node-red-contrib-home-assistant/issues"
   },
   "repository": {
-      "type": "git",
-      "url": "https://github.com/AYapejian/node-red-contrib-home-assistant"
+    "type": "git",
+    "url": "https://github.com/AYapejian/node-red-contrib-home-assistant"
   },
   "license": "MIT",
   "keywords": [
