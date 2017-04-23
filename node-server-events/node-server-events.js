@@ -22,10 +22,12 @@ module.exports = function(RED) {
         node.server = RED.nodes.getNode(config.server);
         incomingEvents.setStatus(false, node);
 
-        // If the eventsource was setup start listening for events
+        // If the event source was setup start listening for events
         if (node.server) {
             if (node.server.connected) {  incomingEvents.setStatus(true, node); }
             const eventsClient = node.server.events;
+
+
 
             eventsClient.on('ha_events:all', (evt) => {
                 node.send({ event_type: evt.event_type, topic: evt.event_type, payload: evt});

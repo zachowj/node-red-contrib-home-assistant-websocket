@@ -68,6 +68,12 @@ const incomingEvents = {
         } else {
             debug('Skipping event due to include or blacklist filter');
         }
+    },
+    handlers: {
+        onStateChanged: (evt) => incomingEvents.onIncomingMessage(evt, incomingEvents.node),
+        onClose:        ()    => incomingEvents.setStatus(false, incomingEvents.node),
+        onOpen:         ()    => incomingEvents.setStatus(true, incomingEvents.node),
+        onError:        (err) => incomingEvents.setStatus(false, incomingEvents.node)
     }
 }
 
@@ -81,21 +87,26 @@ module.exports = function(RED) {
 
         node.server = RED.nodes.getNode(config.server);
         incomingEvents.setStatus(false, node);
+        incomingEvents.node = node;
 
-        // If the eventsource was setup start listening for events
+        // If the event source was setup start listening for events
         if (node.server) {
             if (node.server.connected) {  incomingEvents.setStatus(true, node); }
             const eventsClient = node.server.events;
 
-            eventsClient.on('ha_events:state_changed', (evt) => incomingEvents.onIncomingMessage(evt, node));
-            eventsClient.on('ha_events:close', () => incomingEvents.setStatus(false, node));
-            eventsClient.on('ha_events:open', () => incomingEvents.setStatus(true, node));
-            eventsClient.on('ha_events:error', (err) => {
-                incomingEvents.setStatus(false, node);
-                node.warn(err);
+            eventsClient.on('ha_events:state_changed', incomingEvents.handlers.onStateChanged);
+            eventsClient.on('ha_events:close',         incomingEvents.handlers.onClose);
+            eventsClient.on('ha_events:open',          incomingEvents.handlers.onOpen);
+            eventsClient.on('ha_events:error',         incomingEvents.handlers.onError);
+
+            this.on('close', function(done) {
+                eventsClient.removeListener('ha_events:state_changed', incomingEvents.handlers.onStateChanged);
+                eventsClient.removeListener('ha_events:close',         incomingEvents.handlers.onClose);
+                eventsClient.removeListener('ha_events:open',          incomingEvents.handlers.onOpen);
+                eventsClient.removeListener('ha_events:error',         incomingEvents.handlers.onError);
+                done();
             });
         }
     }
-
     RED.nodes.registerType('server-state-changed', EventsStateChange);
 };

@@ -1,11 +1,17 @@
 'use strict';
-const debug = require('debug')('home-assistant:service-call');
+const debug    = require('debug')('home-assistant:service-call');
+const isString = require('is-string');
 
 const _int = {
     getSettings: function(config, node) {
         node.service_domain = config.service_domain;
         node.service        = config.service;
-        node.data           = config.data;
+        let data = config.data || {};
+        if (isString(config.data)) {
+            try { data = JSON.parse(config.data); }
+            catch (e) { debug('JSON parse error'); }
+        }
+        node.data = data;
         return node;
     },
     flashStatus: function (node) {
@@ -21,8 +27,15 @@ const _int = {
         const p = msg.payload;
         const domain  = p.domain || node.service_domain;
         const service = p.service || node.service;
-        const data    = p.data ? Object.assign({}, node.data, p.data) : node.data;
 
+        let data = p.data || {};
+        debugger;
+        if (isString(data)) {
+            try { data = JSON.parse(p.data) }
+            catch(e) { debug('JSON parse error'); }
+        }
+        data = Object.assign({}, node.data, data);
+        debugger;
         if (!domain || !service) {
             node.warn('Domain or Service not set, skipping call service');
         } else {
