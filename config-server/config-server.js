@@ -19,6 +19,7 @@ module.exports = function(RED) {
             const ha    = node.homeAssistant = new HomeAssistant({ baseUrl: node.url, apiPass: node.pass });
             node.api    = ha.api;
             node.events = ha.events;
+            node.events.setMaxListeners(0);
         }
 
         // All known entities derived from current state

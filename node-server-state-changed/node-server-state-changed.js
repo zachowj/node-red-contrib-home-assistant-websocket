@@ -70,10 +70,18 @@ const incomingEvents = {
         }
     },
     handlers: {
-        onStateChanged: (evt) => incomingEvents.onIncomingMessage(evt, incomingEvents.node),
-        onClose:        ()    => incomingEvents.setStatus(false, incomingEvents.node),
-        onOpen:         ()    => incomingEvents.setStatus(true, incomingEvents.node),
-        onError:        (err) => incomingEvents.setStatus(false, incomingEvents.node)
+        onStateChanged: (evt) => {
+            incomingEvents.onIncomingMessage(evt, incomingEvents.node)
+        },
+        onClose: () => {
+            incomingEvents.setStatus(false, incomingEvents.node)
+        },
+        onOpen: () => {
+            incomingEvents.setStatus(true, incomingEvents.node)
+        },
+        onError: (err) => {
+            incomingEvents.setStatus(false, incomingEvents.node)
+        }
     }
 }
 
