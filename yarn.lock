@@ -88,10 +88,10 @@ core-util-is@~1.0.0:
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
 
 debug@^2.2.0, debug@^2.6.3:
-  version "2.6.3"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.3.tgz#0f7eb8c30965ec08c72accfa0130c8b79984141d"
+  version "2.6.4"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.4.tgz#7586a9b3c39741c0282ae33445c4e8ac74734fe0"
   dependencies:
-    ms "0.7.2"
+    ms "0.7.3"
 
 decamelize@^1.1.1:
   version "1.2.0"
@@ -108,8 +108,8 @@ error-ex@^1.2.0:
     is-arrayish "^0.2.1"
 
 eventsource@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/eventsource/-/eventsource-0.2.2.tgz#8ac0576cbd16ee83478b3faaf27bdc7b7c8fcca9"
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/eventsource/-/eventsource-0.2.3.tgz#30b8f21b40d86968eaeebd199a95072ee54b0df3"
   dependencies:
     original "^1.0.0"
 
@@ -275,13 +275,13 @@ mkdirp@0.5.x, mkdirp@^0.5.1:
   dependencies:
     minimist "0.0.8"
 
-ms@0.7.2:
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/ms/-/ms-0.7.2.tgz#ae25cf2512b3885a1d95d7f037868d8431124765"
+ms@0.7.3:
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/ms/-/ms-0.7.3.tgz#708155a5e44e33f5fd0fc53e81d0d40a91be1fff"
 
-node-home-assistant@0.0.3:
+node-home-assistant@AYapejian/node-home-assistant#dev-master:
   version "0.0.3"
-  resolved "https://registry.yarnpkg.com/node-home-assistant/-/node-home-assistant-0.0.3.tgz#f33afe2bd48203506b02ace1617ea540ae625448"
+  resolved "https://codeload.github.com/AYapejian/node-home-assistant/tar.gz/415e27a69f38c33a19d9c77ed8e4fa64e6201150"
   dependencies:
     axios "^0.15.3"
     debug "^2.6.3"

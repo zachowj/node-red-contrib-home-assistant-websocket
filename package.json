@@ -28,7 +28,7 @@
   "dependencies": {
     "debug": "^2.6.3",
     "is-string": "^1.0.4",
-    "node-home-assistant": "0.0.3"
+    "node-home-assistant": "AYapejian/node-home-assistant#dev-master"
   },
   "devDependencies": {
     "inspect-process": "^0.4.2"
