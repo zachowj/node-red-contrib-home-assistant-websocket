@@ -287,6 +287,14 @@ node-home-assistant@AYapejian/node-home-assistant#dev-master:
     debug "^2.6.3"
     eventsource "^0.2.2"
 
+"node-home-assistant@https://github.com/AYapejian/node-home-assistant.git#dev-master":
+  version "0.0.3"
+  resolved "https://github.com/AYapejian/node-home-assistant.git#415e27a69f38c33a19d9c77ed8e4fa64e6201150"
+  dependencies:
+    axios "^0.15.3"
+    debug "^2.6.3"
+    eventsource "^0.2.2"
+
 nodeflags@^0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/nodeflags/-/nodeflags-0.0.1.tgz#0e28cedaea9ebe265e97f92b79fb30898245fa17"
