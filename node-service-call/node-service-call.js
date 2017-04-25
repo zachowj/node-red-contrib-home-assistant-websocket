@@ -9,7 +9,10 @@ const _int = {
         let data = config.data || {};
         if (isString(config.data)) {
             try { data = JSON.parse(config.data); }
-            catch (e) { debug('JSON parse error'); }
+            catch (e) {
+                debug('JSON parse error');
+                debug(require('utils').inspect(config.data));
+            }
         }
         node.data = data;
         return node;
@@ -27,11 +30,15 @@ const _int = {
         const p = msg.payload;
         const domain  = p.domain || node.service_domain;
         const service = p.service || node.service;
-        debugger;
+
         let data = p.data || {};
+
         if (isString(data)) {
             try { data = JSON.parse(p.data) }
-            catch(e) { debug('JSON parse error'); }
+            catch (e) {
+                debug('JSON parse error');
+                debug(require('utils').inspect(config.data));
+            }
         }
         data = Object.assign({}, node.data, data);
 
