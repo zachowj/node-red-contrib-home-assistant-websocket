@@ -2,6 +2,7 @@
 const debug    = require('debug')('home-assistant:service-call');
 const isString = require('is-string');
 
+
 const _int = {
     getSettings: function(config, node) {
         node.service_domain = config.service_domain;

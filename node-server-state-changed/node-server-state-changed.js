@@ -1,5 +1,5 @@
 'use strict';
-const debug = require('debug')('home-assistant:server-state-changed');
+const nodeUtils = require('../utils/node-utils');
 
 const _int = {
     getSettings: function getSettings(config) {
@@ -10,10 +10,6 @@ const _int = {
         };
 
         return settings;
-    },
-    setStatus: function setStatus(isConnected, node) {
-        if (isConnected) { node.status({ fill: 'green', shape: 'ring', text: 'Connected' }); }
-        else { node.status({ fill: 'red', shape: 'ring', text: 'Disconnected' }) }
     },
     shouldSkipNoChange: function shouldSkipNoChange(e, node) {
         if (!e.event || !e.event.old_state || !e.event.new_state) { return false; }
@@ -67,9 +63,9 @@ const _int = {
     getHandlers: function(node) {
         return {
             onStateChanged: (evt) => _int.onIncomingMessage(evt, node),
-            onClose:        ()    => _int.setStatus(false, node),
-            onOpen:         ()    => _int.setStatus(true, node),
-            onError:        (err) => _int.setStatus(false, node)
+            onClose:        ()    => nodeUtils.setConnectionStatus(node, false),
+            onOpen:         ()    => nodeUtils.setConnectionStatus(node, true),
+            onError:        (err) => nodeUtils.setConnectionStatus(node, false, err)
         };
     }
 }
@@ -79,9 +75,10 @@ module.exports = function(RED) {
         RED.nodes.createNode(this, config);
         const node = this;
         node.settings = _int.getSettings(config);
+        node._state = {};
 
         node.server = RED.nodes.getNode(config.server);
-        _int.setStatus(false, node);
+        nodeUtils.setConnectionStatus(node, false);
         const handlers = _int.getHandlers(node);
 
         // If the event source was setup start listening for events

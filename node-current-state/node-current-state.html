@@ -15,7 +15,7 @@
                 value:    '',
                 required: true,
                 validate: function (v) {
-                    // TODO: One page load, if already configured with invalid entry it will not be
+                    // TODO: On page load, if already configured with invalid entry it will not be
                     // picked up as invalid due to async load of this.availableEntities.
                     if (this.availableEntities) { return (this.availableEntities.indexOf(v) >= 0) };
                     return true;

@@ -1,5 +1,5 @@
 'use strict';
-const debug = require('debug')('home-assistant:server-events');
+const nodeUtils = require('../utils/node-utils');
 
 const _int = {
     getSettings: function getSettings(config) {
@@ -13,9 +13,9 @@ const _int = {
     getHandlers: function(node) {
         return {
             onEvent: (evt) => node.send({ event_type: evt.event_type, topic: evt.event_type, payload: evt}),
-            onClose: ()    => _int.setStatus(false, node),
-            onOpen:  ()    => _int.setStatus(true, node),
-            onError: (err) => _int.setStatus(false, node)
+            onClose:        ()    => nodeUtils.setConnectionStatus(node, false),
+            onOpen:         ()    => nodeUtils.setConnectionStatus(node, true),
+            onError:        (err) => nodeUtils.setConnectionStatus(node, false, err)
         }
     }
 };
@@ -25,11 +25,12 @@ module.exports = function(RED) {
     function EventsAll(config) {
         RED.nodes.createNode(this, config);
         const node = this;
+        node._state = {};
         _int.node = node;
         node.settings = _int.getSettings(config);
 
         node.server = RED.nodes.getNode(config.server);
-        _int.setStatus(false, node);
+        nodeUtils.setConnectionStatus(node, false);
         const handlers = _int.getHandlers(node);
 
         // If the event source was setup start listening for events
