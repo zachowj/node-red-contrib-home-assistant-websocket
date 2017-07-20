@@ -12,7 +12,7 @@ const _int = {
             try { data = JSON.parse(config.data); }
             catch (e) {
                 debug('JSON parse error');
-                debug(require('utils').inspect(config.data));
+                debug(require('util').inspect(config.data));
             }
         }
         node.data = data;
@@ -25,7 +25,7 @@ const _int = {
             node.status(show);
             status = !status;
         }, 100);
-        setTimeout(() => { clearInterval(flash); node.status({}); }, 1000);
+        setTimeout(() => { clearInterval(flash); node.status({}); }, 2000);
     },
     onInput: function(msg, node) {
         const p = msg.payload;
@@ -38,7 +38,7 @@ const _int = {
             try { data = JSON.parse(p.data) }
             catch (e) {
                 debug('JSON parse error');
-                debug(require('utils').inspect(config.data));
+                debug(require('util').inspect(config.data));
             }
         }
         data = Object.assign({}, node.data, data);
