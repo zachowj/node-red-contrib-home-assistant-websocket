@@ -15,7 +15,6 @@ module.exports = function(RED) {
         node.url = config.url;
         node.pass = config.pass;
 
-        debugger;
         if (node.url && !node.homeAssistant) {
             const ha    = node.homeAssistant = new HomeAssistant({ baseUrl: node.url, apiPass: node.pass });
             node.api    = ha.api;
@@ -24,19 +23,35 @@ module.exports = function(RED) {
 
         // All known entities derived from current state
         RED.httpAdmin.get('/homeassistant/entities', function (req, res, next) {
-            res.end(JSON.stringify(Object.keys(node.homeAssistant.states)));
+            return node.homeAssistant.getStates()
+                .then(states => {
+                    const entities = JSON.stringify(Object.keys(states))
+                    return res.end(entities);
+                })
         });
         // The node-home-assistant module tracks state for us, just return the latest object
         RED.httpAdmin.get('/homeassistant/states', function (req, res, next) {
-            res.end(JSON.stringify(node.homeAssistant.states));
+            return node.homeAssistant.getStates()
+                .then(states => {
+                    const resStates = JSON.stringify(states)
+                    return res.end(resStates);
+                });
         });
         // All known services available
         RED.httpAdmin.get('/homeassistant/services', function (req, res, next) {
-            res.end(JSON.stringify(node.homeAssistant.availableServices));
+            return node.homeAssistant.getServices()
+                .then(services => {
+                    const resServices = JSON.stringify(services)
+                    return res.end(resServices);
+                });
         });
         // All known events that could be incoming
         RED.httpAdmin.get('/homeassistant/events', function (req, res, next) {
-            res.end(JSON.stringify(node.homeAssistant.availableEvents));
+            return node.homeAssistant.getEvents()
+                .then(events => {
+                    const resEvents = JSON.stringify(events)
+                    return res.end(resEvents);
+                });
         });
     }
     RED.nodes.registerType('server', ConfigServer);
