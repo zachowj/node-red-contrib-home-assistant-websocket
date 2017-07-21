@@ -12,7 +12,10 @@ const _int = {
     },
     getHandlers: function(node) {
         return {
-            onEvent: (evt) => node.send({ event_type: evt.event_type, topic: evt.event_type, payload: evt}),
+            onEvent: (evt) => {
+                node.send({ event_type: evt.event_type, topic: evt.event_type, payload: evt});
+                nodeUtils.flashStatus(node, { status: { fill: 'green', shape: 'ring' }});
+            },
             onClose:        ()    => nodeUtils.setConnectionStatus(node, false),
             onOpen:         ()    => nodeUtils.setConnectionStatus(node, true),
             onError:        (err) => nodeUtils.setConnectionStatus(node, false, err)

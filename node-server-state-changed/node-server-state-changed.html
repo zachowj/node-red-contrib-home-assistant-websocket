@@ -13,7 +13,36 @@
         outputs: 1,
         icon: "arrow-right-bold-hexagon-outline.png",
         paletteLabel: 'events: state',
-        label: function() { return this.name || `state_changed: ${this.entityidfilter || 'all entities'}` }
+        label: function() { return this.name || `state_changed: ${this.entityidfilter || 'all entities'}` },
+        oneditprepare: function () {
+            // * **************************************************
+            // TODO: Put this autocomplete funtionality in all entity_id nodes
+            // * **************************************************
+            // Set current value to input
+            const $entityIdField = $('#entity_id');
+            $entityIdField.val(this.entity_id);
+
+            $.get('/homeassistant/entities')
+            .done((entities) => {
+                this.availableEntities = JSON.parse(entities);
+
+                $entityIdField.autocomplete({
+                    source:   this.availableEntities,
+                    minLength: 0,
+                    change:   (evt,ui) => {
+                        const validSelection = (this.availableEntities.indexOf($(evt.target).val()) > -1);
+                        if (validSelection) { $(evt.target).removeClass('input-error'); }
+                        else { $(evt.target).addClass('input-error'); }
+                    }
+                });
+
+                const validSelection = (this.availableEntities.indexOf(this.entity_id) > -1);
+                if (validSelection) { $entityIdField.removeClass('input-error'); }
+                else { $entityIdField.addClass('input-error'); }
+            })
+            .fail((err) => RED.notify(err.responseText, 'error'));
+        },
+        oneditsave: function() { this.entity_id = $("#entity_id").val(); }
     });
 </script>
 
@@ -33,6 +62,16 @@
         <label for="node-input-entityidfilter"><i class="fa fa-filter"></i> EntityID Filter</label>
         <input type="text" id="node-input-entityidfilter" placeholder="binary_sensor"/>
     </div>
+
+
+
+
+    <div class="form-row">
+        <label for="entity_id"><i class="fa fa-cube"></i> Entity ID</label>
+        <input type="text" id="entity_id">
+    </div>
+
+
 
     <div class="form-row">
         <label for="node-input-entityidblacklist"><i class="fa fa-filter"></i> EntityID Blacklist</label>

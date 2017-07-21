@@ -15,7 +15,8 @@ module.exports = function(RED) {
         node.url = config.url;
         node.pass = config.pass;
 
-        if (node.url) {
+        debugger;
+        if (node.url && !node.homeAssistant) {
             const ha    = node.homeAssistant = new HomeAssistant({ baseUrl: node.url, apiPass: node.pass });
             node.api    = ha.api;
             node.events = ha.events;

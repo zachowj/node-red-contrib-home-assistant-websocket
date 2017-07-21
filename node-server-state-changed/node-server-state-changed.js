@@ -57,6 +57,7 @@ const _int = {
         };
 
         if (_int.shouldIncludeEvent(entity_id, node.settings)) {
+            nodeUtils.flashStatus(node, { status: { fill: 'green', shape: 'ring' }});
             node.send(msg);
         }
     },
@@ -82,6 +83,7 @@ module.exports = function(RED) {
         const handlers = _int.getHandlers(node);
 
         // If the event source was setup start listening for events
+        debugger;
         if (node.server) {
             const eventsClient = node.server.events;
 

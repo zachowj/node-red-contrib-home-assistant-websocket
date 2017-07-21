@@ -26,11 +26,13 @@
     }
   },
   "dependencies": {
+    "date-fns": "^1.28.5",
     "debug": "^2.6.3",
     "is-string": "^1.0.4",
     "node-home-assistant": "https://github.com/AYapejian/node-home-assistant.git#dev-master"
   },
   "devDependencies": {
+    "eslint": "^4.2.0",
     "inspect-process": "^0.4.2"
   }
 }
