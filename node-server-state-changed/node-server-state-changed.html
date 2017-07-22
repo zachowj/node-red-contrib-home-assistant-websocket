@@ -21,21 +21,21 @@
             $entityIdField.val(this.entityidfilter);
             $entityIdBlacklistField.val(this.entityidblacklist);
 
-            const setupAutocomplete = () => {
-                debugger;
-                if (this.server) {
-                    $.get('/homeassistant/entities').done((entities) => {
-                        this.availableEntities = JSON.parse(entities);
-                        $entityIdField.autocomplete({ source: this.availableEntities, minLength: 0 });
-                        $entityIdBlacklistField.autocomplete({ source: this.availableEntities, minLength: 0 });
+            const setupAutocomplete = (node) => {
+                const selectedServer = $serverField.val();
 
+                // A home assistant server is selected in the node config
+                if (node.server || (selectedServer && selectedServer !== '_ADD_')) {
+                    $.get('/homeassistant/entities').done((entities) => {
+                        node.availableEntities = JSON.parse(entities);
+                        $entityIdField.autocomplete({ source: node.availableEntities, minLength: 0 });
+                        $entityIdBlacklistField.autocomplete({ source: node.availableEntities, minLength: 0 });
                     })
                     .fail((err) => RED.notify(err.responseText, 'error'));
                 }
             };
 
-            $serverField.change(setupAutocomplete);
-            setupAutocomplete();
+            $serverField.change(() => setupAutocomplete(this));
         },
         oneditsave: function() {
             this.entityidfilter         = $("#node-input-entityidfilter").val();
