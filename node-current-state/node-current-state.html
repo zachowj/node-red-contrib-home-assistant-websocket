@@ -9,7 +9,7 @@
         label:        function() { return this.name || `current_state: ${this.entity_id}`; },
         defaults:     {
             name:          { value: '' },
-            server:        { value: '', type: 'server' },
+            server:        { value: '', type: 'server', required: true },
             halt_if:       { value: '' },
             entity_id:     {
                 value:    '',
@@ -23,10 +23,7 @@
             }
         },
         oneditprepare: function () {
-            // * **************************************************
-            // TODO: Put this autocomplete funtionality in all entity_id nodes
-            // * **************************************************
-            // Set current value to input
+
             const $entityIdField = $('#entity_id');
             $entityIdField.val(this.entity_id);
 
