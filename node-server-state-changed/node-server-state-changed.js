@@ -73,18 +73,18 @@ const _int = {
 
 module.exports = function(RED) {
     function EventsStateChange(config) {
-        RED.nodes.createNode(this, config);
         const node = this;
-        node.settings = _int.getSettings(config);
-        node._state = {};
+        RED.nodes.createNode(node, config);
 
+        node._state = {};
+        node.settings = _int.getSettings(config);
         node.server = RED.nodes.getNode(config.server);
-        nodeUtils.setConnectionStatus(node, false);
-        const handlers = _int.getHandlers(node);
 
         // If the event source was setup start listening for events
-        debugger;
         if (node.server) {
+            nodeUtils.setConnectionStatus(node, node.server.events.connected);
+
+            const handlers = _int.getHandlers(node);
             const eventsClient = node.server.events;
 
             eventsClient.on('ha_events:state_changed', handlers.onStateChanged);
@@ -99,6 +99,8 @@ module.exports = function(RED) {
                 eventsClient.removeListener('ha_events:error',         handlers.onError);
                 done();
             });
+        } else {
+            nodeUtils.setConnectionStatus(node, false);
         }
     }
     RED.nodes.registerType('server-state-changed', EventsStateChange);
