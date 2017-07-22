@@ -6,8 +6,7 @@
             name:              { value: '' },
             server:            { value: '', type: 'server', required: true },
             entityidfilter:    { value: '' },
-            entityidblacklist: { value: 'sensor.time,sensor.date__time,sun.sun' },
-            skipifstate:       { value: '' }
+            haltifstate:       { value: '' }
         },
         inputs: 0,
         outputs: 1,
@@ -16,10 +15,8 @@
         label: function() { return this.name || `state_changed: ${this.entityidfilter || 'all entities'}` },
         oneditprepare: function () {
             const $entityIdField          = $('#node-input-entityidfilter');
-            const $entityIdBlacklistField = $('#node-input-entityidblacklist');
             const $serverField            = $('#node-input-server');
             $entityIdField.val(this.entityidfilter);
-            $entityIdBlacklistField.val(this.entityidblacklist);
 
             const setupAutocomplete = (node) => {
                 const selectedServer = $serverField.val();
@@ -29,7 +26,6 @@
                     $.get('/homeassistant/entities').done((entities) => {
                         node.availableEntities = JSON.parse(entities);
                         $entityIdField.autocomplete({ source: node.availableEntities, minLength: 0 });
-                        $entityIdBlacklistField.autocomplete({ source: node.availableEntities, minLength: 0 });
                     })
                     .fail((err) => RED.notify(err.responseText, 'error'));
                 }
@@ -39,7 +35,6 @@
         },
         oneditsave: function() {
             this.entityidfilter         = $("#node-input-entityidfilter").val();
-            this.this.entityidblacklist = $("#node-input-entityidblacklist").val();
         }
     });
 </script>
@@ -62,13 +57,8 @@
     </div>
 
     <div class="form-row">
-        <label for="node-input-entityidblacklist"><i class="fa fa-filter"></i> EntityID Blacklist</label>
-        <input type="text" id="node-input-entityidblacklist" />
-    </div>
-
-    <div class="form-row">
-        <label for="node-input-skipifstate"><i class="fa fa-hand-paper-o"></i> Halt If State</label>
-        <input type="text" id="node-input-skipifstate" />
+        <label for="node-input-haltifstate"><i class="fa fa-hand-paper-o"></i> Halt If State</label>
+        <input type="text" id="node-input-haltifstate" />
     </div>
 
 </script>
@@ -83,8 +73,7 @@
     <table class="ha-table" style="width: 100%;" border="1" cellpadding="10">
         <tbody>
             <tr> <td>Entity ID Filter</td>      <td>CSV substring matches for entity_id field</td>      </tr>
-            <tr> <td>Entity ID Blacklist</td>   <td>CSV substring match for excluding entities</td>     </tr>
-            <tr> <td>Skip If State</td>         <td>If the new_state === this setting then skip sending </tr>
+            <tr> <td>Halt If State</td>         <td>If the new_state === this setting then skip sending </tr>
         </tbody>
     </table>
 

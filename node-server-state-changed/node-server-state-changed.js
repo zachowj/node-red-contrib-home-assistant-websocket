@@ -4,46 +4,26 @@ const nodeUtils = require('../utils/node-utils');
 const _int = {
     getSettings: function getSettings(config) {
         const settings = {
-            entityIdFilter:    config.entityidfilter ? config.entityidfilter.split(',').map(f => f.trim()) : null,
-            entityIdBlacklist: config.entityidblacklist ? config.entityidblacklist.split(',').map(f => f.trim()) : null,
-            skipIfState:       config.skipifstate
+            entityIdFilter: config.entityidfilter ? config.entityidfilter.split(',').map(f => f.trim()): null,
+            haltIfState:    config.haltifstate ? config.haltifstate.trim() : null
         };
-
         return settings;
     },
-    shouldSkipIfState: function shouldSkipIfState(e, skipIfState) {
-        if (!skipIfState) { return false; }
-        const shouldSkip = (skipIfState === e.event.new_state.state);
-        return shouldSkip;
+    shouldHaltIfState: function shouldHaltIfState(haEvent, haltIfState) {
+        if (!haltIfState) { return false; }
+        const shouldHalt = (haltIfState === haEvent.new_state.state);
+        return shouldHalt;
     },
-    shouldIncludeEvent: function shouldIncludeEvent(entityId, { entityIdFilter, entityIdBlacklist }) {
-        // If neither filter is sent just send the event on
-        if (!entityIdFilter && !entityIdBlacklist) { return true; }
-
-        const findings = {};
-        // If include filter is null then set to found
-        if (!entityIdFilter) { findings.included = true; }
-
-        if (entityIdFilter && entityIdFilter.length) {
-            const found = entityIdFilter.filter(iStr => (entityId.indexOf(iStr) >= 0));
-            findings.included =  (found.length > 0);
-        }
-
-        // If blacklist is null set exluded false
-        if (!entityIdBlacklist) { findings.excluded = false; }
-
-        if (entityIdBlacklist && entityIdBlacklist.length) {
-            const found = entityIdBlacklist.filter(blStr => (entityId.indexOf(blStr) >= 0));
-            findings.excluded =  (found.length > 0);
-        }
-
-        return findings.included && !findings.excluded;
+    shouldIncludeEvent: function shouldIncludeEvent(entityId, { entityIdFilter }) {
+        if (!entityIdFilter) { return true; }
+        const found = entityIdFilter.filter(filterStr => (entityId.indexOf(filterStr) >= 0));
+        return found.length > 0;
     },
     /* eslint-disable consistent-return */
     onIncomingMessage: function onIncomingMessage(evt, node) {
-        if (_int.shouldSkipIfState(evt, node.settings.skipIfState)) { return null; }
-
         const { entity_id, event } = evt;
+        if (_int.shouldHaltIfState(event, node.settings.haltIfState)) { return null; }
+
         const msg = {
             topic:   entity_id,
             payload: event.new_state.state,
