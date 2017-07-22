@@ -6,7 +6,7 @@
             name:              { value: '' },
             server:            { value: '', type: 'server', required: true },
             entityidfilter:    { value: '' },
-            entityidblacklist: { value: 'sensor.time,sensor.date__time,dark_sky,sun.sun' },
+            entityidblacklist: { value: 'sensor.time,sensor.date__time,sun.sun' },
             skipifstate:       { value: '' }
         },
         inputs: 0,
@@ -15,34 +15,32 @@
         paletteLabel: 'events: state',
         label: function() { return this.name || `state_changed: ${this.entityidfilter || 'all entities'}` },
         oneditprepare: function () {
-            // * **************************************************
-            // TODO: Put this autocomplete funtionality in all entity_id nodes
-            // * **************************************************
-            // Set current value to input
-            const $entityIdField = $('#entity_id');
-            $entityIdField.val(this.entity_id);
+            const $entityIdField          = $('#node-input-entityidfilter');
+            const $entityIdBlacklistField = $('#node-input-entityidblacklist');
+            const $serverField            = $('#node-input-server');
+            $entityIdField.val(this.entityidfilter);
+            $entityIdBlacklistField.val(this.entityidblacklist);
 
-            $.get('/homeassistant/entities')
-            .done((entities) => {
-                this.availableEntities = JSON.parse(entities);
+            const setupAutocomplete = () => {
+                debugger;
+                if (this.server) {
+                    $.get('/homeassistant/entities').done((entities) => {
+                        this.availableEntities = JSON.parse(entities);
+                        $entityIdField.autocomplete({ source: this.availableEntities, minLength: 0 });
+                        $entityIdBlacklistField.autocomplete({ source: this.availableEntities, minLength: 0 });
 
-                $entityIdField.autocomplete({
-                    source:   this.availableEntities,
-                    minLength: 0,
-                    change:   (evt,ui) => {
-                        const validSelection = (this.availableEntities.indexOf($(evt.target).val()) > -1);
-                        if (validSelection) { $(evt.target).removeClass('input-error'); }
-                        else { $(evt.target).addClass('input-error'); }
-                    }
-                });
+                    })
+                    .fail((err) => RED.notify(err.responseText, 'error'));
+                }
+            };
 
-                const validSelection = (this.availableEntities.indexOf(this.entity_id) > -1);
-                if (validSelection) { $entityIdField.removeClass('input-error'); }
-                else { $entityIdField.addClass('input-error'); }
-            })
-            .fail((err) => RED.notify(err.responseText, 'error'));
+            $serverField.change(setupAutocomplete);
+            setupAutocomplete();
         },
-        oneditsave: function() { this.entity_id = $("#entity_id").val(); }
+        oneditsave: function() {
+            this.entityidfilter         = $("#node-input-entityidfilter").val();
+            this.this.entityidblacklist = $("#node-input-entityidblacklist").val();
+        }
     });
 </script>
 
@@ -64,11 +62,6 @@
     </div>
 
     <div class="form-row">
-        <label for="entity_id"><i class="fa fa-cube"></i> Entity ID</label>
-        <input type="text" id="entity_id">
-    </div>
-
-    <div class="form-row">
         <label for="node-input-entityidblacklist"><i class="fa fa-filter"></i> EntityID Blacklist</label>
         <input type="text" id="node-input-entityidblacklist" />
     </div>
@@ -81,19 +74,28 @@
 </script>
 
 <script type="text/x-red" data-help-name="server-state-changed">
-    <p>Outputs 'state_changed' event types sent from Home Assistant</p>
-    <p>NOTE: The filters are simple substring matches, you can add multiple by comma seperated list and each entry will be matched separately</p>
-    <br/>
-    <p>Entity ID Filter:     Only state changes that subtring match entity_id field</p>
-    <p>Entity ID Blacklist:  Exclude state changes that substring match entity_id</p>
-    <p>Skip If State:        If the new_state === this setting then do -not- send the event</p>
+    <p class="ha-description">Outputs 'state_changed' event types sent from Home Assistant</p>
 
-    <p>The outputted message object contains the following data, underscored values are straight from home assistant</p>
-    <table style="width: 100%;" border="1" cellpadding="10">
+    <p class="ha-subdescription">The autocomplete will open to allow easier selection in the case you want a specific entity however the actual match is a substring match so no validation is done</p>
+    <p class="ha-additional-info">NOTE: You can add multiple string matches by comma separated list and each entry will be matched separately</p>
+
+    <h4 class="ha-title">Configuration:</h4>
+    <table class="ha-table" style="width: 100%;" border="1" cellpadding="10">
         <tbody>
-            <tr> <td>topic</td>      <td>entity_id</td>             </tr>
-            <tr> <td>payload</td>    <td>event.new_state.state</td> </tr>
-            <tr> <td>event</td>      <td>original event object</td> </tr>
+            <tr> <td>Entity ID Filter</td>      <td>CSV substring matches for entity_id field</td>      </tr>
+            <tr> <td>Entity ID Blacklist</td>   <td>CSV substring match for excluding entities</td>     </tr>
+            <tr> <td>Skip If State</td>         <td>If the new_state === this setting then skip sending </tr>
+        </tbody>
+    </table>
+
+    <br/>
+
+    <h4 class="ha-title">Output Object:</h4>
+    <table class="ha-table" style="width: 100%;" border="1" cellpadding="10">
+        <tbody>
+            <tr> <td>topic</td>      <td>entity_id (e.g.: sensor.bedroom_temp)</td>                                 </tr>
+            <tr> <td>payload</td>    <td>event.new_state.state (e.g.: 'on', 'off', '88.5', 'home', 'not_home')</td> </tr>
+            <tr> <td>event</td>      <td>original event object from homeassistant</td> </tr>
         </tbody>
     </table>
 </script>

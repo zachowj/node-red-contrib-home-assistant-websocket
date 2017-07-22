@@ -11,11 +11,6 @@ const _int = {
 
         return settings;
     },
-    shouldSkipNoChange: function shouldSkipNoChange(e, node) {
-        if (!e.event || !e.event.old_state || !e.event.new_state) { return false; }
-        const shouldSkip = (e.event.old_state.state === e.event.new_state.state);
-        return shouldSkip;
-    },
     shouldSkipIfState: function shouldSkipIfState(e, skipIfState) {
         if (!skipIfState) { return false; }
         const shouldSkip = (skipIfState === e.event.new_state.state);
@@ -46,7 +41,6 @@ const _int = {
     },
     /* eslint-disable consistent-return */
     onIncomingMessage: function onIncomingMessage(evt, node) {
-        if (_int.shouldSkipNoChange(evt, node)) { return null; }
         if (_int.shouldSkipIfState(evt, node.settings.skipIfState)) { return null; }
 
         const { entity_id, event } = evt;

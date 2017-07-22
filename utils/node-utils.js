@@ -3,10 +3,6 @@ const nodeUtils = module.exports = {};
 const dateFns = require('date-fns')
 
 nodeUtils.setConnectionStatus = function (node, isConnected, err) {
-
-    console.log (`status isConnected: ${node.name}, ${isConnected}`);
-    // Only update if state changes and we don't have an error to display
-    if (!err && node._state.isConnected === isConnected) { return; }
     if (err) { node.error(`Connection error occured with the home-assistant server: ${JSON.stringify(err)}`); }
 
     if (isConnected) { node.status({ fill: 'green', shape: 'ring', text: 'Connected' });  }
