@@ -1,5 +1,4 @@
 'use strict';
-const debug    = require('debug')('home-assistant:service-call');
 const isString = require('is-string');
 
 
@@ -11,8 +10,8 @@ const _int = {
         if (isString(config.data)) {
             try { data = JSON.parse(config.data); }
             catch (e) {
-                debug('JSON parse error');
-                debug(require('util').inspect(config.data));
+                node.debug('JSON parse error');
+                node.debug(require('util').inspect(config.data));
             }
         }
         node.data = data;
@@ -35,19 +34,22 @@ const _int = {
         let data = p.data || {};
 
         if (isString(data)) {
-            try { data = JSON.parse(p.data) }
+            try { data = JSON.parse(data) }
             catch (e) {
-                debug('JSON parse error');
-                debug(require('util').inspect(config.data));
+                node.debug('JSON parse error');
+                node.debug(require('util').inspect(data));
             }
         }
+        debugger;
         data = Object.assign({}, node.data, data);
 
         if (!domain || !service) {
             node.warn('Domain or Service not set, skipping call service');
         } else {
+            debugger;
             _int.flashStatus(node);
-            debug(`Calling Service: ${domain}:${service} -- ${JSON.stringify(data)}`);
+            node.debug(`Calling Service: ${domain}:${service} -- ${JSON.stringify(data)}`);
+
             node.server.api.callService(domain, service, data)
                 .catch(err => {
                     node.warn('Error calling service, home assistant api error');

@@ -22,17 +22,28 @@ const _int = {
     /* eslint-disable consistent-return */
     onIncomingMessage: function onIncomingMessage(evt, node) {
         const { entity_id, event } = evt;
-        if (_int.shouldHaltIfState(event, node.settings.haltIfState)) { return null; }
+        // TODO: Infrequent issue seen where event encountered without new_state, logging to pick up info
+        if (!event || !event.new_state) {
+            node.debug('Warning, event encountered without new_state');
+            node.debug(JSON.stringify(event));
+            node.warn(event);
+        } else {
+            const shouldHaltIfState  = _int.shouldHaltIfState(event, node.settings.haltIfState);
+            const shouldIncludeEvent = _int.shouldIncludeEvent(entity_id, node.settings);
 
-        const msg = {
-            topic:   entity_id,
-            payload: event.new_state.state,
-            event:   event
-        };
+            if (shouldHaltIfState) { return null; }
 
-        if (_int.shouldIncludeEvent(entity_id, node.settings)) {
-            nodeUtils.flashStatus(node, { status: { fill: 'green', shape: 'ring' }});
-            node.send(msg);
+            const msg = {
+                topic:   entity_id,
+                payload: event.new_state.state,
+                event:   event
+            };
+
+            if (shouldIncludeEvent) {
+                node.debug(`Incoming state event: entity_id: ${event.entity_id}, new_state: ${event.new_state.state}, old_state: ${event.old_state.state}`);
+                nodeUtils.flashStatus(node, { status: { fill: 'green', shape: 'ring' }});
+                node.send(msg);
+            }
         }
     },
     getHandlers: function(node) {

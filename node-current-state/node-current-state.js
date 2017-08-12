@@ -21,11 +21,14 @@ const _int = {
             return null;
         }
 
-        if (node.halt_if && (currentState.state !== node.halt_if)) {
-            node.send({ payload: currentState });
-        } else if (!node.halt_if) {
-            node.send({ payload: currentState });
+        const shouldHaltIfState = node.halt_if && (currentState.state === node.halt_if);
+        node.debug(`Get current state: Found entity: ${entity_id}, with state: ${currentState.state}`);
+        if (shouldHaltIfState) {
+            node.debug(`Get current state: halting processing due to current state of ${entity_id} matches "halt if state" option`);
+            return null;
         }
+
+        node.send({ payload: currentState });
     }
 };
 
