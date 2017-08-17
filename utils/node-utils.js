@@ -5,7 +5,7 @@ const dateFns = require('date-fns')
 nodeUtils.setConnectionStatus = function (node, isConnected, err) {
     if (err) { node.error(`Connection error occured with the home-assistant server: ${JSON.stringify(err)}`); }
 
-    if (isConnected) { node.status({ fill: 'green', shape: 'ring', text: 'Connected' });  }
+    if (isConnected) { node.status({ fill: 'green', shape: 'dot', text: 'Connected' });  }
     else {
         const statusMsg = (err) ? 'Disconnected (error encountered)' : 'Disconnected';
         node.status({ fill: 'red', shape: 'ring', text: statusMsg });
@@ -13,13 +13,14 @@ nodeUtils.setConnectionStatus = function (node, isConnected, err) {
 
     node._state.isConnected = isConnected;
 };
+nodeUtils.flashFlowHaltedStatus = (node, opts = {}) => nodeUtils.flashStatus(node, Object.assign({}, { status: { fill: 'yellow', shape: 'dot' }, showDateTime: true, appendMsg: 'Halted Flow' }, opts));
+nodeUtils.flashAttentionStatus =  (node, opts = {}) => nodeUtils.flashStatus(node, Object.assign({}, { status: { fill: 'blue', shape: 'dot' }}, opts));
 
-nodeUtils.formatDate = (date) => dateFns.format(date, 'MM/DD/YYYY h:mm:ss A')
-
+nodeUtils.formatDate = (date) => dateFns.format(date, 'ddd, h:mm:ss A')
 
 const FLASH_DEFAULTS = {
-    flashTimeout:  1200,
-    flashInterval: 200,
+    flashTimeout:  1500,
+    flashInterval: 250,
     showDateTime:  true,
     appendMsg:     null,
     status:        {
@@ -33,7 +34,11 @@ nodeUtils.flashStatus = function (node, opts, cb) {
 
     let status = false;
     const flash = setInterval(() => {
-        const show = (status) ? { fill: 'blue', shape: 'dot' } : {};
+        let show = {};
+        if (status) {
+            show = opts.status || { fill: 'blue', shape: 'dot' };
+        }
+
         node.status(show);
         status = !status;
     }, opts.flashInterval);
@@ -42,14 +47,18 @@ nodeUtils.flashStatus = function (node, opts, cb) {
         clearInterval(flash);
         // If something is to be shown after the status is cleared
         if (opts.appendMsg || opts.showDateTime || opts.status.text) {
-            let statusMsg = opts.appendMsg;
+            let statusMsg, dateTime;
 
             if (opts.showDateTime) {
-                statusMsg = nodeUtils.formatDate(new Date());
-                statusMsg = opts.appendMsg
-                    ? statusMsg + `: ${opts.appendMsg}`
-                    : statusMsg;
+                dateTime = nodeUtils.formatDate(new Date());
+                statusMsg = `@ ${dateTime}`;
             }
+
+            if (opts.appendMsg) {
+                statusMsg = `${opts.appendMsg} ${statusMsg || ''}`;
+            }
+
+            // Allow direct override
             if (!opts.status.text) { opts.status.text = statusMsg; }
 
             node.status(opts.status);

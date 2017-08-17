@@ -28,6 +28,7 @@ module.exports = function(RED) {
                     const entities = JSON.stringify(Object.keys(states))
                     return res.end(entities);
                 })
+                .catch(err => node.debug(err));
         });
         // The node-home-assistant module tracks state for us, just return the latest object
         RED.httpAdmin.get('/homeassistant/states', function (req, res, next) {
@@ -35,7 +36,8 @@ module.exports = function(RED) {
                 .then(states => {
                     const resStates = JSON.stringify(states)
                     return res.end(resStates);
-                });
+                })
+                .catch(err => node.debug(err));
         });
         // All known services available
         RED.httpAdmin.get('/homeassistant/services', function (req, res, next) {
@@ -43,7 +45,8 @@ module.exports = function(RED) {
                 .then(services => {
                     const resServices = JSON.stringify(services)
                     return res.end(resServices);
-                });
+                })
+                .catch(err => node.debug(err));
         });
         // All known events that could be incoming
         RED.httpAdmin.get('/homeassistant/events', function (req, res, next) {
@@ -51,7 +54,8 @@ module.exports = function(RED) {
                 .then(events => {
                     const resEvents = JSON.stringify(events)
                     return res.end(resEvents);
-                });
+                })
+                .catch(err => node.debug(err));
         });
     }
     RED.nodes.registerType('server', ConfigServer);

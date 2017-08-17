@@ -1,6 +1,6 @@
 'use strict';
 const isString = require('is-string');
-
+const nodeUtils = require('../utils/node-utils');
 
 const _int = {
     getSettings: function(config, node) {
@@ -10,21 +10,11 @@ const _int = {
         if (isString(config.data)) {
             try { data = JSON.parse(config.data); }
             catch (e) {
-                node.debug('JSON parse error');
-                node.debug(require('util').inspect(config.data));
+                node.error('JSON parse error in settings parser');
             }
         }
         node.data = data;
         return node;
-    },
-    flashStatus: function (node) {
-        let status = false;
-        const flash = setInterval(() => {
-            const show = (status) ? { fill: 'blue', shape: 'dot' } : {};
-            node.status(show);
-            status = !status;
-        }, 100);
-        setTimeout(() => { clearInterval(flash); node.status({}); }, 2000);
     },
     onInput: function(msg, node) {
         const p = msg.payload;
@@ -36,25 +26,27 @@ const _int = {
         if (isString(data)) {
             try { data = JSON.parse(data) }
             catch (e) {
-                node.debug('JSON parse error');
-                node.debug(require('util').inspect(data));
+                node.error('JSON parse error during input', msg);
             }
         }
-        debugger;
+
         data = Object.assign({}, node.data, data);
 
         if (!domain || !service) {
             node.warn('Domain or Service not set, skipping call service');
         } else {
-            debugger;
-            _int.flashStatus(node);
-            node.debug(`Calling Service: ${domain}:${service} -- ${JSON.stringify(data)}`);
+            let dataStr = '';
+            try {
+                dataStr = JSON.stringify(data);
+            } catch(e) { node.debug('JSON stringify error'); }
+
+            nodeUtils.flashAttentionStatus(node, { appendMsg: dataStr });
+            node.debug(`Calling Service: ${domain}:${service} -- ${dataStr}`);
 
             node.server.api.callService(domain, service, data)
                 .catch(err => {
                     node.warn('Error calling service, home assistant api error');
-                    node.warn(err);
-                    node.error(err);
+                    node.error('Error calling service, home assistant api error', msg);
                 });
         }
     }
@@ -67,6 +59,7 @@ module.exports = function(RED) {
         RED.nodes.createNode(this, config);
         node.server   = RED.nodes.getNode(config.server);
         _int.getSettings(config, node);
+        node.status({});
 
         node.on('input', (msg) => _int.onInput(msg, node));
     }

@@ -92,22 +92,28 @@
 
     <h3>Outputs</h3>
         <dl class="message-properties">
-            <dt>payload <span class="property-type">object</span></dt>
+            <dt>topic (same as data.entity_id)<span class="property-type">string</span></dt>
             <dd>Latest current state object received from home assistant</dd>
 
-            <dt>payload.state <span class="property-type">string</span></dt>
+            <dt>payload (same as data.state)<span class="property-type">string</span></dt>
+            <dd>Latest current state object received from home assistant</dd>
+
+            <dt>data <span class="property-type">object</span></dt>
+            <dd>Latest current state object received from home assistant</dd>
+
+            <dt>data.state <span class="property-type">string</span></dt>
             <dd>Main attribute state value, examples: 'on', 'off', 'home', 'open', 'closed', etc...</dd>
 
-            <dt>payload.entity_id <span class="property-type">string</span></dt>
+            <dt>data.entity_id <span class="property-type">string</span></dt>
             <dd>The entity to which this state belongs</dd>
 
-            <dt>payload.attributes <span class="property-type">object</span></dt>
+            <dt>data.attributes <span class="property-type">object</span></dt>
             <dd>Supported attributes of state set by homeassistant</dd>
 
-            <dt>payload.last_changed <span class="property-type">string</span></dt>
+            <dt>data.last_changed <span class="property-type">string</span></dt>
             <dd>ISO Date string of last time entity state changed</dd>
 
-            <dt>payload.last_updated <span class="property-type">string</span></dt>
+            <dt>data.last_updated <span class="property-type">string</span></dt>
             <dd>ISO Date string of last time entity state was updated</dd>
         </dl>
 

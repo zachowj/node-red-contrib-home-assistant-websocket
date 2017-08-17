@@ -31,17 +31,20 @@ const _int = {
             const shouldHaltIfState  = _int.shouldHaltIfState(event, node.settings.haltIfState);
             const shouldIncludeEvent = _int.shouldIncludeEvent(entity_id, node.settings);
 
-            if (shouldHaltIfState) { return null; }
+            if (shouldHaltIfState) {
+                nodeUtils.flashFlowHaltedStatus(node);
+                return null;
+            }
 
             const msg = {
                 topic:   entity_id,
                 payload: event.new_state.state,
-                event:   event
+                data:    event
             };
 
             if (shouldIncludeEvent) {
                 node.debug(`Incoming state event: entity_id: ${event.entity_id}, new_state: ${event.new_state.state}, old_state: ${event.old_state.state}`);
-                nodeUtils.flashStatus(node, { status: { fill: 'green', shape: 'ring' }});
+                nodeUtils.flashAttentionStatus(node, { appendMsg: event.new_state.state });
                 node.send(msg);
             }
         }
@@ -60,6 +63,7 @@ module.exports = function(RED) {
     function EventsStateChange(config) {
         const node = this;
         RED.nodes.createNode(node, config);
+        node.status({});
 
         node._state = {};
         node.settings = _int.getSettings(config);
