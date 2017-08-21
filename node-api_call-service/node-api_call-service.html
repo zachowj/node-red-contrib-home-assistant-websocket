@@ -1,7 +1,7 @@
 <script type="text/javascript">
     // TODO: Look for autocomplete modules to allow a select drop down (with autocomplete)
     // the options would be populated by the api query of services on the server node
-    RED.nodes.registerType('service-call', {
+    RED.nodes.registerType('api-call-service', {
         category:     'home_assistant',
         color:        '#52C0F2',
         inputs:       1,
@@ -110,9 +110,7 @@
                         }
                         $unknownServiceDiv.hide();
                         $knownServiceDiv.show();
-                        debugger;
                     } else {
-                        debugger;
                         // Hide service data fields and desc
                         $unknownServiceDiv.show();
                         $knownServiceDiv.hide();
@@ -155,7 +153,7 @@
 </script>
 
 
-<script type="text/x-red" data-template-name="service-call">
+<script type="text/x-red" data-template-name="api-call-service">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
@@ -210,7 +208,7 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="service-call">
+<script type="text/x-red" data-help-name="api-call-service">
     <p>Call a Home Assistant service</p>
     <p>Set the node's domain, service and data defaults or allow the incoming message to define them, or both.</p>
 

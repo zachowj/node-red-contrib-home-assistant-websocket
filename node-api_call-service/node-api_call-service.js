@@ -52,7 +52,6 @@ const _int = {
     }
 };
 
-
 module.exports = function(RED) {
     function ServiceCall(config) {
         const node = this;
@@ -64,5 +63,5 @@ module.exports = function(RED) {
         node.on('input', (msg) => _int.onInput(msg, node));
     }
 
-    RED.nodes.registerType('service-call', ServiceCall);
+    RED.nodes.registerType('api-call-service', ServiceCall);
 }

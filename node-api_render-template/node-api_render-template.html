@@ -1,0 +1,111 @@
+<script type="text/javascript">
+    RED.nodes.registerType('api-render-template', {
+        category: 'home_assistant',
+        color:    '#52C0F2',
+        defaults: {
+            name:     { value: '' },
+            server:   { value: '', type: 'server', required: true },
+            template: { value: '' }
+        },
+        inputs:       1,
+        outputs:      1,
+        icon:         "parser-json.png",
+        paletteLabel: 'get template',
+        label: function() { return this.name || `template: ${this.template || ''}` },
+
+        oneditprepare: function () {
+            $inputTemplate = $("#node-input-template");
+
+            // NOTE: Copypasta from node-red/nodes/core/template node
+            // TODO: How to get jinja syntax highlighting with ace editor?
+            // TODO: Add a preview render button for testing (or call render on debounced keyup)
+            this.editor = RED.editor.createEditor({
+                id:    'node-input-template-editor',
+                value: $inputTemplate.val()
+            });
+            this.editor.focus();
+        },
+        oneditresize: function(size) {
+            const $rows       = $('#dialog-form>div:not(.node-text-editor-row)');
+            const $editorRow  = $('#dialog-form>div.node-text-editor-row');
+            const $textEditor = $('.node-text-editor');
+            const $dialogForm = $('#dialog-form');
+
+            let height = $dialogForm.height();
+            for (var i=0; i<$rows.size(); i++) { height -= $($rows[i]).outerHeight(true); }
+            height -= (parseInt($editorRow.css('marginTop'))+parseInt($editorRow.css('marginBottom')));
+
+            $textEditor.css('height', `${height}px`);
+            this.editor.resize();
+        },
+        oneditcancel: function() {
+            this.editor.destroy();
+            delete this.editor;
+        },
+        oneditsave: function() {
+            const newValue = this.editor.getValue();
+            $("#node-input-template").val(newValue);
+            this.editor.destroy();
+            delete this.editor;
+        }
+    });
+</script>
+
+
+<script type="text/x-red" data-template-name="api-render-template">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
+        <input type="text" id="node-input-server" />
+    </div>
+
+    <div class="form-row" style="position: relative; margin-bottom: 0px;">
+        <label for="node-input-template"><i class="fa fa-file-code-o"></i> Template</label>
+        <input type="hidden" id="node-input-template" autofocus="autofocus">
+    </div>
+
+    <div class="form-row node-text-editor-row">
+        <div style="height: 250px; min-height:150px;" class="node-text-editor" id="node-input-template-editor" ></div>
+    </div>
+
+</script>
+
+<script type="text/x-red" data-help-name="api-render-template">
+    <p>Calls Home Assistant to render a jinja2 template</p>
+
+    <h3>Details</h3>
+    <p>Can either set template in the node configuration or pass in the `msg.template` property of the incoming message.  Passing template via `msg.template` will override the template string set in node configuration. </p>
+    <p class="ha-additional-info">NOTE: Node will output any home assistant API errors for catching with the 'catch all' node</p>
+
+    <h3>Configuration</h3>
+    <dl class="message-properties">
+        <dt class="optional"> template <span class="property-type">string</span></dt>
+        <dd> Jinja template to be rendered, discarded if `msg.template` is provided via input msg </dd>
+    </dl>
+
+
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt class="optional"> template <span class="property-type">string</span> </dt>
+        <dd> Jinja template to be rendered </dd>
+    </dl>
+
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+        <dt> template <span class="property-type">string</span></dt>
+        <dd>The original template sent to home assistant for rendering</dd>
+        <dt> payload <span class="property-type">string</span></dt>
+        <dd>The rendered template</dd>
+    </dl>
+
+    <h3>References</h3>
+    <ul>
+        <li><a href="https://home-assistant.io/docs/configuration/templating/">Home Assistant Template Docs</a></li>
+        <li><a href="http://jinja.pocoo.org/docs/dev/templates/">Jinja Docs</a></li>
+    </ul>
+
+</script>
