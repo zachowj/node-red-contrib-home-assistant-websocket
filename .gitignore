@@ -4,3 +4,4 @@ node_modules
 _scratchpad
 settings.js
 _scratchpad_flows
+.DS_Store

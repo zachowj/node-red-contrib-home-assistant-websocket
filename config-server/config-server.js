@@ -57,6 +57,11 @@ module.exports = function(RED) {
                 })
                 .catch(err => node.debug(err));
         });
+
+        const HTTP_STATIC_OPTS = { root: require('path').join(__dirname, '..', '/_static'), dotfiles: 'deny' };
+        RED.httpAdmin.get('/homeassistant/static/*', function(req,res) {
+            res.sendFile(req.params[0], HTTP_STATIC_OPTS);
+        });
     }
     RED.nodes.registerType('server', ConfigServer);
 }
