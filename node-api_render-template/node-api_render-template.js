@@ -10,10 +10,10 @@ const _int = {
     },
     /* eslint-disable consistent-return */
     onIncomingMessage: function onIncomingMessage(node, msg) {
-        const template = msg.template || node.settings.template;
-        if (!template) { node.warn('No template configured or passed in `msg.template`, skipping render call'); return node.send(msg); }
+        msg.template = msg.template || node.settings.template;
+        if (!msg.template) { node.warn('No template configured or passed in `msg.template`, skipping render call'); return node.send(msg); }
 
-        return node.server.api.renderTemplate(template)
+        return node.server.api.renderTemplate(msg.template)
             .then(res => {
                 msg.payload = res;
                 node.send(msg);

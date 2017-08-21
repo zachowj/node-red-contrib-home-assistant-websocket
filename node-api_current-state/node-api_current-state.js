@@ -48,5 +48,5 @@ module.exports = function(RED) {
         node.on('input', (msg) => _int.onInput(msg, node));
     }
 
-    RED.nodes.registerType('current-state', CurrentState);
+    RED.nodes.registerType('api-current-state', CurrentState);
 }

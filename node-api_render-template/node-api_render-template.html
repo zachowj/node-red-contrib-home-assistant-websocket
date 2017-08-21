@@ -9,8 +9,8 @@
         },
         inputs:       1,
         outputs:      1,
-        icon:         "arrow-right-bold-hexagon-outline.png",
-        paletteLabel: 'api: template',
+        icon:         "parser-json.png",
+        paletteLabel: 'get template',
         label: function() { return this.name || `template: ${this.template || ''}` },
 
         oneditprepare: function () {
@@ -96,6 +96,8 @@
 
     <h3>Outputs</h3>
     <dl class="message-properties">
+        <dt> template <span class="property-type">string</span></dt>
+        <dd>The original template sent to home assistant for rendering</dd>
         <dt> payload <span class="property-type">string</span></dt>
         <dd>The rendered template</dd>
     </dl>

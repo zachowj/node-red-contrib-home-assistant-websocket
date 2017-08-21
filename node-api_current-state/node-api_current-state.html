@@ -1,11 +1,11 @@
 <script type="text/javascript">
-    RED.nodes.registerType('current-state', {
+    RED.nodes.registerType('api-current-state', {
         category:     'home_assistant',
-        color:        '#038FC7',
+        color:        '#52C0F2',
         inputs:       1,
         outputs:      1,
         icon:         "arrow-top-right.png",
-        // paletteLabel: 'current state',
+        paletteLabel: 'current state',
         label:        function() { return this.name || `current_state: ${this.entity_id}`; },
         defaults:     {
             name:          { value: '' },
@@ -58,7 +58,7 @@
     });
 </script>
 
-<script type="text/x-red" data-template-name="current-state">
+<script type="text/x-red" data-template-name="api-current-state">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
@@ -81,7 +81,7 @@
 
 </script>
 
-<script type="text/x-red" data-help-name="current-state">
+<script type="text/x-red" data-help-name="api-current-state">
     <p>Get the current state of an Entity</p>
 
     <h3>Inputs</h3>
