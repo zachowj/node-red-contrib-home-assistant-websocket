@@ -31,7 +31,7 @@
     "date-fns": "^1.28.5",
     "debug": "^2.6.3",
     "is-string": "^1.0.4",
-    "node-home-assistant": "https://github.com/AYapejian/node-home-assistant.git#dev-master"
+    "node-home-assistant": "0.1.0"
   },
   "devDependencies": {
     "eslint": "^4.2.0",
