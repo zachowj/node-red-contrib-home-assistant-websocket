@@ -19,29 +19,21 @@
                 const startdate = new Date(this.startdate);
                 return `${startdate.toLocaleDateString()} ${startdate.toLocaleTimeString()}`;
             }
+            return 'get history';
             // return (this.filterentity) ? this.filterentity : 'get history';
         },
         oneditprepare: function () {
             const loadDatePicker = () => $.getScript('homeassistant/static/vendor/flatpickr/flatpickr.min.js');
             const init           = () => {
-                console.log('Init datepicker');
-                const $inputStartDateHidden = $('#node-input-startdate');
-                console.log(`loaded input val: ${$inputStartDateHidden.val()}`);
-                debugger;
                 let preSelectedDateOrToday = ($inputStartDateHidden.val()
                     ? new Date($inputStartDateHidden.val())
                     : (new Date()).setHours(0, 0, 0))
 
-                console.log(`parsed input val: ${preSelectedDateOrToday}`);
-                debugger;
                 return flatpickr("#node-input-startdate-picker", {
                     enableTime:  true,
                     maxDate:     new Date(),
                     defaultDate: preSelectedDateOrToday,
                     onClose:     function(selectedDates, dateStr, instance) {
-                        const w = selectedDates[0];
-                        console.log(`onClose dateObject: ${w}`);
-                        console.log(`onClose dateString: ${w.toISOString()}`);
                         $('#node-input-startdate').val(selectedDates[0].toISOString());
                     }
                 });
