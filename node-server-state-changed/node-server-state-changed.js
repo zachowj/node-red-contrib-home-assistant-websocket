@@ -43,7 +43,11 @@ const _int = {
             };
 
             if (shouldIncludeEvent) {
-                node.debug(`Incoming state event: entity_id: ${event.entity_id}, new_state: ${event.new_state.state}, old_state: ${event.old_state.state}`);
+                if (event.old_state) {
+                    node.debug(`Incoming state event: entity_id: ${event.entity_id}, new_state: ${event.new_state.state}, old_state: ${event.old_state.state}`);
+                } else {
+                    node.debug(`Incoming state event: entity_id: ${event.entity_id}, new_state: ${event.new_state.state}`);
+                }
                 nodeUtils.flashAttentionStatus(node, { appendMsg: event.new_state.state });
                 node.send(msg);
             }
