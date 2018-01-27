@@ -6,6 +6,15 @@
   "bugs": {
     "url": "https://github.com/AYapejian/node-red-contrib-home-assistant/issues"
   },
+  "scripts": {
+    "dev": "npm run docker:up",
+    "dev:clean": "npm run docker:down",
+    "docker:up": "npm run docker -- up --build --abort-on-container-exit --remove-orphans",
+    "docker:down": "npm run docker -- down -vt5 && npm run docker -- rm -fv",
+    "docker:restart": "npm run docker -- restart",
+    "docker:logs": "npm run docker -- logs -f && true",
+    "docker": "docker-compose -f docker/docker-compose.yml"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/AYapejian/node-red-contrib-home-assistant"
@@ -34,7 +43,6 @@
     "node-home-assistant": "0.1.0"
   },
   "devDependencies": {
-    "eslint": "^4.2.0",
-    "inspect-process": "^0.4.2"
+    "eslint": "^4.2.0"
   }
 }

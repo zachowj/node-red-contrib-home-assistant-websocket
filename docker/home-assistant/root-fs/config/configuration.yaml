@@ -1,0 +1,68 @@
+homeassistant:
+  name:             Home
+  latitude:         !env_var HA_HOME_ASSISTANT_LATITUDE
+  longitude:        !env_var HA_HOME_ASSISTANT_LONGITUDE
+  elevation:        !env_var HA_HOME_ASSISTANT_ELEVATION
+  temperature_unit: !env_var HA_HOME_ASSISTANT_TEMPERATURE_UNIT
+  time_zone:        !env_var HA_HOME_ASSISTANT_TIME_ZONE
+  unit_system:      !env_var HA_HOME_ASSISTANT_UNIT_SYSTEM
+
+http:
+  api_password: !env_var HA_HTTP_API_PASSWORD
+
+mqtt:
+  broker:    !env_var MQTT_HOST
+  port:      !env_var MQTT_PORT
+  client_id: !env_var HA_MQTT_CLIENT_ID
+
+logger:
+  default: !env_var HA_LOGGER_DEFAULT
+
+recorder:
+  purge_interval:  2
+  purge_keep_days: 1
+
+frontend:
+config:
+map:
+sun:
+
+weblink:
+  entities:
+    - name: Node Red
+      url:  !env_var NODE_RED_URL
+
+panel_iframe:
+    node_red:
+      title: Node Red
+      url:   !env_var NODE_RED_URL
+      icon:  mdi:grid-on
+
+# Test Entities for Development
+# automation:
+#   initial_state: True
+#   trigger:
+#     platform: time
+#     seconds: '/10'
+#   action:
+#     service: switch.toggle
+#     entity_id: light.kitchen_light
+
+# Example configuration.yml entry
+switch:
+  - platform: mqtt
+    name: MQTT Switch
+    command_topic: dev/mqtt-switch/cmd
+    state_topic:   dev/mqtt-switch/state
+
+sensor:
+  - platform:    mqtt
+    name:        MQTT Dev Sensor
+    state_topic: !env_var MQTT_DEV_SENSOR_TOPIC
+
+binary_sensor:
+  - platform:    mqtt
+    name:        MQTT Dev Binary Sensor
+    state_topic: !env_var MQTT_DEV_BINARY_SENSOR_TOPIC
+    payload_on:  '1'
+    payload_off: '0'

@@ -1,0 +1,23 @@
+{
+    // Use IntelliSense to learn about possible Node.js debug attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name":      "Attach: Docker",
+            "type":      "node",
+            "request":   "attach",
+            "timeout":   10000,
+            "restart":   true,
+            "address":   "localhost",
+            "port":      9123,
+            "localRoot": "${workspaceFolder}",
+            "remoteRoot": "/data-dev/node_modules/node-red-contrib-home-assistant",
+            "trace": false,
+            "skipFiles": [
+                "<node_internals>/**/*.js"
+            ]
+        }
+    ]
+}

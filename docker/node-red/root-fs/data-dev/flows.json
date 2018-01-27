@@ -1,0 +1,43 @@
+[
+    {
+        "id": "91829608.660cc8",
+        "type": "tab",
+        "label": "Simple Test"
+    },
+    {
+        "id": "aedb3267.4ec5f8",
+        "type": "server",
+        "z": "",
+        "name": "Home Assistant",
+        "url": "http://home-assistant:8123",
+        "pass": "password"
+    },
+    {
+        "id": "71f7b01d.b0b6b",
+        "type": "debug",
+        "z": "91829608.660cc8",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 390,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "d5ab9d80.758ce8",
+        "type": "server-state-changed",
+        "z": "91829608.660cc8",
+        "name": "",
+        "server": "aedb3267.4ec5f8",
+        "entityidfilter": "",
+        "haltifstate": "",
+        "x": 150,
+        "y": 40,
+        "wires": [
+            [
+                "71f7b01d.b0b6b"
+            ]
+        ]
+    }
+]
