@@ -21,7 +21,15 @@ const _int = {
                 msg.payload = res;
                 node.send(msg);
             })
-            .catch(err => node.error('Error calling service, home assistant api error', msg));
+            .catch(err => {
+                console.log(err);
+                let notifyError = 'Error calling service, home assistant api error'
+                notifyError = (err && err.response)
+                    ? notifyError += `: URL: ${err.response.config.url}, Status: ${err.response.status}, Message: ${err.message}`
+                    : notifyError += `: ${err.message}`;
+
+                node.error(notifyError, msg);
+            });
     }
 }
 
