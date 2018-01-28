@@ -43,6 +43,7 @@ services:
     command: npm run dev:watch
     volumes:
       - '..:/data-dev/node_modules/node-red-contrib-home-assistant'
+      - './node-red/root-fs/data-dev/flows.json:/data-dev/flows.json'   # Map flows file for easy commitable examples building
     ports:
       - 1880:1880
       - 9123:9229
@@ -53,8 +54,8 @@ services:
     build:
       context: ./home-assistant
     # While messing with HA config map the repo config to the container for easy changes
-    # volumes:
-    #   - './home-assistant/root-fs/config/configuration.yaml:/config/configuration.yaml'
+    volumes:
+      - './home-assistant/root-fs/config/configuration.yaml:/config/configuration.yaml'
     ports:
       - 8300:8300
       - 8123:8123

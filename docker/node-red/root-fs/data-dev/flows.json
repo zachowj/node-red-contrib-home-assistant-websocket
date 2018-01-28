@@ -5,6 +5,20 @@
         "label": "Simple Test"
     },
     {
+        "id": "ac309840.633668",
+        "type": "tab",
+        "label": "Current State",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "a9b7da37.df64a8",
+        "type": "tab",
+        "label": "All Nodes",
+        "disabled": false,
+        "info": ""
+    },
+    {
         "id": "aedb3267.4ec5f8",
         "type": "server",
         "z": "",
@@ -39,5 +53,424 @@
                 "71f7b01d.b0b6b"
             ]
         ]
+    },
+    {
+        "id": "a450a11.4bb41e",
+        "type": "inject",
+        "z": "ac309840.633668",
+        "name": "Inject entity_id",
+        "topic": "",
+        "payload": "{\"entity_id\":\"binary_sensor.mqtt_dev_binary_sensor\"}",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 150,
+        "y": 220,
+        "wires": [
+            [
+                "1ab59da9.008bf2"
+            ]
+        ]
+    },
+    {
+        "id": "1b506d57.f6bdeb",
+        "type": "server-events",
+        "z": "a9b7da37.df64a8",
+        "name": "Events: All",
+        "server": "aedb3267.4ec5f8",
+        "x": 95,
+        "y": 45,
+        "wires": [
+            [
+                "cfe34d00.3f0af8"
+            ]
+        ]
+    },
+    {
+        "id": "49e83647.76b448",
+        "type": "server-state-changed",
+        "z": "a9b7da37.df64a8",
+        "name": "Events: State Changed",
+        "server": "aedb3267.4ec5f8",
+        "entityidfilter": "binary_sensor.mqtt_dev_binary_sensor",
+        "haltifstate": "",
+        "x": 135,
+        "y": 95,
+        "wires": [
+            [
+                "3f8cfe6a.408b6a"
+            ]
+        ]
+    },
+    {
+        "id": "949e61e9.cd005",
+        "type": "api-current-state",
+        "z": "a9b7da37.df64a8",
+        "name": "Current State",
+        "server": "aedb3267.4ec5f8",
+        "halt_if": "",
+        "entity_id": "binary_sensor.mqtt_dev_binary_sensor",
+        "x": 355,
+        "y": 160,
+        "wires": [
+            [
+                "2aa47700.30b86a"
+            ]
+        ]
+    },
+    {
+        "id": "70716f8b.302608",
+        "type": "inject",
+        "z": "a9b7da37.df64a8",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 115,
+        "y": 160,
+        "wires": [
+            [
+                "949e61e9.cd005",
+                "1236c799.f6e78",
+                "640855fc.4c2c9c"
+            ]
+        ]
+    },
+    {
+        "id": "1236c799.f6e78",
+        "type": "api-render-template",
+        "z": "a9b7da37.df64a8",
+        "name": "Get Template",
+        "server": "aedb3267.4ec5f8",
+        "template": "{% for state in states.sensor %}\n  {{ state.entity_id }}={{ state.state }},\n{% endfor %}",
+        "x": 365,
+        "y": 255,
+        "wires": [
+            [
+                "b5c0827d.077f28"
+            ]
+        ]
+    },
+    {
+        "id": "2aa47700.30b86a",
+        "type": "debug",
+        "z": "a9b7da37.df64a8",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "true",
+        "x": 545,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "64ea9766.90aa5",
+        "type": "debug",
+        "z": "a9b7da37.df64a8",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 550,
+        "y": 225,
+        "wires": []
+    },
+    {
+        "id": "b5c0827d.077f28",
+        "type": "debug",
+        "z": "a9b7da37.df64a8",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "true",
+        "x": 550,
+        "y": 275,
+        "wires": []
+    },
+    {
+        "id": "3f8cfe6a.408b6a",
+        "type": "debug",
+        "z": "a9b7da37.df64a8",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 335,
+        "y": 95,
+        "wires": []
+    },
+    {
+        "id": "cfe34d00.3f0af8",
+        "type": "debug",
+        "z": "a9b7da37.df64a8",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "true",
+        "x": 335,
+        "y": 45,
+        "wires": []
+    },
+    {
+        "id": "640855fc.4c2c9c",
+        "type": "api-get-history",
+        "z": "a9b7da37.df64a8",
+        "name": "",
+        "server": "aedb3267.4ec5f8",
+        "startdate": "",
+        "x": 360,
+        "y": 210,
+        "wires": [
+            [
+                "64ea9766.90aa5"
+            ]
+        ]
+    },
+    {
+        "id": "1ab59da9.008bf2",
+        "type": "api-current-state",
+        "z": "ac309840.633668",
+        "name": "",
+        "server": "aedb3267.4ec5f8",
+        "halt_if": "",
+        "entity_id": "sensor.mqtt_dev_sensor",
+        "x": 415,
+        "y": 220,
+        "wires": [
+            [
+                "64fe8cc3.21d444"
+            ]
+        ]
+    },
+    {
+        "id": "64fe8cc3.21d444",
+        "type": "debug",
+        "z": "ac309840.633668",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 645,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "44129cae.5bab0c",
+        "type": "api-current-state",
+        "z": "ac309840.633668",
+        "name": "",
+        "server": "aedb3267.4ec5f8",
+        "halt_if": "",
+        "entity_id": "sensor.mqtt_dev_sensor",
+        "x": 370,
+        "y": 100,
+        "wires": [
+            [
+                "e3a5a997.d75e4"
+            ]
+        ]
+    },
+    {
+        "id": "d4f47b6c.ad4fa",
+        "type": "inject",
+        "z": "ac309840.633668",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 140,
+        "y": 100,
+        "wires": [
+            [
+                "44129cae.5bab0c"
+            ]
+        ]
+    },
+    {
+        "id": "e3a5a997.d75e4",
+        "type": "debug",
+        "z": "ac309840.633668",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 650,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "8a2c0f6b.ead54",
+        "type": "comment",
+        "z": "ac309840.633668",
+        "name": "Basic fetching of current state",
+        "info": "",
+        "x": 150,
+        "y": 50,
+        "wires": []
+    },
+    {
+        "id": "c6f358bf.ee154",
+        "type": "comment",
+        "z": "ac309840.633668",
+        "name": "Override the current state node's pre-configured entity_id value",
+        "info": "",
+        "x": 260,
+        "y": 170,
+        "wires": []
+    },
+    {
+        "id": "7c6eac6c.6fdba4",
+        "type": "inject",
+        "z": "ac309840.633668",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 140,
+        "y": 350,
+        "wires": [
+            [
+                "b3481b2.bb19068"
+            ]
+        ]
+    },
+    {
+        "id": "b3481b2.bb19068",
+        "type": "api-call-service",
+        "z": "ac309840.633668",
+        "name": "Set MQTT Binary sensor to off state",
+        "server": "aedb3267.4ec5f8",
+        "service_domain": "mqtt",
+        "service": "publish",
+        "data": "{\"topic\":\"dev/mqtt-dev-binary-sensor/state\",\"payload\":\"0\"}",
+        "x": 540,
+        "y": 350,
+        "wires": []
+    },
+    {
+        "id": "c3f15720.5a901",
+        "type": "api-current-state",
+        "z": "ac309840.633668",
+        "name": "Get MQTT Binary Sensor state, halt if off",
+        "server": "aedb3267.4ec5f8",
+        "halt_if": "off",
+        "entity_id": "binary_sensor.mqtt_dev_binary_sensor",
+        "x": 420,
+        "y": 520,
+        "wires": [
+            [
+                "7f3c9194.2bc928"
+            ]
+        ]
+    },
+    {
+        "id": "c5bbfd9e.fdb5",
+        "type": "inject",
+        "z": "ac309840.633668",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 140,
+        "y": 520,
+        "wires": [
+            [
+                "c3f15720.5a901"
+            ]
+        ]
+    },
+    {
+        "id": "7855b2b8.0d1334",
+        "type": "comment",
+        "z": "ac309840.633668",
+        "name": "Override the current state node's pre-configured entity_id value",
+        "info": "",
+        "x": 265,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "4c8253e2.d560cc",
+        "type": "inject",
+        "z": "ac309840.633668",
+        "name": "Overide service data to turn on",
+        "topic": "",
+        "payload": "{\"data\":{\"topic\":\"dev/mqtt-dev-binary-sensor/state\",\"payload\":\"1\"}}",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 210,
+        "y": 390,
+        "wires": [
+            [
+                "b3481b2.bb19068"
+            ]
+        ]
+    },
+    {
+        "id": "7f3c9194.2bc928",
+        "type": "debug",
+        "z": "ac309840.633668",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 670,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "73e5fa98.c017fc",
+        "type": "server-state-changed",
+        "z": "ac309840.633668",
+        "name": "MQTT Binary Sensor State",
+        "server": "aedb3267.4ec5f8",
+        "entityidfilter": "binary_sensor.mqtt_dev_binary_sensor",
+        "haltifstate": "",
+        "x": 500,
+        "y": 410,
+        "wires": [
+            [
+                "306d8a57.83dd16"
+            ]
+        ]
+    },
+    {
+        "id": "306d8a57.83dd16",
+        "type": "function",
+        "z": "ac309840.633668",
+        "name": "Display State",
+        "func": "const isOn = msg.payload === 'on';\n\nnode.status({ \n    fill:  isOn ? 'green' : 'grey', \n    shape: isOn ? 'dot' :   'ring',\n    text:  `Sensor is currently ${msg.payload}`\n});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 760,
+        "y": 410,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "685db7.9310f248",
+        "type": "comment",
+        "z": "ac309840.633668",
+        "name": "Use above to test the Halt If option",
+        "info": "",
+        "x": 180,
+        "y": 470,
+        "wires": []
     }
 ]

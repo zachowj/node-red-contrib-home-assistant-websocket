@@ -51,9 +51,10 @@ panel_iframe:
 # Example configuration.yml entry
 switch:
   - platform: mqtt
-    name: MQTT Switch
-    command_topic: dev/mqtt-switch/cmd
-    state_topic:   dev/mqtt-switch/state
+    name: MQTT Dev Switch
+    command_topic: dev/mqtt-dev-switch/cmd
+    state_topic:   dev/mqtt-dev-switch/state
+    opto
 
 sensor:
   - platform:    mqtt
