@@ -59,11 +59,6 @@ b. _Note: Also first run load of HomeAssistant web interface seems very slow, bu
 | mqtt-dev-binary-sensor |                          | publishes every 30 seconds to a topic home assistant has a `binary_sensor` for                                                  |
 
 
-
-
-
-
-
 ### Node Debugger via VSCode
 Optional but it's pretty nice if you have VSCode installed.
 - Open the project directory in VSCode
@@ -71,4 +66,15 @@ Optional but it's pretty nice if you have VSCode installed.
 - In the debug tab you should see an target for "Attach: Docker", run that guy and you can place debug breakpoints and changes will be reloaded within docker automatically
 - Open [http://localhost:8123](http://localhost:8123) for HomeAssistant (password is `password` by default).  There is a default config which includes mqtt with a couple mqtt sensors that autopublish every 10 and 30 seconds by default. MQTT broker is also launched via docker, checkout the `docker` dir for more details if interested.
 - For node-red either open up via the HomeAssistant web link or left hand menu or just open a browser tab to [http://localhost:1880](http://localhost:1880)
+
+### Other Dev Tips
+* If you're using VSCode and annoyed that node-red html ( `type="x-red"` ) isn't syntax highlighted you can run force it by adding support.  Below is for Mac, can do the same manually on any platform however, note that this is a hack as I couldn't find any other good way to do this.
+
+```shell
+# For VSCode
+sed -i .orig 's/text\/(javascript|ecmascript|babel)/text\/(javascript|ecmascript|babel|x-red)/' "/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/html/syntaxes/html.json"
+
+# For VSCode Insiders
+sed -i .orig 's/text\/(javascript|ecmascript|babel)/text\/(javascript|ecmascript|babel|x-red)/' "/Applications/Visual Studio Code - Insiders.app/Contents/Resources/app/extensions/html/syntaxes/html.json"
+```
 
