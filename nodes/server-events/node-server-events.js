@@ -1,9 +1,9 @@
 'use strict';
-const nodeUtils = require('../utils/node-utils');
+const nodeUtils = require('../../utils/node-utils');
 
 const _int = {
     getSettings: function getSettings(config) {
-        const settings = {}
+        const settings = {};
         return settings;
     },
     getHandlers: function(node) {
@@ -15,10 +15,9 @@ const _int = {
             onClose: ()    => nodeUtils.setConnectionStatus(node, false),
             onOpen:  ()    => nodeUtils.setConnectionStatus(node, true),
             onError: (err) => nodeUtils.setConnectionStatus(node, false, err)
-        }
+        };
     }
 };
-
 
 module.exports = function(RED) {
     function EventsAll(config) {

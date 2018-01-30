@@ -1,6 +1,6 @@
 'use strict';
 const isString = require('is-string');
-const nodeUtils = require('../utils/node-utils');
+const nodeUtils = require('../../utils/node-utils');
 
 const _int = {
     getSettings: function(config, node) {
@@ -8,8 +8,9 @@ const _int = {
         node.service        = config.service;
         let data = config.data || {};
         if (isString(config.data)) {
-            try { data = JSON.parse(config.data); }
-            catch (e) {
+            try {
+                data = JSON.parse(config.data);
+            } catch (e) {
                 node.error('JSON parse error in settings parser');
             }
         }
@@ -24,8 +25,7 @@ const _int = {
         let data = p.data || {};
 
         if (isString(data)) {
-            try { data = JSON.parse(data) }
-            catch (e) {
+            try { data = JSON.parse(data) } catch (e) {
                 node.error('JSON parse error during input', msg);
             }
         }
@@ -38,13 +38,14 @@ const _int = {
             let dataStr = '';
             try {
                 dataStr = JSON.stringify(data);
-            } catch(e) { node.debug('JSON stringify error'); }
+            } catch (e) { node.debug('JSON stringify error') }
 
             nodeUtils.flashAttentionStatus(node, { appendMsg: dataStr });
             node.debug(`Calling Service: ${domain}:${service} -- ${dataStr}`);
 
             node.server.api.callService(domain, service, data)
                 .catch(err => {
+                    console.log(err);
                     node.warn('Error calling service, home assistant api error');
                     node.error('Error calling service, home assistant api error', msg);
                 });
@@ -64,4 +65,4 @@ module.exports = function(RED) {
     }
 
     RED.nodes.registerType('api-call-service', ServiceCall);
-}
+};

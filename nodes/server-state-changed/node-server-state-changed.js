@@ -1,21 +1,21 @@
 'use strict';
-const nodeUtils = require('../utils/node-utils');
+const nodeUtils = require('../../utils/node-utils');
 
 const _int = {
     getSettings: function getSettings(config) {
         const settings = {
-            entityIdFilter: config.entityidfilter ? config.entityidfilter.split(',').map(f => f.trim()): null,
+            entityIdFilter: config.entityidfilter ? config.entityidfilter.split(',').map(f => f.trim()) : null,
             haltIfState:    config.haltifstate ? config.haltifstate.trim() : null
         };
         return settings;
     },
     shouldHaltIfState: function shouldHaltIfState(haEvent, haltIfState) {
-        if (!haltIfState) { return false; }
+        if (!haltIfState) { return false }
         const shouldHalt = (haltIfState === haEvent.new_state.state);
         return shouldHalt;
     },
     shouldIncludeEvent: function shouldIncludeEvent(entityId, { entityIdFilter }) {
-        if (!entityIdFilter) { return true; }
+        if (!entityIdFilter) { return true }
         const found = entityIdFilter.filter(filterStr => (entityId.indexOf(filterStr) >= 0));
         return found.length > 0;
     },
@@ -61,7 +61,7 @@ const _int = {
             onError:        (err) => nodeUtils.setConnectionStatus(node, false, err)
         };
     }
-}
+};
 
 module.exports = function(RED) {
     function EventsStateChange(config) {

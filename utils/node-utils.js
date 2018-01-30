@@ -1,12 +1,13 @@
 'use strict';
 const nodeUtils = module.exports = {};
-const dateFns = require('date-fns')
+const dateFns = require('date-fns');
 
 nodeUtils.setConnectionStatus = function (node, isConnected, err) {
-    if (err) { node.error(`Connection error occured with the home-assistant server: ${JSON.stringify(err)}`); }
+    if (err) { node.error(`Connection error occured with the home-assistant server: ${JSON.stringify(err)}`) }
 
-    if (isConnected) { node.status({ fill: 'green', shape: 'dot', text: 'Connected' });  }
-    else {
+    if (isConnected) {
+        node.status({ fill: 'green', shape: 'dot', text: 'Connected' });
+    } else {
         const statusMsg = (err) ? 'Disconnected (error encountered)' : 'Disconnected';
         node.status({ fill: 'red', shape: 'ring', text: statusMsg });
     }
@@ -16,7 +17,7 @@ nodeUtils.setConnectionStatus = function (node, isConnected, err) {
 nodeUtils.flashFlowHaltedStatus = (node, opts = {}) => nodeUtils.flashStatus(node, Object.assign({}, { status: { fill: 'yellow', shape: 'dot' }, showDateTime: true, appendMsg: 'Halted Flow' }, opts));
 nodeUtils.flashAttentionStatus =  (node, opts = {}) => nodeUtils.flashStatus(node, Object.assign({}, { status: { fill: 'blue', shape: 'dot' }}, opts));
 
-nodeUtils.formatDate = (date) => dateFns.format(date, 'ddd, h:mm:ss A')
+nodeUtils.formatDate = (date) => dateFns.format(date, 'ddd, h:mm:ss A');
 
 const FLASH_DEFAULTS = {
     flashTimeout:  1500,
@@ -59,7 +60,7 @@ nodeUtils.flashStatus = function (node, opts, cb) {
             }
 
             // Allow direct override
-            if (!opts.status.text) { opts.status.text = statusMsg; }
+            if (!opts.status.text) { opts.status.text = statusMsg }
 
             node.status(opts.status);
         // Else just clear status
@@ -67,6 +68,6 @@ nodeUtils.flashStatus = function (node, opts, cb) {
             node.status({});
         }
         // Callback hook
-        if (cb) { cb(node); }
+        if (cb) { cb(node) }
     }, opts.flashTimeout);
 };

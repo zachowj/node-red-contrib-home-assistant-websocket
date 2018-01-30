@@ -25,7 +25,7 @@ module.exports = function(RED) {
         RED.httpAdmin.get('/homeassistant/entities', function (req, res, next) {
             return node.homeAssistant.getStates()
                 .then(states => {
-                    const entities = JSON.stringify(Object.keys(states))
+                    const entities = JSON.stringify(Object.keys(states));
                     return res.end(entities);
                 })
                 .catch(err => node.debug(err));
@@ -34,7 +34,7 @@ module.exports = function(RED) {
         RED.httpAdmin.get('/homeassistant/states', function (req, res, next) {
             return node.homeAssistant.getStates()
                 .then(states => {
-                    const resStates = JSON.stringify(states)
+                    const resStates = JSON.stringify(states);
                     return res.end(resStates);
                 })
                 .catch(err => node.debug(err));
@@ -43,7 +43,7 @@ module.exports = function(RED) {
         RED.httpAdmin.get('/homeassistant/services', function (req, res, next) {
             return node.homeAssistant.getServices()
                 .then(services => {
-                    const resServices = JSON.stringify(services)
+                    const resServices = JSON.stringify(services);
                     return res.end(resServices);
                 })
                 .catch(err => node.debug(err));
@@ -52,16 +52,16 @@ module.exports = function(RED) {
         RED.httpAdmin.get('/homeassistant/events', function (req, res, next) {
             return node.homeAssistant.getEvents()
                 .then(events => {
-                    const resEvents = JSON.stringify(events)
+                    const resEvents = JSON.stringify(events);
                     return res.end(resEvents);
                 })
                 .catch(err => node.debug(err));
         });
 
         const HTTP_STATIC_OPTS = { root: require('path').join(__dirname, '..', '/_static'), dotfiles: 'deny' };
-        RED.httpAdmin.get('/homeassistant/static/*', function(req,res) {
+        RED.httpAdmin.get('/homeassistant/static/*', function(req, res) {
             res.sendFile(req.params[0], HTTP_STATIC_OPTS);
         });
     }
     RED.nodes.registerType('server', ConfigServer);
-}
+};

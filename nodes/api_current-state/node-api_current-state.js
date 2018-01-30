@@ -1,5 +1,5 @@
 'use strict';
-const nodeUtils = require('../utils/node-utils');
+const nodeUtils = require('../../utils/node-utils');
 
 const _int = {
     getSettings: function(config, node) {
@@ -18,12 +18,12 @@ const _int = {
             : node.entity_id;
         const currentState = node.server.homeAssistant.states[entity_id];
 
-        const logAndContinueEmpty = (logMsg) => { node.warn(logMsg); return({ payload: {}}); }
+        const logAndContinueEmpty = (logMsg) => { node.warn(logMsg); return ({ payload: {}}) };
 
         // If connection issues occur there can be a situation where the state object isn't set before input enters
-        if (!states)        { return logAndContinueEmpty('local state cache missing, sending empty payload'); }
-        if (!entity_id)     { return logAndContinueEmpty('entity ID not set, cannot get current state, sending empty payload'); }
-        if (!currentState)  { return logAndContinueEmpty(`entity could not be found in cache for entity_id: ${entity_id}, sending empty payload`); }
+        if (!states)        { return logAndContinueEmpty('local state cache missing, sending empty payload') }
+        if (!entity_id)     { return logAndContinueEmpty('entity ID not set, cannot get current state, sending empty payload') }
+        if (!currentState)  { return logAndContinueEmpty(`entity could not be found in cache for entity_id: ${entity_id}, sending empty payload`) }
 
         const shouldHaltIfState = node.halt_if && (currentState.state === node.halt_if);
         node.debug(`Get current state: Found entity: ${entity_id}, with state: ${currentState.state}`);
@@ -37,7 +37,6 @@ const _int = {
     }
 };
 
-
 module.exports = function(RED) {
     function CurrentState(config) {
         const node = this;
@@ -49,4 +48,4 @@ module.exports = function(RED) {
     }
 
     RED.nodes.registerType('api-current-state', CurrentState);
-}
+};

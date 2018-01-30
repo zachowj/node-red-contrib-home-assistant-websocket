@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
 'use strict';
-const nodeUtils = require('../utils/node-utils');
+const nodeUtils = require('../../utils/node-utils');
 
 const _int = {
     getSettings: function getSettings(config) {
@@ -35,7 +35,7 @@ const _int = {
             })
             .catch(err => {
                 console.log(err); // eslint-disable-line
-                let notifyError = 'Error calling service, home assistant api error'
+                let notifyError = 'Error calling service, home assistant api error';
                 notifyError = (err && err.response)
                     ? notifyError += `: URL: ${err.response.config.url}, Status: ${err.response.status}, Message: ${err.message}`
                     : notifyError += `: ${err.message}`;
@@ -43,7 +43,7 @@ const _int = {
                 node.error(notifyError, msg);
             });
     }
-}
+};
 
 module.exports = function(RED) {
     function NodeApiGetHistory(config) {
