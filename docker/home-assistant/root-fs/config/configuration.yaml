@@ -24,6 +24,8 @@ recorder:
 
 frontend:
 config:
+history:
+recorder:
 map:
 sun:
 
@@ -54,7 +56,6 @@ switch:
     name: MQTT Dev Switch
     command_topic: dev/mqtt-dev-switch/cmd
     state_topic:   dev/mqtt-dev-switch/state
-    opto
 
 sensor:
   - platform:    mqtt

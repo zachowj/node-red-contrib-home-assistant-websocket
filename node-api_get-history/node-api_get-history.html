@@ -5,54 +5,19 @@
         defaults: {
             name:         { value: '' },
             server:       { value: '', type: 'server', required: true },
-            startdate:    { value: '' },
-            // TODO: Implement filterentity
-            // filterentity: { value: '' }
+            startdate:    { value: '' }
         },
         inputs:       1,
         outputs:      1,
-        icon:         "timer.png",
+        icon:         'timer.png',
         paletteLabel: 'get history',
-        label: function() {
+        label:        function() {
             if (this.name) { return this.name; }
             if (this.startdate) {
                 const startdate = new Date(this.startdate);
                 return `${startdate.toLocaleDateString()} ${startdate.toLocaleTimeString()}`;
             }
             return 'get history';
-            // return (this.filterentity) ? this.filterentity : 'get history';
-        },
-        oneditprepare: function () {
-            const loadDatePicker = () => $.getScript('homeassistant/static/vendor/flatpickr/flatpickr.min.js');
-            const init           = () => {
-                let preSelectedDateOrToday = ($inputStartDateHidden.val()
-                    ? new Date($inputStartDateHidden.val())
-                    : (new Date()).setHours(0, 0, 0))
-
-                return flatpickr("#node-input-startdate-picker", {
-                    enableTime:  true,
-                    maxDate:     new Date(),
-                    defaultDate: preSelectedDateOrToday,
-                    onClose:     function(selectedDates, dateStr, instance) {
-                        $('#node-input-startdate').val(selectedDates[0].toISOString());
-                    }
-                });
-            };
-
-            if (!this.datePicker) {
-                loadDatePicker()
-                    .then(res        => init())
-                    .then(datePicker => (this.datePicker = datePicker))
-                    .fail(err       => console.error(err));
-            }
-        },
-        oneditcancel: function() {
-            this.datePicker.destroy();
-            delete this.datePicker;
-        },
-        oneditsave: function() {
-            this.datePicker.destroy();
-            delete this.datePicker;
         }
     });
 </script>
@@ -69,60 +34,47 @@
         <input type="text" id="node-input-server" />
     </div>
 
+
     <div class="form-row">
-        <input type="hidden" type="text" id="node-input-startdate" autofocus="autofocus" />
+        <label for="node-input-startdate"><i class="fa fa-date"></i> Start Date</label>
+        <input type="text" id="node-input-startdate" autofocus="autofocus" />
     </div>
 
-    <div class="form-row" style="position: relative; margin-bottom: 0px;">
-        <label for="node-input-startdate-picker"><i class="fa fa-date"></i> Start Date</label>
-        <input  id="node-input-startdate-picker">
+    <div class="form-tips">
+        <ul>
+            <li>
+                <code>startdate</code> must be in ISO format, example: "2018-01-27T13:00:00+00:00"
+            </li>
+        </ul>
     </div>
-
-    <!-- <div class="form-row">
-        <label for="node-input-filterentity"><i class="fa fa-server"></i> Filter Entity Id:</label>
-        <input type="text" id="node-input-filterentity" />
-    </div> -->
-
 </script>
 
 <script type="text/x-red" data-help-name="api-get-history">
-    <p>Calls Home Assistant to query for entity history</p>
-    <link rel='stylesheet' href='homeassistant/static/vendor/flatpickr/flatpickr.min.css' />
-
-    <p> WARNING: WIP Node </p>
-
-    <h3>Details</h3>
-    <p>Fetches history for all entities, optionally filtering by an entity id. Values set in both configuration and incoming msg result in incoming message values being used</p>
-    <p class="ha-additional-info">NOTE: Node will output any home assistant API errors for catching with the 'catch all' node</p>
-
-    <h3>Configuration</h3>
-    <dl class="message-properties">
-        <dt class="optional"> Start Date <span class="property-type">string</span></dt>
-        <dd> A valid date string, optionally with time </dd>
-        <!-- <dt class="optional"> Filter Entity ID <span class="property-type">string</span></dt>
-        <dd> Home Assistant entity_id to filter history by </dd> -->
-    </dl>
-
+    <p>Fetches history from Home Assistant (all history for the past day by default)</p>
 
     <h3>Inputs</h3>
     <dl class="message-properties">
-        <!-- <dt class="optional"> entity_id <span class="property-type">string</span> </dt>
-        <dd> Home Assistant entity_id to filter history by </dd> -->
-        <dt class="optional"> start_date <span class="property-type">string | Date</span> </dt>
-        <dd> fetch history starting from this date </dd>
+        <dt class="optional">
+            startdate       <span class="property-type">string | date</span>
+        </dt>
+        <dd>Date to start fetching history from. Will override the nodes configuration if passed in</dd>
     </dl>
 
     <h3>Outputs</h3>
     <dl class="message-properties">
-        <dt> payload <span class="property-type">string</span></dt>
-        <dd>The history returned by home-assistant</dd>
-        <dt> startdate <span class="property-type">string</span></dt>
-        <dd>The date history fetched from</dd>
+        <dt>
+            payload         <span class="property-type">array</span>
+        </dt>
+        <dd>The history returned by home-assistant, which is an array of arrays where each array entry contains history objects for one particular entity</dd>
+        <dt>
+            startdate         <span class="property-type">string</span>
+        </dt>
+        <dd>ISO date string used to fetch history</dd>
     </dl>
 
     <h3>References</h3>
     <ul>
-        <li><a href="https://home-assistant.io/components/history/">Home Assistant History Docs</a></li>
+        <li><a href="https://home-assistant.io/components/history">HA History Component</a></li>
+        <li><a href="https://home-assistant.io/developers/rest_api">HA API: /api/history/period</a></li>
     </ul>
-
 </script>
