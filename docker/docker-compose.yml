@@ -54,7 +54,7 @@ services:
     build:
       context: ./home-assistant
     # While messing with HA config map the repo config to the container for easy changes
-    volumes:
+    # volumes:
     #   - './home-assistant/root-fs/config/configuration.yaml:/config/configuration.yaml'
     ports:
       - 8300:8300
