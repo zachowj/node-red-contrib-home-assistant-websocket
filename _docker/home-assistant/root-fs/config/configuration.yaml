@@ -25,7 +25,6 @@ recorder:
 frontend:
 config:
 history:
-recorder:
 map:
 sun:
 
