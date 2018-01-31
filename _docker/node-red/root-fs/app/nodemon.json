@@ -1,13 +1,9 @@
 {
     "colours": true,
-    "delay": 1,
-    "ignore": [
-        "/data-dev/node_modules/node-red-contrib-home-assistant/docker/**/*",
-        "/data-dev/node_modules/node-red-contrib-home-assistant/node_modules/**/*"
-    ],
+    "delay":   1,
     "verbose": false,
-    "watch": [
-        "/data-dev/node_modules/node-red-contrib-home-assistant"
+    "watch":   [
+        "/data/node_modules/node-red-contrib-home-assistant"
     ],
     "env": {
         "NODE_ENV": "development"

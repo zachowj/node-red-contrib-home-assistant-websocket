@@ -42,7 +42,7 @@ services:
       context: ./node-red
     command: npm run dev:watch
     volumes:
-      - '..:/data-dev/node_modules/node-red-contrib-home-assistant'
+      - '..:/data/node_modules/node-red-contrib-home-assistant'
     #   - './node-red/root-fs/data-dev/flows.json:/data-dev/flows.json'   # Map flows file for easy commitable examples building
     ports:
       - 1880:1880
