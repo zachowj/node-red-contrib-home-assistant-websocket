@@ -31,16 +31,20 @@
       "server-events": "nodes/server-events/node-server-events.js",
       "server-state-changed": "nodes/server-state-changed/node-server-state-changed.js",
       "api-call-service": "nodes/api_call-service/node-api_call-service.js",
-      "api-current-state": "nodes/api_current-state/node-api_current-state.js",
+      "api-current-state": "nodes/api_current-state/api_current-state.js",
       "api-get-history": "nodes/api_get-history/node-api_get-history.js",
       "api-render-template": "nodes/api_render-template/node-api_render-template.js"
     }
   },
   "dependencies": {
+    "clone-deep": "^3.0.1",
     "date-fns": "^1.28.5",
     "debug": "^2.6.3",
     "is-string": "^1.0.4",
-    "node-home-assistant": "0.1.0"
+    "joi": "^13.1.1",
+    "lodash.merge": "^4.6.0",
+    "node-home-assistant": "0.1.0",
+    "selectn": "^1.1.2"
   },
   "devDependencies": {
     "eslint": "^4.8.0",

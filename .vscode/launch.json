@@ -13,7 +13,7 @@
             "address":   "localhost",
             "port":      9123,
             "localRoot": "${workspaceFolder}",
-            "remoteRoot": "/data-dev/node_modules/node-red-contrib-home-assistant",
+            "remoteRoot": "/data/node_modules/node-red-contrib-home-assistant",
             "trace": false,
             "skipFiles": [
                 "<node_internals>/**/*.js"
