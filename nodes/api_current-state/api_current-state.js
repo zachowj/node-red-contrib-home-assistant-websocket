@@ -22,7 +22,7 @@ module.exports = function(RED) {
         }
     };
 
-    class CurrentState  extends BaseNode {
+    class CurrentStateNode  extends BaseNode {
         constructor(nodeDefinition) {
             super(nodeDefinition, RED, nodeOptions);
         }
@@ -50,5 +50,5 @@ module.exports = function(RED) {
         }
     }
 
-    RED.nodes.registerType('api-current-state', CurrentState);
+    RED.nodes.registerType('api-current-state', CurrentStateNode);
 };

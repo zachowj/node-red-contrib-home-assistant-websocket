@@ -8,7 +8,7 @@
             "name":      "Attach: Docker",
             "type":      "node",
             "request":   "attach",
-            "timeout":   10000,
+            "timeout":   20000,
             "restart":   true,
             "address":   "localhost",
             "port":      9123,
