@@ -1,44 +1,18 @@
-const BaseNode = require('../../lib/base-node');
+const EventsNode = require('../../lib/events-node');
 
 module.exports = function(RED) {
     const nodeOptions = {
         debug:  true,
         config: {
             entityIdFilter: (nodeDef) => nodeDef.entityidfilter ? nodeDef.entityidfilter.split(',').map(f => f.trim()) : null,
-            haltIfState:    (nodeDef) => nodeDef.haltifstate ? nodeDef.haltifstate.trim() : null,
-            name:           {},
-            server:         { isNode: true }
+            haltIfState:    (nodeDef) => nodeDef.haltifstate ? nodeDef.haltifstate.trim() : null
         }
     };
 
-    class ServerStateChangedNode extends BaseNode {
+    class ServerStateChangedNode extends EventsNode {
         constructor(nodeDefinition) {
             super(nodeDefinition, RED, nodeOptions);
-
-            this.listeners = {
-                onHaEventsStateChanged: this.onHaEventsStateChanged.bind(this),
-                onHaEventsClose:        this.onHaEventsClose.bind(this),
-                onHaEventsOpen:         this.onHaEventsOpen.bind(this),
-                onHaEventsError:        this.onHaEventsError.bind(this)
-            };
-
-            this.setConnectionStatus(this.isConnected);
-
-            if (this.eventsClient) {
-                this.eventsClient.addListener('ha_events:state_changed', this.listeners.onHaEventsStateChanged);
-                this.eventsClient.addListener('ha_events:close',         this.listeners.onHaEventsClose);
-                this.eventsClient.addListener('ha_events:open',          this.listeners.onHaEventsOpen);
-                this.eventsClient.addListener('ha_events:error',         this.listeners.onHaEventsError);
-            }
-        }
-
-        onClose(nodeRemoved) {
-            if (this.eventsClient) {
-                this.eventsClient.removeListener('ha_events:state_changed', this.listeners.onHaEventsStateChanged);
-                this.eventsClient.removeListener('ha_events:close',         this.listeners.onHaEventsClose);
-                this.eventsClient.removeListener('ha_events:open',          this.listeners.onHaEventsOpen);
-                this.eventsClient.removeListener('ha_events:error',         this.listeners.onHaEventsError);
-            }
+            this.addEventClientListener({ event: 'ha_events:state_changed', handler: this.onHaEventsStateChanged.bind(this) });
         }
 
         onHaEventsStateChanged (evt) {
@@ -77,17 +51,6 @@ module.exports = function(RED) {
             }
         }
 
-        onHaEventsClose() {
-            this.setConnectionStatus(false);
-        }
-        onHaEventsOpen()  {
-            this.setConnectionStatus(true);
-        }
-
-        onHaEventsError(err) {
-            if (err.message) this.error(err.message);
-        }
-
         shouldHaltIfState (haEvent, haltIfState) {
             if (!this.nodeConfig.haltIfState) return false;
             const shouldHalt = (this.nodeConfig.haltIfState === haEvent.new_state.state);
@@ -98,20 +61,6 @@ module.exports = function(RED) {
             if (!this.nodeConfig.entityIdFilter) return true;
             const found = this.nodeConfig.entityIdFilter.filter(filterStr => (entityId.indexOf(filterStr) >= 0));
             return found.length > 0;
-        }
-
-        setConnectionStatus(isConnected) {
-            (isConnected)
-                ? this.setStatus({ shape: 'dot', fill: 'green', text: 'connected'   })
-                : this.setStatus({ shape: 'ring', fill: 'red', text: 'disconnected' });
-        }
-
-        get eventsClient() {
-            return this.reach('nodeConfig.server.events');
-        }
-
-        get isConnected() {
-            return this.eventsClient && this.eventsClient.connected;
         }
     }
 
