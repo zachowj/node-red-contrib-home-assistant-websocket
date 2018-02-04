@@ -13,7 +13,8 @@
     "docker:down": "npm run docker -- down -vt5 && npm run docker -- rm -fv",
     "docker:restart": "npm run docker -- restart",
     "docker:logs": "npm run docker -- logs -f && true",
-    "docker": "docker-compose -f _docker/docker-compose.yml"
+    "docker": "docker-compose -f _docker/docker-compose.yml",
+    "docker-map": "docker-compose -f _docker/docker-compose.mapped.yml"
   },
   "repository": {
     "type": "git",

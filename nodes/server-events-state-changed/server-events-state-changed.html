@@ -3,10 +3,11 @@
         category: 'home_assistant',
         color:    '#038FC7',
         defaults: {
-            name:              { value: '' },
-            server:            { value: '', type: 'server', required: true },
-            entityidfilter:    { value: '' },
-            haltifstate:       { value: '' }
+            name:               { value: '' },
+            server:             { value: '', type: 'server', required: true },
+            entityidfilter:     { value: '' },
+            entityidfiltertype: { value: '' },
+            haltifstate:        { value: '' }
         },
         inputs: 0,
         outputs: 1,
@@ -14,24 +15,29 @@
         paletteLabel: 'events: state',
         label: function() { return this.name || `state_changed: ${this.entityidfilter || 'all entities'}` },
         oneditprepare: function () {
-            const $entityIdField          = $('#node-input-entityidfilter');
-            const $serverField            = $('#node-input-server');
-            $entityIdField.val(this.entityidfilter);
+            const $entityidfilter     = $('#node-input-entityidfilter');
+            const $entityidfiltertype = $('#node-input-entityidfiltertype');
+            const $server             = $('#node-input-server');
+
+            $entityidfilter.val(this.entityidfilter);
+            this.entityidfiltertype = this.entityidfiltertype || 'substring';
+            $entityidfiltertype.val(this.entityidfiltertype);
+            $entityidfilter.val(this.entityidfilter);
 
             const setupAutocomplete = (node) => {
-                const selectedServer = $serverField.val();
+                const selectedServer = $server.val();
 
                 // A home assistant server is selected in the node config
                 if (node.server || (selectedServer && selectedServer !== '_ADD_')) {
                     $.get('/homeassistant/entities').done((entities) => {
                         node.availableEntities = JSON.parse(entities);
-                        $entityIdField.autocomplete({ source: node.availableEntities, minLength: 0 });
+                        $entityidfilter.autocomplete({ source: node.availableEntities, minLength: 0 });
                     })
                     .fail((err) => RED.notify(err.responseText, 'error'));
                 }
             };
 
-            $serverField.change(() => setupAutocomplete(this));
+            $server.change(() => setupAutocomplete(this));
         },
         oneditsave: function() {
             this.entityidfilter         = $("#node-input-entityidfilter").val();
@@ -41,19 +47,29 @@
 
 
 <script type="text/x-red" data-template-name="server-state-changed">
+    <!-- Name -->
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
 
+    <!-- Server -->
     <div class="form-row">
         <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
         <input type="text" id="node-input-server" />
     </div>
 
+    <!-- Entity ID Filter and Filter Type -->
     <div class="form-row">
-        <label for="node-input-entityidfilter"><i class="fa fa-filter"></i> EntityID Filter</label>
-        <input type="text" id="node-input-entityidfilter" placeholder="binary_sensor"/>
+        <label for="node-input-entityidfilter"><i class="fa fa-tag"></i> Entity ID</label>
+
+        <input type="text" id="node-input-entityidfilter" placeholder="binary_sensor" style="width: 50%;" />
+
+        <select type="text" id="node-input-entityidfiltertype" style="width: 20%;">
+            <option value="exact">Exact</option>
+            <option value="substring">Substring</option>
+            <option value="regex">Regex</option>
+        </select>
     </div>
 
     <div class="form-row">

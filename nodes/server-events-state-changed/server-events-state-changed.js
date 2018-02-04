@@ -4,8 +4,15 @@ module.exports = function(RED) {
     const nodeOptions = {
         debug:  true,
         config: {
-            entityIdFilter: (nodeDef) => nodeDef.entityidfilter ? nodeDef.entityidfilter.split(',').map(f => f.trim()) : null,
-            haltIfState:    (nodeDef) => nodeDef.haltifstate ? nodeDef.haltifstate.trim() : null
+            entityidfilter: (nodeDef) => {
+                if (!nodeDef.entityidfilter) return undefined;
+
+                if (nodeDef.entityidfiltertype === 'substring') return nodeDef.entityidfilter.split(',').map(f => f.trim());
+                if (nodeDef.entityidfiltertype === 'regex')     return new RegExp(nodeDef.entityidfilter);
+                return nodeDef.entityidfilter;
+            },
+            entityidfiltertype: {},
+            haltIfState:        (nodeDef) => nodeDef.haltifstate ? nodeDef.haltifstate.trim() : null
         }
     };
 
@@ -58,9 +65,22 @@ module.exports = function(RED) {
         }
 
         shouldIncludeEvent (entityId) {
-            if (!this.nodeConfig.entityIdFilter) return true;
-            const found = this.nodeConfig.entityIdFilter.filter(filterStr => (entityId.indexOf(filterStr) >= 0));
-            return found.length > 0;
+            if (!this.nodeConfig.entityidfilter) return true;
+            const filter = this.nodeConfig.entityidfilter;
+            const type   = this.nodeConfig.entityidfiltertype;
+
+            if (type === 'exact') {
+                return filter === entityId;
+            }
+
+            if (type === 'substring') {
+                const found = this.nodeConfig.entityidfilter.filter(filterStr => (entityId.indexOf(filterStr) >= 0));
+                return found.length > 0;
+            }
+
+            if (type === 'regex') {
+                return filter.test(entityId);
+            }
         }
     }
 

@@ -57,6 +57,16 @@ b. _Note: Also first run load of HomeAssistant web interface seems very slow, bu
 | mqtt-listener          |                          | debug listener subscribed to topic `dev/#` of `mqtt` broker for log output                                                      |
 | mqtt-dev-sensor        |                          | publishes every 10 seconds to a topic home assistant has  a `sensor` platform for                                               |
 | mqtt-dev-binary-sensor |                          | publishes every 30 seconds to a topic home assistant has a `binary_sensor` for                                                  |
+### Docker Tips
+1. If you run into environment issues running `npm run dev:clean` should remove all docker data and get you back to a clean state
+2. All data will be discarded when the docker container is removed. You can map volumes locally to persist data.  Create and copy as directed below then modify `docker-compose.yaml` to map the container directories to the created host dirs below. _See: `./_docker/docker-compose.mapped.yaml` for an example or just use that file to launch manually_
+
+```
+mkdir -p _docker-volumes/home-assistant/config
+mkdir -p _docker-volumes/node-red/data
+cp _docker/home-assistant/root-fs/config/* _docker-volumes/home-assistant/config/
+cp _docker/node-red/root-fs/data/*  _docker-volumes/node-red/data
+```
 
 
 ### Node Debugger via VSCode
