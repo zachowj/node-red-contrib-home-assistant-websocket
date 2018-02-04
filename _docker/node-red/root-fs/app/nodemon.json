@@ -1,9 +1,14 @@
 {
     "colours": true,
-    "delay":   1,
+    "delay": "750",
     "verbose": false,
     "watch":   [
         "/data/node_modules/node-red-contrib-home-assistant"
+    ],
+    "ignore": [
+        "/data/node_modules/node-red-contrib-home-assistant/node_modules",
+        "/data/node_modules/node-red-contrib-home-assistant/_docker",
+        "/data/node_modules/node-red-contrib-home-assistant/_docker-volumes"
     ],
     "env": {
         "NODE_ENV": "development"

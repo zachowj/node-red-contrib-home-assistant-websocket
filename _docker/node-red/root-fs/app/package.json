@@ -6,7 +6,7 @@
     "main": "node_modules/node-red/red/red.js",
     "scripts": {
         "start": "node $NODE_OPTIONS /app/node_modules/node-red/red.js -v --userDir $USER_DIR $FLOWS",
-        "dev:watch": "/app/node_modules/.bin/nodemon --inspect=0.0.0.0:9229 --config $NODEMON_CONFIG /app/node_modules/node-red/red.js -- -v --userDir $USER_DIR $FLOWS"
+        "dev:watch": "/app/node_modules/.bin/nodemon --config $NODEMON_CONFIG --exec 'sleep 1; node --inspect=0.0.0.0:9229 /app/node_modules/node-red/red.js -v --userDir $USER_DIR $FLOWS'"
     },
     "dependencies": {
         "node-red": "0.17.5",
