@@ -31,6 +31,7 @@
       "server": "nodes/config-server/config-server.js",
       "server-events": "nodes/server-events-all/server-events-all.js",
       "server-state-changed": "nodes/server-events-state-changed/server-events-state-changed.js",
+      "trigger-state": "nodes/trigger-state/trigger-state.js",
       "api-call-service": "nodes/api_call-service/api_call-service.js",
       "api-current-state": "nodes/api_current-state/api_current-state.js",
       "api-get-history": "nodes/api_get-history/api_get-history.js",

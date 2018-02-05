@@ -1,6 +1,6 @@
 {
     "colours": true,
-    "delay": "750",
+    "delay": "300",
     "verbose": false,
     "watch":   [
         "/data/node_modules/node-red-contrib-home-assistant"
