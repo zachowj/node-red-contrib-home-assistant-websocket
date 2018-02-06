@@ -26,6 +26,7 @@ module.exports = function(RED) {
             this.messageTimers = {};
         }
         onClose(removed) {
+            super.onClose();
             // TODO: test this
             if (removed) {
                 this.debug('removing all message timers onClose and node was removed');
@@ -33,6 +34,18 @@ module.exports = function(RED) {
                     if (this.messageTimers[k]) clearTimeout(this.messageTimers[k]);
                     this.messageTimers[k] = null;
                 });
+            }
+        }
+
+        onInput({ message })  {
+            const p = message.payload;
+            if (p.entity_id && p.new_state && p.old_state) {
+                const evt = {
+                    event_type: 'state_changed',
+                    entity_id:  p.entity_id,
+                    event:      p
+                };
+                this.onEntityStateChanged(evt);
             }
         }
 
@@ -86,6 +99,9 @@ module.exports = function(RED) {
                 const { entity_id, event } = evt;
                 const { nodeConfig } = this;
 
+                // The event listener will only fire off correct entity events, this is for testing with incoming message
+                if (entity_id !== this.nodeConfig.entityid) return;
+
                 const allComparatorResults = [];
                 let comparatorsAllMatches = true;
 
@@ -130,7 +146,7 @@ module.exports = function(RED) {
 
                     if (output.comparatorPropertyType !== 'always') {
                         const actualValue = this.utils.reach(output.comparatorPropertyValue, event);
-                        comparatorMatched = this.getComparatorResult(output.comparatorType, output.comparatorPropertyValue, actualValue);
+                        comparatorMatched = this.getComparatorResult(output.comparatorType, output.comparatorValue, actualValue);
                     }
 
                     let message = (output.messageType === 'default') ? msg : output.messageValue;

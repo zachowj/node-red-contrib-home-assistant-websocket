@@ -76,6 +76,7 @@
         <div>
             <div class="form-row">
                 <label for="output-timer-type" style="width: 60px"> Send</label>
+                <input type="hidden" id="node-input-outputs"/> <!-- Needs to exist for node-red output remapping -->
 
                 <!-- Type -->
                 <select type="text" id="output-timer-type" style="width: 112px;">
@@ -177,8 +178,14 @@
             if (index === 1) return 'blocked';
 
             // Get custom output by length minus default outputs
-            const customoutput = this.customoutputs[index - NUM_DEFAULT_OUTPUTS];
-            return `${customoutput.comparatorType.replace('_', '')} ${customoutput.comparatorValue}`;
+            const co = this.customoutputs[index - NUM_DEFAULT_OUTPUTS];
+            let label = `${co.timerType}: `;
+            if (co.comparatorPropertyType === 'always') {
+                label += 'always sent'
+            } else {
+                label += `sent when ${co.comparatorPropertyType.replace('_', ' ')} ${co.comparatorType.replace('_', '')} ${co.comparatorValue}`;
+            }
+            return label;
         },
         icon:          "trigger.png",
         paletteLabel:  'trigger: state',
@@ -188,6 +195,8 @@
 
             const $entityid = $('#node-input-entityid');
             const $server   = $('#node-input-server');
+            const $outputs  = $('#node-input-outputs');
+
 
             const getRandomId = () => Math.random().toString(36).slice(2);
 
@@ -342,6 +351,17 @@
                     comparatorValue:         $customoutputs.comparatorValue.val()
                 };
 
+                // Removing an output and adding in same edit session means output
+                // map needs to be adjusted, otherwise just increment count
+                debugger;
+                if (isNaN(NODE.outputs)) {
+                    // const maxOutput = Math.max(Object.keys(NODE.outputs));
+                    NODE.outputs[getRandomId()] = 'abc';
+                } else {
+                    NODE.outputs = parseInt(NODE.outputs) + 1;
+                }
+                $outputs.val(isNaN(NODE.outputs) ? JSON.parse(NODE.outputs) : NODE.outputs);
+
                 if (output.comparatorPropertyType === 'current_state')  output.comparatorPropertyValue = 'new_state.state';
                 if (output.comparatorPropertyType === 'previous_state') output.comparatorPropertyValue = 'old_state.state';
 
@@ -349,6 +369,7 @@
             });
 
             // Outputs List
+            let NODE = this;
             $customoutputs.list.editableList({
                 addButton: false,
                 height:    159,
@@ -356,12 +377,43 @@
                 removable: true,
                 removeItem( data ) {
                     console.log('Item removed', data);
+                    // node-red uses a map of old output index to new output index to re-map
+                    // links between nodes. If new index is -1 then it was removed
+                    let customOutputRemovedIndex = NODE.customoutputs.indexOf(data);
+                    NODE.outputs = !(isNaN(NODE.outputs)) ? { 0: 0, 1: 1 } : NODE.outputs;
+                    NODE.outputs[customOutputRemovedIndex + NUM_DEFAULT_OUTPUTS] = -1;
+
+                    NODE.customoutputs.forEach((o, customOutputIndex) => {
+                        const customAllIndex = customOutputIndex + NUM_DEFAULT_OUTPUTS;
+                        const outputIsBeforeRemoval = (customOutputIndex < customOutputRemovedIndex);
+                        const customOutputAlreadyMapped = NODE.outputs.hasOwnProperty(customAllIndex);
+
+                        // If we're on removed output
+                        if (customOutputIndex === customOutputRemovedIndex) return;
+                        // output already removed
+                        if (customOutputAlreadyMapped && NODE.outputs[customAllIndex] === -1) return;
+                        // output previously removed caused this output to be remapped
+                        if (customOutputAlreadyMapped) {
+                            NODE.outputs[customAllIndex] = (outputIsBeforeRemoval)
+                                ? NODE.outputs[customAllIndex]
+                                : NODE.outputs[customAllIndex] - 1;
+                            return;
+                        }
+
+                        // output exists after removal and hasn't been mapped, remap to current index - 1
+                        NODE.outputs[customAllIndex] = (outputIsBeforeRemoval)
+                            ? customAllIndex
+                            : customAllIndex - 1;
+                    });
+
+                    $outputs.val(JSON.stringify(NODE.outputs));
                 },
                 addItem:   function(row, index, data) {
                     console.log('Adding output data: ', data);
                     const $row = $(row);
                     const { comparatorType, comparatorValue } = data;
                     const htmlData = JSON.stringify(data);
+
                     $row.html(htmlData);
                 }
             });
@@ -386,17 +438,17 @@
             $customoutputs.comparatorPropertyType.on('change', function (e) {
                 const val = e.target.value;
                 if (val === 'always') {
-                    $customoutputs.comparatorProperty.attr('disabled', 'disabled');
+                    $customoutputs.comparatorPropertyValue.attr('disabled', 'disabled');
                     $customoutputs.comparatorType.attr('disabled', 'disabled');
                     $customoutputs.comparatorValue.attr('disabled', 'disabled');
                 }
                 if (val === 'previous_state' || val === 'current_state') {
-                    $customoutputs.comparatorProperty.attr('disabled', 'disabled');
+                    $customoutputs.comparatorPropertyValue.attr('disabled', 'disabled');
                     $customoutputs.comparatorType.removeAttr('disabled');
                     $customoutputs.comparatorValue.removeAttr('disabled');
                 }
                 if (val === 'property') {
-                    $customoutputs.comparatorProperty.removeAttr('disabled');
+                    $customoutputs.comparatorPropertyValue.removeAttr('disabled');
                     $customoutputs.comparatorType.removeAttr('disabled');
                     $customoutputs.comparatorValue.removeAttr('disabled');
                 }
