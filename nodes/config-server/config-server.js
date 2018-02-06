@@ -5,7 +5,7 @@ module.exports = function(RED) {
 
     const httpHandlers = {
         getEntities: function (req, res, next) {
-            return this.api.getStates()
+            return this.homeAssistant.getStates()
                 .then(states => res.json(JSON.stringify(Object.keys(states))))
                 .catch(e => this.error(e.message));
         },
@@ -83,9 +83,9 @@ module.exports = function(RED) {
         onHaEventsOpen() {
             // This is another hack that should be set in node-home-assistant
             // when the connection is first made the states cache needs to be refreshed
-            this.api.getStates(null, { forceRefresh: true });
-            this.api.getServices({ forceRefresh: true });
-            this.api.getEvents({ forceRefresh: true });
+            this.homeAssistant.getStates(null, true);
+            this.homeAssistant.getServices(true);
+            this.homeAssistant.getEvents(true);
             this.debug('config server event listener connected');
         }
 

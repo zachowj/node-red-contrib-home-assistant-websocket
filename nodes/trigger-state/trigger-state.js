@@ -1,5 +1,12 @@
 const EventsNode = require('../../lib/events-node');
 
+const TIMER_MULTIPLIERS = {
+    milliseconds: 1,
+    seconds:      1000,
+    minutes:      60000,
+    hours:        3600000
+};
+
 module.exports = function(RED) {
     const nodeOptions = {
         debug:  true,
@@ -15,6 +22,18 @@ module.exports = function(RED) {
             super(nodeDefinition, RED, nodeOptions);
             const eventTopic = `ha_events:state_changed:${this.nodeConfig.entityid}`;
             this.addEventClientListener({ event: eventTopic, handler: this.onEntityStateChanged.bind(this) });
+            this.NUM_DEFAULT_MESSAGES = 2;
+            this.messageTimers = {};
+        }
+        onClose(removed) {
+            // TODO: test this
+            if (removed) {
+                this.debug('removing all message timers onClose and node was removed');
+                Object.keys(this.messageTimers).forEach(k => {
+                    if (this.messageTimers[k]) clearTimeout(this.messageTimers[k]);
+                    this.messageTimers[k] = null;
+                });
+            }
         }
 
         async getConstraintTargetData(constraint, triggerEvent) {
@@ -29,7 +48,7 @@ module.exports = function(RED) {
                 if (isTargetThisEntity) {
                     targetData.state = triggerEvent;
                 } else {
-                    const state = await this.nodeConfig.server.api.getStates(targetData.entityid);
+                    const state = await this.nodeConfig.server.homeAssistant.getStates(targetData.entityid);
                     targetData.state = {
                         new_state: state[targetData.entityid]
                     };
@@ -94,7 +113,7 @@ module.exports = function(RED) {
 
                     const failedConstraints = allComparatorResults.filter(res => !res.comparatorResult)
                         .map(res => {
-                            this.debug(`Failed Result: "${res.constraintTarget.entityid}" had actual value of "${res.actualValue}" which failed an "${res.constraint.comparatorType}" check looking for expected value "${res.constraint.comparatorValue}"`);
+                            this.debug(`Failed Result: "${res.constraintTarget.entityid}" had value of "${res.actualValue}" which failed an "${res.constraint.comparatorType}" check against expected value "${res.constraint.comparatorValue}"`);
                             return res;
                         });
                     msg.failedConstraints = failedConstraints;
@@ -103,17 +122,61 @@ module.exports = function(RED) {
                     outputs = [msg, null];
                 }
 
-                if (!this.nodeConfig.customoutputs || !this.nodeConfig.customoutputs.length) return this.send(outputs);
+                if (!this.nodeConfig.customoutputs.length) return this.send(outputs);
 
                 // Map output to matched customoutputs
-                const customoutputMsgs = this.nodeConfig.customoutputs.reduce((acc, output) => {
-                    const actualValue = event.new_state.state;
-                    const comparatorMatched = this.getComparatorResult(output.comparatorType, output.comparatorValue, actualValue);
-                    (comparatorMatched) ? acc.push(msg) : acc.push(null);
+                const customoutputMsgs = this.nodeConfig.customoutputs.reduce((acc, output, reduceIndex) => {
+                    let comparatorMatched = true;
+
+                    if (output.comparatorPropertyType !== 'always') {
+                        const actualValue = this.utils.reach(output.comparatorPropertyValue, event);
+                        comparatorMatched = this.getComparatorResult(output.comparatorType, output.comparatorPropertyValue, actualValue);
+                    }
+
+                    let message = (output.messageType === 'default') ? msg : output.messageValue;
+
+                    // If comparator did not matched no need to go further
+                    if (!comparatorMatched) {
+                        this.debug('Skipping message, output comparator failed');
+                        acc.push(null);
+                        return acc;
+                    }
+
+                    // If comparator matched and send immediate is set just assign message to output
+                    if (output.timerType === 'immediate') {
+                        acc.push(message);
+                        this.debug('Adding immediate message');
+                        return acc;
+                    }
+
+                    // If already timer scheduler for this output then clear it for re-setting
+                    if (this.messageTimers[output.outputId]) {
+                        this.debug('Found already scheduled message, extending the message timeout');
+                        clearTimeout(this.messageTimers[output.outputId]);
+                    }
+
+                    // Get the timer ms value
+                    const timerDelayMs = output.timerValue * TIMER_MULTIPLIERS[output.timerUnit];
+
+                    // Create the message to send, all outputs leading to this one with null (dont send) values
+                    const customOutputIndexWithDefaults = reduceIndex + this.NUM_DEFAULT_MESSAGES;
+                    const scheduledMessage = (new Array(customOutputIndexWithDefaults + 1)).fill(null);
+                    scheduledMessage[customOutputIndexWithDefaults] = message;
+                    this.debug('Created scheduledMessage: ', scheduledMessage);
+
+                    this.messageTimers[output.outputId] = setTimeout(() => {
+                        this.debug('Sending delayed message', scheduledMessage);
+                        this.send(scheduledMessage);
+                        delete this.messageTimers[output.outputId];
+                    }, timerDelayMs);
+
+                    // Since the message was scheduled push null val to current message output list
+                    acc.push(null);
                     return acc;
                 }, []);
-                outputs = outputs.concat(customoutputMsgs);
 
+                outputs = outputs.concat(customoutputMsgs);
+                this.debug('Sending default output messages and any matched custom outputs(if any)');
                 this.send(outputs);
             } catch (e) {
                 this.error(e);

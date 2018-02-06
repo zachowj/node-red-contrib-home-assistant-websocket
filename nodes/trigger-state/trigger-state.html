@@ -69,27 +69,71 @@
             <button id="constraint-add-btn" style="width: 100%">Add Constraint</button>
         </div>
 
-        <!-- Add Custom Outputs -->
+        <!-- -------------------------------------------------------------- -->
+        <!-- Add Custom Outputs                                             -->
+        <!-- -------------------------------------------------------------- -->
         <h3>Add Outputs</h3>
         <div>
-            <!-- Output Comparator Selection -->
             <div class="form-row">
-                <label for="output-comparator-type" style="width: 60px"> State</label>
+                <label for="output-timer-type" style="width: 60px"> Send</label>
 
                 <!-- Type -->
-                <select type="text" id="output-comparator-type" style="width: 140px;">
-                    <option value="is">Is</option>
-                    <option value="is_not">Is Not</option>
+                <select type="text" id="output-timer-type" style="width: 112px;">
+                    <option value="immediate">  Immediately </option>
+                    <option value="delayed">    Delayed     </option>
+                </select>
 
-                    <option value="greater_than">Greater Than</option>
-                    <option value="less_than">Less Than</option>
+                <input type="text" id="output-timer-value" style="width: 22%" disabled />
+
+                <select type="text" id="output-timer-unit" style="width: 112px;" disabled>
+                    <option value="milliseconds">   Milliseconds    </option>
+                    <option value="seconds">        Seconds         </option>
+                    <option value="minutes">        Minutes         </option>
+                    <option value="hours">          Hours           </option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label for="output-message-type" style="width: 60px"> Message</label>
+
+                <!-- Type -->
+                <select type="text" id="output-message-type" style="width: 112px;">
+                    <option value="default">    Default Msg </option>
+                    <option value="custom">     Custom Msg  </option>
+                </select>
+
+                <input type="text" id="output-message-value" style="width: 52%" disabled/>
+            </div>
+
+
+            <!-- Output Comparator Selection -->
+            <div class="form-row">
+                <label for="output-comparator-type" style="width: 60px"> If</label>
+
+                <select type="text" id="output-comparator-property-type" style="width: 112px">
+                    <option value="always">             Always      </option>
+                    <option value="current_state">      State       </option>
+                    <option value="previous_state">     Prev State  </option>
+                    <option value="property">           Property    </option>
+                </select>
+
+                <input type="text" id="output-comparator-property-value" style="width: 52%" disabled />
+            </div>
+
+            <div class="form-row">
+                <!-- Type -->
+                <select type="text" id="output-comparator-type" style="width: 140px;" disabled>
+                    <option value="is">     Is      </option>
+                    <option value="is_not"> Is Not  </option>
+
+                    <option value="greater_than">   Greater Than    </option>
+                    <option value="less_than">      Less Than       </option>
 
                     <option value="includes">Includes</option>
                     <option value="does_not_include">Does Not Include</option>
                 </select>
 
-                <!-- Value -->
-                <input type="text" id="output-comparator-value" style="width: 45%" />
+                <input type="text" id="output-comparator-value" style="width: 62%" disabled />
             </div>
 
             <!-- Add Output Button -->
@@ -124,26 +168,39 @@
             outputs:       { value: 2  },
             customoutputs: { value: [] }
         },
-        inputs:        0,
+        inputs:        1,
         outputs:       2,
         outputLabels:  function(index) {
+            const NUM_DEFAULT_OUTPUTS = 2;
+
             if (index === 0) return 'allowed';
             if (index === 1) return 'blocked';
 
             // Get custom output by length minus default outputs
-            const customoutput = this.customoutputs[index - 2];
+            const customoutput = this.customoutputs[index - NUM_DEFAULT_OUTPUTS];
             return `${customoutput.comparatorType.replace('_', '')} ${customoutput.comparatorValue}`;
         },
         icon:          "trigger.png",
         paletteLabel:  'trigger: state',
         label:         function() { return this.name || `trigger-state: ${this.entityid}` },
         oneditprepare: function () {
+            const NUM_DEFAULT_OUTPUTS = 2;
+
             const $entityid = $('#node-input-entityid');
             const $server   = $('#node-input-server');
 
             const getRandomId = () => Math.random().toString(36).slice(2);
 
             $entityid.val(this.entityid);
+
+            // New nodes, select first available home-assistant config node found
+            if (!this.server) {
+                let defaultServer;
+                RED.nodes.eachConfig(n => {
+                    if (n.type === 'server' && !defaultServer) defaultServer = n.id;
+                });
+                if (defaultServer) $server.val(defaultServer);
+            }
 
             const setupAutocomplete = (node) => {
                 const selectedServer = $server.val();
@@ -251,18 +308,42 @@
             // * Add Custom Outputs
             // **************************
             const $customoutputs = {
-                list:            $('#output-list'),
-                comparatorType:  $('#output-comparator-type'),
-                comparatorValue: $('#output-comparator-value'),
-                addBtn:          $('#output-add-btn')
+                list:   $('#output-list'),
+                addBtn: $('#output-add-btn'),
+
+                timerType:               $('#output-timer-type'),
+                timerValue:              $('#output-timer-value'),
+                timerUnit:               $('#output-timer-unit'),
+
+                messageType:             $('#output-message-type'),
+                messageValue:            $('#output-message-value'),
+
+                comparatorPropertyType:  $('#output-comparator-property-type'),
+                comparatorPropertyValue: $('#output-comparator-property-value'),
+                comparatorType:          $('#output-comparator-type'),
+                comparatorValue:         $('#output-comparator-value')
             };
 
             // Outputs Add Button
             $customoutputs.addBtn.on('click', function() {
                 const output = {
-                    comparatorType:  $customoutputs.comparatorType.val(),
-                    comparatorValue: $customoutputs.comparatorValue.val()
+                    outputId:                getRandomId(),
+                    timerType:               $customoutputs.timerType.val(),
+                    timerValue:              $customoutputs.timerValue.val(),
+                    timerUnit:               $customoutputs.timerUnit.val(),
+
+                    messageType:             $customoutputs.messageType.val(),
+                    messageValue:            $customoutputs.messageValue.val(),
+
+                    comparatorPropertyType:  $customoutputs.comparatorPropertyType.val(),
+                    comparatorPropertyValue: $customoutputs.comparatorPropertyValue.val(),
+
+                    comparatorType:          $customoutputs.comparatorType.val(),
+                    comparatorValue:         $customoutputs.comparatorValue.val()
                 };
+
+                if (output.comparatorPropertyType === 'current_state')  output.comparatorPropertyValue = 'new_state.state';
+                if (output.comparatorPropertyType === 'previous_state') output.comparatorPropertyValue = 'old_state.state';
 
                 $customoutputs.list.editableList('addItem', output);
             });
@@ -280,16 +361,48 @@
                     console.log('Adding output data: ', data);
                     const $row = $(row);
                     const { comparatorType, comparatorValue } = data;
-
-                    const comparatorTypeText = comparatorType.replace('_', ' ');
-
-                    const rowHtml = `
-                        Incoming state ${comparatorTypeText} ${comparatorValue}
-                    `;
-
-                    $row.html(rowHtml);
+                    const htmlData = JSON.stringify(data);
+                    $row.html(htmlData);
                 }
             });
+
+             // Constraint select menu change handlers
+            $customoutputs.timerType.on('change', function (e) {
+                const val = e.target.value;
+                if (val === 'immediate') {
+                    $customoutputs.timerValue.attr('disabled', 'disabled')
+                    $customoutputs.timerUnit.attr('disabled', 'disabled')
+                } else {
+                    $customoutputs.timerValue.removeAttr('disabled')
+                    $customoutputs.timerUnit.removeAttr('disabled')
+                }
+            });
+            $customoutputs.messageType.on('change', function (e) {
+                const val = e.target.value;
+                (val === 'default')
+                    ? $customoutputs.messageValue.attr('disabled', 'disabled')
+                    : $customoutputs.messageValue.removeAttr('disabled');
+            });
+            $customoutputs.comparatorPropertyType.on('change', function (e) {
+                const val = e.target.value;
+                if (val === 'always') {
+                    $customoutputs.comparatorProperty.attr('disabled', 'disabled');
+                    $customoutputs.comparatorType.attr('disabled', 'disabled');
+                    $customoutputs.comparatorValue.attr('disabled', 'disabled');
+                }
+                if (val === 'previous_state' || val === 'current_state') {
+                    $customoutputs.comparatorProperty.attr('disabled', 'disabled');
+                    $customoutputs.comparatorType.removeAttr('disabled');
+                    $customoutputs.comparatorValue.removeAttr('disabled');
+                }
+                if (val === 'property') {
+                    $customoutputs.comparatorProperty.removeAttr('disabled');
+                    $customoutputs.comparatorType.removeAttr('disabled');
+                    $customoutputs.comparatorValue.removeAttr('disabled');
+                }
+
+            });
+
 
             // Add previous outputs to list
             this.customoutputs.forEach(o => $customoutputs.list.editableList('addItem', o));
