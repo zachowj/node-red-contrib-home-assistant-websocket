@@ -90,7 +90,7 @@ module.exports = function(RED) {
                 } else {
                     const state = await this.nodeConfig.server.homeAssistant.getStates(targetData.entityid);
                     targetData.state = {
-                        new_state: state[targetData.entityid]
+                        new_state: state
                     };
                 }
             } catch (e) {
@@ -136,8 +136,8 @@ module.exports = function(RED) {
         }
 
         async onEntityStateChanged (evt) {
-            if (!this.isenabled) {
-                this.debugToClient('node is currently disabled, ignoring received event: ', evt);
+            if (this.isenabled === false) {
+            this.debugToClient('node is currently disabled, ignoring received event: ', evt);
                 return;
             }
 
@@ -180,7 +180,7 @@ module.exports = function(RED) {
                 let outputs;
 
                 if (!comparatorsAllMatches) {
-                    this.debugToClient('one more more comparators failed to match constraints, message will output on failed output');
+                    this.debugToClient('one more more comparators failed to match constraints, message will send on failed output');
 
                     const failedConstraints = allComparatorResults.filter(res => !res.comparatorResult);
                     msg.failedConstraints = failedConstraints;
@@ -190,8 +190,8 @@ module.exports = function(RED) {
                     outputs = [msg, null];
                 }
 
-                // If constraints failed, or we have no custom outputs then we're done
-                if (!comparatorsAllMatches || !this.nodeConfig.customoutputs.length) {
+                // If constraints failed and we have no custom outputs then we're done
+                if (!comparatorsAllMatches && !this.nodeConfig.customoutputs.length) {
                     this.debugToClient('done processing sending messages: ', outputs);
                     return this.send(outputs);
                 }
