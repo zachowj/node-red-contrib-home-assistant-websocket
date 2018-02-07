@@ -20,21 +20,24 @@ module.exports = function(RED) {
     class TriggerState extends EventsNode {
         constructor(nodeDefinition) {
             super(nodeDefinition, RED, nodeOptions);
-            const eventTopic = `ha_events:state_changed:${this.nodeConfig.entityid}`;
+
+            const eventTopic = this.eventTopic = `ha_events:state_changed:${this.nodeConfig.entityid}`;
             this.addEventClientListener({ event: eventTopic, handler: this.onEntityStateChanged.bind(this) });
             this.NUM_DEFAULT_MESSAGES = 2;
             this.messageTimers = {};
         }
+        onHaEventsOpen()  {
+            super.onHaEventsOpen();
+            this.debugToClient(`connected, listening for ha events topic: ${this.eventTopic}`);
+        }
         onClose(removed) {
             super.onClose();
-            // TODO: test this
-            if (removed) {
-                this.debug('removing all message timers onClose and node was removed');
-                Object.keys(this.messageTimers).forEach(k => {
-                    if (this.messageTimers[k]) clearTimeout(this.messageTimers[k]);
-                    this.messageTimers[k] = null;
-                });
-            }
+
+            this.debug('removing all message timers onClose and node was removed');
+            Object.keys(this.messageTimers).forEach(k => {
+                if (this.messageTimers[k]) clearTimeout(this.messageTimers[k]);
+                this.messageTimers[k] = null;
+            });
         }
 
         onInput({ message })  {
@@ -45,6 +48,8 @@ module.exports = function(RED) {
                     entity_id:  p.entity_id,
                     event:      p
                 };
+
+                this.debugToClient('injecting "fake" ha event from input msg received: ', evt);
                 this.onEntityStateChanged(evt);
             }
         }
@@ -74,33 +79,52 @@ module.exports = function(RED) {
             return targetData;
         }
 
+        getCastValue(datatype, value) {
+            if (!datatype) return value;
+
+            switch (datatype) {
+                case 'num':  return parseFloat(value);
+                case 'str':  return value + '';
+                case 'bool': return !!value;
+                case 're':   return new RegExp(value);
+                case 'list': return value.split(',');
+                default: return value;
+            }
+        }
+
         /* eslint-disable indent */
-        getComparatorResult(comparatorType, comparatorValue, actualValue) {
+        getComparatorResult(comparatorType, comparatorValue, actualValue, comparatorValueDatatype) {
+            const cValue = this.getCastValue(comparatorValueDatatype, comparatorValue);
+
             switch (comparatorType) {
                 case 'is':
-                    return comparatorValue === actualValue;
                 case 'is_not':
-                    return comparatorValue !== actualValue;
-                case 'greater_than':
-                    return comparatorValue > actualValue;
-                case 'less_than':
-                    return comparatorValue < actualValue;
+                    // Datatype might be num, bool, str, re (regular expression)
+                    const isMatch = (comparatorValueDatatype === 're') ? cValue.test(actualValue) : (cValue === actualValue);
+                    return (comparatorType === 'is') ? isMatch : !isMatch;
                 case 'includes':
                 case 'does_not_include':
-                    const filterResults = comparatorValue.split(',').filter(cvalue => (cvalue === actualValue));
-                    return (comparatorType === 'includes')
-                        ? filterResults.length > 0
-                        : filterResults.length < 1;
+                    const isIncluded = cValue.includes(actualValue);
+                    return (comparatorType === 'includes') ? isIncluded : !isIncluded;
+                case 'greater_than':
+                    return actualValue > cValue;
+                case 'less_than':
+                    return actualValue < cValue;
             }
         }
 
         async onEntityStateChanged (evt) {
+            this.debugToClient('received state_changed event', evt);
+
             try {
                 const { entity_id, event } = evt;
                 const { nodeConfig } = this;
 
                 // The event listener will only fire off correct entity events, this is for testing with incoming message
-                if (entity_id !== this.nodeConfig.entityid) return;
+                if (entity_id !== this.nodeConfig.entityid) {
+                    this.debugToClient(`incoming entity_id(${entity_id})  does not match configured entity_id: (${this.nodeConfig.entityid}), skipping event processing`);
+                    return;
+                }
 
                 const allComparatorResults = [];
                 let comparatorsAllMatches = true;
@@ -109,7 +133,11 @@ module.exports = function(RED) {
                 for (let constraint of nodeConfig.constraints) {
                     const constraintTarget = await this.getConstraintTargetData(constraint, event);
                     const actualValue      = this.utils.reach(constraint.propertyValue, constraintTarget.state);
-                    const comparatorResult = this.getComparatorResult(constraint.comparatorType, constraint.comparatorValue, actualValue);
+                    const comparatorResult = this.getComparatorResult(constraint.comparatorType, constraint.comparatorValue, actualValue, constraint.comparatorValueDatatype);
+
+                    if (!comparatorResult) {
+                        this.debugToClient(`constraint comparator failed: entity "${constraintTarget.entityid}" property "${constraint.propertyValue}" with value ${actualValue} failed "${constraint.comparatorType}" check against (${constraint.comparatorValueDatatype}) ${constraint.comparatorValue}`);
+                    }
 
                     // If all previous comparators were true and this comparator is true then all matched so far
                     comparatorsAllMatches = comparatorsAllMatches && comparatorResult;
@@ -125,35 +153,36 @@ module.exports = function(RED) {
                 let outputs;
 
                 if (!comparatorsAllMatches) {
-                    this.debug(`one more more comparators failed to match constraints, flow halted as a result, failed results below: `);
+                    this.debugToClient('one more more comparators failed to match constraints, message will output on failed output');
 
-                    const failedConstraints = allComparatorResults.filter(res => !res.comparatorResult)
-                        .map(res => {
-                            this.debug(`Failed Result: "${res.constraintTarget.entityid}" had value of "${res.actualValue}" which failed an "${res.constraint.comparatorType}" check against expected value "${res.constraint.comparatorValue}"`);
-                            return res;
-                        });
+                    const failedConstraints = allComparatorResults.filter(res => !res.comparatorResult);
                     msg.failedConstraints = failedConstraints;
                     outputs = [null, msg];
                 } else {
+                    this.debugToClient('all (if any) constraints passed checks');
                     outputs = [msg, null];
                 }
 
-                if (!this.nodeConfig.customoutputs.length) return this.send(outputs);
+                // If constraints failed, or we have no custom outputs then we're done
+                if (!comparatorsAllMatches || !this.nodeConfig.customoutputs.length) {
+                    this.debugToClient('done processing sending messages: ', outputs);
+                    return this.send(outputs);
+                }
 
                 // Map output to matched customoutputs
                 const customoutputMsgs = this.nodeConfig.customoutputs.reduce((acc, output, reduceIndex) => {
                     let comparatorMatched = true;
-
+                    let actualValue;
                     if (output.comparatorPropertyType !== 'always') {
-                        const actualValue = this.utils.reach(output.comparatorPropertyValue, event);
-                        comparatorMatched = this.getComparatorResult(output.comparatorType, output.comparatorValue, actualValue);
+                        actualValue = this.utils.reach(output.comparatorPropertyValue, event);
+                        comparatorMatched = this.getComparatorResult(output.comparatorType, output.comparatorValue, actualValue, output.comparatorValueDatatype);
                     }
 
                     let message = (output.messageType === 'default') ? msg : output.messageValue;
 
                     // If comparator did not matched no need to go further
                     if (!comparatorMatched) {
-                        this.debug('Skipping message, output comparator failed');
+                        this.debugToClient(`output comparator failed: property "${output.comparatorPropertyValue}" with value ${actualValue} failed "${output.comparatorType}" check against (${output.comparatorValueDatatype}) ${output.comparatorValue}`);
                         acc.push(null);
                         return acc;
                     }
@@ -161,27 +190,28 @@ module.exports = function(RED) {
                     // If comparator matched and send immediate is set just assign message to output
                     if (output.timerType === 'immediate') {
                         acc.push(message);
-                        this.debug('Adding immediate message');
+                        this.debugToClient(`output ${output.outputId}: adding "immediate" send of message: `);
+                        this.debugToClient(message);
                         return acc;
-                    }
-
-                    // If already timer scheduler for this output then clear it for re-setting
-                    if (this.messageTimers[output.outputId]) {
-                        this.debug('Found already scheduled message, extending the message timeout');
-                        clearTimeout(this.messageTimers[output.outputId]);
                     }
 
                     // Get the timer ms value
                     const timerDelayMs = output.timerValue * TIMER_MULTIPLIERS[output.timerUnit];
 
+                    // If already timer scheduler for this output then clear it for re-setting
+                    if (this.messageTimers[output.outputId]) {
+                        this.debugToClient(`output ${output.outputId}: found already scheduled message, clearing timer to reschedule`);
+                        clearTimeout(this.messageTimers[output.outputId]);
+                    }
+
                     // Create the message to send, all outputs leading to this one with null (dont send) values
                     const customOutputIndexWithDefaults = reduceIndex + this.NUM_DEFAULT_MESSAGES;
                     const scheduledMessage = (new Array(customOutputIndexWithDefaults + 1)).fill(null);
                     scheduledMessage[customOutputIndexWithDefaults] = message;
-                    this.debug('Created scheduledMessage: ', scheduledMessage);
+                    this.debugToClient(`output ${output.outputId}: scheduled message for send after ${timerDelayMs}ms, message contents: `, message);
 
                     this.messageTimers[output.outputId] = setTimeout(() => {
-                        this.debug('Sending delayed message', scheduledMessage);
+                        this.debugToClient(`output ${output.outputId}: sending delayed message: `, scheduledMessage);
                         this.send(scheduledMessage);
                         delete this.messageTimers[output.outputId];
                     }, timerDelayMs);
@@ -192,7 +222,7 @@ module.exports = function(RED) {
                 }, []);
 
                 outputs = outputs.concat(customoutputMsgs);
-                this.debug('Sending default output messages and any matched custom outputs(if any)');
+                this.debugToClient('done processing sending messages: ', outputs);
                 this.send(outputs);
             } catch (e) {
                 this.error(e);

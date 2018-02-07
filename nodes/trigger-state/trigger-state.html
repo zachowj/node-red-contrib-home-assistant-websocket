@@ -14,11 +14,14 @@
     <!-- Entity ID Filter and Filter Type -->
     <div class="form-row">
         <label for="node-input-entityid"><i class="fa fa-tag"></i> Entity ID</label>
-        <input type="text" id="node-input-entityid" placeholder="binary_sensor" style="width: 50%;" />
+        <input type="text" id="node-input-entityid" placeholder="binary_sensor" style="width: 70%;" />
     </div>
 
     <!-- Add Constraint -->
-    <div class="form-row" id="add-constraint-container">
+    <div class="form-row" id="add-container">
+        <!-- -------------------------------------------------------------- -->
+        <!-- Add Custom Constraints                                         -->
+        <!-- -------------------------------------------------------------- -->
         <h3>Add Constraints</h3>
         <div>
             <!-- Target Selection -->
@@ -62,7 +65,7 @@
                 </select>
 
                 <!-- Value -->
-                <input type="text" id="constraint-comparator-value" style="width: 62%" />
+                <input type="text" id="constraint-comparator-value" />
             </div>
 
             <!-- Add Constraint Button -->
@@ -154,6 +157,11 @@
         <ol id="output-list"></ol>
     </div>
 
+    <div class="form-row">
+        <label for="node-input-debugenabled"><i class="fa fa-server"></i> Debug Enabled</label>
+        <input type="checkbox" id="node-input-debugenabled" />
+    </div>
+
 </script>
 
 
@@ -165,6 +173,7 @@
             name:          { value: '' },
             server:        { value: '', type: 'server', required: true },
             entityid:      { value: '', required: true },
+            debugenabled:  { value: false },
             constraints:   { value: [] },
             outputs:       { value: 2  },
             customoutputs: { value: [] }
@@ -191,47 +200,17 @@
         paletteLabel:  'trigger: state',
         label:         function() { return this.name || `trigger-state: ${this.entityid}` },
         oneditprepare: function () {
+            // Outputs List
+            let NODE = this;
             const NUM_DEFAULT_OUTPUTS = 2;
 
-            const $entityid = $('#node-input-entityid');
-            const $server   = $('#node-input-server');
-            const $outputs  = $('#node-input-outputs');
+            const $entityid           = $('#node-input-entityid');
+            const $server             = $('#node-input-server');
+            const $outputs            = $('#node-input-outputs');
+            const $accordionContainer = $('#add-container');
 
-
-            const getRandomId = () => Math.random().toString(36).slice(2);
-
-            $entityid.val(this.entityid);
-
-            // New nodes, select first available home-assistant config node found
-            if (!this.server) {
-                let defaultServer;
-                RED.nodes.eachConfig(n => {
-                    if (n.type === 'server' && !defaultServer) defaultServer = n.id;
-                });
-                if (defaultServer) $server.val(defaultServer);
-            }
-
-            const setupAutocomplete = (node) => {
-                const selectedServer = $server.val();
-
-                // A home assistant server is selected in the node config
-                if (node.server || (selectedServer && selectedServer !== '_ADD_')) {
-                    $.get('/homeassistant/entities').done((entities) => {
-                        node.availableEntities = JSON.parse(entities);
-                        $entityid.autocomplete({ source: node.availableEntities, minLength: 0 });
-                    })
-                    .fail((err) => RED.notify(err.responseText, 'error'));
-                }
-            };
-
-            $server.change(() => setupAutocomplete(this));
-
-            // **************************
-            // * Add Constraints
-            // **************************
             const $constraints = {
                 list:           $('#constraint-list'),
-                container:      $('#add-constraint-container'),
                 addBtn:         $('#constraint-add-btn'),
 
                 targetType:      $('#constraint-target-type'),
@@ -242,80 +221,6 @@
                 comparatorValue: $('#constraint-comparator-value')
             };
 
-            $constraints.container.accordion({ active: false, collapsible: true, heightStyle: 'content' });
-
-            // Constraint select menu change handlers
-            $constraints.targetType.on('change', function (e) {
-                const val = e.target.value;
-                (val === 'this_entity')
-                    ? $constraints.targetValue.attr('disabled', 'disabled')
-                    : $constraints.targetValue.removeAttr('disabled')
-            });
-            $constraints.propertyType.on('change', function (e) {
-                const val = e.target.value;
-                (val === 'current_state' || val === 'previous_state')
-                    ? $constraints.propertyValue.attr('disabled', 'disabled')
-                    : $constraints.propertyValue.removeAttr('disabled');
-            });
-            $constraints.comparatorType.on('change', function (e) {
-                const val = e.target.value;
-                console.log('comparator type changed to: ', val);
-            });
-            // TODO: Add debounced change handler for input that validates on keyup and marks field invalid, disable/enables add button
-            // TODO: Disabled add button initially
-
-            // Constraint Add Button
-            $constraints.addBtn.on('click', function() {
-                const constraint = {
-                    id:              getRandomId(),
-                    targetType:      $constraints.targetType.val(),
-                    targetValue:     $constraints.targetValue.val(),
-                    propertyType:    $constraints.propertyType.val(),
-                    propertyValue:   $constraints.propertyValue.val(),
-                    comparatorType:  $constraints.comparatorType.val(),
-                    comparatorValue: $constraints.comparatorValue.val()
-                };
-
-                if (constraint.propertyType === 'current_state')  constraint.propertyValue = 'new_state.state';
-                if (constraint.propertyType === 'previous_state') constraint.propertyValue = 'old_state.state';
-
-                $constraints.list.editableList('addItem', constraint);
-                $constraints.targetValue.val('');
-            });
-
-            // Constraints List
-            $constraints.list.editableList({
-                addButton: false,
-                height:    159,
-                sortable:  true,
-                removable: true,
-                removeItem( data ) {
-                    console.log('Item removed', data);
-                },
-                addItem:   function(row, index, data) {
-                    console.log('Adding item data: ', data);
-                    const $row = $(row);
-                    const { targetType, targetValue, propertyType, propertyValue, comparatorType, comparatorValue } = data;
-
-                    const entityText   = (targetType === 'this_entity') ? 'this entity' : targetValue;
-                    const propertyText = (propertyType === 'property')  ? propertyText  : propertyType.replace('_', ' ');
-
-                    const comparatorTypeText = comparatorType.replace('_', ' ');
-
-                    const rowHtml = `
-                        <strong>${entityText}:</strong> ${propertyText} ${comparatorTypeText} ${comparatorValue}
-                    `;
-
-                    $row.html(rowHtml);
-                }
-            });
-
-            // Add previous constraints to list
-            this.constraints.forEach(c => $constraints.list.editableList('addItem', c));
-
-            // **************************
-            // * Add Custom Outputs
-            // **************************
             const $customoutputs = {
                 list:   $('#output-list'),
                 addBtn: $('#output-add-btn'),
@@ -333,52 +238,158 @@
                 comparatorValue:         $('#output-comparator-value')
             };
 
-            // Outputs Add Button
-            $customoutputs.addBtn.on('click', function() {
-                const output = {
-                    outputId:                getRandomId(),
-                    timerType:               $customoutputs.timerType.val(),
-                    timerValue:              $customoutputs.timerValue.val(),
-                    timerUnit:               $customoutputs.timerUnit.val(),
+            const utils = {
+                getRandomId:       ()     => Math.random().toString(36).slice(2),
+                setupAutocomplete: () => {
+                    const selectedServer = $server.val();
 
-                    messageType:             $customoutputs.messageType.val(),
-                    messageValue:            $customoutputs.messageValue.val(),
-
-                    comparatorPropertyType:  $customoutputs.comparatorPropertyType.val(),
-                    comparatorPropertyValue: $customoutputs.comparatorPropertyValue.val(),
-
-                    comparatorType:          $customoutputs.comparatorType.val(),
-                    comparatorValue:         $customoutputs.comparatorValue.val()
-                };
-
-                // Removing an output and adding in same edit session means output
-                // map needs to be adjusted, otherwise just increment count
-                debugger;
-                if (isNaN(NODE.outputs)) {
-                    // const maxOutput = Math.max(Object.keys(NODE.outputs));
-                    NODE.outputs[getRandomId()] = 'abc';
-                } else {
-                    NODE.outputs = parseInt(NODE.outputs) + 1;
+                    // A home assistant server is selected in the node config
+                    if (NODE.server || (selectedServer && selectedServer !== '_ADD_')) {
+                        $.get('/homeassistant/entities').done((entities) => {
+                            NODE.availableEntities = JSON.parse(entities);
+                            $entityid.autocomplete({ source: NODE.availableEntities, minLength: 0 });
+                        })
+                        .fail((err) => RED.notify(err.responseText, 'error'));
+                    }
+                },
+                setDefaultServerSelection: function () {
+                    let defaultServer;
+                    RED.nodes.eachConfig(n => {
+                        if (n.type === 'server' && !defaultServer) defaultServer = n.id;
+                    });
+                    if (defaultServer) $server.val(defaultServer);
                 }
-                $outputs.val(isNaN(NODE.outputs) ? JSON.parse(NODE.outputs) : NODE.outputs);
+            };
 
-                if (output.comparatorPropertyType === 'current_state')  output.comparatorPropertyValue = 'new_state.state';
-                if (output.comparatorPropertyType === 'previous_state') output.comparatorPropertyValue = 'old_state.state';
+            // **************************
+            // * Add Constraints
+            // **************************
+            const constraintsHandler = {
+                onTargetTypeChange: function(e) {
+                    const val = e.target.value;
+                    (val === 'this_entity')
+                        ? $constraints.targetValue.attr('disabled', 'disabled')
+                        : $constraints.targetValue.removeAttr('disabled')
+                },
+                onPropertyTypeChange: function(e) {
+                    const val = e.target.value;
+                    (val === 'current_state' || val === 'previous_state')
+                        ? $constraints.propertyValue.attr('disabled', 'disabled')
+                        : $constraints.propertyValue.removeAttr('disabled');
+                },
+                onComparatorTypeChange: function(e) {
+                    const val = e.target.value; // Placeholder
+                },
+                onAddConstraintButton: function(e) {
+                    const constraint = {
+                        id:                      utils.getRandomId(),
+                        targetType:              $constraints.targetType.val(),
+                        targetValue:             $constraints.targetValue.val(),
+                        propertyType:            $constraints.propertyType.val(),
+                        propertyValue:           $constraints.propertyValue.val(),
+                        comparatorType:          $constraints.comparatorType.val(),
+                        comparatorValueDatatype: $constraints.comparatorValue.typedInput('type'),
+                        comparatorValue:         $constraints.comparatorValue.typedInput('value')
+                    };
 
-                $customoutputs.list.editableList('addItem', output);
-            });
+                    if (constraint.propertyType === 'current_state')  constraint.propertyValue = 'new_state.state';
+                    if (constraint.propertyType === 'previous_state') constraint.propertyValue = 'old_state.state';
 
-            // Outputs List
-            let NODE = this;
-            $customoutputs.list.editableList({
+                    if (constraint.comparatorType === 'includes' || constraint.comparatorType === 'does_not_include') {
+                        constraint.comparatorValueDatatype = 'list';
+                    }
+
+                    $constraints.list.editableList('addItem', constraint);
+                    $constraints.targetValue.val('');
+                },
+                onEditableListAdd: function(row, index, data) {
+                    const $row = $(row);
+                    const { targetType, targetValue, propertyType, propertyValue, comparatorType, comparatorValue, comparatorValueDatatype } = data;
+
+                    const entityText   = (targetType === 'this_entity') ? 'this entity' : targetValue;
+                    const propertyText = (propertyType === 'property')  ? propertyValue  : propertyType.replace('_', ' ');
+
+                    const comparatorTypeText = comparatorType.replace('_', ' ');
+
+                    const rowHtml = `
+                        <strong>${entityText}:</strong> ${propertyText} ${comparatorTypeText} (${comparatorValueDatatype}) ${comparatorValue}
+                    `;
+
+                    $row.html(rowHtml);
+                }
+            };
+
+            // Constraint select menu change handlers
+            $constraints.targetType.on('change',     constraintsHandler.onTargetTypeChange);
+            $constraints.propertyType.on('change',   constraintsHandler.onPropertyTypeChange);
+            $constraints.comparatorType.on('change', constraintsHandler.onComparatorTypeChange);
+
+            $constraints.addBtn.on('click', constraintsHandler.onAddConstraintButton);
+
+            // Constraints List
+            $constraints.list.editableList({
                 addButton: false,
                 height:    159,
-                sortable:  false,
+                sortable:  true,
                 removable: true,
-                removeItem( data ) {
-                    console.log('Item removed', data);
+                addItem:   constraintsHandler.onEditableListAdd
+            });
+
+            $constraints.comparatorValue.typedInput({
+                default: 'str',
+                types:   ['str', 'num', 'bool', 're' ]
+            });
+            $constraints.comparatorValue.typedInput('width', '100px');
+
+            // **************************
+            // * Add Custom Outputs
+            // **************************
+            const outputsHandler = {
+                onAddButtonClicked: function() {
+                    const output = {
+                        outputId:                utils.getRandomId(),
+                        timerType:               $customoutputs.timerType.val(),
+                        timerValue:              $customoutputs.timerValue.val(),
+                        timerUnit:               $customoutputs.timerUnit.val(),
+
+                        messageType:             $customoutputs.messageType.val(),
+                        messageValue:            $customoutputs.messageValue.val(),
+
+                        comparatorPropertyType:  $customoutputs.comparatorPropertyType.val(),
+                        comparatorPropertyValue: $customoutputs.comparatorPropertyValue.val(),
+
+                        comparatorType:          $customoutputs.comparatorType.val(),
+                        comparatorValue:         $customoutputs.comparatorValue.val()
+                    };
+
+                    // Removing an output and adding in same edit session means output
+                    // map needs to be adjusted, otherwise just increment count
+                    if (isNaN(NODE.outputs)) {
+                        const maxOutput = Math.max(Object.keys(NODE.outputs));
+                        NODE.outputs[utils.getRandomId()] = maxOutput + 1;
+                    } else {
+                        NODE.outputs = parseInt(NODE.outputs) + 1;
+                    }
+                    $outputs.val(isNaN(NODE.outputs) ? JSON.stringify(NODE.outputs) : NODE.outputs);
+
+                    if (output.comparatorPropertyType === 'current_state')  output.comparatorPropertyValue = 'new_state.state';
+                    if (output.comparatorPropertyType === 'previous_state') output.comparatorPropertyValue = 'old_state.state';
+
+                    NODE.customoutputs.push(output);
+
+                    $customoutputs.list.editableList('addItem', output);
+                },
+                onEditableListAdd:  function(row, index, data) {
+                    const $row = $(row);
+                    const { comparatorType, comparatorValue } = data;
+                    const htmlData = JSON.stringify(data);
+
+                    $row.html(htmlData);
+                },
+                onEditableListRemove: function ( data ) {
                     // node-red uses a map of old output index to new output index to re-map
                     // links between nodes. If new index is -1 then it was removed
+
                     let customOutputRemovedIndex = NODE.customoutputs.indexOf(data);
                     NODE.outputs = !(isNaN(NODE.outputs)) ? { 0: 0, 1: 1 } : NODE.outputs;
                     NODE.outputs[customOutputRemovedIndex + NUM_DEFAULT_OUTPUTS] = -1;
@@ -408,56 +419,75 @@
 
                     $outputs.val(JSON.stringify(NODE.outputs));
                 },
-                addItem:   function(row, index, data) {
-                    console.log('Adding output data: ', data);
-                    const $row = $(row);
-                    const { comparatorType, comparatorValue } = data;
-                    const htmlData = JSON.stringify(data);
-
-                    $row.html(htmlData);
+                onTimerTypeChange: function(e) {
+                    const val = e.target.value;
+                    if (val === 'immediate') {
+                        $customoutputs.timerValue.attr('disabled', 'disabled')
+                        $customoutputs.timerUnit.attr('disabled', 'disabled')
+                    } else {
+                        $customoutputs.timerValue.removeAttr('disabled')
+                        $customoutputs.timerUnit.removeAttr('disabled')
+                    }
+                },
+                onMessageTypeChange: function(e) {
+                    const val = e.target.value;
+                    (val === 'default')
+                        ? $customoutputs.messageValue.attr('disabled', 'disabled')
+                        : $customoutputs.messageValue.removeAttr('disabled');
+                },
+                comparatorPropertyTypeChange: function(e) {
+                    const val = e.target.value;
+                    if (val === 'always') {
+                        $customoutputs.comparatorPropertyValue.attr('disabled', 'disabled');
+                        $customoutputs.comparatorType.attr('disabled', 'disabled');
+                        $customoutputs.comparatorValue.attr('disabled', 'disabled');
+                    }
+                    if (val === 'previous_state' || val === 'current_state') {
+                        $customoutputs.comparatorPropertyValue.attr('disabled', 'disabled');
+                        $customoutputs.comparatorType.removeAttr('disabled');
+                        $customoutputs.comparatorValue.removeAttr('disabled');
+                    }
+                    if (val === 'property') {
+                        $customoutputs.comparatorPropertyValue.removeAttr('disabled');
+                        $customoutputs.comparatorType.removeAttr('disabled');
+                        $customoutputs.comparatorValue.removeAttr('disabled');
+                    }
                 }
+            }
+
+            $customoutputs.list.editableList({
+                addButton:  false,
+                height:     159,
+                sortable:   false,
+                removable:  true,
+                removeItem: outputsHandler.onEditableListRemove,
+                addItem:    outputsHandler.onEditableListAdd
             });
 
              // Constraint select menu change handlers
-            $customoutputs.timerType.on('change', function (e) {
-                const val = e.target.value;
-                if (val === 'immediate') {
-                    $customoutputs.timerValue.attr('disabled', 'disabled')
-                    $customoutputs.timerUnit.attr('disabled', 'disabled')
-                } else {
-                    $customoutputs.timerValue.removeAttr('disabled')
-                    $customoutputs.timerUnit.removeAttr('disabled')
-                }
-            });
-            $customoutputs.messageType.on('change', function (e) {
-                const val = e.target.value;
-                (val === 'default')
-                    ? $customoutputs.messageValue.attr('disabled', 'disabled')
-                    : $customoutputs.messageValue.removeAttr('disabled');
-            });
-            $customoutputs.comparatorPropertyType.on('change', function (e) {
-                const val = e.target.value;
-                if (val === 'always') {
-                    $customoutputs.comparatorPropertyValue.attr('disabled', 'disabled');
-                    $customoutputs.comparatorType.attr('disabled', 'disabled');
-                    $customoutputs.comparatorValue.attr('disabled', 'disabled');
-                }
-                if (val === 'previous_state' || val === 'current_state') {
-                    $customoutputs.comparatorPropertyValue.attr('disabled', 'disabled');
-                    $customoutputs.comparatorType.removeAttr('disabled');
-                    $customoutputs.comparatorValue.removeAttr('disabled');
-                }
-                if (val === 'property') {
-                    $customoutputs.comparatorPropertyValue.removeAttr('disabled');
-                    $customoutputs.comparatorType.removeAttr('disabled');
-                    $customoutputs.comparatorValue.removeAttr('disabled');
-                }
+            $customoutputs.timerType.on('change',              outputsHandler.onTimerTypeChange);
+            $customoutputs.messageType.on('change',            outputsHandler.onMessageTypeChange);
+            $customoutputs.comparatorPropertyType.on('change', outputsHandler.comparatorPropertyTypeChange);
 
-            });
+            $customoutputs.addBtn.on('click', outputsHandler.onAddButtonClicked);
 
+            // **************************
+            // * General Init
+            // **************************
+            $accordionContainer.accordion({ active: false, collapsible: true, heightStyle: 'content' });
+            $entityid.val(NODE.entityid);
+            $server.change(() => utils.setupAutocomplete(this));
 
-            // Add previous outputs to list
-            this.customoutputs.forEach(o => $customoutputs.list.editableList('addItem', o));
+            // New nodes, select first available home-assistant config node found
+            if (!NODE.server) {
+                utils.setDefaultServerSelection();
+            } else {
+                utils.setupAutocomplete();
+            }
+
+            // Add previous constraints/outputs to editable lists
+            NODE.constraints.forEach(c => $constraints.list.editableList('addItem', c));
+            NODE.customoutputs.forEach(o => $customoutputs.list.editableList('addItem', o));
         },
         oneditsave: function() {
             const $constraintsList = $('#constraint-list');
@@ -479,17 +509,7 @@
             this.customoutputs = nodeOutputs;
 
             this.outputs = this.customoutputs.length + 2;
-        },
-        // oneditresize: function(size) {
-        //     var rows = $("#dialog-form>div:not(.node-input-rule-container-row)");
-        //     var height = size.height;
-        //     for (var i=0;i<rows.size();i++) {
-        //         height -= $(rows[i]).outerHeight(true);
-        //     }
-        //     var editorRow = $("#dialog-form>div.node-input-rule-container-row");
-        //     height -= (parseInt(editorRow.css("marginTop"))+parseInt(editorRow.css("marginBottom")));
-        //     $("#node-input-rule-container").editableList('height',height);
-        // }
+        }
     });
 </script>
 
