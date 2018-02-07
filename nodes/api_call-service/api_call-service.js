@@ -7,26 +7,9 @@ module.exports = function(RED) {
         config: {
             service_domain: {},
             service:        {},
-            data:           {},       // TODO: If string cast to object
+            data:           {},
             name:           {},
             server:         { isNode: true }
-        },
-        input: {
-            domain: {
-                messageProp: 'payload.domain',
-                configProp:  'service_domain', // Will be used if value not found on message,
-                validation:  { haltOnFail: true, schema: Joi.string().min(1).required() }
-            },
-            service: {
-                messageProp: 'payload.service',
-                configProp:  'service',
-                validation:  { haltOnFail: true, schema: Joi.string().min(1).required() }
-            },
-            data: {                     // TODO: If found on payload then merge with config object if exists
-                messageProp: 'payload.data',
-                configProp:  'data',
-                validation:  { schema: Joi.object({}) }
-            }
         }
     };
 
@@ -34,21 +17,50 @@ module.exports = function(RED) {
         constructor(nodeDefinition) {
             super(nodeDefinition, RED, nodeOptions);
         }
+        isObjectLike (v) {
+            return (v != null) && (typeof v == 'object'); // eslint-disable-line
+        }
+        // Disable connection status for api node
+        setConnectionStatus() {}
 
-        onInput({ parsedMessage, message }) {
-            let { domain, service, data } = parsedMessage;
-            domain  = domain.value;
-            service = service.value;
-            data    = data.value;
+        onInput({ message }) {
+            let { service_domain, service, data } = this.nodeConfig;
+            if (data && !this.isObjectLike(data)) {
+                try {
+                    data = JSON.parse(data);
+                } catch (e) {}
+            }
 
-            const isObjectLike = (v) => (v != null) && (typeof value == 'object'); // eslint-disable-line
-            data = isObjectLike(data)
-                ? JSON.stringify(data)
-                : data;
+            const pDomain  = this.utils.reach('payload.domain', message);
+            const pService = this.utils.reach('payload.service', message);
+            const pData    = this.utils.reach('payload.data', message);
 
-            this.debug(`Calling Service: ${domain}:${service} -- ${data}`);
 
-            return this.nodeConfig.server.api.callService(domain, service, data)
+            // domain and service are strings, if they exist in payload overwrite any config value
+            const apiDomain = pDomain || service_domain;
+            const apiService = pService || service;
+            if (!apiDomain) throw new Error('call service node is missing api "domain" property, not found in config or payload');
+            if (!apiService) throw new Error('call service node is missing api "service" property, not found in config or payload');
+
+            let apiData;
+            // api data should be an object or falsey, if an object then attempt to merge with config value if also an object
+            if (this.isObjectLike(pData)) {
+                if (this.isObjectLike(data)) {
+                    apiData = this.utils.merge({}, data, pData);
+                } else {
+                    apiData = pData;
+                }
+            // Not an object, but maybe "something"
+            } else if (pData) {
+                apiData = pData;
+            } else {
+                apiData = null;
+            }
+
+            apiData = (apiData && this.isObjectLike(apiData)) ? JSON.stringify(apiData) : null;
+            this.debugToClient(`Calling Service: ${apiDomain}:${apiService} -- ${apiData}`);
+
+            return this.nodeConfig.server.api.callService(apiDomain, apiService, apiData)
                 .catch(err => {
                     this.warn('Error calling service, home assistant api error', err);
                     this.error('Error calling service, home assistant api error', message);
