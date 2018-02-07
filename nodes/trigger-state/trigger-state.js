@@ -230,7 +230,16 @@ module.exports = function(RED) {
                         comparatorMatched = this.getComparatorResult(output.comparatorType, output.comparatorValue, actualValue, output.comparatorValueDatatype);
                     }
 
-                    let message = (output.messageType === 'default') ? msg : output.messageValue;
+                    let message;
+                    if (output.messageType === 'default') {
+                        message = msg;
+                    } else {
+                        try {
+                            message = JSON.parse(output.messageValue);
+                        } catch (e) {
+                            message = output.messageValue;
+                        }
+                    }
 
                     // If comparator did not matched no need to go further
                     if (!comparatorMatched) {

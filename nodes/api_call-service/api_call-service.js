@@ -1,4 +1,3 @@
-const Joi      = require('joi');
 const BaseNode = require('../../lib/base-node');
 
 module.exports = function(RED) {
@@ -34,7 +33,6 @@ module.exports = function(RED) {
             const pDomain  = this.utils.reach('payload.domain', message);
             const pService = this.utils.reach('payload.service', message);
             const pData    = this.utils.reach('payload.data', message);
-
 
             // domain and service are strings, if they exist in payload overwrite any config value
             const apiDomain = pDomain || service_domain;
