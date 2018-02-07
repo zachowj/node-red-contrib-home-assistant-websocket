@@ -40,6 +40,18 @@ module.exports = function(RED) {
                 this.error(e.message);
             }
         }
+        updateConnectionStatus() {
+            if (!this.messageTimers) return super.updateConnectionStatus();
+            const msgKeys = Object.keys(this.messageTimers);
+            const additionalText = msgKeys.length > 0 ? `(${msgKeys.length} msgs scheduled)` : null;
+            super.updateConnectionStatus(additionalText);
+        }
+        clearAllTimers() {
+            Object.keys(this.messageTimers).forEach(k => {
+                if (this.messageTimers[k]) clearTimeout(this.messageTimers[k]);
+                this.messageTimers[k] = null;
+            });
+        }
         onHaEventsOpen()  {
             super.onHaEventsOpen();
             this.debugToClient(`connected, listening for ha events topic: ${this.eventTopic}`);
@@ -51,13 +63,6 @@ module.exports = function(RED) {
                 await this.removeNodeData();
             }
         }
-        clearAllTimers() {
-            Object.keys(this.messageTimers).forEach(k => {
-                if (this.messageTimers[k]) clearTimeout(this.messageTimers[k]);
-                this.messageTimers[k] = null;
-            });
-        }
-
         onInput({ message })  {
             if (message === 'reset' || message.payload === 'reset') {
                 this.debugToClient('canceling all timers due to incoming "reset" message');
@@ -120,6 +125,7 @@ module.exports = function(RED) {
             return targetData;
         }
 
+        /* eslint-disable indent */
         getCastValue(datatype, value) {
             if (!datatype) return value;
 
@@ -156,7 +162,7 @@ module.exports = function(RED) {
 
         async onEntityStateChanged (evt) {
             if (this.isenabled === false) {
-            this.debugToClient('node is currently disabled, ignoring received event: ', evt);
+                this.debugToClient('node is currently disabled, ignoring received event: ', evt);
                 return;
             }
 
@@ -260,10 +266,12 @@ module.exports = function(RED) {
                         this.debugToClient(`output ${output.outputId}: sending delayed message: `, scheduledMessage);
                         this.send(scheduledMessage);
                         delete this.messageTimers[output.outputId];
+                        this.updateConnectionStatus();
                     }, timerDelayMs);
 
                     // Since the message was scheduled push null val to current message output list
                     acc.push(null);
+                    this.updateConnectionStatus();
                     return acc;
                 }, []);
 
