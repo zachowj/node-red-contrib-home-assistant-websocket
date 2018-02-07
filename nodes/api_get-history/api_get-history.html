@@ -18,6 +18,23 @@
                 return `${startdate.toLocaleDateString()} ${startdate.toLocaleTimeString()}`;
             }
             return 'get history';
+        },
+        oneditprepare: function() {
+            const NODE = this;
+            const $server = $('#node-input-server');
+            const utils = {
+                setDefaultServerSelection: function () {
+                    let defaultServer;
+                    RED.nodes.eachConfig(n => {
+                        if (n.type === 'server' && !defaultServer) defaultServer = n.id;
+                    });
+                    if (defaultServer) $server.val(defaultServer);
+                }
+            };
+
+            if (!NODE.server) {
+                utils.setDefaultServerSelection();
+            }
         }
     });
 </script>

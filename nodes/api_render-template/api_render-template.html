@@ -1,4 +1,5 @@
 <script type="text/javascript">
+(function() {
     RED.nodes.registerType('api-render-template', {
         category: 'home_assistant',
         color:    '#52C0F2',
@@ -14,6 +15,22 @@
         label: function() { return this.name || `template: ${this.template || ''}` },
 
         oneditprepare: function () {
+            const NODE = this;
+            const $server = $('#node-input-server');
+            const utils = {
+                setDefaultServerSelection: function () {
+                    let defaultServer;
+                    RED.nodes.eachConfig(n => {
+                        if (n.type === 'server' && !defaultServer) defaultServer = n.id;
+                    });
+                    if (defaultServer) $server.val(defaultServer);
+                }
+            };
+
+            if (!NODE.server) {
+                utils.setDefaultServerSelection();
+            }
+
             $inputTemplate = $("#node-input-template");
 
             // NOTE: Copypasta from node-red/nodes/core/template node
@@ -49,6 +66,7 @@
             delete this.editor;
         }
     });
+})();
 </script>
 
 

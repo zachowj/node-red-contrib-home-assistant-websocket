@@ -23,8 +23,12 @@
             } }
         },
         oneditprepare: function () {
-            const $domainField = $('#service_domain');
+            const NODE = this;
+            const $server = $('#node-input-server');
+
+            const $domainField  = $('#service_domain');
             const $serviceField = $('#service');
+
 
             const $serviceDataDiv       = $('#service-data-desc');
             const $serviceDescDiv       = $('.service-description', $serviceDataDiv);
@@ -36,6 +40,20 @@
             $domainField.val(node.service_domain);
             $serviceField.val(node.service);
             setServicesAndDomains(node);
+
+            const utils = {
+                setDefaultServerSelection: function () {
+                    let defaultServer;
+                    RED.nodes.eachConfig(n => {
+                        if (n.type === 'server' && !defaultServer) defaultServer = n.id;
+                    });
+                    if (defaultServer) $server.val(defaultServer);
+                }
+            };
+
+            if (!NODE.server) {
+                utils.setDefaultServerSelection();
+            }
 
             // Calls the custom api backend defined in the config-server.js node
             // TODO: Not sure how this works with node-red if auth is enabled

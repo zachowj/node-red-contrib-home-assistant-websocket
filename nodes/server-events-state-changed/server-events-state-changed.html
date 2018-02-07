@@ -24,6 +24,21 @@
             $entityidfiltertype.val(this.entityidfiltertype);
             $entityidfilter.val(this.entityidfilter);
 
+            const NODE = this;
+            const utils = {
+                setDefaultServerSelection: function () {
+                    let defaultServer;
+                    RED.nodes.eachConfig(n => {
+                        if (n.type === 'server' && !defaultServer) defaultServer = n.id;
+                    });
+                    if (defaultServer) $server.val(defaultServer);
+                }
+            };
+
+            if (!NODE.server) {
+                utils.setDefaultServerSelection();
+            }
+
             const setupAutocomplete = (node) => {
                 const selectedServer = $server.val();
 

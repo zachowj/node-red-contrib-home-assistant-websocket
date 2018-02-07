@@ -17,9 +17,24 @@
             }
         },
         oneditprepare: function () {
-
             const $entityIdField = $('#entity_id');
             $entityIdField.val(this.entity_id);
+
+            const NODE = this;
+            const $server = $('#node-input-server');
+            const utils = {
+                setDefaultServerSelection: function () {
+                    let defaultServer;
+                    RED.nodes.eachConfig(n => {
+                        if (n.type === 'server' && !defaultServer) defaultServer = n.id;
+                    });
+                    if (defaultServer) $server.val(defaultServer);
+                }
+            };
+
+            if (!NODE.server) {
+                utils.setDefaultServerSelection();
+            }
 
             // Check that proper config is set
             const config = RED.nodes.node($('#node-input-server').val());
