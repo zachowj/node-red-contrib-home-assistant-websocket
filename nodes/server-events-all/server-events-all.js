@@ -9,7 +9,6 @@ module.exports = function(RED) {
 
         onHaEventsAll(evt) {
             this.send({ event_type: evt.event_type, topic: evt.event_type, payload: evt });
-            this.flashStatus();
         }
     }
 

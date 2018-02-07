@@ -46,7 +46,6 @@ module.exports = function(RED) {
                 ? JSON.stringify(data)
                 : data;
 
-            this.flashStatus();
             this.debug(`Calling Service: ${domain}:${service} -- ${data}`);
 
             return this.nodeConfig.server.api.callService(domain, service, data)

@@ -41,8 +41,9 @@ module.exports = function(RED) {
 
             const shouldHaltIfState = this.nodeConfig.halt_if && (currentState.state === this.nodeConfig.halt_if);
             if (shouldHaltIfState) {
-                this.debug(`Get current state: halting processing due to current state of ${entity_id} matches "halt if state" option`);
-                this.flashFlowHaltedStatus();
+                const debugMsg = `Get current state: halting processing due to current state of ${entity_id} matches "halt if state" option`;
+                this.debug(debugMsg);
+                this.debugToClient(debugMsg);
                 return null;
             }
 

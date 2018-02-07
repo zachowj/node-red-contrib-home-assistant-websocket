@@ -12,6 +12,7 @@ module.exports = function(RED) {
         debug:  true,
         config: {
             entityid:      {},
+            isenabled:     {},
             constraints:   {},
             customoutputs: {}
         }
@@ -32,8 +33,9 @@ module.exports = function(RED) {
         }
         onClose(removed) {
             super.onClose();
-
-            this.debug('removing all message timers onClose and node was removed');
+            this.clearAllTimers();
+        }
+        clearAllTimers() {
             Object.keys(this.messageTimers).forEach(k => {
                 if (this.messageTimers[k]) clearTimeout(this.messageTimers[k]);
                 this.messageTimers[k] = null;
@@ -41,7 +43,27 @@ module.exports = function(RED) {
         }
 
         onInput({ message })  {
+            if (message === 'reset' || message.payload === 'reset') {
+                this.debugToClient('canceling all timers due to incoming "reset" message');
+                this.clearAllTimers();
+                return;
+            }
+            // NOTE: Need to look at way to update node config via serverside, doesn't look like it's supported at all.
+            if (message === 'enable' || message.payload === 'enable') {
+                this.debugToClient('node set to enabled by incoming "enable" message');
+                this.isenabled = true;
+                this.updateConnectionStatus();
+                return;
+            }
+            if (message === 'disable' || message.payload === 'disable') {
+                this.debugToClient('node set to disabled by incoming "disable" message');
+                this.isenabled = false;
+                this.updateConnectionStatus();
+                return;
+            }
+
             const p = message.payload;
+
             if (p.entity_id && p.new_state && p.old_state) {
                 const evt = {
                     event_type: 'state_changed',
@@ -114,6 +136,11 @@ module.exports = function(RED) {
         }
 
         async onEntityStateChanged (evt) {
+            if (!this.isenabled) {
+                this.debugToClient('node is currently disabled, ignoring received event: ', evt);
+                return;
+            }
+
             this.debugToClient('received state_changed event', evt);
 
             try {
