@@ -26,14 +26,30 @@ module.exports = function(RED) {
             this.addEventClientListener({ event: eventTopic, handler: this.onEntityStateChanged.bind(this) });
             this.NUM_DEFAULT_MESSAGES = 2;
             this.messageTimers = {};
+
+            this.loadPersistedData();
+        }
+        async loadPersistedData() {
+            try {
+                const data = await this.getNodeData();
+                if (data && data.hasOwnProperty('isenabled')) {
+                    this.isenabled = data.isenabled;
+                    this.updateConnectionStatus();
+                }
+            } catch (e) {
+                this.error(e.message);
+            }
         }
         onHaEventsOpen()  {
             super.onHaEventsOpen();
             this.debugToClient(`connected, listening for ha events topic: ${this.eventTopic}`);
         }
-        onClose(removed) {
+        async onClose(removed) {
             super.onClose();
             this.clearAllTimers();
+            if (removed) {
+                await this.removeNodeData();
+            }
         }
         clearAllTimers() {
             Object.keys(this.messageTimers).forEach(k => {
@@ -52,12 +68,15 @@ module.exports = function(RED) {
             if (message === 'enable' || message.payload === 'enable') {
                 this.debugToClient('node set to enabled by incoming "enable" message');
                 this.isenabled = true;
+                this.saveNodeData('isenabled', true);
                 this.updateConnectionStatus();
                 return;
             }
             if (message === 'disable' || message.payload === 'disable') {
                 this.debugToClient('node set to disabled by incoming "disable" message');
                 this.isenabled = false;
+                this.clearAllTimers();
+                this.saveNodeData('isenabled', false);
                 this.updateConnectionStatus();
                 return;
             }

@@ -45,6 +45,7 @@
     "is-string": "^1.0.4",
     "joi": "^13.1.1",
     "lodash.merge": "^4.6.0",
+    "lowdb": "^1.0.0",
     "node-home-assistant": "^0.2.0",
     "selectn": "^1.1.2"
   },
