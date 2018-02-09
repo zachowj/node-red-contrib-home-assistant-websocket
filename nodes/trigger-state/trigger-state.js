@@ -69,7 +69,7 @@ module.exports = function(RED) {
                 this.clearAllTimers();
                 return;
             }
-            // NOTE: Need to look at way to update node config via serverside, doesn't look like it's supported at all.
+
             if (message === 'enable' || message.payload === 'enable') {
                 this.debugToClient('node set to enabled by incoming "enable" message');
                 this.isenabled = true;

@@ -3,7 +3,7 @@ module.exports = {
     extends:       'standard',
     plugins:       ['html'],
     parserOptions: { sourceType: 'module' },
-    env:           { browser: true, node: true },
+    env:           { browser: true, node: true, mocha: true },
     globals:       {
         '__THEME': true
     },

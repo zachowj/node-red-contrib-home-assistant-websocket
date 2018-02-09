@@ -17,11 +17,10 @@
         <input type="text" id="node-input-entityid" placeholder="binary_sensor" style="width: 70%;" />
     </div>
 
-    <!-- Add Constraint -->
-    <div class="form-row" id="add-container">
-        <!-- -------------------------------------------------------------- -->
-        <!-- Add Custom Constraints                                         -->
-        <!-- -------------------------------------------------------------- -->
+    <!-- -------------------------------------------------------------- -->
+    <!-- Add Custom Constraints                                         -->
+    <!-- -------------------------------------------------------------- -->
+    <div class="form-row" id="add-constraint-container">
         <h3>Add Constraints</h3>
         <div>
             <!-- Target Selection -->
@@ -71,10 +70,17 @@
             <!-- Add Constraint Button -->
             <button id="constraint-add-btn" style="width: 100%">Add Constraint</button>
         </div>
+    </div>
 
-        <!-- -------------------------------------------------------------- -->
-        <!-- Add Custom Outputs                                             -->
-        <!-- -------------------------------------------------------------- -->
+    <!-- Constraints List -->
+    <div class="form-row">
+        <ol id="constraint-list"></ol>
+    </div>
+
+    <!-- -------------------------------------------------------------- -->
+    <!-- Add Custom Outputs                                             -->
+    <!-- -------------------------------------------------------------- -->
+    <div class="form-row" id="add-output-container">
         <h3>Add Outputs</h3>
         <div>
             <div class="form-row">
@@ -145,20 +151,13 @@
         </div>
     </div>
 
-    <!-- Constraints List -->
+    <!-- Output List -->
     <div class="form-row">
-        <h6>Constraints</h6>
-        <ol id="constraint-list"></ol>
-    </div>
-
-    <!-- Constraints List -->
-    <div class="form-row">
-        <h6>Custom Outputs</h6>
         <ol id="output-list"></ol>
     </div>
 
     <div class="form-row">
-        <label for="node-input-debugenabled"><i class="fa fa-server"></i> Debug Enabled</label>
+        <label for="node-input-debugenabled"><i class="fa fa-server"></i> Debug</label>
         <input type="checkbox" id="node-input-debugenabled" />
     </div>
 
@@ -170,13 +169,14 @@
         category: 'home_assistant',
         color:    '#038FC7',
         defaults: {
-            name:          { value: '' },
-            server:        { value: '', type: 'server', required: true },
-            entityid:      { value: '', required: true },
-            debugenabled:  { value: false },
-            constraints:   { value: [] },
-            outputs:       { value: 2  },
-            customoutputs: { value: [] }
+            name:                 { value: '' },
+            server:               { value: '', type: 'server', required: true },
+            entityid:             { value: '', required: true },
+            debugenabled:         { value: false },
+            constraints:          { value: [] },
+            constraintsmustmatch: { value: 'all' },
+            outputs:              { value: 2  },
+            customoutputs:        { value: [] }
         },
         inputs:        1,
         outputs:       2,
@@ -207,7 +207,8 @@
             const $entityid           = $('#node-input-entityid');
             const $server             = $('#node-input-server');
             const $outputs            = $('#node-input-outputs');
-            const $accordionContainer = $('#add-container');
+            const $accordionContraint = $('#add-constraint-container');
+            const $accordionOutput    = $('#add-output-container');
 
             const $constraints = {
                 list:           $('#constraint-list'),
@@ -306,15 +307,13 @@
                     const $row = $(row);
                     const { targetType, targetValue, propertyType, propertyValue, comparatorType, comparatorValue, comparatorValueDatatype } = data;
 
-                    const entityText   = (targetType === 'this_entity') ? 'this entity' : targetValue;
+                    const entityText   = (targetType === 'this_entity') ? '<strong>This entities</strong>' : `Entity ID <strong>${targetValue}</strong>`;
                     const propertyText = (propertyType === 'property')  ? propertyValue  : propertyType.replace('_', ' ');
 
                     const comparatorTypeText = comparatorType.replace('_', ' ');
+                    const comparatorText = `${comparatorTypeText} <strong>${comparatorValue}</strong> (${comparatorValueDatatype})`;
 
-                    const rowHtml = `
-                        <strong>${entityText}:</strong> ${propertyText} ${comparatorTypeText} (${comparatorValueDatatype}) ${comparatorValue}
-                    `;
-
+                    const rowHtml = `${entityText} ${propertyText} ${comparatorText}`;
                     $row.html(rowHtml);
                 }
             };
@@ -379,12 +378,28 @@
 
                     $customoutputs.list.editableList('addItem', output);
                 },
-                onEditableListAdd:  function(row, index, data) {
+                onEditableListAdd:  function(row, index, d) {
                     const $row = $(row);
-                    const { comparatorType, comparatorValue } = data;
-                    const htmlData = JSON.stringify(data);
 
-                    $row.html(htmlData);
+                    const typeText = (d.timerType === 'immediate')
+                        ? 'Immediate'
+                        : 'Delayed';
+
+                    const messageText = (d.messageType === 'default')
+                        ? 'default message'
+                        : d.messageValue;
+
+                    const sendWhenText = (d.comparatorPropertyType === 'always')
+                        ? 'always'
+                        : `${d.comparatorPropertyValue} ${d.comparatorType.replace('_', '')} ${d.comparatorValue}`
+
+                    const sendAfterText = (d.timerType === 'immediate')
+                        ? 'immediately'
+                        : `${d.timerValue + d.timerUnit.substring(0,3)}`;
+
+                    const html = `Send <strong>${messageText}</strong>, if <strong>${sendWhenText}</strong>, after <strong>${sendAfterText}</strong>`;
+
+                    $row.html(html);
                 },
                 onEditableListRemove: function ( data ) {
                     // node-red uses a map of old output index to new output index to re-map
@@ -474,7 +489,9 @@
             // **************************
             // * General Init
             // **************************
-            $accordionContainer.accordion({ active: false, collapsible: true, heightStyle: 'content' });
+            $accordionContraint.accordion({ active: true, collapsible: true, heightStyle: 'content' });
+            $accordionOutput.accordion({ active: false, collapsible: true, heightStyle: 'content' });
+
             $entityid.val(NODE.entityid);
             $server.change(() => utils.setupAutocomplete(this));
 

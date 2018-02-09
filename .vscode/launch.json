@@ -28,7 +28,21 @@
             "restart":    true,
             "address":    "localhost",
             "port":       9123,
-            "trace":      true,
+            "trace":      false,
+
+            "skipFiles":  [
+                "<node_internals>/**/*.js"
+            ]
+        },
+        {
+            "name":       "Attach Local: test",
+            "type":       "node",
+            "request":    "attach",
+            "timeout":    20000,
+            "restart":    true,
+            "address":    "localhost",
+            "port":       9124,
+            "trace":      false,
 
             "skipFiles":  [
                 "<node_internals>/**/*.js"

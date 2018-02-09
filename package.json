@@ -7,6 +7,9 @@
     "url": "https://github.com/AYapejian/node-red-contrib-home-assistant/issues"
   },
   "scripts": {
+    "test": "tape __tests__/**/*.spec.js | tap-min",
+    "test:debug": "node --inspect-brk=0.0.0.0:9124 node_modules/.bin/tape __tests__/**/*.spec.js",
+    "test:watch": "nodemon -w __tests__/ -w lib/ -w nodes/ --exec 'node node_modules/.bin/tape __tests__/**/*.spec.js'",
     "dev": "npm run docker:up",
     "dev:clean": "npm run docker:down",
     "docker:up": "npm run docker -- up --build --abort-on-container-exit --remove-orphans",
@@ -47,7 +50,8 @@
     "lodash.merge": "^4.6.0",
     "lowdb": "^1.0.0",
     "node-home-assistant": "^0.2.0",
-    "selectn": "^1.1.2"
+    "selectn": "^1.1.2",
+    "serialize-javascript": "^1.4.0"
   },
   "devDependencies": {
     "eslint": "^4.8.0",
@@ -58,6 +62,8 @@
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-node": "^5.2.0",
     "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^3.0.1"
+    "eslint-plugin-standard": "^3.0.1",
+    "tap-min": "^1.2.2",
+    "tape": "^4.8.0"
   }
 }
