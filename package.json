@@ -49,7 +49,7 @@
     "joi": "^13.1.1",
     "lodash.merge": "^4.6.0",
     "lowdb": "^1.0.0",
-    "node-home-assistant": "^0.2.0",
+    "node-home-assistant": "AYapejian/node-home-assistant#dev-master",
     "selectn": "^1.1.2",
     "serialize-javascript": "^1.4.0"
   },
