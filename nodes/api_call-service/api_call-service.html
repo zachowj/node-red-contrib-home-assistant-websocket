@@ -3,7 +3,7 @@
         category:     'home_assistant',
         color:        '#52C0F2',
         inputs:       1,
-        outputs:      0,
+        outputs:      1,
         icon:         'router-wireless.png',
         align:        'right',
         paletteLabel: 'call service',
@@ -18,7 +18,8 @@
                 if (!v) { return true; }
                 try { JSON.parse(v); return true; }
                 catch (e) { return false; }
-            } }
+            } },
+            mergecontext: { value: null }
         },
         oneditprepare: function () {
             const NODE = this;
@@ -174,7 +175,7 @@
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
-    <!--<div class="form-tips"><b>Tip:</b> This is here to help.</div>-->
+
 
     <div class="form-row">
         <label for="node-input-server"><i class="fa fa-dot-circle-o"></i> Server</label>
@@ -184,22 +185,21 @@
     <div class="form-row">
         <label for="service_domain"><i class="fa fa-cube"></i> Domain</label>
         <input type="text" id="service_domain">
-
-        <!--<label for="node-input-servicedomain"><i class="fa fa-dot-circle-o"></i> Domain</label>
-        <input type="text" id="node-input-servicedomain" placeholder="light"/>-->
     </div>
 
     <div class="form-row">
         <label for="service"><i class="fa fa-cube"></i> Service</label>
         <input type="text" id="service">
-
-        <!--<label for="node-input-service"><i class="fa fa-dot-circle-o"></i> Service</label>
-        <input type="text" id="node-input-service" placeholder="toggle"/>-->
     </div>
 
     <div class="form-row">
         <label for="node-input-data"><i class="fa fa-dot-circle-o"></i> Data</label>
         <input type="text" id="node-input-data" placeholder="{ entity_id: light.livingroom }"/>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-mergecontext"><i class="fa fa-dot-circle-o"></i> Merge Context</label>
+        <input type="text" id="node-input-mergecontext" placeholder="lightOptions"/>
     </div>
 
     <div id="service-data-desc" class="form-row">
@@ -226,10 +226,50 @@
 
 <script type="text/x-red" data-help-name="api-call-service">
     <p>Call a Home Assistant service</p>
-    <p>Set the node's domain, service and data defaults or allow the incoming message to define them, or both.</p>
 
-    <p>If the incoming message has a `payload` property with `domain`, `service` set it will override any defaults(if any) set. If data is provided
-        and is an obect or parseable into an object then it's data will be -merged- with the config data if set. </p>
-    <p>All other `msg.payload` properties are ignored</p>
-    <p> NOTE: Service and Domain have to be set, either by node config or incoming message for a service call to be made</p>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt class="optional">
+            payload.domain       <span class="property-type">string</span>
+        </dt>
+        <dd>Service domain to call</dd>
+        <dt class="optional">
+            payload.service       <span class="property-type">string</span>
+        </dt>
+        <dd>Service service to call</dd>
+        <dt class="optional">
+            payload.data       <span class="property-type">object</span>
+        </dt>
+        <dd>Service data to send with api call</dd>
+    </dl>
+
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+            <dt>
+                payload.domain       <span class="property-type">string</span>
+            </dt>
+            <dd>Service <code>domain</code> service was called with</dd>
+            <dt>
+                payload.service       <span class="property-type">string</span>
+            </dt>
+            <dd>Service <code>service</code> was called with</dd>
+            <dt class="optional">
+                payload.data       <span class="property-type">object</span>
+            </dt>
+            <dd>Service <code>data</code> used in call, if one was used</dd>
+    </dl>
+
+    <h3>Details</h3>
+    <p>If the incoming message has a <code>payload</code> property with <code>domain</code>, <code>service</code> set it will override any config values if set.</p>
+    <p>If the incoming message has a <code>payload.data</code> that is an object or parseable into an object these properties will be <strong>merged</strong> with any config values set.<p>
+    <p>If the node has a property value in it's config for <code>Merge Context</code> then the <code>flow</code> and <code>global</code> contexts will be checked for this property which should be an object that will also be merged into the data payload.<p>
+
+    <h3>Merge Resolution</h3>
+    <p>As seen above the <code>data</code> property has a lot going on in the way of data merging, in the end all of these are optional and the right most will win in the event that a property exists in multiple objects<p>
+    <p>Config Data, Global Data, Flow Data, Payload Data ( payload data property always wins if provided )<p>
+
+    <h3>References</h3>
+    <ul>
+        <li><a href="https://home-assistant.io/developers/rest_api/#get-apiservices">HA API call service</a></li>
+    </ul>
 </script>
