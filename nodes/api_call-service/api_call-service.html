@@ -228,8 +228,8 @@
     <p>Call a Home Assistant service</p>
     <p>Set the node's domain, service and data defaults or allow the incoming message to define them, or both.</p>
 
-    <p>If the incoming message has a `payload` property with `domain`, `service` or `data`
-        set it will override any defaults(if any) set within the node configuration.</p>
+    <p>If the incoming message has a `payload` property with `domain`, `service` set it will override any defaults(if any) set. If data is provided
+        and is an obect or parseable into an object then it's data will be -merged- with the config data if set. </p>
     <p>All other `msg.payload` properties are ignored</p>
     <p> NOTE: Service and Domain have to be set, either by node config or incoming message for a service call to be made</p>
 </script>
