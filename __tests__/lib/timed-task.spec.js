@@ -57,5 +57,6 @@ test('TimedTask: should deserialize', function(t) {
 
     t.equals(timedTask.id, opts.id, 'deserialized id is equal');
     t.equals(typeof timedTask.task, 'function', 'task function is deserialized correctly');
+
     t.end();
 });

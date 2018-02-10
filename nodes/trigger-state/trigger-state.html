@@ -84,50 +84,26 @@
         <h3>Add Outputs</h3>
         <div>
             <div class="form-row">
-                <label for="output-timer-type" style="width: 60px"> Send</label>
-                <input type="hidden" id="node-input-outputs"/> <!-- Needs to exist for node-red output remapping -->
-
                 <!-- Type -->
-                <select type="text" id="output-timer-type" style="width: 112px;">
-                    <option value="immediate">  Immediately </option>
-                    <option value="delayed">    Delayed     </option>
-                </select>
-
-                <input type="text" id="output-timer-value" style="width: 22%" disabled />
-
-                <select type="text" id="output-timer-unit" style="width: 112px;" disabled>
-                    <option value="milliseconds">   Milliseconds    </option>
-                    <option value="seconds">        Seconds         </option>
-                    <option value="minutes">        Minutes         </option>
-                    <option value="hours">          Hours           </option>
-                </select>
-            </div>
-
-            <div class="form-row">
-                <label for="output-message-type" style="width: 60px"> Message</label>
-
-                <!-- Type -->
-                <select type="text" id="output-message-type" style="width: 112px;">
+                <select type="text" id="output-message-type" style="width: 140px;">
                     <option value="default">    Default Msg </option>
                     <option value="custom">     Custom Msg  </option>
                 </select>
 
-                <input type="text" id="output-message-value" style="width: 52%" disabled/>
+                <input type="text" id="output-message-value" style="width: 62%" disabled/>
             </div>
 
 
             <!-- Output Comparator Selection -->
             <div class="form-row">
-                <label for="output-comparator-type" style="width: 60px"> If</label>
-
-                <select type="text" id="output-comparator-property-type" style="width: 112px">
-                    <option value="always">             Always      </option>
-                    <option value="current_state">      State       </option>
-                    <option value="previous_state">     Prev State  </option>
-                    <option value="property">           Property    </option>
+                <select type="text" id="output-comparator-property-type" style="width: 140px">
+                    <option value="always">             Send Always    </option>
+                    <option value="current_state">      If State       </option>
+                    <option value="previous_state">     If Prev State  </option>
+                    <option value="property">           If Property    </option>
                 </select>
 
-                <input type="text" id="output-comparator-property-value" style="width: 52%" disabled />
+                <input type="text" id="output-comparator-property-value" style="width: 62%" disabled />
             </div>
 
             <div class="form-row">
@@ -188,7 +164,7 @@
 
             // Get custom output by length minus default outputs
             const co = this.customoutputs[index - NUM_DEFAULT_OUTPUTS];
-            let label = `${co.timerType}: `;
+            let label;
             if (co.comparatorPropertyType === 'always') {
                 label += 'always sent'
             } else {
@@ -225,10 +201,6 @@
             const $customoutputs = {
                 list:   $('#output-list'),
                 addBtn: $('#output-add-btn'),
-
-                timerType:               $('#output-timer-type'),
-                timerValue:              $('#output-timer-value'),
-                timerUnit:               $('#output-timer-unit'),
 
                 messageType:             $('#output-message-type'),
                 messageValue:            $('#output-message-value'),
@@ -347,9 +319,6 @@
                 onAddButtonClicked: function() {
                     const output = {
                         outputId:                utils.getRandomId(),
-                        timerType:               $customoutputs.timerType.val(),
-                        timerValue:              $customoutputs.timerValue.val(),
-                        timerUnit:               $customoutputs.timerUnit.val(),
 
                         messageType:             $customoutputs.messageType.val(),
                         messageValue:            $customoutputs.messageValue.val(),
@@ -381,10 +350,6 @@
                 onEditableListAdd:  function(row, index, d) {
                     const $row = $(row);
 
-                    const typeText = (d.timerType === 'immediate')
-                        ? 'Immediate'
-                        : 'Delayed';
-
                     const messageText = (d.messageType === 'default')
                         ? 'default message'
                         : d.messageValue;
@@ -393,11 +358,7 @@
                         ? 'always'
                         : `${d.comparatorPropertyValue} ${d.comparatorType.replace('_', '')} ${d.comparatorValue}`
 
-                    const sendAfterText = (d.timerType === 'immediate')
-                        ? 'immediately'
-                        : `${d.timerValue + d.timerUnit.substring(0,3)}`;
-
-                    const html = `Send <strong>${messageText}</strong>, if <strong>${sendWhenText}</strong>, after <strong>${sendAfterText}</strong>`;
+                    const html = `Send <strong>${messageText}</strong>, if <strong>${sendWhenText}</strong>`;
 
                     $row.html(html);
                 },
@@ -433,16 +394,6 @@
                     });
 
                     $outputs.val(JSON.stringify(NODE.outputs));
-                },
-                onTimerTypeChange: function(e) {
-                    const val = e.target.value;
-                    if (val === 'immediate') {
-                        $customoutputs.timerValue.attr('disabled', 'disabled')
-                        $customoutputs.timerUnit.attr('disabled', 'disabled')
-                    } else {
-                        $customoutputs.timerValue.removeAttr('disabled')
-                        $customoutputs.timerUnit.removeAttr('disabled')
-                    }
                 },
                 onMessageTypeChange: function(e) {
                     const val = e.target.value;
@@ -480,7 +431,6 @@
             });
 
              // Constraint select menu change handlers
-            $customoutputs.timerType.on('change',              outputsHandler.onTimerTypeChange);
             $customoutputs.messageType.on('change',            outputsHandler.onMessageTypeChange);
             $customoutputs.comparatorPropertyType.on('change', outputsHandler.comparatorPropertyTypeChange);
 
@@ -534,23 +484,42 @@
 
 
 <script type="text/x-red" data-help-name="trigger-state">
-    <p class="ha-description">Advanced version of 'server:state-changed' node</p>
+    <p>Advanced version of 'server:state-changed' node</p>
 
-    <h4 class="ha-title">Configuration:</h4>
-    <table class="ha-table" style="width: 100%;" border="1" cellpadding="10">
-        <tbody>
-            <tr> <td>Entity ID Filter</td>      <td>Exact match for entity_id field</td> </tr>
-        </tbody>
-    </table>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt class="optional">
+            [payload|msg]   <span class="property-type">string|object</span>
+        </dt>
+        <dd>If incoming payload or message is a string and equal to 'enable' or 'disable' then set the node accordingly.</dd>
+    </dl>
 
-    <br/>
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+        <dt>
+            topic         <span class="property-type">string</span>
+        </dt>
+        <dd>the entity_id that triggered the node</dd>
+        <dt>
+            payload         <span class="property-type">string</span>
+        </dt>
+        <dd>the state as sent by home assistant</dd>
+        <dt>
+            data         <span class="property-type">object</span>
+        </dt>
+        <dd>the original home assistant event containing <code>entity_id</code> <code>new_state</code> and <code>old_state</code> properties </dd>
+    </dl>
 
-    <h4 class="ha-title">Output Object:</h4>
-    <table class="ha-table" style="width: 100%;" border="1" cellpadding="10">
-        <tbody>
-            <tr> <td>topic</td>      <td>entity_id (e.g.: sensor.bedroom_temp)</td>                                 </tr>
-            <tr> <td>payload</td>    <td>event.current_state.state (e.g.: 'on', 'off', '88.5', 'home', 'not_home')</td> </tr>
-            <tr> <td>data</td>       <td>original event object from homeassistant</td> </tr>
-        </tbody>
-    </table>
+    <h3>Details</h3>
+    <p>Coming soon...</p>
+    <p> TODO Document: Enable / Disable and how it saves state across restarts</p>
+    <p> TODO Document: Constraints and how they work</p>
+    <p> TODO Document: Custom Outputs and how they work</p>
+    <p> TODO Document: Debug flag on node</p>
+    <p> NOTE: To test automation without having to manually change state in home assistant send an input <code>payload</code> as an object which contains <code>entity_id</code>, <code>new_state</code>, and <code>old_state</code> properties.  This will trigger the node as if the event came from home assistant.</p>
+
+    <h3>References</h3>
+    <ul>
+        <li><a href="https://home-assistant.io/docs/configuration/state_object">HA State Object</a></li>
+    </ul>
 </script>

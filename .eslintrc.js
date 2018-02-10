@@ -1,18 +1,13 @@
 module.exports = {
     root:          true,
     extends:       'standard',
-    plugins:       ['html'],
     parserOptions: { sourceType: 'module' },
-    env:           { browser: true, node: true, mocha: true },
-    globals:       {
-        '__THEME': true
-    },
+    env:           { browser: true },
     rules: {
         'arrow-parens':                0,
         'space-before-function-paren': 0,
         'no-warning-comments':         [0, { 'terms': [ 'todo', 'fixme' ], 'location': 'start' }],
         'generator-star-spacing':      0,
-        'camelcase':                   0, // To support home assistant props
         semi:   ['error', 'always', { 'omitLastInOneLineBlock': true }],
         // Because ocd
         'standard/object-curly-even-spacing': 0,
