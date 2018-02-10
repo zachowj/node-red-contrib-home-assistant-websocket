@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const BaseNode = require('../../lib/base-node');
 
 module.exports = function(RED) {
@@ -17,45 +18,51 @@ module.exports = function(RED) {
             super(nodeDefinition, RED, nodeOptions);
         }
         isObjectLike (v) {
-            return (v != null) && (typeof v == 'object'); // eslint-disable-line
+            return (v !== null) && (typeof v === 'object');
         }
         // Disable connection status for api node
         setConnectionStatus() {}
-
-        onInput({ message }) {
-            let { service_domain, service, data } = this.nodeConfig;
-            if (data && !this.isObjectLike(data)) {
-                try {
-                    data = JSON.parse(data);
-                } catch (e) {}
+        tryToObject(v) {
+            if (!v) return null;
+            try {
+                return JSON.parse(v);
+            } catch (e) {
+                return v;
             }
+        }
+        onInput({ message }) {
+            let payloadDomain, payloadService, payloadData;
 
-            const pDomain  = this.utils.reach('payload.domain', message);
-            const pService = this.utils.reach('payload.service', message);
-            const pData    = this.utils.reach('payload.data', message);
+            if (message && message.payload) {
+                const payload  = this.tryToObject(message.payload);
+                payloadDomain  = this.utils.reach('domain',  payload);
+                payloadService = this.utils.reach('service', payload);
+                payloadData    = this.utils.reach('data',    payload);
+            }
+            const configDomain  = this.nodeConfig.service_domain;
+            const configService = this.nodeConfig.service;
+            let   configData    = this.nodeConfig.data;
+            configData = this.tryToObject(configData);
 
-            // domain and service are strings, if they exist in payload overwrite any config value
-            const apiDomain = pDomain || service_domain;
-            const apiService = pService || service;
-            if (!apiDomain) throw new Error('call service node is missing api "domain" property, not found in config or payload');
+            const apiDomain  = payloadDomain  || configDomain;
+            const apiService = payloadService || configService;
+            if (!apiDomain)  throw new Error('call service node is missing api "domain" property, not found in config or payload');
             if (!apiService) throw new Error('call service node is missing api "service" property, not found in config or payload');
 
-            let apiData;
             // api data should be an object or falsey, if an object then attempt to merge with config value if also an object
-            if (this.isObjectLike(pData)) {
-                if (this.isObjectLike(data)) {
-                    apiData = this.utils.merge({}, data, pData);
-                } else {
-                    apiData = pData;
-                }
-            // Not an object, but maybe "something"
-            } else if (pData) {
-                apiData = pData;
-            } else {
-                apiData = null;
+            let apiData;
+
+            const payloadDataIsObject = this.isObjectLike(payloadData);
+            const configDataIsObject  = this.isObjectLike(configData);
+
+            if (payloadDataIsObject && configDataIsObject) {
+                apiData = JSON.stringify(this.utils.merge({}, configData, payloadData));
+            } else if (payloadDataIsObject) {
+                apiData = JSON.stringify(payloadData);
+            } else if (configDataIsObject) {
+                apiData = JSON.stringify(configData);
             }
 
-            apiData = (apiData && this.isObjectLike(apiData)) ? JSON.stringify(apiData) : null;
             this.debugToClient(`Calling Service: ${apiDomain}:${apiService} -- ${apiData}`);
 
             return this.nodeConfig.server.api.callService(apiDomain, apiService, apiData)
