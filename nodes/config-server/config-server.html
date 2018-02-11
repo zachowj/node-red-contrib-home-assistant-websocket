@@ -12,6 +12,7 @@
 </script>
 
 <script type="text/x-red" data-template-name="server">
+
     <div class="form-row">
         <label for="node-config-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-config-input-name" />
@@ -30,4 +31,46 @@
 
 <script type="text/x-red" data-help-name="server">
    <p>Home Assistant connection configuration</p>
+
+
+    <h3>Config</h3>
+    <dl class="message-properties">
+            <dt>
+                Name       <span class="property-type">string</span>
+            </dt>
+            <dd>Label for this configuration, see details below for implications</dd>
+            <dt>
+                Base URL       <span class="property-type">string</span>
+            </dt>
+            <dd>The base url and port the home assistant instance can be reached at, for example: <code>http://192.168.0.100:8123</code> or <code>https://homeassistant.mysite.com</code></dd>
+            <dt class="optional">
+                API Pass       <span class="property-type">string</span>
+            </dt>
+            <dd>Password used to contact the API, if one is needed</dd>
+    </dl>
+
+    <h3>Details</h3>
+    <p>Every node requires a configuration attached to define how to contact home assistant, that is this config node's main purpose.</p>
+
+    <h4>Context</h4>
+    <p>Each config node will also make some data available on the global context, the <code>Name</code> value in this node is used as a, camelcased, namespace for those values</p>
+    <p>Currently <code>states</code>, <code>services</code> and <code>events</code> is made available on the global context.  <code>states</code> is always set to all available states at startup and updated whenever state changes occur so it should be always up to date. <code>services</code> and <code>events</code> is only updated on initial deploy.</p>
+
+    <h4>Context Example</h4>
+    <p>Say we have a config node with name <code>My Awesome server</code>, with an entity setup in homeassistant as <code>switch.my_switch</code>.  This state would be available within function nodes and you could fetch using something like the below code</p>
+    <p>NOTE: It's likely one of the state or trigger nodes will better serve most use cases, this is simply provided as an option for more advanced cases, or to implement functionality I haven't thought of/gotten around to</p>
+<pre>
+const haCtx       = global.get('homeassistant');
+const configCtx   = haCtx.myAwesomeServer;
+const entityState = configCtx.states['switch.my_switch'];
+return (entityState.state === 'on') ? true : false;
+</pre>
+
+    <h3>Connection Issues</h3>
+    <p>Communication with homeassistant is accomplished via a combination of ServerEvents and the REST API, if you are having troubles communicating with home assistant make sure you can access the API outside of node-red, but from the same server node-red is running on, using a REST client, curl, or any number of other methods to validate the connection<p>
+
+    <h3>References</h3>
+    <ul>
+        <li><a href="https://home-assistant.io/developers/rest_api">HA REST API</a></li>
+    </ul>
 </script>

@@ -47,6 +47,11 @@ module.exports = function(RED) {
             const HTTP_STATIC_OPTS = { root: require('path').join(__dirname, '..', '/_static'), dotfiles: 'deny' };
             this.RED.httpAdmin.get('/homeassistant/static/*', function(req, res) { res.sendFile(req.params[0], HTTP_STATIC_OPTS) });
 
+            this.setOnContext('states',   []);
+            this.setOnContext('services', []);
+            this.setOnContext('events',   []);
+            this.setOnContext('isConnected', false);
+
             if (this.nodeConfig.url && !this.homeAssistant) {
                 this.homeAssistant = new HomeAssistant({ baseUrl: this.nodeConfig.url, apiPass: this.nodeConfig.pass }, { startListening: false });
                 this.api    = this.homeAssistant.api;
@@ -55,10 +60,15 @@ module.exports = function(RED) {
                 this.events.addListener('ha_events:close', this.onHaEventsClose.bind(this));
                 this.events.addListener('ha_events:open',  this.onHaEventsOpen.bind(this));
                 this.events.addListener('ha_events:error', this.onHaEventsError.bind(this));
+                this.events.addListener('ha_events:state_changed', this.onHaStateChanged.bind(this));
 
                 this.homeAssistant.startListening()
                     .catch(() => this.startListening());
             }
+        }
+
+        get nameAsCamelcase() {
+            return this.utils.toCamelCase(this.nodeConfig.name);
         }
 
         // This simply tries to connected every 2 seconds, after the initial connection is successful
@@ -80,20 +90,53 @@ module.exports = function(RED) {
             }, 2000);
         }
 
-        onHaEventsOpen() {
-            // This is another hack that should be set in node-home-assistant
-            // when the connection is first made the states cache needs to be refreshed
-            this.homeAssistant.getStates(null, true);
-            this.homeAssistant.getServices(true);
-            this.homeAssistant.getEvents(true);
-            this.debug('config server event listener connected');
+        setOnContext(key, value) {
+            let haCtx = this.context().global.get('homeassistant');
+            haCtx = haCtx || {};
+            haCtx[this.nameAsCamelcase] = haCtx[this.nameAsCamelcase] || {};
+            haCtx[this.nameAsCamelcase][key] = value;
+            this.context().global.set('homeassistant', haCtx);
+        }
+
+        getFromContext(key) {
+            let haCtx = this.context().global.get('homeassistant');
+            return (haCtx[this.nameAsCamelcase]) ? haCtx[this.nameAsCamelcase][key] : null;
+        }
+
+        async onHaEventsOpen() {
+            try {
+                let states = await this.homeAssistant.getStates(null, true);
+                this.setOnContext('states', states);
+
+                let services = await this.homeAssistant.getServices(true);
+                this.setOnContext('services', services);
+
+                let events   = await this.homeAssistant.getEvents(true);
+                this.setOnContext('events', events);
+
+                this.setOnContext('isConnected', true);
+
+                this.debug('config server event listener connected');
+            } catch (e) {
+                this.error(e);
+            }
+        }
+
+        onHaStateChanged(changedEntity) {
+            const states = this.getFromContext('states');
+            if (states) {
+                states[changedEntity.entity_id] = changedEntity.event.new_state;
+                this.setOnContext('states', states);
+            }
         }
 
         onHaEventsClose() {
+            this.setOnContext('isConnected', false);
             this.debug('config server event listener closed');
         }
 
         onHaEventsError(err) {
+            this.setOnContext('isConnected', false);
             this.debug(err);
         }
     }
