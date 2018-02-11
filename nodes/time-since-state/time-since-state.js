@@ -39,8 +39,9 @@ module.exports = function(RED) {
 
         onClose(removed) {
             super.onClose();
-            if (removed) {
+            if (this.timer) {
                 clearInterval(this.timer);
+                this.timer = null;
             }
         }
 
