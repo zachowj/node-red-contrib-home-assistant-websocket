@@ -38,7 +38,8 @@
       "api-call-service": "nodes/api_call-service/api_call-service.js",
       "api-current-state": "nodes/api_current-state/api_current-state.js",
       "api-get-history": "nodes/api_get-history/api_get-history.js",
-      "api-render-template": "nodes/api_render-template/api_render-template.js"
+      "api-render-template": "nodes/api_render-template/api_render-template.js",
+      "time-since-state": "nodes/time-since-state/time-since-state.js"
     }
   },
   "dependencies": {
@@ -49,10 +50,11 @@
     "joi": "^13.1.1",
     "lodash.merge": "^4.6.0",
     "lowdb": "^1.0.0",
-    "node-red": "node-red/node-red#0.18.2",
     "node-home-assistant": "AYapejian/node-home-assistant#dev-master",
+    "node-red": "node-red/node-red#0.18.2",
     "selectn": "^1.1.2",
-    "serialize-javascript": "^1.4.0"
+    "serialize-javascript": "^1.4.0",
+    "time-ago": "^0.2.1"
   },
   "devDependencies": {
     "eslint": "^4.8.0",

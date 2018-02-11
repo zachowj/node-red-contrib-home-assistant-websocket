@@ -1,0 +1,134 @@
+<script type="text/javascript">
+    RED.nodes.registerType('time-since-state', {
+        category:     'home_assistant',
+        color:        '#52C0F2',
+        inputs:       1,
+        outputs:      1,
+        icon:         "timer.png",
+        paletteLabel: 'time since',
+        label:        function() { return this.name || `time since changed: ${this.entity_id}`; },
+        defaults:     {
+            name:            { value: '' },
+            server:          { value: '', type: 'server', required: true },
+            updateinterval:  { value: '', validate: (v) => !isNaN(v) },
+            outputinitially: { value: false },
+            outputonchanged: { value: false },
+            entity_id:     {
+                value:    '',
+                required: true
+            }
+        },
+        oneditprepare: function () {
+            const $entityIdField = $('#entity_id');
+            $entityIdField.val(this.entity_id);
+
+            const NODE = this;
+            const $server = $('#node-input-server');
+            const utils = {
+                setDefaultServerSelection: function () {
+                    let defaultServer;
+                    RED.nodes.eachConfig(n => {
+                        if (n.type === 'server' && !defaultServer) defaultServer = n.id;
+                    });
+                    if (defaultServer) $server.val(defaultServer);
+                }
+            };
+
+            if (!NODE.server) {
+                utils.setDefaultServerSelection();
+            }
+
+            // Check that proper config is set
+            const config = RED.nodes.node($('#node-input-server').val());
+            const isConfigValid = (config && config.valid);
+            // TODO: Doesn't seem to be working
+            if (!isConfigValid) { $entityIdField.addClass('disabled'); }
+            else { $entityIdField.removeClass('disabled'); }
+
+            $.get('/homeassistant/entities')
+                .done((entities) => {
+                    this.availableEntities = JSON.parse(entities);
+
+                    $entityIdField.autocomplete({
+                        source:   this.availableEntities,
+                        minLength: 0,
+                        change:   (evt,ui) => {
+                            const validSelection = (this.availableEntities.indexOf($(evt.target).val()) > -1);
+                            if (validSelection) { $(evt.target).removeClass('input-error'); }
+                            else { $(evt.target).addClass('input-error'); }
+                        }
+                    });
+
+                    const validSelection = (this.availableEntities.indexOf(this.entity_id) > -1);
+                    if (validSelection) { $entityIdField.removeClass('input-error'); }
+                    else { $entityIdField.addClass('input-error'); }
+                })
+                .fail((err) => RED.notify(err.responseText, 'error'));
+        },
+        oneditsave: function() { this.entity_id = $("#entity_id").val(); }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="time-since-state">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
+        <input type="text" id="node-input-server" />
+    </div>
+
+    <div class="form-row">
+        <label for="entity_id"><i class="fa fa-cube"></i> Entity ID</label>
+        <input type="text" id="entity_id">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-updateinterval"><i class="fa fa-hand-paper-o"></i> Update Interval</label>
+        <input type="text" id="node-input-updateinterval" placeholder="10"/>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-outputonchanged"><i class="fa fa-server"></i> Output on Changed</label>
+        <input type="checkbox" id="node-input-outputonchanged" />
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-outputinitially"><i class="fa fa-server"></i> Output Initially</label>
+        <input type="checkbox" id="node-input-outputinitially" />
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="time-since-state">
+    <p>Polls for state of given entity and outputs time since last changed</p>
+
+    <h3>Config</h3>
+        <dl class="message-properties">
+                <dt>Update Interval<span class="property-type">number</span></dt>
+                <dd>Number of seconds between checking / sending updates</dd>
+                <dt>Output Initially<span class="property-type">boolean</span></dt>
+                <dd>Output once on startup/deploy then on each interval</dd>
+        </dl>
+
+    <h3>Outputs</h3>
+        <dl class="message-properties">
+            <dt>topic (same as data.entity_id)<span class="property-type">string</span></dt>
+            <dd>Latest current state object received from home assistant</dd>
+
+            <dt>payload<span class="property-type">string</span></dt>
+            <dd>Time since changed</dd>
+
+            <dt>data <span class="property-type">object</span></dt>
+            <dd>The last known state for the entity</dd>
+        </dl>
+
+    <h3>Details</h3>
+        <p>Useful for either alerts for non-communicating devices (time since change > 1 day for example) or dashboard usage</p>
+
+    <h3>References</h3>
+        <ul>
+            <li><a href="https://home-assistant.io/docs/configuration/state_object/">HA State Objects</a></li>
+        </ul>
+</script>
