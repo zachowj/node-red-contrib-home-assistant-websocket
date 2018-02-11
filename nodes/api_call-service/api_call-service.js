@@ -85,7 +85,6 @@ module.exports = function(RED) {
             }
 
             apiData = this.utils.merge({}, configData, contextData, payloadData);
-            this.warn(apiData);
             return apiData;
         }
     }
