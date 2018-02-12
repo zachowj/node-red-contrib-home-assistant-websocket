@@ -39,7 +39,7 @@
       "api-current-state": "nodes/api_current-state/api_current-state.js",
       "api-get-history": "nodes/api_get-history/api_get-history.js",
       "api-render-template": "nodes/api_render-template/api_render-template.js",
-      "time-since-state": "nodes/time-since-state/time-since-state.js"
+      "poll-state": "nodes/poll-state/poll-state.js"
     }
   },
   "dependencies": {

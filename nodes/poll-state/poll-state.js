@@ -59,7 +59,7 @@ module.exports = function(RED) {
                     const timeSinceChangedMs = Date.now() - dateChanged.getTime();
                     this.send({
                         topic:   this.nodeConfig.entity_id,
-                        payload: { timeSinceChanged, timeSinceChangedMs, dateChanged, state }
+                        payload: { timeSinceChanged, timeSinceChangedMs, dateChanged, data: state }
                     });
                 } else {
                     this.warn(`could not calculate time since changed for entity_id "${this.nodeConfig.entity_id}"`);
@@ -80,5 +80,5 @@ module.exports = function(RED) {
             return state;
         }
     }
-    RED.nodes.registerType('time-since-state', TimeSinceStateNode);
+    RED.nodes.registerType('poll-state', TimeSinceStateNode);
 };

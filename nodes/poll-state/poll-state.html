@@ -1,12 +1,12 @@
 <script type="text/javascript">
-    RED.nodes.registerType('time-since-state', {
+    RED.nodes.registerType('poll-state', {
         category:     'home_assistant',
         color:        '#52C0F2',
         inputs:       1,
         outputs:      1,
         icon:         "timer.png",
-        paletteLabel: 'time since',
-        label:        function() { return this.name || `time since changed: ${this.entity_id}`; },
+        paletteLabel: 'poll state',
+        label:        function() { return this.name || `poll state: ${this.entity_id}`; },
         defaults:     {
             name:            { value: '' },
             server:          { value: '', type: 'server', required: true },
@@ -69,7 +69,7 @@
     });
 </script>
 
-<script type="text/x-red" data-template-name="time-since-state">
+<script type="text/x-red" data-template-name="poll-state">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
@@ -101,7 +101,7 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="time-since-state">
+<script type="text/x-red" data-help-name="poll-state">
     <p>Polls for state of given entity and outputs time since last changed</p>
 
     <h3>Config</h3>
@@ -114,18 +114,25 @@
 
     <h3>Outputs</h3>
         <dl class="message-properties">
-            <dt>topic (same as data.entity_id)<span class="property-type">string</span></dt>
-            <dd>Latest current state object received from home assistant</dd>
+            <dt>topic<span class="property-type">string</span></dt>
+            <dd>entity_id of changed entity</dd>
 
-            <dt>payload<span class="property-type">string</span></dt>
-            <dd>Time since changed</dd>
+            <dt>payload.timeSinceChanged<span class="property-type">string</span></dt>
+            <dd>Human readable format string of time since last updated, example "1 hour ago"</dd>
 
-            <dt>data <span class="property-type">object</span></dt>
-            <dd>The last known state for the entity</dd>
+            <dt>payload.timeSinceChangedMs<span class="property-type">number</span></dt>
+            <dd>Number of milliseconds since last changed</dd>
+
+            <dt>payload.dateChanged<span class="property-type">string</span></dt>
+            <dd>ISO date string of the date when the entity last changed</dd>
+
+            <dt>payload.data<span class="property-type">object</span></dt>
+            <dd>The last known state of the entity</dd>
         </dl>
 
     <h3>Details</h3>
-        <p>Useful for either alerts for non-communicating devices (time since change > 1 day for example) or dashboard usage</p>
+        <p>Polls for state at regular intervals, optionally also outputing at start and when state changes. Useful for either alerts for non-communicating devices (time since change > 1 day for example) or dashboard graphs with consistent interval charts</p>
+        <p>NOTE: The last changed calculation is based on homeassistant's <code>last_changed</code> property so anything that changes that field will result in your last changed time outputted here to be changed.</p>
 
     <h3>References</h3>
         <ul>
