@@ -48,7 +48,10 @@ module.exports = function(RED) {
                 return null;
             }
 
-            this.node.send({ topic: entity_id, payload: currentState.state, data: currentState });
+            msg.topic = entity_id;
+            msg.payload = currentState.state;
+            msg.data = currentState;
+            this.node.send(msg);
         }
     }
 
