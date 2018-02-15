@@ -1,3 +1,4 @@
+
 /* eslint-disable camelcase */
 const EventsNode = require('../../lib/events-node');
 
@@ -195,7 +196,7 @@ module.exports = function(RED) {
             }
 
             if (output.messageType === 'default') {
-                return eventMessage;
+                return { topic: eventMessage.entity_id, payload: eventMessage.event.new_state.state, data: eventMessage };
             }
 
             try {
