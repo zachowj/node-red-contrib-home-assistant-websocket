@@ -27,6 +27,7 @@ module.exports = function(RED) {
             super(nodeDefinition, RED, nodeOptions);
         }
 
+        /* eslint-disable camelcase */
         onInput({ parsedMessage, message }) {
             const entity_id = parsedMessage.entity_id.value;
             const logAndContinueEmpty = (logMsg) => { this.node.warn(logMsg); return ({ payload: {}}) };

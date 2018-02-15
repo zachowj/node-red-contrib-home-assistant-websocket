@@ -67,3 +67,14 @@ binary_sensor:
     state_topic: !env_var MQTT_DEV_BINARY_SENSOR_TOPIC
     payload_on:  '1'
     payload_off: '0'
+
+input_select:
+  time_of_day:
+    name: Time of Day
+    options:
+     - Morning
+     - Afternoon
+     - Evening
+     - Party Time
+    initial: Morning
+    icon: mdi:schedule

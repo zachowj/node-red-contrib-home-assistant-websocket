@@ -3,11 +3,11 @@
         category: 'home_assistant',
         color:    '#038FC7',
         defaults: {
-            name:               { value: '' },
-            server:             { value: '', type: 'server', required: true },
-            entityidfilter:     { value: '' },
-            entityidfiltertype: { value: '' },
-            haltifstate:        { value: '' }
+            name:              { value: '' },
+            server:            { value: '', type: 'server', required: true },
+            entityidfilter:     { value: '', required: true },
+            entityidfiltertype: { value: 'substring' },
+            haltifstate:       { value: '' }
         },
         inputs: 0,
         outputs: 1,

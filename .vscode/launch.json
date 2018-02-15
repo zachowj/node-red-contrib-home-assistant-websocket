@@ -29,7 +29,6 @@
             "address":    "localhost",
             "port":       9123,
             "trace":      false,
-
             "skipFiles":  [
                 "<node_internals>/**/*.js"
             ]
