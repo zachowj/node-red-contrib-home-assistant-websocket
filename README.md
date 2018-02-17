@@ -15,6 +15,8 @@ $ npm install node-red-contrib-home-assistant
 # then restart node-red
 ```
 
+For flow examples checkout the [flows here](https://raw.githubusercontent.com/AYapejian/node-red-contrib-home-assistant/master/_docker/node-red/root-fs/data/flows.json)
+
 ---
 ## Included Nodes
 The installed nodes have more detailed information in the node-red info pane shown when the node is selected. Below is a quick summary
