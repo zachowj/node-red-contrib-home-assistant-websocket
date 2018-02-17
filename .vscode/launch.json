@@ -5,17 +5,45 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name":      "Attach: Docker",
+            "name":      "Attach Docker: node-red",
             "type":      "node",
             "request":   "attach",
-            "timeout":   10000,
+            "timeout":   20000,
             "restart":   true,
             "address":   "localhost",
             "port":      9123,
             "localRoot": "${workspaceFolder}",
-            "remoteRoot": "/data-dev/node_modules/node-red-contrib-home-assistant",
+            "remoteRoot": "/data/node_modules/node-red-contrib-home-assistant",
             "trace": false,
             "skipFiles": [
+                "<node_internals>/**/*.js"
+            ]
+        },
+
+        {
+            "name":       "Attach Local: node-red",
+            "type":       "node",
+            "request":    "attach",
+            "timeout":    20000,
+            "restart":    true,
+            "address":    "localhost",
+            "port":       9123,
+            "trace":      false,
+            "skipFiles":  [
+                "<node_internals>/**/*.js"
+            ]
+        },
+        {
+            "name":       "Attach Local: test",
+            "type":       "node",
+            "request":    "attach",
+            "timeout":    20000,
+            "restart":    true,
+            "address":    "localhost",
+            "port":       9124,
+            "trace":      false,
+
+            "skipFiles":  [
                 "<node_internals>/**/*.js"
             ]
         }

@@ -1,0 +1,100 @@
+<script type="text/javascript">
+    RED.nodes.registerType('api-get-history', {
+        category: 'home_assistant',
+        color:    '#52C0F2',
+        defaults: {
+            name:         { value: '' },
+            server:       { value: '', type: 'server', required: true },
+            startdate:    { value: '' }
+        },
+        inputs:       1,
+        outputs:      1,
+        icon:         'timer.png',
+        paletteLabel: 'get history',
+        label:        function() {
+            if (this.name) { return this.name; }
+            if (this.startdate) {
+                const startdate = new Date(this.startdate);
+                return `${startdate.toLocaleDateString()} ${startdate.toLocaleTimeString()}`;
+            }
+            return 'get history';
+        },
+        oneditprepare: function() {
+            const NODE = this;
+            const $server = $('#node-input-server');
+            const utils = {
+                setDefaultServerSelection: function () {
+                    let defaultServer;
+                    RED.nodes.eachConfig(n => {
+                        if (n.type === 'server' && !defaultServer) defaultServer = n.id;
+                    });
+                    if (defaultServer) $server.val(defaultServer);
+                }
+            };
+
+            if (!NODE.server) {
+                utils.setDefaultServerSelection();
+            }
+        }
+    });
+</script>
+
+
+<script type="text/x-red" data-template-name="api-get-history">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
+        <input type="text" id="node-input-server" />
+    </div>
+
+
+    <div class="form-row">
+        <label for="node-input-startdate"><i class="fa fa-date"></i> Start Date</label>
+        <input type="text" id="node-input-startdate" autofocus="autofocus" />
+    </div>
+
+    <div class="form-tips">
+        <ul>
+            <li>
+                <code>startdate</code> must be in ISO format, example: "2018-01-27T13:00:00+00:00"
+            </li>
+        </ul>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="api-get-history">
+    <p>Fetches history from Home Assistant (all history for the past day by default)</p>
+
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt class="optional">
+            startdate       <span class="property-type">string | date</span>
+        </dt>
+        <dd>Date to start fetching history from. Will override the nodes configuration if passed in</dd>
+    </dl>
+
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+        <dt>
+            payload         <span class="property-type">array</span>
+        </dt>
+        <dd>The history returned by home-assistant, which is an array of arrays where each array entry contains history objects for one particular entity</dd>
+        <dt>
+            startdate         <span class="property-type">string</span>
+        </dt>
+        <dd>ISO date string used to fetch history</dd>
+    </dl>
+
+    <h3>Details</h3>
+    <p>Will return past day history for all entities by default, pass in <code>msg.startdate</code></p>
+
+    <h3>References</h3>
+    <ul>
+        <li><a href="https://home-assistant.io/components/history">HA History Component</a></li>
+        <li><a href="https://home-assistant.io/developers/rest_api">HA API: /api/history/period</a></li>
+    </ul>
+</script>

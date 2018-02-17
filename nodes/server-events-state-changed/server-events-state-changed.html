@@ -1,0 +1,121 @@
+<script type="text/javascript">
+    RED.nodes.registerType('server-state-changed', {
+        category: 'home_assistant',
+        color:    '#038FC7',
+        defaults: {
+            name:              { value: '' },
+            server:            { value: '', type: 'server', required: true },
+            entityidfilter:     { value: '', required: true },
+            entityidfiltertype: { value: 'substring' },
+            haltifstate:       { value: '' }
+        },
+        inputs: 0,
+        outputs: 1,
+        icon: "arrow-right-bold-hexagon-outline.png",
+        paletteLabel: 'events: state',
+        label: function() { return this.name || `state_changed: ${this.entityidfilter || 'all entities'}` },
+        oneditprepare: function () {
+            const $entityidfilter     = $('#node-input-entityidfilter');
+            const $entityidfiltertype = $('#node-input-entityidfiltertype');
+            const $server             = $('#node-input-server');
+
+            $entityidfilter.val(this.entityidfilter);
+            this.entityidfiltertype = this.entityidfiltertype || 'substring';
+            $entityidfiltertype.val(this.entityidfiltertype);
+            $entityidfilter.val(this.entityidfilter);
+
+            const NODE = this;
+            const utils = {
+                setDefaultServerSelection: function () {
+                    let defaultServer;
+                    RED.nodes.eachConfig(n => {
+                        if (n.type === 'server' && !defaultServer) defaultServer = n.id;
+                    });
+                    if (defaultServer) $server.val(defaultServer);
+                }
+            };
+
+            if (!NODE.server) {
+                utils.setDefaultServerSelection();
+            }
+
+            const setupAutocomplete = (node) => {
+                const selectedServer = $server.val();
+
+                // A home assistant server is selected in the node config
+                if (node.server || (selectedServer && selectedServer !== '_ADD_')) {
+                    $.get('/homeassistant/entities').done((entities) => {
+                        node.availableEntities = JSON.parse(entities);
+                        $entityidfilter.autocomplete({ source: node.availableEntities, minLength: 0 });
+                    })
+                    .fail((err) => RED.notify(err.responseText, 'error'));
+                }
+            };
+
+            $server.change(() => setupAutocomplete(this));
+        },
+        oneditsave: function() {
+            this.entityidfilter         = $("#node-input-entityidfilter").val();
+        }
+    });
+</script>
+
+
+<script type="text/x-red" data-template-name="server-state-changed">
+    <!-- Name -->
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+    <!-- Server -->
+    <div class="form-row">
+        <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
+        <input type="text" id="node-input-server" />
+    </div>
+
+    <!-- Entity ID Filter and Filter Type -->
+    <div class="form-row">
+        <label for="node-input-entityidfilter"><i class="fa fa-tag"></i> Entity ID</label>
+
+        <input type="text" id="node-input-entityidfilter" placeholder="binary_sensor" style="width: 50%;" />
+
+        <select type="text" id="node-input-entityidfiltertype" style="width: 20%;">
+            <option value="exact">Exact</option>
+            <option value="substring">Substring</option>
+            <option value="regex">Regex</option>
+        </select>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-haltifstate"><i class="fa fa-hand-paper-o"></i> Halt If State</label>
+        <input type="text" id="node-input-haltifstate" />
+    </div>
+
+</script>
+
+<script type="text/x-red" data-help-name="server-state-changed">
+    <p class="ha-description">Outputs 'state_changed' event types sent from Home Assistant</p>
+
+    <p class="ha-subdescription">The autocomplete will open to allow easier selection in the case you want a specific entity however the actual match is a substring match so no validation is done</p>
+    <p class="ha-additional-info">NOTE: You can add multiple string matches by comma separated list and each entry will be matched separately</p>
+
+    <h4 class="ha-title">Configuration:</h4>
+    <table class="ha-table" style="width: 100%;" border="1" cellpadding="10">
+        <tbody>
+            <tr> <td>Entity ID Filter</td>      <td>CSV substring matches for entity_id field</td>      </tr>
+            <tr> <td>Halt If State</td>         <td>If the new_state === this setting then skip sending </tr>
+        </tbody>
+    </table>
+
+    <br/>
+
+    <h4 class="ha-title">Output Object:</h4>
+    <table class="ha-table" style="width: 100%;" border="1" cellpadding="10">
+        <tbody>
+            <tr> <td>topic</td>      <td>entity_id (e.g.: sensor.bedroom_temp)</td>                                 </tr>
+            <tr> <td>payload</td>    <td>event.new_state.state (e.g.: 'on', 'off', '88.5', 'home', 'not_home')</td> </tr>
+            <tr> <td>data</td>       <td>original event object from homeassistant</td> </tr>
+        </tbody>
+    </table>
+</script>

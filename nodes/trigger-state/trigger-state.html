@@ -1,0 +1,525 @@
+<script type="text/x-red" data-template-name="trigger-state">
+    <!-- Name -->
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+    <!-- Server -->
+    <div class="form-row">
+        <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
+        <input type="text" id="node-input-server" />
+    </div>
+
+    <!-- Entity ID Filter and Filter Type -->
+    <div class="form-row">
+        <label for="node-input-entityid"><i class="fa fa-tag"></i> Entity ID</label>
+        <input type="text" id="node-input-entityid" placeholder="binary_sensor" style="width: 70%;" />
+    </div>
+
+    <!-- -------------------------------------------------------------- -->
+    <!-- Add Custom Constraints                                         -->
+    <!-- -------------------------------------------------------------- -->
+    <div class="form-row" id="add-constraint-container">
+        <h3>Add Constraints</h3>
+        <div>
+            <!-- Target Selection -->
+            <div class="form-row">
+                <!-- Type -->
+                <select type="text" id="constraint-target-type" style="width: 140px;">
+                    <option value="this_entity">This Entity</option>
+                    <option value="entity_id">Entity ID</option>
+                </select>
+
+                <!-- Value -->
+                <input type="text" id="constraint-target-value" style="width: 62%" disabled />
+            </div>
+
+            <!-- Property Selection -->
+            <div class="form-row">
+                <!-- Type -->
+                <select type="text" id="constraint-property-type" style="width: 140px;">
+                    <option value="current_state">Current State</option>
+                    <option value="previous_state">Previous State</option>
+                    <option value="property">Property</option>
+                </select>
+
+                <!-- Value -->
+                <input type="text" id="constraint-property-value" style="width: 62%" disabled />
+            </div>
+
+
+            <!-- Comparator Selection -->
+            <div class="form-row">
+                <!-- Type -->
+                <select type="text" id="constraint-comparator-type" style="width: 140px;">
+                    <option value="is">Is</option>
+                    <option value="is_not">Is Not</option>
+
+                    <option value="greater_than">Greater Than</option>
+                    <option value="less_than">Less Than</option>
+
+                    <option value="includes">Includes</option>
+                    <option value="does_not_include">Does Not Include</option>
+                </select>
+
+                <!-- Value -->
+                <input type="text" id="constraint-comparator-value" />
+            </div>
+
+            <!-- Add Constraint Button -->
+            <button id="constraint-add-btn" style="width: 100%">Add Constraint</button>
+        </div>
+    </div>
+
+    <!-- Constraints List -->
+    <div class="form-row">
+        <ol id="constraint-list"></ol>
+    </div>
+
+    <!-- -------------------------------------------------------------- -->
+    <!-- Add Custom Outputs                                             -->
+    <!-- -------------------------------------------------------------- -->
+    <div class="form-row" id="add-output-container">
+        <h3>Add Outputs</h3>
+        <div>
+            <div class="form-row">
+                <!-- Type -->
+                <select type="text" id="output-message-type" style="width: 140px;">
+                    <option value="default">    Default Msg </option>
+                    <option value="custom">     Custom Msg  </option>
+                </select>
+
+                <input type="text" id="output-message-value" style="width: 62%" disabled/>
+            </div>
+
+
+            <!-- Output Comparator Selection -->
+            <div class="form-row">
+                <select type="text" id="output-comparator-property-type" style="width: 140px">
+                    <option value="always">             Send Always    </option>
+                    <option value="current_state">      If State       </option>
+                    <option value="previous_state">     If Prev State  </option>
+                    <option value="property">           If Property    </option>
+                </select>
+
+                <input type="text" id="output-comparator-property-value" style="width: 62%" disabled />
+            </div>
+
+            <div class="form-row">
+                <!-- Type -->
+                <select type="text" id="output-comparator-type" style="width: 140px;" disabled>
+                    <option value="is">     Is      </option>
+                    <option value="is_not"> Is Not  </option>
+
+                    <option value="greater_than">   Greater Than    </option>
+                    <option value="less_than">      Less Than       </option>
+
+                    <option value="includes">Includes</option>
+                    <option value="does_not_include">Does Not Include</option>
+                </select>
+
+                <input type="text" id="output-comparator-value" style="width: 62%" disabled />
+            </div>
+
+            <!-- Add Output Button -->
+            <button id="output-add-btn" style="width: 100%">Add Output</button>
+        </div>
+    </div>
+
+    <!-- Output List -->
+    <div class="form-row">
+        <ol id="output-list"></ol>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-debugenabled"><i class="fa fa-server"></i> Debug</label>
+        <input type="checkbox" id="node-input-debugenabled" />
+    </div>
+
+</script>
+
+
+<script type="text/javascript">
+    RED.nodes.registerType('trigger-state', {
+        category: 'home_assistant',
+        color:    '#038FC7',
+        defaults: {
+            name:                 { value: '' },
+            server:               { value: '', type: 'server', required: true },
+            entityid:             { value: '', required: true },
+            debugenabled:         { value: false },
+            constraints:          { value: [] },
+            constraintsmustmatch: { value: 'all' },
+            outputs:              { value: 2  },
+            customoutputs:        { value: [] }
+        },
+        inputs:        1,
+        outputs:       2,
+        outputLabels:  function(index) {
+            const NUM_DEFAULT_OUTPUTS = 2;
+
+            if (index === 0) return 'allowed';
+            if (index === 1) return 'blocked';
+
+            // Get custom output by length minus default outputs
+            const co = this.customoutputs[index - NUM_DEFAULT_OUTPUTS];
+            let label;
+            if (co.comparatorPropertyType === 'always') {
+                label += 'always sent'
+            } else {
+                label += `sent when ${co.comparatorPropertyType.replace('_', ' ')} ${co.comparatorType.replace('_', '')} ${co.comparatorValue}`;
+            }
+            return label;
+        },
+        icon:          "trigger.png",
+        paletteLabel:  'trigger: state',
+        label:         function() { return this.name || `trigger-state: ${this.entityid}` },
+        oneditprepare: function () {
+            // Outputs List
+            let NODE = this;
+            const NUM_DEFAULT_OUTPUTS = 2;
+
+            const $entityid           = $('#node-input-entityid');
+            const $server             = $('#node-input-server');
+            const $outputs            = $('#node-input-outputs');
+            const $accordionContraint = $('#add-constraint-container');
+            const $accordionOutput    = $('#add-output-container');
+
+            const $constraints = {
+                list:           $('#constraint-list'),
+                addBtn:         $('#constraint-add-btn'),
+
+                targetType:      $('#constraint-target-type'),
+                targetValue:     $('#constraint-target-value'),
+                propertyType:    $('#constraint-property-type'),
+                propertyValue:   $('#constraint-property-value'),
+                comparatorType:  $('#constraint-comparator-type'),
+                comparatorValue: $('#constraint-comparator-value')
+            };
+
+            const $customoutputs = {
+                list:   $('#output-list'),
+                addBtn: $('#output-add-btn'),
+
+                messageType:             $('#output-message-type'),
+                messageValue:            $('#output-message-value'),
+
+                comparatorPropertyType:  $('#output-comparator-property-type'),
+                comparatorPropertyValue: $('#output-comparator-property-value'),
+                comparatorType:          $('#output-comparator-type'),
+                comparatorValue:         $('#output-comparator-value')
+            };
+
+            const utils = {
+                getRandomId:       ()     => Math.random().toString(36).slice(2),
+                setupAutocomplete: () => {
+                    const selectedServer = $server.val();
+
+                    // A home assistant server is selected in the node config
+                    if (NODE.server || (selectedServer && selectedServer !== '_ADD_')) {
+                        $.get('/homeassistant/entities').done((entities) => {
+                            NODE.availableEntities = JSON.parse(entities);
+                            $entityid.autocomplete({ source: NODE.availableEntities, minLength: 0 });
+                        })
+                        .fail((err) => RED.notify(err.responseText, 'error'));
+                    }
+                },
+                setDefaultServerSelection: function () {
+                    let defaultServer;
+                    RED.nodes.eachConfig(n => {
+                        if (n.type === 'server' && !defaultServer) defaultServer = n.id;
+                    });
+                    if (defaultServer) $server.val(defaultServer);
+                }
+            };
+
+            // **************************
+            // * Add Constraints
+            // **************************
+            const constraintsHandler = {
+                onTargetTypeChange: function(e) {
+                    const val = e.target.value;
+                    (val === 'this_entity')
+                        ? $constraints.targetValue.attr('disabled', 'disabled')
+                        : $constraints.targetValue.removeAttr('disabled')
+                },
+                onPropertyTypeChange: function(e) {
+                    const val = e.target.value;
+                    (val === 'current_state' || val === 'previous_state')
+                        ? $constraints.propertyValue.attr('disabled', 'disabled')
+                        : $constraints.propertyValue.removeAttr('disabled');
+                },
+                onComparatorTypeChange: function(e) {
+                    const val = e.target.value; // Placeholder
+                },
+                onAddConstraintButton: function(e) {
+                    const constraint = {
+                        id:                      utils.getRandomId(),
+                        targetType:              $constraints.targetType.val(),
+                        targetValue:             $constraints.targetValue.val(),
+                        propertyType:            $constraints.propertyType.val(),
+                        propertyValue:           $constraints.propertyValue.val(),
+                        comparatorType:          $constraints.comparatorType.val(),
+                        comparatorValueDatatype: $constraints.comparatorValue.typedInput('type'),
+                        comparatorValue:         $constraints.comparatorValue.typedInput('value')
+                    };
+
+                    if (constraint.propertyType === 'current_state')  constraint.propertyValue = 'new_state.state';
+                    if (constraint.propertyType === 'previous_state') constraint.propertyValue = 'old_state.state';
+
+                    if (constraint.comparatorType === 'includes' || constraint.comparatorType === 'does_not_include') {
+                        constraint.comparatorValueDatatype = 'list';
+                    }
+
+                    $constraints.list.editableList('addItem', constraint);
+                    $constraints.targetValue.val('');
+                },
+                onEditableListAdd: function(row, index, data) {
+                    const $row = $(row);
+                    const { targetType, targetValue, propertyType, propertyValue, comparatorType, comparatorValue, comparatorValueDatatype } = data;
+
+                    const entityText   = (targetType === 'this_entity') ? '<strong>This entities</strong>' : `Entity ID <strong>${targetValue}</strong>`;
+                    const propertyText = (propertyType === 'property')  ? propertyValue  : propertyType.replace('_', ' ');
+
+                    const comparatorTypeText = comparatorType.replace('_', ' ');
+                    const comparatorText = `${comparatorTypeText} <strong>${comparatorValue}</strong> (${comparatorValueDatatype})`;
+
+                    const rowHtml = `${entityText} ${propertyText} ${comparatorText}`;
+                    $row.html(rowHtml);
+                }
+            };
+
+            // Constraint select menu change handlers
+            $constraints.targetType.on('change',     constraintsHandler.onTargetTypeChange);
+            $constraints.propertyType.on('change',   constraintsHandler.onPropertyTypeChange);
+            $constraints.comparatorType.on('change', constraintsHandler.onComparatorTypeChange);
+
+            $constraints.addBtn.on('click', constraintsHandler.onAddConstraintButton);
+
+            // Constraints List
+            $constraints.list.editableList({
+                addButton: false,
+                height:    159,
+                sortable:  true,
+                removable: true,
+                addItem:   constraintsHandler.onEditableListAdd
+            });
+
+            $constraints.comparatorValue.typedInput({
+                default: 'str',
+                types:   ['str', 'num', 'bool', 're' ]
+            });
+            $constraints.comparatorValue.typedInput('width', '100px');
+
+            // **************************
+            // * Add Custom Outputs
+            // **************************
+            const outputsHandler = {
+                onAddButtonClicked: function() {
+                    const output = {
+                        outputId:                utils.getRandomId(),
+
+                        messageType:             $customoutputs.messageType.val(),
+                        messageValue:            $customoutputs.messageValue.val(),
+
+                        comparatorPropertyType:  $customoutputs.comparatorPropertyType.val(),
+                        comparatorPropertyValue: $customoutputs.comparatorPropertyValue.val(),
+
+                        comparatorType:          $customoutputs.comparatorType.val(),
+                        comparatorValue:         $customoutputs.comparatorValue.val()
+                    };
+
+                    // Removing an output and adding in same edit session means output
+                    // map needs to be adjusted, otherwise just increment count
+                    if (isNaN(NODE.outputs)) {
+                        const maxOutput = Math.max(Object.keys(NODE.outputs));
+                        NODE.outputs[utils.getRandomId()] = maxOutput + 1;
+                    } else {
+                        NODE.outputs = parseInt(NODE.outputs) + 1;
+                    }
+                    $outputs.val(isNaN(NODE.outputs) ? JSON.stringify(NODE.outputs) : NODE.outputs);
+
+                    if (output.comparatorPropertyType === 'current_state')  output.comparatorPropertyValue = 'new_state.state';
+                    if (output.comparatorPropertyType === 'previous_state') output.comparatorPropertyValue = 'old_state.state';
+
+                    NODE.customoutputs.push(output);
+
+                    $customoutputs.list.editableList('addItem', output);
+                },
+                onEditableListAdd:  function(row, index, d) {
+                    const $row = $(row);
+
+                    const messageText = (d.messageType === 'default')
+                        ? 'default message'
+                        : d.messageValue;
+
+                    const sendWhenText = (d.comparatorPropertyType === 'always')
+                        ? 'always'
+                        : `${d.comparatorPropertyValue} ${d.comparatorType.replace('_', '')} ${d.comparatorValue}`
+
+                    const html = `Send <strong>${messageText}</strong>, if <strong>${sendWhenText}</strong>`;
+
+                    $row.html(html);
+                },
+                onEditableListRemove: function ( data ) {
+                    // node-red uses a map of old output index to new output index to re-map
+                    // links between nodes. If new index is -1 then it was removed
+
+                    let customOutputRemovedIndex = NODE.customoutputs.indexOf(data);
+                    NODE.outputs = !(isNaN(NODE.outputs)) ? { 0: 0, 1: 1 } : NODE.outputs;
+                    NODE.outputs[customOutputRemovedIndex + NUM_DEFAULT_OUTPUTS] = -1;
+
+                    NODE.customoutputs.forEach((o, customOutputIndex) => {
+                        const customAllIndex = customOutputIndex + NUM_DEFAULT_OUTPUTS;
+                        const outputIsBeforeRemoval = (customOutputIndex < customOutputRemovedIndex);
+                        const customOutputAlreadyMapped = NODE.outputs.hasOwnProperty(customAllIndex);
+
+                        // If we're on removed output
+                        if (customOutputIndex === customOutputRemovedIndex) return;
+                        // output already removed
+                        if (customOutputAlreadyMapped && NODE.outputs[customAllIndex] === -1) return;
+                        // output previously removed caused this output to be remapped
+                        if (customOutputAlreadyMapped) {
+                            NODE.outputs[customAllIndex] = (outputIsBeforeRemoval)
+                                ? NODE.outputs[customAllIndex]
+                                : NODE.outputs[customAllIndex] - 1;
+                            return;
+                        }
+
+                        // output exists after removal and hasn't been mapped, remap to current index - 1
+                        NODE.outputs[customAllIndex] = (outputIsBeforeRemoval)
+                            ? customAllIndex
+                            : customAllIndex - 1;
+                    });
+
+                    $outputs.val(JSON.stringify(NODE.outputs));
+                },
+                onMessageTypeChange: function(e) {
+                    const val = e.target.value;
+                    (val === 'default')
+                        ? $customoutputs.messageValue.attr('disabled', 'disabled')
+                        : $customoutputs.messageValue.removeAttr('disabled');
+                },
+                comparatorPropertyTypeChange: function(e) {
+                    const val = e.target.value;
+                    if (val === 'always') {
+                        $customoutputs.comparatorPropertyValue.attr('disabled', 'disabled');
+                        $customoutputs.comparatorType.attr('disabled', 'disabled');
+                        $customoutputs.comparatorValue.attr('disabled', 'disabled');
+                    }
+                    if (val === 'previous_state' || val === 'current_state') {
+                        $customoutputs.comparatorPropertyValue.attr('disabled', 'disabled');
+                        $customoutputs.comparatorType.removeAttr('disabled');
+                        $customoutputs.comparatorValue.removeAttr('disabled');
+                    }
+                    if (val === 'property') {
+                        $customoutputs.comparatorPropertyValue.removeAttr('disabled');
+                        $customoutputs.comparatorType.removeAttr('disabled');
+                        $customoutputs.comparatorValue.removeAttr('disabled');
+                    }
+                }
+            }
+
+            $customoutputs.list.editableList({
+                addButton:  false,
+                height:     159,
+                sortable:   false,
+                removable:  true,
+                removeItem: outputsHandler.onEditableListRemove,
+                addItem:    outputsHandler.onEditableListAdd
+            });
+
+             // Constraint select menu change handlers
+            $customoutputs.messageType.on('change',            outputsHandler.onMessageTypeChange);
+            $customoutputs.comparatorPropertyType.on('change', outputsHandler.comparatorPropertyTypeChange);
+
+            $customoutputs.addBtn.on('click', outputsHandler.onAddButtonClicked);
+
+            // **************************
+            // * General Init
+            // **************************
+            $accordionContraint.accordion({ active: true, collapsible: true, heightStyle: 'content' });
+            $accordionOutput.accordion({ active: false, collapsible: true, heightStyle: 'content' });
+
+            $entityid.val(NODE.entityid);
+            $server.change(() => utils.setupAutocomplete(this));
+
+            // New nodes, select first available home-assistant config node found
+            if (!NODE.server) {
+                utils.setDefaultServerSelection();
+            } else {
+                utils.setupAutocomplete();
+            }
+
+            // Add previous constraints/outputs to editable lists
+            NODE.constraints.forEach(c => $constraints.list.editableList('addItem', c));
+            NODE.customoutputs.forEach(o => $customoutputs.list.editableList('addItem', o));
+        },
+        oneditsave: function() {
+            const $constraintsList = $('#constraint-list');
+            const $outputList      = $('#output-list');
+            const $entityid        = $('#node-input-entityid');
+
+            this.entityid    = $entityid.val();
+
+            // Compile Constraints
+            const nodeConstraints = [];
+            const listConstraints = $constraintsList.editableList('items');
+            listConstraints.each(function(i) { nodeConstraints.push($(this).data('data')); });
+            this.constraints = nodeConstraints;
+
+            // Compile Outputs
+            const nodeOutputs = [];
+            const listOutputs = $outputList.editableList('items');
+            listOutputs.each(function(i) { nodeOutputs.push($(this).data('data')); });
+            this.customoutputs = nodeOutputs;
+
+            this.outputs = this.customoutputs.length + 2;
+        }
+    });
+</script>
+
+
+
+
+<script type="text/x-red" data-help-name="trigger-state">
+    <p>Advanced version of 'server:state-changed' node</p>
+
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt class="optional">
+            [payload|msg]   <span class="property-type">string|object</span>
+        </dt>
+        <dd>If incoming payload or message is a string and equal to 'enable' or 'disable' then set the node accordingly.</dd>
+    </dl>
+
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+        <dt>
+            topic         <span class="property-type">string</span>
+        </dt>
+        <dd>the entity_id that triggered the node</dd>
+        <dt>
+            payload         <span class="property-type">string</span>
+        </dt>
+        <dd>the state as sent by home assistant</dd>
+        <dt>
+            data         <span class="property-type">object</span>
+        </dt>
+        <dd>the original home assistant event containing <code>entity_id</code> <code>new_state</code> and <code>old_state</code> properties </dd>
+    </dl>
+
+    <h3>Details</h3>
+    <p>Coming soon...</p>
+    <p> TODO Document: Enable / Disable and how it saves state across restarts</p>
+    <p> TODO Document: Constraints and how they work</p>
+    <p> TODO Document: Custom Outputs and how they work</p>
+    <p> TODO Document: Debug flag on node</p>
+    <p> NOTE: To test automation without having to manually change state in home assistant send an input <code>payload</code> as an object which contains <code>entity_id</code>, <code>new_state</code>, and <code>old_state</code> properties.  This will trigger the node as if the event came from home assistant.</p>
+
+    <h3>References</h3>
+    <ul>
+        <li><a href="https://home-assistant.io/docs/configuration/state_object">HA State Object</a></li>
+    </ul>
+</script>

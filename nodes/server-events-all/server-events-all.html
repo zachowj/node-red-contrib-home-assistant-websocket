@@ -1,0 +1,58 @@
+<script type="text/javascript">
+    RED.nodes.registerType('server-events', {
+        category: 'home_assistant',
+        color:    '#038FC7',
+        defaults: {
+            name:   { value: '' },
+            server: { value: '', type: 'server', required: true }
+        },
+        inputs: 0,
+        outputs: 1,
+        icon: "arrow-right-bold.png",
+        paletteLabel: 'events: all',
+        label: function() { return this.name || `events_all: ${this.eventtypefilter}` },
+        oneditprepare: function() {
+            const NODE = this;
+            const $server = $('#node-input-server');
+            const utils = {
+                setDefaultServerSelection: function () {
+                    let defaultServer;
+                    RED.nodes.eachConfig(n => {
+                        if (n.type === 'server' && !defaultServer) defaultServer = n.id;
+                    });
+                    if (defaultServer) $server.val(defaultServer);
+                }
+            };
+
+            if (!NODE.server) {
+                utils.setDefaultServerSelection();
+            }
+        }
+    });
+</script>
+
+
+<script type="text/x-red" data-template-name="server-events">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-server"><i class="fa fa-dot-circle-o"></i> Server</label>
+        <input type="text" id="node-input-server" />
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="server-events">
+    <p>Outputs events received from the home assistant server.</p>
+
+    <p>The outputted message object contains the following data, underscored values are straight from home assistant</p>
+    <table style="width: 100%;" border="1" cellpadding="10">
+        <tbody>
+            <tr> <td>topic</td>      <td>event_type</td>     </tr>
+            <tr> <td>payload</td>    <td>original event</td> </tr>
+            <tr> <td>event_type</td> <td>event_type</td>     </tr>
+        </tbody>
+    </table>
+</script>
