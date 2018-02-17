@@ -89,7 +89,7 @@ module.exports = function(RED) {
                 const comparatorResult = this.getComparatorResult(comparatorType, comparatorValue, actualValue, comparatorValueDatatype);
 
                 if (comparatorResult === false) {
-                    this.debugToClient(`constraint comparator: failed entity "${constraintTarget.entityid}" property "${propertyValue}" with value ${actualValue} failed "${comparatorType}" check against (${comparatorValueDatatype}) ${comparatorValue}`);
+                    this.debugToClient(`constraint comparator: failed entity "${constraintTarget.entityid}" property "${propertyValue}" with value ${actualValue} failed "${comparatorType}" check against (${comparatorValueDatatype}) ${comparatorValue}`); // eslint-disable-line
                 }
 
                 comparatorResults.push({ constraint, constraintTarget, actualValue, comparatorResult });
@@ -191,7 +191,7 @@ module.exports = function(RED) {
         getOutputMessage({ output, comparatorMatched, actualValue }, eventMessage) {
             // If comparator did not match
             if (!comparatorMatched) {
-                this.debugToClient(`output comparator failed: property "${output.comparatorPropertyValue}" with value ${actualValue} failed "${output.comparatorType}" check against ${output.comparatorValue}`);
+                this.debugToClient(`output comparator failed: property "${output.comparatorPropertyValue}" with value ${actualValue} failed "${output.comparatorType}" check against ${output.comparatorValue}`); // eslint-disable-line
                 return null;
             }
 

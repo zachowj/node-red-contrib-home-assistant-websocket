@@ -2929,9 +2929,9 @@ node-emoji@^1.4.1:
   dependencies:
     lodash.toarray "^4.4.0"
 
-node-home-assistant@AYapejian/node-home-assistant#dev-master:
-  version "0.2.0"
-  resolved "https://codeload.github.com/AYapejian/node-home-assistant/tar.gz/9938ac3b7dddc445cad60c8da8e6330aa48ea7f2"
+node-home-assistant@0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/node-home-assistant/-/node-home-assistant-0.2.1.tgz#2da0163a95528ed4298fcae0cbc7aceaad98f7a5"
   dependencies:
     axios "^0.17.1"
     blessed "^0.1.81"
