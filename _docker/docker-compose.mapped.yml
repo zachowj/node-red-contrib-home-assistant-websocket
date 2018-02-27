@@ -1,0 +1,31 @@
+version: '3.1'
+
+services:
+  node-red:
+    container_name: node-red
+    env_file:       ./config.env
+    build:
+      context: ./node-red
+    command: npm run dev:watch
+    volumes:
+      - '..:/data/node_modules/node-red-contrib-home-assistant'
+      - '../_docker-volumes/node-red/data/flows.json:/data/flows.json'
+      - '../_docker-volumes/node-red/data/settings.js:/data/settings.js'
+      - '../_docker-volumes/node-red/data/settings.js:/data/package.json'
+    ports:
+      - 1880:1880
+      - 9123:9229
+
+  home-assistant:
+    container_name: home-assistant
+    env_file:       ./config.env
+    build:
+      context: ./home-assistant
+    volumes:
+      - '../_docker-volumes/home-assistant/config/configuration.yaml:/config/configuration.yaml'
+    ports:
+      - 8300:8300
+      - 8123:8123
+    depends_on:
+      - mqtt
+

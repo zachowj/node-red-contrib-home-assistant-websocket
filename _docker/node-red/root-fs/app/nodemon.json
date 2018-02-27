@@ -1,0 +1,24 @@
+{
+    "colours": true,
+    "delay": "300",
+    "verbose": false,
+    "watch":   [
+        "/data/node_modules/node-red-contrib-home-assistant"
+    ],
+    "ignore": [
+        "/data/node_modules/node-red-contrib-home-assistant/node_modules",
+        "/data/node_modules/node-red-contrib-home-assistant/_docker",
+        "/data/node_modules/node-red-contrib-home-assistant/_docker-volumes"
+    ],
+    "env": {
+        "NODE_ENV": "development"
+    },
+    "ext": "js,json,html",
+    "ignoreRoot": [
+        "**/.git/**",
+        "**/.nyc_output/**",
+        "**/.sass-cache/**",
+        "**/bower_components/**",
+        "**/coverage/**"
+    ]
+}

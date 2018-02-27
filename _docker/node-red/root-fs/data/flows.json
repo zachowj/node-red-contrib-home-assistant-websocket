@@ -1,0 +1,1805 @@
+[
+    {
+        "id": "99942b96.728d68",
+        "type": "tab",
+        "label": "Events All & State Changed",
+        "disabled": false,
+        "info": "Tests for 'events: all' and 'events: state' nodes"
+    },
+    {
+        "id": "63d2914d.5ea9b",
+        "type": "tab",
+        "label": "Call Service",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "dc41607f.a08f2",
+        "type": "tab",
+        "label": "Current State",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "ae2a9159.be871",
+        "type": "tab",
+        "label": "History & Template",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "683ec059.246e5",
+        "type": "tab",
+        "label": "Poll State",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "52eaaa74.1d85e4",
+        "type": "tab",
+        "label": "Trigger Node",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "c81c02fc.f75a5",
+        "type": "tab",
+        "label": "Using HA Context",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "4780c192.bc0f2",
+        "type": "server",
+        "z": "",
+        "name": "Home Assistant",
+        "url": "http://home-assistant:8123",
+        "pass": "password"
+    },
+    {
+        "id": "f31326a2.18c1e8",
+        "type": "server-events",
+        "z": "99942b96.728d68",
+        "name": "Test",
+        "server": "4780c192.bc0f2",
+        "x": 130,
+        "y": 100,
+        "wires": [
+            [
+                "1f11ccc0.c9a1c3"
+            ]
+        ]
+    },
+    {
+        "id": "1f11ccc0.c9a1c3",
+        "type": "debug",
+        "z": "99942b96.728d68",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 330,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "d1c61340.98165",
+        "type": "server-state-changed",
+        "z": "99942b96.728d68",
+        "name": "Substring 'sun'",
+        "server": "4780c192.bc0f2",
+        "entityidfilter": "sun",
+        "entityidfiltertype": "substring",
+        "haltifstate": "",
+        "x": 160,
+        "y": 160,
+        "wires": [
+            [
+                "879548f5.5419c8"
+            ]
+        ]
+    },
+    {
+        "id": "879548f5.5419c8",
+        "type": "debug",
+        "z": "99942b96.728d68",
+        "name": "",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 350,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "c018ca12.9b0f18",
+        "type": "server-state-changed",
+        "z": "99942b96.728d68",
+        "name": "Regex 'sun'",
+        "server": "4780c192.bc0f2",
+        "entityidfilter": "sun",
+        "entityidfiltertype": "regex",
+        "haltifstate": "",
+        "x": 150,
+        "y": 280,
+        "wires": [
+            [
+                "cb214148.637d4"
+            ]
+        ]
+    },
+    {
+        "id": "cb214148.637d4",
+        "type": "debug",
+        "z": "99942b96.728d68",
+        "name": "",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 350,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "71fcdb8d.4bbc44",
+        "type": "server-state-changed",
+        "z": "99942b96.728d68",
+        "name": "Regex 's.n'",
+        "server": "4780c192.bc0f2",
+        "entityidfilter": "s.n",
+        "entityidfiltertype": "regex",
+        "haltifstate": "",
+        "x": 140,
+        "y": 380,
+        "wires": [
+            [
+                "75d24d67.f9edb4"
+            ]
+        ]
+    },
+    {
+        "id": "75d24d67.f9edb4",
+        "type": "debug",
+        "z": "99942b96.728d68",
+        "name": "",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 370,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "708d9765.ad5dc8",
+        "type": "server-state-changed",
+        "z": "99942b96.728d68",
+        "name": "Exact 'sun.sun'",
+        "server": "4780c192.bc0f2",
+        "entityidfilter": "sun.sun",
+        "entityidfiltertype": "exact",
+        "haltifstate": "",
+        "x": 160,
+        "y": 220,
+        "wires": [
+            [
+                "6f2a2bd4.265ea4"
+            ]
+        ]
+    },
+    {
+        "id": "6f2a2bd4.265ea4",
+        "type": "debug",
+        "z": "99942b96.728d68",
+        "name": "",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 350,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "4ef7a108.d71d6",
+        "type": "api-call-service",
+        "z": "63d2914d.5ea9b",
+        "name": "Time of Day: Select Next",
+        "server": "4780c192.bc0f2",
+        "service_domain": "input_select",
+        "service": "select_next",
+        "data": "{ \"entity_id\": \" input_select.time_of_day\" }",
+        "mergecontext": "",
+        "x": 530,
+        "y": 160,
+        "wires": [
+            [
+                "385c435d.e8072c"
+            ]
+        ]
+    },
+    {
+        "id": "385c435d.e8072c",
+        "type": "debug",
+        "z": "63d2914d.5ea9b",
+        "name": "log data sent to ha",
+        "active": false,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 770,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "fdd917f1.fb3a08",
+        "type": "inject",
+        "z": "63d2914d.5ea9b",
+        "name": "use node config defaults",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 250,
+        "y": 100,
+        "wires": [
+            [
+                "4ef7a108.d71d6"
+            ]
+        ]
+    },
+    {
+        "id": "9c79a3e.398646",
+        "type": "inject",
+        "z": "63d2914d.5ea9b",
+        "name": "override svc: 'select previous'",
+        "topic": "",
+        "payload": "{\"service\":\"select_previous\"}",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 240,
+        "y": 160,
+        "wires": [
+            [
+                "4ef7a108.d71d6"
+            ]
+        ]
+    },
+    {
+        "id": "6b4388db.79cf88",
+        "type": "server-state-changed",
+        "z": "63d2914d.5ea9b",
+        "name": "Time of Day: On Change",
+        "server": "4780c192.bc0f2",
+        "entityidfilter": "input_select.time_of_day",
+        "entityidfiltertype": "substring",
+        "haltifstate": "",
+        "x": 1210,
+        "y": 60,
+        "wires": [
+            [
+                "8544614e.23128"
+            ]
+        ]
+    },
+    {
+        "id": "8544614e.23128",
+        "type": "debug",
+        "z": "63d2914d.5ea9b",
+        "name": "",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 1440,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "8f15f93e.b542d8",
+        "type": "inject",
+        "z": "63d2914d.5ea9b",
+        "name": "override svc & merge data: 'party time' ",
+        "topic": "",
+        "payload": "{\"service\":\"select_option\",\"data\":{\"option\":\"Party Time\"}}",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 210,
+        "y": 220,
+        "wires": [
+            [
+                "4ef7a108.d71d6"
+            ]
+        ]
+    },
+    {
+        "id": "70a67972.83cc58",
+        "type": "api-call-service",
+        "z": "63d2914d.5ea9b",
+        "name": "time of day: select option using context",
+        "server": "4780c192.bc0f2",
+        "service_domain": "input_select",
+        "service": "select_option",
+        "data": "{ \"entity_id\": \" input_select.time_of_day\" }",
+        "mergecontext": "timeOfDayOption",
+        "x": 960,
+        "y": 400,
+        "wires": [
+            [
+                "a6459db0.df6ab"
+            ]
+        ]
+    },
+    {
+        "id": "a6459db0.df6ab",
+        "type": "debug",
+        "z": "63d2914d.5ea9b",
+        "name": "log data sent to ha",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 1250,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "79d6048a.91be0c",
+        "type": "inject",
+        "z": "63d2914d.5ea9b",
+        "name": "run",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 110,
+        "y": 400,
+        "wires": [
+            [
+                "6f4771cd.9bd3a"
+            ]
+        ]
+    },
+    {
+        "id": "7a39148b.a7576c",
+        "type": "function",
+        "z": "63d2914d.5ea9b",
+        "name": "set GLOBAL ctx time of day 'Afternoon'",
+        "func": "global.set('timeOfDayOption', {\n    option: 'Afternoon'\n});\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 600,
+        "y": 400,
+        "wires": [
+            [
+                "70a67972.83cc58"
+            ]
+        ]
+    },
+    {
+        "id": "1f371962.dd54c7",
+        "type": "inject",
+        "z": "63d2914d.5ea9b",
+        "name": "run",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 110,
+        "y": 440,
+        "wires": [
+            [
+                "ab945ee0.48ea2"
+            ]
+        ]
+    },
+    {
+        "id": "e2448125.9980f",
+        "type": "function",
+        "z": "63d2914d.5ea9b",
+        "name": "set FLOW ctx time of day 'Morning'",
+        "func": "flow.set('timeOfDayOption', {\noption: 'Morning'\n});\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 580,
+        "y": 440,
+        "wires": [
+            [
+                "70a67972.83cc58"
+            ]
+        ]
+    },
+    {
+        "id": "6f4771cd.9bd3a",
+        "type": "function",
+        "z": "63d2914d.5ea9b",
+        "name": "clear flow and global ctx",
+        "func": "flow.set('timeOfDayOption', null);\nglobal.set('timeOfDayOption', null);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 310,
+        "y": 400,
+        "wires": [
+            [
+                "7a39148b.a7576c"
+            ]
+        ]
+    },
+    {
+        "id": "ab945ee0.48ea2",
+        "type": "function",
+        "z": "63d2914d.5ea9b",
+        "name": "clear flow and global ctx",
+        "func": "flow.set('timeOfDayOption', null);\nglobal.set('timeOfDayOption', null);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 310,
+        "y": 440,
+        "wires": [
+            [
+                "e2448125.9980f"
+            ]
+        ]
+    },
+    {
+        "id": "814cf303.56d81",
+        "type": "api-call-service",
+        "z": "63d2914d.5ea9b",
+        "name": "time of day: select option using context",
+        "server": "4780c192.bc0f2",
+        "service_domain": "input_select",
+        "service": "select_option",
+        "data": "{ \"entity_id\": \" input_select.time_of_day\" }",
+        "mergecontext": "timeOfDayOption",
+        "x": 1020,
+        "y": 660,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8b085e65.f230e",
+        "type": "inject",
+        "z": "63d2914d.5ea9b",
+        "name": "run",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 110,
+        "y": 660,
+        "wires": [
+            [
+                "7816c484.1204ac"
+            ]
+        ]
+    },
+    {
+        "id": "c2e6bc7d.ebfbd",
+        "type": "function",
+        "z": "63d2914d.5ea9b",
+        "name": "set GLOBAL ctx time of day 'Afternoon'",
+        "func": "global.set('timeOfDayOption', {\n    option: 'Afternoon'\n});\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 640,
+        "y": 660,
+        "wires": [
+            [
+                "814cf303.56d81"
+            ]
+        ]
+    },
+    {
+        "id": "7816c484.1204ac",
+        "type": "function",
+        "z": "63d2914d.5ea9b",
+        "name": "clear flow and global ctx",
+        "func": "flow.set('timeOfDayOption', null);\nglobal.set('timeOfDayOption', null);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 310,
+        "y": 660,
+        "wires": [
+            [
+                "295b9ef1.721df2"
+            ]
+        ]
+    },
+    {
+        "id": "295b9ef1.721df2",
+        "type": "function",
+        "z": "63d2914d.5ea9b",
+        "name": "set FLOW ctx time of day 'Morning'",
+        "func": "flow.set('timeOfDayOption', {\noption: 'Morning'\n});\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 480,
+        "y": 600,
+        "wires": [
+            [
+                "c2e6bc7d.ebfbd"
+            ]
+        ]
+    },
+    {
+        "id": "117797c7.be7718",
+        "type": "api-current-state",
+        "z": "dc41607f.a08f2",
+        "name": "Get Time of Day",
+        "server": "4780c192.bc0f2",
+        "halt_if": "",
+        "entity_id": "input_select.time_of_day",
+        "x": 320,
+        "y": 120,
+        "wires": [
+            [
+                "18ddeb10.8fa6d5"
+            ]
+        ]
+    },
+    {
+        "id": "5f649fcc.1b267",
+        "type": "inject",
+        "z": "dc41607f.a08f2",
+        "name": "every 1 sec",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "1",
+        "crontab": "",
+        "once": true,
+        "x": 130,
+        "y": 120,
+        "wires": [
+            [
+                "117797c7.be7718"
+            ]
+        ]
+    },
+    {
+        "id": "18ddeb10.8fa6d5",
+        "type": "debug",
+        "z": "dc41607f.a08f2",
+        "name": "",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 610,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "24372103.e2a25e",
+        "type": "api-current-state",
+        "z": "dc41607f.a08f2",
+        "name": "Get Time of Day, Halt if 'Morning'",
+        "server": "4780c192.bc0f2",
+        "halt_if": "Morning",
+        "entity_id": "input_select.time_of_day",
+        "x": 380,
+        "y": 260,
+        "wires": [
+            [
+                "18c2e888.bab6c7"
+            ]
+        ]
+    },
+    {
+        "id": "18c2e888.bab6c7",
+        "type": "debug",
+        "z": "dc41607f.a08f2",
+        "name": "",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 630,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "33d7626a.debd1e",
+        "type": "api-get-history",
+        "z": "ae2a9159.be871",
+        "name": "Get History",
+        "server": "4780c192.bc0f2",
+        "startdate": "2018-02-14T13:00:00+00:00",
+        "x": 290,
+        "y": 80,
+        "wires": [
+            [
+                "823a69f6.727d78"
+            ]
+        ]
+    },
+    {
+        "id": "9cf9aa59.bd5c98",
+        "type": "inject",
+        "z": "ae2a9159.be871",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 140,
+        "y": 80,
+        "wires": [
+            [
+                "33d7626a.debd1e"
+            ]
+        ]
+    },
+    {
+        "id": "823a69f6.727d78",
+        "type": "debug",
+        "z": "ae2a9159.be871",
+        "name": "",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 450,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "81862084.b5e3e",
+        "type": "api-render-template",
+        "z": "ae2a9159.be871",
+        "name": "Get all Sensor States",
+        "server": "4780c192.bc0f2",
+        "template": "{% for state in states.sensor %}\n  {{ state.entity_id }}={{ state.state }},\n{% endfor %}",
+        "x": 360,
+        "y": 140,
+        "wires": [
+            [
+                "2b7e44e1.5ae46c"
+            ]
+        ]
+    },
+    {
+        "id": "b7401fa5.8bbe",
+        "type": "inject",
+        "z": "ae2a9159.be871",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 140,
+        "y": 140,
+        "wires": [
+            [
+                "81862084.b5e3e"
+            ]
+        ]
+    },
+    {
+        "id": "2b7e44e1.5ae46c",
+        "type": "debug",
+        "z": "ae2a9159.be871",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 570,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "8319fd04.fcf6f",
+        "type": "poll-state",
+        "z": "683ec059.246e5",
+        "name": "poll state: sun.sun",
+        "server": "4780c192.bc0f2",
+        "updateinterval": "10",
+        "outputinitially": false,
+        "outputonchanged": false,
+        "entity_id": "sun.sun",
+        "x": 150,
+        "y": 120,
+        "wires": [
+            [
+                "dc144e5c.34425"
+            ]
+        ]
+    },
+    {
+        "id": "dc144e5c.34425",
+        "type": "debug",
+        "z": "683ec059.246e5",
+        "name": "Last changed",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload.timeSinceChanged",
+        "x": 380,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "5bf86262.3ebf9c",
+        "type": "poll-state",
+        "z": "683ec059.246e5",
+        "name": "poll state: input_select.time_of_day",
+        "server": "4780c192.bc0f2",
+        "updateinterval": "10",
+        "outputinitially": true,
+        "outputonchanged": true,
+        "entity_id": "input_select.time_of_day",
+        "x": 200,
+        "y": 280,
+        "wires": [
+            [
+                "c6b41d43.e2a53"
+            ]
+        ]
+    },
+    {
+        "id": "c6b41d43.e2a53",
+        "type": "debug",
+        "z": "683ec059.246e5",
+        "name": "Last changed",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload.timeSinceChanged",
+        "x": 480,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "7330960e.a530b8",
+        "type": "trigger-state",
+        "z": "52eaaa74.1d85e4",
+        "name": "Trigger: Input Select",
+        "server": "4780c192.bc0f2",
+        "entityid": "input_select.time_of_day",
+        "debugenabled": false,
+        "constraints": [],
+        "constraintsmustmatch": "all",
+        "outputs": 2,
+        "customoutputs": [],
+        "x": 220,
+        "y": 140,
+        "wires": [
+            [
+                "8026fff5.1fb7b"
+            ],
+            [
+                "6119a376.93111c"
+            ]
+        ]
+    },
+    {
+        "id": "1a5d748.4615b8c",
+        "type": "comment",
+        "z": "52eaaa74.1d85e4",
+        "name": "default config behaves like state changed node, second ouput not used",
+        "info": "",
+        "x": 310,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "8026fff5.1fb7b",
+        "type": "debug",
+        "z": "52eaaa74.1d85e4",
+        "name": "passed constraints: state",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 470,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "f7f74b0e.ac88f8",
+        "type": "inject",
+        "z": "52eaaa74.1d85e4",
+        "name": "select next option",
+        "topic": "Select next option",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 890,
+        "y": 780,
+        "wires": [
+            [
+                "611a8b56.6ad224"
+            ]
+        ]
+    },
+    {
+        "id": "611a8b56.6ad224",
+        "type": "api-call-service",
+        "z": "52eaaa74.1d85e4",
+        "name": "Time of Day: Select Next",
+        "server": "4780c192.bc0f2",
+        "service_domain": "input_select",
+        "service": "select_next",
+        "data": "{ \"entity_id\": \" input_select.time_of_day\" }",
+        "mergecontext": "",
+        "x": 1130,
+        "y": 820,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3e36e195.980d4e",
+        "type": "server-state-changed",
+        "z": "52eaaa74.1d85e4",
+        "name": "on input_select.time_of_day",
+        "server": "4780c192.bc0f2",
+        "entityidfilter": "input_select.time_of_day",
+        "entityidfiltertype": "substring",
+        "haltifstate": "",
+        "x": 1160,
+        "y": 860,
+        "wires": [
+            [
+                "272394ff.7a6a0c"
+            ]
+        ]
+    },
+    {
+        "id": "272394ff.7a6a0c",
+        "type": "debug",
+        "z": "52eaaa74.1d85e4",
+        "name": "state",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 1350,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "f31f2d6c.6a9c7",
+        "type": "trigger-state",
+        "z": "52eaaa74.1d85e4",
+        "name": "Trigger: Input Select",
+        "server": "4780c192.bc0f2",
+        "entityid": "input_select.time_of_day",
+        "debugenabled": false,
+        "constraints": [
+            {
+                "id": "ho1v5jzhpm9",
+                "targetType": "this_entity",
+                "targetValue": "",
+                "propertyType": "current_state",
+                "propertyValue": "new_state.state",
+                "comparatorType": "is",
+                "comparatorValueDatatype": "str",
+                "comparatorValue": "Afternoon"
+            }
+        ],
+        "constraintsmustmatch": "all",
+        "outputs": 2,
+        "customoutputs": [],
+        "x": 220,
+        "y": 340,
+        "wires": [
+            [
+                "ce44e49f.32b6e8"
+            ],
+            [
+                "5b4ae375.3318cc"
+            ]
+        ]
+    },
+    {
+        "id": "a02ea99f.77eab8",
+        "type": "comment",
+        "z": "52eaaa74.1d85e4",
+        "name": "constraint: must be 'Afternoon'",
+        "info": "",
+        "x": 190,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "6119a376.93111c",
+        "type": "debug",
+        "z": "52eaaa74.1d85e4",
+        "name": "failed constraints: state",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 470,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "ce44e49f.32b6e8",
+        "type": "debug",
+        "z": "52eaaa74.1d85e4",
+        "name": "passed constraints: state",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 470,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "5b4ae375.3318cc",
+        "type": "debug",
+        "z": "52eaaa74.1d85e4",
+        "name": "failed constraints: state",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 470,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "fe97c29a.40634",
+        "type": "comment",
+        "z": "52eaaa74.1d85e4",
+        "name": "use to test",
+        "info": "",
+        "x": 780,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "1e17a4b3.a06b5b",
+        "type": "trigger-state",
+        "z": "52eaaa74.1d85e4",
+        "name": "Trigger: Input Select",
+        "server": "4780c192.bc0f2",
+        "entityid": "input_select.time_of_day",
+        "debugenabled": false,
+        "constraints": [
+            {
+                "id": "u8nfud48o9j",
+                "targetType": "this_entity",
+                "targetValue": "",
+                "propertyType": "current_state",
+                "propertyValue": "new_state.state",
+                "comparatorType": "includes",
+                "comparatorValueDatatype": "list",
+                "comparatorValue": "Afternoon,Morning"
+            }
+        ],
+        "constraintsmustmatch": "all",
+        "outputs": 2,
+        "customoutputs": [],
+        "x": 220,
+        "y": 580,
+        "wires": [
+            [
+                "65cebebd.d5eb5"
+            ],
+            [
+                "3937db25.d2c384"
+            ]
+        ]
+    },
+    {
+        "id": "9e1dbdeb.f4cf2",
+        "type": "comment",
+        "z": "52eaaa74.1d85e4",
+        "name": "constraint: must include 'Afternoon,Morning'",
+        "info": "",
+        "x": 230,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "65cebebd.d5eb5",
+        "type": "debug",
+        "z": "52eaaa74.1d85e4",
+        "name": "passed constraints: state",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 470,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "3937db25.d2c384",
+        "type": "debug",
+        "z": "52eaaa74.1d85e4",
+        "name": "failed constraints: state",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 470,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "6bcc3557.1579ec",
+        "type": "trigger-state",
+        "z": "52eaaa74.1d85e4",
+        "name": "Trigger: Input Select",
+        "server": "4780c192.bc0f2",
+        "entityid": "input_select.time_of_day",
+        "debugenabled": false,
+        "constraints": [
+            {
+                "id": "yubzwdpovxb",
+                "targetType": "this_entity",
+                "targetValue": "",
+                "propertyType": "current_state",
+                "propertyValue": "new_state.state",
+                "comparatorType": "is_not",
+                "comparatorValueDatatype": "str",
+                "comparatorValue": "Party Time"
+            }
+        ],
+        "constraintsmustmatch": "all",
+        "outputs": 2,
+        "customoutputs": [],
+        "x": 220,
+        "y": 800,
+        "wires": [
+            [
+                "fa7a230d.cf9fd"
+            ],
+            [
+                "1991a7eb.ecffd8"
+            ]
+        ]
+    },
+    {
+        "id": "da616990.c45f58",
+        "type": "comment",
+        "z": "52eaaa74.1d85e4",
+        "name": "constraint: is not 'Party Time'",
+        "info": "",
+        "x": 180,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "fa7a230d.cf9fd",
+        "type": "debug",
+        "z": "52eaaa74.1d85e4",
+        "name": "passed constraints: state",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 470,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "1991a7eb.ecffd8",
+        "type": "debug",
+        "z": "52eaaa74.1d85e4",
+        "name": "failed constraints: state",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 470,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "a47272f4.665a2",
+        "type": "trigger-state",
+        "z": "52eaaa74.1d85e4",
+        "name": "Trigger: Input Select",
+        "server": "4780c192.bc0f2",
+        "entityid": "input_select.time_of_day",
+        "debugenabled": false,
+        "constraints": [
+            {
+                "id": "yubzwdpovxb",
+                "targetType": "this_entity",
+                "targetValue": "",
+                "propertyType": "current_state",
+                "propertyValue": "new_state.state",
+                "comparatorType": "is_not",
+                "comparatorValueDatatype": "str",
+                "comparatorValue": "Party Time"
+            }
+        ],
+        "constraintsmustmatch": "all",
+        "outputs": 4,
+        "customoutputs": [
+            {
+                "outputId": "juuw05k2nsa",
+                "messageType": "default",
+                "messageValue": "",
+                "comparatorPropertyType": "current_state",
+                "comparatorPropertyValue": "new_state.state",
+                "comparatorType": "is",
+                "comparatorValue": "Morning"
+            },
+            {
+                "outputId": "kd1jwe5mefe",
+                "messageType": "default",
+                "messageValue": "",
+                "comparatorPropertyType": "current_state",
+                "comparatorPropertyValue": "new_state.state",
+                "comparatorType": "is",
+                "comparatorValue": "Afternoon"
+            }
+        ],
+        "x": 880,
+        "y": 200,
+        "wires": [
+            [
+                "f4085e9f.a6179"
+            ],
+            [
+                "600b0c2b.7f6404"
+            ],
+            [
+                "f43d545f.504f98"
+            ],
+            [
+                "543ad6dc.d0e148"
+            ]
+        ]
+    },
+    {
+        "id": "f4085e9f.a6179",
+        "type": "debug",
+        "z": "52eaaa74.1d85e4",
+        "name": "passed constraints: state",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 1150,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "600b0c2b.7f6404",
+        "type": "debug",
+        "z": "52eaaa74.1d85e4",
+        "name": "failed constraints: state",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 1150,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "85bd242b.923558",
+        "type": "comment",
+        "z": "52eaaa74.1d85e4",
+        "name": "constraint: is not 'Party Time' with 2 outputs for 'Morning' and 'Afternoon' ",
+        "info": "",
+        "x": 1020,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "f43d545f.504f98",
+        "type": "debug",
+        "z": "52eaaa74.1d85e4",
+        "name": "state is 'Morning'",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 1130,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "543ad6dc.d0e148",
+        "type": "debug",
+        "z": "52eaaa74.1d85e4",
+        "name": "state is 'Afternoon'",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 1130,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "be0ee0bf.d6264",
+        "type": "inject",
+        "z": "52eaaa74.1d85e4",
+        "name": "Set to 'Morning'",
+        "topic": "",
+        "payload": "{\"service\":\"select_option\",\"data\":{\"option\":\"Morning\"}}",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 880,
+        "y": 820,
+        "wires": [
+            [
+                "611a8b56.6ad224"
+            ]
+        ]
+    },
+    {
+        "id": "48645608.c8b738",
+        "type": "inject",
+        "z": "52eaaa74.1d85e4",
+        "name": "Set to 'Party Time'",
+        "topic": "",
+        "payload": "{\"service\":\"select_option\",\"data\":{\"option\":\"Party Time\"}}",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 890,
+        "y": 860,
+        "wires": [
+            [
+                "611a8b56.6ad224"
+            ]
+        ]
+    },
+    {
+        "id": "ac95cd16.a203f",
+        "type": "trigger-state",
+        "z": "52eaaa74.1d85e4",
+        "name": "Trigger: Input Select",
+        "server": "4780c192.bc0f2",
+        "entityid": "input_select.time_of_day",
+        "debugenabled": false,
+        "constraints": [
+            {
+                "id": "tdgnzb9d3pc",
+                "targetType": "entity_id",
+                "targetValue": "sun.sun",
+                "propertyType": "current_state",
+                "propertyValue": "new_state.state",
+                "comparatorType": "is",
+                "comparatorValueDatatype": "str",
+                "comparatorValue": "below_horizon"
+            },
+            {
+                "id": "2ntp5gceqn8",
+                "targetType": "this_entity",
+                "targetValue": "",
+                "propertyType": "current_state",
+                "propertyValue": "new_state.state",
+                "comparatorType": "is",
+                "comparatorValueDatatype": "str",
+                "comparatorValue": "Party Time"
+            }
+        ],
+        "constraintsmustmatch": "all",
+        "outputs": 2,
+        "customoutputs": [],
+        "x": 940,
+        "y": 480,
+        "wires": [
+            [
+                "23d2b566.b865ca"
+            ],
+            [
+                "1a0a5e08.82b5b2"
+            ]
+        ]
+    },
+    {
+        "id": "18e05aa6.2ec855",
+        "type": "comment",
+        "z": "52eaaa74.1d85e4",
+        "name": "constraint: is 'Party Time' and sun.sun is 'below_horizon'",
+        "info": "",
+        "x": 990,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "23d2b566.b865ca",
+        "type": "debug",
+        "z": "52eaaa74.1d85e4",
+        "name": "passed constraints: state",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 1190,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "1a0a5e08.82b5b2",
+        "type": "debug",
+        "z": "52eaaa74.1d85e4",
+        "name": "failed constraints: state",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 1190,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "64a92f1d.cf9ab",
+        "type": "server-state-changed",
+        "z": "52eaaa74.1d85e4",
+        "name": "on sun.sun state",
+        "server": "4780c192.bc0f2",
+        "entityidfilter": "sun.sun",
+        "entityidfiltertype": "substring",
+        "haltifstate": "",
+        "x": 1120,
+        "y": 920,
+        "wires": [
+            [
+                "25b2ddb0.046292"
+            ]
+        ]
+    },
+    {
+        "id": "25b2ddb0.046292",
+        "type": "debug",
+        "z": "52eaaa74.1d85e4",
+        "name": "state",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 1350,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "80b2b91a.661468",
+        "type": "comment",
+        "z": "63d2914d.5ea9b",
+        "name": "Global and Flow contexts can be used to override / merge call service data",
+        "info": "",
+        "x": 300,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "38093beb.48d9c4",
+        "type": "comment",
+        "z": "63d2914d.5ea9b",
+        "name": "If both Flow and Global contexts are set for the same property the FLOW context will win",
+        "info": "",
+        "x": 350,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "2477d4ab.9d4aac",
+        "type": "comment",
+        "z": "63d2914d.5ea9b",
+        "name": "Call service can be configured in the node itself and allows overrides via payload",
+        "info": "",
+        "x": 300,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "c7aca58d.8ed7f8",
+        "type": "inject",
+        "z": "dc41607f.a08f2",
+        "name": "select next option",
+        "topic": "Select next option",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 1030,
+        "y": 100,
+        "wires": [
+            [
+                "217e09d9.1ab0d6"
+            ]
+        ]
+    },
+    {
+        "id": "217e09d9.1ab0d6",
+        "type": "api-call-service",
+        "z": "dc41607f.a08f2",
+        "name": "Time of Day: Select Next",
+        "server": "4780c192.bc0f2",
+        "service_domain": "input_select",
+        "service": "select_next",
+        "data": "{ \"entity_id\": \" input_select.time_of_day\" }",
+        "mergecontext": "",
+        "x": 1270,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c23e8d1d.7ad4c",
+        "type": "comment",
+        "z": "dc41607f.a08f2",
+        "name": "use to test",
+        "info": "",
+        "x": 940,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "6b1830df.9bbeb",
+        "type": "comment",
+        "z": "dc41607f.a08f2",
+        "name": "fetch state of entity mid flow",
+        "info": "",
+        "x": 140,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "e56cb26e.4430e",
+        "type": "comment",
+        "z": "dc41607f.a08f2",
+        "name": "fetch state, halt if equals 'Morning'",
+        "info": "",
+        "x": 160,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "f7784f84.9be3a",
+        "type": "inject",
+        "z": "dc41607f.a08f2",
+        "name": "every 1 sec",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "1",
+        "crontab": "",
+        "once": true,
+        "x": 130,
+        "y": 260,
+        "wires": [
+            [
+                "24372103.e2a25e"
+            ]
+        ]
+    },
+    {
+        "id": "a5db542a.600ac8",
+        "type": "comment",
+        "z": "683ec059.246e5",
+        "name": "poll sun state every 10 seconds",
+        "info": "",
+        "x": 150,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "319cdd28.b17922",
+        "type": "comment",
+        "z": "683ec059.246e5",
+        "name": "poll every 10 sec, once at start, and when state changes",
+        "info": "",
+        "x": 230,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "b4bfc915.5f9078",
+        "type": "inject",
+        "z": "683ec059.246e5",
+        "name": "select next option",
+        "topic": "Select next option",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 910,
+        "y": 120,
+        "wires": [
+            [
+                "cf4589db.e66398"
+            ]
+        ]
+    },
+    {
+        "id": "cf4589db.e66398",
+        "type": "api-call-service",
+        "z": "683ec059.246e5",
+        "name": "Time of Day: Select Next",
+        "server": "4780c192.bc0f2",
+        "service_domain": "input_select",
+        "service": "select_next",
+        "data": "{ \"entity_id\": \" input_select.time_of_day\" }",
+        "mergecontext": "",
+        "x": 1150,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ebc396a4.1ca738",
+        "type": "comment",
+        "z": "683ec059.246e5",
+        "name": "use to test",
+        "info": "",
+        "x": 820,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "ea9a4cf1.38742",
+        "type": "comment",
+        "z": "c81c02fc.f75a5",
+        "name": "Get state of an entity from function node",
+        "info": "",
+        "x": 520,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "e9d3911a.f262a",
+        "type": "comment",
+        "z": "c81c02fc.f75a5",
+        "name": "Get multiple states",
+        "info": "",
+        "x": 450,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "cb30508a.c6d78",
+        "type": "function",
+        "z": "c81c02fc.f75a5",
+        "name": "return time_of_day input state",
+        "func": "const haCtx = global.get('homeassistant').homeAssistant;\n\nconst getState = (e) => haCtx.states[e];\n\nconst inputState = getState('input_select.time_of_day');\nconst sunState = getState('sun.sun');\n\nreturn [ \n    { payload: inputState.state },\n    { payload: sunState.state   }\n];",
+        "outputs": 2,
+        "noerr": 0,
+        "x": 550,
+        "y": 320,
+        "wires": [
+            [
+                "c18f04f0.0d2748"
+            ],
+            [
+                "4c144265.edca2c"
+            ]
+        ],
+        "outputLabels": [
+            "input state",
+            "sun state"
+        ]
+    },
+    {
+        "id": "c18f04f0.0d2748",
+        "type": "debug",
+        "z": "c81c02fc.f75a5",
+        "name": "input state",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 810,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "4c144265.edca2c",
+        "type": "debug",
+        "z": "c81c02fc.f75a5",
+        "name": "sun state",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 800,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "67539b12.e9ec74",
+        "type": "inject",
+        "z": "c81c02fc.f75a5",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 200,
+        "y": 320,
+        "wires": [
+            [
+                "d7d4d181.51b4",
+                "cb30508a.c6d78",
+                "c3a058eb.7104b8"
+            ]
+        ]
+    },
+    {
+        "id": "d7d4d181.51b4",
+        "type": "function",
+        "z": "c81c02fc.f75a5",
+        "name": "return time_of_day input state",
+        "func": "const haCtx = global.get('homeassistant').homeAssistant;\n\nconst inputState = haCtx.states['input_select.time_of_day'];\n\nmsg.payload = inputState.state;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 550,
+        "y": 200,
+        "wires": [
+            [
+                "36dac7c9.baac58"
+            ]
+        ]
+    },
+    {
+        "id": "36dac7c9.baac58",
+        "type": "debug",
+        "z": "c81c02fc.f75a5",
+        "name": "",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "x": 790,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "f6e08c9b.fa84a",
+        "type": "comment",
+        "z": "c81c02fc.f75a5",
+        "name": "Ouput once per entity list",
+        "info": "",
+        "x": 470,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "c3a058eb.7104b8",
+        "type": "function",
+        "z": "c81c02fc.f75a5",
+        "name": "return time_of_day input state",
+        "func": "const haCtx = global.get('homeassistant').homeAssistant;\n\nconst interestingEntities = [\n    'input_select.time_of_day',\n    'sun.sun'\n];\n\nconst states = interestingEntities\n    .map(eid => haCtx.states[eid]);\n\nreturn states;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 550,
+        "y": 480,
+        "wires": [
+            [
+                "3e5e6413.4cd8fc"
+            ]
+        ]
+    },
+    {
+        "id": "3e5e6413.4cd8fc",
+        "type": "switch",
+        "z": "c81c02fc.f75a5",
+        "name": "",
+        "property": "entity_id",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "input_select.time_of_day",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "sun.sun",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 770,
+        "y": 480,
+        "wires": [
+            [
+                "e0b3e2c2.87014"
+            ],
+            [
+                "b3083555.1cf108"
+            ]
+        ]
+    },
+    {
+        "id": "e0b3e2c2.87014",
+        "type": "debug",
+        "z": "c81c02fc.f75a5",
+        "name": "input state",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "state",
+        "x": 970,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "b3083555.1cf108",
+        "type": "debug",
+        "z": "c81c02fc.f75a5",
+        "name": "sun state",
+        "active": true,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "state",
+        "x": 960,
+        "y": 520,
+        "wires": []
+    }
+]

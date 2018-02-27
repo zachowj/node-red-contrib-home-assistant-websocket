@@ -1,0 +1,19 @@
+{
+    "name": "node-red-contrib-home-assistant-docker",
+    "version": "1.0.0",
+    "description": "Node red install for docker, tailored for use with Home Assistant",
+    "homepage": "https://github.com/ayapejian/node-red-contrib-home-assistant",
+    "main": "node_modules/node-red/red/red.js",
+    "scripts": {
+        "start": "node $NODE_OPTIONS /app/node_modules/node-red/red.js -v --userDir $USER_DIR $FLOWS",
+        "dev:watch": "/app/node_modules/.bin/nodemon --config $NODEMON_CONFIG --exec 'sleep 0.5; node --inspect=0.0.0.0:9229 /app/node_modules/node-red/red.js -v --userDir $USER_DIR $FLOWS'"
+    },
+    "dependencies": {
+        "node-red": "0.18.2",
+        "node-red-contrib-contextbrowser": "*",
+        "nodemon":  "1.14.11"
+    },
+    "engines": {
+        "node": "8.*.*"
+    }
+}
