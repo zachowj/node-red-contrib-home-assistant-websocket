@@ -7,6 +7,8 @@ module.exports = function(RED) {
         config: {
             name:      {},
             halt_if:   {},
+            override_topic: {},
+            override_payload: {},
             entity_id: {},
             server:    { isNode: true }
         },
@@ -47,8 +49,28 @@ module.exports = function(RED) {
                 this.debugToClient(debugMsg);
                 return null;
             }
-
-            this.node.send({ topic: entity_id, payload: currentState.state, data: currentState });
+            
+            var override_topic = this.nodeConfig.override_topic;
+            var override_payload = this.nodeConfig.override_payload;
+            
+            //default switches to true if undefined (backward compatibility)
+            if (this.nodeConfig.override_topic == null){
+              override_topic = true;
+            }
+            if(this.nodeConfig.override_payload == null){
+              override_payload = true;
+            }
+            
+            if(override_topic){
+                message.topic = entity_id;
+            }
+            
+            if(override_payload){
+                message.payload = currentState.state;
+            }
+            
+            message.data = currentState;
+            this.node.send(message);
         }
     }
 
