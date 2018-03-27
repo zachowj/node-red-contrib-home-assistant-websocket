@@ -11,9 +11,9 @@
             name:             { value: '' },
             server:           { value: '', type: 'server', required: true },
             halt_if:          { value: '' },
-            override_topic:   { value: 'true' },
-            override_payload: { value: 'true' },
-            entity_id:        {value: '', required: true }
+            override_topic:   { value: true },
+            override_payload: { value: true },
+            entity_id:        { value: '', required: true }
         },
         oneditprepare: function () {
             const $entityIdField = $('#entity_id');
