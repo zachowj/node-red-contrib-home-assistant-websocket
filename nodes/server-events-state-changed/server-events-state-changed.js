@@ -23,28 +23,32 @@ module.exports = function(RED) {
         }
 
         onHaEventsStateChanged (evt) {
-            const { entity_id, event } = evt;
+            try {
+                const { entity_id, event } = evt;
 
-            const shouldHaltIfState  = this.shouldHaltIfState(event);
-            const shouldIncludeEvent = this.shouldIncludeEvent(entity_id);
+                const shouldHaltIfState  = this.shouldHaltIfState(event);
+                const shouldIncludeEvent = this.shouldIncludeEvent(entity_id);
 
-            if (shouldHaltIfState) {
-                this.debug('flow halted due to "halt if state" setting');
-                return null;
-            }
+                if (shouldHaltIfState) {
+                    this.debug('flow halted due to "halt if state" setting');
+                    return null;
+                }
 
-            const msg = {
-                topic:   entity_id,
-                payload: event.new_state.state,
-                data:    event
-            };
+                const msg = {
+                    topic:   entity_id,
+                    payload: event.new_state.state,
+                    data:    event
+                };
 
-            if (shouldIncludeEvent) {
-                (event.old_state)
-                    ? this.debug(`Incoming state event: entity_id: ${event.entity_id}, new_state: ${event.new_state.state}, old_state: ${event.old_state.state}`)
-                    : this.debug(`Incoming state event: entity_id: ${event.entity_id}, new_state: ${event.new_state.state}`);
+                if (shouldIncludeEvent) {
+                    (event.old_state)
+                        ? this.debug(`Incoming state event: entity_id: ${event.entity_id}, new_state: ${event.new_state.state}, old_state: ${event.old_state.state}`)
+                        : this.debug(`Incoming state event: entity_id: ${event.entity_id}, new_state: ${event.new_state.state}`);
 
-                this.send(msg);
+                    this.send(msg);
+                }
+            } catch (e) {
+                this.error(e);
             }
         }
 
