@@ -40,6 +40,7 @@ module.exports = function(RED) {
             if (!states) return logAndContinueEmpty('local state cache missing, sending empty payload');
 
             const currentState = states[entity_id];
+	    this.status({fill:"green",shape:"dot",text: `State: ${currentState.state} at${Date()}`}) // ${getMonth() getDate() getHour():getMinute()});
             if (!currentState) return logAndContinueEmpty(`entity could not be found in cache for entity_id: ${entity_id}, sending empty payload`);
 
             const shouldHaltIfState = this.nodeConfig.halt_if && (currentState.state === this.nodeConfig.halt_if);

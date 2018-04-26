@@ -49,7 +49,7 @@ module.exports = function(RED) {
             if (!apiService) throw new Error('call service node is missing api "service" property, not found in config or payload');
 
             this.debug(`Calling Service: ${apiDomain}:${apiService} -- ${JSON.stringify(apiData || {})}`);
-
+            this.status({fill:"green",shape:"dot",text: 'called'});
             this.send({
                 payload: {
                     domain:  apiDomain,
