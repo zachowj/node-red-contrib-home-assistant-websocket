@@ -7,3 +7,4 @@ _scratchpad_flows
 .DS_Store
 _docker-volumes/
 ./package-lock.json
+*.log
