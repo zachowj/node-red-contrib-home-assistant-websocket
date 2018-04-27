@@ -37,10 +37,12 @@ module.exports = function(RED) {
                     message.startdate = startdate;
                     message.payload = res;
                     this.send(message);
+		    this.status({fill:"green",shape:"dot",text:"Success"});
                 })
                 .catch(err => {
                     this.warn('Error calling service, home assistant api error', err);
                     this.error('Error calling service, home assistant api error', message);
+		    this.status({fill:"red",shape:"ring",text:"Error"});
                 });
         }
     }

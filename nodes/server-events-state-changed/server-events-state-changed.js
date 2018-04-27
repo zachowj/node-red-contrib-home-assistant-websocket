@@ -31,6 +31,9 @@ module.exports = function(RED) {
 
                 if (shouldHaltIfState) {
                     this.debug('flow halted due to "halt if state" setting');
+		    var todaysDate = new Date()
+	            var prettyDate = todaysDate.toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
+		    this.status({fill:"yellow",shape:"ring",text:`Halted: Event: ${event} at: ${prettyDate}'}); 
                     return null;
                 }
 
