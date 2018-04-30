@@ -15,6 +15,9 @@ $ npm install node-red-contrib-home-assistant
 # then restart node-red
 ```
 
+If you are running Node Red inside Hass.io addon/container you can use Hass.io API Proxy address `http://hassio/homeassistant` as Home Assistant server address (server node Base URL). This way you don't need any real network address.
+
+=======
 For flow examples checkout the [flows here](https://raw.githubusercontent.com/AYapejian/node-red-contrib-home-assistant/master/_docker/node-red/root-fs/data/flows.json)
 
 ---
