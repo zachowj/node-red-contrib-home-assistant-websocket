@@ -8,13 +8,12 @@
         paletteLabel: 'current state',
         label:        function() { return this.name || `current_state: ${this.entity_id}`; },
         defaults:     {
-            name:          { value: '' },
-            server:        { value: '', type: 'server', required: true },
-            halt_if:       { value: '' },
-            entity_id:     {
-                value:    '',
-                required: true
-            }
+            name:             { value: '' },
+            server:           { value: '', type: 'server', required: true },
+            halt_if:          { value: '' },
+            override_topic:   { value: true },
+            override_payload: { value: true },
+            entity_id:        { value: '', required: true }
         },
         oneditprepare: function () {
             const $entityIdField = $('#entity_id');
@@ -83,6 +82,18 @@
         <input type="text" id="entity_id">
     </div>
 
+    <div class="form-row">
+        <label for="node-input-override_topic">&nbsp;</label>
+        <input type="checkbox" id="node-input-override_topic" checked style="display:inline-block; width:15px; vertical-align:baseline;">
+        <span>Override Topic</span>
+    </div>
+    
+    <div class="form-row">
+        <label for="node-input-override_payload">&nbsp;</label>
+        <input type="checkbox" id="node-input-override_payload" checked style="display:inline-block; width:15px; vertical-align:baseline;">&nbsp;
+        <span>Override Payload</span>
+    </div>
+    
     <div class="form-row">
         <label for="node-input-halt_if"><i class="fa fa-hand-paper-o"></i> Halt If</label>
         <input type="text" id="node-input-halt_if" placeholder="off"/>
