@@ -18,7 +18,8 @@
     "docker:logs": "npm run docker -- logs -f && true",
     "docker": "docker-compose -f docker/docker-compose.yml",
     "docker-map": "docker-compose -f docker/docker-compose.mapped.yml",
-    "clean": "npm run docker:down"
+    "clean": "npm run docker:down",
+    "lint": "eslint . ; exit 0"
   },
   "repository": {
     "type": "git",
