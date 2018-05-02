@@ -9,12 +9,18 @@ Project is going through active development and as such will probably have a few
 ## Getting Started
 
 This assumes you have [node-red](http://nodered.org/) already installed and working, if you need to install node-red see [here](http://nodered.org/docs/getting-started/installation)
+
+NOTE: node-red-contrib-home-assistant requires node.JS > 8.0  If you're running Node-Red in Docker you'll need to pull the -v8 image for this to work.
+
 ```shell
 $ cd cd ~/.node-red
 $ npm install node-red-contrib-home-assistant
 # then restart node-red
 ```
 
+If you are running Node Red inside Hass.io addon/container you can use Hass.io API Proxy address `http://hassio/homeassistant` as Home Assistant server address (server node Base URL). This way you don't need any real network address.
+
+=======
 For flow examples checkout the [flows here](https://raw.githubusercontent.com/AYapejian/node-red-contrib-home-assistant/master/_docker/node-red/root-fs/data/flows.json)
 
 ---

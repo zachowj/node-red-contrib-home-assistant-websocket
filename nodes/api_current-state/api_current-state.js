@@ -49,7 +49,7 @@ module.exports = function(RED) {
                 this.debugToClient(debugMsg);
                 return null;
             }
-            
+
             var override_topic = this.nodeConfig.override_topic;
             var override_payload = this.nodeConfig.override_payload;
             
