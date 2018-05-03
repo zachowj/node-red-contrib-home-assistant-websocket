@@ -26,6 +26,4 @@ services:
     ports:
       - 8300:8300
       - 8123:8123
-    depends_on:
-      - mqtt
 

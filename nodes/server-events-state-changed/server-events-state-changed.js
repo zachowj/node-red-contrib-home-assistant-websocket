@@ -45,8 +45,10 @@ module.exports = function(RED) {
                         ? this.debug(`Incoming state event: entity_id: ${event.entity_id}, new_state: ${event.new_state.state}, old_state: ${event.old_state.state}`)
                         : this.debug(`Incoming state event: entity_id: ${event.entity_id}, new_state: ${event.new_state.state}`);
 
-                    this.send(msg);
+                    return this.send(msg);
                 }
+
+                return null;
             } catch (e) {
                 this.error(e);
             }
