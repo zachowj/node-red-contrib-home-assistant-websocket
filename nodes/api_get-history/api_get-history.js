@@ -5,11 +5,12 @@ module.exports = function(RED) {
     const nodeOptions = {
         debug:  true,
         config: {
-            name:      {},
-            server:    { isNode: true },
-            startdate: {},
-            enddate:   {},
-            entityid:  {}
+            name:         {},
+            server:       { isNode: true },
+            startdate:    {},
+            enddate:      {},
+            entityid:     {},
+            entityidtype: {}
         },
         input: {
             startdate: {
@@ -30,6 +31,10 @@ module.exports = function(RED) {
             entityid: {
                 messageProp: 'entityid',
                 configProp:   'entityid'
+            },
+            entityidtype: {
+                messageProp: 'entityidtype',
+                configProp:   'entityidtype'
             }
         }
     };
@@ -40,12 +45,16 @@ module.exports = function(RED) {
         }
 
         onInput({ parsedMessage, message }) {
-            let { startdate, enddate, entityid } = parsedMessage;
-            startdate  = startdate.value;
-            enddate    = enddate.value;
-            entityid   = entityid.value;
+            let { startdate, enddate, entityid, entityidtype } = parsedMessage;
+            startdate     = startdate.value;
+            enddate       = enddate.value;
+            entityid      = entityid.value;
 
-            return this.nodeConfig.server.api.getHistory(startdate, entityid, enddate)
+            let apiRequest = (entityidtype.value === 'includes' && entityid)
+                ? this.nodeConfig.server.api.getHistory(startdate, null, enddate, { include: new RegExp(entityid) })
+                : this.nodeConfig.server.api.getHistory(startdate, entityid, enddate);
+
+            return apiRequest
                 .then(res => {
                     message.startdate = startdate;
                     message.enddate   = enddate  || null;

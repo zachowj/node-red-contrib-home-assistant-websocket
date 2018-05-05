@@ -3,11 +3,12 @@
         category: 'home_assistant',
         color:    '#52C0F2',
         defaults: {
-            name:         { value: '' },
+            name:         { value: ''  },
             server:       { value: '', type: 'server', required: true },
-            startdate:    { value: '' },
-            enddate:      { value: '' },
-            entityid:     { value: '' }
+            startdate:    { value: ''  },
+            enddate:      { value: ''  },
+            entityid:     { value: ''  },
+            entityidtype: { value: ''  }
         },
         inputs:       1,
         outputs:      1,
@@ -24,6 +25,9 @@
         oneditprepare: function() {
             const NODE = this;
             const $server = $('#node-input-server');
+            NODE.entityidtype = NODE.entityidtype || 'is';
+            $('#node-input-entityidtype').val(NODE.entityidtype);
+
             const utils = {
                 setDefaultServerSelection: function () {
                     let defaultServer;
@@ -64,9 +68,16 @@
         <input type="text" id="node-input-enddate" />
     </div>
 
+    <!-- Comparator Selection -->
     <div class="form-row">
         <label for="node-input-entityid"><i class="fa fa-date"></i> Entity ID</label>
-        <input type="text" id="node-input-entityid" />
+
+        <select type="text" id="node-input-entityidtype" style="width: 80px;">
+            <option value="is">Is</option>
+            <option value="includes">Includes</option>
+        </select>
+
+        <input type="text" id="node-input-entityid" style="width: 52%;"/>
     </div>
 
     <div class="form-tips">
@@ -105,18 +116,26 @@
             payload         <span class="property-type">array</span>
         </dt>
         <dd>The history returned by home-assistant, which is an array of arrays where each array entry contains history objects for one particular entity</dd>
+
         <dt>
             startdate         <span class="property-type">string</span>
         </dt>
         <dd>ISO date string used to fetch history</dd>
+
         <dt>
             enddate         <span class="property-type">string</span>
         </dt>
         <dd>ISO date string used to fetch history</dd>
+
         <dt>
             entityid         <span class="property-type">string</span>
         </dt>
         <dd>entityid string used during fetch history call</dd>
+
+        <dt>
+            entityidtype     <span class="property-type">string</span>
+        </dt>
+        <dd>'is' or 'includes' depending on match type. NOTE: 'includes' fetches all history for time period then filters according to value, this will be less performant than exact ('is') matching</dd>
     </dl>
 
     <h3>Details</h3>
