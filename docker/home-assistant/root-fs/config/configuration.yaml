@@ -14,25 +14,18 @@ logger:
   default: !env_var HA_LOGGER_DEFAULT
 
 recorder:
-  purge_interval:  2
-  purge_keep_days: 1
-
+logbook:
 frontend:
 config:
 history:
 map:
 sun:
 
-weblink:
-  entities:
-    - name: Node Red
-      url:  !env_var NODE_RED_URL
-
 panel_iframe:
   node_red:
     title: Node Red
     url:   !env_var NODE_RED_URL
-    icon:  mdi:grid-on
+    icon:  mdi:sitemap
 
 
 alarm_control_panel:

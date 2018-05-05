@@ -5,12 +5,12 @@ module.exports = function(RED) {
     const nodeOptions = {
         debug:  true,
         config: {
-            name:      {},
-            halt_if:   {},
-            override_topic: {},
+            name:             {},
+            halt_if:          {},
+            override_topic:   {},
             override_payload: {},
-            entity_id: {},
-            server:    { isNode: true }
+            entity_id:        {},
+            server:           { isNode: true }
         },
         input: {
             entity_id: {
@@ -50,25 +50,13 @@ module.exports = function(RED) {
                 return null;
             }
 
-            var override_topic = this.nodeConfig.override_topic;
-            var override_payload = this.nodeConfig.override_payload;
-            
-            //default switches to true if undefined (backward compatibility)
-            if (this.nodeConfig.override_topic == null){
-              override_topic = true;
-            }
-            if(this.nodeConfig.override_payload == null){
-              override_payload = true;
-            }
-            
-            if(override_topic){
-                message.topic = entity_id;
-            }
-            
-            if(override_payload){
-                message.payload = currentState.state;
-            }
-            
+            // default switches to true if undefined (backward compatibility
+            const override_topic = this.nodeConfig.override_topic || true;
+            const override_payload = this.nodeConfig.override_payload || true;
+
+            if (override_topic)   message.topic = entity_id;
+            if (override_payload) message.payload = currentState.state;
+
             message.data = currentState;
             this.node.send(message);
         }

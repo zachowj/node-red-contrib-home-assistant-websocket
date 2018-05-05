@@ -1,7 +1,7 @@
 {
   "name": "node-red-contrib-home-assistant",
   "description": "node-red nodes to visually construct home automation with home assistant",
-  "version": "0.3.0",
+  "version": "0.3.2",
   "homepage": "https://github.com/AYapejian/node-red-contrib-home-assistant",
   "bugs": {
     "url": "https://github.com/AYapejian/node-red-contrib-home-assistant/issues"
@@ -16,8 +16,10 @@
     "docker:down": "npm run docker -- down -vt5 && npm run docker -- rm -fv",
     "docker:restart": "npm run docker -- restart",
     "docker:logs": "npm run docker -- logs -f && true",
-    "docker": "docker-compose -f _docker/docker-compose.yml",
-    "docker-map": "docker-compose -f _docker/docker-compose.mapped.yml"
+    "docker": "docker-compose -f docker/docker-compose.yml",
+    "docker-map": "docker-compose -f docker/docker-compose.mapped.yml",
+    "clean": "npm run docker:down",
+    "lint": "eslint . ; exit 0"
   },
   "repository": {
     "type": "git",
