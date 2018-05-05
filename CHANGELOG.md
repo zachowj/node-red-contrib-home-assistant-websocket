@@ -1,5 +1,8 @@
-# V0.3.1
+# v0.3.2
+* Feat: History node now supports end date and entityid filtering
+* Fix:  Nodered configuration value userDir is fetched correctly now
 
+# v0.3.1
 * Fix/Feat: Current State Node: Preserve original message with options to override topic and payload (Thanks @declankenny)
 * Fix:      Added try/catch in onHaEventsStateChanged (Thanks @oskargronqvist)
 * Docs:     Added quotes to 'Call Service' placeholder text (Thanks @brubaked)
