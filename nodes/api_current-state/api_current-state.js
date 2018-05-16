@@ -59,7 +59,8 @@ module.exports = function(RED) {
             } else {
                 RED.util.setMessageProperty(message, this.nodeConfig.property, currentState);
             }
-
+	    var prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
+	    this.status({fill:"green",shape:"dot",text:`${currentState.state} at: ${prettyDate}`});
             this.node.send(message);
         }
     }
