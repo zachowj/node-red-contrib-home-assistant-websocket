@@ -49,9 +49,8 @@ module.exports = function(RED) {
             if (!apiService) throw new Error('call service node is missing api "service" property, not found in config or payload');
 
             this.debug(`Calling Service: ${apiDomain}:${apiService} -- ${JSON.stringify(apiData || {})}`);
-            var prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'}); 
+            var prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
             this.status({fill:"green",shape:"dot",text:`${apiDomain}.${apiService} called at: ${prettyDate}`});
-
             this.send({
                 payload: {
                     domain:  apiDomain,

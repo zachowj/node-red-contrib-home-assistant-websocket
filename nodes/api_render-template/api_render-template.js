@@ -32,9 +32,11 @@ module.exports = function(RED) {
                     message.template = template;
                     message.payload = res;
                     this.send(message);
+		    this.status({fill:"green",shape:"dot",text:"Success"});
                 })
                 .catch(err => {
                     this.error(`Error calling service, home assistant api error: ${err.message}`, message);
+		    this.status({fill:"red",shape:"ring",text:"Error"});
                 });
         }
     }
