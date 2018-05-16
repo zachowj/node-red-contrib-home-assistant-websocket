@@ -40,18 +40,14 @@ module.exports = function(RED) {
             if (!states) return logAndContinueEmpty('local state cache missing, sending empty payload');
 
             const currentState = states[entity_id];
-		var prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
-		this.status({fill:"green",shape:"dot",text:`${currentState.state} at: ${prettyDate}`});
-            if (!currentState) return {
-		    logAndContinueEmpty(`entity could not be found in cache for entity_id: ${entity_id}, sending empty payload`);
-		this.status({fill:"yellow",shape:"dot",text:`Entity not found! Continuing. at: ${prettyDate}`});
-
+      	    if (!currentState) return logAndContinueEmpty(`entity could not be found in cache for entity_id: ${entity_id}, sending empty payload`);
+		
             const shouldHaltIfState = this.nodeConfig.halt_if && (currentState.state === this.nodeConfig.halt_if);
             if (shouldHaltIfState) {
                 const debugMsg = `Get current state: halting processing due to current state of ${entity_id} matches "halt if state" option`;
                 this.debug(debugMsg);
                 this.debugToClient(debugMsg);
-		this.status({fill:"yellow",shape:"ring",text:`halted: ${currentState.state} at: ${prettyDate}`});
+		this.status({fill:"yellow",shape:"ring",text:`Halted: ${currentState.state} at: ${prettyDate}`});
                 return null;
             }
 
