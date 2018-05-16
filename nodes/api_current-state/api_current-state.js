@@ -5,12 +5,12 @@ module.exports = function(RED) {
     const nodeOptions = {
         debug:  true,
         config: {
-            name:             {},
-            halt_if:          {},
-            override_topic:   {},
-            override_payload: {},
-            entity_id:        {},
-            server:           { isNode: true }
+            name: {},
+            halt_if: {},
+            entity_id: {},
+            propertyType: {},
+            property: {},
+            server: { isNode: true }
         },
         input: {
             entity_id: {
@@ -55,14 +55,15 @@ module.exports = function(RED) {
                 return null;
             }
 
-            // default switches to true if undefined (backward compatibility
-            const override_topic = this.nodeConfig.override_topic || true;
-            const override_payload = this.nodeConfig.override_payload || true;
+            // Output the currentState Object to the destination specified
+            if (this.nodeConfig.propertyType == 'flow') {
+                this.context().flow.set(this.nodeConfig.property, currentState);
+            } else if (this.nodeConfig.propertyType == 'global') {
+                this.context().global.set(this.nodeConfig.property, currentState);
+            } else {
+                RED.util.setMessageProperty(message, this.nodeConfig.property, currentState);
+            }
 
-            if (override_topic)   message.topic = entity_id;
-            if (override_payload) message.payload = currentState.state;
-
-            message.data = currentState;
             this.node.send(message);
         }
     }

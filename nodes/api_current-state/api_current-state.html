@@ -11,9 +11,9 @@
             name:             { value: '' },
             server:           { value: '', type: 'server', required: true },
             halt_if:          { value: '' },
-            override_topic:   { value: true },
-            override_payload: { value: true },
-            entity_id:        { value: '', required: true }
+            entity_id:        { value: '', required: true },
+            propertyType:     { value: 'msg', required: true },
+            property:         { value: 'payload', required: true }
         },
         oneditprepare: function () {
             const $entityIdField = $('#entity_id');
@@ -42,6 +42,17 @@
             if (!isConfigValid) { $entityIdField.addClass('disabled'); }
             else { $entityIdField.removeClass('disabled'); }
 
+            //Default the output property to msg.payload
+            if (this.property === undefined) {
+                $("#node-input-property").val("payload");
+            }
+            $("#node-input-property").typedInput({
+                default: 'msg',
+                typeField: $("#node-input-propertyType"),
+                types: ['msg', 'flow', 'global']
+            });
+
+
             $.get('/homeassistant/entities')
                 .done((entities) => {
                     this.availableEntities = JSON.parse(entities);
@@ -62,7 +73,11 @@
                 })
                 .fail((err) => RED.notify(err.responseText, 'error'));
         },
-        oneditsave: function() { this.entity_id = $("#entity_id").val(); }
+        oneditsave: function () {
+            this.entity_id = $("#entity_id").val();
+            this.propertyType = $("#node-input-property").typedInput('type');
+            this.property = $("#node-input-property").typedInput('value');
+        }
     });
 </script>
 
@@ -83,20 +98,14 @@
     </div>
 
     <div class="form-row">
-        <label for="node-input-override_topic">&nbsp;</label>
-        <input type="checkbox" id="node-input-override_topic" checked style="display:inline-block; width:15px; vertical-align:baseline;">
-        <span>Override Topic</span>
-    </div>
-    
-    <div class="form-row">
-        <label for="node-input-override_payload">&nbsp;</label>
-        <input type="checkbox" id="node-input-override_payload" checked style="display:inline-block; width:15px; vertical-align:baseline;">&nbsp;
-        <span>Override Payload</span>
+        <label for="node-input-property"><i class="fa fa-ellipsis-h"></i> <span data-i18n="node-red:common.label.property"></span></label>
+        <input type="hidden" id="node-input-propertyType">
+        <input type="text" id="node-input-property" style="width:70%;" />
     </div>
     
     <div class="form-row">
         <label for="node-input-halt_if"><i class="fa fa-hand-paper-o"></i> Halt If</label>
-        <input type="text" id="node-input-halt_if" placeholder="off"/>
+        <input type="text" id="node-input-halt_if" placeholder="off" />
     </div>
 
 </script>
