@@ -219,26 +219,12 @@
         "data": "{ \"entity_id\": \" input_select.time_of_day\" }",
         "mergecontext": "",
         "x": 530,
-        "y": 160,
+        "y": 100,
         "wires": [
             [
-                "385c435d.e8072c"
+                "ea2f46e7.871258"
             ]
         ]
-    },
-    {
-        "id": "385c435d.e8072c",
-        "type": "debug",
-        "z": "63d2914d.5ea9b",
-        "name": "log data sent to ha",
-        "active": false,
-        "tosidebar": false,
-        "console": false,
-        "tostatus": true,
-        "complete": "payload",
-        "x": 770,
-        "y": 160,
-        "wires": []
     },
     {
         "id": "fdd917f1.fb3a08",
@@ -274,7 +260,7 @@
         "y": 160,
         "wires": [
             [
-                "4ef7a108.d71d6"
+                "eba49a.66b6cb68"
             ]
         ]
     },
@@ -287,8 +273,8 @@
         "entityidfilter": "input_select.time_of_day",
         "entityidfiltertype": "substring",
         "haltifstate": "",
-        "x": 1210,
-        "y": 60,
+        "x": 1410,
+        "y": 80,
         "wires": [
             [
                 "8544614e.23128"
@@ -305,8 +291,8 @@
         "console": false,
         "tostatus": true,
         "complete": "payload",
-        "x": 1440,
-        "y": 60,
+        "x": 1640,
+        "y": 80,
         "wires": []
     },
     {
@@ -324,7 +310,7 @@
         "y": 220,
         "wires": [
             [
-                "4ef7a108.d71d6"
+                "f59a907f.7f08b8"
             ]
         ]
     },
@@ -342,23 +328,9 @@
         "y": 400,
         "wires": [
             [
-                "a6459db0.df6ab"
+                "9175adc1.7cf5c"
             ]
         ]
-    },
-    {
-        "id": "a6459db0.df6ab",
-        "type": "debug",
-        "z": "63d2914d.5ea9b",
-        "name": "log data sent to ha",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "x": 1250,
-        "y": 400,
-        "wires": []
     },
     {
         "id": "79d6048a.91be0c",
@@ -426,7 +398,7 @@
         "y": 440,
         "wires": [
             [
-                "70a67972.83cc58"
+                "2517417.5e2073e"
             ]
         ]
     },
@@ -475,7 +447,9 @@
         "x": 1020,
         "y": 660,
         "wires": [
-            []
+            [
+                "85b385c4.952628"
+            ]
         ]
     },
     {
@@ -552,8 +526,10 @@
         "name": "Get Time of Day",
         "server": "4780c192.bc0f2",
         "halt_if": "",
+        "override_topic": true,
+        "override_payload": true,
         "entity_id": "input_select.time_of_day",
-        "x": 320,
+        "x": 360,
         "y": 120,
         "wires": [
             [
@@ -601,6 +577,8 @@
         "name": "Get Time of Day, Halt if 'Morning'",
         "server": "4780c192.bc0f2",
         "halt_if": "Morning",
+        "override_topic": true,
+        "override_payload": true,
         "entity_id": "input_select.time_of_day",
         "x": 380,
         "y": 260,
@@ -630,7 +608,7 @@
         "z": "ae2a9159.be871",
         "name": "Get History",
         "server": "4780c192.bc0f2",
-        "startdate": "2018-02-14T13:00:00+00:00",
+        "startdate": "2018-05-02T20:00:00+00:00",
         "x": 290,
         "y": 80,
         "wires": [
@@ -1801,5 +1779,163 @@
         "x": 960,
         "y": 520,
         "wires": []
+    },
+    {
+        "id": "ea2f46e7.871258",
+        "type": "function",
+        "z": "63d2914d.5ea9b",
+        "name": "[TEST] API payload data is correct",
+        "func": "const testStatus = msg.testStatus = { passed: true, text: 'Test Passed', datetime: new Date(), shape: 'dot', fill: 'green' };\n\nconst { domain, service, data } = msg.payload;\n\n// FIXME: entity_id is getting an extra space at start from somewhere? API call still works but this should be cleaned up\nif (domain !== 'input_select' || service !== 'select_next' || !data || data.entity_id !== ' input_select.time_of_day' ) {\n    testStatus.passed = false; \n    testStatus.text = 'Test Failed';\n    testStatus.fill = 'red';\n}\n\nnode.status(testStatus);\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 820,
+        "y": 100,
+        "wires": [
+            [
+                "a5ae821e.65219"
+            ]
+        ]
+    },
+    {
+        "id": "9175adc1.7cf5c",
+        "type": "function",
+        "z": "63d2914d.5ea9b",
+        "name": "[TEST] state === 'Afternoon'",
+        "func": "// Test that state is actually changed withing home assistant\n\nsetTimeout(() => {\n    const haCtx = global.get('homeassistant').homeAssistant;\n    const inputState = haCtx.states['input_select.time_of_day'];\n\n    if (inputState.state !== 'Afternoon') {\n        const text = 'Test Failed: Expected \"Afternoon\"';\n        node.status({ shape: 'dot', fill: 'red', text })\n        throw new Error(text);\n    } else {\n        const text = 'Test Passed';\n        node.status({ shape: 'dot', fill: 'green', text })\n        node.send(msg);\n    }\n}, 100);\n\nreturn;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1280,
+        "y": 380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2517417.5e2073e",
+        "type": "api-call-service",
+        "z": "63d2914d.5ea9b",
+        "name": "time of day: select option using context",
+        "server": "4780c192.bc0f2",
+        "service_domain": "input_select",
+        "service": "select_option",
+        "data": "{ \"entity_id\": \" input_select.time_of_day\" }",
+        "mergecontext": "timeOfDayOption",
+        "x": 960,
+        "y": 440,
+        "wires": [
+            [
+                "978dccc.f7e38b"
+            ]
+        ]
+    },
+    {
+        "id": "978dccc.f7e38b",
+        "type": "function",
+        "z": "63d2914d.5ea9b",
+        "name": "[TEST] state === 'Morning'",
+        "func": "// Test that state is actually changed withing home assistant\n\nsetTimeout(() => {\n    const haCtx = global.get('homeassistant').homeAssistant;\n    const inputState = haCtx.states['input_select.time_of_day'];\n\n    if (inputState.state !== 'Morning') {\n        const text = 'Test Failed: Expected \"Afternoon\"';\n        node.status({ shape: 'dot', fill: 'red', text })\n        throw new Error(text);\n    } else {\n        const text = 'Test Passed';\n        node.status({ shape: 'dot', fill: 'green', text })\n        node.send(msg);\n    }\n}, 100);\n\nreturn;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1280,
+        "y": 460,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "85b385c4.952628",
+        "type": "function",
+        "z": "63d2914d.5ea9b",
+        "name": "[TEST] state === 'Morning'",
+        "func": "// Test that state is actually changed withing home assistant\n\nsetTimeout(() => {\n    const haCtx = global.get('homeassistant').homeAssistant;\n    const inputState = haCtx.states['input_select.time_of_day'];\n\n    if (inputState.state !== 'Morning') {\n        const text = 'Test Failed: Expected \"Afternoon\"';\n        node.status({ shape: 'dot', fill: 'red', text })\n        throw new Error(text);\n    } else {\n        const text = 'Test Passed';\n        node.status({ shape: 'dot', fill: 'green', text })\n        node.send(msg);\n    }\n}, 100);\n\nreturn;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1360,
+        "y": 660,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a5ae821e.65219",
+        "type": "debug",
+        "z": "63d2914d.5ea9b",
+        "name": "log result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "true",
+        "x": 1120,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "eba49a.66b6cb68",
+        "type": "api-call-service",
+        "z": "63d2914d.5ea9b",
+        "name": "Time of Day: Select Next",
+        "server": "4780c192.bc0f2",
+        "service_domain": "input_select",
+        "service": "select_next",
+        "data": "{ \"entity_id\": \" input_select.time_of_day\" }",
+        "mergecontext": "",
+        "x": 530,
+        "y": 160,
+        "wires": [
+            [
+                "4b8fe84d.98e11"
+            ]
+        ]
+    },
+    {
+        "id": "4b8fe84d.98e11",
+        "type": "function",
+        "z": "63d2914d.5ea9b",
+        "name": "[TEST] API payload data is correct",
+        "func": "const testStatus = msg.testStatus = { passed: true, text: 'Test Passed', datetime: new Date(), shape: 'dot', fill: 'green' };\nconst { domain, service, data } = msg.payload;\n\n// FIXME: entity_id is getting an extra space at start from somewhere? API call still works but this should be cleaned up\nif (domain !== 'input_select' || service !== 'select_previous' || !data || data.entity_id !== ' input_select.time_of_day' ) {\n    testStatus.passed = false; \n    testStatus.text = 'Test Failed';\n    testStatus.fill = 'red';\n}\n\nnode.status(testStatus);\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 820,
+        "y": 160,
+        "wires": [
+            [
+                "a5ae821e.65219"
+            ]
+        ]
+    },
+    {
+        "id": "f59a907f.7f08b8",
+        "type": "api-call-service",
+        "z": "63d2914d.5ea9b",
+        "name": "Time of Day: Select Next",
+        "server": "4780c192.bc0f2",
+        "service_domain": "input_select",
+        "service": "select_next",
+        "data": "{ \"entity_id\": \" input_select.time_of_day\" }",
+        "mergecontext": "",
+        "x": 530,
+        "y": 220,
+        "wires": [
+            [
+                "d3e9c8b5.ea3958"
+            ]
+        ]
+    },
+    {
+        "id": "d3e9c8b5.ea3958",
+        "type": "function",
+        "z": "63d2914d.5ea9b",
+        "name": "[TEST] API payload data is correct",
+        "func": "const testStatus = msg.testStatus = { passed: true, text: 'Test Passed', datetime: new Date(), shape: 'dot', fill: 'green' };\n\nconst { domain, service, data } = msg.payload;\n\n// FIXME: entity_id is getting an extra space at start from somewhere? API call still works but this should be cleaned up\nif (domain !== 'input_select' || service !== 'select_option' || !data || data.entity_id !== ' input_select.time_of_day' || data.option !== 'Party Time' ) {\n    testStatus.passed = false; \n    testStatus.text = 'Test Failed';\n    testStatus.fill = 'red';\n}\n\nnode.status(testStatus);\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 820,
+        "y": 220,
+        "wires": [
+            [
+                "a5ae821e.65219"
+            ]
+        ]
     }
 ]

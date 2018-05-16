@@ -50,6 +50,7 @@ module.exports = function(RED) {
                 const state = await this.getState(this.nodeConfig.entity_id);
                 if (!state) {
                     this.warn(`could not find state with entity_id "${this.nodeConfig.entity_id}"`);
+                    this.status(fill:"red",shape:"ring",text:`no state found for "${this.nodeConfig.entity_id}"`);
                     return;
                 }
 
@@ -78,6 +79,8 @@ module.exports = function(RED) {
                 state = await this.nodeConfig.server.homeAssistant.getStates(this.nodeConfig.entity_id, true);
             }
             return state;
+	    var prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
+            this.status(fill:"green",shape:"dot",text:`${state} at: ${prettyDate}`);
         }
     }
     RED.nodes.registerType('poll-state', TimeSinceStateNode);

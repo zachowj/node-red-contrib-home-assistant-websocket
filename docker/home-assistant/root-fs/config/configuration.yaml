@@ -14,35 +14,67 @@ logger:
   default: !env_var HA_LOGGER_DEFAULT
 
 recorder:
-  purge_interval:  2
-  purge_keep_days: 1
-
+logbook:
 frontend:
 config:
 history:
 map:
 sun:
 
-weblink:
-  entities:
-    - name: Node Red
-      url:  !env_var NODE_RED_URL
-
 panel_iframe:
-    node_red:
-      title: Node Red
-      url:   !env_var NODE_RED_URL
-      icon:  mdi:grid-on
+  node_red:
+    title: Node Red
+    url:   !env_var NODE_RED_URL
+    icon:  mdi:sitemap
 
-# Test Entities for Development
-# automation:
-#   initial_state: True
-#   trigger:
-#     platform: time
-#     seconds: '/10'
-#   action:
-#     service: switch.toggle
-#     entity_id: light.kitchen_light
+
+alarm_control_panel:
+  - platform: demo
+
+binary_sensor:
+  - platform: demo
+
+camera:
+  - platform: demo
+
+climate:
+  - platform: demo
+
+cover:
+  - platform: demo
+
+fan:
+  - platform: demo
+
+image_processing:
+  - platform: demo
+
+light:
+  - platform: demo
+
+lock:
+  - platform: demo
+
+notify:
+  - platform: demo
+
+remote:
+  - platform: demo
+
+sensor:
+  - platform: demo
+
+switch:
+  - platform: demo
+
+tts:
+  - platform: demo
+
+weather:
+  - platform: demo
+
+mailbox:
+  - platform: demo
 
 input_select:
   time_of_day:
@@ -78,3 +110,13 @@ input_datetime:
     name: Input with only time
     has_date: false
     has_time: true
+
+# Test Entities for Development
+# automation:
+#   initial_state: True
+#   trigger:
+#     platform: time
+#     seconds: '/10'
+#   action:
+#     service: switch.toggle
+#     entity_id: light.kitchen_light

@@ -49,7 +49,8 @@ module.exports = function(RED) {
             if (!apiService) throw new Error('call service node is missing api "service" property, not found in config or payload');
 
             this.debug(`Calling Service: ${apiDomain}:${apiService} -- ${JSON.stringify(apiData || {})}`);
-
+            var prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
+            this.status({fill:"green",shape:"dot",text:`${apiDomain}.${apiService} called at: ${prettyDate}`});
             this.send({
                 payload: {
                     domain:  apiDomain,
@@ -62,6 +63,7 @@ module.exports = function(RED) {
                 .catch(err => {
                     this.warn('Error calling service, home assistant api error', err);
                     this.error('Error calling service, home assistant api error', message);
+                    this.status({fill:"red",shape:"ring",text:`API Error at: ${prettyDate}`});
                 });
         }
 
