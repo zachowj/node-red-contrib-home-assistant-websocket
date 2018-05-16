@@ -63,6 +63,7 @@ module.exports = function(RED) {
                 .catch(err => {
                     this.warn('Error calling service, home assistant api error', err);
                     this.error('Error calling service, home assistant api error', message);
+                    this.status({fill:"red",shape:"ring",text:`API Error at: ${prettyDate}`});
                 });
         }
 

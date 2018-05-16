@@ -18,9 +18,11 @@ EXPOSE 1880
 EXPOSE 9229
 
 # Environment variable holding file path for flows configuration
-ENV USER_DIR=/data
-ENV FLOWS=flows.json
-ENV NODE_PATH=/app/node_modules:/data/node_modules
-ENV NODEMON_CONFIG=/app/nodemon.json
+ENV USER_DIR=/data      \
+    FLOWS=flows.json     \
+    NODE_PATH=/app/node_modules:/data/node_modules  \
+    NODEMON_CONFIG=/app/nodemon.json    \
+    NODE_ENV=development                \
+    DEBUG=home-assistant*
 
 CMD ["npm", "start"]

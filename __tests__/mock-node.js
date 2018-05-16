@@ -1,19 +1,19 @@
 'use strict';
-var assert = require('assert');
+// var assert = require('assert');
 
-class Context {
-    constructor(type) {
-        this._values = {};
-        this._type = type;
-    }
-    get(key) {
-        return this._values[key];
-    }
-    set(key, value) {
-        console.log(this._type + ' context: set [' + key + '] => [' + value + ']');
-        this._values[key] = value;
-    }
-}
+// class Context {
+//     constructor(type) {
+//         this._values = {};
+//         this._type = type;
+//     }
+//     get(key) {
+//         return this._values[key];
+//     }
+//     set(key, value) {
+//         console.log(this._type + ' context: set [' + key + '] => [' + value + ']');
+//         this._values[key] = value;
+//     }
+// }
 
 class MockNode {
     constructor() {
@@ -24,9 +24,9 @@ class MockNode {
         this._status  = {};
     }
 
-    log()   { console.log(...arguments); }
-    warn()  { console.log(...arguments); }
-    error() { console.log(...arguments); }
+    log()   { console.log(...arguments) }
+    warn()  { console.log(...arguments) }
+    error() { console.log(...arguments) }
     on(event, eventFn) {
         this._events[event] = eventFn;
     }
