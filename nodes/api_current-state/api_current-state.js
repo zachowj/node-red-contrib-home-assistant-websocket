@@ -31,7 +31,7 @@ module.exports = function(RED) {
 
         /* eslint-disable camelcase */
         onInput({ parsedMessage, message }) {
-            const entity_id = parsedMessage.entity_id.value;
+            const entity_id = this.nodeConfig.entity_id ? this.nodeConfig.entity_id : parsedMessage.entity_id.value;
             const logAndContinueEmpty = (logMsg) => { this.node.warn(logMsg); return ({ payload: {}}) };
 
             if (!entity_id) return logAndContinueEmpty('entity ID not set, cannot get current state, sending empty payload');
@@ -47,7 +47,8 @@ module.exports = function(RED) {
                 const debugMsg = `Get current state: halting processing due to current state of ${entity_id} matches "halt if state" option`;
                 this.debug(debugMsg);
                 this.debugToClient(debugMsg);
-		this.status({fill:"yellow",shape:"ring",text:`Halted: ${currentState.state} at: ${prettyDate}`});
+	        var prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
+		this.status({fill:"red",shape:"ring",text:`${currentState.state} at: ${prettyDate}`});
                 return null;
             }
 
