@@ -50,7 +50,7 @@ module.exports = function(RED) {
                 const state = await this.getState(this.nodeConfig.entity_id);
                 if (!state) {
                     this.warn(`could not find state with entity_id "${this.nodeConfig.entity_id}"`);
-                    this.status(fill:"red",shape:"ring",text:`no state found for "${this.nodeConfig.entity_id}"`);
+                    this.status({fill:"red",shape:"ring",text:`no state found for ${this.nodeConfig.entity_id}`});
                     return;
                 }
 
@@ -62,6 +62,8 @@ module.exports = function(RED) {
                         topic:   this.nodeConfig.entity_id,
                         payload: { timeSinceChanged, timeSinceChangedMs, dateChanged, data: state }
                     });
+	    	    var prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
+		    this.status({fill:"green",shape:"dot",text:`${state} at: ${prettyDate}`});
                 } else {
                     this.warn(`could not calculate time since changed for entity_id "${this.nodeConfig.entity_id}"`);
                 }
@@ -80,7 +82,7 @@ module.exports = function(RED) {
             }
             return state;
 	    var prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
-            this.status(fill:"green",shape:"dot",text:`${state} at: ${prettyDate}`);
+            this.status({fill:"green",shape:"dot",text:`${state} at: ${prettyDate}`});
         }
     }
     RED.nodes.registerType('poll-state', TimeSinceStateNode);

@@ -31,7 +31,7 @@ module.exports = function(RED) {
 
         /* eslint-disable camelcase */
         onInput({ parsedMessage, message }) {
-            const entity_id = parsedMessage.entity_id.value;
+            const entity_id = this.nodeConfig.entity_id ? this.nodeConfig.entity_id : parsedMessage.entity_id.value;
             const logAndContinueEmpty = (logMsg) => { this.node.warn(logMsg); return ({ payload: {}}) };
 
             if (!entity_id) return logAndContinueEmpty('entity ID not set, cannot get current state, sending empty payload');
@@ -40,18 +40,15 @@ module.exports = function(RED) {
             if (!states) return logAndContinueEmpty('local state cache missing, sending empty payload');
 
             const currentState = states[entity_id];
-		var prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
-		this.status({fill:"green",shape:"dot",text:`${currentState.state} at: ${prettyDate}`});
-            if (!currentState) return {
-		    logAndContinueEmpty(`entity could not be found in cache for entity_id: ${entity_id}, sending empty payload`);
-		this.status({fill:"yellow",shape:"dot",text:`Entity not found! Continuing. at: ${prettyDate}`});
-
+      	    if (!currentState) return logAndContinueEmpty(`entity could not be found in cache for entity_id: ${entity_id}, sending empty payload`);
+		
             const shouldHaltIfState = this.nodeConfig.halt_if && (currentState.state === this.nodeConfig.halt_if);
             if (shouldHaltIfState) {
                 const debugMsg = `Get current state: halting processing due to current state of ${entity_id} matches "halt if state" option`;
                 this.debug(debugMsg);
                 this.debugToClient(debugMsg);
-		this.status({fill:"yellow",shape:"ring",text:`halted: ${currentState.state} at: ${prettyDate}`});
+	        var prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
+		this.status({fill:"red",shape:"ring",text:`${currentState.state} at: ${prettyDate}`});
                 return null;
             }
 
@@ -63,7 +60,8 @@ module.exports = function(RED) {
             } else {
                 RED.util.setMessageProperty(message, this.nodeConfig.property, currentState);
             }
-
+	    var prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
+	    this.status({fill:"green",shape:"dot",text:`${currentState.state} at: ${prettyDate}`});
             this.node.send(message);
         }
     }
