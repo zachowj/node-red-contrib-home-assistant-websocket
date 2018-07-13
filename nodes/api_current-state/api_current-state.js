@@ -7,6 +7,7 @@ module.exports = function(RED) {
         config: {
             name: {},
             halt_if: {},
+            override_payload: {},
             entity_id: {},
             propertyType: {},
             property: {},
@@ -52,17 +53,24 @@ module.exports = function(RED) {
                 return null;
             }
 
+            // default switch to true if undefined (backward compatibility
+            const override_payload = this.nodeConfig.override_payload !== false;
+
             // Output the currentState Object to the destination specified
             if (this.nodeConfig.propertyType == 'flow') {
                 this.context().flow.set(this.nodeConfig.property, currentState);
             } else if (this.nodeConfig.propertyType == 'global') {
                 this.context().global.set(this.nodeConfig.property, currentState);
             } else {
-                RED.util.setMessageProperty(message, this.nodeConfig.property, currentState);
+				if (override_payload) {
+					RED.util.setMessageProperty(message, this.nodeConfig.property, currentState);					
+					this.node.send(message);
+				} else {
+					this.node.send(message);
+				}
             }
 	    var prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
-	    this.status({fill:"green",shape:"dot",text:`${currentState.state} at: ${prettyDate}`});
-            this.node.send(message);
+	    this.status({fill:"green",shape:"dot",text:`${currentState.state} at: ${prettyDate}`});    
         }
     }
 
