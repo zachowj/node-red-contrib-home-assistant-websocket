@@ -7,6 +7,7 @@ module.exports = function(RED) {
         config: {
             name: {},
             halt_if: {},
+	    override_topic: {},
             override_payload: {},
             override_object: {},
             entity_id: {},
