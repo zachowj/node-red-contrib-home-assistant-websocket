@@ -9,7 +9,7 @@ module.exports = function(RED) {
             halt_if: {},
             override_topic: {},
             override_payload: {},
-            override_object: {},
+            override_property: {},
             entity_id: {},
             propertyType: {},
             property: {},
@@ -57,7 +57,7 @@ module.exports = function(RED) {
 
             // default switch to true if undefined (backward compatibility
             const override_payload = this.nodeConfig.override_payload !== false;
-            const override_object = this.nodeConfig.override_object !== false;
+            const override_property = this.nodeConfig.override_property !== false;
             const override_topic = this.nodeConfig.override_topic !== false;
 
             // Output the currentState Object to the destination specified
@@ -66,12 +66,12 @@ module.exports = function(RED) {
             } else if (this.nodeConfig.propertyType == 'global') {
                 this.context().global.set(this.nodeConfig.property, currentState);
             } else {
-                if (override_payload) { message.payload = currentState.state; }
-                if (override_topic) { message.topic = entity_id; }
-                if (override_object) {
-                    message.old_object = message.object;
+                if (override_topic)   message.topic = entity_id;
+                if (override_payload) message.payload = currentState.state;
+                if (override_property) {
                     RED.util.setMessageProperty(message, this.nodeConfig.property, currentState);
-                    //message.object = currentState;
+                } else {
+                    message.data = currentState;
                 }
             }
             var prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
