@@ -8,6 +8,7 @@ module.exports = function(RED) {
             name: {},
             halt_if: {},
             override_payload: {},
+            override_object: {},
             entity_id: {},
             propertyType: {},
             property: {},
@@ -55,6 +56,7 @@ module.exports = function(RED) {
 
             // default switch to true if undefined (backward compatibility
             const override_payload = this.nodeConfig.override_payload !== false;
+            const override_object = this.nodeConfig.override_object !== false;
 
             // Output the currentState Object to the destination specified
             if (this.nodeConfig.propertyType == 'flow') {
@@ -63,7 +65,13 @@ module.exports = function(RED) {
                 this.context().global.set(this.nodeConfig.property, currentState);
             } else {
 				if (override_payload) {
-					RED.util.setMessageProperty(message, this.nodeConfig.property, currentState);					
+					//RED.util.setMessageProperty(message, this.nodeConfig.property, currentState.state);
+					message.payload = currentState.state;
+					message.topic = entity_id;
+					if (override_object) {
+						message.old_object = message.object;
+						message.object = currentState;
+					}
 					this.node.send(message);
 				} else {
 					this.node.send(message);

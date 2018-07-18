@@ -12,6 +12,7 @@
             server:           { value: '', type: 'server', required: true },
             halt_if:          { value: '' },
             override_payload: { value: true },			
+            override_object:  { value: true },			
             entity_id:        { value: '', required: true },
             propertyType:     { value: 'msg', required: true },
             property:         { value: 'payload', required: true }
@@ -108,6 +109,12 @@
         <label for="node-input-override_payload">&nbsp;</label>
         <input type="checkbox" id="node-input-override_payload" checked style="display:inline-block; width:15px; vertical-align:baseline;">&nbsp;
         <span>Override Payload</span>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-override_object">&nbsp;</label>
+        <input type="checkbox" id="node-input-override_object" checked style="display:inline-block; width:15px; vertical-align:baseline;">&nbsp;
+        <span>Override Object</span>
     </div>
     
     <div class="form-row">
