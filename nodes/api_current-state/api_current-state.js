@@ -64,21 +64,16 @@ module.exports = function(RED) {
             } else if (this.nodeConfig.propertyType == 'global') {
                 this.context().global.set(this.nodeConfig.property, currentState);
             } else {
-				if (override_payload) {
-					//RED.util.setMessageProperty(message, this.nodeConfig.property, currentState.state);
-					message.payload = currentState.state;
-					message.topic = entity_id;
+				if (override_payload) { message.payload = currentState.state; }
+					if (override_topic) { message.topic = entity_id; }
 					if (override_object) {
 						message.old_object = message.object;
 						message.object = currentState;
 					}
 					this.node.send(message);
-				} else {
-					this.node.send(message);
-				}
             }
-	    var prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
-	    this.status({fill:"green",shape:"dot",text:`${currentState.state} at: ${prettyDate}`});    
+	var prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
+	this.status({fill:"green",shape:"dot",text:`${currentState.state} at: ${prettyDate}`});    
         }
     }
 
