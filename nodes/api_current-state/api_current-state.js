@@ -7,10 +7,9 @@ module.exports = function(RED) {
         config: {
             name: {},
             halt_if: {},
+            override_topic: {},
             override_payload: {},
             entity_id: {},
-            propertyType: {},
-            property: {},
             server: { isNode: true }
         },
         input: {
@@ -41,36 +40,30 @@ module.exports = function(RED) {
             if (!states) return logAndContinueEmpty('local state cache missing, sending empty payload');
 
             const currentState = states[entity_id];
-      	    if (!currentState) return logAndContinueEmpty(`entity could not be found in cache for entity_id: ${entity_id}, sending empty payload`);
-		
+              if (!currentState) return logAndContinueEmpty(`entity could not be found in cache for entity_id: ${entity_id}, sending empty payload`);
+
             const shouldHaltIfState = this.nodeConfig.halt_if && (currentState.state === this.nodeConfig.halt_if);
             if (shouldHaltIfState) {
                 const debugMsg = `Get current state: halting processing due to current state of ${entity_id} matches "halt if state" option`;
                 this.debug(debugMsg);
                 this.debugToClient(debugMsg);
-	        var prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
-		this.status({fill:"red",shape:"ring",text:`${currentState.state} at: ${prettyDate}`});
+                var prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
+                this.status({fill:"red",shape:"ring",text:`${currentState.state} at: ${prettyDate}`});
                 return null;
             }
 
             // default switch to true if undefined (backward compatibility
             const override_payload = this.nodeConfig.override_payload !== false;
+            const override_topic = this.nodeConfig.override_topic !== false;
 
-            // Output the currentState Object to the destination specified
-            if (this.nodeConfig.propertyType == 'flow') {
-                this.context().flow.set(this.nodeConfig.property, currentState);
-            } else if (this.nodeConfig.propertyType == 'global') {
-                this.context().global.set(this.nodeConfig.property, currentState);
-            } else {
-				if (override_payload) {
-					RED.util.setMessageProperty(message, this.nodeConfig.property, currentState);					
-					this.node.send(message);
-				} else {
-					this.node.send(message);
-				}
-            }
-	    var prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
-	    this.status({fill:"green",shape:"dot",text:`${currentState.state} at: ${prettyDate}`});    
+            if (override_topic)   message.topic = entity_id;
+            if (override_payload) message.payload = currentState.state;
+            
+	    message.data = currentState;
+            
+            var prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
+            this.status({fill:"green",shape:"dot",text:`${currentState.state} at: ${prettyDate}`});
+            this.node.send(message);
         }
     }
 
