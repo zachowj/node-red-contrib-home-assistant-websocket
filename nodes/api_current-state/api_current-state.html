@@ -13,10 +13,7 @@
             halt_if:          { value: '' },
             override_topic:   { value: true },
             override_payload: { value: true },
-            override_property:{ value: false },
             entity_id:        { value: '', required: true },
-            propertyType:     { value: 'msg', required: true },
-            property:         { value: 'payload', required: true }
         },
         oneditprepare: function () {
             const $entityIdField = $('#entity_id');
@@ -45,17 +42,6 @@
             if (!isConfigValid) { $entityIdField.addClass('disabled'); }
             else { $entityIdField.removeClass('disabled'); }
 
-            //Default the output property to msg.payload
-            if (this.property === undefined) {
-                $("#node-input-property").val("payload");
-            }
-            $("#node-input-property").typedInput({
-                default: 'msg',
-                typeField: $("#node-input-propertyType"),
-                types: ['msg', 'flow', 'global']
-            });
-
-
             $.get('/homeassistant/entities')
                 .done((entities) => {
                     this.availableEntities = JSON.parse(entities);
@@ -78,8 +64,6 @@
         },
         oneditsave: function () {
             this.entity_id = $("#entity_id").val();
-            this.propertyType = $("#node-input-property").typedInput('type');
-            this.property = $("#node-input-property").typedInput('value');
         }
     });
 </script>
@@ -98,18 +82,6 @@
     <div class="form-row">
         <label for="entity_id"><i class="fa fa-cube"></i> Entity ID</label>
         <input type="text" id="entity_id">
-    </div>
-
-    <div class="form-row">
-        <label for="node-input-override_property">&nbsp;</label>
-        <input type="checkbox" id="node-input-override_property" checked style="display:inline-block; width:15px; vertical-align:baseline;">&nbsp;
-        <span>Override Property</span>
-    </div>
-
-    <div class="form-row">
-        <label for="node-input-property"><i class="fa fa-ellipsis-h"></i> <span data-i18n="node-red:common.label.property"></span></label>
-        <input type="hidden" id="node-input-propertyType">
-        <input type="text" id="node-input-property" style="width:70%;" />
     </div>
 
     <div class="form-row">
