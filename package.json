@@ -1,7 +1,7 @@
 {
   "name": "node-red-contrib-home-assistant",
   "description": "node-red nodes to visually construct home automation with home assistant",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "homepage": "https://github.com/Spartan-II-117/node-red-contrib-home-assistant",
 
   "bugs": {
