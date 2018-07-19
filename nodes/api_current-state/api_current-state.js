@@ -9,10 +9,7 @@ module.exports = function(RED) {
             halt_if: {},
             override_topic: {},
             override_payload: {},
-            override_property: {},
             entity_id: {},
-            propertyType: {},
-            property: {},
             server: { isNode: true }
         },
         input: {
@@ -57,23 +54,13 @@ module.exports = function(RED) {
 
             // default switch to true if undefined (backward compatibility
             const override_payload = this.nodeConfig.override_payload !== false;
-            const override_property = this.nodeConfig.override_property !== false;
             const override_topic = this.nodeConfig.override_topic !== false;
 
-            // Output the currentState Object to the destination specified
-            if (this.nodeConfig.propertyType == 'flow') {
-                this.context().flow.set(this.nodeConfig.property, currentState);
-            } else if (this.nodeConfig.propertyType == 'global') {
-                this.context().global.set(this.nodeConfig.property, currentState);
-            } else {
-                if (override_topic)   message.topic = entity_id;
-                if (override_payload) message.payload = currentState.state;
-                if (override_property) {
-                    RED.util.setMessageProperty(message, this.nodeConfig.property, currentState);
-                } else {
-                    message.data = currentState;
-                }
-            }
+            if (override_topic)   message.topic = entity_id;
+            if (override_payload) message.payload = currentState.state;
+            
+	    message.data = currentState;
+            
             var prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
             this.status({fill:"green",shape:"dot",text:`${currentState.state} at: ${prettyDate}`});
             this.node.send(message);
