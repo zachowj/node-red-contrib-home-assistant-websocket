@@ -1,3 +1,9 @@
+# v0.3.6
+* Feat: Added <= and => comparison for Constraints and Outputs. Renamed greater_than and less_than to > and < but kept backwards compatibility
+* Fix: Fixed label for outputs that was getting undefined tacked on to the front of the string.
+* Fix: poll-state node now matches events-state output
+* Fix:  entity_id is no longer required on current-state
+
 # v0.3.2
 * Feat: History node now supports end date and entityid filtering
 * Fix:  Nodered configuration value userDir is fetched correctly now
