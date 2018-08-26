@@ -47,23 +47,24 @@ module.exports = function(RED) {
 
         async onTimer() {
             try {
-                const state = await this.getState(this.nodeConfig.entity_id);
-                if (!state) {
+                const pollState = await this.getState(this.nodeConfig.entity_id);
+                if (!pollState) {
                     this.warn(`could not find state with entity_id "${this.nodeConfig.entity_id}"`);
                     this.status({fill:"red",shape:"ring",text:`no state found for ${this.nodeConfig.entity_id}`});
                     return;
                 }
 
-                const dateChanged = this.calculateTimeSinceChanged(state);
+                const dateChanged = this.calculateTimeSinceChanged(pollState);
                 if (dateChanged) {
-                    const timeSinceChanged = ta.ago(dateChanged);
-                    const timeSinceChangedMs = Date.now() - dateChanged.getTime();
+                    pollState.timeSinceChanged = ta.ago(dateChanged);
+                    pollState.timeSinceChangedMs = Date.now() - dateChanged.getTime();
                     this.send({
                         topic:   this.nodeConfig.entity_id,
-                        payload: { timeSinceChanged, timeSinceChangedMs, dateChanged, data: state }
+                        payload: pollState.state,
+                        data: pollState
                     });
 	    	    var prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
-		    this.status({fill:"green",shape:"dot",text:`${state} at: ${prettyDate}`});
+		    this.status({fill:"green",shape:"dot",text:`${pollState.state} at: ${prettyDate}`});
                 } else {
                     this.warn(`could not calculate time since changed for entity_id "${this.nodeConfig.entity_id}"`);
                 }
@@ -81,8 +82,6 @@ module.exports = function(RED) {
                 state = await this.nodeConfig.server.homeAssistant.getStates(this.nodeConfig.entity_id, true);
             }
             return state;
-	    var prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
-            this.status({fill:"green",shape:"dot",text:`${state} at: ${prettyDate}`});
         }
     }
     RED.nodes.registerType('poll-state', TimeSinceStateNode);

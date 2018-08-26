@@ -56,8 +56,10 @@
                     <option value="is">Is</option>
                     <option value="is_not">Is Not</option>
 
-                    <option value="greater_than">Greater Than</option>
-                    <option value="less_than">Less Than</option>
+                    <option value=">">&gt;</option>
+                    <option value=">=">&gt;=</option>
+                    <option value="<">&lt;</option>
+                    <option value="<=">&lt;=</option>
 
                     <option value="includes">Includes</option>
                     <option value="does_not_include">Does Not Include</option>
@@ -112,8 +114,10 @@
                     <option value="is">     Is      </option>
                     <option value="is_not"> Is Not  </option>
 
-                    <option value="greater_than">   Greater Than    </option>
-                    <option value="less_than">      Less Than       </option>
+                    <option value=">">&gt;</option>
+                    <option value=">=">&gt;=</option>
+                    <option value="<">&lt;</option>
+                    <option value="<=">&lt;=</option>
 
                     <option value="includes">Includes</option>
                     <option value="does_not_include">Does Not Include</option>
@@ -166,9 +170,9 @@
             const co = this.customoutputs[index - NUM_DEFAULT_OUTPUTS];
             let label;
             if (co.comparatorPropertyType === 'always') {
-                label += 'always sent'
+                label = 'always sent'
             } else {
-                label += `sent when ${co.comparatorPropertyType.replace('_', ' ')} ${co.comparatorType.replace('_', '')} ${co.comparatorValue}`;
+                label = `${co.comparatorPropertyType.replace('_', ' ')} ${co.comparatorType.replace('_', '')} ${co.comparatorValue}`;
             }
             return label;
         },

@@ -59,11 +59,18 @@ module.exports = function(RED) {
 
             try {
                 const constraintComparatorResults = await this.getConstraintComparatorResults(this.nodeConfig.constraints, eventMessage);
-                let outputs                       = this.getDefaultMessageOutputs(constraintComparatorResults, eventMessage);
+                const state = eventMessage.event.new_state.state;
+                const prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
+                let outputs = this.getDefaultMessageOutputs(constraintComparatorResults, eventMessage);
+                let status = { fill: "green", shape: "dot", text: `${state} at: ${prettyDate}` };
 
                 // If a constraint comparator failed we're done, also if no custom outputs to look at
                 if (constraintComparatorResults.failed.length || !this.nodeConfig.customoutputs.length) {
+                    if (constraintComparatorResults.failed.length) {
+                        status = { fill: "red", shape: "ring", text: `${state} at: ${prettyDate}` };
+                    }
                     this.debugToClient('done processing sending messages: ', outputs);
+                    this.status(status);
                     return this.send(outputs);
                 }
 
@@ -72,6 +79,7 @@ module.exports = function(RED) {
 
                 outputs = outputs.concat(customOutputMessages);
                 this.debugToClient('done processing sending messages: ', outputs);
+                this.status(status);
                 this.send(outputs);
             } catch (e) {
                 this.error(e);
@@ -181,10 +189,16 @@ module.exports = function(RED) {
                 case 'does_not_include':
                     const isIncluded = cValue.includes(actualValue);
                     return (comparatorType === 'includes') ? isIncluded : !isIncluded;
-                case 'greater_than':
+                case 'greater_than': // here for backwards compatibility
+                case '>':
                     return actualValue > cValue;
-                case 'less_than':
+                case '>=':
+                    return actualValue >= cValue;
+                case 'less_than': // here for backwards compatibility
+                case '<':
                     return actualValue < cValue;
+                case '<=':
+                    return actualValue <= cValue;
             }
         }
 
