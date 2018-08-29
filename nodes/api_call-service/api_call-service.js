@@ -51,13 +51,13 @@ module.exports = function(RED) {
             this.debug(`Calling Service: ${apiDomain}:${apiService} -- ${JSON.stringify(apiData || {})}`);
             var prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
             this.status({fill:"green",shape:"dot",text:`${apiDomain}.${apiService} called at: ${prettyDate}`});
-            this.send({
-                payload: {
-                    domain:  apiDomain,
-                    service: apiService,
-                    data:    apiData || null
-                }
-            });
+
+            message.payload =  {
+                domain:  apiDomain,
+                service: apiService,
+                data:    apiData || null
+            };
+            this.send(message);
 
             return this.nodeConfig.server.api.callService(apiDomain, apiService, apiData)
                 .catch(err => {
