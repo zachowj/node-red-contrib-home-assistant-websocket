@@ -8,7 +8,7 @@ services:
       context: ./node-red
     command: npm run dev:watch
     volumes:
-      - '..:/data/node_modules/node-red-contrib-home-assistant'
+      - '..:/data/node_modules/node-red-contrib-home-assistant-websocket'
       - '../_docker-volumes/node-red/data/flows.json:/data/flows.json'
       - '../_docker-volumes/node-red/data/settings.js:/data/settings.js'
       - '../_docker-volumes/node-red/data/settings.js:/data/package.json'

@@ -41,7 +41,7 @@ If you never created a pull request before, welcome :tada: :smile: [Here is a gr
    # Navigate to the newly cloned directory
    cd <repo-name>
    # Assign the original repo to a remote called "upstream"
-   git remote add upstream https://github.com/spartan-ii-117/node-red-contrib-home-assistant
+   git remote add upstream https://github.com/zachowj/node-red-contrib-home-assistant-websocket
    ```
 
 2. If you cloned a while ago, get the latest changes from upstream:

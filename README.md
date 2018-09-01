@@ -12,18 +12,18 @@ Project is going through active development and as such will probably have a few
 
 This assumes you have [node-red](http://nodered.org/) already installed and working, if you need to install node-red see [here](http://nodered.org/docs/getting-started/installation)
 
-#### NOTE: node-red-contrib-home-assistant requires node.JS > 8.0  If you're running Node-Red in Docker you'll need to pull the -v8 image for this to work.
+#### NOTE: node-red-contrib-home-assistant-websocket requires node.JS > 8.0  If you're running Node-Red in Docker you'll need to pull the -v8 image for this to work.
 
 ```shell
 $ cd cd ~/.node-red
-$ npm install node-red-contrib-home-assistant
+$ npm install node-red-contrib-home-assistant-websocket
 # then restart node-red
 ```
 
 If you are running Node Red inside Hass.io addon/container you can use Hass.io API Proxy address `http://hassio/homeassistant` as Home Assistant server address (server node Base URL). This way you don't need any real network address.
 
 =======
-For flow examples checkout the [flows here](https://raw.githubusercontent.com/AYapejian/node-red-contrib-home-assistant/master/_docker/node-red/root-fs/data/flows.json)
+For flow examples checkout the [flows here](https://raw.githubusercontent.com/zachowj/node-red-contrib-home-assistant-websocket/master/_docker/node-red/root-fs/data/flows.json)
 
 ---
 ## Included Nodes
@@ -57,8 +57,8 @@ Allows rendering of templates on input
 ## Development
 An environment with Home Assistant/Node Red can be easily spun up using docker and docker-compose along with built in VSCode debug enabled.
 
-1. Clone this repository:              `git clone https://github.com/AYapejian/node-red-contrib-home-assistant.git`
-2. Install node dependencies as usual: `cd node-red-contrib-home-assistant && yarn`
+1. Clone this repository:              `git clone https://github.com/zachowj/node-red-contrib-home-assistant-websocket.git`
+2. Install node dependencies as usual: `cd node-red-contrib-home-assistant-websocket && yarn`
 3. Start the docker dev environment:   `yarn run dev`
 a. _Note: First run will take a bit to download the images ( home-assistants image is over 1gb (yikes!) after that launch is much quicker)_
 b. _Note: Also first run load of HomeAssistant web interface seems very slow, but after first time it's also much faster_

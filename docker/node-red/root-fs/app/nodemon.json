@@ -3,12 +3,12 @@
     "delay": "300",
     "verbose": false,
     "watch":   [
-        "/data/node_modules/node-red-contrib-home-assistant"
+        "/data/node_modules/node-red-contrib-home-assistant-websocket"
     ],
     "ignore": [
-        "/data/node_modules/node-red-contrib-home-assistant/node_modules",
-        "/data/node_modules/node-red-contrib-home-assistant/_docker",
-        "/data/node_modules/node-red-contrib-home-assistant/_docker-volumes"
+        "/data/node_modules/node-red-contrib-home-assistant-websocket/node_modules",
+        "/data/node_modules/node-red-contrib-home-assistant-websocket/_docker",
+        "/data/node_modules/node-red-contrib-home-assistant-websocket/_docker-volumes"
     ],
     "env": {
         "NODE_ENV": "development"
