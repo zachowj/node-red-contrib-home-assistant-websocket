@@ -3,8 +3,9 @@
         category: 'config',
         defaults: {
             name: { value: 'Home Assistant', required: false },
-            url:  { value: '', required: true  },
-            pass: { value: '', required: false }
+            url: { value: '', required: true  },
+            pass: { value: '', required: false },
+            legacy: { value: false }
         },
         icon: "home.png",
         label: function() { return this.name || this.url }
@@ -12,7 +13,6 @@
 </script>
 
 <script type="text/x-red" data-template-name="server">
-
     <div class="form-row">
         <label for="node-config-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-config-input-name" />
@@ -24,14 +24,18 @@
     </div>
 
     <div class="form-row">
-        <label for="node-config-input-pass"><i class="fa fa-user-secret"></i> API Pass</label>
-        <input type="text" id="node-config-input-pass" placeholder="your-super-secret-password" />
+        <label for="node-config-input-pass"><i class="fa fa-user-secret"></i> Access Token</label>
+        <input type="text" id="node-config-input-pass" placeholder="access token" />
+    </div>
+
+    <div class="form-row">
+        <input type="checkbox" id="node-config-input-legacy" style="width: auto;" />
+        <label for="node-config-input-legacy" style="width: auto;"> Use Legacy API Password</label>
     </div>
 </script>
 
 <script type="text/x-red" data-help-name="server">
-   <p>Home Assistant connection configuration</p>
-
+    <p>Home Assistant connection configuration</p>
 
     <h3>Config</h3>
     <dl class="message-properties">
@@ -59,12 +63,13 @@
     <h4>Context Example</h4>
     <p>Say we have a config node with name <code>My Awesome server</code>, with an entity setup in homeassistant as <code>switch.my_switch</code>.  This state would be available within function nodes and you could fetch using something like the below code</p>
     <p>NOTE: It's likely one of the state or trigger nodes will better serve most use cases, this is simply provided as an option for more advanced cases, or to implement functionality I haven't thought of/gotten around to</p>
-<pre>
-const haCtx       = global.get('homeassistant');
-const configCtx   = haCtx.myAwesomeServer;
-const entityState = configCtx.states['switch.my_switch'];
-return (entityState.state === 'on') ? true : false;
-</pre>
+
+    <pre>
+    const haCtx       = global.get('homeassistant');
+    const configCtx   = haCtx.myAwesomeServer;
+    const entityState = configCtx.states['switch.my_switch'];
+    return (entityState.state === 'on') ? true : false;
+    </pre>
 
     <h3>Connection Issues</h3>
     <p>Communication with homeassistant is accomplished via a combination of ServerEvents and the REST API, if you are having troubles communicating with home assistant make sure you can access the API outside of node-red, but from the same server node-red is running on, using a REST client, curl, or any number of other methods to validate the connection<p>

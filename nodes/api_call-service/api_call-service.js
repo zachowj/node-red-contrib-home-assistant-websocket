@@ -3,14 +3,14 @@ const BaseNode = require('../../lib/base-node');
 
 module.exports = function(RED) {
     const nodeOptions = {
-        debug:  true,
+        debug: true,
         config: {
             service_domain: {},
-            service:        {},
-            data:           {},
-            mergecontext:   {},
-            name:           {},
-            server:         { isNode: true }
+            service: {},
+            data: {},
+            mergecontext: {},
+            name: {},
+            server: { isNode: true }
         }
     };
 
@@ -49,21 +49,20 @@ module.exports = function(RED) {
             if (!apiService) throw new Error('call service node is missing api "service" property, not found in config or payload');
 
             this.debug(`Calling Service: ${apiDomain}:${apiService} -- ${JSON.stringify(apiData || {})}`);
-            var prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
-            this.status({fill:"green",shape:"dot",text:`${apiDomain}.${apiService} called at: ${prettyDate}`});
+            this.status({fill: 'green', shape: 'dot', text: `${apiDomain}.${apiService} called at: ${this.getPrettyDate()}`});
 
             message.payload =  {
-                domain:  apiDomain,
+                domain: apiDomain,
                 service: apiService,
-                data:    apiData || null
+                data: apiData || null
             };
             this.send(message);
 
-            return this.nodeConfig.server.api.callService(apiDomain, apiService, apiData)
+            return this.nodeConfig.server.websocket.callService(apiDomain, apiService, apiData)
                 .catch(err => {
                     this.warn('Error calling service, home assistant api error', err);
                     this.error('Error calling service, home assistant api error', message);
-                    this.status({fill:"red",shape:"ring",text:`API Error at: ${prettyDate}`});
+                    this.status({fill: 'red', shape: 'ring', text: `API Error at: ${this.getPrettyDate()}`});
                 });
         }
 

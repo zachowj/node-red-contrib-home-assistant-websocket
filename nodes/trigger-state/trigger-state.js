@@ -4,11 +4,11 @@ const EventsNode = require('../../lib/events-node');
 
 module.exports = function(RED) {
     const nodeOptions = {
-        debug:  true,
+        debug: true,
         config: {
-            entityid:      {},
-            isenabled:     {},
-            constraints:   {},
+            entityid: {},
+            isenabled: {},
+            constraints: {},
             customoutputs: {}
         }
     };
@@ -43,8 +43,8 @@ module.exports = function(RED) {
             if (entity_id && new_state && old_state) {
                 const evt = {
                     event_type: 'state_changed',
-                    entity_id:  entity_id,
-                    event:      message.payload
+                    entity_id: entity_id,
+                    event: message.payload
                 };
 
                 this.onEntityStateChanged(evt);
@@ -60,14 +60,13 @@ module.exports = function(RED) {
             try {
                 const constraintComparatorResults = await this.getConstraintComparatorResults(this.nodeConfig.constraints, eventMessage);
                 const state = eventMessage.event.new_state.state;
-                const prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
                 let outputs = this.getDefaultMessageOutputs(constraintComparatorResults, eventMessage);
-                let status = { fill: "green", shape: "dot", text: `${state} at: ${prettyDate}` };
+                let status = { fill: 'green', shape: 'dot', text: `${state} at: ${this.getPrettyDate()}` };
 
                 // If a constraint comparator failed we're done, also if no custom outputs to look at
                 if (constraintComparatorResults.failed.length || !this.nodeConfig.customoutputs.length) {
                     if (constraintComparatorResults.failed.length) {
-                        status = { fill: "red", shape: "ring", text: `${state} at: ${prettyDate}` };
+                        status = { fill: 'red', shape: 'ring', text: `${state} at: ${this.getPrettyDate()}` };
                     }
                     this.debugToClient('done processing sending messages: ', outputs);
                     this.status(status);

@@ -6,6 +6,9 @@ homeassistant:
   temperature_unit: !env_var HA_HOME_ASSISTANT_TEMPERATURE_UNIT
   time_zone:        !env_var HA_HOME_ASSISTANT_TIME_ZONE
   unit_system:      !env_var HA_HOME_ASSISTANT_UNIT_SYSTEM
+  auth_providers:
+    - type: homeassistant
+    - type: legacy_api_password
 
 http:
   api_password: !env_var HA_HTTP_API_PASSWORD

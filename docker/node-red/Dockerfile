@@ -11,7 +11,8 @@ RUN npm install
 
 # Install Useful Home Automation Nodes
 RUN npm install \
-    node-red-contrib-bigstatus
+    node-red-contrib-bigstatus \
+    home-assistant-js-websocket
 
 # User configuration directory volume
 EXPOSE 1880

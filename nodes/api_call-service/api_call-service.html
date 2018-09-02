@@ -60,7 +60,7 @@
                return $.get('/homeassistant/services')
                     .then(services => {
                         node.allServices = JSON.parse(services);
-                        node.allDomains  = node.allServices.map(s => s.domain);
+                        node.allDomains  = Object.keys(node.allServices);
 
                         $domainField.autocomplete({
                             source: node.allDomains,
@@ -139,14 +139,13 @@
                 }
             }
 
-
             function updateDomainSelection({ event, domainText }) {
                 let selectedDomainText = domainText;
                 if ( !selectedDomainText && event) { selectedDomainText = $(event.target).val(); }
 
                 const knownDomain = (node.allDomains.indexOf(selectedDomainText) > -1);
                 node.selectedDomain = knownDomain
-                    ? node.allServices.find(s => (s.domain === selectedDomainText))
+                    ? { services: node.allServices[selectedDomainText] }
                     : node.selectedDomain = { services: {} };
 
                 $serviceField.autocomplete({

@@ -3,7 +3,6 @@
   "description": "node-red nodes to visually construct home automation with home assistant",
   "version": "0.0.1",
   "homepage": "https://github.com/zachowj/node-red-contrib-home-assistant-websocket",
-
   "bugs": {
     "url": "https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues"
   },
@@ -59,6 +58,7 @@
     "debounce": "^1.1.0",
     "debug": "^3.1.0",
     "dotenv": "^4.0.0",
+    "home-assistant-js-websocket": "^3.1.4",
     "is-string": "^1.0.4",
     "joi": "^13.1.1",
     "lodash.merge": "^4.6.0",
@@ -70,18 +70,20 @@
     "serialize-javascript": "^1.4.0",
     "time-ago": "^0.2.1",
     "timeago.js": "^3.0.2",
-    "tty-table": "^2.5.5"
+    "tty-table": "^2.5.5",
+    "ws": "^6.0.0"
   },
   "devDependencies": {
-    "eslint": "^4.8.0",
-    "eslint-config-standard": "^11.0.0-beta.0",
-    "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-node": "^6.0.0",
-    "eslint-plugin-promise": "^3.6.0",
-    "eslint-plugin-standard": "^3.0.1",
+    "eslint": "^5.6.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
     "mocha": "^4.0.1",
     "nock": "^9.1.4",
     "nodemon": "^1.14.12",
+    "prettier": "^1.14.2",
     "should": "^13.2.1",
     "simple-mock": "^0.8.0",
     "sinon": "^4.2.2",

@@ -14,7 +14,7 @@ module.exports = {
         'indent': [1, 4, {
             VariableDeclarator: { var: 1, let: 1, const: 1 }
         }],
-        'key-spacing': [1, { 'align': 'value' } ],
+        // 'key-spacing': [1, { 'align': 'value' } ],
         'no-multi-spaces': [ 0, {
             exceptions: { Property: true, VariableDeclarator: true, ImportDeclaration: true }
         }],

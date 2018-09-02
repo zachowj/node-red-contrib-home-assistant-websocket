@@ -5,8 +5,8 @@ const EventsNode = require('../../lib/events-node');
 module.exports = function(RED) {
     const nodeOptions = {
         config: {
-            entity_id:       {},
-            updateinterval:  {},
+            entity_id: {},
+            updateinterval: {},
             outputinitially: {},
             outputonchanged: {}
         }
@@ -50,7 +50,7 @@ module.exports = function(RED) {
                 const pollState = await this.getState(this.nodeConfig.entity_id);
                 if (!pollState) {
                     this.warn(`could not find state with entity_id "${this.nodeConfig.entity_id}"`);
-                    this.status({fill:"red",shape:"ring",text:`no state found for ${this.nodeConfig.entity_id}`});
+                    this.status({fill: 'red', shape: 'ring', text: `no state found for ${this.nodeConfig.entity_id}`});
                     return;
                 }
 
@@ -59,12 +59,12 @@ module.exports = function(RED) {
                     pollState.timeSinceChanged = ta.ago(dateChanged);
                     pollState.timeSinceChangedMs = Date.now() - dateChanged.getTime();
                     this.send({
-                        topic:   this.nodeConfig.entity_id,
+                        topic: this.nodeConfig.entity_id,
                         payload: pollState.state,
                         data: pollState
                     });
-	    	    var prettyDate = new Date().toLocaleDateString("en-US",{month: 'short', day: 'numeric', hour12: false, hour: 'numeric', minute: 'numeric'});
-		    this.status({fill:"green",shape:"dot",text:`${pollState.state} at: ${prettyDate}`});
+
+                    this.status({fill: 'green', shape: 'dot', text: `${pollState.state} at: ${this.getPrettyDate()}`});
                 } else {
                     this.warn(`could not calculate time since changed for entity_id "${this.nodeConfig.entity_id}"`);
                 }

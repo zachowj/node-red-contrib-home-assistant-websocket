@@ -3,20 +3,20 @@ const BaseNode = require('../../lib/base-node');
 
 module.exports = function(RED) {
     const nodeOptions = {
-        debug:  true,
+        debug: true,
         config: {
-            name:         {},
-            server:       { isNode: true },
-            startdate:    {},
-            enddate:      {},
-            entityid:     {},
+            name: {},
+            server: { isNode: true },
+            startdate: {},
+            enddate: {},
+            entityid: {},
             entityidtype: {}
         },
         input: {
             startdate: {
                 messageProp: 'startdate',
-                configProp:   'startdate',
-                default:     () => {
+                configProp: 'startdate',
+                default: () => {
                     const yesterday = new Date();
                     yesterday.setDate(yesterday.getDate() - 1);
                     return yesterday.toISOString();
@@ -25,16 +25,16 @@ module.exports = function(RED) {
             },
             enddate: {
                 messageProp: 'enddate',
-                configProp:   'enddate',
+                configProp: 'enddate',
                 validation: { haltOnFail: true, schema: Joi.date().optional().allow('') }
             },
             entityid: {
                 messageProp: 'entityid',
-                configProp:   'entityid'
+                configProp: 'entityid'
             },
             entityidtype: {
                 messageProp: 'entityidtype',
-                configProp:   'entityidtype'
+                configProp: 'entityidtype'
             }
         }
     };
@@ -61,12 +61,12 @@ module.exports = function(RED) {
                     message.entityid  = entityid || null;
                     message.payload   = res;
                     this.send(message);
-		    this.status({fill:"green",shape:"dot",text:"Success"});
+                    this.status({ fill: 'green', shape: 'dot', text: 'Success'});
                 })
                 .catch(err => {
                     this.warn('Error calling service, home assistant api error', err);
                     this.error('Error calling service, home assistant api error', message);
-		    this.status({fill:"red",shape:"ring",text:"Error"});
+                    this.status({fill: 'red', shape: 'ring', text: 'Error'});
                 });
         }
     }

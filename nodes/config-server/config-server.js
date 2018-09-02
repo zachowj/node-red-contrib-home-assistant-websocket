@@ -1,12 +1,12 @@
 const BaseNode = require('../../lib/base-node');
 
 module.exports = function(RED) {
-    const HomeAssistant = require('node-home-assistant');
+    const HomeAssistant = require('../../lib/node-home-assistant');
 
     const httpHandlers = {
         getEntities: function (req, res, next) {
-            return this.homeAssistant.getStates()
-                .then(states => res.json(JSON.stringify(Object.keys(states))))
+            return this.homeAssistant.getEntities()
+                .then(states => res.json(JSON.stringify(states)))
                 .catch(e => this.error(e.message));
         },
         getStates: function (req, res, next) {
@@ -18,20 +18,16 @@ module.exports = function(RED) {
             return this.homeAssistant.getServices()
                 .then(services => res.json(JSON.stringify(services)))
                 .catch(e => this.error(e.message));
-        },
-        getEvents: function (req, res, next) {
-            return this.homeAssistant.getEvents()
-                .then(events => res.json(JSON.stringify(events)))
-                .catch(e => this.error(e.message));
         }
     };
 
     const nodeOptions = {
-        debug:  true,
+        debug: true,
         config: {
             name: {},
-            url:  {},
-            pass: {}
+            url: {},
+            pass: {},
+            legacy: {}
         }
     };
 
@@ -42,52 +38,30 @@ module.exports = function(RED) {
             this.RED.httpAdmin.get('/homeassistant/entities', httpHandlers.getEntities.bind(this));
             this.RED.httpAdmin.get('/homeassistant/states',   httpHandlers.getStates.bind(this));
             this.RED.httpAdmin.get('/homeassistant/services', httpHandlers.getServices.bind(this));
-            this.RED.httpAdmin.get('/homeassistant/events',   httpHandlers.getEvents.bind(this));
 
             const HTTP_STATIC_OPTS = { root: require('path').join(__dirname, '..', '/_static'), dotfiles: 'deny' };
             this.RED.httpAdmin.get('/homeassistant/static/*', function(req, res) { res.sendFile(req.params[0], HTTP_STATIC_OPTS) });
 
-            this.setOnContext('states',   []);
+            this.setOnContext('states', []);
             this.setOnContext('services', []);
-            this.setOnContext('events',   []);
             this.setOnContext('isConnected', false);
 
             if (this.nodeConfig.url && !this.homeAssistant) {
-                this.homeAssistant = new HomeAssistant({ baseUrl: this.nodeConfig.url, apiPass: this.nodeConfig.pass }, { startListening: false });
-                this.api    = this.homeAssistant.api;
-                this.events = this.homeAssistant.events;
+                this.homeAssistant = new HomeAssistant({ baseUrl: this.nodeConfig.url, apiPass: this.nodeConfig.pass, legacy: this.nodeConfig.legacy });
+                this.api = this.homeAssistant.api;
+                this.websocket = this.homeAssistant.websocket;
 
-                this.events.addListener('ha_events:close', this.onHaEventsClose.bind(this));
-                this.events.addListener('ha_events:open',  this.onHaEventsOpen.bind(this));
-                this.events.addListener('ha_events:error', this.onHaEventsError.bind(this));
-                this.events.addListener('ha_events:state_changed', this.onHaStateChanged.bind(this));
+                this.homeAssistant.startListening().catch(err => this.node.error(err));
 
-                this.homeAssistant.startListening()
-                    .catch(() => this.startListening());
+                this.websocket.addListener('ha_events:close', this.onHaEventsClose.bind(this));
+                this.websocket.addListener('ha_events:open', this.onHaEventsOpen.bind(this));
+                this.websocket.addListener('ha_events:error', this.onHaEventsError.bind(this));
+                this.websocket.addListener('ha_events:state_changed', this.onHaStateChanged.bind(this));
             }
         }
 
         get nameAsCamelcase() {
             return this.utils.toCamelCase(this.nodeConfig.name);
-        }
-
-        // This simply tries to connected every 2 seconds, after the initial connection is successful
-        // reconnection attempts are handled by node-home-assistant.  This could use some love obviously
-        startListening() {
-            if (this.connectionAttempts) {
-                clearInterval(this.connectionAttempts);
-                this.connectionAttempts = null;
-            }
-
-            this.connectionAttempts = setInterval(() => {
-                this.homeAssistant.startListening()
-                    .then(() => {
-                        this.debug('Connected to home assistant');
-                        clearInterval(this.connectionAttempts);
-                        this.connectionAttempts = null;
-                    })
-                    .catch(err => this.error(`Home assistant connection failed with error: ${err.message}`));
-            }, 2000);
         }
 
         setOnContext(key, value) {
@@ -110,9 +84,6 @@ module.exports = function(RED) {
 
                 let services = await this.homeAssistant.getServices(true);
                 this.setOnContext('services', services);
-
-                let events   = await this.homeAssistant.getEvents(true);
-                this.setOnContext('events', events);
 
                 this.setOnContext('isConnected', true);
 
