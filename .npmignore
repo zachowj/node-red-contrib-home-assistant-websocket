@@ -1,0 +1,9 @@
+__tests__/
+.vscode
+.eslintrc.js
+.github
+docker
+.dockerignore
+package-lock.json
+yarn.lock
+TODO
