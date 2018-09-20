@@ -1,6 +1,4 @@
-NOTE: I did not write this, I forked from [@AYapejian](https://github.com/AYapejian/node-red-contrib-home-assistant) due to a lack of responsiveness to issues and pull requests.
-
-# Node Red Contrib Home Assistant
+# Node Red Contrib Home Assistant Websocket
 
 Various nodes to assist in setting up automation using [node-red](https://nodered.org/) communicating with [Home Assistant](https://home-assistant.io/).
 
@@ -23,7 +21,7 @@ $ npm install node-red-contrib-home-assistant-websocket
 If you are running Node Red inside Hass.io addon/container you can use Hass.io API Proxy address `http://hassio/homeassistant` as Home Assistant server address (server node Base URL). This way you don't need any real network address.
 
 =======
-For flow examples checkout the [flows here](https://raw.githubusercontent.com/zachowj/node-red-contrib-home-assistant-websocket/master/_docker/node-red/root-fs/data/flows.json)
+For flow examples checkout the [flows here](https://raw.githubusercontent.com/zachowj/node-red-contrib-home-assistant-websocket/master/docker/node-red/root-fs/data/flows.json)
 
 ---
 ## Included Nodes
@@ -53,6 +51,16 @@ Fetches HomeAssistant history on input
 ### Get Template
 Allows rendering of templates on input
 
----
+## Development
+Check out the wiki page for setting up an environment with Home Assistant/Node Red.
 
-[Development](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/wiki/Development)
+[Development Wiki](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/wiki/Development)
+
+## Authors
+* **[@AYapejian](https://github.com/AYapejian)** - [node-red-contrib-home-assistant](https://github.com/AYapejian/node-red-contrib-home-assistant)
+* **[@AYapejian](https://github.com/AYapejian)** - [node-home-assistant](https://github.com/AYapejian/node-home-assistant)
+
+## Acknowledgments
+
+* [home-assistant-js-websocket](https://github.com/home-assistant/home-assistant-js-websocket)
+* [@Spartan-II-117](https://github.com/Spartan-II-117)
