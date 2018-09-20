@@ -1,16 +1,17 @@
 <script type="text/javascript">
     RED.nodes.registerType('server-events', {
         category: 'home_assistant',
-        color:    '#038FC7',
+        color: '#038FC7',
         defaults: {
-            name:   { value: '' },
-            server: { value: '', type: 'server', required: true }
+            name: { value: '' },
+            server: { value: '', type: 'server', required: true },
+            event_type: { value: '', required: false },
         },
         inputs: 0,
         outputs: 1,
         icon: "arrow-right-bold.png",
         paletteLabel: 'events: all',
-        label: function() { return this.name || `events_all: ${this.eventtypefilter}` },
+        label: function() { return this.name || `events: ${this.event_type || 'all'}` },
         oneditprepare: function() {
             const NODE = this;
             const $server = $('#node-input-server');
@@ -42,17 +43,32 @@
         <label for="node-input-server"><i class="fa fa-dot-circle-o"></i> Server</label>
         <input type="text" id="node-input-server" />
     </div>
+
+    <div class="form-row">
+        <label for="node-input-event_type"><i class="fa fa-tag"></i> Event Type</label>
+        <input type="text" id="node-input-event_type" placeholder="leave empty for all events" />
+    </div>
 </script>
 
 <script type="text/x-red" data-help-name="server-events">
-    <p>Outputs events received from the home assistant server.</p>
-
+    <h3>Outputs</h3>
     <p>The outputted message object contains the following data, underscored values are straight from home assistant</p>
-    <table style="width: 100%;" border="1" cellpadding="10">
-        <tbody>
-            <tr> <td>topic</td>      <td>event_type</td>     </tr>
-            <tr> <td>payload</td>    <td>original event</td> </tr>
-            <tr> <td>event_type</td> <td>event_type</td>     </tr>
-        </tbody>
-    </table>
+    <dl class="message-properties">
+        <dt>topic <span class="property-type">string</span></dt>
+        <dd>event_type</dd>
+        <dt>event_type <span class="property-type">string</span></dt>
+        <dd>event_type</dd>
+        <dt>payload <span class="property-type">object</span></dt>
+        <dd>original event object</dd>
+    </dl>
+
+    <h3>Configuration</h3>
+
+    <dl class="message-properties">
+        <dt>Name <span class="property-type">string</span></dt>
+        <dd>the name of the node</dd>
+        <dt>Event Type <span class="property-type">string</span></dt>
+        <dd>filter by event type or leave blank for all events</dd>
+    </dl>
+
 </script>
