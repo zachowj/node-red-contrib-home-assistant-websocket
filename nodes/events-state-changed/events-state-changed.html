@@ -3,11 +3,11 @@
         category: 'home_assistant',
         color:    '#038FC7',
         defaults: {
-            name:              { value: '' },
-            server:            { value: '', type: 'server', required: true },
-            entityidfilter:     { value: '', required: true },
+            name: { value: '' },
+            server: { value: '', type: 'server', required: true },
+            entityidfilter: { value: '', required: true },
             entityidfiltertype: { value: 'substring' },
-            haltifstate:       { value: '' }
+            haltifstate: { value: '' }
         },
         inputs: 0,
         outputs: 1,
@@ -15,9 +15,9 @@
         paletteLabel: 'events: state',
         label: function() { return this.name || `state_changed: ${this.entityidfilter || 'all entities'}` },
         oneditprepare: function () {
-            const $entityidfilter     = $('#node-input-entityidfilter');
+            const $entityidfilter = $('#node-input-entityidfilter');
             const $entityidfiltertype = $('#node-input-entityidfiltertype');
-            const $server             = $('#node-input-server');
+            const $server = $('#node-input-server');
 
             $entityidfilter.val(this.entityidfilter);
             this.entityidfiltertype = this.entityidfiltertype || 'substring';
@@ -43,7 +43,7 @@
 
                 // A home assistant server is selected in the node config
                 if (node.server || (selectedServer && selectedServer !== '_ADD_')) {
-                    $.get('/homeassistant/entities').done((entities) => {
+                    $.get(`${RED.settings.serverStateChangedAdminPrefix}homeassistant/entities`).done((entities) => {
                         node.availableEntities = JSON.parse(entities);
                         $entityidfilter.autocomplete({ source: node.availableEntities, minLength: 0 });
                     })
@@ -54,7 +54,7 @@
             $server.change(() => setupAutocomplete(this));
         },
         oneditsave: function() {
-            this.entityidfilter         = $("#node-input-entityidfilter").val();
+            this.entityidfilter = $("#node-input-entityidfilter").val();
         }
     });
 </script>

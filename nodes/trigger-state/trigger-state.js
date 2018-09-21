@@ -239,5 +239,12 @@ module.exports = function(RED) {
         }
     }
 
-    RED.nodes.registerType('trigger-state', TriggerState);
+    RED.nodes.registerType('trigger-state', TriggerState, {
+        settings: {
+            triggerState: {
+                value: RED.settings.httpAdminRoot,
+                exportable: true
+            }
+        }
+    });
 };

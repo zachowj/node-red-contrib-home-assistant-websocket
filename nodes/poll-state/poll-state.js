@@ -84,5 +84,12 @@ module.exports = function(RED) {
             return state;
         }
     }
-    RED.nodes.registerType('poll-state', TimeSinceStateNode);
+    RED.nodes.registerType('poll-state', TimeSinceStateNode, {
+        settings: {
+            pollStateAdminPrefix: {
+                value: RED.settings.httpAdminRoot,
+                exportable: true
+            }
+        }
+    });
 };
