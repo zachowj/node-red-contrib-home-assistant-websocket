@@ -87,6 +87,7 @@ module.exports = function(RED) {
 
                 this.setOnContext('isConnected', true);
 
+                this.log(`New connection ${this.nodeConfig.url}`);
                 this.debug('config server event listener connected');
             } catch (e) {
                 this.error(e);
