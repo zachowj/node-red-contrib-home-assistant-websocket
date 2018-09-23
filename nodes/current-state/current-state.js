@@ -67,7 +67,7 @@ module.exports = function(RED) {
 
     RED.nodes.registerType('api-current-state', CurrentStateNode, {
         settings: {
-            apiCurrentState: {
+            apiCurrentStateAdminPrefix: {
                 value: RED.settings.httpAdminRoot,
                 exportable: true
             }

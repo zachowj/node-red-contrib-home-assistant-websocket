@@ -42,7 +42,7 @@
             if (!isConfigValid) { $entityIdField.addClass('disabled'); }
             else { $entityIdField.removeClass('disabled'); }
 
-            $.get(`${RED.settings.apiCurrentState}homeassistant/entities`)
+            $.get(`${RED.settings.apiCurrentStateAdminPrefix}homeassistant/entities`)
                 .done((entities) => {
                     this.availableEntities = JSON.parse(entities);
 

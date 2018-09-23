@@ -241,7 +241,7 @@ module.exports = function(RED) {
 
     RED.nodes.registerType('trigger-state', TriggerState, {
         settings: {
-            triggerState: {
+            triggerStateAdminPrefix: {
                 value: RED.settings.httpAdminRoot,
                 exportable: true
             }

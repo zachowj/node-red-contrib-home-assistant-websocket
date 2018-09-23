@@ -57,7 +57,7 @@
             // Calls the custom api backend defined in the config-server.js node
             // TODO: Not sure how this works with node-red if auth is enabled
             function setServicesAndDomains(node) {
-               return $.get(`${RED.settings.pollStateAdminPrefix}homeassistant/services`)
+               return $.get(`${RED.settings.apiCallServiceAdminPrefix}homeassistant/services`)
                     .then(services => {
                         node.allServices = JSON.parse(services);
                         node.allDomains  = Object.keys(node.allServices);
