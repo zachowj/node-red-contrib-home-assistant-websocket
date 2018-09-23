@@ -1,4 +1,4 @@
-FROM homeassistant/home-assistant:0.77.3
+FROM homeassistant/home-assistant:0.78.3
 
 ENV HA_HOME_ASSISTANT_TIME_ZONE=America/New_York    \
     HA_HOME_ASSISTANT_LATITUDE=42.360082            \

@@ -1,4 +1,4 @@
-FROM node:8.9.4
+FROM node:8.12.0
 
 COPY root-fs /
 RUN chown -R node:node /data /app
@@ -11,8 +11,7 @@ RUN npm install
 
 # Install Useful Home Automation Nodes
 RUN npm install \
-    node-red-contrib-bigstatus \
-    home-assistant-js-websocket
+    node-red-contrib-bigstatus
 
 # User configuration directory volume
 EXPOSE 1880

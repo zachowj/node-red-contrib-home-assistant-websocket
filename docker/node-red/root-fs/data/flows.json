@@ -54,7 +54,8 @@
         "z": "",
         "name": "Home Assistant",
         "url": "http://home-assistant:8123",
-        "pass": "password"
+        "pass": "password",
+        "legacy": true
     },
     {
         "id": "f31326a2.18c1e8",
@@ -725,7 +726,7 @@
         "tosidebar": false,
         "console": false,
         "tostatus": true,
-        "complete": "payload.timeSinceChanged",
+        "complete": "data.timeSinceChanged",
         "x": 380,
         "y": 120,
         "wires": []
@@ -757,7 +758,7 @@
         "tosidebar": false,
         "console": false,
         "tostatus": true,
-        "complete": "payload.timeSinceChanged",
+        "complete": "data.timeSinceChanged",
         "x": 480,
         "y": 280,
         "wires": []
