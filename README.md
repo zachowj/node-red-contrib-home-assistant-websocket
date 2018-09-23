@@ -27,28 +27,28 @@ For flow examples checkout the [flows here](https://raw.githubusercontent.com/za
 ## Included Nodes
 The installed nodes have more detailed information in the node-red info pane shown when the node is selected. Below is a quick summary
 
-### All Events
+### All Events - `websocket`
 Listens for all types of events from home assistant
 
-### State Changed Event
+### State Changed Event - `websocket`
 Listens for only `state_changed` events from home assistant
 
-### State Trigger
+### State Trigger - `websocket`
 Much like the `State Changed Ndoe` however provides some advanced functionality around common automation use cases.
 
-### Poll State
+### Poll State - `websocket`
 Outputs the state of an entity at regular intervals, optionally also at startup and every time the entity changes if desired
 
-### Call Service
+### Call Service - `websocket`
 Sends a request to home assistant for any domain and service available ( `light/turn_on`, `input_select/select_option`, etc..)
 
-### Get Current State
+### Get Current State - `websocket`
 Fetches the last known state for any entity on input
 
-### Get History
+### Get History - `rest api`
 Fetches HomeAssistant history on input
 
-### Get Template
+### Get Template - `rest api`
 Allows rendering of templates on input
 
 ## Development

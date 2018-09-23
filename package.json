@@ -1,7 +1,7 @@
 {
   "name": "node-red-contrib-home-assistant-websocket",
-  "description": "node-red nodes to visually construct home automation with home assistant",
-  "version": "0.0.1",
+  "description": "Node-RED integration with Home Assistant through websocket and REST API",
+  "version": "0.0.2",
   "homepage": "https://github.com/zachowj/node-red-contrib-home-assistant-websocket",
   "bugs": {
     "url": "https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues"
@@ -30,7 +30,8 @@
     "node-red",
     "home-assistant",
     "home assistant",
-    "home automation"
+    "home automation",
+    "websocket"
   ],
   "node-red": {
     "nodes": {
@@ -54,7 +55,7 @@
     "lodash.merge": "^4.6.0",
     "lowdb": "^1.0.0",
     "merge": "^1.2.0",
-    "node-red": "node-red/node-red#0.18.2",
+    "node-red": "node-red/node-red#0.19.4",
     "selectn": "^1.1.2",
     "serialize-javascript": "^1.4.0",
     "time-ago": "^0.2.1",
