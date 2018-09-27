@@ -89,7 +89,7 @@ module.exports = function(RED) {
     RED.nodes.registerType('server-state-changed', ServerStateChangedNode, {
         settings: {
             serverStateChangedAdminPrefix: {
-                value: RED.settings.httpAdminRoot,
+                value: RED.settings.httpAdminRoot || '/',
                 exportable: true
             }
         }
