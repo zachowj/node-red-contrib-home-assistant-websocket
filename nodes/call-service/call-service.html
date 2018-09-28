@@ -39,6 +39,9 @@
             $domainField.val(node.service_domain);
             $serviceField.val(node.service);
             setServicesAndDomains(node);
+            $('#node-input-data').typedInput({
+                'types': ['json']
+            });
 
             const utils = {
                 setDefaultServerSelection: function () {
