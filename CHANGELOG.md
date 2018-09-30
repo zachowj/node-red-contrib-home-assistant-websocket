@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+
+* json editor to call-service node data input
+
+### Changed
+
+* host and access token/password credentials are now encrypted and stored in the node-red cred file. This also stops them from being exported in flows.
+
 ## [0.0.3] - 2018.9.26
 
 ### Fixed
@@ -17,7 +27,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-* Docker config you use Home Assistant 0.78.3 and node-red 8.12.0
+* Docker config to use Home Assistant 0.78.3 and node-red 8.12.0
 
 ### Fixed
 

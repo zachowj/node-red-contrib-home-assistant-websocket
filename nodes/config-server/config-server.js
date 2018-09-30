@@ -25,8 +25,6 @@ module.exports = function(RED) {
         debug: true,
         config: {
             name: {},
-            url: {},
-            pass: {},
             legacy: {}
         }
     };
@@ -34,6 +32,14 @@ module.exports = function(RED) {
     class ConfigServerNode extends BaseNode {
         constructor(nodeDefinition) {
             super(nodeDefinition, RED, nodeOptions);
+
+            // For backwards compatibility prior to v0.0.4 when loading url and pass from flow.json
+            if (nodeDefinition.url) {
+                this.credentials.host = this.credentials.host || nodeDefinition.url;
+                this.credentials.access_token = this.credentials.access_token || nodeDefinition.pass;
+
+                this.RED.nodes.addCredentials(this.id, this.credentials);
+            }
 
             this.RED.httpAdmin.get('/homeassistant/entities', httpHandlers.getEntities.bind(this));
             this.RED.httpAdmin.get('/homeassistant/states',   httpHandlers.getStates.bind(this));
@@ -46,8 +52,8 @@ module.exports = function(RED) {
             this.setOnContext('services', []);
             this.setOnContext('isConnected', false);
 
-            if (this.nodeConfig.url && !this.homeAssistant) {
-                this.homeAssistant = new HomeAssistant({ baseUrl: this.nodeConfig.url, apiPass: this.nodeConfig.pass, legacy: this.nodeConfig.legacy });
+            if (this.credentials.host && !this.homeAssistant) {
+                this.homeAssistant = new HomeAssistant({ baseUrl: this.credentials.host, apiPass: this.credentials.access_token, legacy: this.nodeConfig.legacy });
                 this.api = this.homeAssistant.api;
                 this.websocket = this.homeAssistant.websocket;
 
@@ -87,7 +93,7 @@ module.exports = function(RED) {
 
                 this.setOnContext('isConnected', true);
 
-                this.log(`New connection ${this.nodeConfig.url}`);
+                this.log(`New connection ${this.credentials.host}`);
                 this.debug('config server event listener connected');
             } catch (e) {
                 this.error(e);
@@ -113,5 +119,10 @@ module.exports = function(RED) {
         }
     }
 
-    RED.nodes.registerType('server', ConfigServerNode);
+    RED.nodes.registerType('server', ConfigServerNode, {
+        credentials: {
+            host: { type: 'text' },
+            access_token: { type: 'text' }
+        }
+    });
 };

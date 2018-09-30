@@ -3,9 +3,11 @@
         category: 'config',
         defaults: {
             name: { value: 'Home Assistant', required: false },
-            url: { value: '', required: true  },
-            pass: { value: '', required: false },
             legacy: { value: false }
+        },
+        credentials: {
+            host: { value: '', required: true  },
+            access_token: { value: '', required: false }
         },
         icon: "home.png",
         label: function() { return this.name || this.url }
@@ -19,13 +21,13 @@
     </div>
 
     <div class="form-row">
-        <label for="node-config-input-url"><i class="fa fa-link"></i> Base URL</label>
-        <input type="text" id="node-config-input-url" placeholder="http://localhost:8123" />
+        <label for="node-config-input-host"><i class="fa fa-link"></i> Base URL</label>
+        <input type="text" id="node-config-input-host" placeholder="http://localhost:8123" />
     </div>
 
     <div class="form-row">
-        <label for="node-config-input-pass"><i class="fa fa-user-secret"></i> Access Token</label>
-        <input type="text" id="node-config-input-pass" placeholder="access token" />
+        <label for="node-config-input-access_token"><i class="fa fa-user-secret"></i> Access Token</label>
+        <input type="text" id="node-config-input-access_token" placeholder="access token" />
     </div>
 
     <div class="form-row">
