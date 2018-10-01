@@ -1,0 +1,139 @@
+<script type="text/javascript">
+    RED.nodes.registerType('ha-fire-event', {
+        category: 'home_assistant',
+        color: '#52C0F2',
+        inputs: 1,
+        outputs: 1,
+        icon: 'feed.png',
+        align: 'right',
+        paletteLabel: 'fire event',
+        label: function () {
+            return this.name || `Event: ${this.event}`;
+        },
+        defaults: {
+            name: {
+                value: ''
+            },
+            server: {
+                value: '',
+                type: 'server',
+                required: true
+            },
+            event: {
+                value: ''
+            },
+            data: {
+                value: '',
+                validate: function (v) {
+                    // data isn't required since it could be either not needed or provided via payload
+                    if (!v) {
+                        return true;
+                    }
+                    try {
+                        JSON.parse(v);
+                        return  true;
+                    } catch (e) {
+                        return false;
+                    }
+                }
+            },
+            mergecontext: {
+                value: null
+            }
+        },
+        oneditprepare: function () {
+            const NODE = this;
+            const $server = $('#node-input-server');
+
+            const node = this;
+            $('#node-input-data').typedInput({
+                'types': ['json']
+            });
+
+            const utils = {
+                setDefaultServerSelection: function () {
+                    let defaultServer;
+                    RED.nodes.eachConfig(n => {
+                        if (n.type === 'server' && !defaultServer) defaultServer = n.id;
+                    });
+                    if (defaultServer) $server.val(defaultServer);
+                }
+            };
+
+            if (!NODE.server) {
+                utils.setDefaultServerSelection();
+            }
+        }
+    });
+</script>
+
+
+<script type="text/x-red" data-template-name="ha-fire-event">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+
+    <div class="form-row">
+        <label for="node-input-server"><i class="fa fa-dot-circle-o"></i> Server</label>
+        <input type="text" id="node-input-server" />
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-data"><i class="fa fa-cube"></i> Event</label>
+        <input type="text" id="node-input-event">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-data"><i class="fa fa-dot-circle-o"></i> Data</label>
+        <input type="text" id="node-input-data" placeholder="{ }"/>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-mergecontext"><i class="fa fa-dot-circle-o"></i> Merge Context</label>
+        <input type="text" id="node-input-mergecontext" placeholder="lightOptions"/>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="ha-fire-event">
+    <p>Call a Home Assistant service</p>
+
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt class="optional">
+            payload.event       <span class="property-type">string</span>
+        </dt>
+        <dd>Event to fire</dd>
+        <dt class="optional">
+            payload.data       <span class="property-type">object</span>
+        </dt>
+        <dd>Event data to send</dd>
+    </dl>
+
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+            <dt>
+                payload.event_type       <span class="property-type">string</span>
+            </dt>
+            <dd>Event Type that was fired</dd>
+            <dt class="optional">
+                payload.data       <span class="property-type">object</span>
+            </dt>
+            <dd>Event <code>data</code> sent, if one was used</dd>
+    </dl>
+
+    <h3>Details</h3>
+    <p>If the incoming message has a <code>payload</code> property with <code>event</code> set it will override any config values if set.</p>
+    <p>If the incoming message has a <code>payload.data</code> that is an object or parseable into an object these properties will be <strong>merged</strong> with any config values set.<p>
+    <p>If the node has a property value in it's config for <code>Merge Context</code> then the <code>flow</code> and <code>global</code> contexts will be checked for this property which should be an object that will also be merged into the data payload.<p>
+
+    <h3>Merge Resolution</h3>
+    <p>As seen above the <code>data</code> property has a lot going on in the way of data merging, in the end all of these are optional and the right most will win in the event that a property exists in multiple objects<p>
+    <p>Config Data, Global Data, Flow Data, Payload Data ( payload data property always wins if provided )<p>
+
+    <h3>References</h3>
+    <ul>
+        <li><a href="https://developers.home-assistant.io/docs/en/dev_101_events.html#firing-events">HA Events</a></li>
+    </ul>
+</script>

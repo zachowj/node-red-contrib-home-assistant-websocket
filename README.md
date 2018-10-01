@@ -12,9 +12,25 @@ This assumes you have [node-red](http://nodered.org/) already installed and work
 
 #### NOTE: node-red-contrib-home-assistant-websocket requires node.JS > 8.0  If you're running Node-Red in Docker you'll need to pull the -v8 image for this to work.
 
+Install via Node-RED Manage Palette
+
+```shell
+node-red-contrib-home-assistant-websocket
+```
+
+Install via npm
+
 ```shell
 $ cd cd ~/.node-red
 $ npm install node-red-contrib-home-assistant-websocket
+# then restart node-red
+```
+
+If you would like to try out the development branch
+
+```shell
+$ cd cd ~/.node-red
+$ npm install node-red-contrib-home-assistant-websocket#dev-master
 # then restart node-red
 ```
 
@@ -42,6 +58,9 @@ Outputs the state of an entity at regular intervals, optionally also at startup 
 ### Call Service - `websocket`
 Sends a request to home assistant for any domain and service available ( `light/turn_on`, `input_select/select_option`, etc..)
 
+### Fire Event - `rest api`
+Fire an event on the event bus
+
 ### Get Current State - `websocket`
 Fetches the last known state for any entity on input
 
@@ -59,6 +78,7 @@ Check out the wiki page for setting up an environment with Home Assistant/Node R
 ## Authors
 * **[@AYapejian](https://github.com/AYapejian)** - [node-red-contrib-home-assistant](https://github.com/AYapejian/node-red-contrib-home-assistant)
 * **[@AYapejian](https://github.com/AYapejian)** - [node-home-assistant](https://github.com/AYapejian/node-home-assistant)
+* **[@zachowj](https://github.com/AYapejian)** - [node-red-contrib-home-assistant-websocket](https://github.com/AYapejian/node-home-assistant-websocket)
 
 ## Acknowledgments
 

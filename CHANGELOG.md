@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 * json editor to call-service node data input
+* Fire Event node to send events
 
 ### Changed
 

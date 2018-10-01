@@ -43,7 +43,8 @@
       "api-call-service": "nodes/call-service/call-service.js",
       "api-current-state": "nodes/current-state/current-state.js",
       "api-get-history": "nodes/get-history/get-history.js",
-      "api-render-template": "nodes/render-template/render-template.js"
+      "api-render-template": "nodes/render-template/render-template.js",
+      "ha-fire-event": "nodes/fire-event/fire-event.js"
     }
   },
   "dependencies": {
