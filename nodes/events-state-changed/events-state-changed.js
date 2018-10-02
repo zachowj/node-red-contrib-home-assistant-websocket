@@ -4,25 +4,31 @@ const EventsNode = require('../../lib/events-node');
 module.exports = function(RED) {
     const nodeOptions = {
         config: {
-            entityidfilter: (nodeDef) => {
+            entityidfilter: nodeDef => {
                 if (!nodeDef.entityidfilter) return undefined;
 
-                if (nodeDef.entityidfiltertype === 'substring') return nodeDef.entityidfilter.split(',').map(f => f.trim());
-                if (nodeDef.entityidfiltertype === 'regex')     return new RegExp(nodeDef.entityidfilter);
+                if (nodeDef.entityidfiltertype === 'substring')
+                    return nodeDef.entityidfilter.split(',').map(f => f.trim());
+                if (nodeDef.entityidfiltertype === 'regex')
+                    return new RegExp(nodeDef.entityidfilter);
                 return nodeDef.entityidfilter;
             },
             entityidfiltertype: {},
-            haltIfState: (nodeDef) => nodeDef.haltifstate ? nodeDef.haltifstate.trim() : null
+            haltIfState: nodeDef =>
+                nodeDef.haltifstate ? nodeDef.haltifstate.trim() : null
         }
     };
 
     class ServerStateChangedNode extends EventsNode {
         constructor(nodeDefinition) {
             super(nodeDefinition, RED, nodeOptions);
-            this.addEventClientListener({ event: 'ha_events:state_changed', handler: this.onHaEventsStateChanged.bind(this) });
+            this.addEventClientListener({
+                event: 'ha_events:state_changed',
+                handler: this.onHaEventsStateChanged.bind(this)
+            });
         }
 
-        onHaEventsStateChanged (evt) {
+        onHaEventsStateChanged(evt) {
             try {
                 const { entity_id, event } = evt;
 
@@ -30,13 +36,21 @@ module.exports = function(RED) {
                     return null;
                 }
 
-                const shouldHaltIfState  = this.shouldHaltIfState(event);
+                const shouldHaltIfState = this.shouldHaltIfState(event);
                 const shouldIncludeEvent = this.shouldIncludeEvent(entity_id);
 
                 if (shouldIncludeEvent) {
                     if (shouldHaltIfState) {
-                        this.debug('flow halted due to "halt if state" setting');
-                        this.status({ fill: 'red', shape: 'ring', text: `${event.new_state.state} at: ${this.getPrettyDate()}` });
+                        this.debug(
+                            'flow halted due to "halt if state" setting'
+                        );
+                        this.status({
+                            fill: 'red',
+                            shape: 'ring',
+                            text: `${
+                                event.new_state.state
+                            } at: ${this.getPrettyDate()}`
+                        });
 
                         return null;
                     }
@@ -47,10 +61,26 @@ module.exports = function(RED) {
                         data: event
                     };
 
-                    this.status({ fill: 'green', shape: 'dot', text: `${event.new_state.state} at: ${this.getPrettyDate()}` });
-                    (event.old_state)
-                        ? this.debug(`Incoming state event: entity_id: ${event.entity_id}, new_state: ${event.new_state.state}, old_state: ${event.old_state.state}`)
-                        : this.debug(`Incoming state event: entity_id: ${event.entity_id}, new_state: ${event.new_state.state}`);
+                    this.status({
+                        fill: 'green',
+                        shape: 'dot',
+                        text: `${
+                            event.new_state.state
+                        } at: ${this.getPrettyDate()}`
+                    });
+                    event.old_state
+                        ? this.debug(
+                              `Incoming state event: entity_id: ${
+                                  event.entity_id
+                              }, new_state: ${
+                                  event.new_state.state
+                              }, old_state: ${event.old_state.state}`
+                          )
+                        : this.debug(
+                              `Incoming state event: entity_id: ${
+                                  event.entity_id
+                              }, new_state: ${event.new_state.state}`
+                          );
 
                     return this.send(msg);
                 }
@@ -60,23 +90,26 @@ module.exports = function(RED) {
             }
         }
 
-        shouldHaltIfState (haEvent, haltIfState) {
+        shouldHaltIfState(haEvent, haltIfState) {
             if (!this.nodeConfig.haltIfState) return false;
-            const shouldHalt = (this.nodeConfig.haltIfState === haEvent.new_state.state);
+            const shouldHalt =
+                this.nodeConfig.haltIfState === haEvent.new_state.state;
             return shouldHalt;
         }
 
-        shouldIncludeEvent (entityId) {
+        shouldIncludeEvent(entityId) {
             if (!this.nodeConfig.entityidfilter) return true;
             const filter = this.nodeConfig.entityidfilter;
-            const type   = this.nodeConfig.entityidfiltertype;
+            const type = this.nodeConfig.entityidfiltertype;
 
             if (type === 'exact') {
                 return filter === entityId;
             }
 
             if (type === 'substring') {
-                const found = this.nodeConfig.entityidfilter.filter(filterStr => (entityId.indexOf(filterStr) >= 0));
+                const found = this.nodeConfig.entityidfilter.filter(
+                    filterStr => entityId.indexOf(filterStr) >= 0
+                );
                 return found.length > 0;
             }
 

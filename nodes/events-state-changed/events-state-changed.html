@@ -1,7 +1,7 @@
 <script type="text/javascript">
     RED.nodes.registerType('server-state-changed', {
         category: 'home_assistant',
-        color:    '#038FC7',
+        color: '#038FC7',
         defaults: {
             name: { value: '' },
             server: { value: '', type: 'server', required: true },
@@ -13,7 +13,7 @@
         outputs: 1,
         icon: "arrow-right-bold-hexagon-outline.png",
         paletteLabel: 'events: state',
-        label: function() { return this.name || `state_changed: ${this.entityidfilter || 'all entities'}` },
+        label: function () { return this.name || `state_changed: ${this.entityidfilter || 'all entities'}` },
         oneditprepare: function () {
             const $entityidfilter = $('#node-input-entityidfilter');
             const $entityidfiltertype = $('#node-input-entityidfiltertype');
@@ -47,13 +47,13 @@
                         node.availableEntities = JSON.parse(entities);
                         $entityidfilter.autocomplete({ source: node.availableEntities, minLength: 0 });
                     })
-                    .fail((err) => RED.notify(err.responseText, 'error'));
+                        .fail((err) => RED.notify(err.responseText, 'error'));
                 }
             };
 
             $server.change(() => setupAutocomplete(this));
         },
-        oneditsave: function() {
+        oneditsave: function () {
             this.entityidfilter = $("#node-input-entityidfilter").val();
         }
     });

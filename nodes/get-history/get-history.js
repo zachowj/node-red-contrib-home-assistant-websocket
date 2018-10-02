@@ -1,4 +1,4 @@
-const Joi      = require('joi');
+const Joi = require('joi');
 const BaseNode = require('../../lib/base-node');
 
 module.exports = function(RED) {
@@ -21,12 +21,22 @@ module.exports = function(RED) {
                     yesterday.setDate(yesterday.getDate() - 1);
                     return yesterday.toISOString();
                 },
-                validation: { haltOnFail: true, schema: Joi.date().optional().allow('') }
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.date()
+                        .optional()
+                        .allow('')
+                }
             },
             enddate: {
                 messageProp: 'enddate',
                 configProp: 'enddate',
-                validation: { haltOnFail: true, schema: Joi.date().optional().allow('') }
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.date()
+                        .optional()
+                        .allow('')
+                }
             },
             entityid: {
                 messageProp: 'entityid',
@@ -46,27 +56,49 @@ module.exports = function(RED) {
 
         onInput({ parsedMessage, message }) {
             let { startdate, enddate, entityid, entityidtype } = parsedMessage;
-            startdate     = startdate.value;
-            enddate       = enddate.value;
-            entityid      = entityid.value;
+            startdate = startdate.value;
+            enddate = enddate.value;
+            entityid = entityid.value;
 
-            let apiRequest = (entityidtype.value === 'includes' && entityid)
-                ? this.nodeConfig.server.api.getHistory(startdate, null, enddate, { include: new RegExp(entityid) })
-                : this.nodeConfig.server.api.getHistory(startdate, entityid, enddate);
+            let apiRequest =
+                entityidtype.value === 'includes' && entityid
+                    ? this.nodeConfig.server.api.getHistory(
+                          startdate,
+                          null,
+                          enddate,
+                          {
+                              include: new RegExp(entityid)
+                          }
+                      )
+                    : this.nodeConfig.server.api.getHistory(
+                          startdate,
+                          entityid,
+                          enddate
+                      );
 
             return apiRequest
                 .then(res => {
                     message.startdate = startdate;
-                    message.enddate   = enddate  || null;
-                    message.entityid  = entityid || null;
-                    message.payload   = res;
+                    message.enddate = enddate || null;
+                    message.entityid = entityid || null;
+                    message.payload = res;
                     this.send(message);
-                    this.status({ fill: 'green', shape: 'dot', text: 'Success'});
+                    this.status({
+                        fill: 'green',
+                        shape: 'dot',
+                        text: 'Success'
+                    });
                 })
                 .catch(err => {
-                    this.warn('Error calling service, home assistant api error', err);
-                    this.error('Error calling service, home assistant api error', message);
-                    this.status({fill: 'red', shape: 'ring', text: 'Error'});
+                    this.warn(
+                        'Error calling service, home assistant api error',
+                        err
+                    );
+                    this.error(
+                        'Error calling service, home assistant api error',
+                        message
+                    );
+                    this.status({ fill: 'red', shape: 'ring', text: 'Error' });
                 });
         }
     }

@@ -18,8 +18,8 @@ module.exports = function(RED) {
         constructor(nodeDefinition) {
             super(nodeDefinition, RED, nodeOptions);
         }
-        isObjectLike (v) {
-            return (v !== null) && (typeof v === 'object');
+        isObjectLike(v) {
+            return v !== null && typeof v === 'object';
         }
         // Disable connection status for api node
         setConnectionStatus() {}
@@ -35,34 +35,59 @@ module.exports = function(RED) {
             let payload, payloadDomain, payloadService;
 
             if (message && message.payload) {
-                payload  = this.tryToObject(message.payload);
-                payloadDomain  = this.utils.reach('domain',  payload);
+                payload = this.tryToObject(message.payload);
+                payloadDomain = this.utils.reach('domain', payload);
                 payloadService = this.utils.reach('service', payload);
             }
-            const configDomain  = this.nodeConfig.service_domain;
+            const configDomain = this.nodeConfig.service_domain;
             const configService = this.nodeConfig.service;
 
-            const apiDomain  = payloadDomain  || configDomain;
+            const apiDomain = payloadDomain || configDomain;
             const apiService = payloadService || configService;
-            const apiData    = this.getApiData(payload);
-            if (!apiDomain)  throw new Error('call service node is missing api "domain" property, not found in config or payload');
-            if (!apiService) throw new Error('call service node is missing api "service" property, not found in config or payload');
+            const apiData = this.getApiData(payload);
+            if (!apiDomain)
+                throw new Error(
+                    'call service node is missing api "domain" property, not found in config or payload'
+                );
+            if (!apiService)
+                throw new Error(
+                    'call service node is missing api "service" property, not found in config or payload'
+                );
 
-            this.debug(`Calling Service: ${apiDomain}:${apiService} -- ${JSON.stringify(apiData || {})}`);
-            this.status({fill: 'green', shape: 'dot', text: `${apiDomain}.${apiService} called at: ${this.getPrettyDate()}`});
+            this.debug(
+                `Calling Service: ${apiDomain}:${apiService} -- ${JSON.stringify(
+                    apiData || {}
+                )}`
+            );
+            this.status({
+                fill: 'green',
+                shape: 'dot',
+                text: `${apiDomain}.${apiService} called at: ${this.getPrettyDate()}`
+            });
 
-            message.payload =  {
+            message.payload = {
                 domain: apiDomain,
                 service: apiService,
                 data: apiData || null
             };
             this.send(message);
 
-            return this.nodeConfig.server.websocket.callService(apiDomain, apiService, apiData)
+            return this.nodeConfig.server.websocket
+                .callService(apiDomain, apiService, apiData)
                 .catch(err => {
-                    this.warn('Error calling service, home assistant api error', err);
-                    this.error('Error calling service, home assistant api error', message);
-                    this.status({fill: 'red', shape: 'ring', text: `API Error at: ${this.getPrettyDate()}`});
+                    this.warn(
+                        'Error calling service, home assistant api error',
+                        err
+                    );
+                    this.error(
+                        'Error calling service, home assistant api error',
+                        message
+                    );
+                    this.status({
+                        fill: 'red',
+                        shape: 'ring',
+                        text: `API Error at: ${this.getPrettyDate()}`
+                    });
                 });
         }
 
@@ -71,21 +96,26 @@ module.exports = function(RED) {
             let contextData = {};
 
             let payloadData = this.utils.reach('data', payload);
-            let configData  = this.tryToObject(this.nodeConfig.data);
+            let configData = this.tryToObject(this.nodeConfig.data);
             payloadData = payloadData || {};
-            configData  = configData || {};
+            configData = configData || {};
 
             // Cacluate payload to send end priority ends up being 'Config, Global Ctx, Flow Ctx, Payload' with right most winning
             if (this.nodeConfig.mergecontext) {
-                const ctx     = this.node.context();
-                let flowVal   = ctx.flow.get(this.nodeConfig.mergecontext);
+                const ctx = this.node.context();
+                let flowVal = ctx.flow.get(this.nodeConfig.mergecontext);
                 let globalVal = ctx.global.get(this.nodeConfig.mergecontext);
-                flowVal       = flowVal || {};
-                globalVal     = globalVal || {};
-                contextData   = this.utils.merge({}, globalVal, flowVal);
+                flowVal = flowVal || {};
+                globalVal = globalVal || {};
+                contextData = this.utils.merge({}, globalVal, flowVal);
             }
 
-            apiData = this.utils.merge({}, configData, contextData, payloadData);
+            apiData = this.utils.merge(
+                {},
+                configData,
+                contextData,
+                payloadData
+            );
             return apiData;
         }
     }

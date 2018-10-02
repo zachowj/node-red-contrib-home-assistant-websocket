@@ -1,4 +1,3 @@
-
 /* eslint-disable camelcase */
 const EventsNode = require('../../lib/events-node');
 
@@ -17,15 +16,20 @@ module.exports = function(RED) {
         constructor(nodeDefinition) {
             super(nodeDefinition, RED, nodeOptions);
 
-            const eventTopic = this.eventTopic = `ha_events:state_changed:${this.nodeConfig.entityid}`;
-            this.addEventClientListener({ event: eventTopic, handler: this.onEntityStateChanged.bind(this) });
+            const eventTopic = (this.eventTopic = `ha_events:state_changed:${
+                this.nodeConfig.entityid
+            }`);
+            this.addEventClientListener({
+                event: eventTopic,
+                handler: this.onEntityStateChanged.bind(this)
+            });
             this.NUM_DEFAULT_MESSAGES = 2;
             this.messageTimers = {};
 
             this.loadPersistedData();
         }
 
-        onInput({ message })  {
+        onInput({ message }) {
             if (message === 'enable' || message.payload === 'enable') {
                 this.isenabled = true;
                 this.saveNodeData('isenabled', true);
@@ -51,33 +55,63 @@ module.exports = function(RED) {
             }
         }
 
-        async onEntityStateChanged (eventMessage) {
+        async onEntityStateChanged(eventMessage) {
             if (this.isenabled === false) {
-                this.debugToClient('incoming: node is currently disabled, ignoring received event');
+                this.debugToClient(
+                    'incoming: node is currently disabled, ignoring received event'
+                );
                 return;
             }
 
             try {
-                const constraintComparatorResults = await this.getConstraintComparatorResults(this.nodeConfig.constraints, eventMessage);
+                const constraintComparatorResults = await this.getConstraintComparatorResults(
+                    this.nodeConfig.constraints,
+                    eventMessage
+                );
                 const state = eventMessage.event.new_state.state;
-                let outputs = this.getDefaultMessageOutputs(constraintComparatorResults, eventMessage);
-                let status = { fill: 'green', shape: 'dot', text: `${state} at: ${this.getPrettyDate()}` };
+                let outputs = this.getDefaultMessageOutputs(
+                    constraintComparatorResults,
+                    eventMessage
+                );
+                let status = {
+                    fill: 'green',
+                    shape: 'dot',
+                    text: `${state} at: ${this.getPrettyDate()}`
+                };
 
                 // If a constraint comparator failed we're done, also if no custom outputs to look at
-                if (constraintComparatorResults.failed.length || !this.nodeConfig.customoutputs.length) {
+                if (
+                    constraintComparatorResults.failed.length ||
+                    !this.nodeConfig.customoutputs.length
+                ) {
                     if (constraintComparatorResults.failed.length) {
-                        status = { fill: 'red', shape: 'ring', text: `${state} at: ${this.getPrettyDate()}` };
+                        status = {
+                            fill: 'red',
+                            shape: 'ring',
+                            text: `${state} at: ${this.getPrettyDate()}`
+                        };
                     }
-                    this.debugToClient('done processing sending messages: ', outputs);
+                    this.debugToClient(
+                        'done processing sending messages: ',
+                        outputs
+                    );
                     this.status(status);
                     return this.send(outputs);
                 }
 
-                const customOutputsComparatorResults = this.getCustomOutputsComparatorResults(this.nodeConfig.customoutputs, eventMessage);
-                const customOutputMessages           = customOutputsComparatorResults.map(r => r.message);
+                const customOutputsComparatorResults = this.getCustomOutputsComparatorResults(
+                    this.nodeConfig.customoutputs,
+                    eventMessage
+                );
+                const customOutputMessages = customOutputsComparatorResults.map(
+                    r => r.message
+                );
 
                 outputs = outputs.concat(customOutputMessages);
-                this.debugToClient('done processing sending messages: ', outputs);
+                this.debugToClient(
+                    'done processing sending messages: ',
+                    outputs
+                );
                 this.status(status);
                 this.send(outputs);
             } catch (e) {
@@ -90,29 +124,61 @@ module.exports = function(RED) {
 
             // Check constraints
             for (let constraint of constraints) {
-                const { comparatorType, comparatorValue, comparatorValueDatatype, propertyValue } = constraint;
-                const constraintTarget = await this.getConstraintTargetData(constraint, eventMessage.event);
-                const actualValue      = this.utils.reach(constraint.propertyValue, constraintTarget.state);
-                const comparatorResult = this.getComparatorResult(comparatorType, comparatorValue, actualValue, comparatorValueDatatype);
+                const {
+                    comparatorType,
+                    comparatorValue,
+                    comparatorValueDatatype,
+                    propertyValue
+                } = constraint;
+                const constraintTarget = await this.getConstraintTargetData(
+                    constraint,
+                    eventMessage.event
+                );
+                const actualValue = this.utils.reach(
+                    constraint.propertyValue,
+                    constraintTarget.state
+                );
+                const comparatorResult = this.getComparatorResult(
+                    comparatorType,
+                    comparatorValue,
+                    actualValue,
+                    comparatorValueDatatype
+                );
 
                 if (comparatorResult === false) {
                     this.debugToClient(`constraint comparator: failed entity "${constraintTarget.entityid}" property "${propertyValue}" with value ${actualValue} failed "${comparatorType}" check against (${comparatorValueDatatype}) ${comparatorValue}`); // eslint-disable-line
                 }
 
-                comparatorResults.push({ constraint, constraintTarget, actualValue, comparatorResult });
+                comparatorResults.push({
+                    constraint,
+                    constraintTarget,
+                    actualValue,
+                    comparatorResult
+                });
             }
-            const failedComparators = comparatorResults.filter(res => !res.comparatorResult);
-            return { all: comparatorResults || [], failed: failedComparators || [] };
+            const failedComparators = comparatorResults.filter(
+                res => !res.comparatorResult
+            );
+            return {
+                all: comparatorResults || [],
+                failed: failedComparators || []
+            };
         }
 
         getDefaultMessageOutputs(comparatorResults, eventMessage) {
             const { entity_id, event } = eventMessage;
 
-            const msg = { topic: entity_id, payload: event.new_state.state, data: eventMessage };
+            const msg = {
+                topic: entity_id,
+                payload: event.new_state.state,
+                data: eventMessage
+            };
             let outputs;
 
             if (comparatorResults.failed.length) {
-                this.debugToClient('constraint comparator: one more more comparators failed to match constraints, message will send on the failed output');
+                this.debugToClient(
+                    'constraint comparator: one more more comparators failed to match constraints, message will send on the failed output'
+                );
 
                 msg.failedComparators = comparatorResults.failed;
                 outputs = [null, msg];
@@ -124,11 +190,24 @@ module.exports = function(RED) {
 
         getCustomOutputsComparatorResults(outputs, eventMessage) {
             return outputs.reduce((acc, output, reduceIndex) => {
-                let result = { output, comparatorMatched: true, actualValue: null, message: null };
+                let result = {
+                    output,
+                    comparatorMatched: true,
+                    actualValue: null,
+                    message: null
+                };
 
                 if (output.comparatorPropertyType !== 'always') {
-                    result.actualValue       = this.utils.reach(output.comparatorPropertyValue, eventMessage.event);
-                    result.comparatorMatched = this.getComparatorResult(output.comparatorType, output.comparatorValue, result.actualValue, output.comparatorValueDatatype);
+                    result.actualValue = this.utils.reach(
+                        output.comparatorPropertyValue,
+                        eventMessage.event
+                    );
+                    result.comparatorMatched = this.getComparatorResult(
+                        output.comparatorType,
+                        output.comparatorValue,
+                        result.actualValue,
+                        output.comparatorValueDatatype
+                    );
                 }
                 result.message = this.getOutputMessage(result, eventMessage);
                 acc.push(result);
@@ -139,21 +218,29 @@ module.exports = function(RED) {
         async getConstraintTargetData(constraint, triggerEvent) {
             let targetData = { entityid: null, state: null };
             try {
-                const isTargetThisEntity = constraint.targetType === 'this_entity';
-                targetData.entityid = (isTargetThisEntity) ? this.nodeConfig.entityid : constraint.targetValue;
+                const isTargetThisEntity =
+                    constraint.targetType === 'this_entity';
+                targetData.entityid = isTargetThisEntity
+                    ? this.nodeConfig.entityid
+                    : constraint.targetValue;
 
                 // TODO: Non 'self' targets state is just new_state of an incoming event, wrap to hack around the fact
                 // NOTE: UI needs changing to handle this there, and also to hide "previous state" if target is not self
                 if (isTargetThisEntity) {
                     targetData.state = triggerEvent;
                 } else {
-                    const state = await this.nodeConfig.server.homeAssistant.getStates(targetData.entityid);
+                    const state = await this.nodeConfig.server.homeAssistant.getStates(
+                        targetData.entityid
+                    );
                     targetData.state = {
                         new_state: state
                     };
                 }
             } catch (e) {
-                this.debug('Error during trigger:state comparator evalutation: ', e.stack);
+                this.debug(
+                    'Error during trigger:state comparator evalutation: ',
+                    e.stack
+                );
                 throw e;
             }
 
@@ -165,29 +252,48 @@ module.exports = function(RED) {
             if (!datatype) return value;
 
             switch (datatype) {
-                case 'num':  return parseFloat(value);
-                case 'str':  return value + '';
-                case 'bool': return !!value;
-                case 're':   return new RegExp(value);
-                case 'list': return value.split(',');
-                default: return value;
+                case 'num':
+                    return parseFloat(value);
+                case 'str':
+                    return value + '';
+                case 'bool':
+                    return !!value;
+                case 're':
+                    return new RegExp(value);
+                case 'list':
+                    return value.split(',');
+                default:
+                    return value;
             }
         }
 
         /* eslint-disable indent */
-        getComparatorResult(comparatorType, comparatorValue, actualValue, comparatorValueDatatype) {
-            const cValue = this.getCastValue(comparatorValueDatatype, comparatorValue);
+        getComparatorResult(
+            comparatorType,
+            comparatorValue,
+            actualValue,
+            comparatorValueDatatype
+        ) {
+            const cValue = this.getCastValue(
+                comparatorValueDatatype,
+                comparatorValue
+            );
 
             switch (comparatorType) {
                 case 'is':
                 case 'is_not':
                     // Datatype might be num, bool, str, re (regular expression)
-                    const isMatch = (comparatorValueDatatype === 're') ? cValue.test(actualValue) : (cValue === actualValue);
-                    return (comparatorType === 'is') ? isMatch : !isMatch;
+                    const isMatch =
+                        comparatorValueDatatype === 're'
+                            ? cValue.test(actualValue)
+                            : cValue === actualValue;
+                    return comparatorType === 'is' ? isMatch : !isMatch;
                 case 'includes':
                 case 'does_not_include':
                     const isIncluded = cValue.includes(actualValue);
-                    return (comparatorType === 'includes') ? isIncluded : !isIncluded;
+                    return comparatorType === 'includes'
+                        ? isIncluded
+                        : !isIncluded;
                 case 'greater_than': // here for backwards compatibility
                 case '>':
                     return actualValue > cValue;
@@ -201,7 +307,10 @@ module.exports = function(RED) {
             }
         }
 
-        getOutputMessage({ output, comparatorMatched, actualValue }, eventMessage) {
+        getOutputMessage(
+            { output, comparatorMatched, actualValue },
+            eventMessage
+        ) {
             // If comparator did not match
             if (!comparatorMatched) {
                 this.debugToClient(`output comparator failed: property "${output.comparatorPropertyValue}" with value ${actualValue} failed "${output.comparatorType}" check against ${output.comparatorValue}`); // eslint-disable-line
@@ -209,7 +318,11 @@ module.exports = function(RED) {
             }
 
             if (output.messageType === 'default') {
-                return { topic: eventMessage.entity_id, payload: eventMessage.event.new_state.state, data: eventMessage };
+                return {
+                    topic: eventMessage.entity_id,
+                    payload: eventMessage.event.new_state.state,
+                    data: eventMessage
+                };
             }
 
             try {

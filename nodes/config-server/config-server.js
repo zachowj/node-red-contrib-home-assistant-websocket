@@ -4,18 +4,21 @@ module.exports = function(RED) {
     const HomeAssistant = require('../../lib/node-home-assistant');
 
     const httpHandlers = {
-        getEntities: function (req, res, next) {
-            return this.homeAssistant.getEntities()
+        getEntities: function(req, res, next) {
+            return this.homeAssistant
+                .getEntities()
                 .then(states => res.json(JSON.stringify(states)))
                 .catch(e => this.error(e.message));
         },
-        getStates: function (req, res, next) {
-            return this.homeAssistant.getStates()
+        getStates: function(req, res, next) {
+            return this.homeAssistant
+                .getStates()
                 .then(states => res.json(JSON.stringify(states)))
                 .catch(e => this.error(e.message));
         },
-        getServices: function (req, res, next) {
-            return this.homeAssistant.getServices()
+        getServices: function(req, res, next) {
+            return this.homeAssistant
+                .getServices()
                 .then(services => res.json(JSON.stringify(services)))
                 .catch(e => this.error(e.message));
         }
@@ -35,34 +38,71 @@ module.exports = function(RED) {
 
             // For backwards compatibility prior to v0.0.4 when loading url and pass from flow.json
             if (nodeDefinition.url) {
-                this.credentials.host = this.credentials.host || nodeDefinition.url;
-                this.credentials.access_token = this.credentials.access_token || nodeDefinition.pass;
+                this.credentials.host =
+                    this.credentials.host || nodeDefinition.url;
+                this.credentials.access_token =
+                    this.credentials.access_token || nodeDefinition.pass;
 
                 this.RED.nodes.addCredentials(this.id, this.credentials);
             }
 
-            this.RED.httpAdmin.get('/homeassistant/entities', httpHandlers.getEntities.bind(this));
-            this.RED.httpAdmin.get('/homeassistant/states',   httpHandlers.getStates.bind(this));
-            this.RED.httpAdmin.get('/homeassistant/services', httpHandlers.getServices.bind(this));
+            this.RED.httpAdmin.get(
+                '/homeassistant/entities',
+                httpHandlers.getEntities.bind(this)
+            );
+            this.RED.httpAdmin.get(
+                '/homeassistant/states',
+                httpHandlers.getStates.bind(this)
+            );
+            this.RED.httpAdmin.get(
+                '/homeassistant/services',
+                httpHandlers.getServices.bind(this)
+            );
 
-            const HTTP_STATIC_OPTS = { root: require('path').join(__dirname, '..', '/_static'), dotfiles: 'deny' };
-            this.RED.httpAdmin.get('/homeassistant/static/*', function(req, res) { res.sendFile(req.params[0], HTTP_STATIC_OPTS) });
+            const HTTP_STATIC_OPTS = {
+                root: require('path').join(__dirname, '..', '/_static'),
+                dotfiles: 'deny'
+            };
+            this.RED.httpAdmin.get('/homeassistant/static/*', function(
+                req,
+                res
+            ) {
+                res.sendFile(req.params[0], HTTP_STATIC_OPTS);
+            });
 
             this.setOnContext('states', []);
             this.setOnContext('services', []);
             this.setOnContext('isConnected', false);
 
             if (this.credentials.host && !this.homeAssistant) {
-                this.homeAssistant = new HomeAssistant({ baseUrl: this.credentials.host, apiPass: this.credentials.access_token, legacy: this.nodeConfig.legacy });
+                this.homeAssistant = new HomeAssistant({
+                    baseUrl: this.credentials.host,
+                    apiPass: this.credentials.access_token,
+                    legacy: this.nodeConfig.legacy
+                });
                 this.api = this.homeAssistant.api;
                 this.websocket = this.homeAssistant.websocket;
 
-                this.homeAssistant.startListening().catch(err => this.node.error(err));
+                this.homeAssistant
+                    .startListening()
+                    .catch(err => this.node.error(err));
 
-                this.websocket.addListener('ha_events:close', this.onHaEventsClose.bind(this));
-                this.websocket.addListener('ha_events:open', this.onHaEventsOpen.bind(this));
-                this.websocket.addListener('ha_events:error', this.onHaEventsError.bind(this));
-                this.websocket.addListener('ha_events:state_changed', this.onHaStateChanged.bind(this));
+                this.websocket.addListener(
+                    'ha_events:close',
+                    this.onHaEventsClose.bind(this)
+                );
+                this.websocket.addListener(
+                    'ha_events:open',
+                    this.onHaEventsOpen.bind(this)
+                );
+                this.websocket.addListener(
+                    'ha_events:error',
+                    this.onHaEventsError.bind(this)
+                );
+                this.websocket.addListener(
+                    'ha_events:state_changed',
+                    this.onHaStateChanged.bind(this)
+                );
             }
         }
 
@@ -80,7 +120,9 @@ module.exports = function(RED) {
 
         getFromContext(key) {
             let haCtx = this.context().global.get('homeassistant');
-            return (haCtx[this.nameAsCamelcase]) ? haCtx[this.nameAsCamelcase][key] : null;
+            return haCtx[this.nameAsCamelcase]
+                ? haCtx[this.nameAsCamelcase][key]
+                : null;
         }
 
         async onHaEventsOpen() {

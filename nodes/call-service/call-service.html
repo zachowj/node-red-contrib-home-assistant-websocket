@@ -1,39 +1,41 @@
 <script type="text/javascript">
     RED.nodes.registerType('api-call-service', {
-        category:     'home_assistant',
-        color:        '#52C0F2',
-        inputs:       1,
-        outputs:      1,
-        icon:         'router-wireless.png',
-        align:        'right',
+        category: 'home_assistant',
+        color: '#52C0F2',
+        inputs: 1,
+        outputs: 1,
+        icon: 'router-wireless.png',
+        align: 'right',
         paletteLabel: 'call service',
-        label:        function() { return this.name || `svc: ${this.service_domain}:${this.service}`; },
+        label: function () { return this.name || `svc: ${this.service_domain}:${this.service}`; },
         defaults: {
-            name:           { value: '' },
-            server:         { value: '', type: 'server', required: true },
+            name: { value: '' },
+            server: { value: '', type: 'server', required: true },
             service_domain: { value: '' },
-            service:        { value: '' },
-            data:           { value: '', validate: function(v) {
-                // data isn't required since it could be either not needed or provided via payload
-                if (!v) { return true; }
-                try { JSON.parse(v); return true; }
-                catch (e) { return false; }
-            } },
+            service: { value: '' },
+            data: {
+                value: '', validate: function (v) {
+                    // data isn't required since it could be either not needed or provided via payload
+                    if (!v) { return true; }
+                    try { JSON.parse(v); return true; }
+                    catch (e) { return false; }
+                }
+            },
             mergecontext: { value: null }
         },
         oneditprepare: function () {
             const NODE = this;
             const $server = $('#node-input-server');
 
-            const $domainField  = $('#service_domain');
+            const $domainField = $('#service_domain');
             const $serviceField = $('#service');
 
 
-            const $serviceDataDiv       = $('#service-data-desc');
-            const $serviceDescDiv       = $('.service-description', $serviceDataDiv);
+            const $serviceDataDiv = $('#service-data-desc');
+            const $serviceDescDiv = $('.service-description', $serviceDataDiv);
             const $serviceDataTableBody = $('tbody', $serviceDataDiv);
-            const $unknownServiceDiv    = $('.unknown-service', $serviceDataDiv);
-            const $knownServiceDiv      = $('.known-service', $serviceDataDiv);
+            const $unknownServiceDiv = $('.unknown-service', $serviceDataDiv);
+            const $knownServiceDiv = $('.known-service', $serviceDataDiv);
 
             const node = this;
             $domainField.val(node.service_domain);
@@ -60,10 +62,10 @@
             // Calls the custom api backend defined in the config-server.js node
             // TODO: Not sure how this works with node-red if auth is enabled
             function setServicesAndDomains(node) {
-               return $.get(`${RED.settings.apiCallServiceAdminPrefix}homeassistant/services`)
+                return $.get(`${RED.settings.apiCallServiceAdminPrefix}homeassistant/services`)
                     .then(services => {
                         node.allServices = JSON.parse(services);
-                        node.allDomains  = Object.keys(node.allServices);
+                        node.allDomains = Object.keys(node.allServices);
 
                         $domainField.autocomplete({
                             source: node.allDomains,
@@ -71,7 +73,7 @@
                             change: (evt, ui) => updateDomainSelection({ event: evt }),
                             select: (evt, ui) => updateDomainSelection({ event: evt }),
                             minLength: 0
-                        }).focus(function() {
+                        }).focus(function () {
                             $domainField.autocomplete('search');
                         });
 
@@ -86,7 +88,7 @@
 
             function updateServiceSelection({ event, serviceText }) {
                 let selectedServiceText = serviceText;
-                if ( !selectedServiceText && event) {
+                if (!selectedServiceText && event) {
                     selectedServiceText = $(event.target).val();
                 }
 
@@ -144,7 +146,7 @@
 
             function updateDomainSelection({ event, domainText }) {
                 let selectedDomainText = domainText;
-                if ( !selectedDomainText && event) { selectedDomainText = $(event.target).val(); }
+                if (!selectedDomainText && event) { selectedDomainText = $(event.target).val(); }
 
                 const knownDomain = (node.allDomains.indexOf(selectedDomainText) > -1);
                 node.selectedDomain = knownDomain
@@ -156,15 +158,15 @@
                     create: (evt, ui) => updateServiceSelection({ event: evt }),
                     change: (evt, ui) => updateServiceSelection({ event: evt }),
                     select: (evt, ui) => updateServiceSelection({ event: evt }),
-                    focus:  (evt, ui) => updateServiceSelection({ event: evt }),
+                    focus: (evt, ui) => updateServiceSelection({ event: evt }),
                     minLength: 0
                 })
-                .focus(function() {
-                    $serviceField.autocomplete('search');
-                });
+                    .focus(function () {
+                        $serviceField.autocomplete('search');
+                    });
             }
         },
-        oneditsave: function() {
+        oneditsave: function () {
             this.service_domain = $("#service_domain").val();
             this.service = $("#service").val();
         }

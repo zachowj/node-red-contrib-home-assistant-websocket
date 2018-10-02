@@ -1,5 +1,5 @@
-const test             = require('tape');
-const helper           = require('node-red/test/nodes/helper');
+const test = require('tape');
+const helper = require('node-red/test/nodes/helper');
 const ConfigServerNode = require('../../nodes/config-server/config-server');
 const ServerEventsNode = require('../../nodes/server-events-all/server-events-all');
 
@@ -10,12 +10,22 @@ test('before: start-server', function(t) {
 test('Simple Node: should load', function(t) {
     let flow = [
         { id: 'n1', type: 'server-events', server: 'n2', wires: [] },
-        { id: 'n2', type: 'server', name: 'ha-server', url: 'http://localhost:1234', pass: '123' }
+        {
+            id: 'n2',
+            type: 'server',
+            name: 'ha-server',
+            url: 'http://localhost:1234',
+            pass: '123'
+        }
     ];
 
     helper.load([ServerEventsNode, ConfigServerNode], flow, function() {
         const n1 = helper.getNode('n1');
-        t.equals(n1.type, 'server-events', 'simple node should instantiate with type "simple-node"');
+        t.equals(
+            n1.type,
+            'server-events',
+            'simple node should instantiate with type "simple-node"'
+        );
         helper.unload();
         t.end();
     });

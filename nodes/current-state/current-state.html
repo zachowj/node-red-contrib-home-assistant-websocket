@@ -1,19 +1,19 @@
 <script type="text/javascript">
     RED.nodes.registerType('api-current-state', {
-        category:     'home_assistant',
-        color:        '#52C0F2',
-        inputs:       1,
-        outputs:      1,
-        icon:         "arrow-top-right.png",
+        category: 'home_assistant',
+        color: '#52C0F2',
+        inputs: 1,
+        outputs: 1,
+        icon: "arrow-top-right.png",
         paletteLabel: 'current state',
-        label:        function() { return this.name || `current_state: ${this.entity_id}`; },
-        defaults:     {
-            name:             { value: '' },
-            server:           { value: '', type: 'server', required: true },
-            halt_if:          { value: '' },
-            override_topic:   { value: true },
+        label: function () { return this.name || `current_state: ${this.entity_id}`; },
+        defaults: {
+            name: { value: '' },
+            server: { value: '', type: 'server', required: true },
+            halt_if: { value: '' },
+            override_topic: { value: true },
             override_payload: { value: true },
-            entity_id:        { value: '' },
+            entity_id: { value: '' },
         },
         oneditprepare: function () {
             const $entityIdField = $('#entity_id');
@@ -47,9 +47,9 @@
                     this.availableEntities = JSON.parse(entities);
 
                     $entityIdField.autocomplete({
-                        source:   this.availableEntities,
+                        source: this.availableEntities,
                         minLength: 0,
-                        change:   (evt,ui) => {
+                        change: (evt, ui) => {
                             const validSelection = (this.availableEntities.indexOf($(evt.target).val()) > -1);
                             if (validSelection) { $(evt.target).removeClass('input-error'); }
                             else { $(evt.target).addClass('input-error'); }

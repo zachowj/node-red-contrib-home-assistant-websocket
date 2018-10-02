@@ -1,20 +1,20 @@
 <script type="text/javascript">
     RED.nodes.registerType('poll-state', {
-        category:     'home_assistant',
-        color:        '#038FC7',
-        inputs:       0,
-        outputs:      1,
-        icon:         'timer.png',
+        category: 'home_assistant',
+        color: '#038FC7',
+        inputs: 0,
+        outputs: 1,
+        icon: 'timer.png',
         paletteLabel: 'poll state',
-        label:        function() { return this.name || `poll state: ${this.entity_id}`; },
-        defaults:     {
-            name:            { value: '' },
-            server:          { value: '', type: 'server', required: true },
-            updateinterval:  { value: '', validate: (v) => !isNaN(v) },
+        label: function () { return this.name || `poll state: ${this.entity_id}`; },
+        defaults: {
+            name: { value: '' },
+            server: { value: '', type: 'server', required: true },
+            updateinterval: { value: '', validate: (v) => !isNaN(v) },
             outputinitially: { value: false },
             outputonchanged: { value: false },
-            entity_id:     {
-                value:    '',
+            entity_id: {
+                value: '',
                 required: true
             }
         },
@@ -50,9 +50,9 @@
                     this.availableEntities = JSON.parse(entities);
 
                     $entityIdField.autocomplete({
-                        source:   this.availableEntities,
+                        source: this.availableEntities,
                         minLength: 0,
-                        change:   (evt,ui) => {
+                        change: (evt, ui) => {
                             const validSelection = (this.availableEntities.indexOf($(evt.target).val()) > -1);
                             if (validSelection) { $(evt.target).removeClass('input-error'); }
                             else { $(evt.target).addClass('input-error'); }
@@ -65,7 +65,7 @@
                 })
                 .fail((err) => RED.notify(err.responseText, 'error'));
         },
-        oneditsave: function() { this.entity_id = $("#entity_id").val(); }
+        oneditsave: function () { this.entity_id = $("#entity_id").val(); }
     });
 </script>
 

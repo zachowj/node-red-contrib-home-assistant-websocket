@@ -17,16 +17,22 @@
 
 class MockNode {
     constructor() {
-        this._events  = {};
-        this._state   = {};
-        this._sent    = [];
+        this._events = {};
+        this._state = {};
+        this._sent = [];
         this._context = {};
-        this._status  = {};
+        this._status = {};
     }
 
-    log()   { console.log(...arguments) }
-    warn()  { console.log(...arguments) }
-    error() { console.log(...arguments) }
+    log() {
+        console.log(...arguments);
+    }
+    warn() {
+        console.log(...arguments);
+    }
+    error() {
+        console.log(...arguments);
+    }
     on(event, eventFn) {
         this._events[event] = eventFn;
     }
@@ -51,7 +57,7 @@ class MockNode {
 module.exports = function(nodeRedModule, config) {
     const RED = {
         nodes: {
-            getNode:      () => {},
+            getNode: () => {},
             registerType: function(nodeName, nodeConfigFunc) {
                 this.nodeConfigFunc = nodeConfigFunc;
             },

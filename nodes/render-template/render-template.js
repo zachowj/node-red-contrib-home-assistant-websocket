@@ -1,4 +1,4 @@
-const Joi      = require('joi');
+const Joi = require('joi');
 const BaseNode = require('../../lib/base-node');
 
 module.exports = function(RED) {
@@ -13,7 +13,10 @@ module.exports = function(RED) {
             template: {
                 messageProp: 'template',
                 configProp: 'template',
-                validation: { haltOnFail: true, schema: Joi.string().required() }
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.string().required()
+                }
             }
         }
     };
@@ -25,18 +28,28 @@ module.exports = function(RED) {
 
         onInput({ parsedMessage, message }) {
             let { template } = parsedMessage;
-            template  = template.value;
+            template = template.value;
 
-            return this.nodeConfig.server.api.renderTemplate(template)
+            return this.nodeConfig.server.api
+                .renderTemplate(template)
                 .then(res => {
                     message.template = template;
                     message.payload = res;
                     this.send(message);
-                    this.status({fill: 'green', shape: 'dot', text: 'Success'});
+                    this.status({
+                        fill: 'green',
+                        shape: 'dot',
+                        text: 'Success'
+                    });
                 })
                 .catch(err => {
-                    this.error(`Error calling service, home assistant api error: ${err.message}`, message);
-                    this.status({fill: 'red', shape: 'ring', text: 'Error'});
+                    this.error(
+                        `Error calling service, home assistant api error: ${
+                            err.message
+                        }`,
+                        message
+                    );
+                    this.status({ fill: 'red', shape: 'ring', text: 'Error' });
                 });
         }
     }

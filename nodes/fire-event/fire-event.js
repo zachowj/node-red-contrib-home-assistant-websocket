@@ -1,6 +1,6 @@
 const BaseNode = require('../../lib/base-node');
 
-module.exports = function (RED) {
+module.exports = function(RED) {
     const nodeOptions = {
         debug: true,
         config: {
@@ -30,9 +30,7 @@ module.exports = function (RED) {
             }
         }
 
-        onInput({
-            message
-        }) {
+        onInput({ message }) {
             let payload, payloadEvent;
 
             if (message && message.payload) {
@@ -42,8 +40,11 @@ module.exports = function (RED) {
             const configEvent = this.nodeConfig.event;
 
             const eventType = payloadEvent || configEvent;
-            const eventData    = this.getEventData(payload);
-            if (!eventType) throw new Error('fire event node is missing "event" property, not found in config or payload');
+            const eventData = this.getEventData(payload);
+            if (!eventType)
+                throw new Error(
+                    'fire event node is missing "event" property, not found in config or payload'
+                );
 
             this.debug(`Fire Event: ${eventType} -- ${JSON.stringify({})}`);
             this.status({
@@ -58,10 +59,20 @@ module.exports = function (RED) {
             };
             this.send(message);
 
-            return this.nodeConfig.server.api.fireEvent(eventType, eventData)
+            return this.nodeConfig.server.api
+                .fireEvent(eventType, eventData)
                 .catch(err => {
-                    this.error(`Error firing event, home assistant rest api error: ${err.message}`, message);
-                    this.status({ fill: 'red', shape: 'ring', text: `API Error at: ${this.prettyDate}` });
+                    this.error(
+                        `Error firing event, home assistant rest api error: ${
+                            err.message
+                        }`,
+                        message
+                    );
+                    this.status({
+                        fill: 'red',
+                        shape: 'ring',
+                        text: `API Error at: ${this.prettyDate}`
+                    });
                 });
         }
 
@@ -70,21 +81,26 @@ module.exports = function (RED) {
             let contextData = {};
 
             let payloadData = this.utils.reach('data', payload);
-            let configData  = this.tryToObject(this.nodeConfig.data);
+            let configData = this.tryToObject(this.nodeConfig.data);
             payloadData = payloadData || {};
-            configData  = configData || {};
+            configData = configData || {};
 
             // Cacluate payload to send end priority ends up being 'Config, Global Ctx, Flow Ctx, Payload' with right most winning
             if (this.nodeConfig.mergecontext) {
-                const ctx     = this.node.context();
-                let flowVal   = ctx.flow.get(this.nodeConfig.mergecontext);
+                const ctx = this.node.context();
+                let flowVal = ctx.flow.get(this.nodeConfig.mergecontext);
                 let globalVal = ctx.global.get(this.nodeConfig.mergecontext);
-                flowVal       = flowVal || {};
-                globalVal     = globalVal || {};
-                contextData   = this.utils.merge({}, globalVal, flowVal);
+                flowVal = flowVal || {};
+                globalVal = globalVal || {};
+                contextData = this.utils.merge({}, globalVal, flowVal);
             }
 
-            eventData = this.utils.merge({}, configData, contextData, payloadData);
+            eventData = this.utils.merge(
+                {},
+                configData,
+                contextData,
+                payloadData
+            );
             return eventData;
         }
     }
