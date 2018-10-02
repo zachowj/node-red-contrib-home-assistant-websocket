@@ -61,7 +61,7 @@ module.exports = function (RED) {
             return this.nodeConfig.server.api.fireEvent(eventType, eventData)
                 .catch(err => {
                     this.error(`Error firing event, home assistant rest api error: ${err.message}`, message);
-                    this.status({fill: 'red', shape: 'ring', text: `API Error at: ${prettyDate}`});
+                    this.status({ fill: 'red', shape: 'ring', text: `API Error at: ${this.prettyDate}` });
                 });
         }
 
