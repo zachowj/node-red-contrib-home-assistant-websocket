@@ -24,7 +24,7 @@
             mergecontext: { value: null }
         },
         oneditprepare: function () {
-            const NODE = this;
+            const node = this;
             const $server = $('#node-input-server');
 
             const $domainField = $('#service_domain');
@@ -37,7 +37,6 @@
             const $unknownServiceDiv = $('.unknown-service', $serviceDataDiv);
             const $knownServiceDiv = $('.known-service', $serviceDataDiv);
 
-            const node = this;
             $domainField.val(node.service_domain);
             $serviceField.val(node.service);
             setServicesAndDomains(node);
@@ -55,7 +54,7 @@
                 }
             };
 
-            if (!NODE.server) {
+            if (!node.server) {
                 utils.setDefaultServerSelection();
             }
 
@@ -122,7 +121,7 @@
 
                         // Add table and description for service and service fields
                         $serviceDescDiv.html(serviceDesc);
-                        $('#service-data-desc .title').html(node.selectedDomain.domain + '.' + selectedServiceText)
+                        $('#service-data-desc .title').html(node.selectedDomain.name + '.' + selectedServiceText)
                         if (tableRows) {
                             $("#service-data-table").show();
                             $serviceDataTableBody.html(tableRows);
@@ -136,11 +135,13 @@
                         // Hide service data fields and desc
                         $unknownServiceDiv.show();
                         $knownServiceDiv.hide();
+                        $('#service-data-desc .title').val('');
                     }
                 } else {
                     // Hide service data fields and desc
                     $unknownServiceDiv.show();
                     $knownServiceDiv.hide();
+                    $('#service-data-desc .title').val('');
                 }
             }
 
@@ -150,7 +151,7 @@
 
                 const knownDomain = (node.allDomains.indexOf(selectedDomainText) > -1);
                 node.selectedDomain = knownDomain
-                    ? { services: node.allServices[selectedDomainText] }
+                    ? { services: node.allServices[selectedDomainText], name: selectedDomainText }
                     : node.selectedDomain = { services: {} };
 
                 $serviceField.autocomplete({
