@@ -7,9 +7,8 @@
     "url": "https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues"
   },
   "scripts": {
-    "test": "tape __tests__/**/*.spec.js | tap-min",
-    "test:debug": "node --inspect-brk=0.0.0.0:9124 node_modules/.bin/tape __tests__/**/*.spec.js",
-    "test:watch": "nodemon -w __tests__/ -w lib/ -w nodes/ --exec 'node node_modules/.bin/tape __tests__/**/*.spec.js'",
+    "test": "mocha \"test/**/*_spec.js\"",
+    "test:watch": "nodemon -w test/ -w lib/ -w nodes/ --exec 'node_modules/.bin/mocha test/**/*.spec.js'",
     "dev": "npm run docker:up",
     "dev:clean": "npm run docker:down",
     "docker:up": "npm run docker -- up --build --abort-on-container-exit --remove-orphans",
@@ -56,7 +55,6 @@
     "lodash.merge": "^4.6.0",
     "lowdb": "^1.0.0",
     "merge": "^1.2.0",
-    "node-red": "node-red/node-red#0.19.4",
     "selectn": "^1.1.2",
     "serialize-javascript": "^1.4.0",
     "time-ago": "^0.2.1",
@@ -73,17 +71,12 @@
     "eslint-plugin-standard": "^4.0.0",
     "husky": "^1.1.0",
     "lint-staged": "^7.3.0",
-    "mocha": "^4.0.1",
+    "mocha": "^4.1.0",
     "nock": "^9.1.4",
+    "node-red": "0.19.4",
+    "node-red-node-test-helper": "^0.1.8",
     "nodemon": "^1.14.12",
-    "prettier": "^1.14.3",
-    "should": "^13.2.1",
-    "simple-mock": "^0.8.0",
-    "sinon": "^4.2.2",
-    "supertest": "^3.0.0",
-    "table": "^4.0.2",
-    "tap-min": "^1.2.2",
-    "tape": "^4.8.0"
+    "prettier": "^1.14.3"
   },
   "husky": {
     "hooks": {
