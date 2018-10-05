@@ -7,6 +7,13 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Linting and formating into pre-commit hooks using eslint and prettier
+- More logging to the testing of the connection to Home Assistant
+- Boilerplate for adding tests
+
+### Fixed
+
+- Undefined string in call-service node
+- Forgot to reference class function in fire-event node
 
 ## [0.0.4] - 2018.9.31
 
