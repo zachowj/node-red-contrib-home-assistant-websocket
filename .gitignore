@@ -9,3 +9,4 @@ _docker-volumes/
 ./package-lock.json
 *.log
 TODO
+coverage

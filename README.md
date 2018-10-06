@@ -12,7 +12,7 @@ Project is going through active development and as such will probably have a few
 
 This assumes you have [node-red](http://nodered.org/) already installed and working, if you need to install node-red see [here](http://nodered.org/docs/getting-started/installation)
 
-#### NOTE: node-red-contrib-home-assistant-websocket requires node.JS > 8.0 If you're running Node-Red in Docker you'll need to pull the -v8 image for this to work.
+#### NOTE: node-red-contrib-home-assistant-websocket requires node.JS >= 8.12.0. If you're running Node-Red in Docker you'll need to pull the -v8 image for this to work.
 
 Install via Node-RED Manage Palette
 

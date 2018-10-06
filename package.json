@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "mocha \"test/**/*_spec.js\"",
-    "test:watch": "nodemon -w test/ -w lib/ -w nodes/ --exec 'node_modules/.bin/mocha test/**/*.spec.js'",
+    "test-travis": "istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec test/**/*_spec.js",
+    "test:watch": "nodemon -w test/ -w lib/ -w nodes/ --exec 'node_modules/mocha/bin/mocha ./test/*'",
     "dev": "npm run docker:up",
     "dev:clean": "npm run docker:down",
     "docker:up": "npm run docker -- up --build --abort-on-container-exit --remove-orphans",
@@ -40,10 +41,10 @@
       "trigger-state": "nodes/trigger-state/trigger-state.js",
       "poll-state": "nodes/poll-state/poll-state.js",
       "api-call-service": "nodes/call-service/call-service.js",
+      "ha-fire-event": "nodes/fire-event/fire-event.js",
       "api-current-state": "nodes/current-state/current-state.js",
       "api-get-history": "nodes/get-history/get-history.js",
-      "api-render-template": "nodes/render-template/render-template.js",
-      "ha-fire-event": "nodes/fire-event/fire-event.js"
+      "api-render-template": "nodes/render-template/render-template.js"
     }
   },
   "dependencies": {
@@ -61,6 +62,7 @@
     "ws": "^6.0.0"
   },
   "devDependencies": {
+    "coveralls": "^3.0.2",
     "eslint": "^5.6.1",
     "eslint-config-prettier": "^3.1.0",
     "eslint-config-standard": "^12.0.0",
@@ -70,12 +72,13 @@
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
     "husky": "^1.1.0",
+    "istanbul": "^1.1.0-alpha.1",
     "lint-staged": "^7.3.0",
     "mocha": "^4.1.0",
     "nock": "^9.1.4",
     "node-red": "0.19.4",
     "node-red-node-test-helper": "^0.1.8",
-    "nodemon": "^1.14.12",
+    "nodemon": "^1.18.4",
     "prettier": "^1.14.3"
   },
   "husky": {
