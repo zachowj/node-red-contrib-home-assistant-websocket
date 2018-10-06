@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+
+- Added more checks to see if server is selected before call "GET /homeassistant/entities"
+
 ## [0.0.6] 2018.10.6
 
 ### Added

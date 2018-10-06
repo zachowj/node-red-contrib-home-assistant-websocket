@@ -42,25 +42,28 @@
             if (!isConfigValid) { $entityIdField.addClass('disabled'); }
             else { $entityIdField.removeClass('disabled'); }
 
-            $.get(`${RED.settings.apiCurrentStateAdminPrefix}homeassistant/entities`)
-                .done((entities) => {
-                    this.availableEntities = JSON.parse(entities);
+            const selectedServer = $server.val();
+            if (NODE.server || (selectedServer && selectedServer !== '_ADD_')) {
+                $.get(`${RED.settings.apiCurrentStateAdminPrefix}homeassistant/entities`)
+                    .done((entities) => {
+                        this.availableEntities = JSON.parse(entities);
 
-                    $entityIdField.autocomplete({
-                        source: this.availableEntities,
-                        minLength: 0,
-                        change: (evt, ui) => {
-                            const validSelection = (this.availableEntities.indexOf($(evt.target).val()) > -1);
-                            if (validSelection) { $(evt.target).removeClass('input-error'); }
-                            else { $(evt.target).addClass('input-error'); }
-                        }
-                    });
+                        $entityIdField.autocomplete({
+                            source: this.availableEntities,
+                            minLength: 0,
+                            change: (evt, ui) => {
+                                const validSelection = (this.availableEntities.indexOf($(evt.target).val()) > -1);
+                                if (validSelection) { $(evt.target).removeClass('input-error'); }
+                                else { $(evt.target).addClass('input-error'); }
+                            }
+                        });
 
-                    const validSelection = (this.availableEntities.indexOf(this.entity_id) > -1);
-                    if (validSelection) { $entityIdField.removeClass('input-error'); }
-                    else { $entityIdField.addClass('input-error'); }
-                })
-                .fail((err) => RED.notify(err.responseText, 'error'));
+                        const validSelection = (this.availableEntities.indexOf(this.entity_id) > -1);
+                        if (validSelection) { $entityIdField.removeClass('input-error'); }
+                        else { $entityIdField.addClass('input-error'); }
+                    })
+                    .fail((err) => RED.notify(err.responseText, 'error'));
+            }
         },
         oneditsave: function () {
             this.entity_id = $("#entity_id").val();

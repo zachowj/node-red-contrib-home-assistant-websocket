@@ -39,7 +39,7 @@
 
             $domainField.val(node.service_domain);
             $serviceField.val(node.service);
-            setServicesAndDomains(node);
+
             $('#node-input-data').typedInput({
                 'types': ['json']
             });
@@ -58,9 +58,16 @@
                 utils.setDefaultServerSelection();
             }
 
+            // If a server is selected populate dropdowns
+            const selectedServer = $server.val();
+            if (node.server || (selectedServer && selectedServer !== '_ADD_')) {
+                setServicesAndDomains(node);
+            }
+
             // Calls the custom api backend defined in the config-server.js node
             // TODO: Not sure how this works with node-red if auth is enabled
             function setServicesAndDomains(node) {
+
                 return $.get(`${RED.settings.apiCallServiceAdminPrefix}homeassistant/services`)
                     .then(services => {
                         node.allServices = JSON.parse(services);
@@ -82,6 +89,7 @@
                         return node;
                     })
                     .fail((err) => RED.notify(err.responseText, 'error'));
+
             }
 
 
