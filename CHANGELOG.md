@@ -2,7 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [0.0.6] 2018.10.6
+
+### Added
+
+- Added Output Initially / On Deploy for trigger-state node
+- Added Output Initially / On Deploy for events: state node
+- Added config for Github stale bot
+- Added config and base code for coveralls code coverage reporting
+- Added a few more test cases
+
+### Fixed
+
+- Poll state node to wait for a state before triggering when Output Initially is checked
+- Close WebSocket when Deploying before creating a new connection
+
+## [0.0.5] 2018.10.5
 
 ### Added
 
