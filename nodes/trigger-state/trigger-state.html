@@ -17,6 +17,11 @@
         <input type="text" id="node-input-entityid" placeholder="binary_sensor" style="width: 70%;" />
     </div>
 
+    <div class="form-row">
+        <input type="checkbox" id="node-input-outputinitially" style="display: inline-block; width: auto; vertical-align: top;">
+        <label for="node-input-outputinitially" style="width: auto;">Output Initially / On Deploy</label>
+    </div>
+
     <!-- -------------------------------------------------------------- -->
     <!-- Add Custom Constraints                                         -->
     <!-- -------------------------------------------------------------- -->
@@ -156,7 +161,8 @@
             constraints: { value: [] },
             constraintsmustmatch: { value: 'all' },
             outputs: { value: 2 },
-            customoutputs: { value: [] }
+            customoutputs: { value: [] },
+            outputinitially: { value: false }
         },
         inputs: 1,
         outputs: 2,

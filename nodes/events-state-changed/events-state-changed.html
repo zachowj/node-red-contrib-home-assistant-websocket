@@ -7,7 +7,8 @@
             server: { value: '', type: 'server', required: true },
             entityidfilter: { value: '', required: true },
             entityidfiltertype: { value: 'substring' },
-            haltifstate: { value: '' }
+            haltifstate: { value: '' },
+            outputinitially: { value: false }
         },
         inputs: 0,
         outputs: 1,
@@ -91,6 +92,10 @@
         <input type="text" id="node-input-haltifstate" />
     </div>
 
+    <div class="form-row">
+        <input type="checkbox" id="node-input-outputinitially" style="display: inline-block; width: auto; vertical-align: top;">
+        <label for="node-input-outputinitially" style="width: auto;">Output Initially / On Deploy</label>
+    </div>
 </script>
 
 <script type="text/x-red" data-help-name="server-state-changed">

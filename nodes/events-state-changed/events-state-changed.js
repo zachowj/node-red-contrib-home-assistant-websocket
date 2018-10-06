@@ -15,7 +15,8 @@ module.exports = function(RED) {
             },
             entityidfiltertype: {},
             haltIfState: nodeDef =>
-                nodeDef.haltifstate ? nodeDef.haltifstate.trim() : null
+                nodeDef.haltifstate ? nodeDef.haltifstate.trim() : null,
+            outputinitially: {}
         }
     };
 
@@ -26,6 +27,13 @@ module.exports = function(RED) {
                 event: 'ha_events:state_changed',
                 handler: this.onHaEventsStateChanged.bind(this)
             });
+
+            if (this.nodeConfig.outputinitially) {
+                this.addEventClientListener({
+                    event: 'ha_events:states_loaded',
+                    handler: this.onDeploy.bind(this)
+                });
+            }
         }
 
         onHaEventsStateChanged(evt) {
@@ -87,6 +95,24 @@ module.exports = function(RED) {
                 return null;
             } catch (e) {
                 this.error(e);
+            }
+        }
+
+        async onDeploy() {
+            const entities = await this.nodeConfig.server.homeAssistant.getStates();
+
+            for (let entityId in entities) {
+                let eventMessage = {
+                    event_type: 'state_changed',
+                    entity_id: entityId,
+                    event: {
+                        entity_id: entityId,
+                        old_state: entities[entityId],
+                        new_state: entities[entityId]
+                    }
+                };
+
+                this.onHaEventsStateChanged(eventMessage);
             }
         }
 

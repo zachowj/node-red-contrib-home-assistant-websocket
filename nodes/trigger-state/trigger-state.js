@@ -8,7 +8,8 @@ module.exports = function(RED) {
             entityid: {},
             isenabled: {},
             constraints: {},
-            customoutputs: {}
+            customoutputs: {},
+            outputinitially: {}
         }
     };
 
@@ -27,6 +28,13 @@ module.exports = function(RED) {
             this.messageTimers = {};
 
             this.loadPersistedData();
+
+            if (this.nodeConfig.outputinitially) {
+                this.addEventClientListener({
+                    event: 'ha_events:states_loaded',
+                    handler: this.onDeploy.bind(this)
+                });
+            }
         }
 
         onInput({ message }) {
@@ -53,6 +61,24 @@ module.exports = function(RED) {
 
                 this.onEntityStateChanged(evt);
             }
+        }
+
+        async onDeploy() {
+            const entityState = await this.nodeConfig.server.homeAssistant.getStates(
+                this.nodeConfig.entityid
+            );
+
+            let eventMessage = {
+                event_type: 'state_changed',
+                entity_id: this.nodeConfig.entityid,
+                event: {
+                    entity_id: this.nodeConfig.entityid,
+                    old_state: entityState,
+                    new_state: entityState
+                }
+            };
+
+            this.onEntityStateChanged(eventMessage);
         }
 
         async onEntityStateChanged(eventMessage) {
@@ -146,7 +172,11 @@ module.exports = function(RED) {
                 );
 
                 if (comparatorResult === false) {
-                    this.debugToClient(`constraint comparator: failed entity "${constraintTarget.entityid}" property "${propertyValue}" with value ${actualValue} failed "${comparatorType}" check against (${comparatorValueDatatype}) ${comparatorValue}`); // eslint-disable-line
+                    this.debugToClient(
+                        `constraint comparator: failed entity "${
+                            constraintTarget.entityid
+                        }" property "${propertyValue}" with value ${actualValue} failed "${comparatorType}" check against (${comparatorValueDatatype}) ${comparatorValue}`
+                    ); // eslint-disable-line
                 }
 
                 comparatorResults.push({
@@ -313,7 +343,13 @@ module.exports = function(RED) {
         ) {
             // If comparator did not match
             if (!comparatorMatched) {
-                this.debugToClient(`output comparator failed: property "${output.comparatorPropertyValue}" with value ${actualValue} failed "${output.comparatorType}" check against ${output.comparatorValue}`); // eslint-disable-line
+                this.debugToClient(
+                    `output comparator failed: property "${
+                        output.comparatorPropertyValue
+                    }" with value ${actualValue} failed "${
+                        output.comparatorType
+                    }" check against ${output.comparatorValue}`
+                ); // eslint-disable-line
                 return null;
             }
 

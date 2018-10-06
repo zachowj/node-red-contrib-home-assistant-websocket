@@ -44,8 +44,9 @@ module.exports = function(RED) {
             }
 
             if (this.nodeConfig.outputinitially) {
-                process.nextTick(() => {
-                    this.onTimer();
+                this.addEventClientListener({
+                    event: 'ha_events:states_loaded',
+                    handler: this.onTimer.bind(this)
                 });
             }
         }
@@ -109,17 +110,12 @@ module.exports = function(RED) {
             const entityLastChanged = entityState.last_changed;
             return new Date(entityLastChanged);
         }
-        // Try to fetch from cache, if not found then try and pull fresh
+
         async getState(entityId) {
             let state = await this.nodeConfig.server.homeAssistant.getStates(
                 this.nodeConfig.entity_id
             );
-            if (!state) {
-                state = await this.nodeConfig.server.homeAssistant.getStates(
-                    this.nodeConfig.entity_id,
-                    true
-                );
-            }
+
             return state;
         }
     }
