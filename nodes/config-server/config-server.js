@@ -135,7 +135,7 @@ module.exports = function(RED) {
 
                 this.setOnContext('isConnected', true);
 
-                this.log(`New connection ${this.credentials.host}`);
+                this.log(`New WebSocket ${this.credentials.host}`);
                 this.debug('config server event listener connected');
             } catch (e) {
                 this.error(e);
@@ -158,6 +158,20 @@ module.exports = function(RED) {
         onHaEventsError(err) {
             this.setOnContext('isConnected', false);
             this.debug(err);
+        }
+
+        // Close WebSocket client on redeploy or node-RED shutdown
+        async onClose(removed) {
+            super.onClose();
+            const webSocketClient = this.utils.reach(
+                'homeAssistant.websocket.client',
+                this
+            );
+
+            if (webSocketClient) {
+                this.log(`Closing WebSocket ${this.credentials.host}`);
+                webSocketClient.close();
+            }
         }
     }
 
