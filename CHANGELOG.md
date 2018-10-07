@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [0.0.7] 2018.10.7
 
 ### Fixed
 
-- Added more checks to see if server is selected before call "GET /homeassistant/entities"
+- Added more checks to see if server is selected before calling "GET /homeassistant/entities" for call-server, current-state and poll-state nodes
 
 ## [0.0.6] 2018.10.6
 

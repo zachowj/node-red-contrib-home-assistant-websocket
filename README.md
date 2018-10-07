@@ -105,6 +105,8 @@ Check out the wiki page for setting up an environment with Home Assistant/Node R
 - **[@AYapejian](https://github.com/AYapejian)** - [node-home-assistant](https://github.com/AYapejian/node-home-assistant)
 - **[@zachowj](https://github.com/AYapejian)** - [node-red-contrib-home-assistant-websocket](https://github.com/AYapejian/node-home-assistant-websocket)
 
+[List of all authors and contributors](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/graphs/contributors)
+
 ## Acknowledgments
 
 - [home-assistant-js-websocket](https://github.com/home-assistant/home-assistant-js-websocket)
