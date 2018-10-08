@@ -45,6 +45,12 @@ module.exports = function(RED) {
 
                 this.RED.nodes.addCredentials(this.id, this.credentials);
             }
+            // Check if using Hass.io URL and import proxy token
+            if (this.credentials.host === 'http://hassio/homeassistant') {
+                this.credentials.access_token = process.env.HASSIO_TOKEN;
+
+                this.RED.nodes.addCredentials(this.id, this.credentials);
+            }
 
             this.RED.httpAdmin.get(
                 '/homeassistant/entities',
