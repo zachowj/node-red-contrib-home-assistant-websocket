@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.0] 2018.10.8
+
+### Added
+
+- Support for reading the HASSIO_TOKEN from hass.io and using that in the server config if the server URL is the hass.io proxy
+
+### Fixed
+
+- Use the correct hass.io proxy url for websockets
+
 ## [0.0.7] 2018.10.7
 
 ### Fixed
