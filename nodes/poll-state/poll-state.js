@@ -60,6 +60,8 @@ module.exports = function(RED) {
         }
 
         async onTimer() {
+            if (!this.isConnected) return;
+
             try {
                 const pollState = await this.getState(
                     this.nodeConfig.entity_id
