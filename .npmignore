@@ -1,9 +1,11 @@
-__tests__/
+coverage/
+test/
 .vscode
 .eslintrc.js
 .github
-docker
 .dockerignore
+.travis.yml
+docker
 package-lock.json
 yarn.lock
 TODO
