@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.1] 2018.10.11
+
+### Added
+
+- More tests for fire-event node
+- Added coverage/ and travis.yml to .npmignore
+
+### Fixed
+
+- Poll-state node will stop triggering if not connected to Home Assistant
+- Setting server global context states on data load
+
 ## [0.1.0] 2018.10.8
 
 ### Added
