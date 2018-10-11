@@ -109,6 +109,10 @@ module.exports = function(RED) {
                     'ha_events:state_changed',
                     this.onHaStateChanged.bind(this)
                 );
+                this.websocket.addListener(
+                    'ha_events:states_loaded',
+                    this.onHaStatesLoaded.bind(this)
+                );
             }
         }
 
@@ -154,6 +158,10 @@ module.exports = function(RED) {
                 states[changedEntity.entity_id] = changedEntity.event.new_state;
                 this.setOnContext('states', states);
             }
+        }
+
+        onHaStatesLoaded(states) {
+            this.setOnContext('states', states);
         }
 
         onHaEventsClose() {
