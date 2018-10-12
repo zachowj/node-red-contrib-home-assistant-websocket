@@ -9,7 +9,7 @@
   "scripts": {
     "test": "mocha \"test/**/*_spec.js\"",
     "test-travis": "istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec test/**/*_spec.js",
-    "test:watch": "nodemon -w test/ -w lib/ -w nodes/ --exec 'node_modules/mocha/bin/mocha ./test/*'",
+    "test:watch": "nodemon -w test/ -w lib/ -w nodes/ --exec ./node_modules/.bin/mocha test/*",
     "dev": "npm run docker:up",
     "dev:clean": "npm run docker:down",
     "docker:up": "npm run docker -- up --build --abort-on-container-exit --remove-orphans",
