@@ -47,7 +47,7 @@
 
             const selectedServer = $server.val();
             if (NODE.server || (selectedServer && selectedServer !== '_ADD_')) {
-                $.get(`${RED.settings.pollStateAdminPrefix}homeassistant/entities`)
+                $.get(`homeassistant/entities`)
                     .done((entities) => {
                         this.availableEntities = JSON.parse(entities);
 

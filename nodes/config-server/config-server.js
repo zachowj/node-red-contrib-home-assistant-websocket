@@ -54,14 +54,17 @@ module.exports = function(RED) {
 
             this.RED.httpAdmin.get(
                 '/homeassistant/entities',
+                RED.auth.needsPermission('server.read'),
                 httpHandlers.getEntities.bind(this)
             );
             this.RED.httpAdmin.get(
                 '/homeassistant/states',
+                RED.auth.needsPermission('server.read'),
                 httpHandlers.getStates.bind(this)
             );
             this.RED.httpAdmin.get(
                 '/homeassistant/services',
+                RED.auth.needsPermission('server.read'),
                 httpHandlers.getServices.bind(this)
             );
 
@@ -69,12 +72,13 @@ module.exports = function(RED) {
                 root: require('path').join(__dirname, '..', '/_static'),
                 dotfiles: 'deny'
             };
-            this.RED.httpAdmin.get('/homeassistant/static/*', function(
-                req,
-                res
-            ) {
-                res.sendFile(req.params[0], HTTP_STATIC_OPTS);
-            });
+            this.RED.httpAdmin.get(
+                '/homeassistant/static/*',
+                RED.auth.needsPermission('server.read'),
+                function(req, res) {
+                    res.sendFile(req.params[0], HTTP_STATIC_OPTS);
+                }
+            );
 
             this.setOnContext('states', []);
             this.setOnContext('services', []);

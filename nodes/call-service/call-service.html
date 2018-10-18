@@ -68,7 +68,7 @@
             // TODO: Not sure how this works with node-red if auth is enabled
             function setServicesAndDomains(node) {
 
-                return $.get(`${RED.settings.apiCallServiceAdminPrefix}homeassistant/services`)
+                return $.get(`homeassistant/services`)
                     .then(services => {
                         node.allServices = JSON.parse(services);
                         node.allDomains = Object.keys(node.allServices);

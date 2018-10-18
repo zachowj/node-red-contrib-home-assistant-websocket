@@ -120,12 +120,5 @@ module.exports = function(RED) {
         }
     }
 
-    RED.nodes.registerType('api-call-service', CallServiceNode, {
-        settings: {
-            apiCallServiceAdminPrefix: {
-                value: RED.settings.httpAdminRoot || '/',
-                exportable: true
-            }
-        }
-    });
+    RED.nodes.registerType('api-call-service', CallServiceNode);
 };

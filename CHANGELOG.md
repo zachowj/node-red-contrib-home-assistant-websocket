@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.2] 2018.10.18
+
+### Security
+
+- Added permission checks for the httpAdmin endpoints for autocomplete [Fixes #7](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/7)
+
 ## [0.1.1] 2018.10.11
 
 ### Added
