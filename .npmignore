@@ -9,3 +9,4 @@ docker
 package-lock.json
 yarn.lock
 TODO
+greenkeeper.json
