@@ -117,6 +117,10 @@ module.exports = function(RED) {
                     'ha_events:states_loaded',
                     this.onHaStatesLoaded.bind(this)
                 );
+                this.websocket.addListener(
+                    'ha_events:services_loaded',
+                    this.onHaServicesLoaded.bind(this)
+                );
             }
         }
 
@@ -166,6 +170,10 @@ module.exports = function(RED) {
 
         onHaStatesLoaded(states) {
             this.setOnContext('states', states);
+        }
+
+        onHaServicesLoaded(services) {
+            this.setOnContext('services', services);
         }
 
         onHaEventsClose() {
