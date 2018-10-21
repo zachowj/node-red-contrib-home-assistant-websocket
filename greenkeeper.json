@@ -1,0 +1,11 @@
+{
+  "groups": {
+    "default": {
+      "packages": [
+        "docker/node-red/root-fs/app/package.json",
+        "docker/node-red/root-fs/data/package.json",
+        "package.json"
+      ]
+    }
+  }
+}
