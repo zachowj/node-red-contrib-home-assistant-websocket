@@ -11,7 +11,7 @@
     "dependencies": {
         "node-red": "0.19.4",
         "node-red-contrib-contextbrowser": "*",
-        "nodemon":  "1.18.4"
+        "nodemon":  "1.18.5"
     },
     "engines": {
         "node": "8.*.*"
