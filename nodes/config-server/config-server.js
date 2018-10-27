@@ -95,6 +95,7 @@ module.exports = function(RED) {
 
                 this.homeAssistant
                     .startListening()
+                    // .then(this.onHaEventsOpen())
                     .catch(err => this.node.error(err));
 
                 this.websocket.addListener(
@@ -104,6 +105,10 @@ module.exports = function(RED) {
                 this.websocket.addListener(
                     'ha_events:open',
                     this.onHaEventsOpen.bind(this)
+                );
+                this.websocket.addListener(
+                    'ha_events:connecting',
+                    this.onHaEventsConnecting.bind(this)
                 );
                 this.websocket.addListener(
                     'ha_events:error',
@@ -143,21 +148,11 @@ module.exports = function(RED) {
                 : null;
         }
 
-        async onHaEventsOpen() {
-            try {
-                let states = await this.homeAssistant.getStates(null, true);
-                this.setOnContext('states', states);
+        onHaEventsOpen() {
+            this.setOnContext('isConnected', true);
 
-                let services = await this.homeAssistant.getServices(true);
-                this.setOnContext('services', services);
-
-                this.setOnContext('isConnected', true);
-
-                this.log(`New WebSocket ${this.credentials.host}`);
-                this.debug('config server event listener connected');
-            } catch (e) {
-                this.error(e);
-            }
+            this.log(`WebSocket Connected to ${this.credentials.host}`);
+            this.debug('config server event listener connected');
         }
 
         onHaStateChanged(changedEntity) {
@@ -176,7 +171,16 @@ module.exports = function(RED) {
             this.setOnContext('services', services);
         }
 
+        onHaEventsConnecting() {
+            this.setOnContext('isConnected', false);
+            this.debug(`WebSocket Connecting ${this.credentials.host}`);
+            this.debug('config server event listener connecting');
+        }
+
         onHaEventsClose() {
+            if (this.getFromContext('isConnected')) {
+                this.log(`WebSocket Closed ${this.credentials.host}`);
+            }
             this.setOnContext('isConnected', false);
             this.debug('config server event listener closed');
         }
