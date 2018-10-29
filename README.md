@@ -30,18 +30,11 @@ $ npm install node-red-contrib-home-assistant-websocket
 
 For [Hass.io](https://hass.io/) add-on users:
 
-Use the Hass.io API Proxy address `http://hassio/homeassistant` as the Home Assistant server address (Base URL). The access token field can be left empty as the plugin will fill it in with the HASSIO_TOKEN when you deploy your flows.
+The Community Hass.io add-on ships with this node right out of the box.
 
-Add the following to the Node-RED addon configuration:
+Use the Hass.io API Proxy address `http://hassio/homeassistant` as the Home Assistant server address (Base URL, which is the default on installing the add-on the first time). The access token field can be left empty as the plugin will fill it in with the HASSIO_TOKEN when you deploy your flows.
 
-```
-"npm_packages": [
-    "git+https://github.com/zachowj/node-red-contrib-home-assistant-websocket"
-],
-"init_commands": [
-    "npm uninstall node-red-contrib-home-assistant"
-],
-```
+The add-on can be found here: <https://github.com/hassio-addons/addon-node-red#readme>
 
 =======
 For flow examples checkout the [flows here](https://raw.githubusercontent.com/zachowj/node-red-contrib-home-assistant-websocket/master/docker/node-red/root-fs/data/flows.json)
