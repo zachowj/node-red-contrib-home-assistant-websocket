@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.3] 2018.10.28
+
+### Changed
+
+- Refactored the connection process for the WebSocket. Now shows Connecting, Connected, and Disconnected. Connected is now shown only after it has successfully authenticated with Home Assistant.
+- Load the full Services object from Home Assistant on load
+- Only process State and Services objects if they're not empty
+
 ## [0.1.2] 2018.10.18
 
 ### Security
