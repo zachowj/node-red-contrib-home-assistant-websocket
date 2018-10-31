@@ -13,6 +13,7 @@
             halt_if: { value: '' },
             override_topic: { value: true },
             override_payload: { value: true },
+            override_data: { value: true },
             entity_id: { value: '' },
         },
         oneditprepare: function () {
@@ -97,6 +98,12 @@
         <label for="node-input-override_payload">&nbsp;</label>
         <input type="checkbox" id="node-input-override_payload" checked style="display:inline-block; width:15px; vertical-align:baseline;">&nbsp;
         <span>Override Payload</span>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-override_data">&nbsp;</label>
+        <input type="checkbox" id="node-input-override_data" checked style="display:inline-block; width:15px; vertical-align:baseline;">&nbsp;
+        <span>Override Data</span>
     </div>
 
     <div class="form-row">
