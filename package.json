@@ -19,7 +19,8 @@
     "docker": "docker-compose -f docker/docker-compose.yml",
     "docker-map": "docker-compose -f docker/docker-compose.mapped.yml",
     "clean": "npm run docker:down",
-    "lint": "eslint . ; exit 0"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "repository": {
     "type": "git",
@@ -87,8 +88,12 @@
     }
   },
   "lint-staged": {
-    "*.js,*.json,*.md": [
-      "eslint --fix",
+    "*.js": [
+      "eslint -c .eslintrc.js --fix",
+      "git add"
+    ],
+    "*.{json,md}": [
+      "prettier --write",
       "git add"
     ]
   }
