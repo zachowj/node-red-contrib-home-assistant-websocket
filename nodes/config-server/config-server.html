@@ -10,7 +10,18 @@
             access_token: { value: '', required: false }
         },
         icon: "home.png",
-        label: function () { return this.name || this.url }
+        label: function () { return this.name || this.url },
+        oneditsave: function (v) {
+            var host = $("#node-config-input-host").val()
+            if (host !== 'http://hassio/homeassistant') {
+                var parser = document.createElement("a");
+                parser.href = host;
+
+                if (host !== parser.origin) {
+                    RED.notify("Invalid formatted Base URL: " + host);
+                }
+            }
+        }
     });
 </script>
 
