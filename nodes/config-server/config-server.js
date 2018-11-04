@@ -28,7 +28,8 @@ module.exports = function(RED) {
         debug: true,
         config: {
             name: {},
-            legacy: {}
+            legacy: {},
+            hassio: {}
         }
     };
 
