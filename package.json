@@ -79,7 +79,7 @@
     "nock": "^10.0.1",
     "node-red": "^0.19.5",
     "node-red-node-test-helper": "^0.1.8",
-    "nodemon": "^1.18.5",
+    "nodemon": "^1.18.6",
     "prettier": "^1.14.3"
   },
   "husky": {
