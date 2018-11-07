@@ -1,6 +1,6 @@
 # Node Red Contrib Home Assistant Websocket
 
-[![Build Status](https://travis-ci.com/zachowj/node-red-contrib-home-assistant-websocket.svg?branch=master)](https://travis-ci.com/zachowj/node-red-contrib-home-assistant-websocket) [![Coverage Status](https://coveralls.io/repos/github/zachowj/node-red-contrib-home-assistant-websocket/badge.svg?branch=master)](https://coveralls.io/github/zachowj/node-red-contrib-home-assistant-websocket?branch=master) [![Greenkeeper badge](https://badges.greenkeeper.io/zachowj/node-red-contrib-home-assistant-websocket.svg)](https://greenkeeper.io/)
+[![Build Status](https://travis-ci.com/zachowj/node-red-contrib-home-assistant-websocket.svg?branch=master)](https://travis-ci.com/zachowj/node-red-contrib-home-assistant-websocket) [![Coverage Status](https://coveralls.io/repos/github/zachowj/node-red-contrib-home-assistant-websocket/badge.svg?branch=master)](https://coveralls.io/github/zachowj/node-red-contrib-home-assistant-websocket?branch=master)
 
 Various nodes to assist in setting up automation using [node-red](https://nodered.org/) communicating with [Home Assistant](https://home-assistant.io/).
 
@@ -10,7 +10,7 @@ Project is going through active development and as such will probably have a few
 
 ## Getting Started
 
-This assumes you have [node-red](http://nodered.org/) already installed and working, if you need to install node-red see [here](http://nodered.org/docs/getting-started/installation)
+This assumes you have [node-red](https://nodered.org/) already installed and working, if you need to install node-red see [here](https://nodered.org/docs/getting-started/installation)
 
 #### NOTE: node-red-contrib-home-assistant-websocket requires node.JS >= 8.12.0. If you're running Node-Red in Docker you'll need to pull the -v8 image for this to work.
 
@@ -32,7 +32,7 @@ For [Hass.io](https://hass.io/) add-on users:
 
 The Community Hass.io add-on ships with this node right out of the box.
 
-Use the Hass.io API Proxy address `http://hassio/homeassistant` as the Home Assistant server address (Base URL, which is the default on installing the add-on the first time). The access token field can be left empty as the plugin will fill it in with the HASSIO_TOKEN when you deploy your flows.
+Under the server node config just check the checkbox for `I use Hass.io`
 
 The add-on can be found here: <https://github.com/hassio-addons/addon-node-red#readme>
 
