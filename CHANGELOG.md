@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.0] 2018.11.6
+
+### New Features
+
+- Ability to allow Unauthorized SSL Certificates configurable via the server config
+- Added override `msg.data` control to current-state node ([@thejta](https://github.com/thejta))
+- Config for Hass.io users is now just a single checkbox
+- Added autocomplete to the entity id field for the get-history node
+
+### Added
+
+- Base URL will now show validation error if not in an acceptable format
+
+### Fixed
+
+- Files should now get linted correctly on staging
+
 ## [0.1.3] 2018.10.28
 
 ### Changed
