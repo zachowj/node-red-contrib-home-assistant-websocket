@@ -5,6 +5,7 @@
             name: { value: 'Home Assistant', required: false },
             legacy: { value: false },
             hassio: { value: false },
+            rejectUnauthorizedCerts: { value: true }
         },
         credentials: {
             host: { value: '', required: true },
@@ -16,6 +17,10 @@
             var $hassio = $("#node-config-input-hassio");
             var $host = $("#node-config-input-host");
             var $legacy = $("#node-config-input-legacy");
+
+            if (this.rejectUnauthorizedCerts === false) {
+                $("#accept_unauthorized_certs").prop('checked', true);
+            }
 
             if (!$hassio.prop("checked") && $host.val() === "http://hassio/homeassistant") {
                 $hassio.prop("checked", true);
@@ -46,6 +51,8 @@
 
             if (hassio) {
                 $host.val('http://hassio/homeassistant');
+                this.legacy = false;
+                this.rejectUnauthorizedCerts = true;
             } else {
                 var parser = document.createElement("a");
                 parser.href = hostname;
@@ -53,6 +60,9 @@
                 if (hostname !== parser.origin) {
                     RED.notify("Invalid format of Base URL: " + hostname);
                 }
+
+                // Save the inverse of the checkbox
+                this.rejectUnauthorizedCerts = !$('#accept_unauthorized_certs').prop('checked');
             }
         }
     });
@@ -84,6 +94,11 @@
             <input type="checkbox" id="node-config-input-legacy" style="width: auto;margin-left: 125px;vertical-align: top" />
             <label for="node-config-input-legacy" style="width: auto;"> Use Legacy API Password</label>
         </div>
+
+        <div class="form-row">
+            <input type="checkbox" id="accept_unauthorized_certs" style="width: auto;margin-left: 125px;vertical-align: top" />
+            <label for="accept_unauthorized_certs" style="width: auto;"> Accept Unauthorized SSL Certificates</label>
+        </div>
     </div>
 </script>
 
@@ -107,6 +122,8 @@
             <dt>Legacy Password <span class="property-type">boolean</span></dt>
             <dd>If you're using the legacy password to log into Home Assistant check this and enter your password in the password text box.</dd>
 
+            <dt>Unauthorized SSL Certificates <span class="property-type">boolean</span></dt>
+            <dd>This will allow you to use self-signed certificates. Only use this if you know what you're doing.</dd>
     </dl>
 
     <h3>Details</h3>

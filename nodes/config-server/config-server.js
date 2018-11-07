@@ -29,7 +29,8 @@ module.exports = function(RED) {
         config: {
             name: {},
             legacy: {},
-            hassio: {}
+            hassio: {},
+            rejectUnauthorizedCerts: {}
         }
     };
 
@@ -89,7 +90,9 @@ module.exports = function(RED) {
                 this.homeAssistant = new HomeAssistant({
                     baseUrl: this.credentials.host,
                     apiPass: this.credentials.access_token,
-                    legacy: this.nodeConfig.legacy
+                    legacy: this.nodeConfig.legacy,
+                    rejectUnauthorizedCerts: this.nodeConfig
+                        .rejectUnauthorizedCerts
                 });
                 this.api = this.homeAssistant.api;
                 this.websocket = this.homeAssistant.websocket;
