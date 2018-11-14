@@ -1,4 +1,4 @@
-# Node Red Contrib Home Assistant Websocket
+# node-red-contrib-home-assistant-websocket
 
 [![Build Status](https://travis-ci.com/zachowj/node-red-contrib-home-assistant-websocket.svg?branch=master)](https://travis-ci.com/zachowj/node-red-contrib-home-assistant-websocket) [![Coverage Status](https://coveralls.io/repos/github/zachowj/node-red-contrib-home-assistant-websocket/badge.svg?branch=master)](https://coveralls.io/github/zachowj/node-red-contrib-home-assistant-websocket?branch=master)
 
@@ -47,7 +47,7 @@ The installed nodes have more detailed information in the node-red info pane sho
 
 ### All Events - `websocket`
 
-Listens for all types of events from home assistant
+Listens for all types of events from home assistant with the ability to filter by event type
 
 ### State Changed Event - `websocket`
 
@@ -55,7 +55,7 @@ Listens for only `state_changed` events from home assistant
 
 ### State Trigger - `websocket`
 
-Much like the `State Changed Ndoe` however provides some advanced functionality around common automation use cases.
+Much like the `State Changed Node` however provides some advanced functionality around common automation use cases.
 
 ### Poll State - `websocket`
 

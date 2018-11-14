@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.1] 2018.11.11
+
+### Changed
+
+- Reverted home-assistant-js-websocket to version 3.1.6 because hass.io proxy reconnect errors popped back up in ^3.2.0
+
 ## [0.2.0] 2018.11.6
 
 ### New Features

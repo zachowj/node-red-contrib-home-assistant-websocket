@@ -1,7 +1,7 @@
 {
   "name": "node-red-contrib-home-assistant-websocket",
   "description": "Node-RED integration with Home Assistant through websocket and REST API",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "homepage": "https://github.com/zachowj/node-red-contrib-home-assistant-websocket",
   "bugs": {
     "url": "https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues"
@@ -52,7 +52,7 @@
     "axios": "0.18.0",
     "date-fns": "1.29.0",
     "debug": "4.1.0",
-    "home-assistant-js-websocket": "3.2.4",
+    "home-assistant-js-websocket": "3.1.6",
     "joi": "14.0.6",
     "lodash.merge": "4.6.1",
     "lowdb": "1.0.0",

@@ -2,6 +2,7 @@ coverage/
 test/
 .vscode
 .eslintrc.js
+.eslintignore
 .github
 .dockerignore
 .travis.yml
