@@ -70,10 +70,10 @@ module.exports = function(RED) {
                 service: apiService,
                 data: apiData || null
             };
-            this.send(message);
 
             return this.nodeConfig.server.websocket
                 .callService(apiDomain, apiService, apiData)
+                .then(this.send(message))
                 .catch(err => {
                     this.warn(
                         'Error calling service, home assistant api error',
