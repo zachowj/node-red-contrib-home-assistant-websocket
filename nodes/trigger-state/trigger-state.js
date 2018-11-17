@@ -6,6 +6,16 @@ module.exports = function(RED) {
         debug: true,
         config: {
             entityid: {},
+            entityidfilter: nodeDef => {
+                if (!nodeDef.entityid) return undefined;
+
+                if (nodeDef.entityidfiltertype === 'substring')
+                    return nodeDef.entityid.split(',').map(f => f.trim());
+                if (nodeDef.entityidfiltertype === 'regex')
+                    return new RegExp(nodeDef.entityid);
+                return nodeDef.entityid;
+            },
+            entityidfiltertype: {},
             isenabled: {},
             constraints: {},
             customoutputs: {},
@@ -17,13 +27,11 @@ module.exports = function(RED) {
         constructor(nodeDefinition) {
             super(nodeDefinition, RED, nodeOptions);
 
-            const eventTopic = (this.eventTopic = `ha_events:state_changed:${
-                this.nodeConfig.entityid
-            }`);
             this.addEventClientListener({
-                event: eventTopic,
+                event: 'ha_events:state_changed',
                 handler: this.onEntityStateChanged.bind(this)
             });
+
             this.NUM_DEFAULT_MESSAGES = 2;
             this.messageTimers = {};
 
@@ -86,6 +94,9 @@ module.exports = function(RED) {
                 this.debugToClient(
                     'incoming: node is currently disabled, ignoring received event'
                 );
+                return;
+            }
+            if (!this.shouldIncludeEvent(eventMessage.entity_id)) {
                 return;
             }
 
@@ -385,6 +396,25 @@ module.exports = function(RED) {
             if (removed) {
                 await this.removeNodeData();
             }
+        }
+
+        shouldIncludeEvent(entityId) {
+            if (!this.nodeConfig.entityidfilter) return true;
+            const filter = this.nodeConfig.entityidfilter;
+            const type = this.nodeConfig.entityidfiltertype;
+
+            if (type === 'substring') {
+                const found = this.nodeConfig.entityidfilter.filter(
+                    filterStr => entityId.indexOf(filterStr) >= 0
+                );
+                return found.length > 0;
+            }
+
+            if (type === 'regex') {
+                return filter.test(entityId);
+            }
+
+            return filter === entityId;
         }
     }
 
