@@ -60,7 +60,7 @@
     "selectn": "1.1.2",
     "serialize-javascript": "1.5.0",
     "time-ago": "0.2.1",
-    "ws": "6.1.0"
+    "ws": "6.1.1"
   },
   "devDependencies": {
     "coveralls": "^3.0.2",
