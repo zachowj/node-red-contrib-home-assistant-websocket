@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.1] 2018.11.18
+
+### Added
+
+- Added mustache dependency
+
 ## [0.3.0] 2018.11.18
 
 ### New Features
