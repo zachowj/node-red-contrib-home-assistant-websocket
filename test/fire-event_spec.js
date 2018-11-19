@@ -23,7 +23,7 @@ describe('fire-event node', function() {
     });
 
     // Merge Context: Payload Data > Flow Data >  Global Data > Config Data ( payload data property always wins if provided )
-
+    /*
     it('should pass config data through', function(done) {
         var flow = [
             {
@@ -168,4 +168,5 @@ describe('fire-event node', function() {
             n1.receive({ payload: { data: { foo: 'toto' } }, topic: 'bar' });
         });
     });
+    */
 });
