@@ -30,6 +30,12 @@ module.exports = function(RED) {
             let { template } = parsedMessage;
             template = template.value;
 
+            this.status({
+                fill: 'yellow',
+                shape: 'dot',
+                text: `Requesting at: ${this.getPrettyDate()}`
+            });
+
             return this.nodeConfig.server.api
                 .renderTemplate(template)
                 .then(res => {

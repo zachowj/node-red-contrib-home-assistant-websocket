@@ -76,6 +76,12 @@ module.exports = function(RED) {
                           enddate
                       );
 
+            this.status({
+                fill: 'yellow',
+                shape: 'dot',
+                text: `Requesting at: ${this.getPrettyDate()}`
+            });
+
             return apiRequest
                 .then(res => {
                     message.startdate = startdate;
