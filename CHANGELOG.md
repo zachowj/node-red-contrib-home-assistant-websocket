@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] 2018.11.18
+
+### New Features
+
+- Entity Id now has autocomplete for the Call Service node.
+- Trigger node now can be filtered by substring/exact/regex.
+- Call Service and Fire Event nodes are now able to render [mustache templates](https://github.com/janl/mustache.js) in the data property. Template also work on the new entity id field for the Call Service node.
+
+### Added
+
+- Request/Sending status to Call Service, Fire Event, Get History and Get Template nodes.
+
+### Changed
+
+- Call Service node won't send message until it receives a response from HA.
+- Fire Event node won't send message until it receives a response from HA.
+
 ## [0.2.1] 2018.11.11
 
 ### Changed
