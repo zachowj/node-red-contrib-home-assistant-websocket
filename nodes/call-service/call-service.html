@@ -30,6 +30,7 @@
           }
         }
       },
+      render_data: { value: false },
       mergecontext: { value: null }
     },
     oneditprepare: function() {
@@ -264,6 +265,11 @@
   <div class="form-row">
       <label for="node-input-data"><i class="fa fa-dot-circle-o"></i> Data</label>
       <input type="text" id="node-input-data" />
+  </div>
+
+  <div class="form-row">
+    <input type="checkbox" id="node-input-render_data" style="margin-left: 105px;display:inline-block; width:15px; vertical-align:baseline;">
+    <label for="node-input-render_data" style="width: auto;">Render templates in Data</label>
   </div>
 
   <div class="form-row">

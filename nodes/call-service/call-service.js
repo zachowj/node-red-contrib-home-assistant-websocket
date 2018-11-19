@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 const BaseNode = require('../../lib/base-node');
+const mustache = require('mustache');
 
 module.exports = function(RED) {
     const nodeOptions = {
@@ -8,6 +9,7 @@ module.exports = function(RED) {
             service_domain: {},
             service: {},
             data: {},
+            render_data: {},
             mergecontext: {},
             name: {},
             server: { isNode: true }
@@ -32,6 +34,22 @@ module.exports = function(RED) {
             }
         }
         onInput({ message }) {
+            if (
+                this.nodeConfig.server.websocket.connectionState !==
+                this.nodeConfig.server.websocket.CONNECTED
+            ) {
+                this.status({
+                    fill: 'red',
+                    shape: 'ring',
+                    text: `No Connection at: ${this.getPrettyDate()}`
+                });
+                this.warn(
+                    'Call-Service attempted without connection to server.'
+                );
+
+                return;
+            }
+
             let payload, payloadDomain, payloadService;
 
             if (message && message.payload) {
@@ -39,31 +57,36 @@ module.exports = function(RED) {
                 payloadDomain = this.utils.reach('domain', payload);
                 payloadService = this.utils.reach('service', payload);
             }
+
             const configDomain = this.nodeConfig.service_domain;
             const configService = this.nodeConfig.service;
-
             const apiDomain = payloadDomain || configDomain;
             const apiService = payloadService || configService;
-            const apiData = this.getApiData(payload);
-            if (!apiDomain)
+            let apiData = this.getApiData(payload);
+
+            if (!apiDomain) {
                 throw new Error(
                     'call service node is missing api "domain" property, not found in config or payload'
                 );
-            if (!apiService)
+            }
+
+            if (!apiService) {
                 throw new Error(
                     'call service node is missing api "service" property, not found in config or payload'
                 );
+            }
+
+            if (this.nodeConfig.render_data) {
+                apiData = JSON.parse(
+                    mustache.render(JSON.stringify(apiData), message)
+                );
+            }
 
             this.debug(
                 `Calling Service: ${apiDomain}:${apiService} -- ${JSON.stringify(
                     apiData || {}
                 )}`
             );
-            this.status({
-                fill: 'green',
-                shape: 'dot',
-                text: `${apiDomain}.${apiService} called at: ${this.getPrettyDate()}`
-            });
 
             message.payload = {
                 domain: apiDomain,
@@ -71,9 +94,22 @@ module.exports = function(RED) {
                 data: apiData || null
             };
 
+            this.status({
+                fill: 'yellow',
+                shape: 'dot',
+                text: `Sending at: ${this.getPrettyDate()}`
+            });
+
             return this.nodeConfig.server.websocket
                 .callService(apiDomain, apiService, apiData)
-                .then(this.send(message))
+                .then(() => {
+                    this.status({
+                        fill: 'green',
+                        shape: 'dot',
+                        text: `${apiDomain}.${apiService} called at: ${this.getPrettyDate()}`
+                    });
+                    this.send(message);
+                })
                 .catch(err => {
                     this.warn(
                         'Error calling service, home assistant api error',
@@ -116,6 +152,7 @@ module.exports = function(RED) {
                 contextData,
                 payloadData
             );
+
             return apiData;
         }
     }

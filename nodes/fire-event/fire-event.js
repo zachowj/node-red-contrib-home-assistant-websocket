@@ -1,4 +1,5 @@
 const BaseNode = require('../../lib/base-node');
+const mustache = require('mustache');
 
 module.exports = function(RED) {
     const nodeOptions = {
@@ -6,6 +7,7 @@ module.exports = function(RED) {
         config: {
             event: {},
             data: {},
+            render_data: {},
             mergecontext: {},
             name: {},
             server: {
@@ -37,30 +39,46 @@ module.exports = function(RED) {
                 payload = this.tryToObject(message.payload);
                 payloadEvent = this.utils.reach('event', payload);
             }
-            const configEvent = this.nodeConfig.event;
 
+            const configEvent = this.nodeConfig.event;
             const eventType = payloadEvent || configEvent;
-            const eventData = this.getEventData(payload);
-            if (!eventType)
+            let eventData = this.getEventData(payload);
+
+            if (!eventType) {
                 throw new Error(
                     'fire event node is missing "event" property, not found in config or payload'
                 );
+            }
 
             this.debug(`Fire Event: ${eventType} -- ${JSON.stringify({})}`);
-            this.status({
-                fill: 'green',
-                shape: 'dot',
-                text: `${eventType} at: ${this.getPrettyDate()}`
-            });
+
+            if (this.nodeConfig.render_data) {
+                eventData = JSON.parse(
+                    mustache.render(JSON.stringify(eventData), message)
+                );
+            }
 
             message.payload = {
                 event: eventType,
                 data: eventData || null
             };
-            this.send(message);
+
+            this.status({
+                fill: 'yellow',
+                shape: 'dot',
+                text: `Sending at: ${this.getPrettyDate()}`
+            });
 
             return this.nodeConfig.server.api
                 .fireEvent(eventType, eventData)
+                .then(() => {
+                    this.status({
+                        fill: 'green',
+                        shape: 'dot',
+                        text: `${eventType} at: ${this.getPrettyDate()}`
+                    });
+                    this.send(message);
+                })
                 .catch(err => {
                     this.error(
                         `Error firing event, home assistant rest api error: ${
@@ -101,6 +119,7 @@ module.exports = function(RED) {
                 contextData,
                 payloadData
             );
+
             return eventData;
         }
     }
