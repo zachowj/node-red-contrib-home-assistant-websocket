@@ -27,8 +27,16 @@ module.exports = function(RED) {
         constructor(nodeDefinition) {
             super(nodeDefinition, RED, nodeOptions);
 
+            let eventTopic = 'ha_events:state_changed';
+
+            if (this.nodeConfig.entityidfiltertype === 'exact') {
+                eventTopic = this.eventTopic = `ha_events:state_changed:${
+                    this.nodeConfig.entityid
+                }`;
+            }
+
             this.addEventClientListener({
-                event: 'ha_events:state_changed',
+                event: eventTopic,
                 handler: this.onEntityStateChanged.bind(this)
             });
 

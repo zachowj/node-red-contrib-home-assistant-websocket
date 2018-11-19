@@ -23,8 +23,17 @@ module.exports = function(RED) {
     class ServerStateChangedNode extends EventsNode {
         constructor(nodeDefinition) {
             super(nodeDefinition, RED, nodeOptions);
+
+            let eventTopic = 'ha_events:state_changed';
+
+            if (this.nodeConfig.entityidfiltertype === 'exact') {
+                eventTopic = this.eventTopic = `ha_events:state_changed:${
+                    this.nodeConfig.entityidfilter
+                }`;
+            }
+
             this.addEventClientListener({
-                event: 'ha_events:state_changed',
+                event: eventTopic,
                 handler: this.onHaEventsStateChanged.bind(this)
             });
 
