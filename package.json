@@ -53,7 +53,7 @@
     "date-fns": "1.29.0",
     "debug": "4.1.0",
     "home-assistant-js-websocket": "3.1.6",
-    "joi": "14.1.0",
+    "joi": "14.1.1",
     "lodash.merge": "4.6.1",
     "lowdb": "1.0.0",
     "merge": "1.2.1",
