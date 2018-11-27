@@ -12,11 +12,11 @@ Project is going through active development and as such will probably have a few
 
 This assumes you have [node-red](https://nodered.org/) already installed and working, if you need to install node-red see [here](https://nodered.org/docs/getting-started/installation)
 
-#### NOTE: node-red-contrib-home-assistant-websocket requires node.JS >= 8.12.0. If you're running Node-Red in Docker you'll need to pull the -v8 image for this to work.
+**NOTE:** This requires [Node.js](https://nodejs.org/) >= 8.12.0. If you're running Node-Red in Docker you'll need to pull the -v8 image for this to work.
 
 Install via Node-RED Manage Palette
 
-```shell
+```
 node-red-contrib-home-assistant-websocket
 ```
 
@@ -36,8 +36,13 @@ Under the server node config just check the checkbox for `I use Hass.io`
 
 The add-on can be found here: <https://github.com/hassio-addons/addon-node-red#readme>
 
-=======
-For flow examples checkout the [flows here](https://raw.githubusercontent.com/zachowj/node-red-contrib-home-assistant-websocket/master/docker/node-red/root-fs/data/flows.json)
+## Migrating
+
+Coming from a different version, e.g. [@Ayapejian](https://github.com/AYapejian/node-red-contrib-home-assistant) or [@Spartan-II-117](https://github.com/Spartan-II-117/node-red-contrib-home-assistant-llat)?
+
+If you have been using [@Ayapejian](https://github.com/AYapejian/node-red-contrib-home-assistant) version there are some breaking changes with two of the nodes. The ‘Poll State’ and ‘Current State’ both have a little different formatted outputs. Check your nodes and make sure they are outputting what you expect. A more in depth example can be found [here](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/wiki/Migration).
+
+If you have been using the [@Spartan-II-117](https://github.com/Spartan-II-117/node-red-contrib-home-assistant-llat) fork this should be a drop in replacement.
 
 ---
 
@@ -65,7 +70,7 @@ Outputs the state of an entity at regular intervals, optionally also at startup 
 
 Sends a request to home assistant for any domain and service available ( `light/turn_on`, `input_select/select_option`, etc..)
 
-### Fire Event - `rest api`
+### Fire Event - `http`
 
 Fire an event on the event bus
 
@@ -73,11 +78,11 @@ Fire an event on the event bus
 
 Fetches the last known state for any entity on input
 
-### Get History - `rest api`
+### Get History - `http`
 
 Fetches HomeAssistant history on input
 
-### Get Template - `rest api`
+### Get Template - `http`
 
 Allows rendering of templates on input
 
