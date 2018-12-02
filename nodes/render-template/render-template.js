@@ -45,7 +45,7 @@ module.exports = function(RED) {
                     this.status({
                         fill: 'green',
                         shape: 'dot',
-                        text: 'Success'
+                        text: `Success at: ${this.getPrettyDate()}`
                     });
                 })
                 .catch(err => {
@@ -55,7 +55,11 @@ module.exports = function(RED) {
                         }`,
                         message
                     );
-                    this.status({ fill: 'red', shape: 'ring', text: 'Error' });
+                    this.status({
+                        fill: 'red',
+                        shape: 'ring',
+                        text: `Error at: ${this.getPrettyDate()}`
+                    });
                 });
         }
     }
