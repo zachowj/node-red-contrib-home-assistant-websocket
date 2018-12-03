@@ -44,6 +44,7 @@
       "api-call-service": "nodes/call-service/call-service.js",
       "ha-fire-event": "nodes/fire-event/fire-event.js",
       "api-current-state": "nodes/current-state/current-state.js",
+      "ha-get-entities": "nodes/get-entities/get-entities.js",
       "api-get-history": "nodes/get-history/get-history.js",
       "api-render-template": "nodes/render-template/render-template.js"
     }
@@ -52,6 +53,7 @@
     "axios": "0.18.0",
     "date-fns": "1.30.1",
     "debug": "4.1.0",
+    "flat": "^4.1.0",
     "home-assistant-js-websocket": "3.1.6",
     "joi": "14.3.0",
     "lodash.merge": "4.6.1",

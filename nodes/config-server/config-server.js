@@ -1,4 +1,6 @@
 const BaseNode = require('../../lib/base-node');
+const flatten = require('flat');
+const uniq = require('lodash.uniq');
 
 module.exports = function(RED) {
     const HomeAssistant = require('../../lib/node-home-assistant');
@@ -32,6 +34,23 @@ module.exports = function(RED) {
             return this.homeAssistant
                 .getServices()
                 .then(services => res.json(JSON.stringify(services)))
+                .catch(e => this.error(e.message));
+        },
+        getProperties: function(req, res, next) {
+            if (!this.homeAssistant) {
+                return res.json('[]');
+            }
+
+            return this.homeAssistant
+                .getStates()
+                .then(states => {
+                    const flat = Object.values(states).map(entity =>
+                        Object.keys(flatten(entity))
+                    );
+                    const uniqArray = uniq([].concat(...flat).sort());
+
+                    res.json(JSON.stringify(uniqArray));
+                })
                 .catch(e => this.error(e.message));
         }
     };
@@ -82,6 +101,10 @@ module.exports = function(RED) {
                 RED.auth.needsPermission('server.read'),
                 httpHandlers.getServices.bind(this)
             );
+            this.RED.httpAdmin.get(
+                `/homeassistant/${this.id}/properties`,
+                httpHandlers.getProperties.bind(this)
+            );
 
             const HTTP_STATIC_OPTS = {
                 root: require('path').join(__dirname, '..', '/_static'),
@@ -112,7 +135,6 @@ module.exports = function(RED) {
 
                 this.homeAssistant
                     .startListening()
-                    // .then(this.onHaEventsOpen())
                     .catch(err => this.node.error(err));
 
                 this.websocket.addListener(
