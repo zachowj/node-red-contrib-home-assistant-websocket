@@ -30,7 +30,8 @@ module.exports = function(RED) {
             name: {},
             legacy: {},
             hassio: {},
-            rejectUnauthorizedCerts: {}
+            rejectUnauthorizedCerts: {},
+            ha_boolean: {}
         }
     };
 

@@ -12,7 +12,8 @@
       constraintsmustmatch: { value: "all" },
       outputs: { value: 2 },
       customoutputs: { value: [] },
-      outputinitially: { value: false }
+      outputinitially: { value: false },
+      state_type: { value: "str" }
     },
     inputs: 1,
     outputs: 2,
@@ -444,6 +445,15 @@
           <option value="substring">Substring</option>
           <option value="regex">Regex</option>
         </select>
+  </div>
+
+  <div class="form-row">
+      <label for="node-input-state_type"><i class="fa fa-tint"></i> State Type</label>
+      <select type="text" id="node-input-state_type" style="width: auto;">
+          <option value="str">String</option>
+          <option value="num">Number</option>
+          <option value="habool">Boolean</option>
+      </select>
   </div>
 
   <!-- -------------------------------------------------------------- -->

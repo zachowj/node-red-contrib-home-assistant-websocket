@@ -19,7 +19,8 @@ module.exports = function(RED) {
             isenabled: {},
             constraints: {},
             customoutputs: {},
-            outputinitially: {}
+            outputinitially: {},
+            state_type: { value: 'str' }
         }
     };
 
@@ -215,12 +216,32 @@ module.exports = function(RED) {
         }
 
         getDefaultMessageOutputs(comparatorResults, eventMessage) {
-            const { entity_id, event } = eventMessage;
+            const { entity_id, event } = this.utils.merge({}, eventMessage);
+
+            // Convert and save original state if needed
+            if (this.nodeConfig.state_type) {
+                if (event.old_state) {
+                    event.old_state.original_state = event.old_state.state;
+                    event.old_state.state = this.getCastValue(
+                        this.nodeConfig.state_type,
+                        event.old_state.state
+                    );
+                }
+                event.new_state.original_state = event.new_state.state;
+                event.new_state.state = this.getCastValue(
+                    this.nodeConfig.state_type,
+                    event.new_state.state
+                );
+            }
 
             const msg = {
                 topic: entity_id,
                 payload: event.new_state.state,
-                data: eventMessage
+                data: {
+                    event_type: 'state_changed',
+                    entity_id,
+                    event
+                }
             };
             let outputs;
 
@@ -297,26 +318,6 @@ module.exports = function(RED) {
         }
 
         /* eslint-disable indent */
-        getCastValue(datatype, value) {
-            if (!datatype) return value;
-
-            switch (datatype) {
-                case 'num':
-                    return parseFloat(value);
-                case 'str':
-                    return value + '';
-                case 'bool':
-                    return !!value;
-                case 're':
-                    return new RegExp(value);
-                case 'list':
-                    return value.split(',');
-                default:
-                    return value;
-            }
-        }
-
-        /* eslint-disable indent */
         getComparatorResult(
             comparatorType,
             comparatorValue,
@@ -373,6 +374,26 @@ module.exports = function(RED) {
             }
 
             if (output.messageType === 'default') {
+                eventMessage = this.utils.merge({}, eventMessage);
+
+                // Convert and save original state if needed
+                if (this.nodeConfig.state_type) {
+                    if (eventMessage.event.old_state) {
+                        eventMessage.event.old_state.original_state =
+                            eventMessage.event.old_state.state;
+                        eventMessage.event.old_state.state = this.getCastValue(
+                            this.nodeConfig.state_type,
+                            eventMessage.event.old_state.state
+                        );
+                    }
+                    eventMessage.event.new_state.original_state =
+                        eventMessage.event.new_state.state;
+                    eventMessage.event.new_state.state = this.getCastValue(
+                        this.nodeConfig.state_type,
+                        eventMessage.event.new_state.state
+                    );
+                }
+
                 return {
                     topic: eventMessage.entity_id,
                     payload: eventMessage.event.new_state.state,
