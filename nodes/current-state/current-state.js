@@ -59,7 +59,10 @@ module.exports = function(RED) {
                 Date.now() - new Date(currentState.last_changed).getTime();
 
             // Convert and save original state if needed
-            if (this.nodeConfig.state_type) {
+            if (
+                this.nodeConfig.state_type &&
+                this.nodeConfig.state_type !== 'str'
+            ) {
                 currentState.original_state = currentState.state;
                 currentState.state = this.getCastValue(
                     this.nodeConfig.state_type,

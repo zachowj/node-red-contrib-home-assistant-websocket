@@ -89,7 +89,10 @@ module.exports = function(RED) {
                         Date.now() - dateChanged.getTime();
 
                     // Convert and save original state if needed
-                    if (this.nodeConfig.state_type) {
+                    if (
+                        this.nodeConfig.state_type &&
+                        this.nodeConfig.state_type !== 'str'
+                    ) {
                         pollState.original_state = pollState.state;
                         pollState.state = this.getCastValue(
                             this.nodeConfig.state_type,

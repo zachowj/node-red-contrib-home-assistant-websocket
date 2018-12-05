@@ -113,7 +113,10 @@ module.exports = function(RED) {
             }
 
             // Convert and save original state if needed
-            if (this.nodeConfig.state_type) {
+            if (
+                this.nodeConfig.state_type &&
+                this.nodeConfig.state_type !== 'str'
+            ) {
                 if (eventMessage.event.old_state) {
                     eventMessage.event.old_state.original_state =
                         eventMessage.event.old_state.state;
