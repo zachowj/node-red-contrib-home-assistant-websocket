@@ -8,7 +8,8 @@ module.exports = function(RED) {
             entity_id: {},
             updateinterval: {},
             outputinitially: {},
-            outputonchanged: {}
+            outputonchanged: {},
+            state_type: {}
         }
     };
 
@@ -63,8 +64,9 @@ module.exports = function(RED) {
             if (!this.isConnected) return;
 
             try {
-                const pollState = await this.getState(
-                    this.nodeConfig.entity_id
+                const pollState = this.utils.merge(
+                    {},
+                    await this.getState(this.nodeConfig.entity_id)
                 );
                 if (!pollState) {
                     this.warn(
@@ -85,16 +87,26 @@ module.exports = function(RED) {
                     pollState.timeSinceChanged = ta.ago(dateChanged);
                     pollState.timeSinceChangedMs =
                         Date.now() - dateChanged.getTime();
-                    this.send({
-                        topic: this.nodeConfig.entity_id,
-                        payload: pollState.state,
-                        data: pollState
-                    });
+
+                    // Convert and save original state if needed
+                    if (this.nodeConfig.state_type) {
+                        pollState.original_state = pollState.state;
+                        pollState.state = this.getCastValue(
+                            this.nodeConfig.state_type,
+                            pollState.state
+                        );
+                    }
 
                     this.status({
                         fill: 'green',
                         shape: 'dot',
                         text: `${pollState.state} at: ${this.getPrettyDate()}`
+                    });
+
+                    this.send({
+                        topic: this.nodeConfig.entity_id,
+                        payload: pollState.state,
+                        data: pollState
                     });
                 } else {
                     this.warn(

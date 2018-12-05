@@ -1,105 +1,127 @@
 <script type="text/javascript">
-    RED.nodes.registerType('server', {
-        category: 'config',
-        defaults: {
-            name: { value: 'Home Assistant', required: false },
-            legacy: { value: false },
-            hassio: { value: false },
-            rejectUnauthorizedCerts: { value: true }
-        },
-        credentials: {
-            host: { value: '', required: true },
-            access_token: { value: '', required: false }
-        },
-        icon: "home.png",
-        label: function () { return this.name || this.url },
-        oneditprepare: function () {
-            var $hassio = $("#node-config-input-hassio");
-            var $host = $("#node-config-input-host");
-            var $legacy = $("#node-config-input-legacy");
+  RED.nodes.registerType("server", {
+    category: "config",
+    defaults: {
+      name: { value: "Home Assistant", required: false },
+      legacy: { value: false },
+      hassio: { value: false },
+      rejectUnauthorizedCerts: { value: true },
+      ha_boolean: { value: "y|yes|true|on|home|open" }
+    },
+    credentials: {
+      host: { value: "", required: true },
+      access_token: { value: "", required: false }
+    },
+    icon: "home.png",
+    label: function() {
+      return this.name || this.url;
+    },
+    oneditprepare: function() {
+      var $hassio = $("#node-config-input-hassio");
+      var $host = $("#node-config-input-host");
+      var $legacy = $("#node-config-input-legacy");
 
-            if (this.rejectUnauthorizedCerts === false) {
-                $("#accept_unauthorized_certs").prop('checked', true);
-            }
+      if (this.ha_boolean === undefined) {
+        $("#node-config-input-ha_boolean").val("y|yes|true|on|home|open");
+      }
 
-            if (!$hassio.prop("checked") && $host.val() === "http://hassio/homeassistant") {
-                $hassio.prop("checked", true);
-            }
-            function updateHassio() {
-                $("#server-info").toggle(!$hassio.prop("checked"));
-            }
-            updateHassio();
-            $hassio.on("click", function () {
-                updateHassio();
-            });
+      if (this.rejectUnauthorizedCerts === false) {
+        $("#accept_unauthorized_certs").prop("checked", true);
+      }
 
-            function updateLegacy() {
-                var tokenName = $legacy.prop("checked") ? "Password" : "Access Token";
+      if (
+        !$hassio.prop("checked") &&
+        $host.val() === "http://hassio/homeassistant"
+      ) {
+        $hassio.prop("checked", true);
+      }
+      function updateHassio() {
+        $("#server-info").toggle(!$hassio.prop("checked"));
+      }
+      updateHassio();
+      $hassio.on("click", function() {
+        updateHassio();
+      });
 
-                $("#access-token-label").html('<i class="fa fa-user-secret"></i> ' + tokenName);
-                $("#node-config-input-access_token").attr("placeholder", tokenName.toLowerCase());
-            }
-            updateLegacy();
-            $legacy.on("click", function () {
-                updateLegacy();
-            });
-        },
-        oneditsave: function () {
-            var hassio = $('#node-config-input-hassio').is(":checked");
-            var $host = $("#node-config-input-host");
-            var hostname = $host.val();
+      function updateLegacy() {
+        var tokenName = $legacy.prop("checked") ? "Password" : "Access Token";
 
-            if (hassio) {
-                $host.val('http://hassio/homeassistant');
-                this.legacy = false;
-                this.rejectUnauthorizedCerts = true;
-            } else {
-                var parser = document.createElement("a");
-                parser.href = hostname;
+        $("#access-token-label").html(
+          '<i class="fa fa-user-secret"></i> ' + tokenName
+        );
+        $("#node-config-input-access_token").attr(
+          "placeholder",
+          tokenName.toLowerCase()
+        );
+      }
+      updateLegacy();
+      $legacy.on("click", function() {
+        updateLegacy();
+      });
+    },
+    oneditsave: function() {
+      var hassio = $("#node-config-input-hassio").is(":checked");
+      var $host = $("#node-config-input-host");
+      var hostname = $host.val();
 
-                if (hostname !== parser.origin) {
-                    RED.notify("Invalid format of Base URL: " + hostname);
-                }
+      if (hassio) {
+        $host.val("http://hassio/homeassistant");
+        this.legacy = false;
+        this.rejectUnauthorizedCerts = true;
+      } else {
+        var parser = document.createElement("a");
+        parser.href = hostname;
 
-                // Save the inverse of the checkbox
-                this.rejectUnauthorizedCerts = !$('#accept_unauthorized_certs').prop('checked');
-            }
+        if (hostname !== parser.origin) {
+          RED.notify("Invalid format of Base URL: " + hostname);
         }
-    });
+
+        // Save the inverse of the checkbox
+        this.rejectUnauthorizedCerts = !$("#accept_unauthorized_certs").prop(
+          "checked"
+        );
+      }
+    }
+  });
 </script>
 
 <script type="text/x-red" data-template-name="server">
-    <div class="form-row">
-        <label for="node-config-input-name" style="width: 120px"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-config-input-name" />
-    </div>
+  <div class="form-row">
+      <label for="node-config-input-name" style="width: 120px"><i class="fa fa-tag"></i> Name</label>
+      <input type="text" id="node-config-input-name" />
+  </div>
 
-    <div class="form-row">
-        <input type="checkbox" id="node-config-input-hassio" style="width: auto;margin-left: 125px;vertical-align: top" />
-        <label for="node-config-input-hassio" style="width: auto;"> I use Hass.io</label>
-    </div>
+  <div class="form-row">
+      <input type="checkbox" id="node-config-input-hassio" style="width: auto;margin-left: 125px;vertical-align: top" />
+      <label for="node-config-input-hassio" style="width: auto;"> I use Hass.io</label>
+  </div>
 
-    <div id="server-info">
-        <div class="form-row">
-            <label for="node-config-input-host" style="width: 120px"><i class="fa fa-link"></i> Base URL</label>
-            <input type="text" id="node-config-input-host" placeholder="http://localhost:8123" />
-        </div>
+  <div id="server-info">
+      <div class="form-row">
+          <label for="node-config-input-host" style="width: 120px"><i class="fa fa-link"></i> Base URL</label>
+          <input type="text" id="node-config-input-host" placeholder="http://localhost:8123" />
+      </div>
 
-        <div class="form-row">
-            <label id="access-token-label" for="node-config-input-access_token" style="width: 120px"><i class="fa fa-user-secret"></i> Access Token</label>
-            <input type="text" id="node-config-input-access_token" placeholder="access token" />
-        </div>
+      <div class="form-row">
+          <label id="access-token-label" for="node-config-input-access_token" style="width: 120px"><i class="fa fa-user-secret"></i> Access Token</label>
+          <input type="text" id="node-config-input-access_token" placeholder="access token" />
+      </div>
 
-        <div class="form-row">
-            <input type="checkbox" id="node-config-input-legacy" style="width: auto;margin-left: 125px;vertical-align: top" />
-            <label for="node-config-input-legacy" style="width: auto;"> Use Legacy API Password</label>
-        </div>
+      <div class="form-row">
+          <input type="checkbox" id="node-config-input-legacy" style="width: auto;margin-left: 125px;vertical-align: top" />
+          <label for="node-config-input-legacy" style="width: auto;"> Use Legacy API Password</label>
+      </div>
 
-        <div class="form-row">
-            <input type="checkbox" id="accept_unauthorized_certs" style="width: auto;margin-left: 125px;vertical-align: top" />
-            <label for="accept_unauthorized_certs" style="width: auto;"> Accept Unauthorized SSL Certificates</label>
-        </div>
-    </div>
+      <div class="form-row">
+          <input type="checkbox" id="accept_unauthorized_certs" style="width: auto;margin-left: 125px;vertical-align: top" />
+          <label for="accept_unauthorized_certs" style="width: auto;"> Accept Unauthorized SSL Certificates</label>
+      </div>
+  </div>
+
+  <div class="form-row">
+        <label for="node-config-input-ha_boolean" style="width: 120px"><i class="fa fa-link"></i> State Boolean</label>
+        <input type="text" id="node-config-input-ha_boolean" placeholder="y|yes|true|on|home|open" />
+  </div>
 </script>
 
 <script type="text/x-red" data-help-name="server">
@@ -107,48 +129,51 @@
 
     <h3>Config</h3>
     <dl class="message-properties">
-            <dt>Name <span class="property-type">string</span></dt>
-            <dd>Label for this configuration, see details below for implications</dd>
+        <dt>Name <span class="property-type">string</span></dt>
+        <dd>Label for this configuration, see details below for implications</dd>
 
-            <dt>Hass.io <span class="property-type">boolean</span></dt>
-            <dd>If you're connecting Hass.io check this. No other information is needed.</dd>
+        <dt>Hass.io <span class="property-type">boolean</span></dt>
+        <dd>If you're connecting Hass.io check this. No other information is needed.</dd>
 
-            <dt>Base URL <span class="property-type">string</span></dt>
-            <dd>The base url and port the home assistant instance can be reached at, for example: <code>http://192.168.0.100:8123</code> or <code>https://homeassistant.mysite.com</code></dd>
+        <dt>Base URL <span class="property-type">string</span></dt>
+        <dd>The base url and port the home assistant instance can be reached at, for example: <code>http://192.168.0.100:8123</code> or <code>https://homeassistant.mysite.com</code></dd>
 
-            <dt>Access Token / Password <span class="property-type">string</span></dt>
-            <dd>Long-lived Access Token or Password used to contact the API</dd>
+        <dt>Access Token / Password <span class="property-type">string</span></dt>
+        <dd>Long-lived Access Token or Password used to contact the API</dd>
 
-            <dt>Legacy Password <span class="property-type">boolean</span></dt>
-            <dd>If you're using the legacy password to log into Home Assistant check this and enter your password in the password text box.</dd>
+        <dt>Legacy Password <span class="property-type">boolean</span></dt>
+        <dd>If you're using the legacy password to log into Home Assistant check this and enter your password in the password text box.</dd>
 
-            <dt>Unauthorized SSL Certificates <span class="property-type">boolean</span></dt>
-            <dd>This will allow you to use self-signed certificates. Only use this if you know what you're doing.</dd>
+        <dt>Unauthorized SSL Certificates <span class="property-type">boolean</span></dt>
+        <dd>This will allow you to use self-signed certificates. Only use this if you know what you're doing.</dd>
+
+        <dt>State Boolean <span class="property-type">string | delimited</span></dt>
+        <dd>A list of strings, not case sensitive, delimited by vertial pipe, | , that will return true for State Type Boolean.</dd>
     </dl>
 
-    <h3>Details</h3>
-    <p>Every node requires a configuration attached to define how to contact home assistant, that is this config node's main purpose.</p>
+  <h3>Details</h3>
+  <p>Every node requires a configuration attached to define how to contact home assistant, that is this config node's main purpose.</p>
 
-    <h4>Context</h4>
-    <p>Each config node will also make some data available on the global context, the <code>Name</code> value in this node is used as a, camelcased, namespace for those values</p>
-    <p>Currently <code>states</code>, <code>services</code> and <code>events</code> is made available on the global context.  <code>states</code> is always set to all available states at startup and updated whenever state changes occur so it should be always up to date. <code>services</code> and <code>events</code> is only updated on initial deploy.</p>
+  <h4>Context</h4>
+  <p>Each config node will also make some data available on the global context, the <code>Name</code> value in this node is used as a, camelcased, namespace for those values</p>
+  <p>Currently <code>states</code>, <code>services</code> and <code>events</code> is made available on the global context.  <code>states</code> is always set to all available states at startup and updated whenever state changes occur so it should be always up to date. <code>services</code> and <code>events</code> is only updated on initial deploy.</p>
 
-    <h4>Context Example</h4>
-    <p>Say we have a config node with name <code>My Awesome server</code>, with an entity setup in homeassistant as <code>switch.my_switch</code>.  This state would be available within function nodes and you could fetch using something like the below code</p>
-    <p>NOTE: It's likely one of the state or trigger nodes will better serve most use cases, this is simply provided as an option for more advanced cases, or to implement functionality I haven't thought of/gotten around to</p>
+  <h4>Context Example</h4>
+  <p>Say we have a config node with name <code>My Awesome server</code>, with an entity setup in homeassistant as <code>switch.my_switch</code>.  This state would be available within function nodes and you could fetch using something like the below code</p>
+  <p>NOTE: It's likely one of the state or trigger nodes will better serve most use cases, this is simply provided as an option for more advanced cases, or to implement functionality I haven't thought of/gotten around to</p>
 
-    <pre>
-    const haCtx       = global.get('homeassistant');
-    const configCtx   = haCtx.myAwesomeServer;
-    const entityState = configCtx.states['switch.my_switch'];
-    return (entityState.state === 'on') ? true : false;
-    </pre>
+  <pre>
+  const haCtx = global.get('homeassistant');
+  const configCtx = haCtx.myAwesomeServer;
+  const entityState = configCtx.states['switch.my_switch'];
+  return (entityState.state === 'on') ? true : false;
+  </pre>
 
-    <h3>Connection Issues</h3>
-    <p>Communication with homeassistant is accomplished via a combination of WebSocket and the REST API, if you are having troubles communicating with home assistant make sure you can access the API outside of node-red, but from the same server node-red is running on, using a REST client, curl, or any number of other methods to validate the connection<p>
+  <h3>Connection Issues</h3>
+  <p>Communication with homeassistant is accomplished via a combination of WebSocket and the REST API, if you are having troubles communicating with home assistant make sure you can access the API outside of node-red, but from the same server node-red is running on, using a REST client, curl, or any number of other methods to validate the connection<p>
 
-    <h3>References</h3>
-    <ul>
-        <li><a href="https://home-assistant.io/developers/rest_api">HA REST API</a></li>
-    </ul>
+  <h3>References</h3>
+  <ul>
+      <li><a href="https://home-assistant.io/developers/rest_api">HA REST API</a></li>
+  </ul>
 </script>

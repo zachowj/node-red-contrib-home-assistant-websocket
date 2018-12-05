@@ -11,6 +11,7 @@ module.exports = function(RED) {
             override_payload: {},
             override_data: {},
             entity_id: {},
+            state_type: {},
             server: { isNode: true }
         },
         input: {
@@ -45,13 +46,10 @@ module.exports = function(RED) {
                     'entity ID not set, cannot get current state, sending empty payload'
                 );
 
-            const states = await this.nodeConfig.server.homeAssistant.getStates();
-            if (!states)
-                return logAndContinueEmpty(
-                    'local state cache missing, sending empty payload'
-                );
-
-            const currentState = states[entity_id];
+            const currentState = this.utils.merge(
+                {},
+                await this.nodeConfig.server.homeAssistant.getStates(entity_id)
+            );
             if (!currentState)
                 return logAndContinueEmpty(
                     `entity could not be found in cache for entity_id: ${entity_id}, sending empty payload`
@@ -70,6 +68,15 @@ module.exports = function(RED) {
                     text: `${currentState.state} at: ${this.getPrettyDate()}`
                 });
                 return null;
+            }
+
+            // Convert and save original state if needed
+            if (this.nodeConfig.state_type) {
+                currentState.original_state = currentState.state;
+                currentState.state = this.getCastValue(
+                    this.nodeConfig.state_type,
+                    currentState.state
+                );
             }
 
             // default switch to true if undefined (backward compatibility
