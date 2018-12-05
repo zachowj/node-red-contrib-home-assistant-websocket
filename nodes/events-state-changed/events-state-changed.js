@@ -54,6 +54,26 @@ module.exports = function(RED) {
                     return null;
                 }
 
+                event.new_state.timeSinceChangedMs =
+                    Date.now() -
+                    new Date(event.new_state.last_changed).getTime();
+
+                // Convert and save original state if needed
+                if (this.nodeConfig.state_type) {
+                    if (event.old_state) {
+                        event.old_state.original_state = event.old_state.state;
+                        event.old_state.state = this.getCastValue(
+                            this.nodeConfig.state_type,
+                            event.old_state.state
+                        );
+                    }
+                    event.new_state.original_state = event.new_state.state;
+                    event.new_state.state = this.getCastValue(
+                        this.nodeConfig.state_type,
+                        event.new_state.state
+                    );
+                }
+
                 const shouldHaltIfState = this.shouldHaltIfState(event);
                 const shouldIncludeEvent = this.shouldIncludeEvent(entity_id);
 
@@ -71,27 +91,6 @@ module.exports = function(RED) {
                         });
 
                         return null;
-                    }
-
-                    event.new_state.timeSinceChangedMs =
-                        Date.now() -
-                        new Date(event.new_state.last_changed).getTime();
-
-                    // Convert and save original state if needed
-                    if (this.nodeConfig.state_type) {
-                        if (event.old_state) {
-                            event.old_state.original_state =
-                                event.old_state.state;
-                            event.old_state.state = this.getCastValue(
-                                this.nodeConfig.state_type,
-                                event.old_state.state
-                            );
-                        }
-                        event.new_state.original_state = event.new_state.state;
-                        event.new_state.state = this.getCastValue(
-                            this.nodeConfig.state_type,
-                            event.new_state.state
-                        );
                     }
 
                     const msg = {

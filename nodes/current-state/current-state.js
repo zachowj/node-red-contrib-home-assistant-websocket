@@ -58,6 +58,15 @@ module.exports = function(RED) {
             currentState.timeSinceChangedMs =
                 Date.now() - new Date(currentState.last_changed).getTime();
 
+            // Convert and save original state if needed
+            if (this.nodeConfig.state_type) {
+                currentState.original_state = currentState.state;
+                currentState.state = this.getCastValue(
+                    this.nodeConfig.state_type,
+                    currentState.state
+                );
+            }
+
             const shouldHaltIfState =
                 this.nodeConfig.halt_if &&
                 currentState.state === this.nodeConfig.halt_if;
@@ -71,15 +80,6 @@ module.exports = function(RED) {
                     text: `${currentState.state} at: ${this.getPrettyDate()}`
                 });
                 return null;
-            }
-
-            // Convert and save original state if needed
-            if (this.nodeConfig.state_type) {
-                currentState.original_state = currentState.state;
-                currentState.state = this.getCastValue(
-                    this.nodeConfig.state_type,
-                    currentState.state
-                );
             }
 
             // default switch to true if undefined (backward compatibility

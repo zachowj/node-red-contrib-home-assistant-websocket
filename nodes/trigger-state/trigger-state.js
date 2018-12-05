@@ -105,8 +105,29 @@ module.exports = function(RED) {
                 );
                 return;
             }
+
+            eventMessage = this.utils.merge({}, eventMessage);
+
             if (!this.shouldIncludeEvent(eventMessage.entity_id)) {
                 return;
+            }
+
+            // Convert and save original state if needed
+            if (this.nodeConfig.state_type) {
+                if (eventMessage.event.old_state) {
+                    eventMessage.event.old_state.original_state =
+                        eventMessage.event.old_state.state;
+                    eventMessage.event.old_state.state = this.getCastValue(
+                        this.nodeConfig.state_type,
+                        eventMessage.event.old_state.state
+                    );
+                }
+                eventMessage.event.new_state.original_state =
+                    eventMessage.event.new_state.state;
+                eventMessage.event.new_state.state = this.getCastValue(
+                    this.nodeConfig.state_type,
+                    eventMessage.event.new_state.state
+                );
             }
 
             try {
@@ -222,23 +243,7 @@ module.exports = function(RED) {
         }
 
         getDefaultMessageOutputs(comparatorResults, eventMessage) {
-            const { entity_id, event } = this.utils.merge({}, eventMessage);
-
-            // Convert and save original state if needed
-            if (this.nodeConfig.state_type) {
-                if (event.old_state) {
-                    event.old_state.original_state = event.old_state.state;
-                    event.old_state.state = this.getCastValue(
-                        this.nodeConfig.state_type,
-                        event.old_state.state
-                    );
-                }
-                event.new_state.original_state = event.new_state.state;
-                event.new_state.state = this.getCastValue(
-                    this.nodeConfig.state_type,
-                    event.new_state.state
-                );
-            }
+            const { entity_id, event } = eventMessage;
 
             const msg = {
                 topic: entity_id,
@@ -380,26 +385,6 @@ module.exports = function(RED) {
             }
 
             if (output.messageType === 'default') {
-                eventMessage = this.utils.merge({}, eventMessage);
-
-                // Convert and save original state if needed
-                if (this.nodeConfig.state_type) {
-                    if (eventMessage.event.old_state) {
-                        eventMessage.event.old_state.original_state =
-                            eventMessage.event.old_state.state;
-                        eventMessage.event.old_state.state = this.getCastValue(
-                            this.nodeConfig.state_type,
-                            eventMessage.event.old_state.state
-                        );
-                    }
-                    eventMessage.event.new_state.original_state =
-                        eventMessage.event.new_state.state;
-                    eventMessage.event.new_state.state = this.getCastValue(
-                        this.nodeConfig.state_type,
-                        eventMessage.event.new_state.state
-                    );
-                }
-
                 return {
                     topic: eventMessage.entity_id,
                     payload: eventMessage.event.new_state.state,
