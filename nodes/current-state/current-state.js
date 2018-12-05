@@ -55,6 +55,9 @@ module.exports = function(RED) {
                     `entity could not be found in cache for entity_id: ${entity_id}, sending empty payload`
                 );
 
+            currentState.timeSinceChangedMs =
+                Date.now() - new Date(currentState.last_changed).getTime();
+
             const shouldHaltIfState =
                 this.nodeConfig.halt_if &&
                 currentState.state === this.nodeConfig.halt_if;

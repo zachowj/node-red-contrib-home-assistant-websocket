@@ -73,6 +73,10 @@ module.exports = function(RED) {
                         return null;
                     }
 
+                    event.new_state.timeSinceChangedMs =
+                        Date.now() -
+                        new Date(event.new_state.last_changed).getTime();
+
                     // Convert and save original state if needed
                     if (this.nodeConfig.state_type) {
                         if (event.old_state) {

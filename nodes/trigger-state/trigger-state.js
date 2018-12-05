@@ -110,6 +110,12 @@ module.exports = function(RED) {
             }
 
             try {
+                eventMessage.event.new_state.timeSinceChangedMs =
+                    Date.now() -
+                    new Date(
+                        eventMessage.event.new_state.last_changed
+                    ).getTime();
+
                 const constraintComparatorResults = await this.getConstraintComparatorResults(
                     this.nodeConfig.constraints,
                     eventMessage
