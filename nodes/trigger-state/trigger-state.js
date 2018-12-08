@@ -331,46 +331,6 @@ module.exports = function(RED) {
             return targetData;
         }
 
-        /* eslint-disable indent */
-        getComparatorResult(
-            comparatorType,
-            comparatorValue,
-            actualValue,
-            comparatorValueDatatype
-        ) {
-            const cValue = this.getCastValue(
-                comparatorValueDatatype,
-                comparatorValue
-            );
-
-            switch (comparatorType) {
-                case 'is':
-                case 'is_not':
-                    // Datatype might be num, bool, str, re (regular expression)
-                    const isMatch =
-                        comparatorValueDatatype === 're'
-                            ? cValue.test(actualValue)
-                            : cValue === actualValue;
-                    return comparatorType === 'is' ? isMatch : !isMatch;
-                case 'includes':
-                case 'does_not_include':
-                    const isIncluded = cValue.includes(actualValue);
-                    return comparatorType === 'includes'
-                        ? isIncluded
-                        : !isIncluded;
-                case 'greater_than': // here for backwards compatibility
-                case '>':
-                    return actualValue > cValue;
-                case '>=':
-                    return actualValue >= cValue;
-                case 'less_than': // here for backwards compatibility
-                case '<':
-                    return actualValue < cValue;
-                case '<=':
-                    return actualValue <= cValue;
-            }
-        }
-
         getOutputMessage(
             { output, comparatorMatched, actualValue },
             eventMessage

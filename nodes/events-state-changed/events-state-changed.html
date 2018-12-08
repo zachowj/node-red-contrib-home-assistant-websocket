@@ -7,9 +7,11 @@
       server: { value: "", type: "server", required: true },
       entityidfilter: { value: "", required: true },
       entityidfiltertype: { value: "substring" },
-      haltifstate: { value: "" },
       outputinitially: { value: false },
-      state_type: { value: "str" }
+      state_type: { value: "str" },
+      haltifstate: { value: "" },
+      halt_if_type: {},
+      halt_if_compare: {}
     },
     inputs: 0,
     outputs: 1,
@@ -62,6 +64,50 @@
       };
 
       $server.change(() => setupAutocomplete(this));
+
+      if (this.state_type === undefined) {
+        $("#node-input-state_type").val("str");
+      }
+
+      const defaultTypes = ["str", "num", "bool", "re"];
+      const $halt_if_compare = $("#node-input-halt_if_compare");
+      const $haltifstate = $("#node-input-haltifstate");
+      const $halt_if_help = $("#halt_if_help");
+
+      if (this.halt_if_compare === undefined) {
+        $("#node-input-halt_if_compare").val("is");
+      }
+
+      $haltifstate.typedInput({
+        default: "str",
+        types: defaultTypes,
+        typeField: "#node-input-halt_if_type"
+      });
+      $haltifstate.typedInput("width", "74.5%");
+
+      $halt_if_compare.change(function(e) {
+        let types = defaultTypes;
+        $halt_if_help.hide();
+
+        switch (e.target.value) {
+          case "is":
+          case "is_not":
+            break;
+          case "lt":
+          case "lte":
+          case "gt":
+          case "gte":
+            types = ["num"];
+            break;
+          case "includes":
+          case "does_not_include":
+            $halt_if_help.show();
+            types = ["str"];
+            break;
+        }
+        $haltifstate.typedInput("types", types);
+      });
+      $halt_if_compare.trigger("change");
     },
     oneditsave: function() {
       this.entityidfilter = $("#node-input-entityidfilter").val();
@@ -95,10 +141,25 @@
       </select>
   </div>
 
+
   <div class="form-row">
-      <label for="node-input-haltifstate"><i class="fa fa-hand-paper-o"></i> Halt If State</label>
+    <label for="node-input-haltifstate"><i class="fa fa-hand-paper-o"></i> Halt if State</label>
+    <div style="width: 71%;display: inline-block;">
+      <select type="text" id="node-input-halt_if_compare" style="width: auto;">
+        <option value="is">is</option>
+        <option value="is_not">is not</option>
+        <option value="lt">&lt;</option>
+        <option value="lte">&lt;=</option>
+        <option value="gt">&gt;</option>
+        <option value="gte">&gt;=</option>
+        <option value="includes">in</option>
+        <option value="does_not_include">not in</option>
+      </select>
       <input type="text" id="node-input-haltifstate" />
+    </div>
+    <input type="hidden" id="node-input-halt_if_type" />
   </div>
+  <span id="halt_if_help" style="inline-block;margin-left: 210px;">^ Comma delimited string</span>
 
   <div class="form-row">
       <label for="node-input-state_type"><i class="fa fa-tint"></i> State Type</label>
@@ -116,7 +177,7 @@
 </script>
 
 <script type="text/x-red" data-help-name="server-state-changed">
-  <p class="ha-description">Outputs 'state_changed' event types sent from Home Assistant</p>
+  <p class="ha-description">Outputs &#39;state_changed&#39; event types sent from Home Assistant</p>
 
   <p class="ha-subdescription">The autocomplete will open to allow easier selection in the case you want a specific entity however the actual match is a substring match so no validation is done</p>
 
@@ -130,6 +191,9 @@
 
       <dt>State Type<span class="property-type">string</span></dt>
       <dd>Convert the state of the entity to the selected type. Boolean will be convert to true based on if the string is equial by default to (y|yes|true|on|home|open). Original value stored in msg.data.original_state</dd>
+
+      <dt>Output Initially<span class="property-type">boolean</span></dt>
+      <dd>Output once on startup/deploy then on each interval</dd>
   </dl>
 
   <h3>Output Object:</h3>
@@ -138,7 +202,7 @@
       <dd>CSV substring matches for entity_id field</dd>
 
       <dt>payload<span class="property-type">string|number|boolean</span></dt>
-      <dd>event.new_state.state (e.g.: 'on', 'off', 88.5, 'home', 'not_home')</dd>
+      <dd>event.new_state.state (e.g.: &#39;on&#39;, &#39;off&#39;, 88.5, &#39;home&#39;, &#39;not_home&#39;)</dd>
 
       <dt>data<span class="property-type">json</span></dt>
       <dd>original event object from homeassistant</dd>

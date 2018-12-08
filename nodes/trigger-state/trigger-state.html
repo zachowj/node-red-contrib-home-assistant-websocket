@@ -587,14 +587,17 @@
 </script>
 
 <script type="text/x-red" data-help-name="trigger-state">
-  <p>Advanced version of 'server:state-changed' node</p>
+  <p>Advanced version of &#39;server:state-changed&#39; node</p>
 
   <h3>Inputs</h3>
   <dl class="message-properties">
       <dt class="optional">
           [payload|msg]   <span class="property-type">string|object</span>
       </dt>
-      <dd>If incoming payload or message is a string and equal to 'enable' or 'disable' then set the node accordingly.</dd>
+      <dd>If incoming payload or message is a string and equal to &#39;enable&#39; or &#39;disable&#39; then set the node accordingly.</dd>
+
+      <dt>Output Initially<span class="property-type">boolean</span></dt>
+      <dd>Output once on startup/deploy then on each interval</dd>
   </dl>
 
   <h3>Outputs</h3>

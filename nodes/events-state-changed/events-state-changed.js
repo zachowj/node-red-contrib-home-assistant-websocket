@@ -16,6 +16,8 @@ module.exports = function(RED) {
             entityidfiltertype: {},
             haltIfState: nodeDef =>
                 nodeDef.haltifstate ? nodeDef.haltifstate.trim() : null,
+            halt_if_type: {},
+            halt_if_compare: {},
             outputinitially: {},
             state_type: {}
         }
@@ -77,10 +79,18 @@ module.exports = function(RED) {
                     );
                 }
 
-                const shouldHaltIfState = this.shouldHaltIfState(event);
                 const shouldIncludeEvent = this.shouldIncludeEvent(entity_id);
 
                 if (shouldIncludeEvent) {
+                    const shouldHaltIfState =
+                        this.nodeConfig.haltIfState &&
+                        this.getComparatorResult(
+                            this.nodeConfig.halt_if_compare,
+                            this.nodeConfig.haltIfState,
+                            event.new_state.state,
+                            this.nodeConfig.halt_if_type
+                        );
+
                     if (shouldHaltIfState) {
                         this.debug(
                             'flow halted due to "halt if state" setting'
@@ -148,13 +158,6 @@ module.exports = function(RED) {
 
                 this.onHaEventsStateChanged(eventMessage);
             }
-        }
-
-        shouldHaltIfState(haEvent, haltIfState) {
-            if (!this.nodeConfig.haltIfState) return false;
-            const shouldHalt =
-                this.nodeConfig.haltIfState === haEvent.new_state.state;
-            return shouldHalt;
         }
 
         shouldIncludeEvent(entityId) {

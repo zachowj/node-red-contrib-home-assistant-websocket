@@ -9,7 +9,10 @@ module.exports = function(RED) {
             updateinterval: {},
             outputinitially: {},
             outputonchanged: {},
-            state_type: {}
+            state_type: {},
+            halt_if: {},
+            halt_if_type: {},
+            halt_if_compare: {}
         }
     };
 
@@ -98,6 +101,31 @@ module.exports = function(RED) {
                             this.nodeConfig.state_type,
                             pollState.state
                         );
+                    }
+
+                    const shouldHaltIfState =
+                        this.nodeConfig.halt_if &&
+                        this.getComparatorResult(
+                            this.nodeConfig.halt_if_compare,
+                            this.nodeConfig.halt_if,
+                            pollState.state,
+                            this.nodeConfig.halt_if_type
+                        );
+
+                    if (shouldHaltIfState) {
+                        const debugMsg = `poll state: halting processing due to current state of ${
+                            pollState.entity_id
+                        } matches "halt if state" option`;
+                        this.debug(debugMsg);
+                        this.debugToClient(debugMsg);
+                        this.status({
+                            fill: 'red',
+                            shape: 'ring',
+                            text: `${
+                                pollState.state
+                            } at: ${this.getPrettyDate()}`
+                        });
+                        return null;
                     }
 
                     this.status({

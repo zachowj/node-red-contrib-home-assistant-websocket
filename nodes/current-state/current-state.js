@@ -7,6 +7,8 @@ module.exports = function(RED) {
         config: {
             name: {},
             halt_if: {},
+            halt_if_type: {},
+            halt_if_compare: {},
             override_topic: {},
             override_payload: {},
             override_data: {},
@@ -72,7 +74,13 @@ module.exports = function(RED) {
 
             const shouldHaltIfState =
                 this.nodeConfig.halt_if &&
-                currentState.state === this.nodeConfig.halt_if;
+                this.getComparatorResult(
+                    this.nodeConfig.halt_if_compare,
+                    this.nodeConfig.halt_if,
+                    currentState.state,
+                    this.nodeConfig.halt_if_type
+                );
+
             if (shouldHaltIfState) {
                 const debugMsg = `Get current state: halting processing due to current state of ${entity_id} matches "halt if state" option`;
                 this.debug(debugMsg);

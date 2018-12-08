@@ -13,6 +13,8 @@
       name: { value: "" },
       server: { value: "", type: "server", required: true },
       halt_if: { value: "" },
+      halt_if_type: { value: "str" },
+      halt_if_compare: { value: "is" },
       override_topic: { value: true },
       override_payload: { value: true },
       override_data: { value: true },
@@ -69,6 +71,50 @@
           })
           .fail(err => RED.notify(err.responseText, "error"));
       }
+
+      if (this.state_type === undefined) {
+        $("#node-input-state_type").val("str");
+      }
+
+      const defaultTypes = ["str", "num", "bool", "re"];
+      const $halt_if_compare = $("#node-input-halt_if_compare");
+      const $halt_if = $("#node-input-halt_if");
+      const $halt_if_help = $("#halt_if_help");
+
+      if (this.halt_if_compare === undefined) {
+        $("#node-input-halt_if_compare").val("is");
+      }
+
+      $halt_if.typedInput({
+        default: "str",
+        types: defaultTypes,
+        typeField: "#node-input-halt_if_type"
+      });
+      $halt_if.typedInput("width", "74.5%");
+
+      $halt_if_compare.change(function(e) {
+        let types = defaultTypes;
+        $halt_if_help.hide();
+
+        switch (e.target.value) {
+          case "is":
+          case "is_not":
+            break;
+          case "lt":
+          case "lte":
+          case "gt":
+          case "gte":
+            types = ["num"];
+            break;
+          case "includes":
+          case "does_not_include":
+            $halt_if_help.show();
+            types = ["str"];
+            break;
+        }
+        $halt_if.typedInput("types", types);
+      });
+      $halt_if_compare.trigger("change");
     },
     oneditsave: function() {
       this.entity_id = $("#entity_id").val();
@@ -93,9 +139,23 @@
   </div>
 
   <div class="form-row">
-      <label for="node-input-halt_if"><i class="fa fa-hand-paper-o"></i> Halt If</label>
-      <input type="text" id="node-input-halt_if" placeholder="off" />
+    <label for="node-input-halt_if_compare"><i class="fa fa-hand-paper-o"></i> Halt if State</label>
+    <div style="width: 70%;display: inline-block;">
+      <select type="text" id="node-input-halt_if_compare" style="width: auto;">
+        <option value="is">is</option>
+        <option value="is_not">is not</option>
+        <option value="lt">&lt;</option>
+        <option value="lte">&lt;=</option>
+        <option value="gt">&gt;</option>
+        <option value="gte">&gt;=</option>
+        <option value="includes">in</option>
+        <option value="does_not_include">not in</option>
+      </select>
+      <input type="text" id="node-input-halt_if" />
+    </div>
+    <input type="hidden" id="node-input-halt_if_type" />
   </div>
+  <span id="halt_if_help" style="inline-block;margin-left: 210px;">^ Comma delimited string</span>
 
   <div class="form-row">
       <label for="node-input-state_type"><i class="fa fa-tint"></i> State Type</label>
@@ -156,7 +216,7 @@
       <dd>Latest current state object received from home assistant</dd>
 
       <dt>data.state <span class="property-type">string</span></dt>
-      <dd>Main attribute state value, examples: 'on', 'off', 'home', 'open', 'closed', etc...</dd>
+      <dd>Main attribute state value, examples: &#39;on&#39;, &#39;off&#39;, &#39;home&#39;, &#39;open&#39;, &#39;closed&#39;, etc...</dd>
 
       <dt>data.entity_id <span class="property-type">string</span></dt>
       <dd>The entity to which this state belongs</dd>
