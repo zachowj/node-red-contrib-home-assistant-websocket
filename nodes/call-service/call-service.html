@@ -84,7 +84,7 @@
       const selectedServer = $server.val();
       if (node.server || (selectedServer && selectedServer !== "_ADD_")) {
         setServicesAndDomains(node);
-        $.get(`homeassistant/entities`)
+        $.get(`homeassistant/${node.server}/entities`)
           .done(entities => {
             this.availableEntities = JSON.parse(entities);
 
@@ -98,7 +98,7 @@
 
       // Calls the custom api backend defined in the config-server.js node
       function setServicesAndDomains(node) {
-        return $.get(`homeassistant/services`)
+        return $.get(`homeassistant/${node.server}/services`)
           .then(services => {
             node.allServices = JSON.parse(services);
             node.allDomains = Object.keys(node.allServices);

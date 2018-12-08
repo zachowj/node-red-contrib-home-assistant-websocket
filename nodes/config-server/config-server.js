@@ -5,18 +5,30 @@ module.exports = function(RED) {
 
     const httpHandlers = {
         getEntities: function(req, res, next) {
+            if (!this.homeAssistant) {
+                return res.json('[]');
+            }
+
             return this.homeAssistant
                 .getEntities()
                 .then(states => res.json(JSON.stringify(states)))
                 .catch(e => this.error(e.message));
         },
         getStates: function(req, res, next) {
+            if (!this.homeAssistant) {
+                return res.json('[]');
+            }
+
             return this.homeAssistant
                 .getStates()
                 .then(states => res.json(JSON.stringify(states)))
                 .catch(e => this.error(e.message));
         },
         getServices: function(req, res, next) {
+            if (!this.homeAssistant) {
+                return res.json('[]');
+            }
+
             return this.homeAssistant
                 .getServices()
                 .then(services => res.json(JSON.stringify(services)))
@@ -56,17 +68,17 @@ module.exports = function(RED) {
             }
 
             this.RED.httpAdmin.get(
-                '/homeassistant/entities',
+                `/homeassistant/${this.id}/entities`,
                 RED.auth.needsPermission('server.read'),
                 httpHandlers.getEntities.bind(this)
             );
             this.RED.httpAdmin.get(
-                '/homeassistant/states',
+                `/homeassistant/${this.id}/states`,
                 RED.auth.needsPermission('server.read'),
                 httpHandlers.getStates.bind(this)
             );
             this.RED.httpAdmin.get(
-                '/homeassistant/services',
+                `/homeassistant/${this.id}/services`,
                 RED.auth.needsPermission('server.read'),
                 httpHandlers.getServices.bind(this)
             );

@@ -91,7 +91,7 @@
 
           // A home assistant server is selected in the node config
           if (NODE.server || (selectedServer && selectedServer !== "_ADD_")) {
-            $.get(`homeassistant/entities`)
+            $.get(`homeassistant/${NODE.server}/entities`)
               .done(entities => {
                 NODE.availableEntities = JSON.parse(entities);
                 $entityid.autocomplete({
