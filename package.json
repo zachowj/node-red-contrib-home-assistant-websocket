@@ -64,7 +64,7 @@
   },
   "devDependencies": {
     "coveralls": "^3.0.2",
-    "eslint": "^5.9.0",
+    "eslint": "^5.10.0",
     "eslint-config-prettier": "^3.3.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.14.0",
@@ -76,11 +76,11 @@
     "istanbul": "^1.1.0-alpha.1",
     "lint-staged": "^8.1.0",
     "mocha": "^5.2.0",
-    "nock": "^10.0.2",
+    "nock": "^10.0.4",
     "node-red": "^0.19.5",
     "node-red-node-test-helper": "^0.1.8",
     "nodemon": "^1.18.7",
-    "prettier": "^1.15.2"
+    "prettier": "^1.15.3"
   },
   "husky": {
     "hooks": {
