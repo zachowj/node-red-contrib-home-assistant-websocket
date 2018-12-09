@@ -72,6 +72,11 @@ module.exports = function(RED) {
                 );
             }
 
+            this.nodeConfig.halt_if_compare =
+                this.nodeConfig.halt_if_compare || 'is';
+            this.nodeConfig.halt_if_type =
+                this.nodeConfig.halt_if_type || 'str';
+
             const shouldHaltIfState =
                 this.nodeConfig.halt_if &&
                 this.getComparatorResult(

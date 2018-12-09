@@ -82,6 +82,11 @@ module.exports = function(RED) {
                 const shouldIncludeEvent = this.shouldIncludeEvent(entity_id);
 
                 if (shouldIncludeEvent) {
+                    this.nodeConfig.halt_if_compare =
+                        this.nodeConfig.halt_if_compare || 'is';
+                    this.nodeConfig.halt_if_type =
+                        this.nodeConfig.halt_if_type || 'str';
+
                     const shouldHaltIfState =
                         this.nodeConfig.haltIfState &&
                         this.getComparatorResult(
