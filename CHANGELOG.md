@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.2] 2018.12.9
+
+### Fixed
+
+- Make Server Id is not empty when performing autocomplete ajax call
+
 ## [0.4.1] 2018.12.9
 
 ### Fixed
