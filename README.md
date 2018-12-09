@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.com/zachowj/node-red-contrib-home-assistant-websocket.svg?branch=master)](https://travis-ci.com/zachowj/node-red-contrib-home-assistant-websocket) [![Coverage Status](https://coveralls.io/repos/github/zachowj/node-red-contrib-home-assistant-websocket/badge.svg?branch=master)](https://coveralls.io/github/zachowj/node-red-contrib-home-assistant-websocket?branch=master)
 
+[![Buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoff.ee/zachowj)
+
 Various nodes to assist in setting up automation using [node-red](https://nodered.org/) communicating with [Home Assistant](https://home-assistant.io/).
 
 ## Project status

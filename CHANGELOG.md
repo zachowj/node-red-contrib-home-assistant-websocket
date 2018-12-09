@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.0] 2018.12.8
+
+### New Features
+
+- Ability to cast the `state` of event entities and payload to String/Number/Boolean
+- Changed `halt if` logic to be able to use different comparators to check the state for current-state, and events-state-change nodes
+- Poll-state now has `halt if` logic
+
+### Added
+
+- Added status times for success and error messages for the `get template` node ([@jonathanadams](https://github.com/jonathanadams))
+- Added timeSinceChangedMs to current-state, events-state, and trigger-state nodes `entity.timeSinceChangedMs`
+
+### Fixed
+
+- Autocomplete to use the correct entities/services if more than one server is setup ([#49](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/49))
+
 ## [0.3.1] 2018.11.18
 
 ### Added
