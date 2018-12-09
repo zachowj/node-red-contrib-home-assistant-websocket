@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.1] 2018.12.9
+
+### Fixed
+
+- Make sure `halt if` logic has default starting values
+
 ## [0.4.0] 2018.12.8
 
 ### New Features
