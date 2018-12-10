@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-- Make Server Id is not empty when performing autocomplete ajax call for `get history` node
+- Make Server Id is not empty when performing autocomplete ajax call for `get history` node ([@rchl](https://github.com/rchl))
 
 ## [0.4.2] 2018.12.9
 
