@@ -71,50 +71,24 @@
         $("#node-input-state_type").val("str");
       }
 
-      const defaultTypes = ["str", "num", "bool", "re"];
-      const $halt_if_compare = $("#node-input-halt_if_compare");
-      const $haltifstate = $("#node-input-haltifstate");
-      const $halt_if_help = $("#halt_if_help");
-
       if (this.halt_if_compare === undefined) {
         $("#node-input-halt_if_compare").val("is");
       }
 
-      $haltifstate.typedInput({
-        default: "str",
-        types: defaultTypes,
-        typeField: "#node-input-halt_if_type"
+      $.getScript("/homeassistant/static/haltif.js", function() {
+        setupHaltIf("#node-input-haltifstate", "#node-input-halt_if_compare");
       });
-      $haltifstate.typedInput("width", "74.5%");
-
-      $halt_if_compare.change(function(e) {
-        let types = defaultTypes;
-        $halt_if_help.hide();
-
-        switch (e.target.value) {
-          case "is":
-          case "is_not":
-            break;
-          case "lt":
-          case "lte":
-          case "gt":
-          case "gte":
-            types = ["num"];
-            break;
-          case "includes":
-          case "does_not_include":
-            $halt_if_help.show();
-            types = ["str"];
-            break;
-        }
-        $haltifstate.typedInput("types", types);
-      });
-      $halt_if_compare.trigger("change");
     },
     oneditsave: function() {
       this.entityidfilter = $("#node-input-entityidfilter").val();
       const outputs = $("#node-input-haltifstate").val() ? 2 : 1;
       $("#node-input-outputs").val(outputs);
+    },
+    oneditresize: function() {
+      $halt_if = $("#node-input-haltifstate");
+      if ($halt_if.hasClass("red-ui-typedInput")) {
+        resizeHaltIf($halt_if);
+      }
     }
   });
 </script>
@@ -149,7 +123,7 @@
 
   <div class="form-row">
     <label for="node-input-haltifstate"><i class="fa fa-hand-paper-o"></i> Halt if State</label>
-    <div style="width: 71%;display: inline-block;">
+    <div style="width: 70%;display: inline-block;">
       <select type="text" id="node-input-halt_if_compare" style="width: auto;">
         <option value="is">is</option>
         <option value="is_not">is not</option>

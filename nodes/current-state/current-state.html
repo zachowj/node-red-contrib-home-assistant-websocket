@@ -78,50 +78,24 @@
         $("#node-input-state_type").val("str");
       }
 
-      const defaultTypes = ["str", "num", "bool", "re"];
-      const $halt_if_compare = $("#node-input-halt_if_compare");
-      const $halt_if = $("#node-input-halt_if");
-      const $halt_if_help = $("#halt_if_help");
-
       if (this.halt_if_compare === undefined) {
         $("#node-input-halt_if_compare").val("is");
       }
 
-      $halt_if.typedInput({
-        default: "str",
-        types: defaultTypes,
-        typeField: "#node-input-halt_if_type"
+      $.getScript("/homeassistant/static/haltif.js", function() {
+        setupHaltIf("#node-input-halt_if", "#node-input-halt_if_compare");
       });
-      $halt_if.typedInput("width", "74.5%");
-
-      $halt_if_compare.change(function(e) {
-        let types = defaultTypes;
-        $halt_if_help.hide();
-
-        switch (e.target.value) {
-          case "is":
-          case "is_not":
-            break;
-          case "lt":
-          case "lte":
-          case "gt":
-          case "gte":
-            types = ["num"];
-            break;
-          case "includes":
-          case "does_not_include":
-            $halt_if_help.show();
-            types = ["str"];
-            break;
-        }
-        $halt_if.typedInput("types", types);
-      });
-      $halt_if_compare.trigger("change");
     },
     oneditsave: function() {
       this.entity_id = $("#entity_id").val();
       const outputs = $("#node-input-halt_if").val() ? 2 : 1;
       $("#node-input-outputs").val(outputs);
+    },
+    oneditresize: function() {
+      $halt_if = $("#node-input-halt_if");
+      if ($halt_if.hasClass("red-ui-typedInput")) {
+        resizeHaltIf($halt_if);
+      }
     }
   });
 </script>

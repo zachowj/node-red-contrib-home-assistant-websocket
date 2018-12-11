@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### New Features
+
+- Added secondary outputs for `halt if` logic for current-state, events-state, and poll-state nodes
+
+### Added
+
+- Added Spinner UI element to poll-state node
+
+### Changed
+
+- Refactored the UI for `halt if` logic into an external file and loaded on demand
+
 ## [0.4.3] 2018.12.9
 
 ### Fixed
