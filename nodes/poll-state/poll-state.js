@@ -117,6 +117,12 @@ module.exports = function(RED) {
                             this.nodeConfig.halt_if_type
                         );
 
+                    const msg = {
+                        topic: this.nodeConfig.entity_id,
+                        payload: pollState.state,
+                        data: pollState
+                    };
+
                     if (shouldHaltIfState) {
                         const debugMsg = `poll state: halting processing due to current state of ${
                             pollState.entity_id
@@ -130,7 +136,7 @@ module.exports = function(RED) {
                                 pollState.state
                             } at: ${this.getPrettyDate()}`
                         });
-                        return null;
+                        return this.send([null, msg]);
                     }
 
                     this.status({
@@ -139,11 +145,7 @@ module.exports = function(RED) {
                         text: `${pollState.state} at: ${this.getPrettyDate()}`
                     });
 
-                    this.send({
-                        topic: this.nodeConfig.entity_id,
-                        payload: pollState.state,
-                        data: pollState
-                    });
+                    this.send([msg, null]);
                 } else {
                     this.warn(
                         `could not calculate time since changed for entity_id "${

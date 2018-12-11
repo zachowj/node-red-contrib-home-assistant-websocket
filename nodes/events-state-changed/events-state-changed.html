@@ -11,7 +11,8 @@
       state_type: { value: "str" },
       haltifstate: { value: "" },
       halt_if_type: {},
-      halt_if_compare: {}
+      halt_if_compare: {},
+      outputs: { value: 1 }
     },
     inputs: 0,
     outputs: 1,
@@ -112,6 +113,8 @@
     },
     oneditsave: function() {
       this.entityidfilter = $("#node-input-entityidfilter").val();
+      const outputs = $("#node-input-haltifstate").val() ? 2 : 1;
+      $("#node-input-outputs").val(outputs);
     }
   });
 </script>
@@ -121,6 +124,7 @@
   <div class="form-row">
       <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
       <input type="text" id="node-input-name" placeholder="Name">
+      <input type="hidden" id="node-input-outputs"/>
   </div>
 
   <!-- Server -->

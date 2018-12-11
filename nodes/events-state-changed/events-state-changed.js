@@ -96,6 +96,12 @@ module.exports = function(RED) {
                             this.nodeConfig.halt_if_type
                         );
 
+                    const msg = {
+                        topic: entity_id,
+                        payload: event.new_state.state,
+                        data: event
+                    };
+
                     if (shouldHaltIfState) {
                         this.debug(
                             'flow halted due to "halt if state" setting'
@@ -108,14 +114,8 @@ module.exports = function(RED) {
                             } at: ${this.getPrettyDate()}`
                         });
 
-                        return null;
+                        return this.send([null, msg]);
                     }
-
-                    const msg = {
-                        topic: entity_id,
-                        payload: event.new_state.state,
-                        data: event
-                    };
 
                     this.status({
                         fill: 'green',
@@ -139,7 +139,7 @@ module.exports = function(RED) {
                               }, new_state: ${event.new_state.state}`
                           );
 
-                    return this.send(msg);
+                    return this.send([msg, null]);
                 }
                 return null;
             } catch (e) {

@@ -19,7 +19,8 @@
       override_payload: { value: true },
       override_data: { value: true },
       entity_id: { value: "" },
-      state_type: { value: "str" }
+      state_type: { value: "str" },
+      outputs: { value: 1 }
     },
     oneditprepare: function() {
       const $entityIdField = $("#entity_id");
@@ -119,6 +120,8 @@
     },
     oneditsave: function() {
       this.entity_id = $("#entity_id").val();
+      const outputs = $("#node-input-halt_if").val() ? 2 : 1;
+      $("#node-input-outputs").val(outputs);
     }
   });
 </script>
@@ -127,6 +130,7 @@
   <div class="form-row">
       <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
       <input type="text" id="node-input-name" placeholder="Name">
+      <input type="hidden" id="node-input-outputs"/>
   </div>
 
   <div class="form-row">

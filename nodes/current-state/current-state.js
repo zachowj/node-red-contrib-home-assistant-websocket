@@ -86,18 +86,6 @@ module.exports = function(RED) {
                     this.nodeConfig.halt_if_type
                 );
 
-            if (shouldHaltIfState) {
-                const debugMsg = `Get current state: halting processing due to current state of ${entity_id} matches "halt if state" option`;
-                this.debug(debugMsg);
-                this.debugToClient(debugMsg);
-                this.status({
-                    fill: 'red',
-                    shape: 'ring',
-                    text: `${currentState.state} at: ${this.getPrettyDate()}`
-                });
-                return null;
-            }
-
             // default switch to true if undefined (backward compatibility
             const override_payload = this.nodeConfig.override_payload !== false;
             const override_topic = this.nodeConfig.override_topic !== false;
@@ -107,12 +95,24 @@ module.exports = function(RED) {
             if (override_payload) message.payload = currentState.state;
             if (override_data) message.data = currentState;
 
-            this.status({
-                fill: 'green',
-                shape: 'dot',
-                text: `${currentState.state} at: ${this.getPrettyDate()}`
-            });
-            this.node.send(message);
+            if (shouldHaltIfState) {
+                const debugMsg = `Get current state: halting processing due to current state of ${entity_id} matches "halt if state" option`;
+                this.debug(debugMsg);
+                this.debugToClient(debugMsg);
+                this.status({
+                    fill: 'red',
+                    shape: 'ring',
+                    text: `${currentState.state} at: ${this.getPrettyDate()}`
+                });
+                this.node.send([null, message]);
+            } else {
+                this.status({
+                    fill: 'green',
+                    shape: 'dot',
+                    text: `${currentState.state} at: ${this.getPrettyDate()}`
+                });
+                this.node.send([message, null]);
+            }
         }
     }
 

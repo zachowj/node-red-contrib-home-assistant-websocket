@@ -12,7 +12,7 @@
     defaults: {
       name: { value: "" },
       server: { value: "", type: "server", required: true },
-      updateinterval: { value: "", validate: v => !isNaN(v) },
+      updateinterval: { value: "10", validate: v => !isNaN(v) },
       outputinitially: { value: false },
       outputonchanged: { value: false },
       entity_id: {
@@ -22,7 +22,8 @@
       state_type: { value: "str" },
       halt_if: { value: "" },
       halt_if_type: { value: "str" },
-      halt_if_compare: { value: "is" }
+      halt_if_compare: { value: "is" },
+      outputs: { value: 1 }
     },
     oneditprepare: function() {
       const $entityIdField = $("#entity_id");
@@ -132,6 +133,8 @@
     },
     oneditsave: function() {
       this.entity_id = $("#entity_id").val();
+      const outputs = $("#node-input-halt_if").val() ? 2 : 1;
+      $("#node-input-outputs").val(outputs);
     }
   });
 </script>
@@ -140,6 +143,7 @@
   <div class="form-row">
       <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
       <input type="text" id="node-input-name" placeholder="Name">
+      <input type="hidden" id="node-input-outputs"/>
   </div>
 
   <div class="form-row">
