@@ -233,7 +233,10 @@
         .typedInput("width", "68%");
     },
     oneditsave: function() {
-      const entityId = $("#entity_id").val();
+      const entityId = $("#entity_id")
+        .val()
+        .replace(/\s/g, "")
+        .split(",");
 
       this.service_domain = $("#service_domain").val();
       this.service = $("#service").val();
@@ -257,34 +260,33 @@
 
 <script type="text/x-red" data-template-name="api-call-service">
   <div class="form-row">
-      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-      <input type="text" id="node-input-name" placeholder="Name">
-  </div>
-
-
-  <div class="form-row">
-      <label for="node-input-server"><i class="fa fa-dot-circle-o"></i> Server</label>
-      <input type="text" id="node-input-server" />
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
   </div>
 
   <div class="form-row">
-      <label for="service_domain"><i class="fa fa-cube"></i> Domain</label>
-      <input type="text" id="service_domain">
+    <label for="node-input-server"><i class="fa fa-dot-circle-o"></i> Server</label>
+    <input type="text" id="node-input-server" />
   </div>
 
   <div class="form-row">
-      <label for="service"><i class="fa fa-cube"></i> Service</label>
-      <input type="text" id="service">
+    <label for="service_domain"><i class="fa fa-cube"></i> Domain</label>
+    <input type="text" id="service_domain">
   </div>
 
   <div class="form-row">
-      <label for="entity_id"><i class="fa fa-cube"></i> Entity Id</label>
-      <input type="text" id="entity_id">
+    <label for="service"><i class="fa fa-cube"></i> Service</label>
+    <input type="text" id="service">
   </div>
 
   <div class="form-row">
-      <label for="node-input-data"><i class="fa fa-dot-circle-o"></i> Data</label>
-      <input type="text" id="node-input-data" />
+    <label for="entity_id"><i class="fa fa-cube"></i> Entity Id</label>
+    <input type="text" id="entity_id">
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-data"><i class="fa fa-dot-circle-o"></i> Data</label>
+    <input type="text" id="node-input-data" />
   </div>
 
   <div class="form-row">
@@ -293,8 +295,8 @@
   </div>
 
   <div class="form-row">
-      <label for="node-input-mergecontext">Merge Context</label>
-      <input type="text" id="node-input-mergecontext" placeholder="lightOptions"/>
+    <label for="node-input-mergecontext">Merge Context</label>
+    <input type="text" id="node-input-mergecontext" placeholder="lightOptions"/>
   </div>
 
   <div class="form-row output-option" id="output_location">
@@ -304,60 +306,70 @@
   </div>
 
   <div id="service-data-desc" class="form-row">
-      <h4>
-          Service: <span class="title"></span>
-      </h4>
-      <div class="unknown-service">Unknown Service</div>
-      <div class="known-service">
-          <p class='service-description'></p>
-              <table id="service-data-table" style="width: 100%;" border="1" cellpadding="10">
-                  <thead>
-                      <tr>
-                          <th>Property</th>
-                          <th>Desc</th>
-                          <th>Example</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                  </tbody>
-          </table>
-      </div>
+    <h4>
+      Service: <span class="title"></span>
+    </h4>
+    <div class="unknown-service">Unknown Service</div>
+    <div class="known-service">
+      <p class='service-description'></p>
+        <table id="service-data-table" style="width: 100%;" border="1" cellpadding="10">
+          <thead>
+            <tr>
+              <th>Property</th>
+              <th>Desc</th>
+              <th>Example</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+    </div>
   </div>
 </script>
 
 <script type="text/x-red" data-help-name="api-call-service">
   <p>Call a Home Assistant service</p>
 
+  <h3>Config</h3>
+  <dl class="message-properties">
+    <dt>Entity Id <span class="property-type">string</span></dt>
+    <dd>A comma delimited list of entity ids</dd>
+    <dt class="optional">data <span class="property-type">JSON</span></dt>
+    <dd>When using templates the top level is a property of the message object: <code>msg.payload</code> would be <code>{{payload}}</code></dd>
+    <dt>Render Templates <span class="property-type">boolean</span></dt>
+    <dd>When checked will attempt to render templates within the data element including entity ids</dd>
+  </dl>
+
   <h3>Inputs</h3>
   <dl class="message-properties">
-      <dt class="optional">
-          payload.domain <span class="property-type">string</span>
-      </dt>
-      <dd>Service domain to call</dd>
-      <dt class="optional">
-          payload.service <span class="property-type">string</span>
-      </dt>
-      <dd>Service service to call</dd>
-      <dt class="optional">
-          payload.data <span class="property-type">object</span>
-      </dt>
-      <dd>Service data to send with api call</dd>
+    <dt class="optional">
+      payload.domain <span class="property-type">string</span>
+    </dt>
+    <dd>Service domain to call</dd>
+    <dt class="optional">
+      payload.service <span class="property-type">string</span>
+    </dt>
+    <dd>Service service to call</dd>
+    <dt class="optional">
+      payload.data <span class="property-type">object</span>
+    </dt>
+    <dd>Service data to send with api call</dd>
   </dl>
 
   <h3>Outputs</h3>
   <dl class="message-properties">
-          <dt>
-              payload.domain <span class="property-type">string</span>
-          </dt>
-          <dd>Service <code>domain</code> service was called with</dd>
-          <dt>
-              payload.service <span class="property-type">string</span>
-          </dt>
-          <dd>Service <code>service</code> was called with</dd>
-          <dt class="optional">
-              payload.data <span class="property-type">object</span>
-          </dt>
-          <dd>Service <code>data</code> used in call, if one was used</dd>
+    <dt>
+      payload.domain <span class="property-type">string</span>
+    </dt>
+    <dd>Service <code>domain</code> service was called with</dd>
+    <dt>
+      payload.service <span class="property-type">string</span>
+    </dt>
+    <dd>Service <code>service</code> was called with</dd>
+    <dt class="optional">
+      payload.data <span class="property-type">object</span>
+    </dt>
+    <dd>Service <code>data</code> used in call, if one was used</dd>
   </dl>
 
   <h3>Details</h3>
@@ -371,6 +383,6 @@
 
   <h3>References</h3>
   <ul>
-      <li><a href="https://home-assistant.io/developers/rest_api/#get-apiservices">HA API call service</a></li>
+    <li><a href="https://home-assistant.io/developers/rest_api/#get-apiservices">HA API call service</a></li>
   </ul>
 </script>
