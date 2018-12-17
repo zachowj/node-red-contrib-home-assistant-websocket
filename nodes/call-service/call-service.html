@@ -242,7 +242,10 @@
         const $nodeInputData = $("#node-input-data");
         const dataString = $nodeInputData.val() || "{}";
 
-        if (entityId.indexOf(",") !== -1) {
+        if (
+          this.service_domain === "homeassistant" &&
+          entityId.indexOf(",") !== -1
+        ) {
           entityId = entityId.replace(/\s/g, "").split(",");
         }
 
