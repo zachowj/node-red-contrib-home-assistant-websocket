@@ -103,6 +103,7 @@ module.exports = function(RED) {
             );
             this.RED.httpAdmin.get(
                 `/homeassistant/${this.id}/properties`,
+                RED.auth.needsPermission('server.read'),
                 httpHandlers.getProperties.bind(this)
             );
 
