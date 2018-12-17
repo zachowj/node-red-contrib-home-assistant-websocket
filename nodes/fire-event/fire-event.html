@@ -47,9 +47,11 @@
       const $server = $("#node-input-server");
 
       const node = this;
-      $("#node-input-data").typedInput({
-        types: ["json"]
-      });
+      $("#node-input-data")
+        .typedInput({
+          types: ["json"]
+        })
+        .typedInput("width", "68%");
 
       const utils = {
         setDefaultServerSelection: function() {

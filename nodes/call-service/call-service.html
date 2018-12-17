@@ -64,9 +64,11 @@
         }
       } catch (e) {}
 
-      $data.typedInput({
-        types: ["json"]
-      });
+      $data
+        .typedInput({
+          types: ["json"]
+        })
+        .typedInput("width", "68%");
 
       const utils = {
         setDefaultServerSelection: function() {
@@ -218,15 +220,17 @@
       if (!this.output_location) {
         $("#node-input-output_location").val("payload");
       }
-      $("#node-input-output_location").typedInput({
-        types: [
-          "msg",
-          "flow",
-          "global",
-          { value: "none", label: "None", hasValue: false }
-        ],
-        typeField: "#node-input-output_location_type"
-      });
+      $("#node-input-output_location")
+        .typedInput({
+          types: [
+            "msg",
+            "flow",
+            "global",
+            { value: "none", label: "None", hasValue: false }
+          ],
+          typeField: "#node-input-output_location_type"
+        })
+        .typedInput("width", "68%");
     },
     oneditsave: function() {
       const entityId = $("#entity_id").val();
