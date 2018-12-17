@@ -12,7 +12,9 @@ module.exports = function(RED) {
             render_data: {},
             mergecontext: {},
             name: {},
-            server: { isNode: true }
+            server: { isNode: true },
+            output_location: {},
+            output_location_type: {}
         }
     };
 
@@ -88,7 +90,7 @@ module.exports = function(RED) {
                 )}`
             );
 
-            message.payload = {
+            const msgPayload = {
                 domain: apiDomain,
                 service: apiService,
                 data: apiData || null
@@ -108,6 +110,26 @@ module.exports = function(RED) {
                         shape: 'dot',
                         text: `${apiDomain}.${apiService} called at: ${this.getPrettyDate()}`
                     });
+
+                    const contextKey = RED.util.parseContextStore(
+                        this.nodeConfig.output_location
+                    );
+                    contextKey.key = contextKey.key || 'payload';
+                    const locationType =
+                        this.nodeConfig.output_location_type || 'msg';
+
+                    if (locationType === 'flow' || locationType === 'global') {
+                        this.node
+                            .context()
+                            [locationType].set(
+                                contextKey.key,
+                                msgPayload,
+                                contextKey.store
+                            );
+                    } else if (locationType === 'msg') {
+                        message[contextKey.key] = msgPayload;
+                    }
+
                     this.send(message);
                 })
                 .catch(err => {
