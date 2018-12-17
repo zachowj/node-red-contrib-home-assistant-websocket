@@ -233,11 +233,7 @@
         .typedInput("width", "68%");
     },
     oneditsave: function() {
-      const entityId = $("#entity_id")
-        .val()
-        .replace(/\s/g, "")
-        .split(",");
-
+      let entityId = $("#entity_id").val();
       this.service_domain = $("#service_domain").val();
       this.service = $("#service").val();
 
@@ -245,6 +241,10 @@
       if (entityId.length) {
         const $nodeInputData = $("#node-input-data");
         const dataString = $nodeInputData.val() || "{}";
+
+        if (entityId.indexOf(",") !== -1) {
+          entityId = entityId.replace(/\s/g, "").split(",");
+        }
 
         try {
           const data = JSON.parse(dataString);
