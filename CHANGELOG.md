@@ -2,11 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [0.5.0] 2018.12.18
 
 ### New Features
 
 - Added secondary outputs for `halt if` logic for current-state, events-state, and poll-state nodes
+- Call-service node now has the option for custom location output or no output
+- New node `get-entities`: Get entities based on search criteria with 3 different output options
 
 ### Added
 
@@ -15,6 +17,10 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 - Refactored the UI for `halt if` logic into an external file and loaded on demand
+
+### Fixed
+
+- Fixed the handling of multiple entity ids for the homeassistant domain for the call-service node Fixed #57
 
 ## [0.4.3] 2018.12.9
 

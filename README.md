@@ -76,9 +76,13 @@ Sends a request to home assistant for any domain and service available ( `light/
 
 Fire an event on the event bus
 
-### Get Current State - `websocket`
+### Current State - `websocket`
 
 Fetches the last known state for any entity on input
+
+### Get Entities - `websocket`
+
+Get entities based on search criteria with 3 different output options
 
 ### Get History - `http`
 
