@@ -6,7 +6,9 @@
     outputs: 1,
     icon: "split.png",
     paletteLabel: "get entities",
-    label: "get entities",
+    label: function() {
+      return this.name || "get entities";
+    },
     defaults: {
       server: { value: "", type: "server", required: true },
       name: { value: "" },
