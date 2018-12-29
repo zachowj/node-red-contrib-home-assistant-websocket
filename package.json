@@ -55,7 +55,7 @@
     "debug": "4.1.0",
     "flat": "4.1.0",
     "home-assistant-js-websocket": "3.1.6",
-    "joi": "14.3.0",
+    "joi": "14.3.1",
     "lodash.merge": "4.6.1",
     "lodash.uniq": "4.5.0",
     "lowdb": "1.0.0",
