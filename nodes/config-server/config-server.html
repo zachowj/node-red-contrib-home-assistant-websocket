@@ -133,7 +133,7 @@
         <dd>Label for this configuration, see details below for implications</dd>
 
         <dt>Hass.io <span class="property-type">boolean</span></dt>
-        <dd>If you're connecting Hass.io check this. No other information is needed.</dd>
+        <dd>If you&#39;re connecting Hass.io check this. No other information is needed.</dd>
 
         <dt>Base URL <span class="property-type">string</span></dt>
         <dd>The base url and port the home assistant instance can be reached at, for example: <code>http://192.168.0.100:8123</code> or <code>https://homeassistant.mysite.com</code></dd>
@@ -142,17 +142,17 @@
         <dd>Long-lived Access Token or Password used to contact the API</dd>
 
         <dt>Legacy Password <span class="property-type">boolean</span></dt>
-        <dd>If you're using the legacy password to log into Home Assistant check this and enter your password in the password text box.</dd>
+        <dd>If you&#39;re using the legacy password to log into Home Assistant check this and enter your password in the password text box.</dd>
 
         <dt>Unauthorized SSL Certificates <span class="property-type">boolean</span></dt>
-        <dd>This will allow you to use self-signed certificates. Only use this if you know what you're doing.</dd>
+        <dd>This will allow you to use self-signed certificates. Only use this if you know what you&#39;re doing.</dd>
 
         <dt>State Boolean <span class="property-type">string | delimited</span></dt>
         <dd>A list of strings, not case sensitive, delimited by vertial pipe, | , that will return true for State Type Boolean.</dd>
     </dl>
 
   <h3>Details</h3>
-  <p>Every node requires a configuration attached to define how to contact home assistant, that is this config node's main purpose.</p>
+  <p>Every node requires a configuration attached to define how to contact home assistant, that is this config node&#39;s main purpose.</p>
 
   <h4>Context</h4>
   <p>Each config node will also make some data available on the global context, the <code>Name</code> value in this node is used as a, camelcased, namespace for those values</p>
@@ -160,13 +160,13 @@
 
   <h4>Context Example</h4>
   <p>Say we have a config node with name <code>My Awesome server</code>, with an entity setup in homeassistant as <code>switch.my_switch</code>.  This state would be available within function nodes and you could fetch using something like the below code</p>
-  <p>NOTE: It's likely one of the state or trigger nodes will better serve most use cases, this is simply provided as an option for more advanced cases, or to implement functionality I haven't thought of/gotten around to</p>
+  <p>NOTE: It&#39;s likely one of the state or trigger nodes will better serve most use cases, this is simply provided as an option for more advanced cases, or to implement functionality I haven&#39;t thought of/gotten around to</p>
 
   <pre>
-  const haCtx = global.get('homeassistant');
+  const haCtx = global.get(&#39;homeassistant&#39;);
   const configCtx = haCtx.myAwesomeServer;
-  const entityState = configCtx.states['switch.my_switch'];
-  return (entityState.state === 'on') ? true : false;
+  const entityState = configCtx.states[&#39;switch.my_switch&#39;];
+  return (entityState.state === &#39;on&#39;) ? true : false;
   </pre>
 
   <h3>Connection Issues</h3>

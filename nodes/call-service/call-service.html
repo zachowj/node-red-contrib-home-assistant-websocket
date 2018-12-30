@@ -378,7 +378,7 @@
   <h3>Details</h3>
   <p>If the incoming message has a <code>payload</code> property with <code>domain</code>, <code>service</code> set it will override any config values if set.</p>
   <p>If the incoming message has a <code>payload.data</code> that is an object or parseable into an object these properties will be <strong>merged</strong> with any config values set.<p>
-  <p>If the node has a property value in it's config for <code>Merge Context</code> then the <code>flow</code> and <code>global</code> contexts will be checked for this property which should be an object that will also be merged into the data payload.<p>
+  <p>If the node has a property value in it&#39;s config for <code>Merge Context</code> then the <code>flow</code> and <code>global</code> contexts will be checked for this property which should be an object that will also be merged into the data payload.<p>
 
   <h3>Merge Resolution</h3>
   <p>As seen above the <code>data</code> property has a lot going on in the way of data merging, in the end all of these are optional and the right most will win in the event that a property exists in multiple objects<p>
