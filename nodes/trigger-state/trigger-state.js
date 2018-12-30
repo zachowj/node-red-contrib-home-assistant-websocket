@@ -81,21 +81,21 @@ module.exports = function(RED) {
         }
 
         async onDeploy() {
-            const entityState = await this.nodeConfig.server.homeAssistant.getStates(
-                this.nodeConfig.entityid
-            );
+            const entities = await this.nodeConfig.server.homeAssistant.getStates();
 
-            let eventMessage = {
-                event_type: 'state_changed',
-                entity_id: this.nodeConfig.entityid,
-                event: {
-                    entity_id: this.nodeConfig.entityid,
-                    old_state: entityState,
-                    new_state: entityState
-                }
-            };
+            for (let entityId in entities) {
+                let eventMessage = {
+                    event_type: 'state_changed',
+                    entity_id: entityId,
+                    event: {
+                        entity_id: entityId,
+                        old_state: entities[entityId],
+                        new_state: entities[entityId]
+                    }
+                };
 
-            this.onEntityStateChanged(eventMessage);
+                this.onEntityStateChanged(eventMessage);
+            }
         }
 
         async onEntityStateChanged(eventMessage) {
@@ -251,11 +251,7 @@ module.exports = function(RED) {
             const msg = {
                 topic: entity_id,
                 payload: event.new_state.state,
-                data: {
-                    event_type: 'state_changed',
-                    entity_id,
-                    event
-                }
+                data: eventMessage
             };
             let outputs;
 
