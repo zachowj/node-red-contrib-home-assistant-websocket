@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.1] 2018.12.29
+
+### Fixed
+
+- Fixed `get-entities` to use custom label if valid
+- Correct possessive apostrophe in trigger state node constraint list ([@albertnis](https://github.com/albertnis))
+- Fixed condition where wildcard type state changes fired before current states were actually saved
+- Fixed onDeploy for trigger-state node when using substring/regex for entity id
+
 ## [0.5.0] 2018.12.18
 
 ### New Features
