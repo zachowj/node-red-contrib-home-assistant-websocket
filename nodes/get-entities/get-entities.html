@@ -71,7 +71,18 @@
               minLength: 0
             });
           })
-          .fail(err => RED.notify(err.responseText, "error"));
+          .fail(err => {
+            const serverConfig = RED.nodes.node($("#node-input-server").val());
+
+            if (serverConfig && serverConfig.dirty === true) {
+              RED.notify(
+                `You probably haven't deployed since adding a server. Do that for autocomplete to work.\n${
+                  err.responseText
+                }`,
+                "error"
+              );
+            }
+          });
       }
 
       $logic.editableList({
