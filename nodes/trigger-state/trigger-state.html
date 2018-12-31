@@ -99,6 +99,10 @@
                   source: NODE.availableEntities,
                   minLength: 0
                 });
+                $("#constraint-target-value").autocomplete({
+                  source: NODE.availableEntities,
+                  minLength: 0
+                });
               })
               .fail(err => {
                 const serverConfig = RED.nodes.node(
@@ -114,6 +118,17 @@
                   );
                 }
               });
+            $.get(`homeassistant/${serverId}/properties`)
+              .done(entities => {
+                NODE.availableProperties = JSON.parse(entities);
+                $(
+                  "#constraint-property-value,#output-comparator-property-value"
+                ).autocomplete({
+                  source: NODE.availableProperties,
+                  minLength: 0
+                });
+              })
+              .fail(err => {});
           }
         },
         setDefaultServerSelection: function() {
@@ -131,15 +146,27 @@
       const constraintsHandler = {
         onTargetTypeChange: function(e) {
           const val = e.target.value;
-          val === "this_entity"
-            ? $constraints.targetValue.attr("disabled", "disabled")
-            : $constraints.targetValue.removeAttr("disabled");
+          if (val === "this_entity") {
+            $constraints.targetValue.attr("disabled", "disabled").val("");
+            $constraints.propertyType
+              .find("option[value=previous_state]")
+              .show();
+          } else {
+            $constraints.targetValue.removeAttr("disabled");
+            $constraints.propertyType
+              .val("current_state")
+              .find("option[value=previous_state]")
+              .hide()
+              .trigger("change");
+          }
         },
         onPropertyTypeChange: function(e) {
           const val = e.target.value;
-          val === "current_state" || val === "previous_state"
-            ? $constraints.propertyValue.attr("disabled", "disabled")
-            : $constraints.propertyValue.removeAttr("disabled");
+          if (val === "current_state" || val === "previous_state") {
+            $constraints.propertyValue.attr("disabled", "disabled").val("");
+          } else {
+            $constraints.propertyValue.removeAttr("disabled");
+          }
         },
         onComparatorTypeChange: function(e) {
           const val = e.target.value; // Placeholder
@@ -342,11 +369,13 @@
             $customoutputs.comparatorPropertyValue.attr("disabled", "disabled");
             $customoutputs.comparatorType.attr("disabled", "disabled");
             $customoutputs.comparatorValue.attr("disabled", "disabled");
+            $customoutputs.comparatorPropertyValue.val("");
           }
           if (val === "previous_state" || val === "current_state") {
             $customoutputs.comparatorPropertyValue.attr("disabled", "disabled");
             $customoutputs.comparatorType.removeAttr("disabled");
             $customoutputs.comparatorValue.removeAttr("disabled");
+            $customoutputs.comparatorPropertyValue.val("");
           }
           if (val === "property") {
             $customoutputs.comparatorPropertyValue.removeAttr("disabled");

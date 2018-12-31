@@ -304,8 +304,6 @@ module.exports = function(RED) {
                     ? this.nodeConfig.entityid
                     : constraint.targetValue;
 
-                // TODO: Non 'self' targets state is just new_state of an incoming event, wrap to hack around the fact
-                // NOTE: UI needs changing to handle this there, and also to hide "previous state" if target is not self
                 if (isTargetThisEntity) {
                     targetData.state = triggerEvent;
                 } else {
@@ -318,7 +316,7 @@ module.exports = function(RED) {
                 }
             } catch (e) {
                 this.debug(
-                    'Error during trigger:state comparator evalutation: ',
+                    'Error during trigger:state comparator evaluation: ',
                     e.stack
                 );
                 throw e;
