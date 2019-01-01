@@ -77,14 +77,13 @@ module.exports = function(RED) {
             this.nodeConfig.halt_if_type =
                 this.nodeConfig.halt_if_type || 'str';
 
-            const shouldHaltIfState =
-                this.nodeConfig.halt_if &&
-                this.getComparatorResult(
-                    this.nodeConfig.halt_if_compare,
-                    this.nodeConfig.halt_if,
-                    currentState.state,
-                    this.nodeConfig.halt_if_type
-                );
+            const isHaltValid = await this.getComparatorResult(
+                this.nodeConfig.halt_if_compare,
+                this.nodeConfig.halt_if,
+                currentState.state,
+                this.nodeConfig.halt_if_type
+            );
+            const shouldHaltIfState = this.nodeConfig.halt_if && isHaltValid;
 
             // default switch to true if undefined (backward compatibility
             const override_payload = this.nodeConfig.override_payload !== false;

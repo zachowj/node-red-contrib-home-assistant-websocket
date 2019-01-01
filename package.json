@@ -61,6 +61,7 @@
     "lowdb": "1.0.0",
     "merge": "1.2.1",
     "mustache": "3.0.1",
+    "p-iteration": "1.1.7",
     "selectn": "1.1.2",
     "time-ago": "0.2.1",
     "ws": "6.1.2"

@@ -48,7 +48,7 @@ module.exports = function(RED) {
             }
         }
 
-        onHaEventsStateChanged(evt) {
+        async onHaEventsStateChanged(evt) {
             try {
                 const { entity_id, event } = this.utils.merge({}, evt);
 
@@ -87,14 +87,14 @@ module.exports = function(RED) {
                     this.nodeConfig.halt_if_type =
                         this.nodeConfig.halt_if_type || 'str';
 
+                    const isHaltValid = await this.getComparatorResult(
+                        this.nodeConfig.halt_if_compare,
+                        this.nodeConfig.haltIfState,
+                        event.new_state.state,
+                        this.nodeConfig.halt_if_type
+                    );
                     const shouldHaltIfState =
-                        this.nodeConfig.haltIfState &&
-                        this.getComparatorResult(
-                            this.nodeConfig.halt_if_compare,
-                            this.nodeConfig.haltIfState,
-                            event.new_state.state,
-                            this.nodeConfig.halt_if_type
-                        );
+                        this.nodeConfig.haltIfState && isHaltValid;
 
                     const msg = {
                         topic: entity_id,

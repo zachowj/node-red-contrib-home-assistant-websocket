@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 const EventsNode = require('../../lib/events-node');
+const { reduce } = require('p-iteration');
 
 module.exports = function(RED) {
     const nodeOptions = {
@@ -175,7 +176,7 @@ module.exports = function(RED) {
                     return this.send(outputs);
                 }
 
-                const customOutputsComparatorResults = this.getCustomOutputsComparatorResults(
+                const customOutputsComparatorResults = await this.getCustomOutputsComparatorResults(
                     this.nodeConfig.customoutputs,
                     eventMessage
                 );
@@ -214,7 +215,7 @@ module.exports = function(RED) {
                     constraint.propertyValue,
                     constraintTarget.state
                 );
-                const comparatorResult = this.getComparatorResult(
+                const comparatorResult = await this.getComparatorResult(
                     comparatorType,
                     comparatorValue,
                     actualValue,
@@ -269,30 +270,37 @@ module.exports = function(RED) {
         }
 
         getCustomOutputsComparatorResults(outputs, eventMessage) {
-            return outputs.reduce((acc, output, reduceIndex) => {
-                let result = {
-                    output,
-                    comparatorMatched: true,
-                    actualValue: null,
-                    message: null
-                };
+            return reduce(
+                outputs,
+                async (acc, output, reduceIndex) => {
+                    let result = {
+                        output,
+                        comparatorMatched: true,
+                        actualValue: null,
+                        message: null
+                    };
 
-                if (output.comparatorPropertyType !== 'always') {
-                    result.actualValue = this.utils.reach(
-                        output.comparatorPropertyValue,
-                        eventMessage.event
+                    if (output.comparatorPropertyType !== 'always') {
+                        result.actualValue = this.utils.reach(
+                            output.comparatorPropertyValue,
+                            eventMessage.event
+                        );
+                        result.comparatorMatched = await this.getComparatorResult(
+                            output.comparatorType,
+                            output.comparatorValue,
+                            result.actualValue,
+                            output.comparatorValueDatatype
+                        );
+                    }
+                    result.message = this.getOutputMessage(
+                        result,
+                        eventMessage
                     );
-                    result.comparatorMatched = this.getComparatorResult(
-                        output.comparatorType,
-                        output.comparatorValue,
-                        result.actualValue,
-                        output.comparatorValueDatatype
-                    );
-                }
-                result.message = this.getOutputMessage(result, eventMessage);
-                acc.push(result);
-                return acc;
-            }, []);
+                    acc.push(result);
+                    return acc;
+                },
+                []
+            );
         }
 
         async getConstraintTargetData(constraint, triggerEvent) {

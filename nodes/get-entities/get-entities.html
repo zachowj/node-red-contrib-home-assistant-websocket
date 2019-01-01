@@ -50,7 +50,8 @@
         { value: "gte", text: ">=" },
         { value: "includes", text: "in" },
         { value: "does_not_include", text: "not in" },
-        { value: "starts_with", text: "starts with" }
+        { value: "starts_with", text: "starts with" },
+        { value: "in_group", text: "in group" }
       ];
       const defaultTypes = ["str", "num", "bool", "re"];
       const $logic = $("#logic");
@@ -136,6 +137,7 @@
                 case "includes":
                 case "does_not_include":
                 case "starts_with":
+                case "in_group":
                   types = ["str"];
                   break;
               }

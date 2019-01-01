@@ -1,5 +1,6 @@
 const BaseNode = require('../../lib/base-node');
-const lodash = require('lodash');
+const { shuffle } = require('lodash');
+const { filter } = require('p-iteration');
 
 module.exports = function(RED) {
     const nodeOptions = {
@@ -33,27 +34,24 @@ module.exports = function(RED) {
                 return { payload: {} };
             }
 
-            let entities = Object.values(states).filter(entity => {
+            let entities = await filter(Object.values(states), async entity => {
                 const rules = this.nodeConfig.rules;
 
                 for (const rule of rules) {
                     const value = this.utils.reach(rule.property, entity);
-                    if (
-                        value === undefined ||
-                        !this.getComparatorResult(
-                            rule.logic,
-                            rule.value,
-                            value,
-                            rule.valueType
-                        )
-                    ) {
+                    const result = await this.getComparatorResult(
+                        rule.logic,
+                        rule.value,
+                        value,
+                        rule.valueType
+                    );
+                    if (value === undefined || !result) {
                         return false;
                     }
                 }
 
                 entity.timeSinceChangedMs =
                     Date.now() - new Date(entity.last_changed).getTime();
-
                 return true;
             });
 
@@ -100,7 +98,7 @@ module.exports = function(RED) {
                         entities.length <= maxReturned
                             ? entities.length
                             : maxReturned;
-                    let shuffledEntities = lodash.shuffle(entities);
+                    let shuffledEntities = shuffle(entities);
                     payload = shuffledEntities.slice(0, max);
                     if (maxReturned === 1) {
                         payload = payload[0];
