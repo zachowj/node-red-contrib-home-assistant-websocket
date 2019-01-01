@@ -89,9 +89,9 @@
       const serverId = node.server || selectedServer;
       if (node.server || (selectedServer && selectedServer !== "_ADD_")) {
         setServicesAndDomains(node);
-        $.get(`homeassistant/${serverId}/entities`)
+        $.getJSON(`homeassistant/${serverId}/entities`)
           .done(entities => {
-            this.availableEntities = JSON.parse(entities);
+            this.availableEntities = entities;
 
             $entityIdField.autocomplete({
               source: this.availableEntities,
@@ -114,10 +114,10 @@
 
       // Calls the custom api backend defined in the config-server.js node
       function setServicesAndDomains(node) {
-        return $.get(`homeassistant/${serverId}/services`)
+        return $.getJSON(`homeassistant/${serverId}/services`)
           .then(services => {
-            node.allServices = JSON.parse(services);
-            node.allDomains = Object.keys(node.allServices);
+            node.allServices = services;
+            node.allDomains = Object.keys(node.allServices).sort();
 
             $domainField
               .autocomplete({
@@ -227,7 +227,7 @@
 
         $serviceField
           .autocomplete({
-            source: Object.keys(node.selectedDomain.services),
+            source: Object.keys(node.selectedDomain.services).sort(),
             create: (evt, ui) => updateServiceSelection({ event: evt }),
             change: (evt, ui) => updateServiceSelection({ event: evt }),
             select: (evt, ui) => updateServiceSelection({ event: evt }),

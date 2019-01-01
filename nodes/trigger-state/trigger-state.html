@@ -92,9 +92,9 @@
           // A home assistant server is selected in the node config
           if (NODE.server || (selectedServer && selectedServer !== "_ADD_")) {
             const serverId = NODE.server || selectedServer;
-            $.get(`homeassistant/${serverId}/entities`)
+            $.getJSON(`homeassistant/${serverId}/entities`)
               .done(entities => {
-                NODE.availableEntities = JSON.parse(entities);
+                NODE.availableEntities = entities;
                 $entityid.autocomplete({
                   source: NODE.availableEntities,
                   minLength: 0
@@ -118,9 +118,9 @@
                   );
                 }
               });
-            $.get(`homeassistant/${serverId}/properties`)
+            $.getJSON(`homeassistant/${serverId}/properties`)
               .done(entities => {
-                NODE.availableProperties = JSON.parse(entities);
+                NODE.availableProperties = entities;
                 $(
                   "#constraint-property-value,#output-comparator-property-value"
                 ).autocomplete({

@@ -8,37 +8,37 @@ module.exports = function(RED) {
     const httpHandlers = {
         getEntities: function(req, res, next) {
             if (!this.homeAssistant) {
-                return res.json('[]');
+                return res.json([]);
             }
 
             return this.homeAssistant
                 .getEntities()
-                .then(states => res.json(JSON.stringify(states)))
+                .then(states => res.json(states))
                 .catch(e => this.error(e.message));
         },
         getStates: function(req, res, next) {
             if (!this.homeAssistant) {
-                return res.json('[]');
+                return res.json([]);
             }
 
             return this.homeAssistant
                 .getStates()
-                .then(states => res.json(JSON.stringify(states)))
+                .then(states => res.json(states))
                 .catch(e => this.error(e.message));
         },
         getServices: function(req, res, next) {
             if (!this.homeAssistant) {
-                return res.json('[]');
+                return res.json([]);
             }
 
             return this.homeAssistant
                 .getServices()
-                .then(services => res.json(JSON.stringify(services)))
+                .then(services => res.json(services))
                 .catch(e => this.error(e.message));
         },
         getProperties: function(req, res, next) {
             if (!this.homeAssistant) {
-                return res.json('[]');
+                return res.json([]);
             }
 
             return this.homeAssistant
@@ -47,9 +47,18 @@ module.exports = function(RED) {
                     const flat = Object.values(states).map(entity =>
                         Object.keys(flatten(entity))
                     );
-                    const uniqArray = uniq([].concat(...flat).sort());
+                    const uniqArray = uniq(
+                        [].concat(...flat).sort((a, b) => {
+                            if (!a.includes('.') && b.includes('.')) return -1;
+                            if (a.includes('.') && !b.includes('.')) return 1;
+                            if (a < b) return -1;
+                            if (a > b) return 1;
 
-                    res.json(JSON.stringify(uniqArray));
+                            return 0;
+                        })
+                    );
+
+                    res.json(uniqArray);
                 })
                 .catch(e => this.error(e.message));
         }

@@ -63,9 +63,9 @@
       let availableProperties = [];
       if (NODE.server || (selectedServer && selectedServer !== "_ADD_")) {
         const serverId = NODE.server || selectedServer;
-        $.get(`homeassistant/${serverId}/properties`)
+        $.getJSON(`homeassistant/${serverId}/properties`)
           .done(entities => {
-            availableProperties = JSON.parse(entities);
+            availableProperties = entities;
             $(".input-property").autocomplete({
               source: availableProperties,
               minLength: 0

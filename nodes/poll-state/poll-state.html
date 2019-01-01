@@ -48,9 +48,9 @@
       const selectedServer = $server.val();
       if (NODE.server || (selectedServer && selectedServer !== "_ADD_")) {
         const serverId = NODE.server || selectedServer;
-        $.get(`homeassistant/${serverId}/entities`)
+        $.getJSON(`homeassistant/${serverId}/entities`)
           .done(entities => {
-            this.availableEntities = JSON.parse(entities);
+            this.availableEntities = entities;
 
             $entityIdField.autocomplete({
               source: this.availableEntities,
