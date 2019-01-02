@@ -97,44 +97,42 @@
 
 <script type="text/html" data-template-name="api-get-history">
   <div class="form-row">
-      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-      <input type="text" id="node-input-name" placeholder="Name">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
   </div>
 
   <div class="form-row">
-      <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
-      <input type="text" id="node-input-server" />
+    <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
+    <input type="text" id="node-input-server" />
   </div>
 
 
   <div class="form-row">
-      <label for="node-input-startdate"><i class="fa fa-date"></i> Start Date</label>
-      <input type="text" id="node-input-startdate" autofocus="autofocus" />
+    <label for="node-input-startdate"><i class="fa fa-date"></i> Start Date</label>
+    <input type="text" id="node-input-startdate" autofocus="autofocus" />
   </div>
 
   <div class="form-row">
-      <label for="node-input-enddate"><i class="fa fa-date"></i> End Date</label>
-      <input type="text" id="node-input-enddate" />
+    <label for="node-input-enddate"><i class="fa fa-date"></i> End Date</label>
+    <input type="text" id="node-input-enddate" />
   </div>
 
   <!-- Comparator Selection -->
   <div class="form-row">
-      <label for="entity_id"><i class="fa fa-date"></i> Entity ID</label>
+    <label for="entity_id"><i class="fa fa-date"></i> Entity ID</label>
 
-      <select type="text" id="node-input-entityidtype" style="width: 80px;">
-          <option value="is">Is</option>
-          <option value="includes">Includes</option>
-      </select>
+    <select type="text" id="node-input-entityidtype" style="width: 80px;">
+      <option value="is">Is</option>
+      <option value="includes">Includes</option>
+    </select>
 
-      <input type="text" id="entity_id" style="width: 52%;"/>
+    <input type="text" id="entity_id" style="width: 52%;"/>
   </div>
 
   <div class="form-tips">
-      <ul>
-          <li>
-              dates must be in ISO format, example: "2018-01-27T13:00:00+00:00"
-          </li>
-      </ul>
+    <ul>
+      <li>dates must be in ISO format, example: "2018-01-27T13:00:00+00:00"</li>
+    </ul>
   </div>
 </script>
 
@@ -143,48 +141,33 @@
 
   <h3>Inputs</h3>
   <dl class="message-properties">
-      <dt class="optional">
-          startdate       <span class="property-type">string | date</span>
-      </dt>
+      <dt class="optional">startdate <span class="property-type">string | date</span></dt>
       <dd>Date to start fetching history from. Will override the nodes configuration if passed in</dd>
 
-      <dt class="optional">
-          enddate       <span class="property-type">string | date</span>
-      </dt>
+      <dt class="optional">enddate <span class="property-type">string | date</span></dt>
       <dd>Date to fetch history to. Will override the nodes configuration if passed in</dd>
 
-      <dt class="optional">
-          entityid       <span class="property-type">string</span>
-      </dt>
+      <dt class="optional">entityid <span class="property-type">string</span></dt>
       <dd>Exact entity_id to fetch history for, must be an exact match as is passed directly to the home-assistant api</dd>
   </dl>
 
   <h3>Outputs</h3>
   <dl class="message-properties">
-      <dt>
-          payload         <span class="property-type">array</span>
+      <dt>payload <span class="property-type">array</span>
       </dt>
       <dd>The history returned by home-assistant, which is an array of arrays where each array entry contains history objects for one particular entity</dd>
 
-      <dt>
-          startdate         <span class="property-type">string</span>
-      </dt>
+      <dt>startdate <span class="property-type">string</span></dt>
       <dd>ISO date string used to fetch history</dd>
 
-      <dt>
-          enddate         <span class="property-type">string</span>
-      </dt>
+      <dt>enddate <span class="property-type">string</span></dt>
       <dd>ISO date string used to fetch history</dd>
 
-      <dt>
-          entityid         <span class="property-type">string</span>
-      </dt>
+      <dt> entityid <span class="property-type">string</span></dt>
       <dd>entityid string used during fetch history call</dd>
 
-      <dt>
-          entityidtype     <span class="property-type">string</span>
-      </dt>
-      <dd>'is' or 'includes' depending on match type. NOTE: 'includes' fetches all history for time period then filters according to value, this will be less performant than exact ('is') matching</dd>
+      <dt> entityidtype <span class="property-type">string</span></dt>
+      <dd>	&#39;is	&#39; or 	&#39;includes	&#39; depending on match type. NOTE: 	&#39;includes	&#39; fetches all history for time period then filters according to value, this will be less performant than exact (	&#39;is	&#39;) matching</dd>
   </dl>
 
   <h3>Details</h3>
@@ -192,7 +175,7 @@
 
   <h3>References</h3>
   <ul>
-      <li><a href="https://home-assistant.io/components/history">HA History Component</a></li>
-      <li><a href="https://developers.home-assistant.io/docs/en/external_api_rest.html#get-api-history-period-lt-timestamp">HA API: /api/history/period</a></li>
+    <li><a href="https://home-assistant.io/components/history">HA History Component</a></li>
+    <li><a href="https://developers.home-assistant.io/docs/en/external_api_rest.html#get-api-history-period-lt-timestamp">HA API: /api/history/period</a></li>
   </ul>
 </script>
