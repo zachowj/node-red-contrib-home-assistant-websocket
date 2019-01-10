@@ -4,7 +4,7 @@
 
 [![Buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoff.ee/zachowj)
 
-Various nodes to assist in setting up automation using [node-red](https://nodered.org/) communicating with [Home Assistant](https://home-assistant.io/).
+Various nodes to assist in setting up automation using [Node-RED](https://nodered.org/) communicating with [Home Assistant](https://home-assistant.io/).
 
 ## Project status
 
@@ -12,9 +12,9 @@ Project is going through active development and as such will probably have a few
 
 ## Getting Started
 
-This assumes you have [node-red](https://nodered.org/) already installed and working, if you need to install node-red see [here](https://nodered.org/docs/getting-started/installation)
+This assumes you have [Node-RED](https://nodered.org) already installed and working, if you need to install Node-RED see [here](https://nodered.org/docs/getting-started/installation)
 
-**NOTE:** This requires [Node.js](https://nodejs.org/) >= 8.12.0. If you're running Node-Red in Docker you'll need to pull the -v8 image for this to work.
+**NOTE:** This requires [Node.js](https://nodejs.org) v8.12+ and [Node-RED](https://nodered.org/) v0.19+. If you're running Node-Red in Docker you'll need to pull the -v8 image for this to work.
 
 Install via Node-RED Manage Palette
 
@@ -50,7 +50,7 @@ If you have been using the [@Spartan-II-117](https://github.com/Spartan-II-117/n
 
 ## Included Nodes
 
-The installed nodes have more detailed information in the node-red info pane shown when the node is selected. Below is a quick summary
+The installed nodes have more detailed information in the Node-RED info pane shown when the node is selected. Below is a quick summary
 
 ### All Events - `websocket`
 
