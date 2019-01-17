@@ -133,14 +133,14 @@ module.exports = function(RED) {
                     this.send(message);
                 })
                 .catch(err => {
-                    this.warn(
-                        'Error calling service, home assistant api error',
-                        err
-                    );
-                    this.error(
-                        'Error calling service, home assistant api error',
-                        message
-                    );
+                    let errorMessage =
+                        'Error call service, home assistant api error.';
+                    if (err.message)
+                        errorMessage = `${errorMessage} Error Message: ${
+                            err.message
+                        }`;
+                    this.error(errorMessage);
+
                     this.status({
                         fill: 'red',
                         shape: 'ring',
