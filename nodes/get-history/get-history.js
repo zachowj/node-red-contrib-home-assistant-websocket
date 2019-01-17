@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const timestring = require('timestring');
 const BaseNode = require('../../lib/base-node');
 
 module.exports = function(RED) {
@@ -10,7 +11,12 @@ module.exports = function(RED) {
             startdate: {},
             enddate: {},
             entityid: {},
-            entityidtype: {}
+            entityidtype: {},
+            useRelativeTime: {},
+            relativeTime: {},
+            output_type: {},
+            output_location_type: {},
+            output_location: {}
         },
         input: {
             startdate: {
@@ -45,6 +51,14 @@ module.exports = function(RED) {
             entityidtype: {
                 messageProp: 'entityidtype',
                 configProp: 'entityidtype'
+            },
+            useRelativeTime: {
+                messageProp: 'userelativetime',
+                configProp: 'useRelativeTime'
+            },
+            relativeTime: {
+                messageProp: 'relativetime',
+                configProp: 'relativeTime'
             }
         }
     };
@@ -54,11 +68,29 @@ module.exports = function(RED) {
             super(nodeDefinition, RED, nodeOptions);
         }
 
-        onInput({ parsedMessage, message }) {
-            let { startdate, enddate, entityid, entityidtype } = parsedMessage;
+        async onInput({ parsedMessage, message }) {
+            let {
+                startdate,
+                enddate,
+                entityid,
+                entityidtype,
+                useRelativeTime,
+                relativeTime
+            } = parsedMessage;
             startdate = startdate.value;
             enddate = enddate.value;
             entityid = entityid.value;
+            relativeTime = relativeTime.value;
+            useRelativeTime = useRelativeTime.value;
+
+            if (
+                useRelativeTime ||
+                parsedMessage.relativeTime.source === 'message'
+            ) {
+                startdate = new Date(
+                    Date.now() - timestring(relativeTime, 'ms')
+                ).toISOString();
+            }
 
             let apiRequest =
                 entityidtype.value === 'includes' && entityid
@@ -82,34 +114,86 @@ module.exports = function(RED) {
                 text: `Requesting at: ${this.getPrettyDate()}`
             });
 
-            return apiRequest
-                .then(res => {
-                    message.startdate = startdate;
-                    message.enddate = enddate || null;
-                    message.entityid = entityid || null;
-                    message.payload = res;
-                    this.send(message);
-                    this.status({
-                        fill: 'green',
-                        shape: 'dot',
-                        text: `Success at: ${this.getPrettyDate()}`
-                    });
-                })
-                .catch(err => {
-                    this.warn(
-                        'Error calling service, home assistant api error',
-                        err
-                    );
-                    this.error(
-                        'Error calling service, home assistant api error',
-                        message
-                    );
-                    this.status({
-                        fill: 'red',
-                        shape: 'ring',
-                        text: `Error at: ${this.getPrettyDate()}`
-                    });
+            try {
+                var results = await apiRequest;
+                message.startdate = startdate;
+                message.enddate = enddate || null;
+                message.entityid = entityid || null;
+            } catch (err) {
+                let errorMessage =
+                    'Error get-history, home assistant api error.';
+                if (this.utils.selectn('response.data.message', err))
+                    errorMessage = `${errorMessage} Error Message: ${
+                        err.response.data.message
+                    }`;
+                this.error(errorMessage);
+
+                this.status({
+                    fill: 'red',
+                    shape: 'ring',
+                    text: `Error at: ${this.getPrettyDate()}`
                 });
+
+                return null;
+            }
+
+            switch (this.nodeConfig.output_type) {
+                case 'split':
+                    if (results.length === 0) {
+                        this.status({
+                            fill: 'red',
+                            shape: 'dot',
+                            text: `No Results at: ${this.getPrettyDate()}`
+                        });
+                        return;
+                    }
+                    if (entityidtype.value === 'is') {
+                        results = results[0];
+                    }
+
+                    message.parts = {};
+                    message.parts.id = RED.util.generateId();
+                    delete message._msgid;
+                    message.parts.type = 'array';
+                    message.parts.count = results.length;
+
+                    let pos = 0;
+                    message.parts.len = 1;
+                    for (let i = 0; i < results.length; i++) {
+                        message.payload = results.slice(pos, pos + 1)[0];
+                        message.parts.index = i;
+                        pos += 1;
+                        this.node.send(this.RED.util.cloneMessage(message));
+                    }
+                    break;
+
+                case 'array':
+                default:
+                    const contextKey = RED.util.parseContextStore(
+                        this.nodeConfig.output_location
+                    );
+                    const locationType = this.nodeConfig.output_location_type;
+                    if (locationType === 'flow' || locationType === 'global') {
+                        this.node
+                            .context()
+                            [locationType].set(
+                                contextKey.key,
+                                results,
+                                contextKey.store
+                            );
+                    } else {
+                        message[contextKey.key] = results;
+                    }
+
+                    this.node.send(message);
+                    break;
+            }
+
+            this.status({
+                fill: 'green',
+                shape: 'dot',
+                text: `Success at: ${this.getPrettyDate()}`
+            });
         }
     }
 

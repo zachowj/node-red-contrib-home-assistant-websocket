@@ -8,7 +8,12 @@
       startdate: { value: "" },
       enddate: { value: "" },
       entityid: { value: "" },
-      entityidtype: { value: "" }
+      entityidtype: { value: "" },
+      useRelativeTime: { value: false },
+      relativeTime: { value: "" },
+      output_type: { value: "array" },
+      output_location_type: { value: "msg" },
+      output_location: { value: "payload" }
     },
     inputs: 1,
     outputs: 1,
@@ -18,7 +23,9 @@
       if (this.name) {
         return this.name;
       }
-      if (this.startdate) {
+      if (this.useRelativeTime && this.relativeTime) {
+        return this.relativeTime;
+      } else if (this.startdate) {
         const startdate = new Date(this.startdate);
         return `${startdate.toLocaleDateString()} ${startdate.toLocaleTimeString()}`;
       }
@@ -68,7 +75,7 @@
             });
 
             const validSelection =
-              this.availableEntities.indexOf(this.entity_id) > -1;
+              this.availableEntities.indexOf(NODE.entityid) > -1;
             if (validSelection) {
               $entityIdField.removeClass("input-error");
             } else {
@@ -88,6 +95,34 @@
             }
           });
       }
+
+      $("#node-input-useRelativeTime").on("change", function() {
+        if (this.checked) {
+          $(".relative_row").show();
+          $(".date_row").hide();
+        } else {
+          $(".relative_row").hide();
+          $(".date_row").show();
+        }
+      });
+
+      if (this.output_location === undefined) {
+        $("#node-input-output_location").val("payload");
+      }
+      if (this.output_type === undefined) {
+        $("#node-input-output_type").val("array");
+      }
+
+      $("#node-input-output_location").typedInput({
+        types: ["msg", "flow", "global"],
+        typeField: "#node-input-output_location_type"
+      });
+
+      $("#node-input-output_type")
+        .on("change", e =>
+          $(".output-option").toggle(e.target.value === "array")
+        )
+        .trigger("change");
     },
     oneditsave: function() {
       this.entityid = $("#entity_id").val();
@@ -106,17 +141,6 @@
     <input type="text" id="node-input-server" />
   </div>
 
-
-  <div class="form-row">
-    <label for="node-input-startdate"><i class="fa fa-date"></i> Start Date</label>
-    <input type="text" id="node-input-startdate" autofocus="autofocus" />
-  </div>
-
-  <div class="form-row">
-    <label for="node-input-enddate"><i class="fa fa-date"></i> End Date</label>
-    <input type="text" id="node-input-enddate" />
-  </div>
-
   <!-- Comparator Selection -->
   <div class="form-row">
     <label for="entity_id"><i class="fa fa-date"></i> Entity ID</label>
@@ -129,10 +153,59 @@
     <input type="text" id="entity_id" style="width: 52%;"/>
   </div>
 
-  <div class="form-tips">
+  <div class="form-row">
+    <input type="checkbox" id="node-input-useRelativeTime" checked style="display: inline-block; width: auto; vertical-align: top;margin-left: 105px;">&nbsp;
+    <label for="node-input-useRelativeTime" style="width: auto;">Use Relative Time</label>
+  </div>
+
+  <div class="form-row relative_row">
+    <label for="node-input-relativeTime"><i class="fa fa-date"></i> In the Last</label>
+    <input type="text" id="node-input-relativeTime" autofocus="autofocus" placeholder="20 minutes" />
+  </div>
+
+  <div class="form-row date_row">
+    <label for="node-input-startdate"><i class="fa fa-date"></i> Start Date</label>
+    <input type="text" id="node-input-startdate" autofocus="autofocus" />
+  </div>
+
+  <div class="form-row date_row">
+    <label for="node-input-enddate"><i class="fa fa-date"></i> End Date</label>
+    <input type="text" id="node-input-enddate" />
+  </div>
+
+  <div class="form-row form-tips date_row">
     <ul>
-      <li>dates must be in ISO format, example: "2018-01-27T13:00:00+00:00"</li>
+      <li>dates must be in ISO format</li>
+      <li>example: "2018-01-27T13:00:00+00:00"</li>
     </ul>
+  </div>
+
+  <div class="form-row form-tips relative_row">
+    <p><code>timestring</code> will parse the following keywords into time values:</p>
+    <ol>
+      <li><code>ms, milli, millisecond, milliseconds</code> - will parse to milliseconds</li>
+      <li><code>s, sec, secs, second, seconds</code> - will parse to seconds</li>
+      <li><code>m, min, mins, minute, minutes</code> - will parse to minutes</li>
+      <li><code>h, hr, hrs, hour, hours</code> - will parse to hours</li>
+      <li><code>d, day, days</code> - will parse to days</li>
+      <li><code>w, week, weeks</code> - will parse to weeks</li>
+      <li><code>mon, mth, mths, month, months</code> - will parse to months</li>
+      <li><code>y, yr, yrs, year, years</code> - will parse to years</li>
+    </ol>
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-output_type">Output Type</label>
+    <select id="node-input-output_type">
+      <option value="array">Array</option>
+      <option value="split">Split</option>
+    </select>
+  </div>
+
+  <div class="form-row output-option" id="output_location">
+    <label for="node-input-output_location">Output Location</label>
+    <input type="hidden" id="node-input-output_location_type" />
+    <input type="text" id="node-input-output_location" />
   </div>
 </script>
 
@@ -146,6 +219,9 @@
 
       <dt class="optional">enddate <span class="property-type">string | date</span></dt>
       <dd>Date to fetch history to. Will override the nodes configuration if passed in</dd>
+
+      <dt class="optional">relativetime <span class="property-type">string</span></dt>
+      <dd>A timestring to be parsed into datetime string</dd>
 
       <dt class="optional">entityid <span class="property-type">string</span></dt>
       <dd>Exact entity_id to fetch history for, must be an exact match as is passed directly to the home-assistant api</dd>
@@ -162,6 +238,9 @@
 
       <dt>enddate <span class="property-type">string</span></dt>
       <dd>ISO date string used to fetch history</dd>
+
+      <dt>relativetime <span class="property-type">string</span></dt>
+      <dd>The timestring parsed into the startdate</dd>
 
       <dt> entityid <span class="property-type">string</span></dt>
       <dd>entityid string used during fetch history call</dd>
