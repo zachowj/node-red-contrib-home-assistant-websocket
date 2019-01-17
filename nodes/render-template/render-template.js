@@ -41,7 +41,7 @@ module.exports = function(RED) {
                 .then(res => {
                     message.template = template;
                     message.payload = res;
-                    this.send(message);
+                    this.node.send(message);
                     this.status({
                         fill: 'green',
                         shape: 'dot',
@@ -49,12 +49,14 @@ module.exports = function(RED) {
                     });
                 })
                 .catch(err => {
-                    this.error(
-                        `Error calling service, home assistant api error: ${
-                            err.message
-                        }`,
-                        message
-                    );
+                    let errorMessage =
+                        'Error get-template, home assistant api error.';
+                    if (this.utils.selectn('response.data.message', err))
+                        errorMessage = `${errorMessage} Error Message: ${
+                            err.response.data.message
+                        }`;
+
+                    this.error(errorMessage);
                     this.status({
                         fill: 'red',
                         shape: 'ring',
