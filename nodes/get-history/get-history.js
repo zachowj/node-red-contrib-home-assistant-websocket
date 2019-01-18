@@ -28,7 +28,6 @@ module.exports = function(RED) {
                     return yesterday.toISOString();
                 },
                 validation: {
-                    haltOnFail: true,
                     schema: Joi.date()
                         .optional()
                         .allow('')
@@ -38,7 +37,6 @@ module.exports = function(RED) {
                 messageProp: 'enddate',
                 configProp: 'enddate',
                 validation: {
-                    haltOnFail: true,
                     schema: Joi.date()
                         .optional()
                         .allow('')
@@ -51,10 +49,6 @@ module.exports = function(RED) {
             entityidtype: {
                 messageProp: 'entityidtype',
                 configProp: 'entityidtype'
-            },
-            useRelativeTime: {
-                messageProp: 'userelativetime',
-                configProp: 'useRelativeTime'
             },
             relativeTime: {
                 messageProp: 'relativetime',
@@ -74,14 +68,13 @@ module.exports = function(RED) {
                 enddate,
                 entityid,
                 entityidtype,
-                useRelativeTime,
                 relativeTime
             } = parsedMessage;
             startdate = startdate.value;
             enddate = enddate.value;
             entityid = entityid.value;
             relativeTime = relativeTime.value;
-            useRelativeTime = useRelativeTime.value;
+            let useRelativeTime = this.nodeConfig.useRelativeTime;
 
             if (
                 useRelativeTime ||
