@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.0] 2019.1.18
+
+### New Features
+
+- The **call-service** node autocomplete for `entity_id` now handles multiple entities
+- The properties field of a **trigger-state** node now has autocomplete
+- Added a new comparator, 'in group', to the **get-entities** node
+- **Get-history** node can use a relative time string for its date fields
+
+### Added
+
+- A more verbose error message for the autocomplete error when the server config hasn't been deployed
+- More informative error message for the **call-service** node when there's an API error
+
+### Changed
+
+- Change the connect timeout for hass.io users so it doesn't bombard the proxy when attempting to connect. ([#76](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/76))
+
+### Fixed
+
+- HomeAssistant object updated before firing state_change event ([#74](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/74))
+- Fixed HTTP API so it returns an empty string and not the response object when res.data is empty.
+  ([#78](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/78))
+
 ## [0.5.1] 2018.12.29
 
 ### Fixed
