@@ -110,12 +110,12 @@ module.exports = function(RED) {
 
                     const shouldHaltIfState =
                         this.nodeConfig.halt_if &&
-                        this.getComparatorResult(
+                        (await this.getComparatorResult(
                             this.nodeConfig.halt_if_compare,
                             this.nodeConfig.halt_if,
                             pollState.state,
                             this.nodeConfig.halt_if_type
-                        );
+                        ));
 
                     const msg = {
                         topic: this.nodeConfig.entity_id,
