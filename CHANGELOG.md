@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.1] 2019.1.18
+
+### Fixes
+
+- Fixed validation error for the **get-history** node
+- Fixed poll-state node not waiting for getComparatorResult
+
 ## [0.6.0] 2019.1.18
 
 ### New Features
