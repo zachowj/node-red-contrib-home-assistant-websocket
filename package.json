@@ -20,7 +20,8 @@
     "docker-map": "docker-compose -f docker/docker-compose.mapped.yml",
     "clean": "npm run docker:down",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "release": "standard-version"
   },
   "repository": {
     "type": "git",
@@ -101,5 +102,10 @@
       "prettier --write",
       "git add"
     ]
+  },
+  "standard-version": {
+    "scripts": {
+      "postchangelog": "prettier --write CHANGELOG.md"
+    }
   }
 }
