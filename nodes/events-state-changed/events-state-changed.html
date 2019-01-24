@@ -12,7 +12,8 @@
       haltifstate: { value: "" },
       halt_if_type: {},
       halt_if_compare: {},
-      outputs: { value: 1 }
+      outputs: { value: 1 },
+      output_only_on_state_change: { value: true }
     },
     inputs: 0,
     outputs: 1,
@@ -160,6 +161,11 @@
           <option value="num">Number</option>
           <option value="habool">Boolean</option>
       </select>
+  </div>
+
+  <div class="form-row">
+      <input type="checkbox" id="node-input-output_only_on_state_change" style="display: inline-block; width: auto; vertical-align: top;margin-left: 105px;">
+      <label for="node-input-output_only_on_state_change" style="width: auto;">Output only on state change</label>
   </div>
 
   <div class="form-row">

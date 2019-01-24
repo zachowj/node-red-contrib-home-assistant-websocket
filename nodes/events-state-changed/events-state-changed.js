@@ -19,7 +19,8 @@ module.exports = function(RED) {
             halt_if_type: {},
             halt_if_compare: {},
             outputinitially: {},
-            state_type: {}
+            state_type: {},
+            output_only_on_state_change: {}
         }
     };
 
@@ -79,69 +80,71 @@ module.exports = function(RED) {
                     );
                 }
 
-                const shouldIncludeEvent = this.shouldIncludeEvent(entity_id);
+                if (!this.shouldIncludeEvent(entity_id)) {
+                    return null;
+                }
 
-                if (shouldIncludeEvent) {
-                    this.nodeConfig.halt_if_compare =
-                        this.nodeConfig.halt_if_compare || 'is';
-                    this.nodeConfig.halt_if_type =
-                        this.nodeConfig.halt_if_type || 'str';
+                if (
+                    this.nodeConfig.output_only_on_state_change === true &&
+                    event.old_state.state === event.new_state.state
+                ) {
+                    return null;
+                }
 
-                    const isHaltValid = await this.getComparatorResult(
-                        this.nodeConfig.halt_if_compare,
-                        this.nodeConfig.haltIfState,
-                        event.new_state.state,
-                        this.nodeConfig.halt_if_type
-                    );
-                    const shouldHaltIfState =
-                        this.nodeConfig.haltIfState && isHaltValid;
+                this.nodeConfig.halt_if_compare =
+                    this.nodeConfig.halt_if_compare || 'is';
+                this.nodeConfig.halt_if_type =
+                    this.nodeConfig.halt_if_type || 'str';
 
-                    const msg = {
-                        topic: entity_id,
-                        payload: event.new_state.state,
-                        data: event
-                    };
+                const isHaltValid = await this.getComparatorResult(
+                    this.nodeConfig.halt_if_compare,
+                    this.nodeConfig.haltIfState,
+                    event.new_state.state,
+                    this.nodeConfig.halt_if_type
+                );
+                const shouldHaltIfState =
+                    this.nodeConfig.haltIfState && isHaltValid;
 
-                    if (shouldHaltIfState) {
-                        this.debug(
-                            'flow halted due to "halt if state" setting'
-                        );
-                        this.status({
-                            fill: 'red',
-                            shape: 'ring',
-                            text: `${
-                                event.new_state.state
-                            } at: ${this.getPrettyDate()}`
-                        });
+                const msg = {
+                    topic: entity_id,
+                    payload: event.new_state.state,
+                    data: event
+                };
 
-                        return this.send([null, msg]);
-                    }
-
+                if (shouldHaltIfState) {
+                    this.debug('flow halted due to "halt if state" setting');
                     this.status({
-                        fill: 'green',
-                        shape: 'dot',
+                        fill: 'red',
+                        shape: 'ring',
                         text: `${
                             event.new_state.state
                         } at: ${this.getPrettyDate()}`
                     });
 
-                    event.old_state
-                        ? this.debug(
-                              `Incoming state event: entity_id: ${
-                                  event.entity_id
-                              }, new_state: ${
-                                  event.new_state.state
-                              }, old_state: ${event.old_state.state}`
-                          )
-                        : this.debug(
-                              `Incoming state event: entity_id: ${
-                                  event.entity_id
-                              }, new_state: ${event.new_state.state}`
-                          );
-
-                    return this.send([msg, null]);
+                    return this.send([null, msg]);
                 }
-                return null;
+
+                this.status({
+                    fill: 'green',
+                    shape: 'dot',
+                    text: `${event.new_state.state} at: ${this.getPrettyDate()}`
+                });
+
+                event.old_state
+                    ? this.debug(
+                          `Incoming state event: entity_id: ${
+                              event.entity_id
+                          }, new_state: ${event.new_state.state}, old_state: ${
+                              event.old_state.state
+                          }`
+                      )
+                    : this.debug(
+                          `Incoming state event: entity_id: ${
+                              event.entity_id
+                          }, new_state: ${event.new_state.state}`
+                      );
+
+                return this.send([msg, null]);
             } catch (e) {
                 this.error(e);
             }
