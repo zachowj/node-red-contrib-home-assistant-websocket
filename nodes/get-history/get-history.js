@@ -76,6 +76,11 @@ module.exports = function(RED) {
             relativeTime = relativeTime.value;
             let useRelativeTime = this.nodeConfig.useRelativeTime;
 
+            if (this.nodeConfig.server === null) {
+                this.node.error('No valid server selected.');
+                return null;
+            }
+
             if (
                 useRelativeTime ||
                 parsedMessage.relativeTime.source === 'message'

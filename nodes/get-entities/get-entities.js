@@ -26,6 +26,11 @@ module.exports = function(RED) {
         async onInput({ parsedMessage, message }) {
             let noPayload = false;
 
+            if (this.nodeConfig.server === null) {
+                this.node.error('No valid server selected.');
+                return null;
+            }
+
             const states = await this.nodeConfig.server.homeAssistant.getStates();
             if (!states) {
                 this.node.warn(

@@ -43,6 +43,11 @@ module.exports = function(RED) {
                 return { payload: {} };
             };
 
+            if (this.nodeConfig.server === null) {
+                this.node.error('No valid server selected.');
+                return null;
+            }
+
             if (!entity_id)
                 return logAndContinueEmpty(
                     'entity ID not set, cannot get current state, sending empty payload'

@@ -30,6 +30,11 @@ module.exports = function(RED) {
             let { template } = parsedMessage;
             template = template.value;
 
+            if (this.nodeConfig.server === null) {
+                this.node.error('No valid server selected.');
+                return null;
+            }
+
             this.status({
                 fill: 'yellow',
                 shape: 'dot',
