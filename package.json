@@ -21,7 +21,8 @@
     "clean": "npm run docker:down",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "release": "standard-version"
+    "release": "standard-version",
+    "prerelease": "standard-version -p"
   },
   "repository": {
     "type": "git",
