@@ -12,21 +12,24 @@
     defaults: {
       name: { value: "" },
       server: { value: "", type: "server", required: true },
+      outputs: { value: 1 },
       halt_if: { value: "" },
       halt_if_type: { value: "str" },
       halt_if_compare: { value: "is" },
       override_topic: { value: true },
-      override_payload: { value: true },
-      override_data: { value: true },
       entity_id: { value: "" },
       state_type: { value: "str" },
-      outputs: { value: 1 }
+      state_location: { value: "payload" },
+      override_payload: { value: "msg" }, // state location type
+      entity_location: { value: "data" },
+      override_data: { value: "msg" } // entity location type
     },
     oneditprepare: function() {
       const $entityIdField = $("#entity_id");
-      $entityIdField.val(this.entity_id);
+      const $stateLocation = $("#node-input-state_location");
+      const $entityLocation = $("#node-input-entity_location");
 
-      const NODE = this;
+      const node = this;
       const $server = $("#node-input-server");
       const utils = {
         setDefaultServerSelection: function() {
@@ -38,13 +41,13 @@
         }
       };
 
-      if (!NODE.server) {
+      if (!node.server) {
         utils.setDefaultServerSelection();
       }
 
       const selectedServer = $server.val();
-      if (NODE.server || (selectedServer && selectedServer !== "_ADD_")) {
-        const serverId = NODE.server || selectedServer;
+      if (node.server || (selectedServer && selectedServer !== "_ADD_")) {
+        const serverId = node.server || selectedServer;
         $.getJSON(`homeassistant/${serverId}/entities`)
           .done(entities => {
             this.availableEntities = entities;
@@ -75,11 +78,41 @@
           });
       }
 
-      if (this.state_type === undefined) {
+      $entityIdField.val(node.entity_id);
+
+      // Handle backwards compatibility
+      if (node.state_location === undefined) {
+        $stateLocation.val("payload");
+        $("#node-input-override_payload").val(
+          node.override_payload === false ? "none" : "msg"
+        );
+      }
+      if (node.entity_location === undefined) {
+        $entityLocation.val("data");
+        $("#node-input-override_data").val(
+          node.override_data === false ? "none" : "msg"
+        );
+      }
+
+      const NoneType = { value: "none", label: "None", hasValue: false };
+      $stateLocation
+        .typedInput({
+          types: ["msg", "flow", "global", NoneType],
+          typeField: "#node-input-override_payload"
+        })
+        .typedInput("width", "68%");
+      $entityLocation
+        .typedInput({
+          types: ["msg", "flow", "global", NoneType],
+          typeField: "#node-input-override_data"
+        })
+        .typedInput("width", "68%");
+
+      if (node.state_type === undefined) {
         $("#node-input-state_type").val("str");
       }
 
-      if (this.halt_if_compare === undefined) {
+      if (node.halt_if_compare === undefined) {
         $("#node-input-halt_if_compare").val("is");
       }
 
@@ -146,17 +179,21 @@
       </select>
   </div>
 
+  <div class="form-row" id="state_location">
+    <label for="node-input-state_location">State Location</label>
+    <input type="hidden" id="node-input-override_payload" />
+    <input type="text" id="node-input-state_location" />
+  </div>
+
+  <div class="form-row" id="entity_location">
+    <label for="node-input-entity_location">Entity Location</label>
+    <input type="hidden" id="node-input-override_data" />
+    <input type="text" id="node-input-entity_location" />
+  </div>
+
   <div class="form-row">
-      <span style="width: 100px;display: inline-block;">Override</span>
-
-      <input type="checkbox" id="node-input-override_topic" checked style="display:inline-block; width:15px; vertical-align:baseline;">&nbsp;
-      <label for="node-input-override_topic" style="width: auto;margin-right: 20px;">Topic</label>
-
-      <input type="checkbox" id="node-input-override_payload" checked style="display:inline-block; width:15px; vertical-align:baseline;">&nbsp;
-      <label for="node-input-override_payload" style="width: auto;margin-right: 20px;">Payload</label>
-
-      <input type="checkbox" id="node-input-override_data" checked style="display:inline-block; width:15px; vertical-align:baseline;">&nbsp;
-      <label for="node-input-override_data" style="width: auto;">Data</label>
+      <input type="checkbox" id="node-input-override_topic" checked style="margin-left:105px;display:inline-block; width:auto; vertical-align:baseline;">&nbsp;
+      <label for="node-input-override_topic" style="width: auto;margin-right: 20px;">Override Topic</label>
   </div>
 </script>
 
@@ -180,8 +217,14 @@
       <dt>State Type<span class="property-type">string</span></dt>
       <dd>Convert the state of the entity to the selected type. Boolean will be convert to true based on if the string is equial by default to (y|yes|true|on|home|open). Original value stored in msg.data.original_state</dd>
 
-      <dt>Overrides<span class="property-type">boolean</span></dt>
-      <dd></dd>
+      <dt>State Location<span class="property-type">string</span></dt>
+      <dd>Customizable location for the entity's state. Defaults to <code>msg.payload</code></dd>
+
+      <dt>Entity Location<span class="property-type">string</span></dt>
+      <dd>Customizable location for the <a href="https://www.home-assistant.io/docs/configuration/state_object/" target="_blank">entity object</a>. Defaults to <code>msg.data</code></dd>
+
+      <dt>Override Topic<span class="property-type">boolean</span></dt>
+      <dd>Write entity id to <code>msg.topic</code></dd>
   </dl>
 
   <h3>Outputs</h3>

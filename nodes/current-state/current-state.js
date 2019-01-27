@@ -6,15 +6,17 @@ module.exports = function(RED) {
         debug: true,
         config: {
             name: {},
+            server: { isNode: true },
             halt_if: {},
             halt_if_type: {},
             halt_if_compare: {},
             override_topic: {},
-            override_payload: {},
-            override_data: {},
             entity_id: {},
             state_type: {},
-            server: { isNode: true }
+            state_location: {},
+            override_payload: {}, // state location type
+            entity_location: {},
+            override_data: {} // entity location type
         },
         input: {
             entity_id: {
@@ -91,13 +93,65 @@ module.exports = function(RED) {
             const shouldHaltIfState = this.nodeConfig.halt_if && isHaltValid;
 
             // default switch to true if undefined (backward compatibility
-            const override_payload = this.nodeConfig.override_payload !== false;
             const override_topic = this.nodeConfig.override_topic !== false;
-            const override_data = this.nodeConfig.override_data !== false;
-
             if (override_topic) message.topic = entity_id;
-            if (override_payload) message.payload = currentState.state;
-            if (override_data) message.data = currentState;
+
+            if (this.nodeConfig.state_location === undefined) {
+                this.nodeConfig.state_location = 'payload';
+                this.nodeConfig.override_payload =
+                    this.nodeConfig.override_payload !== false ? 'msg' : 'none';
+            }
+            if (this.nodeConfig.entity_location === undefined) {
+                this.nodeConfig.entity_location = 'data';
+                this.nodeConfig.override_data =
+                    this.nodeConfig.override_data !== false ? 'msg' : 'none';
+            }
+
+            if (
+                this.nodeConfig.override_payload !== 'none' &&
+                this.nodeConfig.state_location
+            ) {
+                const contextKey = RED.util.parseContextStore(
+                    this.nodeConfig.state_location
+                );
+                contextKey.key = contextKey.key || 'payload';
+                const locationType = this.nodeConfig.override_payload || 'msg';
+
+                if (locationType === 'flow' || locationType === 'global') {
+                    this.node
+                        .context()
+                        [locationType].set(
+                            contextKey.key,
+                            currentState.state,
+                            contextKey.store
+                        );
+                } else if (locationType === 'msg') {
+                    message[contextKey.key] = currentState.state;
+                }
+            }
+
+            if (
+                this.nodeConfig.override_data !== 'none' &&
+                this.nodeConfig.entity_location
+            ) {
+                const contextKey = RED.util.parseContextStore(
+                    this.nodeConfig.entity_location
+                );
+                contextKey.key = contextKey.key || 'data';
+                const locationType = this.nodeConfig.override_data || 'msg';
+
+                if (locationType === 'flow' || locationType === 'global') {
+                    this.node
+                        .context()
+                        [locationType].set(
+                            contextKey.key,
+                            currentState,
+                            contextKey.store
+                        );
+                } else if (locationType === 'msg') {
+                    message[contextKey.key] = currentState;
+                }
+            }
 
             if (shouldHaltIfState) {
                 const debugMsg = `Get current state: halting processing due to current state of ${entity_id} matches "halt if state" option`;
