@@ -48,10 +48,15 @@ module.exports = function(RED) {
             this.loadPersistedData();
 
             if (this.nodeConfig.outputinitially) {
-                this.addEventClientListener({
-                    event: 'ha_events:states_loaded',
-                    handler: this.onDeploy.bind(this)
-                });
+                // Here for when the node is deploy without the server config being deployed
+                if (this.isConnected) {
+                    this.onDeploy();
+                } else {
+                    this.addEventClientListener({
+                        event: 'ha_events:states_loaded',
+                        handler: this.onStatesLoaded.bind(this)
+                    });
+                }
             }
         }
 
@@ -83,7 +88,10 @@ module.exports = function(RED) {
 
         async onDeploy() {
             const entities = await this.nodeConfig.server.homeAssistant.getStates();
+            this.onStatesLoaded(entities);
+        }
 
+        onStatesLoaded(entities) {
             for (let entityId in entities) {
                 let eventMessage = {
                     event_type: 'state_changed',
@@ -95,7 +103,7 @@ module.exports = function(RED) {
                     }
                 };
 
-                this.onEntityStateChanged(eventMessage);
+                this.onEntityStateChanged(eventMessage, true);
             }
         }
 

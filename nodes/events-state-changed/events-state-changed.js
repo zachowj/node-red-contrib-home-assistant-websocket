@@ -42,14 +42,19 @@ module.exports = function(RED) {
             });
 
             if (this.nodeConfig.outputinitially) {
-                this.addEventClientListener({
-                    event: 'ha_events:states_loaded',
-                    handler: this.onDeploy.bind(this)
-                });
+                // Here for when the node is deploy without the server config being deployed
+                if (this.isConnected) {
+                    this.onDeploy();
+                } else {
+                    this.addEventClientListener({
+                        event: 'ha_events:states_loaded',
+                        handler: this.onStatesLoaded.bind(this)
+                    });
+                }
             }
         }
 
-        async onHaEventsStateChanged(evt) {
+        async onHaEventsStateChanged(evt, runAll) {
             try {
                 const { entity_id, event } = this.utils.merge({}, evt);
 
@@ -85,6 +90,7 @@ module.exports = function(RED) {
                 }
 
                 if (
+                    runAll === undefined &&
                     this.nodeConfig.output_only_on_state_change === true &&
                     event.old_state.state === event.new_state.state
                 ) {
@@ -152,7 +158,10 @@ module.exports = function(RED) {
 
         async onDeploy() {
             const entities = await this.nodeConfig.server.homeAssistant.getStates();
+            this.onStatesLoaded(entities);
+        }
 
+        onStatesLoaded(entities) {
             for (let entityId in entities) {
                 let eventMessage = {
                     event_type: 'state_changed',
@@ -164,7 +173,7 @@ module.exports = function(RED) {
                     }
                 };
 
-                this.onHaEventsStateChanged(eventMessage);
+                this.onHaEventsStateChanged(eventMessage, true);
             }
         }
 
