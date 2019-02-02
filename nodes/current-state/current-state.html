@@ -4,6 +4,7 @@
     color: "#52C0F2",
     inputs: 1,
     outputs: 1,
+    outputLabels: ["", "halt if"],
     icon: "code.png",
     paletteLabel: "current state",
     label: function() {
@@ -16,7 +17,7 @@
       halt_if: { value: "" },
       halt_if_type: { value: "str" },
       halt_if_compare: { value: "is" },
-      override_topic: { value: true },
+      override_topic: { value: false },
       entity_id: { value: "" },
       state_type: { value: "str" },
       state_location: { value: "payload" },
@@ -218,7 +219,7 @@
       <dd>Convert the state of the entity to the selected type. Boolean will be convert to true based on if the string is equial by default to (y|yes|true|on|home|open). Original value stored in msg.data.original_state</dd>
 
       <dt>State Location<span class="property-type">string</span></dt>
-      <dd>Customizable location for the entity's state. Defaults to <code>msg.payload</code></dd>
+      <dd>Customizable location for the entity&#8217;s state. Defaults to <code>msg.payload</code></dd>
 
       <dt>Entity Location<span class="property-type">string</span></dt>
       <dd>Customizable location for the <a href="https://www.home-assistant.io/docs/configuration/state_object/" target="_blank">entity object</a>. Defaults to <code>msg.data</code></dd>
