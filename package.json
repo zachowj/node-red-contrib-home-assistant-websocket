@@ -22,7 +22,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "release": "standard-version",
-    "prerelease": "standard-version -p"
+    "release:pre": "standard-version -p"
   },
   "repository": {
     "type": "git",
