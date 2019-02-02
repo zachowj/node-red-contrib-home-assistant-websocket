@@ -36,31 +36,49 @@ module.exports = function(RED) {
                 .then(services => res.json(services))
                 .catch(e => this.error(e.message));
         },
-        getProperties: function(req, res, next) {
+        getProperties: async function(req, res, next) {
             if (!this.homeAssistant) {
                 return res.json([]);
             }
 
-            return this.homeAssistant
-                .getStates()
-                .then(states => {
-                    const flat = Object.values(states).map(entity =>
-                        Object.keys(flatten(entity))
-                    );
-                    const uniqArray = uniq(
-                        [].concat(...flat).sort((a, b) => {
-                            if (!a.includes('.') && b.includes('.')) return -1;
-                            if (a.includes('.') && !b.includes('.')) return 1;
-                            if (a < b) return -1;
-                            if (a > b) return 1;
+            let flat = [];
+            let singleEntity = !!req.query.entityId;
 
-                            return 0;
-                        })
-                    );
+            try {
+                var states = await this.homeAssistant.getStates(
+                    req.query.entityId
+                );
 
-                    res.json(uniqArray);
+                if (!states) {
+                    states = await this.homeAssistant.getStates();
+                    singleEntity = false;
+                }
+            } catch (e) {
+                this.error(e.message);
+            }
+
+            if (singleEntity) {
+                flat = Object.keys(flatten(states)).filter(
+                    e => e.indexOf(req.query.term) !== -1
+                );
+            } else {
+                flat = Object.values(states).map(entity =>
+                    Object.keys(flatten(entity))
+                );
+            }
+
+            const uniqArray = uniq(
+                [].concat(...flat).sort((a, b) => {
+                    if (!a.includes('.') && b.includes('.')) return -1;
+                    if (a.includes('.') && !b.includes('.')) return 1;
+                    if (a < b) return -1;
+                    if (a > b) return 1;
+
+                    return 0;
                 })
-                .catch(e => this.error(e.message));
+            );
+
+            res.json(uniqArray);
         }
     };
 

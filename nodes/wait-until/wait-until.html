@@ -1,0 +1,223 @@
+<script type="text/javascript">
+  RED.nodes.registerType("ha-wait-until", {
+    category: "home_assistant",
+    color: "#52C0F2",
+    inputs: 1,
+    outputs: 1,
+    icon: "wait-until.png",
+    paletteLabel: "wait until",
+    label: function() {
+      return this.name || `wait until`;
+    },
+    outputLabels: ["", "timed out"],
+    defaults: {
+      name: { value: "" },
+      server: { value: "", type: "server", required: true },
+      outputs: { value: 1 },
+      entityId: { value: "" },
+      property: { value: "" },
+      comparator: { value: "is" },
+      value: { value: "" },
+      valueType: { value: "str" },
+      timeout: { value: 0 },
+      timeoutUnits: { value: "seconds" },
+      entityLocation: { value: "data" },
+      entityLocationType: { value: "none" }
+    },
+    oneditprepare: function() {
+      const $entityIdField = $("#node-input-entityId");
+
+      const node = this;
+      const $server = $("#node-input-server");
+      const utils = {
+        setDefaultServerSelection: function() {
+          let defaultServer;
+          RED.nodes.eachConfig(n => {
+            if (n.type === "server" && !defaultServer) defaultServer = n.id;
+          });
+          if (defaultServer) $server.val(defaultServer);
+        }
+      };
+
+      if (!node.server) {
+        utils.setDefaultServerSelection();
+      }
+
+      const selectedServer = $server.val();
+      if (node.server || (selectedServer && selectedServer !== "_ADD_")) {
+        const serverId = node.server || selectedServer;
+        $.getJSON(`homeassistant/${serverId}/entities`)
+          .done(entities => {
+            this.availableEntities = entities;
+
+            $entityIdField.autocomplete({
+              source: this.availableEntities,
+              minLength: 0,
+              change: (evt, ui) => {
+                const validSelection =
+                  this.availableEntities.indexOf($(evt.target).val()) > -1;
+              }
+            });
+
+            const validSelection =
+              this.availableEntities.indexOf(this.entityId) > -1;
+          })
+          .fail(err => {
+            const serverConfig = RED.nodes.node($("#node-input-server").val());
+
+            if (serverConfig && serverConfig.dirty === true) {
+              RED.notify(
+                `You probably haven't deployed since adding a server. Do that for autocomplete to work.\n${
+                  err.responseText
+                }`,
+                "error"
+              );
+            }
+          });
+        $("#node-input-property").autocomplete({
+          source: function(request, response) {
+            $.ajax({
+              url: `homeassistant/${serverId}/properties`,
+              dataType: "json",
+              data: {
+                term: request.term,
+                entityId: $("#node-input-entityId").val()
+              },
+              success: function(data) {
+                response(data);
+              }
+            });
+          },
+          minLength: 0
+        });
+      }
+      const defaultTypes = ["str", "num", "bool", "re"];
+      $("#node-input-value")
+        .typedInput({
+          default: "str",
+          types: defaultTypes,
+          typeField: "#node-input-valueType"
+        })
+        .typedInput("width", "50%");
+
+      $("#node-input-comparator").change(function(e) {
+        let types = defaultTypes;
+
+        switch (e.target.value) {
+          case "is":
+          case "is_not":
+            break;
+          case "lt":
+          case "lte":
+          case "gt":
+          case "gte":
+            types = ["num"];
+            break;
+          case "includes":
+          case "does_not_include":
+            types = ["str"];
+            break;
+        }
+        $("#node-input-value").typedInput("types", types);
+      });
+
+      $("#node-input-timeout").spinner({ min: 0 });
+
+      const NoneType = { value: "none", label: "None", hasValue: false };
+      $("#node-input-entityLocation")
+        .typedInput({
+          types: ["msg", "flow", "global", NoneType],
+          typeField: "#node-input-entityLocationType"
+        })
+        .typedInput("width", "68%");
+    },
+    oneditsave: function() {
+      const outputs = $("#node-input-timeout").val() > 0 ? 2 : 1;
+      $("#node-input-outputs").val(outputs);
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="ha-wait-until">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+    <input type="hidden" id="node-input-outputs"/>
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
+    <input type="text" id="node-input-server" />
+  </div>
+
+  <div class="form-row">
+    <label for="entityId"><i class="fa fa-cube"></i> Entity ID</label>
+    <input type="text" id="node-input-entityId">
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-property"><i class="fa fa-hand-paper-o"></i> Wait Until</label>
+    <input type="text" id="node-input-property" placeholder="property">
+  </div>
+
+  <div class="form-row">
+    <select id="node-input-comparator" style="margin-right: 5px;margin-left: 105px;width: auto;">
+      <option value="is">is</option>
+      <option value="is_not">is not</option>
+      <option value="lt">&lt;</option>
+      <option value="lte">&lt;=</option>
+      <option value="gt">&gt;</option>
+      <option value="gte">&gt;=</option>
+      <option value="includes">in</option>
+      <option value="does_not_include">not in</option>
+    </select>
+    <input id="node-input-valueType" type="hidden">
+    <input id="node-input-value" type="text" placeholder="value" style="width: 46%;">
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-timeout"><i class="fa fa-clock-o"></i> Timeout</label>
+    <input type="text" id="node-input-timeout" style="text-align:end; width:50px !important">
+    <select id="node-input-timeoutUnits" style="width:auto !important">
+      <option value="milliseconds">milliseconds</option>
+      <option value="seconds">seconds</option>
+      <option value="minutes">minutes</option>
+      <option value="hours">hours</option>
+      <option value="days">days</option>
+    </select>
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-entityLocation">Entity Location</label>
+    <input type="hidden" id="node-input-entityLocationType" />
+    <input type="text" id="node-input-entityLocation" />
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="ha-wait-until">
+  <p>When an input is received the node will wait until the condition is met or the timeout occurs then will pass on the last received message.</p>
+
+  <h3>Inputs</h3>
+  <dl class="message-properties">
+    <dt class="optional">reset <span class="property-type"></span> </dt>
+    <dd>If the received message has this property set to any value the node will be set to inactive and the timeout cleared.</dd>
+  </dl>
+
+  <h3>Configuration</h3>
+  <dl class="message-properties">
+    <dt>Entity ID<span class="property-type">string</span></dt>
+    <dd>The id of a of an entity to use for the comparison.</dd>
+
+    <dt>Wait Until <span class="property-type">string</span></dt>
+    <dd>The <code>property</code> field will be checked against the <code>value</code> field using the comparator.</dd>
+
+    <dt>Timeout<span class="property-type">number</span></dt>
+    <dd>The amount of time to wait for the condition to become true before deactivating the node and passing the message object to the second output. If the timeout is equal to zero the node will wait indefinitely for the condition to be met..</dd>
+
+    <dt>Entity Location <span class="property-type optional">object</span></dt>
+    <dd>The entity object can also be pass with the message object.</dd>
+  </dl>
+
+  <h3>Outputs</h3>
+    Will output the last received message when the condition is true or the timeout occurs. If the condition becomes true the message will be pass to the first output. If the timeout passes the message will be sent to the second output.
+</script>

@@ -92,6 +92,10 @@ Fetches HomeAssistant history on input
 
 Allows rendering of templates on input
 
+### Wait Until - `websocket`
+
+When an input is received the node will wait until the condition is met or the timeout occurs then will pass on the last received message
+
 ## Development
 
 Check out the wiki page for setting up an environment with Home Assistant/Node Red.
