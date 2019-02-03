@@ -43,7 +43,7 @@
     },
     oneditprepare: function() {
       // Outputs List
-      let NODE = this;
+      let node = this;
       const NUM_DEFAULT_OUTPUTS = 2;
 
       const $entityid = $("#node-input-entityid");
@@ -90,17 +90,17 @@
           const selectedServer = $server.val();
 
           // A home assistant server is selected in the node config
-          if (NODE.server || (selectedServer && selectedServer !== "_ADD_")) {
-            const serverId = NODE.server || selectedServer;
+          if (node.server || (selectedServer && selectedServer !== "_ADD_")) {
+            const serverId = node.server || selectedServer;
             $.getJSON(`homeassistant/${serverId}/entities`)
               .done(entities => {
-                NODE.availableEntities = entities;
+                node.availableEntities = entities;
                 $entityid.autocomplete({
-                  source: NODE.availableEntities,
+                  source: node.availableEntities,
                   minLength: 0
                 });
                 $("#constraint-target-value").autocomplete({
-                  source: NODE.availableEntities,
+                  source: node.availableEntities,
                   minLength: 0
                 });
               })
@@ -120,12 +120,29 @@
               });
             $.getJSON(`homeassistant/${serverId}/properties`)
               .done(entities => {
-                NODE.availableProperties = entities;
-                $(
-                  "#constraint-property-value,#output-comparator-property-value"
-                ).autocomplete({
-                  source: NODE.availableProperties,
+                node.availableProperties = entities;
+                // prefix properties with new_state and old_state
+                node.availablePropertiesPrefixes = []
+                  .concat(
+                    entities.map(e => `new_state.${e}`),
+                    entities.map(e => `old_state.${e}`)
+                  )
+                  .sort();
+                $("#constraint-property-value").autocomplete({
+                  source: node.availablePropertiesPrefixes,
                   minLength: 0
+                });
+                $("#output-comparator-property-value").autocomplete({
+                  source: node.availableProperties,
+                  minLength: 0
+                });
+                $("#constraint-target-type").on("change", function() {
+                  $("#constraint-property-value").autocomplete("option", {
+                    source:
+                      $(this).val() === "this_entity"
+                        ? node.availablePropertiesPrefixes
+                        : node.availableProperties
+                  });
                 });
               })
               .fail(err => {});
@@ -280,14 +297,14 @@
 
           // Removing an output and adding in same edit session means output
           // map needs to be adjusted, otherwise just increment count
-          if (isNaN(NODE.outputs)) {
-            const maxOutput = Math.max(Object.keys(NODE.outputs));
-            NODE.outputs[utils.getRandomId()] = maxOutput + 1;
+          if (isNaN(node.outputs)) {
+            const maxOutput = Math.max(Object.keys(node.outputs));
+            node.outputs[utils.getRandomId()] = maxOutput + 1;
           } else {
-            NODE.outputs = parseInt(NODE.outputs) + 1;
+            node.outputs = parseInt(node.outputs) + 1;
           }
           $outputs.val(
-            isNaN(NODE.outputs) ? JSON.stringify(NODE.outputs) : NODE.outputs
+            isNaN(node.outputs) ? JSON.stringify(node.outputs) : node.outputs
           );
 
           if (output.comparatorPropertyType === "current_state")
@@ -295,7 +312,7 @@
           if (output.comparatorPropertyType === "previous_state")
             output.comparatorPropertyValue = "old_state.state";
 
-          NODE.customoutputs.push(output);
+          node.customoutputs.push(output);
 
           $customoutputs.list.editableList("addItem", output);
         },
@@ -321,15 +338,15 @@
           // node-red uses a map of old output index to new output index to re-map
           // links between nodes. If new index is -1 then it was removed
 
-          let customOutputRemovedIndex = NODE.customoutputs.indexOf(data);
-          NODE.outputs = !isNaN(NODE.outputs) ? { 0: 0, 1: 1 } : NODE.outputs;
-          NODE.outputs[customOutputRemovedIndex + NUM_DEFAULT_OUTPUTS] = -1;
+          let customOutputRemovedIndex = node.customoutputs.indexOf(data);
+          node.outputs = !isNaN(node.outputs) ? { 0: 0, 1: 1 } : node.outputs;
+          node.outputs[customOutputRemovedIndex + NUM_DEFAULT_OUTPUTS] = -1;
 
-          NODE.customoutputs.forEach((o, customOutputIndex) => {
+          node.customoutputs.forEach((o, customOutputIndex) => {
             const customAllIndex = customOutputIndex + NUM_DEFAULT_OUTPUTS;
             const outputIsBeforeRemoval =
               customOutputIndex < customOutputRemovedIndex;
-            const customOutputAlreadyMapped = NODE.outputs.hasOwnProperty(
+            const customOutputAlreadyMapped = node.outputs.hasOwnProperty(
               customAllIndex
             );
 
@@ -338,24 +355,24 @@
             // output already removed
             if (
               customOutputAlreadyMapped &&
-              NODE.outputs[customAllIndex] === -1
+              node.outputs[customAllIndex] === -1
             )
               return;
             // output previously removed caused this output to be remapped
             if (customOutputAlreadyMapped) {
-              NODE.outputs[customAllIndex] = outputIsBeforeRemoval
-                ? NODE.outputs[customAllIndex]
-                : NODE.outputs[customAllIndex] - 1;
+              node.outputs[customAllIndex] = outputIsBeforeRemoval
+                ? node.outputs[customAllIndex]
+                : node.outputs[customAllIndex] - 1;
               return;
             }
 
             // output exists after removal and hasn't been mapped, remap to current index - 1
-            NODE.outputs[customAllIndex] = outputIsBeforeRemoval
+            node.outputs[customAllIndex] = outputIsBeforeRemoval
               ? customAllIndex
               : customAllIndex - 1;
           });
 
-          $outputs.val(JSON.stringify(NODE.outputs));
+          $outputs.val(JSON.stringify(node.outputs));
         },
         onMessageTypeChange: function(e) {
           const val = e.target.value;
@@ -420,21 +437,21 @@
         heightStyle: "content"
       });
 
-      $entityid.val(NODE.entityid);
+      $entityid.val(node.entityid);
       $server.change(() => utils.setupAutocomplete(this));
 
       // New nodes, select first available home-assistant config node found
-      if (!NODE.server) {
+      if (!node.server) {
         utils.setDefaultServerSelection();
       } else {
         utils.setupAutocomplete();
       }
 
       // Add previous constraints/outputs to editable lists
-      NODE.constraints.forEach(c =>
+      node.constraints.forEach(c =>
         $constraints.list.editableList("addItem", c)
       );
-      NODE.customoutputs.forEach(o =>
+      node.customoutputs.forEach(o =>
         $customoutputs.list.editableList("addItem", o)
       );
     },

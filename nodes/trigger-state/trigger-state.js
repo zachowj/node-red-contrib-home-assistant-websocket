@@ -103,7 +103,7 @@ module.exports = function(RED) {
                     }
                 };
 
-                this.onEntityStateChanged(eventMessage, true);
+                this.onEntityStateChanged(eventMessage);
             }
         }
 
