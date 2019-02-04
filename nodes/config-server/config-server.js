@@ -134,17 +134,15 @@ module.exports = function(RED) {
                 httpHandlers.getProperties.bind(this)
             );
 
-            const HTTP_STATIC_OPTS = {
-                root: require('path').join(__dirname, '..', '/_static'),
-                dotfiles: 'deny'
-            };
-            this.RED.httpAdmin.get(
-                '/homeassistant/static/*',
-                RED.auth.needsPermission('server.read'),
-                function(req, res) {
-                    res.sendFile(req.params[0], HTTP_STATIC_OPTS);
-                }
-            );
+            this.RED.httpAdmin.get('/homeassistant/static/*', function(
+                req,
+                res
+            ) {
+                res.sendFile(req.params[0], {
+                    root: require('path').join(__dirname, '..', '/_static'),
+                    dotfiles: 'deny'
+                });
+            });
 
             this.setOnContext('states', []);
             this.setOnContext('services', []);
