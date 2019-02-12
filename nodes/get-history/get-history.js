@@ -135,6 +135,11 @@ module.exports = function(RED) {
                 return null;
             }
 
+            if (this.nodeConfig.output_location === undefined) {
+                this.nodeConfig.output_location = 'payload';
+                this.nodeConfig.output_location_type = 'msg';
+            }
+
             switch (this.nodeConfig.output_type) {
                 case 'split':
                     if (results.length === 0) {
