@@ -14,7 +14,8 @@ module.exports = function(RED) {
             timeout: {},
             timeoutUnits: {},
             entityLocation: {},
-            entityLocationType: {}
+            entityLocationType: {},
+            checkCurrentState: {}
         }
     };
 
@@ -90,7 +91,7 @@ module.exports = function(RED) {
             }
         }
 
-        onInput({ parsedMessage, message }) {
+        async onInput({ parsedMessage, message }) {
             const node = this;
             const config = node.nodeConfig;
 
@@ -167,6 +168,14 @@ module.exports = function(RED) {
                 }, node.timeout);
             }
             node.status({ fill: 'blue', text: statusText });
+
+            if (config.checkCurrentState === true) {
+                const currentState = await this.nodeConfig.server.homeAssistant.getStates(
+                    config.entityId
+                );
+
+                node.onEntityChange({ event: { new_state: currentState } });
+            }
         }
 
         timeoutStatus(milliseconds = 0) {

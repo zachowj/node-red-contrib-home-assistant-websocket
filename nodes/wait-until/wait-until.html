@@ -22,7 +22,8 @@
       timeout: { value: 0 },
       timeoutUnits: { value: "seconds" },
       entityLocation: { value: "data" },
-      entityLocationType: { value: "none" }
+      entityLocationType: { value: "none" },
+      checkCurrentState: { value: true }
     },
     oneditprepare: function() {
       const $entityIdField = $("#node-input-entityId");
@@ -91,6 +92,11 @@
           minLength: 0
         });
       }
+
+      if (node.checkCurrentState === undefined) {
+        $("#node-input-checkCurrentState").prop("checked", false);
+      }
+
       const defaultTypes = ["str", "num", "bool", "re"];
       $("#node-input-value")
         .typedInput({
@@ -191,6 +197,11 @@
     <label for="node-input-entityLocation">Entity Location</label>
     <input type="hidden" id="node-input-entityLocationType" />
     <input type="text" id="node-input-entityLocation" />
+  </div>
+
+  <div class="form-row">
+    <input type="checkbox" id="node-input-checkCurrentState" checked style="margin-left:105px;display:inline-block; width:auto; vertical-align:baseline;">&nbsp;
+    <label for="node-input-checkCurrentState" style="width: auto;margin-right: 20px;">Check against current state</label>
   </div>
 </script>
 
