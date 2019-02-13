@@ -30,7 +30,6 @@
           }
         }
       },
-      render_data: { value: false },
       mergecontext: { value: null },
       output_location: { value: "payload" },
       output_location_type: { value: "msg" }
@@ -363,11 +362,6 @@
   </div>
 
   <div class="form-row">
-    <input type="checkbox" id="node-input-render_data" style="margin-left: 105px;display:inline-block; width:15px; vertical-align:baseline;">
-    <label for="node-input-render_data" style="width: auto;">Render templates in Data</label>
-  </div>
-
-  <div class="form-row">
     <label for="node-input-mergecontext">Merge Context</label>
     <input type="text" id="node-input-mergecontext" placeholder="lightOptions"/>
   </div>
@@ -408,9 +402,9 @@
     <dt>Entity Id <span class="property-type">string</span></dt>
     <dd>A comma delimited list of entity ids</dd>
     <dt class="optional">data <span class="property-type">JSON</span></dt>
-    <dd>When using templates the top level is a property of the message object: <code>msg.payload</code> would be <code>{{payload}}</code></dd>
-    <dt>Render Templates <span class="property-type">boolean</span></dt>
-    <dd>When checked will attempt to render templates within the data element including entity ids</dd>
+    <dd>JSON object to pass along.</dd>
+    <dt>Templates</dt>
+    <dd>You can use templates in the <code>Entity Id</code> and <code>data</code> fields. When using templates the top level is a property of the message object: <code>msg.payload</code> would be <code>{{payload}}</code>. You can also access the <code>flow, global and states</code> contexts <code>{{flow.foobar}}</code> <code>{{global.something}}</code>. For the <code>states</code> context you can use the <code>{{states.domain.entity_id}}</code> to just get the state or drill further down like <code>{{states.light.kitchen.attributes.friendly_name}}</code>. <code>{{states.light.kitchen}}</code> and <code>{{states.light.kitchen.state}}</code> are equivalent.</dd>
   </dl>
 
   <h3>Inputs</h3>

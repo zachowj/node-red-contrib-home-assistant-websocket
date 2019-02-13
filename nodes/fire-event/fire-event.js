@@ -1,5 +1,6 @@
 const BaseNode = require('../../lib/base-node');
 const mustache = require('mustache');
+const Context = require('../../lib/mustache-context');
 
 module.exports = function(RED) {
     const nodeOptions = {
@@ -10,9 +11,7 @@ module.exports = function(RED) {
             render_data: {},
             mergecontext: {},
             name: {},
-            server: {
-                isNode: true
-            }
+            server: { isNode: true }
         }
     };
 
@@ -52,11 +51,17 @@ module.exports = function(RED) {
 
             this.debug(`Fire Event: ${eventType} -- ${JSON.stringify({})}`);
 
-            if (this.nodeConfig.render_data) {
-                eventData = JSON.parse(
-                    mustache.render(JSON.stringify(eventData), message)
-                );
-            }
+            eventData = JSON.parse(
+                mustache.render(
+                    JSON.stringify(eventData),
+                    new Context(
+                        message,
+                        null,
+                        this.node.context(),
+                        this.utils.toCamelCase(this.nodeConfig.server.name)
+                    )
+                )
+            );
 
             message.payload = {
                 event: eventType,
@@ -103,7 +108,7 @@ module.exports = function(RED) {
             payloadData = payloadData || {};
             configData = configData || {};
 
-            // Cacluate payload to send end priority ends up being 'Config, Global Ctx, Flow Ctx, Payload' with right most winning
+            // Calculate payload to send end priority ends up being 'Config, Global Ctx, Flow Ctx, Payload' with right most winning
             if (this.nodeConfig.mergecontext) {
                 const ctx = this.node.context();
                 let flowVal = ctx.flow.get(this.nodeConfig.mergecontext);

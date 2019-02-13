@@ -11,17 +11,9 @@
       return this.name || `Event: ${this.event}`;
     },
     defaults: {
-      name: {
-        value: ""
-      },
-      server: {
-        value: "",
-        type: "server",
-        required: true
-      },
-      event: {
-        value: ""
-      },
+      name: { value: "" },
+      server: { value: "", type: "server", required: true },
+      event: { value: "" },
       data: {
         value: "",
         validate: function(v) {
@@ -37,10 +29,7 @@
           }
         }
       },
-      render_data: { value: false },
-      mergecontext: {
-        value: null
-      }
+      mergecontext: { value: null }
     },
     oneditprepare: function() {
       const NODE = this;
@@ -92,27 +81,32 @@
   </div>
 
   <div class="form-row">
-    <input type="checkbox" id="node-input-render_data" style="margin-left: 105px;display:inline-block; width:15px; vertical-align:baseline;">
-    <label for="node-input-render_data" style="width: auto;">Render templates in Data</label>
-  </div>
-
-  <div class="form-row">
     <label for="node-input-mergecontext"><i class="fa fa-dot-circle-o"></i> Merge Context</label>
     <input type="text" id="node-input-mergecontext" placeholder="lightOptions"/>
   </div>
 </script>
 
 <script type="text/x-red" data-help-name="ha-fire-event">
-  <p>Call a Home Assistant service</p>
+  <p>Fire an event to Home Assistants event bus</p>
+
+  <h3>Config</h3>
+  <dl class="message-properties">
+    <dt>Event <span class="property-type">string</span></dt>
+    <dd>Event name to fire</dd>
+    <dt class="optional">data <span class="property-type">JSON</span></dt>
+    <dd>JSON object to pass along</dd>
+    <dt>Templates</dt>
+    <dd>You can use templates in the <code>Entity Id</code> and <code>data</code> fields. When using templates the top level is a property of the message object: <code>msg.payload</code> would be <code>{{payload}}</code>. You can also access the <code>flow, global and states</code> contexts <code>{{flow.foobar}}</code> <code>{{global.something}}</code>. For the <code>states</code> context you can use the <code>{{states.domain.entity_id}}</code> to just get the state or drill further down like <code>{{states.light.kitchen.attributes.friendly_name}}</code>. <code>{{states.light.kitchen}}</code> and <code>{{states.light.kitchen.state}}</code> are equivalent.</dd>
+  </dl>
 
   <h3>Inputs</h3>
   <dl class="message-properties">
     <dt class="optional">
-        payload.event <span class="property-type">string</span>
+      payload.event <span class="property-type">string</span>
     </dt>
     <dd>Event to fire</dd>
     <dt class="optional">
-        payload.data <span class="property-type">object</span>
+      payload.data <span class="property-type">object</span>
     </dt>
     <dd>Event data to send</dd>
   </dl>
@@ -120,11 +114,11 @@
   <h3>Outputs</h3>
   <dl class="message-properties">
     <dt>
-        payload.event_type <span class="property-type">string</span>
+      payload.event_type <span class="property-type">string</span>
     </dt>
     <dd>Event Type that was fired</dd>
     <dt class="optional">
-        payload.data <span class="property-type">object</span>
+      payload.data <span class="property-type">object</span>
     </dt>
     <dd>Event <code>data</code> sent, if one was used</dd>
   </dl>
@@ -140,6 +134,6 @@
 
   <h3>References</h3>
   <ul>
-      <li><a href="https://developers.home-assistant.io/docs/en/dev_101_events.html#firing-events">HA Events</a></li>
+    <li><a href="https://developers.home-assistant.io/docs/en/dev_101_events.html#firing-events">HA Events</a></li>
   </ul>
 </script>

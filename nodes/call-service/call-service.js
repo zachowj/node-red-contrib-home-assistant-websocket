@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 const BaseNode = require('../../lib/base-node');
 const mustache = require('mustache');
+const Context = require('../../lib/mustache-context');
 
 module.exports = function(RED) {
     const nodeOptions = {
@@ -9,7 +10,6 @@ module.exports = function(RED) {
             service_domain: {},
             service: {},
             data: {},
-            render_data: {},
             mergecontext: {},
             name: {},
             server: { isNode: true },
@@ -78,11 +78,17 @@ module.exports = function(RED) {
                 );
             }
 
-            if (this.nodeConfig.render_data) {
-                apiData = JSON.parse(
-                    mustache.render(JSON.stringify(apiData), message)
-                );
-            }
+            apiData = JSON.parse(
+                mustache.render(
+                    JSON.stringify(apiData),
+                    new Context(
+                        message,
+                        null,
+                        this.node.context(),
+                        this.utils.toCamelCase(this.nodeConfig.server.name)
+                    )
+                )
+            );
 
             this.debug(
                 `Calling Service: ${apiDomain}:${apiService} -- ${JSON.stringify(
@@ -158,7 +164,7 @@ module.exports = function(RED) {
             payloadData = payloadData || {};
             configData = configData || {};
 
-            // Cacluate payload to send end priority ends up being 'Config, Global Ctx, Flow Ctx, Payload' with right most winning
+            // Calculate payload to send end priority ends up being 'Config, Global Ctx, Flow Ctx, Payload' with right most winning
             if (this.nodeConfig.mergecontext) {
                 const ctx = this.node.context();
                 let flowVal = ctx.flow.get(this.nodeConfig.mergecontext);
