@@ -651,38 +651,58 @@
 
   <h3>Inputs</h3>
   <dl class="message-properties">
-      <dt class="optional">
-          [payload|msg]   <span class="property-type">string|object</span>
-      </dt>
-      <dd>If incoming payload or message is a string and equal to &#39;enable&#39; or &#39;disable&#39; then set the node accordingly.</dd>
+    <dt class="optional">
+      [payload|msg]<span class="property-type">string|object</span>
+    </dt>
+    <dd>
+      If incoming payload or message is a string and equal to &#39;enable&#39; or &#39;disable&#39; then set the node accordingly.
+      Saves over restarts.
+    </dd>
 
-      <dt>Output Initially<span class="property-type">boolean</span></dt>
-      <dd>Output once on startup/deploy then on each interval</dd>
+    <dt>Output Initially<sp class="property-type">boolean</span></dt>
+    <dd>Output once on startup/deploy.</dd>
   </dl>
 
   <h3>Outputs</h3>
   <dl class="message-properties">
-      <dt>
-          topic         <span class="property-type">string</span>
-      </dt>
-      <dd>the entity_id that triggered the node</dd>
-      <dt>
-          payload         <span class="property-type">string</span>
-      </dt>
-      <dd>the state as sent by home assistant</dd>
-      <dt>
-          data         <span class="property-type">object</span>
-      </dt>
-      <dd>the original home assistant event containing <code>entity_id</code> <code>new_state</code> and <code>old_state</code> properties </dd>
+    <dt>
+      topic <span class="property-type">string</span>
+    </dt>
+    <dd>The entity_id that triggered the node</dd>
+    <dt>
+      payload <span class="property-type">string</span>
+    </dt>
+    <dd>The state as sent by home assistant</dd>
+    <dt>
+      data <span class="property-type">object</span>
+    </dt>
+    <dd>The original home assistant event containing <code>entity_id</code> <code>new_state</code> and <code>old_state</code> properties</dd>
   </dl>
 
   <h3>Details</h3>
-  <p>Coming soon...</p>
-  <p> TODO Document: Enable / Disable and how it saves state across restarts</p>
-  <p> TODO Document: Constraints and how they work</p>
-  <p> TODO Document: Custom Outputs and how they work</p>
-  <p> TODO Document: Debug flag on node</p>
-  <p> NOTE: To test automation without having to manually change state in home assistant send an input <code>payload</code> as an object which contains <code>entity_id</code>, <code>new_state</code>, and <code>old_state</code> properties.  This will trigger the node as if the event came from home assistant.</p>
+  <dl class="message-properties">
+    <dt>Constraints</dt>
+    <dd>This node has two default outputs "allowed" and "blocked". If all the constraints are true the default message will be sent to the "allowed" output otherwise it will be sent to the "blocked" output.</dd>
+
+    <dt>Custom Outputs</dt>
+    <dd>All the above constraints need to be true for any custom outputs to be sent, having zero constraints is a valid option. Each custom output can send the default message or a custom message. Also, each one can have its own constraint whether or not to be sent.</dd>
+  </dl>
+
+  <h3>Testing</h3>
+  <p>To test automation without having to manually change state in home assistant send an input <code>payload</code> as an object which contains <code>entity_id</code>, <code>new_state</code>, and <code>old_state</code> properties.  This will trigger the node as if the event came from home assistant.</p>
+
+  <code>
+  <pre>
+  {
+    "entity_id": "test_entity",
+    "old_state": {
+      "state": "on"
+    },
+    "new_state": {
+      "state": "off"
+    }
+  }</pre>
+  </code>
 
   <h3>References</h3>
   <ul>
