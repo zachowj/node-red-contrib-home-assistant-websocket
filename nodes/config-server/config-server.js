@@ -89,7 +89,8 @@ module.exports = function(RED) {
             legacy: {},
             hassio: {},
             rejectUnauthorizedCerts: {},
-            ha_boolean: {}
+            ha_boolean: {},
+            connectionDelay: {}
         }
     };
 
@@ -154,7 +155,8 @@ module.exports = function(RED) {
                     apiPass: this.credentials.access_token,
                     legacy: this.nodeConfig.legacy,
                     rejectUnauthorizedCerts: this.nodeConfig
-                        .rejectUnauthorizedCerts
+                        .rejectUnauthorizedCerts,
+                    connectionDelay: this.nodeConfig.connectionDelay
                 });
                 this.api = this.homeAssistant.api;
                 this.websocket = this.homeAssistant.websocket;

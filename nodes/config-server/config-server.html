@@ -6,7 +6,8 @@
       legacy: { value: false },
       hassio: { value: false },
       rejectUnauthorizedCerts: { value: true },
-      ha_boolean: { value: "y|yes|true|on|home|open" }
+      ha_boolean: { value: "y|yes|true|on|home|open" },
+      connectionDelay: { value: true }
     },
     credentials: {
       host: { value: "", required: true },
@@ -17,9 +18,9 @@
       return this.name || this.url;
     },
     oneditprepare: function() {
-      var $hassio = $("#node-config-input-hassio");
-      var $host = $("#node-config-input-host");
-      var $legacy = $("#node-config-input-legacy");
+      const $hassio = $("#node-config-input-hassio");
+      const $host = $("#node-config-input-host");
+      const $legacy = $("#node-config-input-legacy");
 
       if (this.ha_boolean === undefined) {
         $("#node-config-input-ha_boolean").val("y|yes|true|on|home|open");
@@ -27,6 +28,10 @@
 
       if (this.rejectUnauthorizedCerts === false) {
         $("#accept_unauthorized_certs").prop("checked", true);
+      }
+
+      if (this.connectionDelay === undefined) {
+        $("#node-config-input-connectionDelay").prop("checked", true);
       }
 
       if (
@@ -37,6 +42,7 @@
       }
       function updateHassio() {
         $("#server-info").toggle(!$hassio.prop("checked"));
+        $(".hassio").toggle($hassio.prop("checked"));
       }
       updateHassio();
       $hassio.on("click", function() {
@@ -44,7 +50,7 @@
       });
 
       function updateLegacy() {
-        var tokenName = $legacy.prop("checked") ? "Password" : "Access Token";
+        const tokenName = $legacy.prop("checked") ? "Password" : "Access Token";
 
         $("#access-token-label").html(
           '<i class="fa fa-user-secret"></i> ' + tokenName
@@ -60,16 +66,19 @@
       });
     },
     oneditsave: function() {
-      var hassio = $("#node-config-input-hassio").is(":checked");
-      var $host = $("#node-config-input-host");
-      var hostname = $host.val();
+      const hassio = $("#node-config-input-hassio").is(":checked");
+      const $host = $("#node-config-input-host");
+      const hostname = $host.val();
 
       if (hassio) {
         $host.val("http://hassio/homeassistant");
         this.legacy = false;
         this.rejectUnauthorizedCerts = true;
+        // this.connectionDelay = $("#node-config-input-connectionDelay").is(
+        //   ":checked"
+        // );
       } else {
-        var parser = document.createElement("a");
+        const parser = document.createElement("a");
         parser.href = hostname;
 
         if (hostname !== parser.origin) {
@@ -80,6 +89,7 @@
         this.rejectUnauthorizedCerts = !$("#accept_unauthorized_certs").prop(
           "checked"
         );
+        this.connectionDelay = false;
       }
     }
   });
@@ -94,6 +104,11 @@
   <div class="form-row">
       <input type="checkbox" id="node-config-input-hassio" style="width: auto;margin-left: 125px;vertical-align: top" />
       <label for="node-config-input-hassio" style="width: auto;"> I use Hass.io</label>
+  </div>
+
+  <div class="form-row hassio">
+    <input type="checkbox" id="node-config-input-connectionDelay" style="width: auto;margin-left: 125px;vertical-align: top" />
+    <label for="node-config-input-connectionDelay" style="width: auto;"> Delay connection attempts</label>
   </div>
 
   <div id="server-info">
