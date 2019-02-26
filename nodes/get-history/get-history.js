@@ -154,20 +154,7 @@ module.exports = function(RED) {
                         results = results[0];
                     }
 
-                    message.parts = {};
-                    message.parts.id = RED.util.generateId();
-                    delete message._msgid;
-                    message.parts.type = 'array';
-                    message.parts.count = results.length;
-
-                    let pos = 0;
-                    message.parts.len = 1;
-                    for (let i = 0; i < results.length; i++) {
-                        message.payload = results.slice(pos, pos + 1)[0];
-                        message.parts.index = i;
-                        pos += 1;
-                        this.node.send(this.RED.util.cloneMessage(message));
-                    }
+                    this.sendSplit(message, results);
                     break;
 
                 case 'array':

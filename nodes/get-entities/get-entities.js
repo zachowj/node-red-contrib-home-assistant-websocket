@@ -69,20 +69,6 @@ module.exports = function(RED) {
                         noPayload = true;
                         break;
                     }
-                    message.parts = {};
-                    message.parts.id = RED.util.generateId();
-                    delete message._msgid;
-                    message.parts.type = 'array';
-                    message.parts.count = entities.length;
-
-                    let pos = 0;
-                    message.parts.len = 1;
-                    for (let i = 0; i < entities.length; i++) {
-                        message.payload = entities.slice(pos, pos + 1)[0];
-                        message.parts.index = i;
-                        pos += 1;
-                        this.node.send(this.RED.util.cloneMessage(message));
-                    }
 
                     this.status({
                         fill: 'green',
@@ -90,6 +76,7 @@ module.exports = function(RED) {
                         text: `${statusText} at: ${this.getPrettyDate()}`
                     });
 
+                    this.sendSplit(message, entities);
                     return;
                 case 'random':
                     if (entities.length === 0) {
