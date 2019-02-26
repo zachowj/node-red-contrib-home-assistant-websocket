@@ -1,6 +1,5 @@
 const BaseNode = require('../../lib/base-node');
-const mustache = require('mustache');
-const Context = require('../../lib/mustache-context');
+const RenderTemplate = require('../../lib/mustache-context');
 
 module.exports = function(RED) {
     const nodeOptions = {
@@ -8,7 +7,6 @@ module.exports = function(RED) {
         config: {
             event: {},
             data: {},
-            render_data: {},
             mergecontext: {},
             name: {},
             server: { isNode: true }
@@ -41,7 +39,13 @@ module.exports = function(RED) {
 
             const configEvent = this.nodeConfig.event;
             const eventType = payloadEvent || configEvent;
-            let eventData = this.getEventData(payload);
+            const configData = RenderTemplate(
+                this.nodeConfig.data,
+                message,
+                this.node.context(),
+                this.utils.toCamelCase(this.nodeConfig.server.name)
+            );
+            const eventData = this.getEventData(payload, configData);
 
             if (!eventType) {
                 throw new Error(
@@ -50,18 +54,6 @@ module.exports = function(RED) {
             }
 
             this.debug(`Fire Event: ${eventType} -- ${JSON.stringify({})}`);
-
-            eventData = JSON.parse(
-                mustache.render(
-                    JSON.stringify(eventData),
-                    new Context(
-                        message,
-                        null,
-                        this.node.context(),
-                        this.utils.toCamelCase(this.nodeConfig.server.name)
-                    )
-                )
-            );
 
             message.payload = {
                 event: eventType,
@@ -99,12 +91,12 @@ module.exports = function(RED) {
                 });
         }
 
-        getEventData(payload) {
+        getEventData(payload, data) {
             let eventData;
             let contextData = {};
 
             let payloadData = this.utils.reach('data', payload);
-            let configData = this.tryToObject(this.nodeConfig.data);
+            let configData = this.tryToObject(data);
             payloadData = payloadData || {};
             configData = configData || {};
 

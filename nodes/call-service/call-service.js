@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 const BaseNode = require('../../lib/base-node');
-const mustache = require('mustache');
-const Context = require('../../lib/mustache-context');
+// const mustache = require('mustache');
+const RenderTemplate = require('../../lib/mustache-context');
 
 module.exports = function(RED) {
     const nodeOptions = {
@@ -64,7 +64,13 @@ module.exports = function(RED) {
             const configService = this.nodeConfig.service;
             const apiDomain = payloadDomain || configDomain;
             const apiService = payloadService || configService;
-            let apiData = this.getApiData(payload);
+            const configData = RenderTemplate(
+                this.nodeConfig.data,
+                message,
+                this.node.context(),
+                this.utils.toCamelCase(this.nodeConfig.server.name)
+            );
+            const apiData = this.getApiData(payload, configData);
 
             if (!apiDomain) {
                 throw new Error(
@@ -77,18 +83,6 @@ module.exports = function(RED) {
                     'call service node is missing api "service" property, not found in config or payload'
                 );
             }
-
-            apiData = JSON.parse(
-                mustache.render(
-                    JSON.stringify(apiData),
-                    new Context(
-                        message,
-                        null,
-                        this.node.context(),
-                        this.utils.toCamelCase(this.nodeConfig.server.name)
-                    )
-                )
-            );
 
             this.debug(
                 `Calling Service: ${apiDomain}:${apiService} -- ${JSON.stringify(
@@ -155,12 +149,12 @@ module.exports = function(RED) {
                 });
         }
 
-        getApiData(payload) {
+        getApiData(payload, data) {
             let apiData;
             let contextData = {};
 
             let payloadData = this.utils.reach('data', payload);
-            let configData = this.tryToObject(this.nodeConfig.data);
+            let configData = this.tryToObject(data);
             payloadData = payloadData || {};
             configData = configData || {};
 
