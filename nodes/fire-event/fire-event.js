@@ -66,7 +66,7 @@ module.exports = function(RED) {
                 text: `Sending at: ${this.getPrettyDate()}`
             });
 
-            return this.nodeConfig.server.api
+            return this.nodeConfig.server.http
                 .fireEvent(eventType, eventData)
                 .then(() => {
                     this.status({

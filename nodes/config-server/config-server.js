@@ -158,7 +158,7 @@ module.exports = function(RED) {
                         .rejectUnauthorizedCerts,
                     connectionDelay: this.nodeConfig.connectionDelay
                 });
-                this.api = this.homeAssistant.api;
+                this.http = this.homeAssistant.http;
                 this.websocket = this.homeAssistant.websocket;
 
                 this.homeAssistant

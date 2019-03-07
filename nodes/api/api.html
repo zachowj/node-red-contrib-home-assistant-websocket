@@ -1,0 +1,179 @@
+<script type="text/javascript">
+  RED.nodes.registerType("ha-api", {
+    category: "home_assistant",
+    color: "#52C0F2",
+    inputs: 1,
+    outputs: 1,
+    icon: "server.png",
+    paletteLabel: "API",
+    label: function() {
+      return this.name || "API";
+    },
+    defaults: {
+      name: { value: "" },
+      server: { value: "", type: "server", required: true },
+      protocol: { value: "websocket" },
+      method: { value: "get" },
+      path: { value: "" },
+      data: { value: "" },
+      location: { value: "payload" },
+      locationType: { value: "msg" }
+    },
+    oneditprepare: function() {
+      const node = this;
+      const $server = $("#node-input-server");
+      const utils = {
+        setDefaultServerSelection: function() {
+          let defaultServer;
+          RED.nodes.eachConfig(n => {
+            if (n.type === "server" && !defaultServer) defaultServer = n.id;
+          });
+          if (defaultServer) $server.val(defaultServer);
+        }
+      };
+
+      if (!node.server) {
+        utils.setDefaultServerSelection();
+      }
+
+      $("#node-input-data")
+        .typedInput({
+          types: [
+            {
+              value: "json",
+              label: "JSON",
+              icon: "red/images/typedInput/json.png",
+              validate: function(v) {
+                if (!v) return true;
+                try {
+                  JSON.parse(v);
+                  return true;
+                } catch (e) {
+                  return false;
+                }
+              },
+              expand: function() {
+                const that = this;
+                const value = this.value();
+                try {
+                  value = JSON.stringify(JSON.parse(value), null, 4);
+                } catch (err) {}
+                RED.editor.editJSON({
+                  value: value,
+                  complete: function(v) {
+                    const value = v;
+                    try {
+                      value = JSON.stringify(JSON.parse(v));
+                    } catch (err) {}
+                    that.value(value);
+                  }
+                });
+              }
+            }
+          ]
+        })
+        .typedInput("width", "68%");
+
+      $("#node-input-protocol")
+        .on("change", function() {
+          const isHttp = $(this).val() === "http";
+          $(".http").toggle(isHttp);
+          $("#node-input-method").trigger("change");
+        })
+        .trigger("change");
+
+      $("#node-input-method").on("change", function() {
+        const label =
+          $("#node-input-protocol").val() === "http" &&
+          $("#node-input-method").val() === "get"
+            ? "Params"
+            : "Data";
+        $("#data-label").text(label);
+      });
+
+      $("#node-input-location")
+        .typedInput({
+          types: [
+            "msg",
+            "flow",
+            "global",
+            { value: "none", label: "None", hasValue: false }
+          ],
+          typeField: "#node-input-locationType"
+        })
+        .typedInput("width", "68%");
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="ha-api">
+  <div class="form-row">
+    <label for="node-input-name">Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-server">Server</label>
+    <input type="text" id="node-input-server" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-protocol">Protocol</label>
+    <select type="text" id="node-input-protocol" style="width:70%;">
+      <option value="websocket">WebSocket</option>
+      <option value="http">HTTP</option>
+    </select>
+  </div>
+
+  <div class="form-row http">
+    <label for="node-input-method">Method</label>
+    <select type="text" id="node-input-method" style="width:70%;">
+      <option value="get">GET</option>
+      <option value="post">POST</option>
+    </select>
+  </div>
+
+  <div class="form-row http">
+    <label for="node-input-path">Path</label>
+    <input type="text" id="node-input-path" placeholder="config">
+  </div>
+
+  <div class="form-row">
+    <label id="data-label" for="node-input-data">Data</label>
+    <input type="text" id="node-input-data">
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-location">Results</label>
+    <input type="text" id="node-input-location">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="ha-api">
+  <h3>Configuration</h3>
+  <dl class="message-properties">
+    <dt>Protocol<span class="property-type">[websocket|http] string</span></dt>
+    <dd>Protocol to use to access Home Assistant API.</dd>
+
+    <dt>Method<span class="property-type">[get|post] string</span></dt>
+    <dd>Type of method to use to access the HTTP endpoint.</dd>
+
+    <dt>Path<span class="property-type">string</span></dt>
+    <dd>URL of the API endpoint.</dd>
+
+    <dt>Params<span class="property-type">JSON</span></dt>
+    <dd>JSON object with key/value pairs that will be converted into URL parameters.</dd>
+
+    <dt>Data<span class="property-type">JSON</span></dt>
+    <dd>JSON Object to send for WebSocket requests and HTTP posts.</dd>
+
+    <dt>Results<span class="property-type">string</span></dt>
+    <dd>Location to saved the API results.</dd>
+
+    <dt>Templates</dt>
+    <dd>Templates can be used in path, params and data fields.</dd>
+  </dl>
+
+  <h3>Outputs</h3>
+    Will output the results received from the API call to the location defined in the config.
+</script>

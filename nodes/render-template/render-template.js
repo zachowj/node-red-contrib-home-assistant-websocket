@@ -41,7 +41,7 @@ module.exports = function(RED) {
                 text: `Requesting at: ${this.getPrettyDate()}`
             });
 
-            return this.nodeConfig.server.api
+            return this.nodeConfig.server.http
                 .renderTemplate(template)
                 .then(res => {
                     message.template = template;

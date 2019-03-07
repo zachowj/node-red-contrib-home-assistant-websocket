@@ -49,7 +49,8 @@
       "ha-get-entities": "nodes/get-entities/get-entities.js",
       "api-get-history": "nodes/get-history/get-history.js",
       "api-render-template": "nodes/render-template/render-template.js",
-      "ha-wait-until": "nodes/wait-until/wait-until.js"
+      "ha-wait-until": "nodes/wait-until/wait-until.js",
+      "ha-api": "nodes/api/api.js"
     }
   },
   "dependencies": {

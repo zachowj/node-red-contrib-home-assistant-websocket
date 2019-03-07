@@ -92,7 +92,7 @@ module.exports = function(RED) {
 
             let apiRequest =
                 entityidtype.value === 'includes' && entityid
-                    ? this.nodeConfig.server.api.getHistory(
+                    ? this.nodeConfig.server.http.getHistory(
                           startdate,
                           null,
                           enddate,
@@ -100,7 +100,7 @@ module.exports = function(RED) {
                               include: new RegExp(entityid)
                           }
                       )
-                    : this.nodeConfig.server.api.getHistory(
+                    : this.nodeConfig.server.http.getHistory(
                           startdate,
                           entityid,
                           enddate
