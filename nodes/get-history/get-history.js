@@ -14,6 +14,7 @@ module.exports = function(RED) {
             entityidtype: {},
             useRelativeTime: {},
             relativeTime: {},
+            flatten: {},
             output_type: {},
             output_location_type: {},
             output_location: {}
@@ -53,6 +54,10 @@ module.exports = function(RED) {
             relativeTime: {
                 messageProp: 'relativetime',
                 configProp: 'relativeTime'
+            },
+            flatten: {
+                messageProp: 'flatten',
+                configProp: 'flatten'
             }
         }
     };
@@ -68,12 +73,14 @@ module.exports = function(RED) {
                 enddate,
                 entityid,
                 entityidtype,
-                relativeTime
+                relativeTime,
+                flatten
             } = parsedMessage;
             startdate = startdate.value;
             enddate = enddate.value;
             entityid = entityid.value;
             relativeTime = relativeTime.value;
+            flatten = flatten.value;
             let useRelativeTime = this.nodeConfig.useRelativeTime;
 
             if (this.nodeConfig.server === null) {
@@ -97,13 +104,17 @@ module.exports = function(RED) {
                           null,
                           enddate,
                           {
+                              flatten: flatten,
                               include: new RegExp(entityid)
                           }
                       )
                     : this.nodeConfig.server.http.getHistory(
                           startdate,
                           entityid,
-                          enddate
+                          enddate,
+                          {
+                              flatten: flatten
+                          }
                       );
 
             this.setStatusSending('Requesting');

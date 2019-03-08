@@ -11,6 +11,7 @@
       entityidtype: { value: "" },
       useRelativeTime: { value: false },
       relativeTime: { value: "" },
+      flatten: { value: true },
       output_type: { value: "array" },
       output_location_type: { value: "msg" },
       output_location: { value: "payload" }
@@ -125,7 +126,9 @@
         .trigger("change");
     },
     oneditsave: function() {
-      this.entityid = $("#entity_id").val();
+      this.entityid = $("#entity_id")
+        .val()
+        .trim();
     }
   });
 </script>
@@ -154,7 +157,7 @@
   </div>
 
   <div class="form-row">
-    <input type="checkbox" id="node-input-useRelativeTime" checked style="display: inline-block; width: auto; vertical-align: top;margin-left: 105px;">&nbsp;
+    <input type="checkbox" id="node-input-useRelativeTime" style="display: inline-block; width: auto; vertical-align: top;margin-left: 105px;">&nbsp;
     <label for="node-input-useRelativeTime" style="width: auto;">Use Relative Time</label>
   </div>
 
@@ -195,6 +198,11 @@
   </div>
 
   <div class="form-row">
+    <input type="checkbox" id="node-input-flatten" style="display: inline-block; width: auto; vertical-align: top;margin-left: 105px;">&nbsp;
+    <label for="node-input-flatten" style="width: auto;">Flatten Results</label>
+  </div>
+
+  <div class="form-row">
     <label for="node-input-output_type">Output Type</label>
     <select id="node-input-output_type">
       <option value="array">Array</option>
@@ -214,7 +222,10 @@
 
   <h3>Inputs</h3>
   <dl class="message-properties">
-      <dt class="optional">startdate <span class="property-type">string | date</span></dt>
+    <dt class="optional">entityid <span class="property-type">string</span></dt>
+    <dd>Exact entity_id to fetch history for, must be an exact match as is passed directly to the home-assistant api</dd>
+
+    <dt class="optional">startdate <span class="property-type">string | date</span></dt>
       <dd>Date to start fetching history from. Will override the nodes configuration if passed in</dd>
 
       <dt class="optional">enddate <span class="property-type">string | date</span></dt>
@@ -223,8 +234,9 @@
       <dt class="optional">relativetime <span class="property-type">string</span></dt>
       <dd>A timestring to be parsed into datetime string</dd>
 
-      <dt class="optional">entityid <span class="property-type">string</span></dt>
-      <dd>Exact entity_id to fetch history for, must be an exact match as is passed directly to the home-assistant api</dd>
+      <dt>Flatten</dt>
+      <dd>Instead of returning the data from home assistant ( array for each entity_id ) return one flattened array of one item per history entry</dd>
+
   </dl>
 
   <h3>Outputs</h3>
