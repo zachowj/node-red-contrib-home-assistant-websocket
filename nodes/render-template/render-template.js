@@ -35,11 +35,7 @@ module.exports = function(RED) {
                 return null;
             }
 
-            this.status({
-                fill: 'yellow',
-                shape: 'dot',
-                text: `Requesting at: ${this.getPrettyDate()}`
-            });
+            this.setStatusSending('Requesting');
 
             return this.nodeConfig.server.http
                 .renderTemplate(template)
@@ -47,11 +43,7 @@ module.exports = function(RED) {
                     message.template = template;
                     message.payload = res;
                     this.node.send(message);
-                    this.status({
-                        fill: 'green',
-                        shape: 'dot',
-                        text: `Success at: ${this.getPrettyDate()}`
-                    });
+                    this.setStatusSuccess();
                 })
                 .catch(err => {
                     let errorMessage =
@@ -62,11 +54,7 @@ module.exports = function(RED) {
                         }`;
 
                     this.error(errorMessage);
-                    this.status({
-                        fill: 'red',
-                        shape: 'ring',
-                        text: `Error at: ${this.getPrettyDate()}`
-                    });
+                    this.setStatusFailed('Error');
                 });
         }
     }

@@ -157,18 +157,10 @@ module.exports = function(RED) {
                 const debugMsg = `Get current state: halting processing due to current state of ${entity_id} matches "halt if state" option`;
                 this.debug(debugMsg);
                 this.debugToClient(debugMsg);
-                this.status({
-                    fill: 'red',
-                    shape: 'ring',
-                    text: `${currentState.state} at: ${this.getPrettyDate()}`
-                });
+                this.setStatusFailed(currentState.state);
                 this.node.send([null, message]);
             } else {
-                this.status({
-                    fill: 'green',
-                    shape: 'dot',
-                    text: `${currentState.state} at: ${this.getPrettyDate()}`
-                });
+                this.setStatusSuccess(currentState.state);
                 this.node.send([message, null]);
             }
         }

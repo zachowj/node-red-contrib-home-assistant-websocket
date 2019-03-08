@@ -22,11 +22,7 @@ module.exports = function(RED) {
                 topic: evt.event_type,
                 payload: evt
             });
-            this.status({
-                fill: 'green',
-                shape: 'dot',
-                text: `${evt.event_type} at: ${this.getPrettyDate()}`
-            });
+            this.setStatusSuccess(evt.event_type);
         }
     }
 

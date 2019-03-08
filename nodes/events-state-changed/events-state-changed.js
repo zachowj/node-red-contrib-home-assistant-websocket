@@ -119,22 +119,11 @@ module.exports = function(RED) {
 
                 if (shouldHaltIfState) {
                     this.debug('flow halted due to "halt if state" setting');
-                    this.status({
-                        fill: 'red',
-                        shape: 'ring',
-                        text: `${
-                            event.new_state.state
-                        } at: ${this.getPrettyDate()}`
-                    });
-
+                    this.setStatusFailed(event.new_state.state);
                     return this.send([null, msg]);
                 }
 
-                this.status({
-                    fill: 'green',
-                    shape: 'dot',
-                    text: `${event.new_state.state} at: ${this.getPrettyDate()}`
-                });
+                this.setStatusSuccess(event.new_state.state);
 
                 event.old_state
                     ? this.debug(

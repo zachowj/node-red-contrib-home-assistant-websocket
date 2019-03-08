@@ -129,22 +129,11 @@ module.exports = function(RED) {
                         } matches "halt if state" option`;
                         this.debug(debugMsg);
                         this.debugToClient(debugMsg);
-                        this.status({
-                            fill: 'red',
-                            shape: 'ring',
-                            text: `${
-                                pollState.state
-                            } at: ${this.getPrettyDate()}`
-                        });
+                        this.setStatusFailed(pollState.state);
                         return this.send([null, msg]);
                     }
 
-                    this.status({
-                        fill: 'green',
-                        shape: 'dot',
-                        text: `${pollState.state} at: ${this.getPrettyDate()}`
-                    });
-
+                    this.setStatusSuccess(pollState.state);
                     this.send([msg, null]);
                 } else {
                     this.warn(

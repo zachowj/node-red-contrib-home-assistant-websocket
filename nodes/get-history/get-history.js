@@ -106,11 +106,7 @@ module.exports = function(RED) {
                           enddate
                       );
 
-            this.status({
-                fill: 'yellow',
-                shape: 'dot',
-                text: `Requesting at: ${this.getPrettyDate()}`
-            });
+            this.setStatusSending('Requesting');
 
             try {
                 var results = await apiRequest;
@@ -125,12 +121,7 @@ module.exports = function(RED) {
                         err.response.data.message
                     }`;
                 this.error(errorMessage);
-
-                this.status({
-                    fill: 'red',
-                    shape: 'ring',
-                    text: `Error at: ${this.getPrettyDate()}`
-                });
+                this.setStatusFailed('Error');
 
                 return null;
             }
@@ -143,11 +134,7 @@ module.exports = function(RED) {
             switch (this.nodeConfig.output_type) {
                 case 'split':
                     if (results.length === 0) {
-                        this.status({
-                            fill: 'red',
-                            shape: 'dot',
-                            text: `No Results at: ${this.getPrettyDate()}`
-                        });
+                        this.setStatusFailed('No Results');
                         return;
                     }
                     if (entityidtype.value === 'is') {
@@ -179,11 +166,7 @@ module.exports = function(RED) {
                     break;
             }
 
-            this.status({
-                fill: 'green',
-                shape: 'dot',
-                text: `Success at: ${this.getPrettyDate()}`
-            });
+            this.setStatusSuccess();
         }
     }
 

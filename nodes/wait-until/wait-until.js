@@ -54,10 +54,7 @@ module.exports = function(RED) {
 
                 clearTimeout(this.timeoutId);
                 this.active = false;
-                this.status({
-                    fill: 'green',
-                    text: `true at: ${this.getPrettyDate()}`
-                });
+                this.setStatusSuccess('true');
 
                 if (
                     config.entityLocationType !== 'none' &&
@@ -160,14 +157,10 @@ module.exports = function(RED) {
 
                     node.active = false;
                     node.send([null, message]);
-                    node.status({
-                        fill: 'red',
-                        shape: 'dot',
-                        text: `timed out at: ${node.getPrettyDate()}`
-                    });
+                    node.setStatusFailed('timed out');
                 }, node.timeout);
             }
-            node.status({ fill: 'blue', text: statusText });
+            node.setStatus({ text: statusText });
 
             if (config.checkCurrentState === true) {
                 const currentState = await this.nodeConfig.server.homeAssistant.getStates(

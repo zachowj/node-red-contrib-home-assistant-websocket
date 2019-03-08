@@ -60,20 +60,12 @@ module.exports = function(RED) {
                 data: eventData || null
             };
 
-            this.status({
-                fill: 'yellow',
-                shape: 'dot',
-                text: `Sending at: ${this.getPrettyDate()}`
-            });
+            this.setStatusSending();
 
             return this.nodeConfig.server.http
                 .fireEvent(eventType, eventData)
                 .then(() => {
-                    this.status({
-                        fill: 'green',
-                        shape: 'dot',
-                        text: `${eventType} at: ${this.getPrettyDate()}`
-                    });
+                    this.setStatusSuccess(eventType);
                     this.send(message);
                 })
                 .catch(err => {
@@ -83,11 +75,7 @@ module.exports = function(RED) {
                         }`,
                         message
                     );
-                    this.status({
-                        fill: 'red',
-                        shape: 'ring',
-                        text: `API Error at: ${this.prettyDate}`
-                    });
+                    this.setStatusFailed('API Error');
                 });
         }
 

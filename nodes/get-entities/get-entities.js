@@ -70,12 +70,7 @@ module.exports = function(RED) {
                         break;
                     }
 
-                    this.status({
-                        fill: 'green',
-                        shape: 'dot',
-                        text: `${statusText} at: ${this.getPrettyDate()}`
-                    });
-
+                    this.setStatusSuccess(statusText);
                     this.sendSplit(message, entities);
                     return;
                 case 'random':
@@ -113,20 +108,11 @@ module.exports = function(RED) {
             }
 
             if (noPayload) {
-                this.status({
-                    fill: 'red',
-                    shape: 'ring',
-                    text: `No Results at: ${this.getPrettyDate()}`
-                });
-
+                this.setStatusFailed('No Results');
                 return null;
             }
 
-            this.status({
-                fill: 'green',
-                shape: 'dot',
-                text: `${statusText} at: ${this.getPrettyDate()}`
-            });
+            this.setStatusSuccess(statusText);
 
             const contextKey = RED.util.parseContextStore(
                 this.nodeConfig.output_location

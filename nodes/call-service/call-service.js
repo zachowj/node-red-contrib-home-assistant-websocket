@@ -40,11 +40,7 @@ module.exports = function(RED) {
                 this.nodeConfig.server.websocket.connectionState !==
                 this.nodeConfig.server.websocket.CONNECTED
             ) {
-                this.status({
-                    fill: 'red',
-                    shape: 'ring',
-                    text: `No Connection at: ${this.getPrettyDate()}`
-                });
+                this.setStatusFailed('No Connection');
                 this.warn(
                     'Call-Service attempted without connection to server.'
                 );
@@ -96,20 +92,12 @@ module.exports = function(RED) {
                 data: apiData || null
             };
 
-            this.status({
-                fill: 'yellow',
-                shape: 'dot',
-                text: `Sending at: ${this.getPrettyDate()}`
-            });
+            this.setStatusSending();
 
             return this.nodeConfig.server.websocket
                 .callService(apiDomain, apiService, apiData)
                 .then(() => {
-                    this.status({
-                        fill: 'green',
-                        shape: 'dot',
-                        text: `${apiDomain}.${apiService} called at: ${this.getPrettyDate()}`
-                    });
+                    this.setStatusSuccess(`${apiDomain}.${apiService}`);
 
                     const contextKey = RED.util.parseContextStore(
                         this.nodeConfig.output_location
@@ -141,11 +129,7 @@ module.exports = function(RED) {
                         }`;
                     this.error(errorMessage);
 
-                    this.status({
-                        fill: 'red',
-                        shape: 'ring',
-                        text: `API Error at: ${this.getPrettyDate()}`
-                    });
+                    this.setStatusFailed('API Error');
                 });
         }
 
