@@ -41,11 +41,13 @@ module.exports = function(RED) {
 
                 if (!path) {
                     node.error('HTTP request requires a valid path.');
+                    node.setStatusFailed();
                     return;
                 }
 
                 if (!['get', 'post'].includes(config.method)) {
                     node.error('HTTP request requires a valid method');
+                    node.setStatusFailed();
                     return;
                 }
 
@@ -62,6 +64,7 @@ module.exports = function(RED) {
                         node.error(
                             `A WebSocket request requires a 'type' property in the data object.`
                         );
+                        node.setStatusFailed();
                         return null;
                     }
 
