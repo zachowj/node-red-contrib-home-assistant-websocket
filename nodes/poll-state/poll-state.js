@@ -79,11 +79,14 @@ module.exports = function(RED) {
             if (!this.isConnected) return;
 
             try {
-                const pollState = await this.nodeConfig.server.homeAssistant.getStates(
-                    this.entityId
+                const pollState = this.utils.merge(
+                    {},
+                    await this.nodeConfig.server.homeAssistant.getStates(
+                        this.entityId
+                    )
                 );
 
-                if (!pollState) {
+                if (!pollState.entity_id) {
                     this.warn(
                         `could not find state with entity_id "${this.entityId}"`
                     );

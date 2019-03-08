@@ -59,7 +59,7 @@ module.exports = function(RED) {
                 {},
                 await this.nodeConfig.server.homeAssistant.getStates(entity_id)
             );
-            if (!currentState)
+            if (!currentState.entity_id)
                 return logAndContinueEmpty(
                     `entity could not be found in cache for entity_id: ${entity_id}, sending empty payload`
                 );
