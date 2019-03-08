@@ -80,7 +80,7 @@ module.exports = function(RED) {
 
             return apiCall()
                 .then(results => {
-                    node.setStatusSuccess(config.protocol);
+                    node.setStatusSuccess(`${config.protocol} called`);
 
                     const contextKey = RED.util.parseContextStore(
                         config.location
