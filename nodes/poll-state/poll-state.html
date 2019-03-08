@@ -13,6 +13,7 @@
       name: { value: "" },
       server: { value: "", type: "server", required: true },
       updateinterval: { value: "10", validate: v => !isNaN(v) },
+      updateIntervalUnits: { value: "seconds" },
       outputinitially: { value: false },
       outputonchanged: { value: false },
       entity_id: {
@@ -103,7 +104,9 @@
       });
     },
     oneditsave: function() {
-      this.entity_id = $("#entity_id").val();
+      this.entity_id = $("#entity_id")
+        .val()
+        .trim();
       const outputs = $("#node-input-halt_if").val() ? 2 : 1;
       $("#node-input-outputs").val(outputs);
     },
@@ -134,8 +137,13 @@
   </div>
 
   <div class="form-row">
-      <label for="node-input-updateinterval"><i class="fa fa-clock-o"></i> Update Interval</label>
-      <input type="text" id="node-input-updateinterval" placeholder="10" style="width: auto;"/> <span style="padding-left: 5px;">Seconds</span>
+    <label for="node-input-updateinterval"><i class="fa fa-clock-o"></i> Update Interval</label>
+    <input type="text" id="node-input-updateinterval" style="text-align:end; width:50px !important">
+    <select id="node-input-updateIntervalUnits" style="width:auto !important">
+      <option value="seconds">seconds</option>
+      <option value="minutes">minutes</option>
+      <option value="hours">hours</option>
+    </select>
   </div>
 
   <div class="form-row">
@@ -183,10 +191,10 @@
   <h3>Config</h3>
   <dl class="message-properties">
     <dt>Update Interval<span class="property-type">number</span></dt>
-    <dd>Number of seconds between checking / sending updates</dd>
+    <dd>The amount of time between checking / sending updates</dd>
 
     <dt>Half If<span class="property-type">string</span></dt>
-    <dd>If the new_state === this setting then skip sending</dd>
+    <dd>If the new state equals this value the message will be sent to the second output</dd>
 
     <dt>State Type<span class="property-type">string</span></dt>
     <dd>Convert the state of the entity to the selected type. Boolean will be convert to true based on if the string is equial by default to (y|yes|true|on|home|open). Original value stored in msg.data.original_state</dd>
