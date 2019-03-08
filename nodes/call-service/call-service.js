@@ -55,29 +55,40 @@ module.exports = function(RED) {
                 payloadDomain = this.utils.reach('domain', payload);
                 payloadService = this.utils.reach('service', payload);
             }
-
             const configDomain = this.nodeConfig.service_domain;
             const configService = this.nodeConfig.service;
-            const apiDomain = payloadDomain || configDomain;
-            const apiService = payloadService || configService;
+            const serverName = this.utils.toCamelCase(
+                this.nodeConfig.server.name
+            );
+            const context = this.node.context();
+            const apiDomain = RenderTemplate(
+                payloadDomain || configDomain,
+                message,
+                context,
+                serverName
+            );
+            const apiService = RenderTemplate(
+                payloadService || configService,
+                message,
+                context,
+                serverName
+            );
             const configData = RenderTemplate(
                 this.nodeConfig.data,
                 message,
-                this.node.context(),
-                this.utils.toCamelCase(this.nodeConfig.server.name)
+                context,
+                serverName
             );
             const apiData = this.getApiData(payload, configData);
 
-            if (!apiDomain) {
-                throw new Error(
-                    'call service node is missing api "domain" property, not found in config or payload'
+            if (!apiDomain || !apiService) {
+                this.error(
+                    `call service node is missing api "${
+                        !apiDomain ? 'domain' : 'service'
+                    }" property, not found in config or payload`
                 );
-            }
-
-            if (!apiService) {
-                throw new Error(
-                    'call service node is missing api "service" property, not found in config or payload'
-                );
+                this.setStatusFailed('Error');
+                return;
             }
 
             this.debug(
@@ -121,13 +132,11 @@ module.exports = function(RED) {
                     this.send(message);
                 })
                 .catch(err => {
-                    let errorMessage =
-                        'Error call service, home assistant api error.';
-                    if (err.message)
-                        errorMessage = `${errorMessage} Error Message: ${
-                            err.message
-                        }`;
-                    this.error(errorMessage);
+                    this.error(
+                        `Call-service API error.${
+                            err.message ? ` Error Message: ${err.message}` : ''
+                        }`
+                    );
 
                     this.setStatusFailed('API Error');
                 });

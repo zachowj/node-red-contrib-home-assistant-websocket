@@ -65,7 +65,39 @@
 
       $data
         .typedInput({
-          types: ["json"]
+          types: [
+            {
+              value: "json",
+              label: "JSON",
+              icon: "red/images/typedInput/json.png",
+              validate: function(v) {
+                if (!v) return true;
+                try {
+                  JSON.parse(v);
+                  return true;
+                } catch (e) {
+                  return false;
+                }
+              },
+              expand: function() {
+                const that = this;
+                const value = this.value();
+                try {
+                  value = JSON.stringify(JSON.parse(value), null, 4);
+                } catch (err) {}
+                RED.editor.editJSON({
+                  value: value,
+                  complete: function(v) {
+                    const value = v;
+                    try {
+                      value = JSON.stringify(JSON.parse(v));
+                    } catch (err) {}
+                    that.value(value);
+                  }
+                });
+              }
+            }
+          ]
         })
         .typedInput("width", "68%");
 
@@ -403,8 +435,6 @@
     <dd>A comma delimited list of entity ids</dd>
     <dt class="optional">data <span class="property-type">JSON</span></dt>
     <dd>JSON object to pass along.</dd>
-    <dt>Templates</dt>
-    <dd>You can use templates in the <code>Entity Id</code> and <code>data</code> fields. When using templates the top level is a property of the message object: <code>msg.payload</code> would be <code>{{payload}}</code>. You can also access the <code>flow, global and states</code> contexts <code>{{flow.foobar}}</code> <code>{{global.something}}</code>. For the <code>states</code> context you can use the <code>{{states.domain.entity_id}}</code> to just get the state or drill further down like <code>{{states.light.kitchen.attributes.friendly_name}}</code>. <code>{{states.light.kitchen}}</code> and <code>{{states.light.kitchen.state}}</code> are equivalent.</dd>
   </dl>
 
   <h3>Inputs</h3>
@@ -438,6 +468,9 @@
     </dt>
     <dd>Service <code>data</code> used in call, if one was used</dd>
   </dl>
+
+  <h3>Templates</h3>
+  <p>You can use templates in the <code>Domain</code>, <code>Service</code>, <code>Entity Id</code>, and <code>data</code> fields. When using templates the top level is a property of the message object: <code>msg.payload</code> would be <code>{{payload}}</code>. You can also access the <code>flow, global and states</code> contexts <code>{{flow.foobar}}</code> <code>{{global.something}}</code>. For the <code>states</code> context you can use the <code>{{states.domain.entity_id}}</code> to just get the state or drill further down like <code>{{states.light.kitchen.attributes.friendly_name}}</code>. <code>{{states.light.kitchen}}</code> and <code>{{states.light.kitchen.state}}</code> are equivalent.</p>
 
   <h3>Details</h3>
   <p>If the incoming message has a <code>payload</code> property with <code>domain</code>, <code>service</code> set it will override any config values if set.</p>
