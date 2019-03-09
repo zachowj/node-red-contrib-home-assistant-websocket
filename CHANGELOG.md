@@ -31,6 +31,10 @@ All notable changes to this project will be documented in this file. See [standa
 
 # [0.8.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.7.1...v0.8.0) (2019-02-26)
 
+## Breaking Change
+
+- jinja2 (HA) templates will no longer work in fields where mustache templates are rendered.
+
 ### Bug Fixes
 
 - **get-history:** fix backwards compatibility for output location ([8bd6e42](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/8bd6e42)), closes [mit/3154f79a5758c74967742e282660dac1decfbe74#r32270616](https://github.com/mit/3154f79a5758c74967742e282660dac1decfbe74/issues/r32270616)
