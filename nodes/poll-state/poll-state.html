@@ -99,6 +99,10 @@
         $("#node-input-halt_if_compare").val("is");
       }
 
+      if (this.updateIntervalUnits === undefined) {
+        $("#node-input-updateIntervalUnits").val("seconds");
+      }
+
       $.getScript("/homeassistant/static/haltif.js", function() {
         setupHaltIf("#node-input-halt_if", "#node-input-halt_if_compare");
       });
