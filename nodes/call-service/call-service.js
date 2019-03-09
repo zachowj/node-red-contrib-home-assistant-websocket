@@ -108,7 +108,7 @@ module.exports = function(RED) {
             return this.nodeConfig.server.websocket
                 .callService(apiDomain, apiService, apiData)
                 .then(() => {
-                    this.setStatusSuccess(`${apiDomain}.${apiService}`);
+                    this.setStatusSuccess(`${apiDomain}.${apiService} called`);
 
                     const contextKey = RED.util.parseContextStore(
                         this.nodeConfig.output_location
