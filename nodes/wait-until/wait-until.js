@@ -45,7 +45,8 @@ module.exports = function(RED) {
                     config.comparator,
                     config.value,
                     this.utils.selectn(config.property, event.new_state),
-                    config.valueType
+                    config.valueType,
+                    this.savedMessage
                 );
 
                 if (!result) {

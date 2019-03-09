@@ -53,7 +53,15 @@
         { value: "starts_with", text: "starts with" },
         { value: "in_group", text: "in group" }
       ];
-      const defaultTypes = ["str", "num", "bool", "re"];
+      const defaultTypes = [
+        "str",
+        "num",
+        "bool",
+        "re",
+        "msg",
+        "flow",
+        "global"
+      ];
       const $logic = $("#logic");
 
       if (!NODE.server) {
@@ -132,13 +140,13 @@
                 case "lte":
                 case "gt":
                 case "gte":
-                  types = ["num"];
+                  types = ["num", "msg", "flow", "global"];
                   break;
                 case "includes":
                 case "does_not_include":
                 case "starts_with":
                 case "in_group":
-                  types = ["str"];
+                  types = ["str", "msg", "flow", "global"];
                   break;
               }
               $value.typedInput("types", types);

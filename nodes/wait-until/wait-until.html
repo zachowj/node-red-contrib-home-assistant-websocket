@@ -97,7 +97,15 @@
         $("#node-input-checkCurrentState").prop("checked", false);
       }
 
-      const defaultTypes = ["str", "num", "bool", "re"];
+      const defaultTypes = [
+        "str",
+        "num",
+        "bool",
+        "re",
+        "msg",
+        "flow",
+        "global"
+      ];
       $("#node-input-value")
         .typedInput({
           default: "str",
@@ -117,11 +125,11 @@
           case "lte":
           case "gt":
           case "gte":
-            types = ["num"];
+            types = ["num", "msg", "flow", "global"];
             break;
           case "includes":
           case "does_not_include":
-            types = ["str"];
+            types = ["str", "msg", "flow", "global"];
             break;
         }
         $("#node-input-value").typedInput("types", types);

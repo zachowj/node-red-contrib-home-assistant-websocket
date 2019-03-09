@@ -48,7 +48,8 @@ module.exports = function(RED) {
                         rule.logic,
                         rule.value,
                         value,
-                        rule.valueType
+                        rule.valueType,
+                        message
                     );
                     if (value === undefined || !result) {
                         return false;

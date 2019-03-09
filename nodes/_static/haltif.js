@@ -1,5 +1,4 @@
 const $ = window.jQuery;
-const defaultTypes = ['str', 'num', 'bool', 're'];
 
 const resizeHaltIf = function(input) {
     const $clearHaltIf = $('#clearHaltIf');
@@ -17,7 +16,11 @@ const resizeHaltIf = function(input) {
 
 window.resizeHaltIf = resizeHaltIf;
 
-window.setupHaltIf = function(input, compare) {
+window.setupHaltIf = function(
+    input,
+    compare,
+    defaultTypes = ['str', 'num', 'bool', 're', 'flow', 'global']
+) {
     const $input = $(input);
     const $compare = $(compare);
     const $help = $('#halt_if_help');

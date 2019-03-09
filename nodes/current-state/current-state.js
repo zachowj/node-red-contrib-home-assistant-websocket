@@ -88,7 +88,8 @@ module.exports = function(RED) {
                 this.nodeConfig.halt_if_compare,
                 this.nodeConfig.halt_if,
                 currentState.state,
-                this.nodeConfig.halt_if_type
+                this.nodeConfig.halt_if_type,
+                message
             );
             const shouldHaltIfState = this.nodeConfig.halt_if && isHaltValid;
 
