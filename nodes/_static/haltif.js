@@ -38,7 +38,12 @@ window.setupHaltIf = function(
 
     $compare.change(function(e) {
         let types = defaultTypes;
+        let extraTypes = ['flow', 'global'];
         $help.hide();
+
+        if (defaultTypes.includes('msg')) {
+            extraTypes = ['msg'].concat(extraTypes);
+        }
 
         switch (e.target.value) {
             case 'is':
@@ -48,12 +53,12 @@ window.setupHaltIf = function(
             case 'lte':
             case 'gt':
             case 'gte':
-                types = ['num'];
+                types = ['num'].concat(extraTypes);
                 break;
             case 'includes':
             case 'does_not_include':
                 $help.show();
-                types = ['str'];
+                types = ['str'].concat(extraTypes);
                 break;
         }
         $input.typedInput('types', types);
