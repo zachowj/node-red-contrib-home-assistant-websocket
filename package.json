@@ -69,7 +69,7 @@
     "selectn": "1.1.2",
     "time-ago": "0.2.1",
     "timestring": "5.0.1",
-    "ws": "6.1.4"
+    "ws": "6.2.0"
   },
   "devDependencies": {
     "coveralls": "^3.0.3",
