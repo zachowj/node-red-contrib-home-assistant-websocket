@@ -38,39 +38,7 @@
 
       $("#node-input-data")
         .typedInput({
-          types: [
-            {
-              value: "json",
-              label: "JSON",
-              icon: "red/images/typedInput/json.png",
-              validate: function(v) {
-                if (!v) return true;
-                try {
-                  JSON.parse(v);
-                  return true;
-                } catch (e) {
-                  return false;
-                }
-              },
-              expand: function() {
-                const that = this;
-                const value = this.value();
-                try {
-                  value = JSON.stringify(JSON.parse(value), null, 4);
-                } catch (err) {}
-                RED.editor.editJSON({
-                  value: value,
-                  complete: function(v) {
-                    const value = v;
-                    try {
-                      value = JSON.stringify(JSON.parse(v));
-                    } catch (err) {}
-                    that.value(value);
-                  }
-                });
-              }
-            }
-          ]
+          types: ["json"]
         })
         .typedInput("width", "68%");
 
@@ -168,12 +136,39 @@
     <dd>JSON Object to send for WebSocket requests and HTTP posts.</dd>
 
     <dt>Results<span class="property-type">string</span></dt>
-    <dd>Location to saved the API results.</dd>
+    <dd>Location to save the API results.</dd>
+  </dl>
 
-    <dt>Templates</dt>
-    <dd>Templates can be used in path, params and data fields.</dd>
+  <h3>Inputs</h3>
+  <dl class="message-properties">
+    <dt>payload.protocol<span class="property-type">[websocket|http] string</span></dt>
+    <dd>Overrides or sets the protocol property of the config.</dd>
+
+    <dt>payload.method<span class="property-type">[get|post] string</span></dt>
+    <dd>Overrides or sets the method property of the config.</dd>
+
+    <dt>payload.path<span class="property-type">string</span></dt>
+    <dd>Overrides or sets the path property of the config.</dd>
+
+    <dt>payload.data<span class="property-type">JSON | string</span></dt>
+    <dd>Overrides or sets the data/params property of the config.</dd>
+
+    <dt>payload.location<span class="property-type">string</span></dt>
+    <dd>Overrides or sets the results property of the config.</dd>
+
+    <dt>payload.locationType<span class="property-type">[msg|flow|global] string</span></dt>
+    <dd>Overrides or sets the results type property of the config.</dd>
   </dl>
 
   <h3>Outputs</h3>
-    Will output the results received from the API call to the location defined in the config.
+  <p>Will output the results received from the API call to the location defined in the config.</p>
+
+  <h3>Templates</h3>
+  <p>Templates can be used in path, params and data fields. When using templates the top level is a property of the message object: <code>msg.payload</code> would be <code>{{payload}}</code>.</p>
+
+  <h3>References</h3>
+  <p>
+    <a href="https://developers.home-assistant.io/docs/en/external_api_rest.html">http api</a><br />
+    <a href="https://developers.home-assistant.io/docs/en/external_api_websocket.html">websocket api</a>
+  </p>
 </script>

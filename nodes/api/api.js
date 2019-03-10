@@ -1,5 +1,6 @@
 const RenderTemplate = require('../../lib/mustache-context');
 const BaseNode = require('../../lib/base-node');
+const Joi = require('joi');
 
 module.exports = function(RED) {
     const nodeOptions = {
@@ -12,6 +13,52 @@ module.exports = function(RED) {
             data: {},
             location: {},
             locationType: {}
+        },
+        input: {
+            protocol: {
+                messageProp: 'payload.protocol',
+                configProp: 'protocol',
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.string().valid('websocket', 'http')
+                }
+            },
+            method: {
+                messageProp: 'payload.method',
+                configProp: 'method',
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.string().valid('get', 'post')
+                }
+            },
+            path: {
+                messageProp: 'payload.path',
+                configProp: 'path',
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.string()
+                }
+            },
+            data: {
+                messageProp: 'payload.data',
+                configProp: 'data'
+            },
+            location: {
+                messageProp: 'payload.location',
+                configProp: 'location',
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.string()
+                }
+            },
+            locationType: {
+                messageProp: 'payload.locationType',
+                configProp: 'locationType',
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.string().valid('msg', 'flow', 'global')
+                }
+            }
         }
     };
     class ApiNode extends BaseNode {
@@ -19,21 +66,24 @@ module.exports = function(RED) {
             super(nodeDefinition, RED, nodeOptions);
         }
 
-        onInput({ message }) {
+        onInput({ message, parsedMessage }) {
             const node = this;
             const config = node.nodeConfig;
             const serverName = node.utils.toCamelCase(config.server.name);
             const data = RenderTemplate(
-                config.data,
+                typeof parsedMessage.data.value === 'object'
+                    ? JSON.stringify(parsedMessage.data.value)
+                    : parsedMessage.data.value,
                 message,
                 node.node.context(),
                 serverName
             );
+            const method = parsedMessage.method.value;
             let apiCall;
 
-            if (config.protocol === 'http') {
+            if (parsedMessage.protocol.value === 'http') {
                 const path = RenderTemplate(
-                    config.path,
+                    parsedMessage.path.value,
                     message,
                     node.node.context(),
                     serverName
@@ -45,13 +95,13 @@ module.exports = function(RED) {
                     return;
                 }
 
-                if (!['get', 'post'].includes(config.method)) {
+                if (!['get', 'post'].includes(method)) {
                     node.error('HTTP request requires a valid method');
                     node.setStatusFailed();
                     return;
                 }
 
-                apiCall = config.server.http[`_${config.method}`].bind(
+                apiCall = config.server.http[`_${method}`].bind(
                     config.server.http,
                     path,
                     data
@@ -83,18 +133,21 @@ module.exports = function(RED) {
 
             return apiCall()
                 .then(results => {
-                    node.setStatusSuccess(`${config.protocol} called`);
+                    node.setStatusSuccess(
+                        `${parsedMessage.protocol.value} called`
+                    );
 
                     const contextKey = RED.util.parseContextStore(
-                        config.location
+                        parsedMessage.location.value
                     );
                     contextKey.key = contextKey.key || 'payload';
-                    const locationType = config.location_type || 'msg';
+                    const locationType =
+                        parsedMessage.locationType.value || 'msg';
 
                     if (locationType === 'flow' || locationType === 'global') {
                         node.node
                             .context()
-                            [locationType].set(
+                            [parsedMessage.locationType.value].set(
                                 contextKey.key,
                                 results,
                                 contextKey.store
