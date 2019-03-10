@@ -65,39 +65,7 @@
 
       $data
         .typedInput({
-          types: [
-            {
-              value: "json",
-              label: "JSON",
-              icon: "red/images/typedInput/json.png",
-              validate: function(v) {
-                if (!v) return true;
-                try {
-                  JSON.parse(v);
-                  return true;
-                } catch (e) {
-                  return false;
-                }
-              },
-              expand: function() {
-                const that = this;
-                const value = this.value();
-                try {
-                  value = JSON.stringify(JSON.parse(value), null, 4);
-                } catch (err) {}
-                RED.editor.editJSON({
-                  value: value,
-                  complete: function(v) {
-                    const value = v;
-                    try {
-                      value = JSON.stringify(JSON.parse(v));
-                    } catch (err) {}
-                    that.value(value);
-                  }
-                });
-              }
-            }
-          ]
+          types: ["json"]
         })
         .typedInput("width", "68%");
 
