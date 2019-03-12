@@ -9,7 +9,7 @@
         "dev:watch": "/app/node_modules/.bin/nodemon --config $NODEMON_CONFIG --exec 'sleep 0.5; node --inspect=0.0.0.0:9229 /app/node_modules/node-red/red.js -v --userDir $USER_DIR $FLOWS'"
     },
     "dependencies": {
-        "node-red": "0.19.6",
+        "node-red": "0.20.0",
         "node-red-contrib-contextbrowser": "*",
         "nodemon":  "1.18.10"
     },
