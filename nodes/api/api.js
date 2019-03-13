@@ -18,9 +18,12 @@ module.exports = function(RED) {
             protocol: {
                 messageProp: 'payload.protocol',
                 configProp: 'protocol',
+                default: 'websocket',
                 validation: {
                     haltOnFail: true,
-                    schema: Joi.string().valid('websocket', 'http')
+                    schema: Joi.string()
+                        .valid('websocket', 'http')
+                        .label('protocol')
                 }
             },
             method: {
@@ -28,7 +31,9 @@ module.exports = function(RED) {
                 configProp: 'method',
                 validation: {
                     haltOnFail: true,
-                    schema: Joi.string().valid('get', 'post')
+                    schema: Joi.string()
+                        .valid('get', 'post')
+                        .label('method')
                 }
             },
             path: {
@@ -37,6 +42,8 @@ module.exports = function(RED) {
                 validation: {
                     haltOnFail: true,
                     schema: Joi.string()
+                        .allow('')
+                        .label('path')
                 }
             },
             data: {
@@ -46,17 +53,21 @@ module.exports = function(RED) {
             location: {
                 messageProp: 'payload.location',
                 configProp: 'location',
+                default: 'payload',
                 validation: {
                     haltOnFail: true,
-                    schema: Joi.string()
+                    schema: Joi.string().label('location')
                 }
             },
             locationType: {
                 messageProp: 'payload.locationType',
                 configProp: 'locationType',
+                default: 'msg',
                 validation: {
                     haltOnFail: true,
-                    schema: Joi.string().valid('msg', 'flow', 'global')
+                    schema: Joi.string()
+                        .valid('msg', 'flow', 'global', 'none')
+                        .label('locationType')
                 }
             }
         }
@@ -91,12 +102,6 @@ module.exports = function(RED) {
 
                 if (!path) {
                     node.error('HTTP request requires a valid path.');
-                    node.setStatusFailed();
-                    return;
-                }
-
-                if (!['get', 'post'].includes(method)) {
-                    node.error('HTTP request requires a valid method');
                     node.setStatusFailed();
                     return;
                 }
@@ -137,24 +142,12 @@ module.exports = function(RED) {
                         `${parsedMessage.protocol.value} called`
                     );
 
-                    const contextKey = RED.util.parseContextStore(
-                        parsedMessage.location.value
+                    this.setContextValue(
+                        results,
+                        parsedMessage.locationType.value,
+                        parsedMessage.location.value,
+                        message
                     );
-                    contextKey.key = contextKey.key || 'payload';
-                    const locationType =
-                        parsedMessage.locationType.value || 'msg';
-
-                    if (locationType === 'flow' || locationType === 'global') {
-                        node.node
-                            .context()
-                            [parsedMessage.locationType.value].set(
-                                contextKey.key,
-                                results,
-                                contextKey.store
-                            );
-                    } else if (locationType === 'msg') {
-                        message[contextKey.key] = results;
-                    }
 
                     node.send(message);
                 })
