@@ -32,6 +32,7 @@ module.exports = function(RED) {
                     schema: Joi.date()
                         .optional()
                         .allow('')
+                        .label('startdate')
                 }
             },
             enddate: {
@@ -41,6 +42,7 @@ module.exports = function(RED) {
                     schema: Joi.date()
                         .optional()
                         .allow('')
+                        .label('enddate')
                 }
             },
             entityid: {

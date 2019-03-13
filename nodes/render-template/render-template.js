@@ -15,7 +15,9 @@ module.exports = function(RED) {
                 configProp: 'template',
                 validation: {
                     haltOnFail: true,
-                    schema: Joi.string().required()
+                    schema: Joi.string()
+                        .required()
+                        .label('template')
                 }
             }
         }
