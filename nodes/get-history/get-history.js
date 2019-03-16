@@ -159,21 +159,12 @@ module.exports = function(RED) {
 
                 case 'array':
                 default:
-                    const contextKey = RED.util.parseContextStore(
-                        this.nodeConfig.output_location
+                    this.setContextValue(
+                        results,
+                        this.nodeConfig.output_location_type,
+                        this.nodeConfig.output_location,
+                        message
                     );
-                    const locationType = this.nodeConfig.output_location_type;
-                    if (locationType === 'flow' || locationType === 'global') {
-                        this.node
-                            .context()
-                            [locationType].set(
-                                contextKey.key,
-                                results,
-                                contextKey.store
-                            );
-                    } else {
-                        message[contextKey.key] = results;
-                    }
 
                     this.node.send(message);
                     break;

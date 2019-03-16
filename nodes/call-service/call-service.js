@@ -36,9 +36,10 @@ module.exports = function(RED) {
             }
         }
         onInput({ message }) {
+            const config = this.nodeConfig;
             if (
-                this.nodeConfig.server.websocket.connectionState !==
-                this.nodeConfig.server.websocket.CONNECTED
+                config.server.websocket.connectionState !==
+                config.server.websocket.CONNECTED
             ) {
                 this.setStatusFailed('No Connection');
                 this.warn(
@@ -55,11 +56,9 @@ module.exports = function(RED) {
                 payloadDomain = this.utils.reach('domain', payload);
                 payloadService = this.utils.reach('service', payload);
             }
-            const configDomain = this.nodeConfig.service_domain;
-            const configService = this.nodeConfig.service;
-            const serverName = this.utils.toCamelCase(
-                this.nodeConfig.server.name
-            );
+            const configDomain = config.service_domain;
+            const configService = config.service;
+            const serverName = this.utils.toCamelCase(config.server.name);
             const context = this.node.context();
             const apiDomain = RenderTemplate(
                 payloadDomain || configDomain,
@@ -74,7 +73,7 @@ module.exports = function(RED) {
                 serverName
             );
             const configData = RenderTemplate(
-                this.nodeConfig.data,
+                config.data,
                 message,
                 context,
                 serverName
@@ -105,30 +104,17 @@ module.exports = function(RED) {
 
             this.setStatusSending();
 
-            return this.nodeConfig.server.websocket
+            return config.server.websocket
                 .callService(apiDomain, apiService, apiData)
                 .then(() => {
                     this.setStatusSuccess(`${apiDomain}.${apiService} called`);
 
-                    const contextKey = RED.util.parseContextStore(
-                        this.nodeConfig.output_location
+                    this.setContextValue(
+                        msgPayload,
+                        config.output_location_type,
+                        config.output_location,
+                        message
                     );
-                    contextKey.key = contextKey.key || 'payload';
-                    const locationType =
-                        this.nodeConfig.output_location_type || 'msg';
-
-                    if (locationType === 'flow' || locationType === 'global') {
-                        this.node
-                            .context()
-                            [locationType].set(
-                                contextKey.key,
-                                msgPayload,
-                                contextKey.store
-                            );
-                    } else if (locationType === 'msg') {
-                        message[contextKey.key] = msgPayload;
-                    }
-
                     this.send(message);
                 })
                 .catch(err => {

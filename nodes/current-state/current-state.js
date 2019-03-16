@@ -37,125 +37,89 @@ module.exports = function(RED) {
 
         /* eslint-disable camelcase */
         async onInput({ parsedMessage, message }) {
-            const entity_id = this.nodeConfig.entity_id
-                ? this.nodeConfig.entity_id
+            const config = this.nodeConfig;
+            const entityId = config.entity_id
+                ? config.entity_id
                 : parsedMessage.entity_id.value;
             const logAndContinueEmpty = logMsg => {
                 this.node.warn(logMsg);
                 return { payload: {} };
             };
 
-            if (this.nodeConfig.server === null) {
+            if (config.server === null) {
                 this.node.error('No valid server selected.');
                 return null;
             }
 
-            if (!entity_id)
+            if (!entityId)
                 return logAndContinueEmpty(
                     'entity ID not set, cannot get current state, sending empty payload'
                 );
 
             const currentState = this.utils.merge(
                 {},
-                await this.nodeConfig.server.homeAssistant.getStates(entity_id)
+                await config.server.homeAssistant.getStates(entityId)
             );
             if (!currentState.entity_id)
                 return logAndContinueEmpty(
-                    `entity could not be found in cache for entity_id: ${entity_id}, sending empty payload`
+                    `entity could not be found in cache for entity_id: ${entityId}, sending empty payload`
                 );
 
             currentState.timeSinceChangedMs =
                 Date.now() - new Date(currentState.last_changed).getTime();
 
             // Convert and save original state if needed
-            if (
-                this.nodeConfig.state_type &&
-                this.nodeConfig.state_type !== 'str'
-            ) {
+            if (config.state_type && config.state_type !== 'str') {
                 currentState.original_state = currentState.state;
                 currentState.state = this.getCastValue(
-                    this.nodeConfig.state_type,
+                    config.state_type,
                     currentState.state
                 );
             }
 
-            this.nodeConfig.halt_if_compare =
-                this.nodeConfig.halt_if_compare || 'is';
-            this.nodeConfig.halt_if_type =
-                this.nodeConfig.halt_if_type || 'str';
+            config.halt_if_compare = config.halt_if_compare || 'is';
+            config.halt_if_type = config.halt_if_type || 'str';
 
             const isHaltValid = await this.getComparatorResult(
-                this.nodeConfig.halt_if_compare,
-                this.nodeConfig.halt_if,
+                config.halt_if_compare,
+                config.halt_if,
                 currentState.state,
-                this.nodeConfig.halt_if_type,
+                config.halt_if_type,
                 message
             );
-            const shouldHaltIfState = this.nodeConfig.halt_if && isHaltValid;
+            const shouldHaltIfState = config.halt_if && isHaltValid;
 
             // default switch to true if undefined (backward compatibility
-            const override_topic = this.nodeConfig.override_topic !== false;
-            if (override_topic) message.topic = entity_id;
+            const override_topic = config.override_topic !== false;
+            if (override_topic) message.topic = entityId;
 
-            if (this.nodeConfig.state_location === undefined) {
-                this.nodeConfig.state_location = 'payload';
-                this.nodeConfig.override_payload =
-                    this.nodeConfig.override_payload !== false ? 'msg' : 'none';
+            if (config.state_location === undefined) {
+                config.state_location = 'payload';
+                config.override_payload =
+                    config.override_payload !== false ? 'msg' : 'none';
             }
-            if (this.nodeConfig.entity_location === undefined) {
-                this.nodeConfig.entity_location = 'data';
-                this.nodeConfig.override_data =
-                    this.nodeConfig.override_data !== false ? 'msg' : 'none';
-            }
-
-            if (
-                this.nodeConfig.override_payload !== 'none' &&
-                this.nodeConfig.state_location
-            ) {
-                const contextKey = RED.util.parseContextStore(
-                    this.nodeConfig.state_location
-                );
-                contextKey.key = contextKey.key || 'payload';
-                const locationType = this.nodeConfig.override_payload || 'msg';
-
-                if (locationType === 'flow' || locationType === 'global') {
-                    this.node
-                        .context()
-                        [locationType].set(
-                            contextKey.key,
-                            currentState.state,
-                            contextKey.store
-                        );
-                } else if (locationType === 'msg') {
-                    message[contextKey.key] = currentState.state;
-                }
+            if (config.entity_location === undefined) {
+                config.entity_location = 'data';
+                config.override_data =
+                    config.override_data !== false ? 'msg' : 'none';
             }
 
-            if (
-                this.nodeConfig.override_data !== 'none' &&
-                this.nodeConfig.entity_location
-            ) {
-                const contextKey = RED.util.parseContextStore(
-                    this.nodeConfig.entity_location
-                );
-                contextKey.key = contextKey.key || 'data';
-                const locationType = this.nodeConfig.override_data || 'msg';
+            this.setContextValue(
+                currentState.state,
+                config.override_payload,
+                config.state_location,
+                message
+            );
 
-                if (locationType === 'flow' || locationType === 'global') {
-                    this.node
-                        .context()
-                        [locationType].set(
-                            contextKey.key,
-                            currentState,
-                            contextKey.store
-                        );
-                } else if (locationType === 'msg') {
-                    message[contextKey.key] = currentState;
-                }
-            }
+            this.setContextValue(
+                currentState,
+                config.override_data,
+                config.entity_location,
+                message
+            );
 
             if (shouldHaltIfState) {
-                const debugMsg = `Get current state: halting processing due to current state of ${entity_id} matches "halt if state" option`;
+                const debugMsg = `Get current state: halting processing due to current state of ${entityId} matches "halt if state" option`;
                 this.debug(debugMsg);
                 this.debugToClient(debugMsg);
                 this.setStatusFailed(currentState.state);

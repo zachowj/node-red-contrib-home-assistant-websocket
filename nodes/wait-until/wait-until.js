@@ -35,7 +35,7 @@ module.exports = function(RED) {
         async onEntityChange(evt) {
             try {
                 const config = this.nodeConfig;
-                const { event } = this.utils.merge({}, evt);
+                const event = Object.assign({}, evt.event);
 
                 if (!this.active) {
                     return null;
@@ -64,23 +64,13 @@ module.exports = function(RED) {
                     event.new_state.timeSinceChangedMs =
                         Date.now() -
                         new Date(event.new_state.last_changed).getTime();
-                    const contextKey = RED.util.parseContextStore(
-                        config.entityLocation
-                    );
-                    contextKey.key = contextKey.key || 'data';
-                    const locationType = config.entityLocationType || 'msg';
 
-                    if (locationType === 'flow' || locationType === 'global') {
-                        this.node
-                            .context()
-                            [locationType].set(
-                                contextKey.key,
-                                event.new_state,
-                                contextKey.store
-                            );
-                    } else if (locationType === 'msg') {
-                        this.savedMessage[contextKey.key] = event.new_state;
-                    }
+                    this.setContextValue(
+                        event.new_state,
+                        config.entityLocationType,
+                        config.entityLocation,
+                        this.savedMessage
+                    );
                 }
 
                 this.send([this.savedMessage, null]);
@@ -89,7 +79,7 @@ module.exports = function(RED) {
             }
         }
 
-        async onInput({ parsedMessage, message }) {
+        async onInput({ message }) {
             const node = this;
             const config = node.nodeConfig;
 
@@ -123,38 +113,22 @@ module.exports = function(RED) {
                 }
 
                 node.timeoutId = setTimeout(async function() {
-                    const state = await config.server.homeAssistant.getStates(
-                        config.entityId
+                    const state = Object.assign(
+                        {},
+                        await config.server.homeAssistant.getStates(
+                            config.entityId
+                        )
                     );
 
-                    if (
-                        config.entityLocationType !== 'none' &&
-                        config.entityLocation
-                    ) {
-                        state.timeSinceChangedMs =
-                            Date.now() - new Date(state.last_changed).getTime();
+                    state.timeSinceChangedMs =
+                        Date.now() - new Date(state.last_changed).getTime();
 
-                        const contextKey = RED.util.parseContextStore(
-                            config.entityLocation
-                        );
-                        contextKey.key = contextKey.key || 'data';
-                        const locationType = config.entityLocationType || 'msg';
-
-                        if (
-                            locationType === 'flow' ||
-                            locationType === 'global'
-                        ) {
-                            this.node
-                                .context()
-                                [locationType].set(
-                                    contextKey.key,
-                                    state,
-                                    contextKey.store
-                                );
-                        } else if (locationType === 'msg') {
-                            message[contextKey.key] = state;
-                        }
-                    }
+                    this.setContextValue(
+                        state,
+                        config.entityLocationType,
+                        config.entityLocation,
+                        message
+                    );
 
                     node.active = false;
                     node.send([null, message]);

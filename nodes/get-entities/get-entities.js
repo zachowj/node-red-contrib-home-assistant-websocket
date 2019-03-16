@@ -23,15 +23,16 @@ module.exports = function(RED) {
         }
 
         /* eslint-disable camelcase */
-        async onInput({ parsedMessage, message }) {
+        async onInput({ message }) {
+            const config = this.nodeConfig;
             let noPayload = false;
 
-            if (this.nodeConfig.server === null) {
+            if (config.server === null) {
                 this.node.error('No valid server selected.');
                 return null;
             }
 
-            const states = await this.nodeConfig.server.homeAssistant.getStates();
+            const states = await config.server.homeAssistant.getStates();
             if (!states) {
                 this.node.warn(
                     'local state cache missing sending empty payload'
@@ -40,7 +41,7 @@ module.exports = function(RED) {
             }
 
             let entities = await filter(Object.values(states), async entity => {
-                const rules = this.nodeConfig.rules;
+                const rules = config.rules;
 
                 for (const rule of rules) {
                     const value = this.utils.reach(rule.property, entity);
@@ -64,7 +65,7 @@ module.exports = function(RED) {
             let statusText = `${entities.length} entities`;
             let payload = {};
 
-            switch (this.nodeConfig.output_type) {
+            switch (config.output_type) {
                 case 'split':
                     if (entities.length === 0) {
                         noPayload = true;
@@ -79,8 +80,7 @@ module.exports = function(RED) {
                         noPayload = true;
                         break;
                     }
-                    let maxReturned =
-                        Number(this.nodeConfig.output_results_count) || 1;
+                    let maxReturned = Number(config.output_results_count) || 1;
 
                     const max =
                         entities.length <= maxReturned
@@ -97,10 +97,7 @@ module.exports = function(RED) {
                     break;
                 case 'array':
                 default:
-                    if (
-                        entities.length === 0 &&
-                        !this.nodeConfig.output_empty_results
-                    ) {
+                    if (entities.length === 0 && !config.output_empty_results) {
                         noPayload = true;
                     }
 
@@ -115,21 +112,12 @@ module.exports = function(RED) {
 
             this.setStatusSuccess(statusText);
 
-            const contextKey = RED.util.parseContextStore(
-                this.nodeConfig.output_location
+            this.setContextValue(
+                payload,
+                config.output_location_type,
+                config.output_location,
+                message
             );
-            const locationType = this.nodeConfig.output_location_type;
-            if (locationType === 'flow' || locationType === 'global') {
-                this.node
-                    .context()
-                    [locationType].set(
-                        contextKey.key,
-                        payload,
-                        contextKey.store
-                    );
-            } else {
-                message[contextKey.key] = payload;
-            }
 
             this.node.send(message);
         }
