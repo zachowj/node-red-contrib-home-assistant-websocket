@@ -14,7 +14,7 @@ Project is going through active development and as such will probably have a few
 
 This assumes you have [Node-RED](https://nodered.org) already installed and working, if you need to install Node-RED see [here](https://nodered.org/docs/getting-started/installation)
 
-**NOTE:** This requires [Node.js](https://nodejs.org) v8.12+ and [Node-RED](https://nodered.org/) v0.19+. If you're running Node-Red in Docker you'll need to pull the -v8 image for this to work.
+**NOTE:** This requires [Node.js](https://nodejs.org) v8.12+ and [Node-RED](https://nodered.org/) v0.19+.
 
 Install via Node-RED Manage Palette
 
