@@ -190,6 +190,9 @@
               $("#output_empty_results").show();
               $("#output_location").show();
               break;
+            case "count":
+              $("#output_location").show();
+              break;
             case "random":
               $("#output_results_count").show();
               $("#output_location").show();
@@ -243,8 +246,9 @@
     <label for="node-input-output_type" style="width: 160px;">Output Type</label>
     <select id="node-input-output_type">
       <option value="array">Array</option>
-      <option value="split">Split</option>
+      <option value="count">Count</option>
       <option value="random">Random</option>
+      <option value="split">Split</option>
     </select>
   </div>
 
@@ -284,11 +288,14 @@
     <dt>Array<span class="property-type">array</span></dt>
     <dd>Sends an array of state objects from search criteria to the Output Location.</dd>
 
-    <dt>Split<span class="property-type">msg part</span></dt>
-    <dd>Sends a message for each state object. In the same format as if the split node was used.</dd>
+    <dt>Count<span class="property-type">number</span></dt>
+    <dd>Return the total count of valid entities.</dd>
 
     <dt>Random<span class="property-type">object/array</span></dt>
     <dd>Return a random object or array from the available state objects to the Output Location. When <code>One Max Results</code> is selected it will return an object and when more than one is selected will always return an array of state objects.</dd>
+
+    <dt>Split<span class="property-type">msg part</span></dt>
+    <dd>Sends a message for each state object. In the same format as if the split node was used.</dd>
   </dl>
 
   <h3>State Object Format</h3>

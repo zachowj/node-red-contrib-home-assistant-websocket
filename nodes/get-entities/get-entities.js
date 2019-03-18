@@ -66,6 +66,9 @@ module.exports = function(RED) {
             let payload = {};
 
             switch (config.output_type) {
+                case 'count':
+                    payload = entities.length;
+                    break;
                 case 'split':
                     if (entities.length === 0) {
                         noPayload = true;
