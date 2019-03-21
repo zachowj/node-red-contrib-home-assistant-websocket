@@ -219,7 +219,7 @@ module.exports = function(RED) {
                     constraint,
                     eventMessage.event
                 );
-                const actualValue = this.utils.reach(
+                const actualValue = this.utils.selectn(
                     constraint.propertyValue,
                     constraintTarget.state
                 );
@@ -289,7 +289,7 @@ module.exports = function(RED) {
                     };
 
                     if (output.comparatorPropertyType !== 'always') {
-                        result.actualValue = this.utils.reach(
+                        result.actualValue = this.utils.selectn(
                             output.comparatorPropertyValue,
                             eventMessage.event
                         );

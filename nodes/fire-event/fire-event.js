@@ -34,7 +34,7 @@ module.exports = function(RED) {
 
             if (message && message.payload) {
                 payload = this.tryToObject(message.payload);
-                payloadEvent = this.utils.reach('event', payload);
+                payloadEvent = this.utils.selectn('event', payload);
             }
 
             const configEvent = this.nodeConfig.event;
@@ -83,7 +83,7 @@ module.exports = function(RED) {
             let eventData;
             let contextData = {};
 
-            let payloadData = this.utils.reach('data', payload);
+            let payloadData = this.utils.selectn('data', payload);
             let configData = this.tryToObject(data);
             payloadData = payloadData || {};
             configData = configData || {};

@@ -260,7 +260,7 @@ module.exports = function(RED) {
         // Close WebSocket client on redeploy or node-RED shutdown
         async onClose(removed) {
             super.onClose();
-            const webSocketClient = this.utils.reach(
+            const webSocketClient = this.utils.selectn(
                 'homeAssistant.websocket.client',
                 this
             );

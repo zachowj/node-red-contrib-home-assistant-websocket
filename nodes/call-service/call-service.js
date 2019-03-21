@@ -53,8 +53,8 @@ module.exports = function(RED) {
 
             if (message && message.payload) {
                 payload = this.tryToObject(message.payload);
-                payloadDomain = this.utils.reach('domain', payload);
-                payloadService = this.utils.reach('service', payload);
+                payloadDomain = this.utils.selectn('domain', payload);
+                payloadService = this.utils.selectn('service', payload);
             }
             const configDomain = config.service_domain;
             const configService = config.service;
@@ -132,7 +132,7 @@ module.exports = function(RED) {
             let apiData;
             let contextData = {};
 
-            let payloadData = this.utils.reach('data', payload);
+            let payloadData = this.utils.selectn('data', payload);
             let configData = this.tryToObject(data);
             payloadData = payloadData || {};
             configData = configData || {};

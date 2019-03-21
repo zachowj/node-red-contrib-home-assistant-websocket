@@ -44,7 +44,7 @@ module.exports = function(RED) {
                 const rules = config.rules;
 
                 for (const rule of rules) {
-                    const value = this.utils.reach(rule.property, entity);
+                    const value = this.utils.selectn(rule.property, entity);
                     const result = await this.getComparatorResult(
                         rule.logic,
                         rule.value,
