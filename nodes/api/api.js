@@ -80,6 +80,17 @@ module.exports = function(RED) {
         onInput({ message, parsedMessage }) {
             const node = this;
             const config = node.nodeConfig;
+
+            if (
+                config.server.websocket.connectionState !==
+                config.server.websocket.CONNECTED
+            ) {
+                this.setStatusFailed('No Connection');
+                this.warn('API call attempted without connection to server.');
+
+                return;
+            }
+
             const serverName = node.utils.toCamelCase(config.server.name);
             const data = RenderTemplate(
                 typeof parsedMessage.data.value === 'object'
