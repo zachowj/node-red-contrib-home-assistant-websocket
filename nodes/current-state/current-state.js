@@ -85,7 +85,10 @@ module.exports = function(RED) {
                 config.halt_if,
                 currentState.state,
                 config.halt_if_type,
-                message
+                {
+                    message,
+                    entity: currentState
+                }
             );
             const shouldHaltIfState = config.halt_if && isHaltValid;
 

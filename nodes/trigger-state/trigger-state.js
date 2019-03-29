@@ -227,7 +227,11 @@ module.exports = function(RED) {
                     comparatorType,
                     comparatorValue,
                     actualValue,
-                    comparatorValueDatatype
+                    comparatorValueDatatype,
+                    {
+                        entity: eventMessage.event.new_state,
+                        prevEntity: eventMessage.event.old_state
+                    }
                 );
 
                 if (comparatorResult === false) {
@@ -297,7 +301,11 @@ module.exports = function(RED) {
                             output.comparatorType,
                             output.comparatorValue,
                             result.actualValue,
-                            output.comparatorValueDatatype
+                            output.comparatorValueDatatype,
+                            {
+                                entity: eventMessage.event.new_state,
+                                prevEntity: eventMessage.event.old_state
+                            }
                         );
                     }
                     result.message = this.getOutputMessage(

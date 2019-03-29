@@ -118,15 +118,11 @@
       }
 
       $.getScript("/homeassistant/static/haltif.js", function() {
-        setupHaltIf("#node-input-halt_if", "#node-input-halt_if_compare", [
-          "str",
-          "num",
-          "bool",
-          "re",
-          "msg",
-          "flow",
-          "global"
-        ]);
+        setupHaltIf(
+          "#node-input-halt_if",
+          "#node-input-halt_if_compare",
+          "currentState"
+        );
       });
     },
     oneditsave: function() {

@@ -16,14 +16,25 @@ const resizeHaltIf = function(input) {
 
 window.resizeHaltIf = resizeHaltIf;
 
-window.setupHaltIf = function(
-    input,
-    compare,
-    defaultTypes = ['str', 'num', 'bool', 're', 'flow', 'global']
-) {
+window.setupHaltIf = function(input, compare, nodeName) {
     const $input = $(input);
     const $compare = $(compare);
     const $help = $('#halt_if_help');
+    const entityType = { value: 'entity', label: 'entity.' };
+    let defaultTypes = [
+        'str',
+        'num',
+        'bool',
+        're',
+        'msg',
+        'flow',
+        'global',
+        entityType
+    ];
+
+    if (nodeName === 'currentState') {
+        defaultTypes.splice(4, 1);
+    }
 
     $input.after(
         ' <a id="clearHaltIf" class="editor-button"><i class="fa fa-remove"></i></a>'
@@ -38,7 +49,7 @@ window.setupHaltIf = function(
 
     $compare.change(function(e) {
         let types = defaultTypes;
-        let extraTypes = ['flow', 'global'];
+        let extraTypes = ['flow', 'global', entityType];
         $help.hide();
 
         if (defaultTypes.includes('msg')) {

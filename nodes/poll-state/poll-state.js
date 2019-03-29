@@ -134,7 +134,10 @@ module.exports = function(RED) {
                         this.nodeConfig.halt_if_compare,
                         this.nodeConfig.halt_if,
                         pollState.state,
-                        this.nodeConfig.halt_if_type
+                        this.nodeConfig.halt_if_type,
+                        {
+                            entity: pollState
+                        }
                     ));
 
                 const msg = {

@@ -273,7 +273,14 @@
 
       $constraints.comparatorValue.typedInput({
         default: "str",
-        types: ["str", "num", "bool", "re"]
+        types: [
+          "str",
+          "num",
+          "bool",
+          "re",
+          { value: "entity", label: "entity." },
+          { value: "prevEntity", label: "prev entity." }
+        ]
       });
       $constraints.comparatorValue.typedInput("width", "233px");
 

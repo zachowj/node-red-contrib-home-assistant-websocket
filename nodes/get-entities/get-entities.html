@@ -53,6 +53,7 @@
         { value: "starts_with", text: "starts with" },
         { value: "in_group", text: "in group" }
       ];
+      const typeEntity = { value: "entity", label: "entity." };
       const defaultTypes = [
         "str",
         "num",
@@ -60,7 +61,8 @@
         "re",
         "msg",
         "flow",
-        "global"
+        "global",
+        typeEntity
       ];
       const $logic = $("#logic");
 
@@ -140,13 +142,13 @@
                 case "lte":
                 case "gt":
                 case "gte":
-                  types = ["num", "msg", "flow", "global"];
+                  types = ["num", "msg", "flow", "global", typeEntity];
                   break;
                 case "includes":
                 case "does_not_include":
                 case "starts_with":
                 case "in_group":
-                  types = ["str", "msg", "flow", "global"];
+                  types = ["str", "msg", "flow", "global", typeEntity];
                   break;
               }
               $value.typedInput("types", types);

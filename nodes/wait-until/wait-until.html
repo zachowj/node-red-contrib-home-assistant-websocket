@@ -97,6 +97,7 @@
         $("#node-input-checkCurrentState").prop("checked", false);
       }
 
+      const entityType = { value: "entity", label: "entity." };
       const defaultTypes = [
         "str",
         "num",
@@ -104,7 +105,8 @@
         "re",
         "msg",
         "flow",
-        "global"
+        "global",
+        entityType
       ];
       $("#node-input-value")
         .typedInput({
@@ -125,7 +127,7 @@
           case "lte":
           case "gt":
           case "gte":
-            types = ["num", "msg", "flow", "global"];
+            types = ["num", "msg", "flow", "global", entityType];
             break;
           case "includes":
           case "does_not_include":

@@ -46,7 +46,10 @@ module.exports = function(RED) {
                     config.value,
                     this.utils.selectn(config.property, event.new_state),
                     config.valueType,
-                    this.savedMessage
+                    {
+                        message: this.savedMessage,
+                        entity: event.new_state
+                    }
                 );
 
                 if (!result) {

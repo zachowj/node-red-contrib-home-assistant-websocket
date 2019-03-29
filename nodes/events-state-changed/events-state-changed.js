@@ -106,8 +106,13 @@ module.exports = function(RED) {
                     this.nodeConfig.halt_if_compare,
                     this.nodeConfig.haltIfState,
                     event.new_state.state,
-                    this.nodeConfig.halt_if_type
+                    this.nodeConfig.halt_if_type,
+                    {
+                        entity: event.new_state,
+                        prevEntity: event.old_state
+                    }
                 );
+
                 const shouldHaltIfState =
                     this.nodeConfig.haltIfState && isHaltValid;
 

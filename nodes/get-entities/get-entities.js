@@ -50,7 +50,10 @@ module.exports = function(RED) {
                         rule.value,
                         value,
                         rule.valueType,
-                        message
+                        {
+                            message,
+                            entity
+                        }
                     );
                     if (value === undefined || !result) {
                         return false;
