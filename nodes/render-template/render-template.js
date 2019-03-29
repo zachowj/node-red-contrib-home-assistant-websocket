@@ -5,9 +5,13 @@ module.exports = function(RED) {
     const nodeOptions = {
         debug: true,
         config: {
-            template: {},
             name: {},
-            server: { isNode: true }
+            server: { isNode: true },
+            template: {},
+            resultsLocation: {},
+            resultsLocationType: {},
+            templateLocation: {},
+            templateLocationType: {}
         },
         input: {
             template: {
@@ -19,6 +23,38 @@ module.exports = function(RED) {
                         .required()
                         .label('template')
                 }
+            },
+            resultsLocation: {
+                messageProp: 'resultsLocation',
+                configProp: 'resultsLocation',
+                default: 'payload'
+            },
+            resultsLocationType: {
+                messageProp: 'resultsLocationType',
+                configProp: 'resultsLocationType',
+                default: 'msg',
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.string()
+                        .valid('msg', 'flow', 'global', 'none')
+                        .label('resultsLocationType')
+                }
+            },
+            templateLocation: {
+                messageProp: 'templateLocation',
+                configProp: 'templateLocation',
+                default: 'template'
+            },
+            templateLocationType: {
+                messageProp: 'templateLocationType',
+                configProp: 'templateLocationType',
+                default: 'msg',
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.string()
+                        .valid('msg', 'flow', 'global', 'none')
+                        .label('templateLocationType')
+                }
             }
         }
     };
@@ -29,8 +65,13 @@ module.exports = function(RED) {
         }
 
         onInput({ parsedMessage, message }) {
-            let { template } = parsedMessage;
-            template = template.value;
+            const {
+                template,
+                templateLocation,
+                templateLocationType,
+                resultsLocation,
+                resultsLocationType
+            } = parsedMessage;
 
             if (this.nodeConfig.server === null) {
                 this.node.error('No valid server selected.');
@@ -40,22 +81,32 @@ module.exports = function(RED) {
             this.setStatusSending('Requesting');
 
             return this.nodeConfig.server.http
-                .renderTemplate(template)
+                .renderTemplate(template.value)
                 .then(res => {
-                    message.template = template;
-                    message.payload = res;
+                    this.setContextValue(
+                        template.value,
+                        templateLocationType.value,
+                        templateLocation.value,
+                        message
+                    );
+                    this.setContextValue(
+                        res,
+                        resultsLocationType.value,
+                        resultsLocation.value,
+                        message
+                    );
+
                     this.node.send(message);
                     this.setStatusSuccess();
                 })
                 .catch(err => {
-                    let errorMessage =
-                        'Error get-template, home assistant api error.';
-                    if (this.utils.selectn('response.data.message', err))
-                        errorMessage = `${errorMessage} Error Message: ${
-                            err.response.data.message
-                        }`;
-
-                    this.error(errorMessage);
+                    this.error(
+                        `Error get-template, home assistant api error. ${
+                            this.utils.selectn('response.data.message', err)
+                                ? `Error Message: ${err.response.data.message}`
+                                : ''
+                        }`
+                    );
                     this.setStatusFailed('Error');
                 });
         }
