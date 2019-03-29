@@ -136,7 +136,7 @@
 
 
   <div class="form-row">
-    <label for="node-input-haltifstate"><i class="fa fa-hand-paper-o"></i> Halt if State</label>
+    <label for="node-input-haltifstate"><i class="fa fa-random"></i> If State</label>
     <div style="width: 70%;display: inline-block;">
       <select type="text" id="node-input-halt_if_compare" style="width: auto;">
         <option value="is">is</option>
@@ -184,11 +184,11 @@
       <dt>Entity ID<span class="property-type">string|regex</span></dt>
       <dd>matches for entity_id field</dd>
 
-      <dt>Halt If State<span class="property-type">string</span></dt>
-      <dd>If the new_state === this setting then skip sending</dd>
+      <dt>If State<span class="property-type">string</span></dt>
+      <dd>If the logic statement is true send message to second output</dd>
 
       <dt>State Type<span class="property-type">string</span></dt>
-      <dd>Convert the state of the entity to the selected type. Boolean will be convert to true based on if the string is equial by default to (y|yes|true|on|home|open). Original value stored in msg.data.original_state</dd>
+      <dd>Convert the state of the entity to the selected type. Boolean will be convert to true based on if the string is equal by default to (y|yes|true|on|home|open). Original value stored in msg.data.original_state</dd>
 
       <dt>Output Initially<span class="property-type">boolean</span></dt>
       <dd>Output once on startup/deploy then on each interval</dd>
