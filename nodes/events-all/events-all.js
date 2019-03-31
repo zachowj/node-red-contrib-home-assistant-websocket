@@ -40,6 +40,10 @@ module.exports = function(RED) {
                 payload: type,
                 data: data
             });
+
+            if (type === 'states_loaded' || type === 'services_loaded') {
+                this.setStatusSuccess(type);
+            }
         }
 
         onClientStatesLoaded() {
