@@ -80,6 +80,8 @@
     <li>connected</li>
     <li>disconnected</li>
     <li>error</li>
+    <li>states_loaded</li>
+    <li>services_loaded</li>
   </ul>
   Structure
   <dl class="message-properties">
@@ -90,7 +92,7 @@
     <dd>home_assistant_client:{event_type}</dd>
 
     <dt>payload <span class="property-type">string</span></dt>
-    <dd>connecting | connected | disconnected | error</dd>
+    <dd>connecting | connected | disconnected | error | states_loaded | services_loaded</dd>
 
     <dt>data <span class="property-type optional">string</span></dt>
     <dd>Will contain the error message if event type is type error</dd>

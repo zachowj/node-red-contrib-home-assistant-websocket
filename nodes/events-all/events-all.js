@@ -14,6 +14,14 @@ module.exports = function(RED) {
                 event: 'ha_events:' + (this.nodeConfig.event_type || 'all'),
                 handler: this.onHaEventsAll.bind(this)
             });
+            this.addEventClientListener({
+                event: 'ha_events:states_loaded',
+                handler: this.onClientStatesLoaded.bind(this)
+            });
+            this.addEventClientListener({
+                event: 'ha_events:services_loaded',
+                handler: this.onClientServicesLoaded.bind(this)
+            });
         }
 
         onHaEventsAll(evt) {
@@ -32,6 +40,14 @@ module.exports = function(RED) {
                 payload: type,
                 data: data
             });
+        }
+
+        onClientStatesLoaded() {
+            this.clientEvent('states_loaded');
+        }
+
+        onClientServicesLoaded() {
+            this.clientEvent('services_loaded');
         }
 
         onHaEventsClose() {
