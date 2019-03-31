@@ -126,7 +126,7 @@ module.exports = function(RED) {
                     state.timeSinceChangedMs =
                         Date.now() - new Date(state.last_changed).getTime();
 
-                    this.setContextValue(
+                    node.setContextValue(
                         state,
                         config.entityLocationType,
                         config.entityLocation,
