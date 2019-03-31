@@ -1,74 +1,98 @@
 <script type="text/javascript">
-    RED.nodes.registerType('server-events', {
-        category: 'home_assistant',
-        color: '#038FC7',
-        defaults: {
-            name: { value: '' },
-            server: { value: '', type: 'server', required: true },
-            event_type: { value: '', required: false },
-        },
-        inputs: 0,
-        outputs: 1,
-        icon: "arrow-right-bold.png",
-        paletteLabel: 'events: all',
-        label: function () { return this.name || `events: ${this.event_type || 'all'}` },
-        oneditprepare: function () {
-            const NODE = this;
-            const $server = $('#node-input-server');
-            const utils = {
-                setDefaultServerSelection: function () {
-                    let defaultServer;
-                    RED.nodes.eachConfig(n => {
-                        if (n.type === 'server' && !defaultServer) defaultServer = n.id;
-                    });
-                    if (defaultServer) $server.val(defaultServer);
-                }
-            };
-
-            if (!NODE.server) {
-                utils.setDefaultServerSelection();
-            }
+  RED.nodes.registerType("server-events", {
+    category: "home_assistant",
+    color: "#038FC7",
+    defaults: {
+      name: { value: "" },
+      server: { value: "", type: "server", required: true },
+      event_type: { value: "", required: false }
+    },
+    inputs: 0,
+    outputs: 1,
+    icon: "arrow-right-bold.png",
+    paletteLabel: "events: all",
+    label: function() {
+      return this.name || `events: ${this.event_type || "all"}`;
+    },
+    oneditprepare: function() {
+      const NODE = this;
+      const $server = $("#node-input-server");
+      const utils = {
+        setDefaultServerSelection: function() {
+          let defaultServer;
+          RED.nodes.eachConfig(n => {
+            if (n.type === "server" && !defaultServer) defaultServer = n.id;
+          });
+          if (defaultServer) $server.val(defaultServer);
         }
-    });
+      };
+
+      if (!NODE.server) {
+        utils.setDefaultServerSelection();
+      }
+    }
+  });
 </script>
 
-
 <script type="text/x-red" data-template-name="server-events">
-    <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-name" placeholder="Name">
-    </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
 
-    <div class="form-row">
-        <label for="node-input-server"><i class="fa fa-dot-circle-o"></i> Server</label>
-        <input type="text" id="node-input-server" />
-    </div>
+  <div class="form-row">
+    <label for="node-input-server"><i class="fa fa-dot-circle-o"></i> Server</label>
+    <input type="text" id="node-input-server" />
+  </div>
 
-    <div class="form-row">
-        <label for="node-input-event_type"><i class="fa fa-tag"></i> Event Type</label>
-        <input type="text" id="node-input-event_type" placeholder="leave empty for all events" />
-    </div>
+  <div class="form-row">
+    <label for="node-input-event_type"><i class="fa fa-tag"></i> Event Type</label>
+    <input type="text" id="node-input-event_type" placeholder="leave empty for all events" />
+  </div>
 </script>
 
 <script type="text/x-red" data-help-name="server-events">
-    <h3>Outputs</h3>
-    <p>The outputted message object contains the following data, underscored values are straight from home assistant</p>
-    <dl class="message-properties">
-        <dt>topic <span class="property-type">string</span></dt>
-        <dd>event_type</dd>
-        <dt>event_type <span class="property-type">string</span></dt>
-        <dd>event_type</dd>
-        <dt>payload <span class="property-type">object</span></dt>
-        <dd>original event object</dd>
-    </dl>
+  <h3>Outputs</h3>
+  <p>The outputted message object contains the following data, underscored values are straight from home assistant and home assistant client events.</p>
 
-    <h3>Configuration</h3>
+  <dl class="message-properties">
+    <dt>topic <span class="property-type">string</span></dt>
+    <dd>event_type</dd>
+    <dt>event_type <span class="property-type">string</span></dt>
+    <dd>event_type</dd>
+    <dt>payload <span class="property-type">object</span></dt>
+    <dd>original event object</dd>
+  </dl>
 
-    <dl class="message-properties">
-        <dt>Name <span class="property-type">string</span></dt>
-        <dd>the name of the node</dd>
-        <dt>Event Type <span class="property-type">string</span></dt>
-        <dd>filter by event type or leave blank for all events</dd>
-    </dl>
+  <h3>Configuration</h3>
 
+  <dl class="message-properties">
+    <dt>Name <span class="property-type">string</span></dt>
+    <dd>the name of the node</dd>
+    <dt>Event Type <span class="property-type">string</span></dt>
+    <dd>filter by event type or leave blank for all events</dd>
+  </dl>
+
+  <h3>Client Events</h3>
+  <p>Possible Event Types</p>
+  <ul>
+    <li>connecting</li>
+    <li>connected</li>
+    <li>disconnected</li>
+    <li>error</li>
+  </ul>
+  Structure
+  <dl class="message-properties">
+    <dt>event_type <span class="property-type">string</span></dt>
+    <dd>home_assistant_client</dd>
+
+    <dt>topic <span class="property-type">string</span></dt>
+    <dd>home_assistant_client:{event_type}</dd>
+
+    <dt>payload <span class="property-type">string</span></dt>
+    <dd>connecting | connected | disconnected | error</dd>
+
+    <dt>data <span class="property-type optional">string</span></dt>
+    <dd>Will contain the error message if event type is type error</dd>
+  </dl>
 </script>

@@ -24,6 +24,37 @@ module.exports = function(RED) {
             });
             this.setStatusSuccess(evt.event_type);
         }
+
+        clientEvent(type, data) {
+            this.send({
+                event_type: 'home_assistant_client',
+                topic: `home_assistant_client:${type}`,
+                payload: type,
+                data: data
+            });
+        }
+
+        onHaEventsClose() {
+            super.onHaEventsClose();
+            this.clientEvent('disconnected');
+        }
+
+        onHaEventsOpen() {
+            super.onHaEventsOpen();
+            this.clientEvent('connected');
+        }
+
+        onHaEventsConnecting() {
+            super.onHaEventsConnecting();
+            this.clientEvent('connecting');
+        }
+
+        onHaEventsError(err) {
+            super.onHaEventsError(err);
+            if (err) {
+                this.clientEvent('error', err.message);
+            }
+        }
     }
 
     RED.nodes.registerType('server-events', ServerEventsNode);
