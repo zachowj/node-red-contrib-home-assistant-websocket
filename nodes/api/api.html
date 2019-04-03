@@ -17,7 +17,8 @@
       path: { value: "" },
       data: { value: "" },
       location: { value: "payload" },
-      locationType: { value: "msg" }
+      locationType: { value: "msg" },
+      responseType: { value: "json" }
     },
     oneditprepare: function() {
       const node = this;
@@ -115,6 +116,15 @@
     <label for="node-input-location">Results</label>
     <input type="text" id="node-input-location">
     <input type="hidden" id="node-input-locationType">
+  </div>
+
+  <div class="form-row http">
+    <label for="node-input-responseType">Return</label>
+    <select id="node-input-responseType" style="width:70%;">
+      <option value="text">a UTF-8 string</option>
+      <option value="arraybuffer">a binary buffer</option>
+      <option value="json">a parsed JSON object</option>
+    </select>
   </div>
 </script>
 

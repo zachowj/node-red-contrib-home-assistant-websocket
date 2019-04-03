@@ -12,7 +12,8 @@ module.exports = function(RED) {
             path: {},
             data: {},
             location: {},
-            locationType: {}
+            locationType: {},
+            responseType: {}
         },
         input: {
             protocol: {
@@ -69,6 +70,16 @@ module.exports = function(RED) {
                         .valid('msg', 'flow', 'global', 'none')
                         .label('locationType')
                 }
+            },
+            responseType: {
+                messageProp: 'payload.responseType',
+                configProp: 'responseType',
+                default: 'json',
+                validation: {
+                    schema: Joi.string()
+                        .valid('json', 'text', 'arraybuffer')
+                        .label('responseType')
+                }
             }
         }
     };
@@ -120,7 +131,8 @@ module.exports = function(RED) {
                 apiCall = config.server.http[`_${method}`].bind(
                     config.server.http,
                     path,
-                    data
+                    data,
+                    parsedMessage.responseType.value
                 );
             } else {
                 try {
