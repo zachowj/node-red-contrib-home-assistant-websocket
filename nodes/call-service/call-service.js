@@ -111,8 +111,8 @@ module.exports = function(RED) {
 
                     this.setContextValue(
                         msgPayload,
-                        config.output_location_type,
-                        config.output_location,
+                        config.output_location_type || 'msg',
+                        config.output_location || 'payload',
                         message
                     );
                     this.send(message);
