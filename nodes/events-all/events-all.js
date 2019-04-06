@@ -14,14 +14,19 @@ module.exports = function(RED) {
                 event: 'ha_events:' + (this.nodeConfig.event_type || 'all'),
                 handler: this.onHaEventsAll.bind(this)
             });
-            this.addEventClientListener({
-                event: 'ha_events:states_loaded',
-                handler: this.onClientStatesLoaded.bind(this)
-            });
-            this.addEventClientListener({
-                event: 'ha_events:services_loaded',
-                handler: this.onClientServicesLoaded.bind(this)
-            });
+            if (
+                !this.nodeConfig.event_type ||
+                this.nodeConfig.event_type === 'home_assistant_client'
+            ) {
+                this.addEventClientListener({
+                    event: 'ha_events:states_loaded',
+                    handler: this.onClientStatesLoaded.bind(this)
+                });
+                this.addEventClientListener({
+                    event: 'ha_events:services_loaded',
+                    handler: this.onClientServicesLoaded.bind(this)
+                });
+            }
         }
 
         onHaEventsAll(evt) {
@@ -34,15 +39,20 @@ module.exports = function(RED) {
         }
 
         clientEvent(type, data) {
-            this.send({
-                event_type: 'home_assistant_client',
-                topic: `home_assistant_client:${type}`,
-                payload: type,
-                data: data
-            });
+            if (
+                !this.nodeConfig.event_type ||
+                this.nodeConfig.event_type === 'home_assistant_client'
+            ) {
+                this.send({
+                    event_type: 'home_assistant_client',
+                    topic: `home_assistant_client:${type}`,
+                    payload: type,
+                    data: data
+                });
 
-            if (type === 'states_loaded' || type === 'services_loaded') {
-                this.setStatusSuccess(type);
+                if (type === 'states_loaded' || type === 'services_loaded') {
+                    this.setStatusSuccess(type);
+                }
             }
         }
 
