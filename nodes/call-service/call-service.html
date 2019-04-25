@@ -438,7 +438,7 @@
   </dl>
 
   <h3>Templates</h3>
-  <p>You can use templates in the <code>Domain</code>, <code>Service</code>, <code>Entity Id</code>, and <code>data</code> fields. When using templates the top level is a property of the message object: <code>msg.payload</code> would be <code>{{payload}}</code>. You can also access the <code>flow, global and states</code> contexts <code>{{flow.foobar}}</code> <code>{{global.something}}</code>. For the <code>states</code> context you can use the <code>{{states.domain.entity_id}}</code> to just get the state or drill further down like <code>{{states.light.kitchen.attributes.friendly_name}}</code>. <code>{{states.light.kitchen}}</code> and <code>{{states.light.kitchen.state}}</code> are equivalent.</p>
+  <p>You can use templates in the <code>Domain</code>, <code>Service</code>, <code>Entity Id</code>, and <code>data</code> fields. When using templates the top level is a property of the message object: <code>msg.payload</code> would be <code>{{payload}}</code>. You can also access the <code>flow, global and states</code> contexts <code>{{flow.foobar}}</code> <code>{{global.something}}</code>. For the <code>states</code> context you can use the <code>{{entity.domain.entity_id}}</code> to just get the state or drill further down like <code>{{entity.light.kitchen.attributes.friendly_name}}</code>. <code>{{entity.light.kitchen}}</code> and <code>{{entity.light.kitchen.state}}</code> are equivalent.</p>
 
   <h3>Details</h3>
   <p>If the incoming message has a <code>payload</code> property with <code>domain</code>, <code>service</code> set it will override any config values if set.</p>
