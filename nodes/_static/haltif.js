@@ -32,7 +32,7 @@ window.setupHaltIf = function(input, compare, nodeName) {
         entityType
     ];
 
-    if (nodeName === 'currentState') {
+    if (nodeName !== 'currentState') {
         defaultTypes.splice(4, 1);
     }
 
