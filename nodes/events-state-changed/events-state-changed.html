@@ -17,6 +17,12 @@
     },
     inputs: 0,
     outputs: 1,
+    outputLabels: function(index) {
+      if (this.haltifstate) {
+        if (index === 0) return "'If State' is false";
+        if (index === 1) return "'If State' is true";
+      }
+    },
     icon: "arrow-right-bold-hexagon-outline.png",
     paletteLabel: "events: state",
     label: function() {
