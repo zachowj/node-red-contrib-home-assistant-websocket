@@ -6,7 +6,7 @@ Following these guidelines helps to communicate that you respect the time of the
 
 ## Using the issue tracker
 
-The issue tracker is the preferred channel for [bug reports](#bugs), [features requests](#features) and [submitting pull requests](#pull-requests). Currently [support issues](#support-issues) are acceptable in the issue tracker as well although this may change in the future to cut down on the noise.
+The issue tracker is the preferred channel for [bug reports](#bug-reports), [features requests](#features-requets) and [submitting pull requests](#pull-requests). Currently [support issues](#support-issues) are acceptable in the issue tracker as well although this may change in the future to cut down on the noise.
 
 ## Bug reports
 
@@ -15,7 +15,7 @@ A bug is a _demonstrable problem_ that is caused by the code in the repository. 
 Guidelines for bug reports:
 
 1. **Use the GitHub issue search** &mdash; check if the issue has already been reported.
-2. **Check if the issue has been fixed** &mdash; try to reproduce it using the latest `master` branch in the repository.
+2. **Check if the issue has been fixed** &mdash; try to reproduce it using the latest `dev` branch in the repository.
 3. **Isolate the problem** &mdash; ideally create a reduced test case, an example flow in node-red that you can add to the issue is preferred.
 
 A good bug report shouldn't leave others needing to chase you up for more information. Please try to be as detailed as possible in your report. What is your environment? What steps will reproduce the issue? What OS experiences the problem? What would you expect to be the outcome? All these details will help people to fix any potential bugs. Fill out all the information you can when presented with the Bug Issue template.
@@ -48,8 +48,8 @@ If you never created a pull request before, welcome :tada: :smile: [Here is a gr
 2. If you cloned a while ago, get the latest changes from upstream:
 
    ```bash
-   git checkout master
-   git pull upstream master
+   git checkout dev
+   git pull upstream dev
    ```
 
 3. Create a new topic branch (off the main project development branch) to contain your feature, change, or fix:
