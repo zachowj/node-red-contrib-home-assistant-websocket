@@ -1,4 +1,4 @@
-const Joi = require('joi');
+const Joi = require('@hapi/joi');
 const BaseNode = require('../../lib/base-node');
 
 module.exports = function(RED) {

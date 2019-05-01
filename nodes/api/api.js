@@ -1,6 +1,6 @@
 const RenderTemplate = require('../../lib/mustache-context');
 const BaseNode = require('../../lib/base-node');
-const Joi = require('joi');
+const Joi = require('@hapi/joi');
 
 module.exports = function(RED) {
     const nodeOptions = {
