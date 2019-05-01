@@ -4,7 +4,7 @@
     color: "#52C0F2",
     inputs: 1,
     outputs: 1,
-    outputLabels: ["", "halt if"],
+    outputLabels: ["", "if state"],
     icon: "code.png",
     paletteLabel: "current state",
     label: function() {
@@ -217,7 +217,7 @@
       <dd>Match for entity_id field</dd>
 
       <dt>If state <span class="property-type">string</span></dt>
-      <dd>If the logic statement is true send message to second output</dd>
+      <dd>If the logic statement is true send message to only the second output</dd>
 
       <dt>State Type<span class="property-type">string</span></dt>
       <dd>Convert the state of the entity to the selected type. Boolean will be convert to true based on if the string is equal by default to (y|yes|true|on|home|open). Original value stored in msg.data.original_state</dd>

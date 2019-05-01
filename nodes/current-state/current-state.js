@@ -21,10 +21,10 @@ module.exports = function(RED) {
         input: {
             entity_id: {
                 messageProp: 'payload.entity_id',
-                configProp: 'entity_id', // Will be used if value not found on message,
+                configProp: 'entity_id',
                 validation: {
                     haltOnFail: true,
-                    schema: Joi.string() // Validates on message if exists, Joi will also attempt coercion
+                    schema: Joi.string().label('entity_id')
                 }
             }
         }
@@ -38,64 +38,45 @@ module.exports = function(RED) {
         /* eslint-disable camelcase */
         async onInput({ parsedMessage, message }) {
             const config = this.nodeConfig;
-            const entityId = config.entity_id
-                ? config.entity_id
-                : parsedMessage.entity_id.value;
-            const logAndContinueEmpty = logMsg => {
-                this.node.warn(logMsg);
-                return { payload: {} };
-            };
+            const entityId = parsedMessage.entity_id.value;
 
             if (config.server === null) {
                 this.node.error('No valid server selected.');
-                return null;
+                return;
             }
 
-            if (!entityId)
-                return logAndContinueEmpty(
-                    'entity ID not set, cannot get current state, sending empty payload'
-                );
-
-            const currentState = this.utils.merge(
+            const entity = this.utils.merge(
                 {},
                 await config.server.homeAssistant.getStates(entityId)
             );
-            if (!currentState.entity_id)
-                return logAndContinueEmpty(
-                    `entity could not be found in cache for entity_id: ${entityId}, sending empty payload`
-                );
 
-            currentState.timeSinceChangedMs =
-                Date.now() - new Date(currentState.last_changed).getTime();
+            if (!entity.entity_id) {
+                this.node.error(
+                    `entity could not be found in cache for entity_id: ${entityId}`
+                );
+                return;
+            }
+
+            entity.timeSinceChangedMs =
+                Date.now() - new Date(entity.last_changed).getTime();
 
             // Convert and save original state if needed
             if (config.state_type && config.state_type !== 'str') {
-                currentState.original_state = currentState.state;
-                currentState.state = this.getCastValue(
+                entity.original_state = entity.state;
+                entity.state = this.getCastValue(
                     config.state_type,
-                    currentState.state
+                    entity.state
                 );
             }
 
             config.halt_if_compare = config.halt_if_compare || 'is';
             config.halt_if_type = config.halt_if_type || 'str';
 
-            const isHaltValid = await this.getComparatorResult(
-                config.halt_if_compare,
-                config.halt_if,
-                currentState.state,
-                config.halt_if_type,
-                {
-                    message,
-                    entity: currentState
-                }
-            );
-            const shouldHaltIfState = config.halt_if && isHaltValid;
+            // default switch to true if undefined (backward compatibility)
+            message.topic =
+                config.override_topic !== false ? entityId : message.topic;
 
-            // default switch to true if undefined (backward compatibility
-            const override_topic = config.override_topic !== false;
-            if (override_topic) message.topic = entityId;
-
+            // Set Defaults
             if (config.state_location === undefined) {
                 config.state_location = 'payload';
                 config.override_payload =
@@ -107,29 +88,39 @@ module.exports = function(RED) {
                     config.override_data !== false ? 'msg' : 'none';
             }
 
+            // Set 'State Location'
             this.setContextValue(
-                currentState.state,
+                entity.state,
                 config.override_payload,
                 config.state_location,
                 message
             );
 
+            // Set 'Entity Location'
             this.setContextValue(
-                currentState,
+                entity,
                 config.override_data,
                 config.entity_location,
                 message
             );
 
-            if (shouldHaltIfState) {
-                const debugMsg = `Get current state: halting processing due to current state of ${entityId} matches "halt if state" option`;
-                this.debug(debugMsg);
-                this.debugToClient(debugMsg);
-                this.setStatusFailed(currentState.state);
-                this.node.send([null, message]);
+            const isHaltValid = await this.getComparatorResult(
+                config.halt_if_compare,
+                config.halt_if,
+                entity.state,
+                config.halt_if_type,
+                {
+                    message,
+                    entity
+                }
+            );
+
+            if (config.halt_if && isHaltValid) {
+                this.setStatusFailed(entity.state);
+                this.send([null, message]);
             } else {
-                this.setStatusSuccess(currentState.state);
-                this.node.send([message, null]);
+                this.setStatusSuccess(entity.state);
+                this.send([message, null]);
             }
         }
     }
