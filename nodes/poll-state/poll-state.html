@@ -103,7 +103,7 @@
         $("#node-input-updateIntervalUnits").val("seconds");
       }
 
-      $.getScript("/homeassistant/static/haltif.js", function() {
+      $.getScript("homeassistant/static/haltif.js", function() {
         setupHaltIf("#node-input-halt_if", "#node-input-halt_if_compare");
       });
     },
