@@ -1,3 +1,5 @@
+<link rel="stylesheet" type="text/css" href="homeassistant/static/common.css" />
+<script src="homeassistant/static/common.js"></script>
 <script type="text/javascript">
   RED.nodes.registerType("poll-state", {
     category: "home_assistant",
@@ -12,7 +14,8 @@
     defaults: {
       name: { value: "" },
       server: { value: "", type: "server", required: true },
-      updateinterval: { value: "10", validate: v => !isNaN(v) },
+      version: { value: 1 },
+      updateinterval: { value: "60", validate: v => !isNaN(v) },
       updateIntervalUnits: { value: "seconds" },
       outputinitially: { value: false },
       outputonchanged: { value: false },
@@ -24,9 +27,16 @@
       halt_if: { value: "" },
       halt_if_type: { value: "str" },
       halt_if_compare: { value: "is" },
-      outputs: { value: 1 }
+      outputs: { value: 1 },
+      outputLabels: function(index) {
+        if (this.halt_if) {
+          if (index === 0) return "'If State' is true";
+          if (index === 1) return "'If State' is false";
+        }
+      }
     },
     oneditprepare: function() {
+      versionCheck(this);
       const $entityIdField = $("#entity_id");
       $entityIdField.val(this.entity_id);
 
@@ -103,7 +113,7 @@
         $("#node-input-updateIntervalUnits").val("seconds");
       }
 
-      $.getScript("homeassistant/static/haltif.js", function() {
+      $.getScript("homeassistant/static/ifstate.js", function() {
         setupHaltIf("#node-input-halt_if", "#node-input-halt_if_compare");
       });
     },
@@ -111,8 +121,13 @@
       this.entity_id = $("#entity_id")
         .val()
         .trim();
-      const outputs = $("#node-input-halt_if").val() ? 2 : 1;
+      let outputs = $("#node-input-halt_if").val() ? 2 : 1;
+      // Swap inputs for the new 'if state' location
+      if (this.version === 0 && outputs === 2) {
+        outputs = JSON.stringify({ 0: 1, 1: 0 });
+      }
       $("#node-input-outputs").val(outputs);
+      updateNodeVersion(this);
     },
     oneditresize: function() {
       $halt_if = $("#node-input-halt_if");
@@ -124,6 +139,8 @@
 </script>
 
 <script type="text/x-red" data-template-name="poll-state">
+  <input type="hidden" id="node-input-version" />
+
   <div class="form-row">
       <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
       <input type="text" id="node-input-name" placeholder="Name">
@@ -198,7 +215,7 @@
     <dd>The amount of time between checking / sending updates</dd>
 
     <dt>If state <span class="property-type">string</span></dt>
-    <dd>If the logic statement is true send message to second output</dd>
+    <dd>If the conditional statement is evaluated as true send the message to the first output otherwise send it to the second output. If blank there will only be one output.</dd>
 
     <dt>State Type<span class="property-type">string</span></dt>
     <dd>Convert the state of the entity to the selected type. Boolean will be convert to true based on if the string is equal by default to (y|yes|true|on|home|open). Original value stored in msg.data.original_state</dd>

@@ -16,10 +16,10 @@ module.exports = function(RED) {
             entityidfiltertype: {},
             haltIfState: nodeDef =>
                 nodeDef.haltifstate ? nodeDef.haltifstate.trim() : null,
-            halt_if_type: {},
-            halt_if_compare: {},
+            halt_if_type: nodeDef => nodeDef.halt_if_type || 'str',
+            halt_if_compare: nodeDef => nodeDef.halt_if_compare || 'is',
             outputinitially: {},
-            state_type: {},
+            state_type: nodeDef => nodeDef.state_type || 'str',
             output_only_on_state_change: {}
         }
     };
@@ -67,10 +67,7 @@ module.exports = function(RED) {
                     new Date(event.new_state.last_changed).getTime();
 
                 // Convert and save original state if needed
-                if (
-                    this.nodeConfig.state_type &&
-                    this.nodeConfig.state_type !== 'str'
-                ) {
+                if (this.nodeConfig.state_type !== 'str') {
                     if (event.old_state) {
                         event.old_state.original_state = event.old_state.state;
                         event.old_state.state = this.getCastValue(
@@ -97,12 +94,8 @@ module.exports = function(RED) {
                     return null;
                 }
 
-                this.nodeConfig.halt_if_compare =
-                    this.nodeConfig.halt_if_compare || 'is';
-                this.nodeConfig.halt_if_type =
-                    this.nodeConfig.halt_if_type || 'str';
-
-                const isHaltValid = await this.getComparatorResult(
+                // Check if 'if state' is true
+                const isIfState = await this.getComparatorResult(
                     this.nodeConfig.halt_if_compare,
                     this.nodeConfig.haltIfState,
                     event.new_state.state,
@@ -113,38 +106,32 @@ module.exports = function(RED) {
                     }
                 );
 
-                const shouldHaltIfState =
-                    this.nodeConfig.haltIfState && isHaltValid;
-
                 const msg = {
                     topic: entity_id,
                     payload: event.new_state.state,
                     data: event
                 };
 
-                if (shouldHaltIfState) {
-                    this.debug('flow halted due to "halt if state" setting');
+                // Handle version 0 'halt if' outputs
+                if (this.nodeConfig.version < 1) {
+                    if (this.nodeConfig.haltIfState && isIfState) {
+                        this.setStatusFailed(event.new_state.state);
+                        this.send([null, msg]);
+                        return;
+                    }
+                    this.setStatusSuccess(event.new_state.state);
+                    this.send([msg, null]);
+                    return;
+                }
+
+                if (this.nodeConfig.haltIfState && !isIfState) {
                     this.setStatusFailed(event.new_state.state);
-                    return this.send([null, msg]);
+                    this.send([null, msg]);
+                    return;
                 }
 
                 this.setStatusSuccess(event.new_state.state);
-
-                event.old_state
-                    ? this.debug(
-                          `Incoming state event: entity_id: ${
-                              event.entity_id
-                          }, new_state: ${event.new_state.state}, old_state: ${
-                              event.old_state.state
-                          }`
-                      )
-                    : this.debug(
-                          `Incoming state event: entity_id: ${
-                              event.entity_id
-                          }, new_state: ${event.new_state.state}`
-                      );
-
-                return this.send([msg, null]);
+                this.send([msg, null]);
             } catch (e) {
                 this.error(e);
             }

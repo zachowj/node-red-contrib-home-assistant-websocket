@@ -1,10 +1,17 @@
+<link rel="stylesheet" type="text/css" href="homeassistant/static/common.css" />
+<script src="homeassistant/static/common.js"></script>
 <script type="text/javascript">
   RED.nodes.registerType("api-current-state", {
     category: "home_assistant",
     color: "#52C0F2",
     inputs: 1,
     outputs: 1,
-    outputLabels: ["", "if state"],
+    outputLabels: function(index) {
+      if (this.halt_if) {
+        if (index === 0) return "'If State' is true";
+        if (index === 1) return "'If State' is false";
+      }
+    },
     icon: "code.png",
     paletteLabel: "current state",
     label: function() {
@@ -13,6 +20,7 @@
     defaults: {
       name: { value: "" },
       server: { value: "", type: "server", required: true },
+      version: { value: 1 },
       outputs: { value: 1 },
       halt_if: { value: "" },
       halt_if_type: { value: "str" },
@@ -23,9 +31,11 @@
       state_location: { value: "payload" },
       override_payload: { value: "msg" }, // state location type
       entity_location: { value: "data" },
-      override_data: { value: "msg" } // entity location type
+      override_data: { value: "msg" } // entity location types
     },
     oneditprepare: function() {
+      versionCheck(this);
+
       const $entityIdField = $("#entity_id");
       const $stateLocation = $("#node-input-state_location");
       const $entityLocation = $("#node-input-entity_location");
@@ -117,7 +127,7 @@
         $("#node-input-halt_if_compare").val("is");
       }
 
-      $.getScript("homeassistant/static/haltif.js", function() {
+      $.getScript("homeassistant/static/ifstate.js", function() {
         setupHaltIf(
           "#node-input-halt_if",
           "#node-input-halt_if_compare",
@@ -127,8 +137,13 @@
     },
     oneditsave: function() {
       this.entity_id = $("#entity_id").val();
-      const outputs = $("#node-input-halt_if").val() ? 2 : 1;
+      let outputs = $("#node-input-halt_if").val() ? 2 : 1;
+      // Swap inputs for the new 'if state' location
+      if (this.version === 0 && outputs === 2) {
+        outputs = JSON.stringify({ 0: 1, 1: 0 });
+      }
       $("#node-input-outputs").val(outputs);
+      updateNodeVersion(this);
     },
     oneditresize: function() {
       $halt_if = $("#node-input-halt_if");
@@ -140,6 +155,8 @@
 </script>
 
 <script type="text/x-red" data-template-name="api-current-state">
+  <input type="hidden" id="node-input-version" />
+
   <div class="form-row">
       <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
       <input type="text" id="node-input-name" placeholder="Name">
@@ -217,7 +234,7 @@
       <dd>Match for entity_id field</dd>
 
       <dt>If state <span class="property-type">string</span></dt>
-      <dd>If the logic statement is true send message to only the second output</dd>
+      <dd>If the conditional statement is evaluated as true send the message to the first output otherwise send it to the second output. If blank there will only be one output.</dd>
 
       <dt>State Type<span class="property-type">string</span></dt>
       <dd>Convert the state of the entity to the selected type. Boolean will be convert to true based on if the string is equal by default to (y|yes|true|on|home|open). Original value stored in msg.data.original_state</dd>

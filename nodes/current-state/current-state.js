@@ -3,20 +3,21 @@ const Joi = require('@hapi/joi');
 
 module.exports = function(RED) {
     const nodeOptions = {
-        debug: true,
         config: {
-            name: {},
-            server: { isNode: true },
             halt_if: {},
-            halt_if_type: {},
-            halt_if_compare: {},
+            halt_if_type: nodeDef => nodeDef.halt_if_type || 'str',
+            halt_if_compare: nodeDef => nodeDef.halt_if_compare || 'is',
             override_topic: {},
             entity_id: {},
-            state_type: {},
-            state_location: {},
-            override_payload: {}, // state location type
-            entity_location: {},
-            override_data: {} // entity location type
+            state_type: nodeDef => nodeDef.state_type || 'str',
+            state_location: nodeDef => nodeDef.state_location || 'payload',
+            // state location type
+            override_payload: nodeDef =>
+                nodeDef.override_payload !== false ? 'msg' : 'none',
+            entity_location: nodeDef => nodeDef.entity_location || 'data',
+            // entity location type
+            override_data: nodeDef =>
+                nodeDef.override_data !== false ? 'msg' : 'none'
         },
         input: {
             entity_id: {
@@ -52,7 +53,7 @@ module.exports = function(RED) {
 
             if (!entity.entity_id) {
                 this.node.error(
-                    `entity could not be found in cache for entity_id: ${entityId}`
+                    `Entity could not be found in cache for entity_id: ${entityId}`
                 );
                 return;
             }
@@ -61,7 +62,7 @@ module.exports = function(RED) {
                 Date.now() - new Date(entity.last_changed).getTime();
 
             // Convert and save original state if needed
-            if (config.state_type && config.state_type !== 'str') {
+            if (config.state_type !== 'str') {
                 entity.original_state = entity.state;
                 entity.state = this.getCastValue(
                     config.state_type,
@@ -69,24 +70,9 @@ module.exports = function(RED) {
                 );
             }
 
-            config.halt_if_compare = config.halt_if_compare || 'is';
-            config.halt_if_type = config.halt_if_type || 'str';
-
             // default switch to true if undefined (backward compatibility)
             message.topic =
                 config.override_topic !== false ? entityId : message.topic;
-
-            // Set Defaults
-            if (config.state_location === undefined) {
-                config.state_location = 'payload';
-                config.override_payload =
-                    config.override_payload !== false ? 'msg' : 'none';
-            }
-            if (config.entity_location === undefined) {
-                config.entity_location = 'data';
-                config.override_data =
-                    config.override_data !== false ? 'msg' : 'none';
-            }
 
             // Set 'State Location'
             this.setContextValue(
@@ -104,7 +90,7 @@ module.exports = function(RED) {
                 message
             );
 
-            const isHaltValid = await this.getComparatorResult(
+            const isIfState = await this.getComparatorResult(
                 config.halt_if_compare,
                 config.halt_if,
                 entity.state,
@@ -115,13 +101,26 @@ module.exports = function(RED) {
                 }
             );
 
-            if (config.halt_if && isHaltValid) {
-                this.setStatusFailed(entity.state);
-                this.send([null, message]);
-            } else {
+            // Handle version 0 'halt if' outputs
+            if (config.version < 1) {
+                if (config.halt_if && isIfState) {
+                    this.setStatusFailed(entity.state);
+                    this.send([null, message]);
+                    return;
+                }
                 this.setStatusSuccess(entity.state);
                 this.send([message, null]);
+                return;
             }
+
+            if (config.halt_if && !isIfState) {
+                this.setStatusFailed(entity.state);
+                this.send([null, message]);
+                return;
+            }
+
+            this.setStatusSuccess(entity.state);
+            this.send([message, null]);
         }
     }
 
