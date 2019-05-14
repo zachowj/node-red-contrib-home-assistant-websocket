@@ -1,99 +1,109 @@
-const $ = window.jQuery;
+// eslint-disable-next-line no-unused-vars
+var ifState = (function($) {
+    let $input;
 
-const resizeHaltIf = function(input) {
-    const $clearHaltIf = $('#clearHaltIf');
-    let width =
-        input.parent('div').width() -
-        $('#node-input-halt_if_compare').width() -
-        20.5;
+    const resize = function() {
+        const $clearIfState = $('#clearIfState');
 
-    if ($clearHaltIf.is(':visible')) {
-        width = width - $clearHaltIf.outerWidth(true) - 4;
-    }
+        if (!$input.hasClass('red-ui-typedInput')) return;
 
-    input.typedInput('width', width);
-};
+        let width =
+            $input.parent('div').width() -
+            $('#node-input-halt_if_compare').width() -
+            20.5;
 
-window.resizeHaltIf = resizeHaltIf;
-
-window.setupHaltIf = function(input, compare, nodeName) {
-    const $input = $(input);
-    const $compare = $(compare);
-    const $help = $('#halt_if_help');
-    const entityType = { value: 'entity', label: 'entity.' };
-    let defaultTypes = [
-        'str',
-        'num',
-        'bool',
-        're',
-        'msg',
-        'flow',
-        'global',
-        entityType
-    ];
-
-    if (nodeName !== 'currentState') {
-        defaultTypes.splice(4, 1);
-    }
-
-    $input.after(
-        ' <a id="clearHaltIf" class="editor-button"><i class="fa fa-remove"></i></a>'
-    );
-    const $clearHaltIf = $('#clearHaltIf');
-
-    $input.typedInput({
-        default: 'str',
-        types: defaultTypes,
-        typeField: '#node-input-halt_if_type'
-    });
-
-    $compare.change(function(e) {
-        let types = defaultTypes;
-        let extraTypes = ['flow', 'global', entityType];
-        $help.hide();
-
-        if (defaultTypes.includes('msg')) {
-            extraTypes = ['msg'].concat(extraTypes);
+        if ($clearIfState.is(':visible')) {
+            width = width - $clearIfState.outerWidth(true) - 4;
         }
 
-        switch (e.target.value) {
-            case 'is':
-            case 'is_not':
-                break;
-            case 'lt':
-            case 'lte':
-            case 'gt':
-            case 'gte':
-                types = ['num'].concat(extraTypes);
-                break;
-            case 'includes':
-            case 'does_not_include':
-                $help.show();
-                types = ['str'].concat(extraTypes);
-                break;
+        $input.typedInput('width', width);
+    };
+
+    const init = function(input, compare, nodeName) {
+        $('#errorIfState').remove();
+
+        $input = $(input);
+        const $compare = $(compare);
+        const entityType = { value: 'entity', label: 'entity.' };
+        let defaultTypes = [
+            'str',
+            'num',
+            'bool',
+            're',
+            'msg',
+            'flow',
+            'global',
+            entityType
+        ];
+
+        if (nodeName !== 'currentState') {
+            defaultTypes.splice(4, 1);
         }
-        $input.typedInput('types', types);
-    });
 
-    $compare.trigger('change');
+        $input.after(
+            ' <a id="clearIfState" class="editor-button"><i class="fa fa-remove"></i></a>'
+        );
+        const $clearIfState = $('#clearIfState');
 
-    $input.on('change', function(e) {
-        if (e.currentTarget.value) {
-            $clearHaltIf.show();
-            resizeHaltIf($input);
+        $input.typedInput({
+            default: 'str',
+            types: defaultTypes,
+            typeField: '#node-input-halt_if_type'
+        });
+
+        $compare.change(function(e) {
+            let types = defaultTypes;
+            let extraTypes = ['flow', 'global', entityType];
+
+            if (defaultTypes.includes('msg')) {
+                extraTypes = ['msg'].concat(extraTypes);
+            }
+
+            switch (e.target.value) {
+                case 'is':
+                case 'is_not':
+                    break;
+                case 'lt':
+                case 'lte':
+                case 'gt':
+                case 'gte':
+                    types = ['num'].concat(extraTypes);
+                    break;
+                case 'includes':
+                case 'does_not_include':
+                    types = ['str'].concat(extraTypes);
+                    break;
+            }
+            $input.typedInput('types', types);
+        });
+
+        $compare.trigger('change');
+
+        $input.on('change', function(e) {
+            if (e.currentTarget.value) {
+                $clearIfState.show();
+                resize($input);
+            }
+        });
+
+        $clearIfState.on('click', function() {
+            $input.typedInput('type', 'str');
+            $input.typedInput('value', '');
+            $(this).hide();
+            resize($input);
+        });
+
+        if (!$input.val()) {
+            $clearIfState.hide();
+            resize($input);
         }
-    });
+        resize($input);
+    };
 
-    $clearHaltIf.on('click', function() {
-        $input.typedInput('type', 'str');
-        $input.typedInput('value', '');
-        $(this).hide();
-        resizeHaltIf($input);
-    });
+    return {
+        init,
+        resize
+    };
 
-    if (!$input.val()) {
-        $clearHaltIf.hide();
-        resizeHaltIf($input);
-    }
-    resizeHaltIf($input);
-};
+    // eslint-disable-next-line no-undef
+})(jQuery);

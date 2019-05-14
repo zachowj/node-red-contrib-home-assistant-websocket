@@ -1,12 +1,18 @@
 #versionUpdate {
-    padding: 0.5em;
-    margin-bottom: 1em;
+  padding: 0.5em;
+  margin-bottom: 1em;
 }
 
 #versionUpdate p {
-    margin: 0;
+  margin: 0;
 }
 
 #versionUpdate strong {
-    padding-right: 5px;
+  padding-right: 5px;
+}
+
+#errorIfState {
+  text-align: center;
+  padding: 5px;
+  margin-top: 5px;
 }

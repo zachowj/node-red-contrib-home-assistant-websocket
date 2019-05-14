@@ -1,5 +1,6 @@
 <link rel="stylesheet" type="text/css" href="homeassistant/static/common.css" />
 <script src="homeassistant/static/common.js"></script>
+<script src="homeassistant/static/ifState.js"></script>
 <script type="text/javascript">
   RED.nodes.registerType("server-state-changed", {
     category: "home_assistant",
@@ -34,7 +35,7 @@
       );
     },
     oneditprepare: function() {
-      versionCheck(this);
+      nodeVersion.check(this);
 
       const $entityidfilter = $("#node-input-entityidfilter");
       const $entityidfiltertype = $("#node-input-entityidfiltertype");
@@ -100,9 +101,7 @@
         $("#node-input-halt_if_compare").val("is");
       }
 
-      $.getScript("homeassistant/static/ifstate.js", function() {
-        setupHaltIf("#node-input-haltifstate", "#node-input-halt_if_compare");
-      });
+      ifState.init("#node-input-haltifstate", "#node-input-halt_if_compare");
     },
     oneditsave: function() {
       this.entityidfilter = $("#node-input-entityidfilter").val();
@@ -112,13 +111,10 @@
         outputs = JSON.stringify({ 0: 1, 1: 0 });
       }
       $("#node-input-outputs").val(outputs);
-      updateNodeVersion(this);
+      nodeVersion.update(this);
     },
     oneditresize: function() {
-      $halt_if = $("#node-input-haltifstate");
-      if ($halt_if.hasClass("red-ui-typedInput")) {
-        resizeHaltIf($halt_if);
-      }
+      ifState.resize();
     }
   });
 </script>
@@ -169,8 +165,9 @@
       <input type="text" id="node-input-haltifstate" />
     </div>
     <input type="hidden" id="node-input-halt_if_type" />
+    <p id="errorIfState" class="ui-state-error">ifState.js not loaded</p>
   </div>
-  <span id="halt_if_help" style="inline-block;margin-left: 210px;">^ Comma delimited string</span>
+
 
   <div class="form-row">
       <label for="node-input-state_type"><i class="fa fa-tint"></i> State Type</label>

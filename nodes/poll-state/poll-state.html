@@ -1,5 +1,6 @@
 <link rel="stylesheet" type="text/css" href="homeassistant/static/common.css" />
 <script src="homeassistant/static/common.js"></script>
+<script src="homeassistant/static/ifState.js"></script>
 <script type="text/javascript">
   RED.nodes.registerType("poll-state", {
     category: "home_assistant",
@@ -36,7 +37,7 @@
       }
     },
     oneditprepare: function() {
-      versionCheck(this);
+      nodeVersion.check(this);
       const $entityIdField = $("#entity_id");
       $entityIdField.val(this.entity_id);
 
@@ -113,9 +114,7 @@
         $("#node-input-updateIntervalUnits").val("seconds");
       }
 
-      $.getScript("homeassistant/static/ifstate.js", function() {
-        setupHaltIf("#node-input-halt_if", "#node-input-halt_if_compare");
-      });
+      ifState.init("#node-input-halt_if", "#node-input-halt_if_compare");
     },
     oneditsave: function() {
       this.entity_id = $("#entity_id")
@@ -127,13 +126,10 @@
         outputs = JSON.stringify({ 0: 1, 1: 0 });
       }
       $("#node-input-outputs").val(outputs);
-      updateNodeVersion(this);
+      nodeVersion.update(this);
     },
     oneditresize: function() {
-      $halt_if = $("#node-input-halt_if");
-      if ($halt_if.hasClass("red-ui-typedInput")) {
-        resizeHaltIf($halt_if);
-      }
+      ifState.resize();
     }
   });
 </script>
@@ -183,8 +179,8 @@
       <input type="text" id="node-input-halt_if" />
     </div>
     <input type="hidden" id="node-input-halt_if_type" />
+    <p id="errorIfState" class="ui-state-error">ifState.js not loaded</p>
   </div>
-  <span id="halt_if_help" style="inline-block;margin-left: 210px;">^ Comma delimited string</span>
 
   <div class="form-row">
       <label for="node-input-state_type"><i class="fa fa-tint"></i> State Type</label>
