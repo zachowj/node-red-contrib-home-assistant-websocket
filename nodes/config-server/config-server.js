@@ -5,6 +5,18 @@ const uniq = require('lodash.uniq');
 module.exports = function(RED) {
     const HomeAssistant = require('../../lib/node-home-assistant');
 
+    // Handle static files
+    RED.httpAdmin.get(
+        '/homeassistant/static/*',
+        RED.auth.needsPermission('server.read'),
+        function(req, res, next) {
+            res.sendFile(req.params[0], {
+                root: require('path').join(__dirname, '..', '/_static'),
+                dotfiles: 'deny'
+            });
+        }
+    );
+
     const httpHandlers = {
         getEntities: function(req, res, next) {
             if (!this.homeAssistant) {
@@ -134,16 +146,6 @@ module.exports = function(RED) {
                 RED.auth.needsPermission('server.read'),
                 httpHandlers.getProperties.bind(this)
             );
-
-            this.RED.httpAdmin.get('/homeassistant/static/*', function(
-                req,
-                res
-            ) {
-                res.sendFile(req.params[0], {
-                    root: require('path').join(__dirname, '..', '/_static'),
-                    dotfiles: 'deny'
-                });
-            });
 
             this.setOnContext('states', []);
             this.setOnContext('services', []);

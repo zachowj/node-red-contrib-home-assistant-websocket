@@ -34,68 +34,21 @@
     },
     oneditprepare: function() {
       const NODE = this;
-      const $server = $("#node-input-server");
       const $entityIdField = $("#entity_id");
       $entityIdField.val(this.entityid);
       NODE.entityidtype = NODE.entityidtype || "is";
       $("#node-input-entityidtype").val(NODE.entityidtype);
 
-      const utils = {
-        setDefaultServerSelection: function() {
-          let defaultServer;
-          RED.nodes.eachConfig(n => {
-            if (n.type === "server" && !defaultServer) defaultServer = n.id;
-          });
-          if (defaultServer) $server.val(defaultServer);
-        }
-      };
+      haServer.init(NODE, "#node-input-server");
+      let availableEntities = [];
+      haServer.autocomplete("entities", entities => {
+        availableEntities = entities;
 
-      if (!NODE.server) {
-        utils.setDefaultServerSelection();
-      }
-
-      const selectedServer = $server.val();
-      if (NODE.server || (selectedServer && selectedServer !== "_ADD_")) {
-        const serverId = NODE.server || selectedServer;
-        $.getJSON(`homeassistant/${serverId}/entities`)
-          .done(entities => {
-            this.availableEntities = entities;
-
-            $entityIdField.autocomplete({
-              source: this.availableEntities,
-              minLength: 0,
-              change: (evt, ui) => {
-                const validSelection =
-                  this.availableEntities.indexOf($(evt.target).val()) > -1;
-                if (validSelection) {
-                  $(evt.target).removeClass("input-error");
-                } else {
-                  $(evt.target).addClass("input-error");
-                }
-              }
-            });
-
-            const validSelection =
-              this.availableEntities.indexOf(NODE.entityid) > -1;
-            if (validSelection) {
-              $entityIdField.removeClass("input-error");
-            } else {
-              $entityIdField.addClass("input-error");
-            }
-          })
-          .fail(err => {
-            const serverConfig = RED.nodes.node($("#node-input-server").val());
-
-            if (serverConfig && serverConfig.dirty === true) {
-              RED.notify(
-                `You probably haven't deployed since adding a server. Do that for autocomplete to work.\n${
-                  err.responseText
-                }`,
-                "error"
-              );
-            }
-          });
-      }
+        $entityIdField.autocomplete({
+          source: availableEntities,
+          minLength: 0
+        });
+      });
 
       $("#node-input-useRelativeTime").on("change", function() {
         if (this.checked) {

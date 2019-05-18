@@ -1,5 +1,3 @@
-<link rel="stylesheet" type="text/css" href="homeassistant/static/common.css" />
-<script src="homeassistant/static/common.js"></script>
 <script src="homeassistant/static/ifstate.js"></script>
 <script type="text/javascript">
   RED.nodes.registerType("api-current-state", {
@@ -42,53 +40,16 @@
       const $entityLocation = $("#node-input-entity_location");
 
       const node = this;
-      const $server = $("#node-input-server");
-      const utils = {
-        setDefaultServerSelection: function() {
-          let defaultServer;
-          RED.nodes.eachConfig(n => {
-            if (n.type === "server" && !defaultServer) defaultServer = n.id;
-          });
-          if (defaultServer) $server.val(defaultServer);
-        }
-      };
 
-      if (!node.server) {
-        utils.setDefaultServerSelection();
-      }
+      haServer.init(node, "#node-input-server");
+      haServer.autocomplete("entities", entities => {
+        node.availableEntities = entities;
 
-      const selectedServer = $server.val();
-      if (node.server || (selectedServer && selectedServer !== "_ADD_")) {
-        const serverId = node.server || selectedServer;
-        $.getJSON(`homeassistant/${serverId}/entities`)
-          .done(entities => {
-            this.availableEntities = entities;
-
-            $entityIdField.autocomplete({
-              source: this.availableEntities,
-              minLength: 0,
-              change: (evt, ui) => {
-                const validSelection =
-                  this.availableEntities.indexOf($(evt.target).val()) > -1;
-              }
-            });
-
-            const validSelection =
-              this.availableEntities.indexOf(this.entity_id) > -1;
-          })
-          .fail(err => {
-            const serverConfig = RED.nodes.node($("#node-input-server").val());
-
-            if (serverConfig && serverConfig.dirty === true) {
-              RED.notify(
-                `You probably haven't deployed since adding a server. Do that for autocomplete to work.\n${
-                  err.responseText
-                }`,
-                "error"
-              );
-            }
-          });
-      }
+        $entityIdField.autocomplete({
+          source: node.availableEntities,
+          minLength: 0
+        });
+      });
 
       $entityIdField.val(node.entity_id);
 

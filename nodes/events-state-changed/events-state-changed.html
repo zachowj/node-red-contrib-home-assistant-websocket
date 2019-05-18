@@ -1,5 +1,3 @@
-<link rel="stylesheet" type="text/css" href="homeassistant/static/common.css" />
-<script src="homeassistant/static/common.js"></script>
 <script src="homeassistant/static/ifstate.js"></script>
 <script type="text/javascript">
   RED.nodes.registerType("server-state-changed", {
@@ -39,59 +37,21 @@
 
       const $entityidfilter = $("#node-input-entityidfilter");
       const $entityidfiltertype = $("#node-input-entityidfiltertype");
-      const $server = $("#node-input-server");
 
       $entityidfilter.val(this.entityidfilter);
       this.entityidfiltertype = this.entityidfiltertype || "substring";
       $entityidfiltertype.val(this.entityidfiltertype);
 
-      const NODE = this;
-      const utils = {
-        setDefaultServerSelection: function() {
-          let defaultServer;
-          RED.nodes.eachConfig(n => {
-            if (n.type === "server" && !defaultServer) defaultServer = n.id;
-          });
-          if (defaultServer) $server.val(defaultServer);
-        }
-      };
+      const node = this;
 
-      if (!NODE.server) {
-        utils.setDefaultServerSelection();
-      }
-
-      const setupAutocomplete = node => {
-        const selectedServer = $server.val();
-
-        // A home assistant server is selected in the node config
-        if (node.server || (selectedServer && selectedServer !== "_ADD_")) {
-          const serverId = node.server || selectedServer;
-          $.getJSON(`homeassistant/${serverId}/entities`)
-            .done(entities => {
-              node.availableEntities = entities;
-              $entityidfilter.autocomplete({
-                source: node.availableEntities,
-                minLength: 0
-              });
-            })
-            .fail(err => {
-              const serverConfig = RED.nodes.node(
-                $("#node-input-server").val()
-              );
-
-              if (serverConfig && serverConfig.dirty === true) {
-                RED.notify(
-                  `You probably haven't deployed since adding a server. Do that for autocomplete to work.\n${
-                    err.responseText
-                  }`,
-                  "error"
-                );
-              }
-            });
-        }
-      };
-
-      $server.change(() => setupAutocomplete(this));
+      haServer.init(node, "#node-input-server");
+      haServer.autocomplete("entities", entities => {
+        node.availableEntities = entities;
+        $entityidfilter.autocomplete({
+          source: node.availableEntities,
+          minLength: 0
+        });
+      });
 
       if (this.state_type === undefined) {
         $("#node-input-state_type").val("str");

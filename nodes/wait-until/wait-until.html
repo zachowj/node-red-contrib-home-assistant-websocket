@@ -29,69 +29,31 @@
       const $entityIdField = $("#node-input-entityId");
 
       const node = this;
-      const $server = $("#node-input-server");
-      const utils = {
-        setDefaultServerSelection: function() {
-          let defaultServer;
-          RED.nodes.eachConfig(n => {
-            if (n.type === "server" && !defaultServer) defaultServer = n.id;
-          });
-          if (defaultServer) $server.val(defaultServer);
-        }
-      };
 
-      if (!node.server) {
-        utils.setDefaultServerSelection();
-      }
+      haServer.init(node, "#node-input-server");
+      let availableEntities = [];
+      let availableProperties = [];
+      haServer.autocomplete("entities", entities => {
+        availableEntities = entities;
 
-      const selectedServer = $server.val();
-      if (node.server || (selectedServer && selectedServer !== "_ADD_")) {
-        const serverId = node.server || selectedServer;
-        $.getJSON(`homeassistant/${serverId}/entities`)
-          .done(entities => {
-            this.availableEntities = entities;
-
-            $entityIdField.autocomplete({
-              source: this.availableEntities,
-              minLength: 0,
-              change: (evt, ui) => {
-                const validSelection =
-                  this.availableEntities.indexOf($(evt.target).val()) > -1;
-              }
-            });
-
+        $entityIdField.autocomplete({
+          source: availableEntities,
+          minLength: 0,
+          change: (evt, ui) => {
             const validSelection =
-              this.availableEntities.indexOf(this.entityId) > -1;
-          })
-          .fail(err => {
-            const serverConfig = RED.nodes.node($("#node-input-server").val());
+              availableEntities.indexOf($(evt.target).val()) > -1;
+          }
+        });
 
-            if (serverConfig && serverConfig.dirty === true) {
-              RED.notify(
-                `You probably haven't deployed since adding a server. Do that for autocomplete to work.\n${
-                  err.responseText
-                }`,
-                "error"
-              );
-            }
-          });
+        const validSelection = availableEntities.indexOf(this.entityId) > -1;
+      });
+      haServer.autocomplete("properties", entities => {
+        availableProperties = entities;
         $("#node-input-property").autocomplete({
-          source: function(request, response) {
-            $.ajax({
-              url: `homeassistant/${serverId}/properties`,
-              dataType: "json",
-              data: {
-                term: request.term,
-                entityId: $("#node-input-entityId").val()
-              },
-              success: function(data) {
-                response(data);
-              }
-            });
-          },
+          source: availableProperties,
           minLength: 0
         });
-      }
+      });
 
       if (node.checkCurrentState === undefined) {
         $("#node-input-checkCurrentState").prop("checked", false);

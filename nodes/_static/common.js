@@ -17,7 +17,6 @@ var nodeVersion = (function($) {
         return `https://github.com/zachowj/node-red-contrib-home-assistant-websocket/wiki/${name}`;
     }
 
-    // eslint-disable-next-line no-unused-vars
     function check(node) {
         node.version = node.version === undefined ? 0 : Number(node.version);
         const versionAlert = `<div id="versionUpdate" class="ui-state-error"><p><strong>Alert:</strong>This node will be updated to version ${
@@ -27,15 +26,12 @@ var nodeVersion = (function($) {
         )}#version" target="_blank" rel="noreferrer">changes</a>)</p></div>`;
 
         if (node.version < node._def.defaults.version.value) {
-            // eslint-disable-next-line no-undef
             $('#dialog-form').prepend(versionAlert);
         }
     }
 
-    // eslint-disable-next-line no-unused-vars
     function update(node) {
         if (node.version < node._def.defaults.version.value) {
-            // eslint-disable-next-line no-undef
             $('#node-input-version').val(node._def.defaults.version.value);
         }
     }
@@ -46,3 +42,70 @@ var nodeVersion = (function($) {
     };
     // eslint-disable-next-line no-undef
 })(jQuery);
+
+// eslint-disable-next-line no-unused-vars
+var haServer = (function($, RED) {
+    let $server;
+    let serverId;
+    let node;
+
+    function setDefault() {
+        let defaultServer;
+        RED.nodes.eachConfig(n => {
+            if (n.type === 'server' && !defaultServer) defaultServer = n.id;
+        });
+        if (defaultServer) $server.val(defaultServer);
+    }
+
+    function init(n, server) {
+        $server = $(server);
+        node = n;
+
+        if (!node.server) {
+            setDefault();
+        }
+    }
+
+    function autocomplete(type, callback) {
+        // If a server is selected populate drop downs
+        const selectedServer = $server.val();
+        if (node.server || (selectedServer && selectedServer !== '_ADD_')) {
+            serverId = node.server || selectedServer;
+            getItems(type, callback);
+        }
+
+        $server.change(() => {
+            serverId = $server.val();
+            getItems(type, callback);
+        });
+    }
+
+    function getItems(type, callback) {
+        // If no server added yet just return
+        if (serverId === '_ADD_') return;
+
+        $.getJSON(`homeassistant/${serverId}/${type}`)
+            .done(items => {
+                callback(items);
+            })
+            .fail(err => {
+                const serverConfig = RED.nodes.node($server.val());
+
+                if (serverConfig && serverConfig.dirty === true) {
+                    RED.notify(
+                        `You probably haven't deployed since adding a server. Do that for autocomplete to work.\n${
+                            err.responseText
+                        }`,
+                        'error'
+                    );
+                }
+            });
+    }
+
+    return {
+        init,
+        autocomplete
+    };
+
+    // eslint-disable-next-line no-undef
+})(jQuery, RED);
