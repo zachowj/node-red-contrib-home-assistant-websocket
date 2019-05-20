@@ -73,6 +73,7 @@
 
         messageType: $("#output-message-type"),
         messageValue: $("#output-message-value"),
+        messageValueType: $("#output-message-value-type"),
 
         comparatorPropertyType: $("#output-comparator-property-type"),
         comparatorPropertyValue: $("#output-comparator-property-value"),
@@ -87,6 +88,8 @@
             .slice(2)
       };
 
+      let availableProperties = [];
+      let availablePropertiesPrefixes = [];
       haServer.init(node, "#node-input-server");
       haServer.autocomplete("entities", entities => {
         node.availableEntities = entities;
@@ -100,28 +103,26 @@
         });
       });
       haServer.autocomplete("properties", properties => {
-        node.availableProperties = properties;
+        availableProperties = properties;
         // prefix properties with new_state and old_state
-        node.availablePropertiesPrefixes = []
+        availablePropertiesPrefixes = []
           .concat(
             properties.map(e => `new_state.${e}`),
             properties.map(e => `old_state.${e}`)
           )
           .sort();
-        $("#constraint-property-value").autocomplete({
-          source: node.availablePropertiesPrefixes,
-          minLength: 0
-        });
-        $("#output-comparator-property-value").autocomplete({
-          source: node.availableProperties,
+        $(
+          "#constraint-property-value,#output-comparator-property-value"
+        ).autocomplete({
+          source: availablePropertiesPrefixes,
           minLength: 0
         });
         $("#constraint-target-type").on("change", function() {
           $("#constraint-property-value").autocomplete("option", {
             source:
               $(this).val() === "this_entity"
-                ? node.availablePropertiesPrefixes
-                : node.availableProperties
+                ? availablePropertiesPrefixes
+                : availableProperties
           });
         });
       });
@@ -263,6 +264,7 @@
 
             messageType: $customoutputs.messageType.val(),
             messageValue: $customoutputs.messageValue.val(),
+            messageValueType: $customoutputs.messageValueType.val(),
 
             comparatorPropertyType: $customoutputs.comparatorPropertyType.val(),
             comparatorPropertyValue: $customoutputs.comparatorPropertyValue.val(),
@@ -306,7 +308,14 @@
                   ""
                 )} ${d.comparatorValue}`;
 
-          const html = `Send <strong>${messageText}</strong>, if <strong>${sendWhenText}</strong>`;
+          const where =
+            d.messageType === "default"
+              ? "Send"
+              : d.messageType === "custom"
+              ? "Msg"
+              : "Payload";
+
+          const html = `${where} <strong>${messageText}</strong>, if <strong>${sendWhenText}</strong>`;
 
           $row.html(html);
         },
@@ -352,9 +361,9 @@
         },
         onMessageTypeChange: function(e) {
           const val = e.target.value;
-          val === "default"
-            ? $customoutputs.messageValue.attr("disabled", "disabled")
-            : $customoutputs.messageValue.removeAttr("disabled");
+          $customoutputs.messageValue.typedInput(
+            val === "default" ? "hide" : "show"
+          );
         },
         comparatorPropertyTypeChange: function(e) {
           const val = e.target.value;
@@ -392,6 +401,14 @@
         "change",
         outputsHandler.onMessageTypeChange
       );
+
+      $customoutputs.messageValue.typedInput({
+        default: "json",
+        types: ["str", "num", "bool", "json"],
+        typeField: "#output-message-value-type"
+      });
+      $customoutputs.messageType.trigger("change");
+
       $customoutputs.comparatorPropertyType.on(
         "change",
         outputsHandler.comparatorPropertyTypeChange
@@ -555,21 +572,23 @@
           <div class="form-row">
               <!-- Type -->
               <select type="text" id="output-message-type" style="width: 140px;">
-                  <option value="default">    Default Msg </option>
-                  <option value="custom">     Custom Msg  </option>
+                  <option value="default">Default Msg</option>
+                  <option value="custom">Custom Msg</option>
+                  <option value="payload">Custom Payload</option>
               </select>
 
-              <input type="text" id="output-message-value" style="width: 62%" disabled/>
+              <input type="text" id="output-message-value" style="width: 62%"/>
+              <input type="hidden" id="output-message-value-type" />
           </div>
 
 
           <!-- Output Comparator Selection -->
           <div class="form-row">
               <select type="text" id="output-comparator-property-type" style="width: 140px">
-                  <option value="always">             Send Always    </option>
-                  <option value="current_state">      If State       </option>
-                  <option value="previous_state">     If Prev State  </option>
-                  <option value="property">           If Property    </option>
+                  <option value="always">Send Always</option>
+                  <option value="current_state">If State</option>
+                  <option value="previous_state">If Prev State</option>
+                  <option value="property">If Property</option>
               </select>
 
               <input type="text" id="output-comparator-property-value" style="width: 62%" disabled />
@@ -578,8 +597,8 @@
           <div class="form-row">
               <!-- Type -->
               <select type="text" id="output-comparator-type" style="width: 140px;" disabled>
-                  <option value="is">     Is      </option>
-                  <option value="is_not"> Is Not  </option>
+                  <option value="is">Is</option>
+                  <option value="is_not">Is Not</option>
 
                   <option value=">">&gt;</option>
                   <option value=">=">&gt;=</option>

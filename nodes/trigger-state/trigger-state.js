@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 const EventsNode = require('../../lib/events-node');
 const { reduce } = require('p-iteration');
+const RenderTemplate = require('../../lib/mustache-context');
 
 module.exports = function(RED) {
     const nodeOptions = {
@@ -43,7 +44,6 @@ module.exports = function(RED) {
             });
 
             this.NUM_DEFAULT_MESSAGES = 2;
-            this.messageTimers = {};
 
             this.loadPersistedData();
 
@@ -365,19 +365,46 @@ module.exports = function(RED) {
                 return null;
             }
 
-            if (output.messageType === 'default') {
-                return {
-                    topic: eventMessage.entity_id,
-                    payload: eventMessage.event.new_state.state,
-                    data: eventMessage
-                };
+            let payload = eventMessage.event.new_state.state;
+            if (
+                output.messageType === 'custom' ||
+                output.messageType === 'payload'
+            ) {
+                // Render Template Variables
+                payload = RenderTemplate(
+                    output.messageValue,
+                    eventMessage.event,
+                    this.node.context(),
+                    this.utils.toCamelCase(this.nodeConfig.server.name)
+                );
+
+                switch (output.messageValueType) {
+                    case 'num':
+                        payload = Number(payload);
+                        break;
+                    case 'bool':
+                        payload = payload === 'true';
+                        break;
+                    case 'str':
+                        break;
+                    case 'json':
+                    default:
+                        try {
+                            payload = JSON.parse(payload);
+                        } catch (e) {}
+                        break;
+                }
+
+                if (output.messageType === 'custom') {
+                    return payload;
+                }
             }
 
-            try {
-                return JSON.parse(output.messageValue);
-            } catch (e) {
-                return output.messageValue;
-            }
+            return {
+                topic: eventMessage.entity_id,
+                payload,
+                data: eventMessage
+            };
         }
 
         async loadPersistedData() {
