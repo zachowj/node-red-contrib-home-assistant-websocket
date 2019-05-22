@@ -42,7 +42,7 @@ module.exports = function(RED) {
             const entityId = parsedMessage.entity_id.value;
 
             if (config.server === null) {
-                this.node.error('No valid server selected.');
+                this.node.error('No valid server selected.', message);
                 return;
             }
 
@@ -53,7 +53,8 @@ module.exports = function(RED) {
 
             if (!entity.entity_id) {
                 this.node.error(
-                    `Entity could not be found in cache for entity_id: ${entityId}`
+                    `Entity could not be found in cache for entity_id: ${entityId}`,
+                    message
                 );
                 return;
             }

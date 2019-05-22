@@ -86,8 +86,8 @@ module.exports = function(RED) {
             let useRelativeTime = this.nodeConfig.useRelativeTime;
 
             if (this.nodeConfig.server === null) {
-                this.node.error('No valid server selected.');
-                return null;
+                this.node.error('No valid server selected.', message);
+                return;
             }
 
             if (

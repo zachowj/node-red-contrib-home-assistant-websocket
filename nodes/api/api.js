@@ -97,7 +97,10 @@ module.exports = function(RED) {
                 config.server.websocket.CONNECTED
             ) {
                 this.setStatusFailed('No Connection');
-                this.warn('API call attempted without connection to server.');
+                this.error(
+                    'API call attempted without connection to server.',
+                    message
+                );
 
                 return;
             }
@@ -123,7 +126,7 @@ module.exports = function(RED) {
                 ).replace(/^\/(?:api\/)?/, '');
 
                 if (!path) {
-                    node.error('HTTP request requires a valid path.');
+                    node.error('HTTP request requires a valid path.', message);
                     node.setStatusFailed();
                     return;
                 }
@@ -140,7 +143,8 @@ module.exports = function(RED) {
 
                     if (!json.type) {
                         node.error(
-                            `A WebSocket request requires a 'type' property in the data object.`
+                            `A WebSocket request requires a 'type' property in the data object.`,
+                            message
                         );
                         node.setStatusFailed();
                         return null;
@@ -151,7 +155,7 @@ module.exports = function(RED) {
                         json
                     );
                 } catch (e) {
-                    node.error(e.message);
+                    node.error(e.message, message);
                     node.setStatusFailed();
                     return;
                 }
@@ -178,7 +182,8 @@ module.exports = function(RED) {
                     node.error(
                         'API Error. ' + err.message
                             ? `Error Message: ${err.message}`
-                            : ''
+                            : '',
+                        message
                     );
                     node.setStatusFailed('API Error');
                 });

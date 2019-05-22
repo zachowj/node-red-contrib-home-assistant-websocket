@@ -87,10 +87,11 @@ module.exports = function(RED) {
                 );
 
                 if (!pollState.entity_id) {
-                    this.warn(
+                    this.error(
                         `could not find state with entity_id "${
                             this.nodeConfig.entity_id
-                        }"`
+                        }"`,
+                        {}
                     );
                     this.status({
                         fill: 'red',
@@ -102,10 +103,11 @@ module.exports = function(RED) {
 
                 const dateChanged = this.calculateTimeSinceChanged(pollState);
                 if (!dateChanged) {
-                    this.warn(
+                    this.error(
                         `could not calculate time since changed for entity_id "${
                             this.nodeConfig.entity_id
-                        }"`
+                        }"`,
+                        {}
                     );
                     return;
                 }

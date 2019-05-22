@@ -42,8 +42,9 @@ module.exports = function(RED) {
                 config.server.websocket.CONNECTED
             ) {
                 this.setStatusFailed('No Connection');
-                this.warn(
-                    'Call-Service attempted without connection to server.'
+                this.error(
+                    'Call-Service attempted without connection to server.',
+                    message
                 );
 
                 return;

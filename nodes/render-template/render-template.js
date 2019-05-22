@@ -74,8 +74,8 @@ module.exports = function(RED) {
             } = parsedMessage;
 
             if (this.nodeConfig.server === null) {
-                this.node.error('No valid server selected.');
-                return null;
+                this.node.error('No valid server selected.', message);
+                return;
             }
 
             this.setStatusSending('Requesting');

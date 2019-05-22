@@ -28,8 +28,8 @@ module.exports = function(RED) {
             let noPayload = false;
 
             if (config.server === null) {
-                this.node.error('No valid server selected.');
-                return null;
+                this.node.error('No valid server selected.', message);
+                return;
             }
 
             const states = await config.server.homeAssistant.getStates();
