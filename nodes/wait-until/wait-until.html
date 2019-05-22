@@ -14,8 +14,8 @@
       name: { value: "" },
       server: { value: "", type: "server", required: true },
       outputs: { value: 1 },
-      entityId: { value: "" },
-      property: { value: "" },
+      entityId: { value: "", required: true },
+      property: { value: "", required: true },
       comparator: { value: "is" },
       value: { value: "" },
       valueType: { value: "str" },
@@ -26,8 +26,6 @@
       checkCurrentState: { value: true }
     },
     oneditprepare: function() {
-      const $entityIdField = $("#node-input-entityId");
-
       const node = this;
 
       haServer.init(node, "#node-input-server");
@@ -35,20 +33,13 @@
       let availableProperties = [];
       haServer.autocomplete("entities", entities => {
         availableEntities = entities;
-
-        $entityIdField.autocomplete({
+        $("#node-input-entityId").autocomplete({
           source: availableEntities,
-          minLength: 0,
-          change: (evt, ui) => {
-            const validSelection =
-              availableEntities.indexOf($(evt.target).val()) > -1;
-          }
+          minLength: 0
         });
-
-        const validSelection = availableEntities.indexOf(this.entityId) > -1;
       });
-      haServer.autocomplete("properties", entities => {
-        availableProperties = entities;
+      haServer.autocomplete("properties", properties => {
+        availableProperties = properties;
         $("#node-input-property").autocomplete({
           source: availableProperties,
           minLength: 0
