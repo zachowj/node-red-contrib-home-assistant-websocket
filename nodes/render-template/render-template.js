@@ -100,13 +100,7 @@ module.exports = function(RED) {
                     this.setStatusSuccess();
                 })
                 .catch(err => {
-                    this.error(
-                        `Error get-template, home assistant api error. ${
-                            this.utils.selectn('response.data.message', err)
-                                ? `Error Message: ${err.response.data.message}`
-                                : ''
-                        }`
-                    );
+                    this.error(`Error get-template: ${err.message}`, message);
                     this.setStatusFailed('Error');
                 });
         }

@@ -78,7 +78,7 @@ module.exports = function(RED) {
 
                 this.send([this.savedMessage, null]);
             } catch (e) {
-                this.error(e);
+                this.error(e, this.savedMessage);
             }
         }
 

@@ -127,16 +127,11 @@ module.exports = function(RED) {
                 message.enddate = enddate || null;
                 message.entityid = entityid || null;
             } catch (err) {
-                let errorMessage =
-                    'Error get-history, home assistant api error.';
-                if (this.utils.selectn('response.data.message', err))
-                    errorMessage = `${errorMessage} Error Message: ${
-                        err.response.data.message
-                    }`;
-                this.error(errorMessage);
+                let errorMessage = `Error get-history: ${err.message}`;
+                this.error(errorMessage, message);
                 this.setStatusFailed('Error');
 
-                return null;
+                return;
             }
 
             if (this.nodeConfig.output_location === undefined) {

@@ -84,7 +84,8 @@ module.exports = function(RED) {
                 this.error(
                     `call service node is missing api "${
                         !apiDomain ? 'domain' : 'service'
-                    }" property, not found in config or payload`
+                    }" property, not found in config or payload`,
+                    message
                 );
                 this.setStatusFailed('Error');
                 return;
@@ -121,7 +122,8 @@ module.exports = function(RED) {
                     this.error(
                         `Call-service API error.${
                             err.message ? ` Error Message: ${err.message}` : ''
-                        }`
+                        }`,
+                        message
                     );
 
                     this.setStatusFailed('API Error');
