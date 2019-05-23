@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
 const BaseNode = require('../../lib/base-node');
-// const mustache = require('mustache');
 const RenderTemplate = require('../../lib/mustache-context');
 
 module.exports = function(RED) {
@@ -14,7 +13,8 @@ module.exports = function(RED) {
             name: {},
             server: { isNode: true },
             output_location: {},
-            output_location_type: {}
+            output_location_type: {},
+            mustacheAltTags: {}
         }
     };
 
@@ -77,7 +77,8 @@ module.exports = function(RED) {
                 config.data,
                 message,
                 context,
-                serverName
+                serverName,
+                config.mustacheAltTags
             );
             const apiData = this.getApiData(payload, configData);
 

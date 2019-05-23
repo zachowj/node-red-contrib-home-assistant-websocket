@@ -16,3 +16,15 @@
   padding: 5px;
   margin-top: 5px;
 }
+
+.checkboxOption input {
+  margin-left: 105px;
+  display: inline-block;
+  width: auto;
+  vertical-align: baseline;
+}
+
+.checkboxOption label {
+  width: auto;
+  margin-right: 20px;
+}

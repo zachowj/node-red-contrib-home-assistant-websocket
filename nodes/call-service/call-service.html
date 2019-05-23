@@ -32,7 +32,8 @@
       },
       mergecontext: { value: null },
       output_location: { value: "payload" },
-      output_location_type: { value: "none" }
+      output_location_type: { value: "none" },
+      mustacheAltTags: { value: false }
     },
     oneditprepare: function() {
       const node = this;
@@ -322,6 +323,11 @@
     <input type="text" id="node-input-output_location" />
   </div>
 
+  <div class="form-row checkboxOption">
+    <input type="checkbox" id="node-input-mustacheAltTags">&nbsp;
+    <label for="node-input-mustacheAltTags">Use alternative Mustache tags for the Data field</label>
+  </div>
+
   <div id="service-data-desc" class="form-row">
     <h4>
       Service: <span class="title"></span>
@@ -351,8 +357,15 @@
   <dl class="message-properties">
     <dt>Entity Id <span class="property-type">string</span></dt>
     <dd>A comma delimited list of entity ids</dd>
+
     <dt class="optional">data <span class="property-type">JSON</span></dt>
     <dd>JSON object to pass along.</dd>
+
+    <dt class="optional">Merge Context <span class="property-type">string</span></dt>
+    <dd>If defined will attempt to merge the global and flow context variable into the config</dd>
+
+    <dt class="optional">Alternative Mustache tags <span class="property-type">boolean</span></dt>
+    <dd>Will change the tags used for mustache template to <code>&lt;%</code> and <code>%&gt;</code></dd>
   </dl>
 
   <h3>Inputs</h3>
