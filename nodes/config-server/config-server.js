@@ -212,6 +212,7 @@ module.exports = function(RED) {
 
         getFromContext(key) {
             let haCtx = this.context().global.get('homeassistant');
+            haCtx = haCtx || {};
             return haCtx[this.nameAsCamelcase]
                 ? haCtx[this.nameAsCamelcase][key]
                 : null;
