@@ -8,12 +8,11 @@ var ifState = (function($) {
         if (!$input.hasClass('red-ui-typedInput')) return;
 
         let width =
-            $input.parent('div').width() -
-            $('#node-input-halt_if_compare').width() -
-            20.5;
+            $('#node-input-name').width() -
+            $('#node-input-halt_if_compare').outerWidth();
 
         if ($clearIfState.is(':visible')) {
-            width = width - $clearIfState.outerWidth(true) - 4;
+            width = width - $clearIfState.outerWidth(true);
         }
 
         $input.typedInput('width', width);
