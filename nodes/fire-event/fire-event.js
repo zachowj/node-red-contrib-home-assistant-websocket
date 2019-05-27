@@ -1,15 +1,33 @@
+const Joi = require('@hapi/joi');
 const BaseNode = require('../../lib/base-node');
 const RenderTemplate = require('../../lib/mustache-context');
 
 module.exports = function(RED) {
     const nodeOptions = {
-        debug: true,
         config: {
+            name: {},
+            server: { isNode: true },
             event: {},
             data: {},
-            mergecontext: {},
-            name: {},
-            server: { isNode: true }
+            mergecontext: {}
+        },
+        input: {
+            event: {
+                messageProp: 'payload.event',
+                configProp: 'event',
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.string().label('event')
+                }
+            },
+            data: {
+                messageProp: 'payload.data',
+                configProp: 'data',
+                validation: {
+                    haltOnFail: false,
+                    schema: Joi.string().label('data')
+                }
+            }
         }
     };
 
@@ -29,28 +47,29 @@ module.exports = function(RED) {
             }
         }
 
-        onInput({ message }) {
-            let payload, payloadEvent;
-
-            if (message && message.payload) {
-                payload = this.tryToObject(message.payload);
-                payloadEvent = this.utils.selectn('event', payload);
-            }
-
-            const configEvent = this.nodeConfig.event;
-            const eventType = payloadEvent || configEvent;
-            const configData = RenderTemplate(
-                this.nodeConfig.data,
+        onInput({ message, parsedMessage }) {
+            const eventType = RenderTemplate(
+                parsedMessage.event.value,
                 message,
                 this.node.context(),
                 this.utils.toCamelCase(this.nodeConfig.server.name)
             );
-            const eventData = this.getEventData(payload, configData);
+            const configData = RenderTemplate(
+                typeof parsedMessage.data.value === 'object'
+                    ? JSON.stringify(parsedMessage.data.value)
+                    : parsedMessage.data.value,
+                message,
+                this.node.context(),
+                this.utils.toCamelCase(this.nodeConfig.server.name)
+            );
+            const eventData = this.getEventData(message.payload, configData);
 
             if (!eventType) {
-                throw new Error(
-                    'fire event node is missing "event" property, not found in config or payload'
+                this.node.error(
+                    'Fire event node is missing "event" property, not found in config or payload',
+                    message
                 );
+                return;
             }
 
             this.debug(`Fire Event: ${eventType} -- ${JSON.stringify({})}`);
