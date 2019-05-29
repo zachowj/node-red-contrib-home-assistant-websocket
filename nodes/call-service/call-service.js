@@ -37,10 +37,7 @@ module.exports = function(RED) {
         }
         onInput({ message }) {
             const config = this.nodeConfig;
-            if (
-                config.server.websocket.connectionState !==
-                config.server.websocket.CONNECTED
-            ) {
+            if (!this.isConnected) {
                 this.setStatusFailed('No Connection');
                 this.error(
                     'Call-Service attempted without connection to server.',
@@ -107,7 +104,7 @@ module.exports = function(RED) {
 
             this.setStatusSending();
 
-            return config.server.websocket
+            return this.websocketClient
                 .callService(apiDomain, apiService, apiData)
                 .then(() => {
                     this.setStatusSuccess(`${apiDomain}.${apiService} called`);

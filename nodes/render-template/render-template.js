@@ -80,7 +80,7 @@ module.exports = function(RED) {
 
             this.setStatusSending('Requesting');
 
-            return this.nodeConfig.server.http
+            return this.httpClient
                 .renderTemplate(template.value)
                 .then(res => {
                     this.setContextValue(

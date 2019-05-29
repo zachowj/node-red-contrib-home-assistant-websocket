@@ -81,7 +81,7 @@ module.exports = function(RED) {
 
             this.setStatusSending();
 
-            return this.nodeConfig.server.http
+            return this.httpClient
                 .fireEvent(eventType, eventData)
                 .then(() => {
                     this.setStatusSuccess(eventType);

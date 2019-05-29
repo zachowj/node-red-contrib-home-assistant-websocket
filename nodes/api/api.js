@@ -92,10 +92,7 @@ module.exports = function(RED) {
             const node = this;
             const config = node.nodeConfig;
 
-            if (
-                config.server.websocket.connectionState !==
-                config.server.websocket.CONNECTED
-            ) {
+            if (!this.isConnected) {
                 this.setStatusFailed('No Connection');
                 this.error(
                     'API call attempted without connection to server.',
@@ -131,8 +128,8 @@ module.exports = function(RED) {
                     return;
                 }
 
-                apiCall = config.server.http[`_${method}`].bind(
-                    config.server.http,
+                apiCall = this.httpClient[`_${method}`].bind(
+                    this.httpClient,
                     path,
                     data,
                     parsedMessage.responseType.value
@@ -150,8 +147,8 @@ module.exports = function(RED) {
                         return null;
                     }
 
-                    apiCall = config.server.websocket.send.bind(
-                        config.server.websocket,
+                    apiCall = this.websocketClient.send.bind(
+                        this.websocketClient,
                         json
                     );
                 } catch (e) {

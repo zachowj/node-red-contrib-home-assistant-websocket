@@ -101,23 +101,13 @@ module.exports = function(RED) {
 
             let apiRequest =
                 entityidtype.value === 'includes' && entityid
-                    ? this.nodeConfig.server.http.getHistory(
-                          startdate,
-                          null,
-                          enddate,
-                          {
-                              flatten: flatten,
-                              include: new RegExp(entityid)
-                          }
-                      )
-                    : this.nodeConfig.server.http.getHistory(
-                          startdate,
-                          entityid,
-                          enddate,
-                          {
-                              flatten: flatten
-                          }
-                      );
+                    ? this.httpClient.getHistory(startdate, null, enddate, {
+                          flatten: flatten,
+                          include: new RegExp(entityid)
+                      })
+                    : this.httpClient.getHistory(startdate, entityid, enddate, {
+                          flatten: flatten
+                      });
 
             this.setStatusSending('Requesting');
 
