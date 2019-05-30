@@ -2,20 +2,6 @@
   RED.nodes.registerType("api-get-history", {
     category: "home_assistant",
     color: "#52C0F2",
-    defaults: {
-      name: { value: "" },
-      server: { value: "", type: "server", required: true },
-      startdate: { value: "" },
-      enddate: { value: "" },
-      entityid: { value: "" },
-      entityidtype: { value: "" },
-      useRelativeTime: { value: false },
-      relativeTime: { value: "" },
-      flatten: { value: true },
-      output_type: { value: "array" },
-      output_location_type: { value: "msg" },
-      output_location: { value: "payload" }
-    },
     inputs: 1,
     outputs: 1,
     icon: "history.png",
@@ -31,6 +17,21 @@
         return `${startdate.toLocaleDateString()} ${startdate.toLocaleTimeString()}`;
       }
       return "get history";
+    },
+    labelStyle: nodeVersion.labelStyle,
+    defaults: {
+      name: { value: "" },
+      server: { value: "", type: "server", required: true },
+      startdate: { value: "" },
+      enddate: { value: "" },
+      entityid: { value: "" },
+      entityidtype: { value: "" },
+      useRelativeTime: { value: false },
+      relativeTime: { value: "" },
+      flatten: { value: true },
+      output_type: { value: "array" },
+      output_location_type: { value: "msg" },
+      output_location: { value: "payload" }
     },
     oneditprepare: function() {
       const NODE = this;

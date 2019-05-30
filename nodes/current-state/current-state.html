@@ -5,17 +5,13 @@
     color: "#52C0F2",
     inputs: 1,
     outputs: 1,
-    outputLabels: function(index) {
-      if (this.halt_if) {
-        if (index === 0) return "'If State' is true";
-        if (index === 1) return "'If State' is false";
-      }
-    },
+    outputLabels: nodeVersion.ifStateLabels,
     icon: "code.png",
     paletteLabel: "current state",
     label: function() {
       return this.name || `current_state: ${this.entity_id}`;
     },
+    labelStyle: nodeVersion.labelStyle,
     defaults: {
       name: { value: "" },
       server: { value: "", type: "server", required: true },

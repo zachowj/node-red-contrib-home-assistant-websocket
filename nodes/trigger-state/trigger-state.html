@@ -2,19 +2,6 @@
   RED.nodes.registerType("trigger-state", {
     category: "home_assistant",
     color: "#038FC7",
-    defaults: {
-      name: { value: "" },
-      server: { value: "", type: "server", required: true },
-      entityid: { value: "", required: true },
-      entityidfiltertype: { value: "exact" },
-      debugenabled: { value: false },
-      constraints: { value: [] },
-      constraintsmustmatch: { value: "all" },
-      outputs: { value: 2 },
-      customoutputs: { value: [] },
-      outputinitially: { value: false },
-      state_type: { value: "str" }
-    },
     inputs: 1,
     outputs: 2,
     outputLabels: function(index) {
@@ -40,6 +27,20 @@
     paletteLabel: "trigger: state",
     label: function() {
       return this.name || `trigger-state: ${this.entityid}`;
+    },
+    labelStyle: nodeVersion.labelStyle,
+    defaults: {
+      name: { value: "" },
+      server: { value: "", type: "server", required: true },
+      entityid: { value: "", required: true },
+      entityidfiltertype: { value: "exact" },
+      debugenabled: { value: false },
+      constraints: { value: [] },
+      constraintsmustmatch: { value: "all" },
+      outputs: { value: 2 },
+      customoutputs: { value: [] },
+      outputinitially: { value: false },
+      state_type: { value: "str" }
     },
     oneditprepare: function() {
       // Outputs List

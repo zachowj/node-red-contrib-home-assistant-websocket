@@ -3,6 +3,17 @@
   RED.nodes.registerType("server-state-changed", {
     category: "home_assistant",
     color: "#038FC7",
+    inputs: 0,
+    outputs: 1,
+    outputLabels: nodeVersion.ifStateLabels,
+    icon: "arrow-right-bold-hexagon-outline.png",
+    paletteLabel: "events: state",
+    label: function() {
+      return (
+        this.name || `state_changed: ${this.entityidfilter || "all entities"}`
+      );
+    },
+    labelStyle: nodeVersion.labelStyle,
     defaults: {
       name: { value: "" },
       server: { value: "", type: "server", required: true },
@@ -16,21 +27,6 @@
       halt_if_compare: {},
       outputs: { value: 1 },
       output_only_on_state_change: { value: true }
-    },
-    inputs: 0,
-    outputs: 1,
-    outputLabels: function(index) {
-      if (this.haltifstate) {
-        if (index === 0) return "'If State' is true";
-        if (index === 1) return "'If State' is false";
-      }
-    },
-    icon: "arrow-right-bold-hexagon-outline.png",
-    paletteLabel: "events: state",
-    label: function() {
-      return (
-        this.name || `state_changed: ${this.entityidfilter || "all entities"}`
-      );
     },
     oneditprepare: function() {
       nodeVersion.check(this);

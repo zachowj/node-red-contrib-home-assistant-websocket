@@ -3,6 +3,14 @@
     RED.nodes.registerType("api-render-template", {
       category: "home_assistant",
       color: "#52C0F2",
+      inputs: 1,
+      outputs: 1,
+      icon: "parser-json.png",
+      paletteLabel: "get template",
+      label: function() {
+        return this.name || `template: ${this.template || ""}`;
+      },
+      labelStyle: nodeVersion.labelStyle,
       defaults: {
         name: { value: "" },
         server: { value: "", type: "server", required: true },
@@ -12,14 +20,6 @@
         templateLocation: { value: "template" },
         templateLocationType: { value: "msg" }
       },
-      inputs: 1,
-      outputs: 1,
-      icon: "parser-json.png",
-      paletteLabel: "get template",
-      label: function() {
-        return this.name || `template: ${this.template || ""}`;
-      },
-
       oneditprepare: function() {
         const $server = $("#node-input-server");
         const utils = {

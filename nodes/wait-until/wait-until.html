@@ -4,12 +4,13 @@
     color: "#52C0F2",
     inputs: 1,
     outputs: 1,
+    outputLabels: ["", "timed out"],
     icon: "wait-until.png",
     paletteLabel: "wait until",
     label: function() {
       return this.name || `wait until`;
     },
-    outputLabels: ["", "timed out"],
+    labelStyle: nodeVersion.labelStyle,
     defaults: {
       name: { value: "" },
       server: { value: "", type: "server", required: true },

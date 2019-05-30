@@ -36,8 +36,31 @@ var nodeVersion = (function($) {
         }
     }
 
+    function ifStateLabels(index) {
+        if (this.halt_if || this.haltifstate) {
+            if (this.version === 0 || this.version === undefined) {
+                if (index === 0) return "'If State' is false";
+                if (index === 1) return "'If State' is true";
+            }
+
+            if (index === 0) return "'If State' is true";
+            if (index === 1) return "'If State' is false";
+        }
+    }
+
+    function labelStyle() {
+        return `${
+            this._def.defaults.version &&
+            Number(this.version) !== this._def.defaults.version.value
+                ? 'node_label_legacy '
+                : ''
+        }${this.name ? 'node_label_italic' : ''}`;
+    }
+
     return {
         check,
+        ifStateLabels,
+        labelStyle,
         update
     };
     // eslint-disable-next-line no-undef

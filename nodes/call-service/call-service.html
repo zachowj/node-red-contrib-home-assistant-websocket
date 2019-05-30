@@ -10,6 +10,7 @@
     label: function() {
       return this.name || `svc: ${this.service_domain}:${this.service}`;
     },
+    labelStyle: nodeVersion.labelStyle,
     defaults: {
       name: { value: "" },
       server: { value: "", type: "server", required: true },
