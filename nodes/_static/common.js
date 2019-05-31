@@ -38,7 +38,7 @@ var nodeVersion = (function($) {
 
     function ifStateLabels(index) {
         if (this.halt_if || this.haltifstate) {
-            if (this.version === 0 || this.version === undefined) {
+            if (Number(this.version) === 0 || this.version === undefined) {
                 if (index === 0) return "'If State' is false";
                 if (index === 1) return "'If State' is true";
             }
