@@ -26,6 +26,7 @@ If applicable, add an example of exported json of a flow exhibiting the issue to
 **Environment (please complete the following information):**
 
 - Node Red Version: [e.g. 0.19.5]
+- Node.js Version: [e.g. 8.12.0]
 - NR Home Assistant Plugin Version: [e.g. 0.5.0]
 - Is Node Red running in Docker: [e.g. yes/no/hassio]
 
