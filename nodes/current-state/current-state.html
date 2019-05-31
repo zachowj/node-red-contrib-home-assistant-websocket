@@ -26,7 +26,8 @@
       state_location: { value: "payload" },
       override_payload: { value: "msg" }, // state location type
       entity_location: { value: "data" },
-      override_data: { value: "msg" } // entity location types
+      override_data: { value: "msg" }, // entity location types
+      blockInputOverrides: { value: false }
     },
     oneditprepare: function() {
       nodeVersion.check(this);
@@ -166,9 +167,14 @@
     <input type="text" id="node-input-entity_location" />
   </div>
 
-  <div class="form-row">
-      <input type="checkbox" id="node-input-override_topic" checked style="margin-left:105px;display:inline-block; width:auto; vertical-align:baseline;">&nbsp;
-      <label for="node-input-override_topic" style="width: auto;margin-right: 20px;">Override Topic</label>
+  <div class="form-row checkboxOption">
+      <input type="checkbox" id="node-input-override_topic">&nbsp;
+      <label for="node-input-override_topic">Override Topic</label>
+  </div>
+
+  <div class="form-row checkboxOption">
+      <input type="checkbox" id="node-input-blockInputOverrides">&nbsp;
+      <label for="node-input-blockInputOverrides">Block Input Overrides</label>
   </div>
 </script>
 
@@ -200,6 +206,9 @@
 
       <dt>Override Topic<span class="property-type">boolean</span></dt>
       <dd>Write entity id to <code>msg.topic</code></dd>
+
+      <dt>Block Input Overrides<span class="property-type">boolean</span></dt>
+      <dd>Stop <code>msg.payload</code> values from overriding local config</dd>
   </dl>
 
   <h3>Outputs</h3>

@@ -17,7 +17,8 @@ module.exports = function(RED) {
             entity_location: nodeDef => nodeDef.entity_location || 'data',
             // entity location type
             override_data: nodeDef =>
-                nodeDef.override_data !== false ? 'msg' : 'none'
+                nodeDef.override_data !== false ? 'msg' : 'none',
+            blockInputOverrides: {}
         },
         input: {
             entity_id: {
@@ -39,7 +40,10 @@ module.exports = function(RED) {
         /* eslint-disable camelcase */
         async onInput({ parsedMessage, message }) {
             const config = this.nodeConfig;
-            const entityId = parsedMessage.entity_id.value;
+            const entityId =
+                config.blockInputOverrides === true
+                    ? config.entity_id
+                    : parsedMessage.entity_id.value;
 
             if (config.server === null) {
                 this.node.error('No valid server selected.', message);
