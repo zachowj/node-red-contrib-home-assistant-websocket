@@ -93,11 +93,6 @@ module.exports = function(RED) {
                 return null;
             }
 
-            if (this.websocketClient) {
-                Object.entries(this.listeners).forEach(([event, handler]) => {
-                    this.websocketClient.removeListener(event, handler);
-                });
-            }
             node.savedMessage = message;
             node.active = true;
             let statusText = 'waiting';
