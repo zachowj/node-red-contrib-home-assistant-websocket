@@ -12,12 +12,20 @@ module.exports = function(RED) {
             state_type: nodeDef => nodeDef.state_type || 'str',
             state_location: nodeDef => nodeDef.state_location || 'payload',
             // state location type
-            override_payload: nodeDef =>
-                nodeDef.override_payload !== false ? 'msg' : 'none',
+            override_payload: nodeDef => {
+                if (nodeDef.state_location === undefined) {
+                    return nodeDef.override_payload !== false ? 'msg' : 'none';
+                }
+                return nodeDef.override_payload;
+            },
             entity_location: nodeDef => nodeDef.entity_location || 'data',
             // entity location type
-            override_data: nodeDef =>
-                nodeDef.override_data !== false ? 'msg' : 'none',
+            override_data: nodeDef => {
+                if (nodeDef.entity_location === undefined) {
+                    return nodeDef.override_data !== false ? 'msg' : 'none';
+                }
+                return nodeDef.override_data;
+            },
             blockInputOverrides: {}
         },
         input: {
