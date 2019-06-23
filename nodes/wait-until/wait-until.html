@@ -15,8 +15,8 @@
       name: { value: "" },
       server: { value: "", type: "server", required: true },
       outputs: { value: 1 },
-      entityId: { value: "", required: true },
-      property: { value: "", required: true },
+      entityId: { value: "" },
+      property: { value: "" },
       comparator: { value: "is" },
       value: { value: "" },
       valueType: { value: "str" },
@@ -24,7 +24,8 @@
       timeoutUnits: { value: "seconds" },
       entityLocation: { value: "data" },
       entityLocationType: { value: "none" },
-      checkCurrentState: { value: true }
+      checkCurrentState: { value: true },
+      blockInputOverrides: { value: false }
     },
     oneditprepare: function() {
       const node = this;
@@ -167,6 +168,11 @@
     <input type="checkbox" id="node-input-checkCurrentState" checked style="margin-left:105px;display:inline-block; width:auto; vertical-align:baseline;">&nbsp;
     <label for="node-input-checkCurrentState" style="width: auto;margin-right: 20px;">Check against current state</label>
   </div>
+
+  <div class="form-row checkboxOption">
+    <input type="checkbox" id="node-input-blockInputOverrides">&nbsp;
+    <label for="node-input-blockInputOverrides">Block Input Overrides</label>
+  </div>
 </script>
 
 <script type="text/x-red" data-help-name="ha-wait-until">
@@ -176,6 +182,24 @@
   <dl class="message-properties">
     <dt class="optional">reset <span class="property-type"></span> </dt>
     <dd>If the received message has this property set to any value the node will be set to inactive and the timeout cleared.</dd>
+
+    <dt class="optional">payload <span class="property-type">object</span> </dt>
+    <dd>
+      Override config values by passing in a property with a valid value.
+      <ul>
+        <li>entityId</li>
+        <li>property</li>
+        <li>comparator</li>
+        <li>value</li>
+        <li>valueType</li>
+        <li>timeout</li>
+        <li>timeoutUnits</li>
+        <li>entityLocation</li>
+        <li>entityLocationType</li>
+        <li>checkCurrentState</li>
+      </ul>
+    </dd>
+
   </dl>
 
   <h3>Configuration</h3>

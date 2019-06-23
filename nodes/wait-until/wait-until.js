@@ -1,4 +1,5 @@
 module.exports = function(RED) {
+    const Joi = require('@hapi/joi');
     const EventsNode = require('../../lib/events-node');
 
     const nodeOptions = {
@@ -15,7 +16,104 @@ module.exports = function(RED) {
             timeoutUnits: {},
             entityLocation: {},
             entityLocationType: {},
-            checkCurrentState: {}
+            checkCurrentState: {},
+            blockInputOverrides: {}
+        },
+        input: {
+            entityId: {
+                messageProp: 'payload.entityId',
+                configProp: 'entityId',
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.string().label('entityId')
+                }
+            },
+            property: {
+                messageProp: 'payload.property',
+                configProp: 'property',
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.string().label('property')
+                }
+            },
+            comparator: {
+                messageProp: 'payload.comparator',
+                configProp: 'comparator',
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.string()
+                        .valid(
+                            'is',
+                            'is_not',
+                            'lt',
+                            'lte',
+                            'gt',
+                            'gte',
+                            'includes',
+                            'does_not_include'
+                        )
+                        .label('comparator')
+                }
+            },
+            value: {
+                messageProp: 'payload.value',
+                configProp: 'value',
+                validation: {
+                    schema: Joi.string().label('value')
+                }
+            },
+            valueType: {
+                messageProp: 'payload.valueType',
+                configProp: 'valueType',
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.string().label('valueType')
+                }
+            },
+            timeout: {
+                messageProp: 'payload.timeout',
+                configProp: 'timeout',
+                validation: {
+                    schema: Joi.number().label('timeout')
+                }
+            },
+            timeoutUnits: {
+                messageProp: 'payload.timeoutUnits',
+                configProp: 'timeoutUnits',
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.string()
+                        .valid(
+                            'milliseconds',
+                            'seconds',
+                            'minutes',
+                            'hours',
+                            'days'
+                        )
+                        .label('timeoutUnits')
+                }
+            },
+            entityLocation: {
+                messageProp: 'payload.entityLocation',
+                configProp: 'entityLocation',
+                validation: {
+                    schema: Joi.string().label('entityLocation')
+                }
+            },
+            entityLocationType: {
+                messageProp: 'payload.entityLocationType',
+                configProp: 'entityLocationType',
+                validation: {
+                    schema: Joi.string().label('entityLocationType')
+                }
+            },
+            checkCurrentState: {
+                messageProp: 'payload.checkCurrentState',
+                configProp: 'checkCurrentState',
+                validation: {
+                    schema: Joi.boolean().label('checkCurrentState')
+                }
+            }
         }
     };
 
@@ -25,16 +123,10 @@ module.exports = function(RED) {
             this.active = false;
             this.savedMessage = {};
             this.timeoutId = -1;
-
-            this.addEventClientListener({
-                event: `ha_events:state_changed:${this.nodeConfig.entityId}`,
-                handler: this.onEntityChange.bind(this)
-            });
         }
 
         async onEntityChange(evt) {
             try {
-                const config = this.nodeConfig;
                 const event = Object.assign({}, evt.event);
 
                 if (!this.active) {
@@ -42,10 +134,13 @@ module.exports = function(RED) {
                 }
 
                 const result = await this.getComparatorResult(
-                    config.comparator,
-                    config.value,
-                    this.utils.selectn(config.property, event.new_state),
-                    config.valueType,
+                    this.savedConfig.comparator,
+                    this.savedConfig.value,
+                    this.utils.selectn(
+                        this.savedConfig.property,
+                        event.new_state
+                    ),
+                    this.savedConfig.valueType,
                     {
                         message: this.savedMessage,
                         entity: event.new_state
@@ -61,8 +156,8 @@ module.exports = function(RED) {
                 this.setStatusSuccess('true');
 
                 if (
-                    config.entityLocationType !== 'none' &&
-                    config.entityLocation
+                    this.savedConfig.entityLocationType !== 'none' &&
+                    this.savedConfig.entityLocation
                 ) {
                     event.new_state.timeSinceChangedMs =
                         Date.now() -
@@ -70,8 +165,8 @@ module.exports = function(RED) {
 
                     this.setContextValue(
                         event.new_state,
-                        config.entityLocationType,
-                        config.entityLocation,
+                        this.savedConfig.entityLocationType,
+                        this.savedConfig.entityLocation,
                         this.savedMessage
                     );
                 }
@@ -82,44 +177,74 @@ module.exports = function(RED) {
             }
         }
 
-        async onInput({ message }) {
+        async onInput({ message, parsedMessage }) {
             const node = this;
-            const config = node.nodeConfig;
-
             clearTimeout(node.timeoutId);
+
             if (message.hasOwnProperty('reset')) {
                 node.status({ text: 'reset' });
                 node.active = false;
                 return null;
             }
 
+            node.savedConfig = {
+                entityId: parsedMessage.entityId.value,
+                property: parsedMessage.property.value,
+                comparator: parsedMessage.comparator.value,
+                value: parsedMessage.value.value,
+                valueType: parsedMessage.valueType.value,
+                timeout: parsedMessage.timeout.value,
+                timeoutUnits: parsedMessage.timeoutUnits.value,
+                entityLocation: parsedMessage.entityLocation.value,
+                entityLocationType: parsedMessage.entityLocationType.value,
+                checkCurrentState: parsedMessage.checkCurrentState.value
+            };
+
+            // If blocking input overrides reset values to nodeConfig
+            if (node.nodeConfig.blockInputOverrides === true) {
+                Object.keys(node.savedConfig).forEach(
+                    key =>
+                        (node.savedConfig[key] = (key in node.nodeConfig
+                            ? node.nodeConfig
+                            : node.savedConfig)[key])
+                );
+            }
+
+            node.removeEventClientListeners();
+            node.addEventClientListener({
+                event: `ha_events:state_changed:${node.savedConfig.entityId}`,
+                handler: node.onEntityChange.bind(node)
+            });
+
             node.savedMessage = message;
             node.active = true;
             let statusText = 'waiting';
 
-            if (config.timeout > 0) {
-                if (config.timeoutUnits === 'milliseconds') {
-                    node.timeout = config.timeout;
-                    statusText = `waiting for ${config.timeout} milliseconds`;
-                } else if (config.timeoutUnits === 'minutes') {
-                    node.timeout = config.timeout * (60 * 1000);
-                    statusText = `waiting for ${config.timeout} minutes`;
-                } else if (config.timeoutUnits === 'hours') {
-                    node.timeout = config.timeout * (60 * 60 * 1000);
+            const timeout = node.savedConfig.timeout;
+            if (timeout > 0) {
+                const timeoutUnits = node.savedConfig.timeoutUnits;
+                if (timeoutUnits === 'milliseconds') {
+                    node.timeout = timeout;
+                    statusText = `waiting for ${timeout} milliseconds`;
+                } else if (timeoutUnits === 'minutes') {
+                    node.timeout = timeout * (60 * 1000);
+                    statusText = `waiting for ${timeout} minutes`;
+                } else if (timeoutUnits === 'hours') {
+                    node.timeout = timeout * (60 * 60 * 1000);
                     statusText = node.timeoutStatus(node.timeout);
-                } else if (config.timeoutUnits === 'days') {
-                    node.timeout = config.timeout * (24 * 60 * 60 * 1000);
+                } else if (timeoutUnits === 'days') {
+                    node.timeout = timeout * (24 * 60 * 60 * 1000);
                     statusText = node.timeoutStatus(node.timeout);
                 } else {
-                    node.timeout = config.timeout * 1000;
-                    statusText = `waiting for ${config.timeout} seconds`;
+                    node.timeout = timeout * 1000;
+                    statusText = `waiting for ${timeout} seconds`;
                 }
 
-                node.timeoutId = setTimeout(async function() {
+                node.timeoutId = setTimeout(async () => {
                     const state = Object.assign(
                         {},
-                        await config.server.homeAssistant.getStates(
-                            config.entityId
+                        await node.nodeConfig.server.homeAssistant.getStates(
+                            node.savedConfig.entityId
                         )
                     );
 
@@ -128,8 +253,8 @@ module.exports = function(RED) {
 
                     node.setContextValue(
                         state,
-                        config.entityLocationType,
-                        config.entityLocation,
+                        node.savedConfig.entityLocationType,
+                        node.savedConfig.entityLocation,
                         message
                     );
 
@@ -140,9 +265,9 @@ module.exports = function(RED) {
             }
             node.setStatus({ text: statusText });
 
-            if (config.checkCurrentState === true) {
-                const currentState = await this.nodeConfig.server.homeAssistant.getStates(
-                    config.entityId
+            if (node.nodeConfig.checkCurrentState === true) {
+                const currentState = await node.nodeConfig.server.homeAssistant.getStates(
+                    node.savedConfig.entityId
                 );
 
                 node.onEntityChange({ event: { new_state: currentState } });
