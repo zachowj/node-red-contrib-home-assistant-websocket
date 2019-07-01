@@ -17,7 +17,10 @@ module.exports = function(RED) {
             entityLocation: {},
             entityLocationType: {},
             checkCurrentState: {},
-            blockInputOverrides: {}
+            blockInputOverrides: nodeDef =>
+                nodeDef.blockInputOverrides === undefined
+                    ? true
+                    : nodeDef.blockInputOverrides
         },
         input: {
             entityId: {

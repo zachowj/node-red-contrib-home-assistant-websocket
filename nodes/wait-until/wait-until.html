@@ -25,7 +25,7 @@
       entityLocation: { value: "data" },
       entityLocationType: { value: "none" },
       checkCurrentState: { value: true },
-      blockInputOverrides: { value: false }
+      blockInputOverrides: { value: true }
     },
     oneditprepare: function() {
       const node = this;
@@ -101,6 +101,10 @@
           typeField: "#node-input-entityLocationType"
         })
         .typedInput("width", "68%");
+
+      if (node.blockInputOverrides === undefined) {
+        $("#node-input-blockInputOverrides").prop("checked", true);
+      }
     },
     oneditsave: function() {
       const outputs = $("#node-input-timeout").val() > 0 ? 2 : 1;
