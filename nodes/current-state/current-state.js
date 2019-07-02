@@ -1,3 +1,4 @@
+const RenderTemplate = require('../../lib/mustache-context');
 const BaseNode = require('../../lib/base-node');
 const Joi = require('@hapi/joi');
 
@@ -48,10 +49,14 @@ module.exports = function(RED) {
         /* eslint-disable camelcase */
         async onInput({ parsedMessage, message }) {
             const config = this.nodeConfig;
-            const entityId =
+            const entityId = RenderTemplate(
                 config.blockInputOverrides === true
                     ? config.entity_id
-                    : parsedMessage.entity_id.value;
+                    : parsedMessage.entity_id.value,
+                message,
+                this.node.context(),
+                this.utils.toCamelCase(config.server.name)
+            );
 
             if (config.server === null) {
                 this.node.error('No valid server selected.', message);
