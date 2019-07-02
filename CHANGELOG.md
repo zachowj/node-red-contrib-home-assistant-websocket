@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.13.0"></a>
+
+# [0.13.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.12.3...v0.13.0) (2019-07-02)
+
+### Features
+
+- **current-state:** Templates are processed in the entity id field ([aed4579](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/aed4579))
+- **wait-until:** Allow overriding of config value ([c4d3081](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/c4d3081))
+
 <a name="0.12.3"></a>
 
 ## [0.12.3](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.12.2...v0.12.3) (2019-06-05)
