@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.13.1"></a>
+
+## [0.13.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.13.0...v0.13.1) (2019-07-06)
+
+### Bug Fixes
+
+- Load external js,css for all nodes not only config ([e0f52e0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/e0f52e0))
+
 <a name="0.13.0"></a>
 
 # [0.13.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.12.3...v0.13.0) (2019-07-02)
