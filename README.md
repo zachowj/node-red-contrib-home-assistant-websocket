@@ -12,9 +12,9 @@ Project is going through active development and as such will probably have a few
 
 ## Getting Started
 
-This assumes you have [Node-RED](https://nodered.org) already installed and working, if you need to install Node-RED see [here](https://nodered.org/docs/getting-started/installation)
+This assumes you have [Node-RED](https://nodered.org) already installed and working, if you need to install Node-RED see [here](https://nodered.org/docs/getting-started/installation).
 
-**NOTE:** This requires [Node.js](https://nodejs.org) v8.12+ and [Node-RED](https://nodered.org/) v0.19+.
+**NOTE:** This requires at least [Node.js](https://nodejs.org) v8.12.x and [Node-RED](https://nodered.org/) v0.19.x.
 
 Install via Node-RED Manage Palette
 
@@ -29,6 +29,8 @@ $ cd ~/.node-red
 $ npm install node-red-contrib-home-assistant-websocket
 # then restart node-red
 ```
+
+**Docker users on Rpi** will need to upgrade Node.js inside the [official Node-RED container](https://hub.docker.com/r/nodered/node-red-docker/) or can use the [raymondmm/node-red container](https://hub.docker.com/r/raymondmm/node-red) which comes with Node.js 8.16.0 installed.
 
 For [Hass.io](https://hass.io/) add-on users:
 
