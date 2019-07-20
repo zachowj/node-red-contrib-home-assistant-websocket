@@ -41,3 +41,11 @@
   -ms-user-select: none;
   user-select: none;
 }
+
+li span.property-type {
+  font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+  color: #666;
+  font-style: italic;
+  font-size: 11px;
+  float: right;
+}

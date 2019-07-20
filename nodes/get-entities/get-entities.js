@@ -1,6 +1,7 @@
 const BaseNode = require('../../lib/base-node');
 const { shuffle } = require('lodash');
 const { filter } = require('p-iteration');
+const Joi = require('@hapi/joi');
 
 module.exports = function(RED) {
     const nodeOptions = {
@@ -14,6 +15,97 @@ module.exports = function(RED) {
             output_location_type: {},
             output_location: {},
             output_results_count: {}
+        },
+        input: {
+            outputType: {
+                messageProp: 'payload.outputType',
+                configProp: 'output_type',
+                default: 'array',
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.string()
+                        .valid('array', 'count', 'random', 'split')
+                        .label('OutputType')
+                }
+            },
+            outputEmptyResults: {
+                messageProp: 'payload.outputEmptyResults',
+                configProp: 'output_empty_results',
+                default: false,
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.boolean().label('outputEmptyResults')
+                }
+            },
+            outputLocationType: {
+                messageProp: 'payload.outputLocationType',
+                configProp: 'output_location_type',
+                default: 'msg',
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.string()
+                        .valid('array', 'msg', 'flow', 'global')
+                        .label('outputLocationType')
+                }
+            },
+            outputLocation: {
+                messageProp: 'payload.outputLocation',
+                configProp: 'output_location',
+                default: 'payload',
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.string().label('outputLocation')
+                }
+            },
+            outputResultsCount: {
+                messageProp: 'payload.outputResultsCount',
+                configProp: 'output_results_count',
+                default: 1,
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.number().label('outputResultsCount')
+                }
+            },
+            rules: {
+                messageProp: 'payload.rules',
+                configProp: 'rules',
+                default: [],
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.array()
+                        .items(
+                            Joi.object({
+                                property: Joi.string(),
+                                logic: Joi.string().valid(
+                                    'is',
+                                    'is_not',
+                                    'lt',
+                                    'lte',
+                                    'gt',
+                                    'gte',
+                                    'includes',
+                                    'does_not_include',
+                                    'starts_with',
+                                    'in_group',
+                                    'jsonata'
+                                ),
+                                value: Joi.string(),
+                                valueType: Joi.string().valid(
+                                    'str',
+                                    'num',
+                                    'bool',
+                                    're',
+                                    'jsonata',
+                                    'msg',
+                                    'flow',
+                                    'global',
+                                    'entity'
+                                )
+                            })
+                        )
+                        .label('rules')
+                }
+            }
         }
     };
 
@@ -23,16 +115,15 @@ module.exports = function(RED) {
         }
 
         /* eslint-disable camelcase */
-        async onInput({ message }) {
-            const config = this.nodeConfig;
+        async onInput({ message, parsedMessage }) {
             let noPayload = false;
 
-            if (config.server === null) {
+            if (this.nodeConfig.server === null) {
                 this.node.error('No valid server selected.', message);
                 return;
             }
 
-            const states = await config.server.homeAssistant.getStates();
+            const states = await this.nodeConfig.server.homeAssistant.getStates();
             if (!states) {
                 this.node.warn(
                     'local state cache missing sending empty payload'
@@ -43,7 +134,7 @@ module.exports = function(RED) {
             let entities;
             try {
                 entities = await filter(Object.values(states), async entity => {
-                    const rules = config.rules;
+                    const rules = parsedMessage.rules.value;
 
                     for (const rule of rules) {
                         const value = this.utils.selectn(rule.property, entity);
@@ -78,7 +169,7 @@ module.exports = function(RED) {
             let statusText = `${entities.length} entities`;
             let payload = {};
 
-            switch (config.output_type) {
+            switch (parsedMessage.outputType.value) {
                 case 'count':
                     payload = entities.length;
                     break;
@@ -96,7 +187,8 @@ module.exports = function(RED) {
                         noPayload = true;
                         break;
                     }
-                    let maxReturned = Number(config.output_results_count) || 1;
+                    let maxReturned =
+                        Number(parsedMessage.outputResultsCount.value) || 1;
 
                     const max =
                         entities.length <= maxReturned
@@ -113,7 +205,10 @@ module.exports = function(RED) {
                     break;
                 case 'array':
                 default:
-                    if (entities.length === 0 && !config.output_empty_results) {
+                    if (
+                        entities.length === 0 &&
+                        !parsedMessage.outputEmptyResults.value
+                    ) {
                         noPayload = true;
                     }
 
@@ -130,8 +225,8 @@ module.exports = function(RED) {
 
             this.setContextValue(
                 payload,
-                config.output_location_type,
-                config.output_location,
+                parsedMessage.outputLocationType.value,
+                parsedMessage.outputLocation.value,
                 message
             );
 
