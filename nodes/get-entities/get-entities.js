@@ -40,30 +40,40 @@ module.exports = function(RED) {
                 return { payload: {} };
             }
 
-            let entities = await filter(Object.values(states), async entity => {
-                const rules = config.rules;
+            let entities;
+            try {
+                entities = await filter(Object.values(states), async entity => {
+                    const rules = config.rules;
 
-                for (const rule of rules) {
-                    const value = this.utils.selectn(rule.property, entity);
-                    const result = await this.getComparatorResult(
-                        rule.logic,
-                        rule.value,
-                        value,
-                        rule.valueType,
-                        {
-                            message,
-                            entity
+                    for (const rule of rules) {
+                        const value = this.utils.selectn(rule.property, entity);
+                        const result = await this.getComparatorResult(
+                            rule.logic,
+                            rule.value,
+                            value,
+                            rule.valueType,
+                            {
+                                message,
+                                entity
+                            }
+                        );
+                        if (
+                            (rule.logic !== 'jsonata' && value === undefined) ||
+                            !result
+                        ) {
+                            return false;
                         }
-                    );
-                    if (value === undefined || !result) {
-                        return false;
                     }
-                }
 
-                entity.timeSinceChangedMs =
-                    Date.now() - new Date(entity.last_changed).getTime();
-                return true;
-            });
+                    entity.timeSinceChangedMs =
+                        Date.now() - new Date(entity.last_changed).getTime();
+                    return true;
+                });
+            } catch (e) {
+                this.setStatusFailed('Error');
+                this.node.error(e.message, {});
+                return;
+            }
 
             let statusText = `${entities.length} entities`;
             let payload = {};

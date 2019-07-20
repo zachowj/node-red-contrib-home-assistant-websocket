@@ -29,6 +29,7 @@ var ifState = (function($) {
             'num',
             'bool',
             're',
+            'jsonata',
             'msg',
             'flow',
             'global',
@@ -36,7 +37,7 @@ var ifState = (function($) {
         ];
 
         if (nodeName !== 'currentState') {
-            defaultTypes.splice(4, 1);
+            defaultTypes.splice(5, 1);
         }
 
         $input.after(
@@ -66,11 +67,14 @@ var ifState = (function($) {
                 case 'lte':
                 case 'gt':
                 case 'gte':
-                    types = ['num'].concat(extraTypes);
+                    types = ['num', 'jsonata'].concat(extraTypes);
                     break;
                 case 'includes':
                 case 'does_not_include':
-                    types = ['str'].concat(extraTypes);
+                    types = ['str', 'jsonata'].concat(extraTypes);
+                    break;
+                case 'jsonata':
+                    types = ['jsonata'];
                     break;
             }
             $input.typedInput('types', types);

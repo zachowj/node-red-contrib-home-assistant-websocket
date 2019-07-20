@@ -53,7 +53,8 @@ module.exports = function(RED) {
                             'gt',
                             'gte',
                             'includes',
-                            'does_not_include'
+                            'does_not_include',
+                            'jsonata'
                         )
                         .label('comparator')
                 }
@@ -136,20 +137,26 @@ module.exports = function(RED) {
                     return null;
                 }
 
-                const result = await this.getComparatorResult(
-                    this.savedConfig.comparator,
-                    this.savedConfig.value,
-                    this.utils.selectn(
-                        this.savedConfig.property,
-                        event.new_state
-                    ),
-                    this.savedConfig.valueType,
-                    {
-                        message: this.savedMessage,
-                        entity: event.new_state
-                    }
-                );
-
+                let result;
+                try {
+                    result = await this.getComparatorResult(
+                        this.savedConfig.comparator,
+                        this.savedConfig.value,
+                        this.utils.selectn(
+                            this.savedConfig.property,
+                            event.new_state
+                        ),
+                        this.savedConfig.valueType,
+                        {
+                            message: this.savedMessage,
+                            entity: event.new_state
+                        }
+                    );
+                } catch (e) {
+                    this.setStatusFailed('Error');
+                    this.node.error(e.message, {});
+                    return;
+                }
                 if (!result) {
                     return null;
                 }

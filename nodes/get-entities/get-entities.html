@@ -45,7 +45,8 @@
         { value: "includes", text: "in" },
         { value: "does_not_include", text: "not in" },
         { value: "starts_with", text: "starts with" },
-        { value: "in_group", text: "in group" }
+        { value: "in_group", text: "in group" },
+        { value: "jsonata", text: "JSONata" }
       ];
       const typeEntity = { value: "entity", label: "entity." };
       const defaultTypes = [
@@ -53,6 +54,7 @@
         "num",
         "bool",
         "re",
+        "jsonata",
         "msg",
         "flow",
         "global",
@@ -108,6 +110,11 @@
             .change(function(e) {
               let types = defaultTypes;
 
+              $property.prop(
+                "disabled",
+                e.target.value === "jsonata" ? true : false
+              );
+
               switch (e.target.value) {
                 case "is":
                 case "is_not":
@@ -116,13 +123,30 @@
                 case "lte":
                 case "gt":
                 case "gte":
-                  types = ["num", "msg", "flow", "global", typeEntity];
+                  types = [
+                    "num",
+                    "jsonata",
+                    "msg",
+                    "flow",
+                    "global",
+                    typeEntity
+                  ];
                   break;
                 case "includes":
                 case "does_not_include":
                 case "starts_with":
                 case "in_group":
-                  types = ["str", "msg", "flow", "global", typeEntity];
+                  types = [
+                    "str",
+                    "jsonata",
+                    "msg",
+                    "flow",
+                    "global",
+                    typeEntity
+                  ];
+                  break;
+                case "jsonata":
+                  types = ["jsonata"];
                   break;
               }
               $value.typedInput("types", types);

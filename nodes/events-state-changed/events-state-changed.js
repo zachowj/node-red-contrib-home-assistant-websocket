@@ -95,16 +95,23 @@ module.exports = function(RED) {
                 }
 
                 // Check if 'if state' is true
-                const isIfState = await this.getComparatorResult(
-                    this.nodeConfig.halt_if_compare,
-                    this.nodeConfig.haltIfState,
-                    event.new_state.state,
-                    this.nodeConfig.halt_if_type,
-                    {
-                        entity: event.new_state,
-                        prevEntity: event.old_state
-                    }
-                );
+                let isIfState;
+                try {
+                    isIfState = await this.getComparatorResult(
+                        this.nodeConfig.halt_if_compare,
+                        this.nodeConfig.haltIfState,
+                        event.new_state.state,
+                        this.nodeConfig.halt_if_type,
+                        {
+                            entity: event.new_state,
+                            prevEntity: event.old_state
+                        }
+                    );
+                } catch (e) {
+                    this.setStatusFailed('Error');
+                    this.node.error(e.message, {});
+                    return;
+                }
 
                 const msg = {
                     topic: entity_id,

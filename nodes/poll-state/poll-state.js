@@ -130,15 +130,22 @@ module.exports = function(RED) {
                     data: pollState
                 };
 
-                const isIfState = await this.getComparatorResult(
-                    this.nodeConfig.halt_if_compare,
-                    this.nodeConfig.halt_if,
-                    pollState.state,
-                    this.nodeConfig.halt_if_type,
-                    {
-                        entity: pollState
-                    }
-                );
+                let isIfState;
+                try {
+                    isIfState = await this.getComparatorResult(
+                        this.nodeConfig.halt_if_compare,
+                        this.nodeConfig.halt_if,
+                        pollState.state,
+                        this.nodeConfig.halt_if_type,
+                        {
+                            entity: pollState
+                        }
+                    );
+                } catch (e) {
+                    this.setStatusFailed('Error');
+                    this.node.error(e.message, {});
+                    return;
+                }
 
                 // Handle version 0 'halt if' outputs
                 if (this.nodeConfig.version < 1) {
