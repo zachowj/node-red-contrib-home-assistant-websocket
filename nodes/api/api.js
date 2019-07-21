@@ -11,6 +11,7 @@ module.exports = function(RED) {
             method: {},
             path: {},
             data: {},
+            dataType: nodeDef => nodeDef.dataType || 'json',
             location: {},
             locationType: {},
             responseType: {}
@@ -50,6 +51,17 @@ module.exports = function(RED) {
             data: {
                 messageProp: 'payload.data',
                 configProp: 'data'
+            },
+            dataType: {
+                messageProp: 'payload.dataType',
+                configProp: 'dataType',
+                default: 'json',
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.string()
+                        .valid('json', 'jsonata')
+                        .label('dataType')
+                }
             },
             location: {
                 messageProp: 'payload.location',
@@ -103,14 +115,28 @@ module.exports = function(RED) {
             }
 
             const serverName = node.utils.toCamelCase(config.server.name);
-            const data = RenderTemplate(
-                typeof parsedMessage.data.value === 'object'
-                    ? JSON.stringify(parsedMessage.data.value)
-                    : parsedMessage.data.value,
-                message,
-                node.node.context(),
-                serverName
-            );
+            let data;
+            if (parsedMessage.dataType.value === 'jsonata') {
+                try {
+                    data = JSON.stringify(
+                        this.evaluateJSONata(parsedMessage.data.value, message)
+                    );
+                } catch (e) {
+                    this.setStatusFailed('Error');
+                    this.node.error(e.message, message);
+                    return;
+                }
+            } else {
+                data = RenderTemplate(
+                    typeof parsedMessage.data.value === 'object'
+                        ? JSON.stringify(parsedMessage.data.value)
+                        : parsedMessage.data.value,
+                    message,
+                    node.node.context(),
+                    serverName
+                );
+            }
+
             const method = parsedMessage.method.value;
             let apiCall;
 

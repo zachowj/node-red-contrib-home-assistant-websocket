@@ -19,6 +19,7 @@
       method: { value: "get" },
       path: { value: "" },
       data: { value: "" },
+      dataType: { value: "json" },
       location: { value: "payload" },
       locationType: { value: "msg" },
       responseType: { value: "json" }
@@ -42,7 +43,8 @@
 
       $("#node-input-data")
         .typedInput({
-          types: ["json"]
+          types: ["json", "jsonata"],
+          typeField: "#node-input-dataType"
         })
         .typedInput("width", "68%");
 
@@ -113,6 +115,7 @@
   <div class="form-row">
     <label id="data-label" for="node-input-data">Data</label>
     <input type="text" id="node-input-data">
+    <input type="hidden" id="node-input-dataType">
   </div>
 
   <div class="form-row">
@@ -178,7 +181,7 @@
   <p>Will output the results received from the API call to the location defined in the config.</p>
 
   <h3>Templates</h3>
-  <p>Templates can be used in path, params and data fields. When using templates the top level is a property of the message object: <code>msg.payload</code> would be <code>{{payload}}</code>.</p>
+  <p>Templates can be used in path, params and data fields. When using templates the top level is a property of the message object: <code>msg.payload</code> would be <code>{{payload}}</code>. Templates will only work in the data field when the data type is JSON.</p>
 
   <h3>References</h3>
   <p>
