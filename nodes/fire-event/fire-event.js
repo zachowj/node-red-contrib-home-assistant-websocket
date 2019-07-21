@@ -9,7 +9,7 @@ module.exports = function(RED) {
             server: { isNode: true },
             event: {},
             data: {},
-            mergecontext: {}
+            dataType: nodeDef => nodeDef.dataType || 'json'
         },
         input: {
             event: {
@@ -26,6 +26,17 @@ module.exports = function(RED) {
                 validation: {
                     haltOnFail: false,
                     schema: Joi.string().label('data')
+                }
+            },
+            dataType: {
+                messageProp: 'payload.dataType',
+                configProp: 'dataType',
+                default: 'json',
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.string()
+                        .valid('json', 'jsonata')
+                        .label('dataType')
                 }
             }
         }
@@ -54,22 +65,26 @@ module.exports = function(RED) {
                 this.node.context(),
                 this.utils.toCamelCase(this.nodeConfig.server.name)
             );
-            const configData = RenderTemplate(
-                typeof parsedMessage.data.value === 'object'
-                    ? JSON.stringify(parsedMessage.data.value)
-                    : parsedMessage.data.value,
-                message,
-                this.node.context(),
-                this.utils.toCamelCase(this.nodeConfig.server.name)
-            );
-            const eventData = this.getEventData(message.payload, configData);
-
-            if (!eventType) {
-                this.node.error(
-                    'Fire event node is missing "event" property, not found in config or payload',
-                    message
+            let eventData;
+            if (parsedMessage.dataType.value === 'jsonata') {
+                try {
+                    eventData = JSON.stringify(
+                        this.evaluateJSONata(parsedMessage.data.value, message)
+                    );
+                } catch (e) {
+                    this.setStatusFailed('Error');
+                    this.node.error(e.message, message);
+                    return;
+                }
+            } else {
+                eventData = RenderTemplate(
+                    typeof parsedMessage.data.value === 'object'
+                        ? JSON.stringify(parsedMessage.data.value)
+                        : parsedMessage.data.value,
+                    message,
+                    this.node.context(),
+                    this.utils.toCamelCase(this.nodeConfig.server.name)
                 );
-                return;
             }
 
             this.debug(`Fire Event: ${eventType} -- ${JSON.stringify({})}`);
@@ -96,35 +111,6 @@ module.exports = function(RED) {
                     );
                     this.setStatusFailed('API Error');
                 });
-        }
-
-        getEventData(payload, data) {
-            let eventData;
-            let contextData = {};
-
-            let payloadData = this.utils.selectn('data', payload);
-            let configData = this.tryToObject(data);
-            payloadData = payloadData || {};
-            configData = configData || {};
-
-            // Calculate payload to send end priority ends up being 'Config, Global Ctx, Flow Ctx, Payload' with right most winning
-            if (this.nodeConfig.mergecontext) {
-                const ctx = this.node.context();
-                let flowVal = ctx.flow.get(this.nodeConfig.mergecontext);
-                let globalVal = ctx.global.get(this.nodeConfig.mergecontext);
-                flowVal = flowVal || {};
-                globalVal = globalVal || {};
-                contextData = this.utils.merge({}, globalVal, flowVal);
-            }
-
-            eventData = this.utils.merge(
-                {},
-                configData,
-                contextData,
-                payloadData
-            );
-
-            return eventData;
         }
     }
 
