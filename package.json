@@ -1,7 +1,7 @@
 {
   "name": "node-red-contrib-home-assistant-websocket",
   "description": "Node-RED integration with Home Assistant through websocket and REST API",
-  "version": "0.13.1",
+  "version": "0.14.0",
   "homepage": "https://github.com/zachowj/node-red-contrib-home-assistant-websocket",
   "bugs": {
     "url": "https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues"

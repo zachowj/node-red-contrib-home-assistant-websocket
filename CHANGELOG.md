@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.14.0"></a>
+
+# [0.14.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.13.1...v0.14.0) (2019-07-24)
+
+### Features
+
+- JSONata everywhere ([6424235](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/6424235))
+- **api:** Add option for data field to be a JSONata Expr ([37b54ce](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/37b54ce))
+- **call-service:** Add JSONata option to data field ([8e91f42](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/8e91f42))
+- **fire-event:** Add option for data field to be a JSONata Expr ([526d083](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/526d083))
+- **get-entities:** Allow overriding of config values from payload ([a0fdb96](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a0fdb96)), closes [#133](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/133)
+
 <a name="0.13.1"></a>
 
 ## [0.13.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.13.0...v0.13.1) (2019-07-06)
