@@ -7,6 +7,9 @@ var nodeVersion = (function($) {
             case 'api-current-state':
                 name = 'current-state';
                 break;
+            case 'api-call-service':
+                name = 'call-service';
+                break;
             case 'poll-state':
                 name = 'poll-state';
                 break;

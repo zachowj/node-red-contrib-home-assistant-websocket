@@ -16,13 +16,19 @@
     defaults: {
       name: { value: "" },
       server: { value: "", type: "server", required: true },
+      version: { value: 1 },
       service_domain: { value: "" },
       service: { value: "" },
+      entityId: { value: "" },
       data: {
         value: "",
         validate: function(v) {
           // data isn't required since it could be either not needed or provided via payload
-          if (!v) {
+          if (
+            !v ||
+            $("#node-input-dataType").val() === "jsonata" ||
+            template.indexOf("{{") !== -1
+          ) {
             return true;
           }
           try {
@@ -33,18 +39,21 @@
           }
         }
       },
+      dataType: { value: "json" },
       mergecontext: { value: null },
       output_location: { value: "payload" },
       output_location_type: { value: "none" },
       mustacheAltTags: { value: false }
     },
     oneditprepare: function() {
+      nodeVersion.check(this);
       const node = this;
 
       const $domainField = $("#service_domain");
       const $serviceField = $("#service");
-      const $entityIdField = $("#entity_id");
+      const $entityIdField = $("#node-input-entityId");
       const $data = $("#node-input-data");
+      const $dataType = $("#node-input-dataType");
 
       const $serviceDataDiv = $("#service-data-desc");
       const $serviceDescDiv = $(".service-description", $serviceDataDiv);
@@ -54,23 +63,29 @@
 
       $domainField.val(node.service_domain);
       $serviceField.val(node.service);
-      $entityIdField.val(node.entity_id);
 
-      // Extract entity_id from data and fill in the entity_id input
-      try {
-        const data = JSON.parse(node.data);
-        if (data.entity_id) {
-          $entityIdField.val(data.entity_id);
-          delete data.entity_id;
-          $data.val(!Object.keys(data).length ? "" : JSON.stringify(data));
-        }
-      } catch (e) {}
+      if (!node.version) {
+        // Extract entity_id from data and fill in the entity_id input
+        try {
+          const data = JSON.parse(node.data);
+          if (data.entity_id) {
+            $entityIdField.val(data.entity_id);
+            delete data.entity_id;
+            $data.val(!Object.keys(data).length ? "" : JSON.stringify(data));
+          }
+        } catch (e) {}
+      }
 
       $data
         .typedInput({
-          types: ["json"]
+          types: ["json", "jsonata"],
+          typeField: "#node-input-dataType"
         })
         .typedInput("width", "68%");
+
+      $data.on("change", function() {
+        $("#mustacheAltTags").toggle($dataType.val() === "json");
+      });
 
       haServer.init(node, "#node-input-server");
       haServer.autocomplete("entities", entities => {
@@ -251,7 +266,7 @@
         .typedInput("width", "68%");
     },
     oneditsave: function() {
-      let entityId = $("#entity_id").val();
+      let entityId = $("#node-input-entityId").val();
       this.service_domain = $("#service_domain").val();
       this.service = $("#service").val();
 
@@ -271,20 +286,17 @@
         } else {
           entityId = entityId.replace(/\s*,\s*$/, ""); // remove trailing comma
         }
-
-        try {
-          const data = JSON.parse(dataString);
-          const mergedData = Object.assign({ entity_id: entityId }, data);
-          $nodeInputData.val(JSON.stringify(mergedData));
-        } catch (e) {
-          RED.notify("Error merging Entity Id into data.", "error");
-        }
+        $("#node-input-entityId").val(entityId);
       }
+
+      nodeVersion.update(this);
     }
   });
 </script>
 
 <script type="text/x-red" data-template-name="api-call-service">
+  <input type="hidden" id="node-input-version" />
+
   <div class="form-row">
     <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
     <input type="text" id="node-input-name" placeholder="Name">
@@ -306,18 +318,19 @@
   </div>
 
   <div class="form-row">
-    <label for="entity_id"><i class="fa fa-cube"></i> Entity Id</label>
-    <input type="text" id="entity_id">
+    <label for="node-input-entityId"><i class="fa fa-cube"></i> Entity Id</label>
+    <input type="text" id="node-input-entityId">
   </div>
 
   <div class="form-row">
     <label for="node-input-data"><i class="fa fa-dot-circle-o"></i> Data</label>
     <input type="text" id="node-input-data" />
+    <input type="hidden" id="node-input-dataType" />
   </div>
 
-  <div class="form-row checkboxOption">
+  <div class="form-row checkboxOption" id="mustacheAltTags">
     <input type="checkbox" id="node-input-mustacheAltTags">&nbsp;
-    <label for="node-input-mustacheAltTags">Use alternative Mustache tags for the Data field</label>
+    <label for="node-input-mustacheAltTags">Use alternative template tags for the Data field</label>
   </div>
 
   <div class="form-row">
@@ -358,16 +371,22 @@
 
   <h3>Config</h3>
   <dl class="message-properties">
-    <dt>Entity Id <span class="property-type">string</span></dt>
+    <dt>Domain <span class="property-type">string</span></dt>
+    <dd>Service domain to call</dd>
+
+    <dt>Service <span class="property-type">string</span></dt>
+    <dd>Service service to call</dd>
+
+    <dt class="optional">Entity Id <span class="property-type">string</span></dt>
     <dd>A comma delimited list of entity ids</dd>
 
-    <dt class="optional">data <span class="property-type">JSON</span></dt>
+    <dt class="optional">Data <span class="property-type">JSON</span></dt>
     <dd>JSON object to pass along.</dd>
 
     <dt class="optional">Merge Context <span class="property-type">string</span></dt>
     <dd>If defined will attempt to merge the global and flow context variable into the config</dd>
 
-    <dt class="optional">Alternative Mustache tags <span class="property-type">boolean</span></dt>
+    <dt class="optional">Alternative template tags <span class="property-type">boolean</span></dt>
     <dd>Will change the tags used for mustache template to <code>&lt;%</code> and <code>%&gt;</code></dd>
   </dl>
 
@@ -404,7 +423,7 @@
   </dl>
 
   <h3>Templates</h3>
-  <p>You can use templates in the <code>Domain</code>, <code>Service</code>, <code>Entity Id</code>, and <code>data</code> fields. When using templates the top level is a property of the message object: <code>msg.payload</code> would be <code>{{payload}}</code>. You can also access the <code>flow, global and states</code> contexts <code>{{flow.foobar}}</code> <code>{{global.something}}</code>. For the <code>states</code> context you can use the <code>{{entity.domain.entity_id}}</code> to just get the state or drill further down like <code>{{entity.light.kitchen.attributes.friendly_name}}</code>. <code>{{entity.light.kitchen}}</code> and <code>{{entity.light.kitchen.state}}</code> are equivalent.</p>
+  <p>You can use templates in the <code>Domain</code>, <code>Service</code>, <code>Entity Id</code>, and <code>data</code> fields. When using templates the top level is a property of the message object: <code>msg.payload</code> would be <code>{{payload}}</code>. You can also access the <code>flow, global and states</code> contexts <code>{{flow.foobar}}</code> <code>{{global.something}}</code>. For the <code>states</code> context you can use the <code>{{entity.domain.entity_id}}</code> to just get the state or drill further down like <code>{{entity.light.kitchen.attributes.friendly_name}}</code>. <code>{{entity.light.kitchen}}</code> and <code>{{entity.light.kitchen.state}}</code> are equivalent.</p><p>Templates only work in the data field when the data type is JSON.</p>
 
   <h3>Details</h3>
   <p>If the incoming message has a <code>payload</code> property with <code>domain</code>, <code>service</code> set it will override any config values if set.</p>

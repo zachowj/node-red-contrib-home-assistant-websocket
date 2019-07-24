@@ -8,7 +8,9 @@ module.exports = function(RED) {
         config: {
             service_domain: {},
             service: {},
+            entityId: {},
             data: {},
+            dataType: nodeDef => nodeDef.dataType || 'json',
             mergecontext: {},
             name: {},
             server: { isNode: true },
@@ -70,13 +72,27 @@ module.exports = function(RED) {
                 context,
                 serverName
             );
-            const configData = RenderTemplate(
-                config.data,
-                message,
-                context,
-                serverName,
-                config.mustacheAltTags
-            );
+            let configData;
+            if (config.dataType === 'jsonata' && config.data.length) {
+                try {
+                    configData = JSON.stringify(
+                        this.evaluateJSONata(config.data, message)
+                    );
+                } catch (e) {
+                    this.setStatusFailed('Error');
+                    this.node.error(e.message, message);
+                    return;
+                }
+            } else {
+                configData = RenderTemplate(
+                    config.data,
+                    message,
+                    context,
+                    serverName,
+                    config.mustacheAltTags
+                );
+            }
+
             const apiData = this.getApiData(payload, configData);
 
             if (!apiDomain || !apiService) {
@@ -95,6 +111,10 @@ module.exports = function(RED) {
                     apiData || {}
                 )}`
             );
+
+            // Merge entity id field into data property if it doesn't exist
+            if (config.entityId.length && !apiData.hasOwnProperty('entity_id'))
+                apiData.entity_id = config.entityId;
 
             const msgPayload = {
                 domain: apiDomain,
