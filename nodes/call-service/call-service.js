@@ -73,7 +73,7 @@ module.exports = function(RED) {
                 serverName
             );
             let configData;
-            if (config.dataType === 'jsonata' && config.data.length) {
+            if (config.dataType === 'jsonata' && config.data) {
                 try {
                     configData = JSON.stringify(
                         this.evaluateJSONata(config.data, message)
@@ -113,7 +113,7 @@ module.exports = function(RED) {
             );
 
             // Merge entity id field into data property if it doesn't exist
-            if (config.entityId.length && !apiData.hasOwnProperty('entity_id'))
+            if (config.entityId && !apiData.hasOwnProperty('entity_id'))
                 apiData.entity_id = config.entityId;
 
             const msgPayload = {
