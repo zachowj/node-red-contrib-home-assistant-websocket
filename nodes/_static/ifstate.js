@@ -24,7 +24,7 @@ var ifState = (function($) {
         $input = $(input);
         const $compare = $(compare);
         const entityType = { value: 'entity', label: 'entity.' };
-        let defaultTypes = [
+        const defaultTypes = [
             'str',
             'num',
             'bool',

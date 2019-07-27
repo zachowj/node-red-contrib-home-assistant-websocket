@@ -119,9 +119,7 @@ var haServer = (function($, RED) {
 
                 if (serverConfig && serverConfig.dirty === true) {
                     RED.notify(
-                        `You probably haven't deployed since adding a server. Do that for autocomplete to work.\n${
-                            err.responseText
-                        }`,
+                        `You probably haven't deployed since adding a server. Do that for autocomplete to work.\n${err.responseText}`,
                         'error'
                     );
                 }

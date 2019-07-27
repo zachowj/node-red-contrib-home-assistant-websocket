@@ -82,7 +82,7 @@
             container
           );
 
-          if (!data.hasOwnProperty("logic")) {
+          if (!Object.prototype.hasOwnProperty.call(data, "logic")) {
             data.logic = "is";
           }
 

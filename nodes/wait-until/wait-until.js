@@ -191,7 +191,7 @@ module.exports = function(RED) {
             const node = this;
             clearTimeout(node.timeoutId);
 
-            if (message.hasOwnProperty('reset')) {
+            if (Object.prototype.hasOwnProperty.call(message, 'reset')) {
                 node.status({ text: 'reset' });
                 node.active = false;
                 return null;

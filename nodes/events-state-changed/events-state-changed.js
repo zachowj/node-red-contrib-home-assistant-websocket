@@ -31,9 +31,7 @@ module.exports = function(RED) {
             let eventTopic = 'ha_events:state_changed';
 
             if (this.nodeConfig.entityidfiltertype === 'exact') {
-                eventTopic = this.eventTopic = `ha_events:state_changed:${
-                    this.nodeConfig.entityidfilter
-                }`;
+                eventTopic = this.eventTopic = `ha_events:state_changed:${this.nodeConfig.entityidfilter}`;
             }
 
             this.addEventClientListener({
@@ -150,8 +148,8 @@ module.exports = function(RED) {
         }
 
         onStatesLoaded(entities) {
-            for (let entityId in entities) {
-                let eventMessage = {
+            for (const entityId in entities) {
+                const eventMessage = {
                     event_type: 'state_changed',
                     entity_id: entityId,
                     event: {

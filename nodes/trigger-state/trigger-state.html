@@ -335,8 +335,9 @@
             const customAllIndex = customOutputIndex + NUM_DEFAULT_OUTPUTS;
             const outputIsBeforeRemoval =
               customOutputIndex < customOutputRemovedIndex;
-            const customOutputAlreadyMapped = node.outputs.hasOwnProperty(
-              customAllIndex
+            const customOutputAlreadyMapped = Object.prototype.hasOwnProperty.call(
+              node.outputs,
+              "customAllIndex"
             );
 
             // If we're on removed output

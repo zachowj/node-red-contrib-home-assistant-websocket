@@ -24,11 +24,14 @@ module.exports = function(RED) {
         constructor(nodeDefinition) {
             super(nodeDefinition, RED, nodeOptions);
         }
+
         isObjectLike(v) {
             return v !== null && typeof v === 'object';
         }
+
         // Disable connection status for api node
         setConnectionStatus() {}
+
         tryToObject(v) {
             if (!v) return null;
             try {
@@ -37,6 +40,7 @@ module.exports = function(RED) {
                 return v;
             }
         }
+
         onInput({ message }) {
             const config = this.nodeConfig;
             if (!this.isConnected) {
@@ -113,7 +117,10 @@ module.exports = function(RED) {
             );
 
             // Merge entity id field into data property if it doesn't exist
-            if (config.entityId && !apiData.hasOwnProperty('entity_id'))
+            if (
+                config.entityId &&
+                !Object.prototype.hasOwnProperty.call(apiData, 'entity_id')
+            )
                 apiData.entity_id = config.entityId;
 
             const msgPayload = {
@@ -150,7 +157,6 @@ module.exports = function(RED) {
         }
 
         getApiData(payload, data) {
-            let apiData;
             let contextData = {};
 
             let payloadData = this.utils.selectn('data', payload);
@@ -168,14 +174,7 @@ module.exports = function(RED) {
                 contextData = this.utils.merge({}, globalVal, flowVal);
             }
 
-            apiData = this.utils.merge(
-                {},
-                configData,
-                contextData,
-                payloadData
-            );
-
-            return apiData;
+            return this.utils.merge({}, configData, contextData, payloadData);
         }
     }
 

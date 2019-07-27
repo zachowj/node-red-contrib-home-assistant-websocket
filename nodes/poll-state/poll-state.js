@@ -52,9 +52,7 @@ module.exports = function(RED) {
 
             if (this.nodeConfig.outputonchanged) {
                 this.addEventClientListener({
-                    event: `ha_events:state_changed:${
-                        this.nodeConfig.entity_id
-                    }`,
+                    event: `ha_events:state_changed:${this.nodeConfig.entity_id}`,
                     handler: this.onTimer.bind(this)
                 });
             }
@@ -78,99 +76,90 @@ module.exports = function(RED) {
         async onTimer() {
             if (!this.isConnected) return;
 
-            try {
-                const pollState = this.utils.merge(
-                    {},
-                    await this.nodeConfig.server.homeAssistant.getStates(
-                        this.nodeConfig.entity_id
-                    )
+            const pollState = this.utils.merge(
+                {},
+                await this.nodeConfig.server.homeAssistant.getStates(
+                    this.nodeConfig.entity_id
+                )
+            );
+
+            if (!pollState.entity_id) {
+                this.error(
+                    `could not find state with entity_id "${this.nodeConfig.entity_id}"`,
+                    {}
                 );
+                this.status({
+                    fill: 'red',
+                    shape: 'ring',
+                    text: `no state found for ${this.nodeConfig.entity_id}`
+                });
+                return;
+            }
 
-                if (!pollState.entity_id) {
-                    this.error(
-                        `could not find state with entity_id "${
-                            this.nodeConfig.entity_id
-                        }"`,
-                        {}
-                    );
-                    this.status({
-                        fill: 'red',
-                        shape: 'ring',
-                        text: `no state found for ${this.nodeConfig.entity_id}`
-                    });
-                    return;
-                }
+            const dateChanged = this.calculateTimeSinceChanged(pollState);
+            if (!dateChanged) {
+                this.error(
+                    `could not calculate time since changed for entity_id "${this.nodeConfig.entity_id}"`,
+                    {}
+                );
+                return;
+            }
+            pollState.timeSinceChanged = ta.ago(dateChanged);
+            pollState.timeSinceChangedMs = Date.now() - dateChanged.getTime();
 
-                const dateChanged = this.calculateTimeSinceChanged(pollState);
-                if (!dateChanged) {
-                    this.error(
-                        `could not calculate time since changed for entity_id "${
-                            this.nodeConfig.entity_id
-                        }"`,
-                        {}
-                    );
-                    return;
-                }
-                pollState.timeSinceChanged = ta.ago(dateChanged);
-                pollState.timeSinceChangedMs =
-                    Date.now() - dateChanged.getTime();
+            // Convert and save original state if needed
+            if (this.nodeConfig.state_type !== 'str') {
+                pollState.original_state = pollState.state;
+                pollState.state = this.getCastValue(
+                    this.nodeConfig.state_type,
+                    pollState.state
+                );
+            }
 
-                // Convert and save original state if needed
-                if (this.nodeConfig.state_type !== 'str') {
-                    pollState.original_state = pollState.state;
-                    pollState.state = this.getCastValue(
-                        this.nodeConfig.state_type,
-                        pollState.state
-                    );
-                }
+            const msg = {
+                topic: this.nodeConfig.entity_id,
+                payload: pollState.state,
+                data: pollState
+            };
 
-                const msg = {
-                    topic: this.nodeConfig.entity_id,
-                    payload: pollState.state,
-                    data: pollState
-                };
-
-                let isIfState;
-                try {
-                    isIfState = await this.getComparatorResult(
-                        this.nodeConfig.halt_if_compare,
-                        this.nodeConfig.halt_if,
-                        pollState.state,
-                        this.nodeConfig.halt_if_type,
-                        {
-                            entity: pollState
-                        }
-                    );
-                } catch (e) {
-                    this.setStatusFailed('Error');
-                    this.node.error(e.message, {});
-                    return;
-                }
-
-                // Handle version 0 'halt if' outputs
-                if (this.nodeConfig.version < 1) {
-                    if (this.nodeConfig.halt_if && isIfState) {
-                        this.setStatusFailed(pollState.state);
-                        this.send([null, msg]);
-                        return;
+            let isIfState;
+            try {
+                isIfState = await this.getComparatorResult(
+                    this.nodeConfig.halt_if_compare,
+                    this.nodeConfig.halt_if,
+                    pollState.state,
+                    this.nodeConfig.halt_if_type,
+                    {
+                        entity: pollState
                     }
-                    this.setStatusSuccess(pollState.state);
-                    this.send([msg, null]);
-                    return;
-                }
+                );
+            } catch (e) {
+                this.setStatusFailed('Error');
+                this.node.error(e.message, {});
+                return;
+            }
 
-                // Check 'if state' and send to correct output
-                if (this.nodeConfig.halt_if && !isIfState) {
+            // Handle version 0 'halt if' outputs
+            if (this.nodeConfig.version < 1) {
+                if (this.nodeConfig.halt_if && isIfState) {
                     this.setStatusFailed(pollState.state);
                     this.send([null, msg]);
                     return;
                 }
-
                 this.setStatusSuccess(pollState.state);
                 this.send([msg, null]);
-            } catch (e) {
-                throw e;
+                return;
             }
+
+            // Check 'if state' and send to correct output
+            if (this.nodeConfig.halt_if && !isIfState) {
+                this.setStatusFailed(pollState.state);
+                this.send([null, msg]);
+                return;
+            }
+
+            this.setStatusSuccess(pollState.state);
+            this.send([msg, null]);
         }
 
         calculateTimeSinceChanged(entityState) {

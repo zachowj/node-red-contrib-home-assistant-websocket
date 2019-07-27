@@ -187,14 +187,14 @@ module.exports = function(RED) {
                         noPayload = true;
                         break;
                     }
-                    let maxReturned =
+                    const maxReturned =
                         Number(parsedMessage.outputResultsCount.value) || 1;
 
                     const max =
                         entities.length <= maxReturned
                             ? entities.length
                             : maxReturned;
-                    let shuffledEntities = shuffle(entities);
+                    const shuffledEntities = shuffle(entities);
                     payload = shuffledEntities.slice(0, max);
                     if (maxReturned === 1) {
                         payload = payload[0];

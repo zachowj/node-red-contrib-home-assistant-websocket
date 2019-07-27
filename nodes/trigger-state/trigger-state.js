@@ -33,9 +33,7 @@ module.exports = function(RED) {
             let eventTopic = 'ha_events:state_changed';
 
             if (this.nodeConfig.entityidfiltertype === 'exact') {
-                eventTopic = this.eventTopic = `ha_events:state_changed:${
-                    this.nodeConfig.entityid
-                }`;
+                eventTopic = this.eventTopic = `ha_events:state_changed:${this.nodeConfig.entityid}`;
             }
 
             this.addEventClientListener({
@@ -92,8 +90,8 @@ module.exports = function(RED) {
         }
 
         onStatesLoaded(entities) {
-            for (let entityId in entities) {
-                let eventMessage = {
+            for (const entityId in entities) {
+                const eventMessage = {
                     event_type: 'state_changed',
                     entity_id: entityId,
                     event: {
@@ -208,7 +206,7 @@ module.exports = function(RED) {
             const comparatorResults = [];
 
             // Check constraints
-            for (let constraint of constraints) {
+            for (const constraint of constraints) {
                 const {
                     comparatorType,
                     comparatorValue,
@@ -236,9 +234,7 @@ module.exports = function(RED) {
 
                 if (comparatorResult === false) {
                     this.debugToClient(
-                        `constraint comparator: failed entity "${
-                            constraintTarget.entityid
-                        }" property "${propertyValue}" with value ${actualValue} failed "${comparatorType}" check against (${comparatorValueDatatype}) ${comparatorValue}`
+                        `constraint comparator: failed entity "${constraintTarget.entityid}" property "${propertyValue}" with value ${actualValue} failed "${comparatorType}" check against (${comparatorValueDatatype}) ${comparatorValue}`
                     ); // eslint-disable-line
                 }
 
@@ -285,7 +281,7 @@ module.exports = function(RED) {
             return reduce(
                 outputs,
                 async (acc, output, reduceIndex) => {
-                    let result = {
+                    const result = {
                         output,
                         comparatorMatched: true,
                         actualValue: null,
@@ -320,7 +316,7 @@ module.exports = function(RED) {
         }
 
         async getConstraintTargetData(constraint, triggerEvent) {
-            let targetData = { entityid: null, state: null };
+            const targetData = { entityid: null, state: null };
             try {
                 const isTargetThisEntity =
                     constraint.targetType === 'this_entity';
@@ -356,11 +352,7 @@ module.exports = function(RED) {
             // If comparator did not match
             if (!comparatorMatched) {
                 this.debugToClient(
-                    `output comparator failed: property "${
-                        output.comparatorPropertyValue
-                    }" with value ${actualValue} failed "${
-                        output.comparatorType
-                    }" check against ${output.comparatorValue}`
+                    `output comparator failed: property "${output.comparatorPropertyValue}" with value ${actualValue} failed "${output.comparatorType}" check against ${output.comparatorValue}`
                 ); // eslint-disable-line
                 return null;
             }
@@ -410,7 +402,10 @@ module.exports = function(RED) {
         async loadPersistedData() {
             try {
                 const data = await this.getNodeData();
-                if (data && data.hasOwnProperty('isenabled')) {
+                if (
+                    data &&
+                    Object.prototype.hasOwnProperty.call(data, 'isenabled')
+                ) {
                     this.isenabled = data.isenabled;
                     this.updateConnectionStatus();
                 }

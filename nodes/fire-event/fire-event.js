@@ -49,6 +49,7 @@ module.exports = function(RED) {
 
         // Disable connection status for api node
         setConnectionStatus() {}
+
         tryToObject(v) {
             if (!v) return null;
             try {
@@ -104,9 +105,7 @@ module.exports = function(RED) {
                 })
                 .catch(err => {
                     this.error(
-                        `Error firing event, home assistant rest api error: ${
-                            err.message
-                        }`,
+                        `Error firing event, home assistant rest api error: ${err.message}`,
                         message
                     );
                     this.setStatusFailed('API Error');

@@ -83,7 +83,7 @@ module.exports = function(RED) {
             entityid = entityid.value;
             relativeTime = relativeTime.value;
             flatten = flatten.value;
-            let useRelativeTime = this.nodeConfig.useRelativeTime;
+            const useRelativeTime = this.nodeConfig.useRelativeTime;
 
             if (this.nodeConfig.server === null) {
                 this.node.error('No valid server selected.', message);
@@ -99,7 +99,7 @@ module.exports = function(RED) {
                 ).toISOString();
             }
 
-            let apiRequest =
+            const apiRequest =
                 entityidtype.value === 'includes' && entityid
                     ? this.httpClient.getHistory(startdate, null, enddate, {
                           flatten: flatten,
@@ -117,8 +117,7 @@ module.exports = function(RED) {
                 message.enddate = enddate || null;
                 message.entityid = entityid || null;
             } catch (err) {
-                let errorMessage = `Error get-history: ${err.message}`;
-                this.error(errorMessage, message);
+                this.error(`Error get-history: ${err.message}`, message);
                 this.setStatusFailed('Error');
 
                 return;
