@@ -270,23 +270,9 @@
       this.service_domain = $("#service_domain").val();
       this.service = $("#service").val();
 
-      // Insert entity id into data object
       if (entityId.length) {
-        const $nodeInputData = $("#node-input-data");
-        const dataString = $nodeInputData.val() || "{}";
-
-        if (
-          this.service_domain === "homeassistant" &&
-          entityId.indexOf(",") !== -1
-        ) {
-          entityId = entityId
-            .replace(/\s/g, "") // remove spaces
-            .replace(/\s*,\s*$/, "") // remove trailing comma
-            .split(",");
-        } else {
-          entityId = entityId.replace(/\s*,\s*$/, ""); // remove trailing comma
-        }
-        $("#node-input-entityId").val(entityId);
+        // remove trailing comma
+        $("#node-input-entityId").val(entityId.replace(/\s*,\s*$/, ""));
       }
 
       nodeVersion.update(this);

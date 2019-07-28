@@ -120,8 +120,17 @@ module.exports = function(RED) {
             if (
                 config.entityId &&
                 !Object.prototype.hasOwnProperty.call(apiData, 'entity_id')
-            )
-                apiData.entity_id = config.entityId;
+            ) {
+                // homeassistant domain requires entity_id to be an array for multiple ids
+                if (
+                    apiDomain === 'homeassistant' &&
+                    config.entityId.indexOf(',') !== -1
+                ) {
+                    apiData.entity_id = config.entityId.split(',');
+                } else {
+                    apiData.entity_id = config.entityId;
+                }
+            }
 
             const msgPayload = {
                 domain: apiDomain,
