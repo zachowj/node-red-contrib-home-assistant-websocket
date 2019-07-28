@@ -20,25 +20,7 @@
       service_domain: { value: "" },
       service: { value: "" },
       entityId: { value: "" },
-      data: {
-        value: "",
-        validate: function(v) {
-          // data isn't required since it could be either not needed or provided via payload
-          if (
-            !v ||
-            $("#node-input-dataType").val() === "jsonata" ||
-            template.indexOf("{{") !== -1
-          ) {
-            return true;
-          }
-          try {
-            JSON.parse(v);
-            return true;
-          } catch (e) {
-            return false;
-          }
-        }
-      },
+      data: { value: "" },
       dataType: { value: "json" },
       mergecontext: { value: null },
       output_location: { value: "payload" },
