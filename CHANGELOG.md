@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.14.1"></a>
+
+## [0.14.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.14.0...v0.14.1) (2019-07-28)
+
+### Bug Fixes
+
+- **call-service:** fix for validation of data field ([0902162](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/0902162))
+- **call-service:** homeassistant domain ids needing to be an array ([b118009](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/b118009)), closes [#136](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/136)
+
 <a name="0.14.0"></a>
 
 # [0.14.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.13.1...v0.14.0) (2019-07-24)
