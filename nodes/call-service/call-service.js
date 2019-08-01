@@ -121,14 +121,21 @@ module.exports = function(RED) {
                 config.entityId &&
                 !Object.prototype.hasOwnProperty.call(apiData, 'entity_id')
             ) {
+                const entityId = RenderTemplate(
+                    config.entityId,
+                    message,
+                    context,
+                    serverName,
+                    config.mustacheAltTags
+                );
                 // homeassistant domain requires entity_id to be an array for multiple ids
                 if (
                     apiDomain === 'homeassistant' &&
-                    config.entityId.indexOf(',') !== -1
+                    entityId.indexOf(',') !== -1
                 ) {
-                    apiData.entity_id = config.entityId.split(',');
+                    apiData.entity_id = entityId.split(',');
                 } else {
-                    apiData.entity_id = config.entityId;
+                    apiData.entity_id = entityId;
                 }
             }
 
