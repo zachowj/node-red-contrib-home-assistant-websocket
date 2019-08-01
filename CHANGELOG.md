@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.14.2"></a>
+
+## [0.14.2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.14.1...v0.14.2) (2019-08-01)
+
+### Bug Fixes
+
+- **call-service:** render mustache templates for entity id field ([8889355](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/8889355))
+
 <a name="0.14.1"></a>
 
 ## [0.14.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.14.0...v0.14.1) (2019-07-28)
