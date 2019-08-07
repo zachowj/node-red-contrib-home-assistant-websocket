@@ -50,6 +50,7 @@
       "api-get-history": "nodes/get-history/get-history.js",
       "api-render-template": "nodes/render-template/render-template.js",
       "ha-wait-until": "nodes/wait-until/wait-until.js",
+      "server-deconz-events": "nodes/deconz-events-all/deconz-events-all.js",
       "ha-api": "nodes/api/api.js"
     }
   },

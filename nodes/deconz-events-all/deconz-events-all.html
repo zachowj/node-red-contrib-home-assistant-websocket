@@ -1,0 +1,120 @@
+<script type="text/javascript">
+  RED.nodes.registerType("server-deconz-events", {
+    category: "home_assistant",
+    color: "#FFFF29",
+    defaults: {
+      name: { value: "" },
+      server: { value: "", type: "server", required: true },
+      event_type: { value: "", required: false },
+      button_name: { value: "", required: false },
+      button_event: { value: "", required: false }
+    },
+    inputs: 0,
+    outputs: 1,
+    icon: "cursor-pointer.png",
+    paletteLabel: "deconz-events",
+    label: function() {
+      return this.name || "no name deconz-events";
+    },
+    oneditprepare: function() {
+      const NODE = this;
+      const $server = $("#node-input-server");
+      const utils = {
+        setDefaultServerSelection: function() {
+          let defaultServer;
+          RED.nodes.eachConfig(n => {
+            if (n.type === "server" && !defaultServer) defaultServer = n.id;
+          });
+          if (defaultServer) $server.val(defaultServer);
+        }
+      };
+
+      if (!NODE.server) {
+        utils.setDefaultServerSelection();
+      }
+
+      if(this.nodeConfig.button_event){
+        const $buttonevent = $("#node-input-button_event");
+        $buttonevent.val(this.nodeConfig.button_event);
+      }      
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="server-deconz-events">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-server"><i class="fa fa-dot-circle-o"></i> Server</label>
+    <input type="text" id="node-input-server" />
+  </div>
+
+  <!-- ADDED -->
+  <div class="form-row">
+    <label for="node-input-button_name"><i class="fa fa-tag"></i> Button Name</label>
+    <input type="text" id="node-input-button_name" placeholder="deConz entity name" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-button_event"><i class="fa fa-tag"></i> Button Event</label>
+    <select id="node-input-button_event">
+      <option value="1002">Philips On</option>
+      <option value="4002">Philips Off</option>
+      <option value="1003">Philips On Long</option>
+      <option value="4003">Philips Off Long</option>
+      <option value="i1002">Ikea On-Off</option> 
+      <option value="i4002">Ikea Left</option> 
+      <option value="i5002">Ikea Right</option> 
+    </select>
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="server-deconz-events">
+  <h3>Outputs</h3>
+  <p>The outputted message object contains the following data, underscored values are straight from home assistant and home assistant client events.</p>
+
+  <dl class="message-properties">
+    <dt>topic <span class="property-type">string</span></dt>
+    <dd>event_type</dd>
+    <dt>event_type <span class="property-type">string</span></dt>
+    <dd>event_type</dd>
+    <dt>payload <span class="property-type">object</span></dt>
+    <dd>original event object</dd>
+  </dl>
+
+  <h3>Configuration</h3>
+
+  <dl class="message-properties">
+    <dt>Name <span class="property-type">string</span></dt>
+    <dd>the name of the node</dd>
+    <dt>Event Type <span class="property-type">string</span></dt>
+    <dd>filter by event type or leave blank for all events</dd>
+  </dl>
+
+  <h3>Client Events</h3>
+  <p>Possible Event Types</p>
+  <ul>
+    <li>connecting</li>
+    <li>connected</li>
+    <li>disconnected</li>
+    <li>error</li>
+    <li>states_loaded</li>
+    <li>services_loaded</li>
+  </ul>
+  Structure
+  <dl class="message-properties">
+    <dt>event_type <span class="property-type">string</span></dt>
+    <dd>home_assistant_client</dd>
+
+    <dt>topic <span class="property-type">string</span></dt>
+    <dd>home_assistant_client:{event_type}</dd>
+
+    <dt>payload <span class="property-type">string</span></dt>
+    <dd>connecting | connected | disconnected | error | states_loaded | services_loaded</dd>
+
+    <dt>data <span class="property-type optional">string</span></dt>
+    <dd>Will contain the error message if event type is type error</dd>
+  </dl>
+</script>
