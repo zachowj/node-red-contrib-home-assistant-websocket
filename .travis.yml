@@ -4,5 +4,6 @@ node_js:
 script:
   - npm run lint
   - npm run-script test-travis
-# Send coverage data to Coveralls
-after_script: "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+after_success:
+  # Send coverage data to Coveralls
+  - nyc npm test && nyc report --reporter=text-lcov | coveralls
