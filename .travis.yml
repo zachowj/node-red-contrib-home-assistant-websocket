@@ -1,9 +1,10 @@
 language: node_js
 node_js:
-  - "8"
+  - 8
+  - 10
 script:
   - npm run lint
-  - npm run-script test-travis
+  - npm run test
 after_success:
   # Send coverage data to Coveralls
   - nyc npm test && nyc report --reporter=text-lcov | coveralls
