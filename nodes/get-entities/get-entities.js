@@ -75,7 +75,11 @@ module.exports = function(RED) {
                     schema: Joi.array()
                         .items(
                             Joi.object({
-                                property: Joi.string(),
+                                property: Joi.when('logic', {
+                                    is: 'jsonata',
+                                    then: Joi.any(),
+                                    otherwise: Joi.string()
+                                }),
                                 logic: Joi.string().valid(
                                     'is',
                                     'is_not',
