@@ -222,7 +222,6 @@ module.exports = function(RED) {
                     constraint.propertyValue,
                     constraintTarget.state
                 );
-                console.log(constraint.propertyValue, actualValue);
 
                 const comparatorResult = await this.getComparatorResult(
                     comparatorType,
