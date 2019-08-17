@@ -140,6 +140,9 @@ module.exports = function(RED) {
                 entities = await filter(Object.values(states), async entity => {
                     const rules = parsedMessage.rules.value;
 
+                    entity.timeSinceChangedMs =
+                        Date.now() - new Date(entity.last_changed).getTime();
+
                     for (const rule of rules) {
                         const value = this.utils.selectn(rule.property, entity);
                         const result = await this.getComparatorResult(
@@ -160,8 +163,6 @@ module.exports = function(RED) {
                         }
                     }
 
-                    entity.timeSinceChangedMs =
-                        Date.now() - new Date(entity.last_changed).getTime();
                     return true;
                 });
             } catch (e) {
