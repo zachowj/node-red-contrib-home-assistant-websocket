@@ -324,14 +324,23 @@ module.exports = function(RED) {
                     ? this.nodeConfig.entityid
                     : constraint.targetValue;
 
-                if (isTargetThisEntity) {
-                    targetData.state = triggerEvent;
-                } else {
-                    const state = await this.nodeConfig.server.homeAssistant.getStates(
-                        targetData.entityid
+                targetData.state = isTargetThisEntity
+                    ? triggerEvent
+                    : await this.nodeConfig.server.homeAssistant.getStates(
+                          targetData.entityid
+                      );
+
+                // TODO: Deprecated, remove at a later date
+                if (
+                    !isTargetThisEntity &&
+                    constraint.propertyValue.startsWith('new_state.')
+                ) {
+                    this.warn(
+                        'DEPRECATED: new_state is no longer needed to access properties of this entity. The ability to do so will be removed in the future',
+                        {}
                     );
                     targetData.state = {
-                        new_state: state
+                        new_state: targetData.state
                     };
                 }
             } catch (e) {
