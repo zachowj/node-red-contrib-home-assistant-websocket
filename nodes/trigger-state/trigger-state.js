@@ -217,10 +217,13 @@ module.exports = function(RED) {
                     constraint,
                     eventMessage.event
                 );
+
                 const actualValue = this.utils.selectn(
                     constraint.propertyValue,
                     constraintTarget.state
                 );
+                console.log(constraint.propertyValue, actualValue);
+
                 const comparatorResult = await this.getComparatorResult(
                     comparatorType,
                     comparatorValue,
@@ -330,15 +333,10 @@ module.exports = function(RED) {
                           targetData.entityid
                       );
 
-                // TODO: Deprecated, remove at a later date
                 if (
                     !isTargetThisEntity &&
-                    constraint.propertyValue.startsWith('new_state.')
+                    constraint.propertyType === 'current_state'
                 ) {
-                    this.warn(
-                        'DEPRECATED: new_state is no longer needed to access properties of this entity. The ability to do so will be removed in the future',
-                        {}
-                    );
                     targetData.state = {
                         new_state: targetData.state
                     };
