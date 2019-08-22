@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.15.0"></a>
+
+# [0.15.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.14.2...v0.15.0) (2019-08-22)
+
+### Bug Fixes
+
+- **get-entities:** error when property value was not set for jsonata ([5125821](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/5125821))
+- **trigger-state:** Attribute of other entity undefined in trigger ([a45366f](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a45366f)), closes [#148](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/148)
+
+### Features
+
+- **get-entities:** timeSinceChangedMs is not a filterable property ([adfd0dc](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/adfd0dc)), closes [#147](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/147)
+
 <a name="0.14.2"></a>
 
 ## [0.14.2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.14.1...v0.14.2) (2019-08-01)
