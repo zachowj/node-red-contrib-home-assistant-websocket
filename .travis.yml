@@ -2,9 +2,25 @@ language: node_js
 node_js:
   - 8
   - 10
-script:
-  - npm run lint
-  - npm run test
-after_success:
-  # Send coverage data to Coveralls
-  - nyc npm test && nyc report --reporter=text-lcov | coveralls
+
+stages:
+  - name: test
+  - name: release
+    if: (branch = master AND type = push) OR (tag IS present)
+
+jobs:
+  include:
+    - stage: test
+      script:
+        - npm run lint
+        - npm run test
+      after_success:
+        # Send coverage data to Coveralls
+        - nyc npm test && nyc report --reporter=text-lcov | coveralls
+    - stage: release
+      node_js: 10
+      deploy: npm
+        email: "$NPM_EMAIL"
+        api_key: "$NPM_TOKEN"
+        on:
+          tags: true
