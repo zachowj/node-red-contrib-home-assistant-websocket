@@ -19,7 +19,8 @@ jobs:
         - nyc npm test && nyc report --reporter=text-lcov | coveralls
     - stage: release
       node_js: 10
-      deploy: npm
+      deploy:
+        provider: npm
         email: "$NPM_EMAIL"
         api_key: "$NPM_TOKEN"
         on:
