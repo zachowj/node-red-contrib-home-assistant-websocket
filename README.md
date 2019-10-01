@@ -30,8 +30,6 @@ $ npm install node-red-contrib-home-assistant-websocket
 # then restart node-red
 ```
 
-**Docker users on Rpi** will need to upgrade Node.js inside the [official Node-RED container](https://hub.docker.com/r/nodered/node-red-docker/) or can use the [raymondmm/node-red container](https://hub.docker.com/r/raymondmm/node-red) which comes with Node.js 8.16.0 installed.
-
 For [Hass.io](https://hass.io/) add-on users:
 
 The Community Hass.io add-on ships with this node right out of the box.
