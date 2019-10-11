@@ -7,7 +7,9 @@ module.exports = function(RED) {
     const nodeOptions = {
         debug: true,
         config: {
-            server: { isNode: true },
+            server: {
+                isNode: true
+            },
             name: {},
             rules: {},
             output_type: {},
@@ -132,7 +134,9 @@ module.exports = function(RED) {
                 this.node.warn(
                     'local state cache missing sending empty payload'
                 );
-                return { payload: {} };
+                return {
+                    payload: {}
+                };
             }
 
             let entities;
@@ -187,7 +191,7 @@ module.exports = function(RED) {
                     this.setStatusSuccess(statusText);
                     this.sendSplit(message, entities);
                     return;
-                case 'random':
+                case 'random': {
                     if (entities.length === 0) {
                         noPayload = true;
                         break;
@@ -208,6 +212,7 @@ module.exports = function(RED) {
                         maxReturned === 1 ? 1 : payload.length
                     } Random`;
                     break;
+                }
                 case 'array':
                 default:
                     if (
