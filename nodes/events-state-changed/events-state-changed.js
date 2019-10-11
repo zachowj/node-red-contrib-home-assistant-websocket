@@ -87,6 +87,7 @@ module.exports = function(RED) {
                 if (
                     runAll === undefined &&
                     this.nodeConfig.output_only_on_state_change === true &&
+                    event.old_state &&
                     event.old_state.state === event.new_state.state
                 ) {
                     return null;

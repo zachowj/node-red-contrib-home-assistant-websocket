@@ -27,6 +27,11 @@ module.exports = function(RED) {
                     handler: this.onClientServicesLoaded.bind(this)
                 });
             }
+
+            // Registering only needed event types
+            this.nodeConfig.server.homeAssistant.registeredEvents[this.id] =
+                this.nodeConfig.event_type || '__ALL__';
+            this.updateEventList();
         }
 
         onHaEventsAll(evt) {
@@ -64,6 +69,17 @@ module.exports = function(RED) {
             this.clientEvent('services_loaded');
         }
 
+        onClose(nodeRemoved) {
+            super.onClose();
+
+            if (nodeRemoved) {
+                delete this.nodeConfig.server.homeAssistant.registeredEvents[
+                    this.id
+                ];
+                this.updateEventList();
+            }
+        }
+
         onHaEventsClose() {
             super.onHaEventsClose();
             this.clientEvent('disconnected');
@@ -83,6 +99,14 @@ module.exports = function(RED) {
             super.onHaEventsError(err);
             if (err) {
                 this.clientEvent('error', err.message);
+            }
+        }
+
+        updateEventList() {
+            if (this.isConnected) {
+                this.websocketClient.subscribeEvents(
+                    this.nodeConfig.server.homeAssistant.registeredEvents
+                );
             }
         }
     }

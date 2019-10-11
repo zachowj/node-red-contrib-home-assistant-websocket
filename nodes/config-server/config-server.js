@@ -191,6 +191,10 @@ module.exports = function(RED) {
                     'ha_events:services_loaded',
                     this.onHaServicesLoaded.bind(this)
                 );
+                this.websocket.once(
+                    'ha_events:connected',
+                    this.registerEvents.bind(this)
+                );
             }
         }
 
@@ -269,12 +273,22 @@ module.exports = function(RED) {
                 webSocketClient.close();
             }
         }
+
+        registerEvents() {
+            this.homeAssistant.websocket.subscribeEvents(
+                this.homeAssistant.registeredEvents
+            );
+        }
     }
 
     RED.nodes.registerType('server', ConfigServerNode, {
         credentials: {
-            host: { type: 'text' },
-            access_token: { type: 'text' }
+            host: {
+                type: 'text'
+            },
+            access_token: {
+                type: 'text'
+            }
         }
     });
 };
