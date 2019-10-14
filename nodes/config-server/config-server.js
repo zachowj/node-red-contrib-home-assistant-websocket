@@ -3,7 +3,7 @@ const flatten = require('flat');
 const uniq = require('lodash.uniq');
 
 module.exports = function(RED) {
-    const HomeAssistant = require('../../lib/node-home-assistant');
+    const HomeAssistant = require('../../lib/home-assistant');
 
     // Handle static files
     RED.httpAdmin.get('/homeassistant/static/*', function(req, res, next) {
@@ -276,7 +276,7 @@ module.exports = function(RED) {
 
         registerEvents() {
             this.homeAssistant.websocket.subscribeEvents(
-                this.homeAssistant.registeredEvents
+                this.homeAssistant.eventsList
             );
         }
     }

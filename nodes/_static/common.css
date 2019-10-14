@@ -49,3 +49,8 @@ li span.property-type {
   font-size: 11px;
   float: right;
 }
+
+.ha-alertbox {
+  padding: 10px;
+  margin-bottom: 10px;
+}

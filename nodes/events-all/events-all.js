@@ -29,7 +29,7 @@ module.exports = function(RED) {
             }
 
             // Registering only needed event types
-            this.nodeConfig.server.homeAssistant.registeredEvents[this.id] =
+            this.nodeConfig.server.homeAssistant.eventsList[this.id] =
                 this.nodeConfig.event_type || '__ALL__';
             this.updateEventList();
         }
@@ -73,9 +73,7 @@ module.exports = function(RED) {
             super.onClose();
 
             if (nodeRemoved) {
-                delete this.nodeConfig.server.homeAssistant.registeredEvents[
-                    this.id
-                ];
+                delete this.nodeConfig.server.homeAssistant.eventsList[this.id];
                 this.updateEventList();
             }
         }
@@ -105,7 +103,7 @@ module.exports = function(RED) {
         updateEventList() {
             if (this.isConnected) {
                 this.websocketClient.subscribeEvents(
-                    this.nodeConfig.server.homeAssistant.registeredEvents
+                    this.nodeConfig.server.homeAssistant.eventsList
                 );
             }
         }

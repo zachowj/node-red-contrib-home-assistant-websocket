@@ -22,7 +22,7 @@ var nodeVersion = (function($) {
 
     function check(node) {
         node.version = node.version === undefined ? 0 : Number(node.version);
-        const versionAlert = `<div id="versionUpdate" class="ui-state-error"><p><strong>Alert:</strong>This node will be updated to version ${
+        const versionAlert = `<div id="versionUpdate" class="ui-state-error ha-alertbox"><p><strong>Alert:</strong>This node will be updated to version ${
             node._def.defaults.version.value
         } from ${node.version} (<a href="${wikiLink(
             node.type
