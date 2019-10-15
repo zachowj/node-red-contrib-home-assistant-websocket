@@ -22,7 +22,9 @@ module.exports = function(RED) {
             constraints: {},
             customoutputs: {},
             outputinitially: {},
-            state_type: { value: 'str' }
+            state_type: {
+                value: 'str'
+            }
         }
     };
 
@@ -51,7 +53,7 @@ module.exports = function(RED) {
                     this.onDeploy();
                 } else {
                     this.addEventClientListener({
-                        event: 'ha_events:states_loaded',
+                        event: 'ha_client:states_loaded',
                         handler: this.onStatesLoaded.bind(this)
                     });
                 }
@@ -318,7 +320,10 @@ module.exports = function(RED) {
         }
 
         async getConstraintTargetData(constraint, triggerEvent) {
-            const targetData = { entityid: null, state: null };
+            const targetData = {
+                entityid: null,
+                state: null
+            };
             try {
                 const isTargetThisEntity =
                     constraint.targetType === 'this_entity';

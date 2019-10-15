@@ -19,11 +19,11 @@ module.exports = function(RED) {
                 this.nodeConfig.event_type === 'home_assistant_client'
             ) {
                 this.addEventClientListener({
-                    event: 'ha_events:states_loaded',
+                    event: 'ha_client:states_loaded',
                     handler: this.onClientStatesLoaded.bind(this)
                 });
                 this.addEventClientListener({
-                    event: 'ha_events:services_loaded',
+                    event: 'ha_client:services_loaded',
                     handler: this.onClientServicesLoaded.bind(this)
                 });
             }
@@ -61,14 +61,6 @@ module.exports = function(RED) {
             }
         }
 
-        onClientStatesLoaded() {
-            this.clientEvent('states_loaded');
-        }
-
-        onClientServicesLoaded() {
-            this.clientEvent('services_loaded');
-        }
-
         onClose(nodeRemoved) {
             super.onClose();
 
@@ -98,6 +90,14 @@ module.exports = function(RED) {
             if (err) {
                 this.clientEvent('error', err.message);
             }
+        }
+
+        onClientStatesLoaded() {
+            this.clientEvent('states_loaded');
+        }
+
+        onClientServicesLoaded() {
+            this.clientEvent('services_loaded');
         }
 
         updateEventList() {

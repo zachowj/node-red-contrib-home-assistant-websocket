@@ -45,7 +45,7 @@ module.exports = function(RED) {
                     this.onDeploy();
                 } else {
                     this.addEventClientListener({
-                        event: 'ha_events:states_loaded',
+                        event: 'ha_client:states_loaded',
                         handler: this.onStatesLoaded.bind(this)
                     });
                 }

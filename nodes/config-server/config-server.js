@@ -164,35 +164,35 @@ module.exports = function(RED) {
                     .catch(err => this.node.error(err));
 
                 this.websocket.addListener(
-                    'ha_events:close',
+                    'ha_client:close',
                     this.onHaEventsClose.bind(this)
                 );
                 this.websocket.addListener(
-                    'ha_events:open',
+                    'ha_client:open',
                     this.onHaEventsOpen.bind(this)
                 );
                 this.websocket.addListener(
-                    'ha_events:connecting',
+                    'ha_client:connecting',
                     this.onHaEventsConnecting.bind(this)
                 );
                 this.websocket.addListener(
-                    'ha_events:error',
+                    'ha_client:error',
                     this.onHaEventsError.bind(this)
                 );
                 this.websocket.addListener(
-                    'ha_events:state_changed',
+                    'ha_client:state_changed',
                     this.onHaStateChanged.bind(this)
                 );
                 this.websocket.addListener(
-                    'ha_events:states_loaded',
+                    'ha_client:states_loaded',
                     this.onHaStatesLoaded.bind(this)
                 );
                 this.websocket.addListener(
-                    'ha_events:services_loaded',
+                    'ha_client:services_loaded',
                     this.onHaServicesLoaded.bind(this)
                 );
                 this.websocket.once(
-                    'ha_events:connected',
+                    'ha_client:connected',
                     this.registerEvents.bind(this)
                 );
             }

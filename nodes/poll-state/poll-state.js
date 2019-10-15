@@ -59,7 +59,7 @@ module.exports = function(RED) {
 
             if (this.nodeConfig.outputinitially) {
                 this.addEventClientListener({
-                    event: 'ha_events:states_loaded',
+                    event: 'ha_client:states_loaded',
                     handler: this.onTimer.bind(this)
                 });
             }
