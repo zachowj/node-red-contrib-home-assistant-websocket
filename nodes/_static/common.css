@@ -17,19 +17,19 @@
   margin-top: 5px;
 }
 
-.checkboxOption input {
+.form-row.checkboxOption input {
   margin-left: 105px;
   display: inline-block;
   width: auto;
   vertical-align: baseline;
 }
 
-.checkboxOption label {
+.form-row.checkboxOption label {
   width: auto;
   margin-right: 20px;
 }
 
-.node_label_legacy {
+.ha-nodeLabelLegacy {
   fill: #fdfd96;
   stroke-width: 0;
   font-size: 14px;
@@ -50,7 +50,7 @@ li span.property-type {
   float: right;
 }
 
-.ha-alertbox {
+.ha-alertBox {
   padding: 10px;
   margin-bottom: 10px;
 }
