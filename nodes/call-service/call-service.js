@@ -13,7 +13,9 @@ module.exports = function(RED) {
             dataType: nodeDef => nodeDef.dataType || 'json',
             mergecontext: {},
             name: {},
-            server: { isNode: true },
+            server: {
+                isNode: true
+            },
             output_location: {},
             output_location_type: {},
             mustacheAltTags: {}
@@ -147,6 +149,12 @@ module.exports = function(RED) {
 
             this.setStatusSending();
 
+            this.debugToClient({
+                domain: apiDomain,
+                service: apiService,
+                data: apiData
+            });
+
             return this.websocketClient
                 .callService(apiDomain, apiService, apiData)
                 .then(() => {
@@ -162,12 +170,11 @@ module.exports = function(RED) {
                 })
                 .catch(err => {
                     this.error(
-                        `Call-service API error.${
+                        `Call-service API error. ${
                             err.message ? ` Error Message: ${err.message}` : ''
                         }`,
                         message
                     );
-
                     this.setStatusFailed('API Error');
                 });
         }
