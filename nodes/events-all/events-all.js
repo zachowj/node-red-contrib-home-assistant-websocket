@@ -10,6 +10,7 @@ module.exports = function(RED) {
     class ServerEventsNode extends EventsNode {
         constructor(nodeDefinition) {
             super(nodeDefinition, RED, nodeOptions);
+
             this.addEventClientListener({
                 event: 'ha_events:' + (this.nodeConfig.event_type || 'all'),
                 handler: this.onHaEventsAll.bind(this)
@@ -29,9 +30,11 @@ module.exports = function(RED) {
             }
 
             // Registering only needed event types
-            this.nodeConfig.server.homeAssistant.eventsList[this.id] =
-                this.nodeConfig.event_type || '__ALL__';
-            this.updateEventList();
+            if (this.utils.selectn('nodeConfig.server.homeAssistant', this)) {
+                this.nodeConfig.server.homeAssistant.eventsList[this.id] =
+                    this.nodeConfig.event_type || '__ALL__';
+                this.updateEventList();
+            }
         }
 
         onHaEventsAll(evt) {
