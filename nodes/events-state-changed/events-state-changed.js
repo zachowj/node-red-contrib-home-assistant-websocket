@@ -34,20 +34,20 @@ module.exports = function(RED) {
                 eventTopic = this.eventTopic = `ha_events:state_changed:${this.nodeConfig.entityidfilter}`;
             }
 
-            this.addEventClientListener({
-                event: eventTopic,
-                handler: this.onHaEventsStateChanged.bind(this)
-            });
+            this.addEventClientListener(
+                eventTopic,
+                this.onHaEventsStateChanged.bind(this)
+            );
 
             if (this.nodeConfig.outputinitially) {
                 // Here for when the node is deploy without the server config being deployed
                 if (this.isConnected) {
                     this.onDeploy();
                 } else {
-                    this.addEventClientListener({
-                        event: 'ha_client:states_loaded',
-                        handler: this.onStatesLoaded.bind(this)
-                    });
+                    this.addEventClientListener(
+                        'ha_client:states_loaded',
+                        this.onStatesLoaded.bind(this)
+                    );
                 }
             }
         }

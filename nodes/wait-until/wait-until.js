@@ -5,7 +5,9 @@ module.exports = function(RED) {
     const nodeOptions = {
         config: {
             name: {},
-            server: { isNode: true },
+            server: {
+                isNode: true
+            },
             outputs: 1,
             entityId: {},
             property: {},
@@ -192,7 +194,9 @@ module.exports = function(RED) {
             clearTimeout(node.timeoutId);
 
             if (Object.prototype.hasOwnProperty.call(message, 'reset')) {
-                node.status({ text: 'reset' });
+                node.status({
+                    text: 'reset'
+                });
                 node.active = false;
                 return null;
             }
@@ -221,10 +225,10 @@ module.exports = function(RED) {
             }
 
             node.removeEventClientListeners();
-            node.addEventClientListener({
-                event: `ha_events:state_changed:${node.savedConfig.entityId}`,
-                handler: node.onEntityChange.bind(node)
-            });
+            node.addEventClientListener(
+                `ha_events:state_changed:${node.savedConfig.entityId}`,
+                node.onEntityChange.bind(node)
+            );
 
             node.savedMessage = message;
             node.active = true;
@@ -273,14 +277,20 @@ module.exports = function(RED) {
                     node.setStatusFailed('timed out');
                 }, node.timeout);
             }
-            node.setStatus({ text: statusText });
+            node.setStatus({
+                text: statusText
+            });
 
             if (node.nodeConfig.checkCurrentState === true) {
                 const currentState = await node.nodeConfig.server.homeAssistant.getStates(
                     node.savedConfig.entityId
                 );
 
-                node.onEntityChange({ event: { new_state: currentState } });
+                node.onEntityChange({
+                    event: {
+                        new_state: currentState
+                    }
+                });
             }
         }
 

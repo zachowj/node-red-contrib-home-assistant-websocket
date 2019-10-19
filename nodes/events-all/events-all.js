@@ -11,22 +11,22 @@ module.exports = function(RED) {
         constructor(nodeDefinition) {
             super(nodeDefinition, RED, nodeOptions);
 
-            this.addEventClientListener({
-                event: 'ha_events:' + (this.nodeConfig.event_type || 'all'),
-                handler: this.onHaEventsAll.bind(this)
-            });
+            this.addEventClientListener(
+                'ha_events:' + (this.nodeConfig.event_type || 'all'),
+                this.onHaEventsAll.bind(this)
+            );
             if (
                 !this.nodeConfig.event_type ||
                 this.nodeConfig.event_type === 'home_assistant_client'
             ) {
-                this.addEventClientListener({
-                    event: 'ha_client:states_loaded',
-                    handler: this.onClientStatesLoaded.bind(this)
-                });
-                this.addEventClientListener({
-                    event: 'ha_client:services_loaded',
-                    handler: this.onClientServicesLoaded.bind(this)
-                });
+                this.addEventClientListener(
+                    'ha_client:states_loaded',
+                    this.onClientStatesLoaded.bind(this)
+                );
+                this.addEventClientListener(
+                    'ha_client:services_loaded',
+                    this.onClientServicesLoaded.bind(this)
+                );
             }
 
             // Registering only needed event types

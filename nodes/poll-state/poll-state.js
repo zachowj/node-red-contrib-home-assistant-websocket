@@ -51,17 +51,17 @@ module.exports = function(RED) {
             }
 
             if (this.nodeConfig.outputonchanged) {
-                this.addEventClientListener({
-                    event: `ha_events:state_changed:${this.nodeConfig.entity_id}`,
-                    handler: this.onTimer.bind(this)
-                });
+                this.addEventClientListener(
+                    `ha_events:state_changed:${this.nodeConfig.entity_id}`,
+                    this.onTimer.bind(this)
+                );
             }
 
             if (this.nodeConfig.outputinitially) {
-                this.addEventClientListener({
-                    event: 'ha_client:states_loaded',
-                    handler: this.onTimer.bind(this)
-                });
+                this.addEventClientListener(
+                    'ha_client:states_loaded',
+                    this.onTimer.bind(this)
+                );
             }
         }
 

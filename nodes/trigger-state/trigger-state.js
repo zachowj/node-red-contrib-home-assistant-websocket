@@ -38,10 +38,10 @@ module.exports = function(RED) {
                 eventTopic = this.eventTopic = `ha_events:state_changed:${this.nodeConfig.entityid}`;
             }
 
-            this.addEventClientListener({
-                event: eventTopic,
-                handler: this.onEntityStateChanged.bind(this)
-            });
+            this.addEventClientListener(
+                eventTopic,
+                this.onEntityStateChanged.bind(this)
+            );
 
             this.NUM_DEFAULT_MESSAGES = 2;
 
@@ -52,10 +52,10 @@ module.exports = function(RED) {
                 if (this.isConnected) {
                     this.onDeploy();
                 } else {
-                    this.addEventClientListener({
-                        event: 'ha_client:states_loaded',
-                        handler: this.onStatesLoaded.bind(this)
-                    });
+                    this.addEventClientListener(
+                        'ha_client:states_loaded',
+                        this.onStatesLoaded.bind(this)
+                    );
                 }
             }
         }
