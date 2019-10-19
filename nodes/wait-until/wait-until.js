@@ -242,16 +242,20 @@ module.exports = function(RED) {
                     statusText = `waiting for ${timeout} milliseconds`;
                 } else if (timeoutUnits === 'minutes') {
                     node.timeout = timeout * (60 * 1000);
-                    statusText = `waiting for ${timeout} minutes`;
+                    statusText = `waiting for ${timeout} minutes: ${node.timeoutStatus()}`;
                 } else if (timeoutUnits === 'hours') {
                     node.timeout = timeout * (60 * 60 * 1000);
-                    statusText = node.timeoutStatus(node.timeout);
+                    statusText = `waiting until ${node.timeoutStatus(
+                        node.timeout
+                    )}`;
                 } else if (timeoutUnits === 'days') {
                     node.timeout = timeout * (24 * 60 * 60 * 1000);
-                    statusText = node.timeoutStatus(node.timeout);
+                    statusText = `waiting until ${node.timeoutStatus(
+                        node.timeout
+                    )}`;
                 } else {
                     node.timeout = timeout * 1000;
-                    statusText = `waiting for ${timeout} seconds`;
+                    statusText = `waiting for ${timeout} seconds: ${node.timeoutStatus()}`;
                 }
 
                 node.timeoutId = setTimeout(async () => {
@@ -301,10 +305,11 @@ module.exports = function(RED) {
                 day: 'numeric',
                 hour12: false,
                 hour: 'numeric',
-                minute: 'numeric'
+                minute: 'numeric',
+                second: 'numeric'
             });
 
-            return `waiting until ${timeoutStr}`;
+            return timeoutStr;
         }
     }
 
