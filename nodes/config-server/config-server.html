@@ -4,22 +4,44 @@
   RED.nodes.registerType("server", {
     category: "config",
     defaults: {
-      name: { value: "Home Assistant", required: false },
-      legacy: { value: false },
-      hassio: { value: false },
-      rejectUnauthorizedCerts: { value: true },
-      ha_boolean: { value: "y|yes|true|on|home|open" },
-      connectionDelay: { value: true }
+      name: {
+        value: "Home Assistant",
+        required: false
+      },
+      legacy: {
+        value: false
+      },
+      hassio: {
+        value: false
+      },
+      rejectUnauthorizedCerts: {
+        value: true
+      },
+      ha_boolean: {
+        value: "y|yes|true|on|home|open"
+      },
+      connectionDelay: {
+        value: true
+      },
+      cacheJson: {
+        value: true
+      }
     },
     credentials: {
-      host: { value: "", required: true },
-      access_token: { value: "", required: false }
+      host: {
+        value: "",
+        required: true
+      },
+      access_token: {
+        value: "",
+        required: false
+      }
     },
     icon: "home.png",
-    label: function() {
+    label: function () {
       return this.name || this.url;
     },
-    oneditprepare: function() {
+    oneditprepare: function () {
       const $hassio = $("#node-config-input-hassio");
       const $host = $("#node-config-input-host");
       const $legacy = $("#node-config-input-legacy");
@@ -28,12 +50,15 @@
         $("#node-config-input-ha_boolean").val("y|yes|true|on|home|open");
       }
 
+      // Backwards compatibility
       if (this.rejectUnauthorizedCerts === false) {
         $("#accept_unauthorized_certs").prop("checked", true);
       }
-
       if (this.connectionDelay === undefined) {
         $("#node-config-input-connectionDelay").prop("checked", true);
+      }
+      if (this.cacheJson === undefined) {
+        $("#node-config-input-cacheJson").prop("checked", true);
       }
 
       if (
@@ -42,12 +67,13 @@
       ) {
         $hassio.prop("checked", true);
       }
+
       function updateHassio() {
         $("#server-info").toggle(!$hassio.prop("checked"));
         $(".hassio").toggle($hassio.prop("checked"));
       }
       updateHassio();
-      $hassio.on("click", function() {
+      $hassio.on("click", function () {
         updateHassio();
       });
 
@@ -63,11 +89,11 @@
         );
       }
       updateLegacy();
-      $legacy.on("click", function() {
+      $legacy.on("click", function () {
         updateLegacy();
       });
     },
-    oneditsave: function() {
+    oneditsave: function () {
       const hassio = $("#node-config-input-hassio").is(":checked");
       const $host = $("#node-config-input-host");
       const hostname = $host.val();
@@ -136,13 +162,19 @@
   </div>
 
   <div class="form-row">
-        <label for="node-config-input-ha_boolean" style="width: 120px"><i class="fa fa-link"></i> State Boolean</label>
-        <input type="text" id="node-config-input-ha_boolean" placeholder="y|yes|true|on|home|open" />
+    <label for="node-config-input-ha_boolean" style="width: 120px"><i class="fa fa-link"></i> State Boolean</label>
+    <input type="text" id="node-config-input-ha_boolean" placeholder="y|yes|true|on|home|open" />
   </div>
+
+  <div class="form-row">
+    <input type="checkbox" id="node-config-input-cacheJson" style="width: auto;margin-left: 125px;vertical-align: top" />
+    <label for="node-config-input-cacheJson" style="width: auto;"> Cache Autocomplete Results</label>
+  </div>
+
 </script>
 
 <script type="text/x-red" data-help-name="server">
-    <p>Home Assistant connection configuration</p>
+  <p>Home Assistant connection configuration</p>
 
     <h3>Config</h3>
     <dl class="message-properties">
@@ -166,6 +198,9 @@
 
         <dt>State Boolean <span class="property-type">string | delimited</span></dt>
         <dd>A list of strings, not case sensitive, delimited by vertial pipe, | , that will return true for State Type Boolean.</dd>
+
+        <dt>Cache Autocomplete Results</dt>
+        <dd>Enables the caching of the JSON autocomplete requests. Enabling or disabling this may require a restart of Node-RED for it to take effect.</dd>
     </dl>
 
   <h3>Details</h3>

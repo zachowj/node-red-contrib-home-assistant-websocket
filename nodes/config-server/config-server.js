@@ -14,6 +14,18 @@ module.exports = function(RED) {
     });
 
     const httpHandlers = {
+        disableCache: function(req, res, next) {
+            if (this.nodeConfig.cacheJson === false) {
+                res.setHeader('Surrogate-Control', 'no-store');
+                res.setHeader(
+                    'Cache-Control',
+                    'no-store, no-cache, must-revalidate, proxy-revalidate'
+                );
+                res.setHeader('Pragma', 'no-cache');
+                res.setHeader('Expires', '0');
+            }
+            next();
+        },
         getEntities: function(req, res, next) {
             if (!this.homeAssistant) {
                 return res.json([]);
@@ -98,7 +110,8 @@ module.exports = function(RED) {
             hassio: {},
             rejectUnauthorizedCerts: {},
             ha_boolean: {},
-            connectionDelay: {}
+            connectionDelay: {},
+            cacheJson: {}
         }
     };
 
@@ -125,21 +138,25 @@ module.exports = function(RED) {
             this.RED.httpAdmin.get(
                 `/homeassistant/${this.id}/entities`,
                 RED.auth.needsPermission('server.read'),
+                httpHandlers.disableCache.bind(this),
                 httpHandlers.getEntities.bind(this)
             );
             this.RED.httpAdmin.get(
                 `/homeassistant/${this.id}/states`,
                 RED.auth.needsPermission('server.read'),
+                httpHandlers.disableCache.bind(this),
                 httpHandlers.getStates.bind(this)
             );
             this.RED.httpAdmin.get(
                 `/homeassistant/${this.id}/services`,
                 RED.auth.needsPermission('server.read'),
+                httpHandlers.disableCache.bind(this),
                 httpHandlers.getServices.bind(this)
             );
             this.RED.httpAdmin.get(
                 `/homeassistant/${this.id}/properties`,
                 RED.auth.needsPermission('server.read'),
+                httpHandlers.disableCache.bind(this),
                 httpHandlers.getProperties.bind(this)
             );
 
