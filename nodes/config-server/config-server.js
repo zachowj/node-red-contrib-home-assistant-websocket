@@ -197,10 +197,6 @@ module.exports = function(RED) {
                     this.onHaEventsError.bind(this)
                 );
                 this.websocket.addListener(
-                    'ha_client:state_changed',
-                    this.onHaStateChanged.bind(this)
-                );
-                this.websocket.addListener(
                     'ha_client:states_loaded',
                     this.onHaStatesLoaded.bind(this)
                 );
@@ -211,6 +207,10 @@ module.exports = function(RED) {
                 this.websocket.once(
                     'ha_client:connected',
                     this.registerEvents.bind(this)
+                );
+                this.websocket.addListener(
+                    'ha_events:state_changed',
+                    this.onHaStateChanged.bind(this)
                 );
             }
         }
