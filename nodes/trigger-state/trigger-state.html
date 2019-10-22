@@ -6,7 +6,7 @@
     color: "#038FC7",
     inputs: 1,
     outputs: 2,
-    outputLabels: function(index) {
+    outputLabels: function (index) {
       const NUM_DEFAULT_OUTPUTS = 2;
 
       if (index === 0) return "allowed";
@@ -27,24 +27,49 @@
     },
     icon: "trigger.png",
     paletteLabel: "trigger: state",
-    label: function() {
+    label: function () {
       return this.name || `trigger-state: ${this.entityid}`;
     },
     labelStyle: nodeVersion.labelStyle,
     defaults: {
-      name: { value: "" },
-      server: { value: "", type: "server", required: true },
-      entityid: { value: "", required: true },
-      entityidfiltertype: { value: "exact" },
-      debugenabled: { value: false },
-      constraints: { value: [] },
-      constraintsmustmatch: { value: "all" },
-      outputs: { value: 2 },
-      customoutputs: { value: [] },
-      outputinitially: { value: false },
-      state_type: { value: "str" }
+      name: {
+        value: ""
+      },
+      server: {
+        value: "",
+        type: "server",
+        required: true
+      },
+      entityid: {
+        value: "",
+        required: true
+      },
+      entityidfiltertype: {
+        value: "exact"
+      },
+      debugenabled: {
+        value: false
+      },
+      constraints: {
+        value: []
+      },
+      constraintsmustmatch: {
+        value: "all"
+      },
+      outputs: {
+        value: 2
+      },
+      customoutputs: {
+        value: []
+      },
+      outputinitially: {
+        value: false
+      },
+      state_type: {
+        value: "str"
+      }
     },
-    oneditprepare: function() {
+    oneditprepare: function () {
       // Outputs List
       let node = this;
       const NUM_DEFAULT_OUTPUTS = 2;
@@ -87,8 +112,8 @@
       const utils = {
         getRandomId: () =>
           Math.random()
-            .toString(36)
-            .slice(2)
+          .toString(36)
+          .slice(2)
       };
 
       let availableProperties = [];
@@ -120,12 +145,11 @@
           source: availablePropertiesPrefixes,
           minLength: 0
         });
-        $("#constraint-target-type").on("change", function() {
+        $("#constraint-target-type").on("change", function () {
           $("#constraint-property-value").autocomplete("option", {
-            source:
-              $(this).val() === "this_entity"
-                ? availablePropertiesPrefixes
-                : availableProperties
+            source: $(this).val() === "this_entity" ?
+              availablePropertiesPrefixes :
+              availableProperties
           });
         });
       });
@@ -134,7 +158,7 @@
       // * Add Constraints
       // **************************
       const constraintsHandler = {
-        onTargetTypeChange: function(e) {
+        onTargetTypeChange: function (e) {
           const val = e.target.value;
           if (val === "this_entity") {
             $constraints.targetValue.attr("disabled", "disabled").val("");
@@ -150,7 +174,7 @@
               .trigger("change");
           }
         },
-        onPropertyTypeChange: function(e) {
+        onPropertyTypeChange: function (e) {
           const val = e.target.value;
           if (val === "current_state" || val === "previous_state") {
             $constraints.propertyValue.attr("disabled", "disabled").val("");
@@ -158,10 +182,10 @@
             $constraints.propertyValue.removeAttr("disabled");
           }
         },
-        onComparatorTypeChange: function(e) {
+        onComparatorTypeChange: function (e) {
           const val = e.target.value; // Placeholder
         },
-        onAddConstraintButton: function(e) {
+        onAddConstraintButton: function (e) {
           const constraint = {
             id: utils.getRandomId(),
             targetType: $constraints.targetType.val(),
@@ -190,7 +214,7 @@
           $constraints.list.editableList("addItem", constraint);
           $constraints.targetValue.val("");
         },
-        onEditableListAdd: function(row, index, data) {
+        onEditableListAdd: function (row, index, data) {
           const $row = $(row);
           const {
             targetType,
@@ -203,16 +227,17 @@
           } = data;
 
           const entityText =
-            targetType === "this_entity"
-              ? "<strong>This entity&#8217;s</strong>"
-              : `Entity ID <strong>${targetValue}</strong>`;
+            targetType === "this_entity" ?
+            "<strong>This entity&#8217;s</strong>" :
+            `Entity ID <strong>${targetValue}</strong>`;
           const propertyText =
-            propertyType === "property"
-              ? propertyValue
-              : propertyType.replace("_", " ");
+            propertyType === "property" ?
+            propertyValue :
+            propertyType.replace("_", " ");
 
           const comparatorTypeText = comparatorType.replace("_", " ");
-          const comparatorText = `${comparatorTypeText} <strong>${comparatorValue}</strong> (${comparatorValueDatatype})`;
+          const comparatorText =
+            `${comparatorTypeText} <strong>${comparatorValue}</strong> (${comparatorValueDatatype})`;
 
           const rowHtml = `${entityText} ${propertyText} ${comparatorText}`;
           $row.html(rowHtml);
@@ -252,8 +277,14 @@
           "bool",
           "re",
           "jsonata",
-          { value: "entity", label: "entity." },
-          { value: "prevEntity", label: "prev entity." }
+          {
+            value: "entity",
+            label: "entity."
+          },
+          {
+            value: "prevEntity",
+            label: "prev entity."
+          }
         ]
       });
       $constraints.comparatorValue.typedInput("width", "233px");
@@ -262,7 +293,7 @@
       // * Add Custom Outputs
       // **************************
       const outputsHandler = {
-        onAddButtonClicked: function() {
+        onAddButtonClicked: function () {
           const output = {
             outputId: utils.getRandomId(),
 
@@ -298,37 +329,40 @@
 
           $customoutputs.list.editableList("addItem", output);
         },
-        onEditableListAdd: function(row, index, d) {
+        onEditableListAdd: function (row, index, d) {
           const $row = $(row);
 
           const messageText =
             d.messageType === "default" ? "default message" : d.messageValue;
 
           const sendWhenText =
-            d.comparatorPropertyType === "always"
-              ? "always"
-              : `${d.comparatorPropertyValue} ${d.comparatorType.replace(
+            d.comparatorPropertyType === "always" ?
+            "always" :
+            `${d.comparatorPropertyValue} ${d.comparatorType.replace(
                   "_",
                   ""
                 )} ${d.comparatorValue}`;
 
           const where =
-            d.messageType === "default"
-              ? "Send"
-              : d.messageType === "custom"
-              ? "Msg"
-              : "Payload";
+            d.messageType === "default" ?
+            "Send" :
+            d.messageType === "custom" ?
+            "Msg" :
+            "Payload";
 
           const html = `${where} <strong>${messageText}</strong>, if <strong>${sendWhenText}</strong>`;
 
           $row.html(html);
         },
-        onEditableListRemove: function(data) {
+        onEditableListRemove: function (data) {
           // node-red uses a map of old output index to new output index to re-map
           // links between nodes. If new index is -1 then it was removed
 
           let customOutputRemovedIndex = node.customoutputs.indexOf(data);
-          node.outputs = !isNaN(node.outputs) ? { 0: 0, 1: 1 } : node.outputs;
+          node.outputs = !isNaN(node.outputs) ? {
+            0: 0,
+            1: 1
+          } : node.outputs;
           node.outputs[customOutputRemovedIndex + NUM_DEFAULT_OUTPUTS] = -1;
 
           node.customoutputs.forEach((o, customOutputIndex) => {
@@ -350,27 +384,27 @@
               return;
             // output previously removed caused this output to be remapped
             if (customOutputAlreadyMapped) {
-              node.outputs[customAllIndex] = outputIsBeforeRemoval
-                ? node.outputs[customAllIndex]
-                : node.outputs[customAllIndex] - 1;
+              node.outputs[customAllIndex] = outputIsBeforeRemoval ?
+                node.outputs[customAllIndex] :
+                node.outputs[customAllIndex] - 1;
               return;
             }
 
             // output exists after removal and hasn't been mapped, remap to current index - 1
-            node.outputs[customAllIndex] = outputIsBeforeRemoval
-              ? customAllIndex
-              : customAllIndex - 1;
+            node.outputs[customAllIndex] = outputIsBeforeRemoval ?
+              customAllIndex :
+              customAllIndex - 1;
           });
 
           $outputs.val(JSON.stringify(node.outputs));
         },
-        onMessageTypeChange: function(e) {
+        onMessageTypeChange: function (e) {
           const val = e.target.value;
           $customoutputs.messageValue.typedInput(
             val === "default" ? "hide" : "show"
           );
         },
-        comparatorPropertyTypeChange: function(e) {
+        comparatorPropertyTypeChange: function (e) {
           const val = e.target.value;
           if (val === "always") {
             $customoutputs.comparatorPropertyValue.attr("disabled", "disabled");
@@ -445,7 +479,7 @@
         $customoutputs.list.editableList("addItem", o)
       );
     },
-    oneditsave: function() {
+    oneditsave: function () {
       const $constraintsList = $("#constraint-list");
       const $outputList = $("#output-list");
       const $entityid = $("#node-input-entityid");
@@ -455,7 +489,7 @@
       // Compile Constraints
       const nodeConstraints = [];
       const listConstraints = $constraintsList.editableList("items");
-      listConstraints.each(function(i) {
+      listConstraints.each(function (i) {
         nodeConstraints.push($(this).data("data"));
       });
       this.constraints = nodeConstraints;
@@ -463,7 +497,7 @@
       // Compile Outputs
       const nodeOutputs = [];
       const listOutputs = $outputList.editableList("items");
-      listOutputs.each(function(i) {
+      listOutputs.each(function (i) {
         nodeOutputs.push($(this).data("data"));
       });
       this.customoutputs = nodeOutputs;
@@ -476,150 +510,150 @@
 <script type="text/x-red" data-template-name="trigger-state">
   <!-- Name -->
   <div class="form-row">
-      <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-      <input type="text" id="node-input-name" placeholder="Name">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
   </div>
 
   <!-- Server -->
   <div class="form-row">
-      <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
-      <input type="text" id="node-input-server" />
+    <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
+    <input type="text" id="node-input-server" />
   </div>
 
   <!-- Entity ID Filter and Filter Type -->
   <div class="form-row">
-      <label for="node-input-entityid"><i class="fa fa-tag"></i> Entity ID</label>
-      <input type="text" id="node-input-entityid" placeholder="binary_sensor" style="width: 50%;" />
-        <select type="text" id="node-input-entityidfiltertype" style="width: 20%;">
-          <option value="exact">Exact</option>
-          <option value="substring">Substring</option>
-          <option value="regex">Regex</option>
-        </select>
+    <label for="node-input-entityid"><i class="fa fa-tag"></i> Entity ID</label>
+    <input type="text" id="node-input-entityid" style="width: 50%;" />
+    <select type="text" id="node-input-entityidfiltertype" style="width: 20%;">
+      <option value="exact">Exact</option>
+      <option value="substring">Substring</option>
+      <option value="regex">Regex</option>
+    </select>
   </div>
 
   <div class="form-row">
-      <label for="node-input-state_type"><i class="fa fa-tint"></i> State Type</label>
-      <select type="text" id="node-input-state_type" style="width: auto;">
-          <option value="str">String</option>
-          <option value="num">Number</option>
-          <option value="habool">Boolean</option>
-      </select>
+    <label for="node-input-state_type"><i class="fa fa-tint"></i> State Type</label>
+    <select type="text" id="node-input-state_type" style="width: auto;">
+      <option value="str">String</option>
+      <option value="num">Number</option>
+      <option value="habool">Boolean</option>
+    </select>
   </div>
 
   <!-- -------------------------------------------------------------- -->
   <!-- Add Custom Constraints                                         -->
   <!-- -------------------------------------------------------------- -->
   <div class="form-row" id="add-constraint-container">
-      <h3>Add Constraints</h3>
-      <div>
-          <!-- Target Selection -->
-          <div class="form-row">
-              <!-- Type -->
-              <select type="text" id="constraint-target-type" style="width: 140px;">
-                  <option value="this_entity">This Entity</option>
-                  <option value="entity_id">Entity ID</option>
-              </select>
+    <h3>Add Constraints</h3>
+    <div>
+      <!-- Target Selection -->
+      <div class="form-row">
+        <!-- Type -->
+        <select type="text" id="constraint-target-type" style="width: 140px;">
+          <option value="this_entity">This Entity</option>
+          <option value="entity_id">Entity ID</option>
+        </select>
 
-              <!-- Value -->
-              <input type="text" id="constraint-target-value" style="width: 62%" disabled />
-          </div>
-
-          <!-- Property Selection -->
-          <div class="form-row">
-              <!-- Type -->
-              <select type="text" id="constraint-property-type" style="width: 140px;">
-                  <option value="current_state">Current State</option>
-                  <option value="previous_state">Previous State</option>
-                  <option value="property">Property</option>
-              </select>
-
-              <!-- Value -->
-              <input type="text" id="constraint-property-value" style="width: 62%" disabled />
-          </div>
-
-
-          <!-- Comparator Selection -->
-          <div class="form-row">
-              <!-- Type -->
-              <select type="text" id="constraint-comparator-type" style="width: 140px;">
-                  <option value="is">Is</option>
-                  <option value="is_not">Is Not</option>
-
-                  <option value=">">&gt;</option>
-                  <option value=">=">&gt;=</option>
-                  <option value="<">&lt;</option>
-                  <option value="<=">&lt;=</option>
-
-                  <option value="includes">Includes</option>
-                  <option value="does_not_include">Does Not Include</option>
-              </select>
-
-              <!-- Value -->
-              <input type="text" id="constraint-comparator-value" />
-          </div>
-
-          <!-- Add Constraint Button -->
-          <button id="constraint-add-btn" style="width: 100%">Add Constraint</button>
+        <!-- Value -->
+        <input type="text" id="constraint-target-value" style="width: 62%" disabled />
       </div>
+
+      <!-- Property Selection -->
+      <div class="form-row">
+        <!-- Type -->
+        <select type="text" id="constraint-property-type" style="width: 140px;">
+          <option value="current_state">Current State</option>
+          <option value="previous_state">Previous State</option>
+          <option value="property">Property</option>
+        </select>
+
+        <!-- Value -->
+        <input type="text" id="constraint-property-value" style="width: 62%" disabled />
+      </div>
+
+
+      <!-- Comparator Selection -->
+      <div class="form-row">
+        <!-- Type -->
+        <select type="text" id="constraint-comparator-type" style="width: 140px;">
+          <option value="is">Is</option>
+          <option value="is_not">Is Not</option>
+
+          <option value=">">&gt;</option>
+          <option value=">=">&gt;=</option>
+          <option value="<">&lt;</option>
+          <option value="<=">&lt;=</option>
+
+          <option value="includes">Includes</option>
+          <option value="does_not_include">Does Not Include</option>
+        </select>
+
+        <!-- Value -->
+        <input type="text" id="constraint-comparator-value" />
+      </div>
+
+      <!-- Add Constraint Button -->
+      <button id="constraint-add-btn" style="width: 100%">Add Constraint</button>
+    </div>
   </div>
 
   <!-- Constraints List -->
   <div class="form-row">
-      <ol id="constraint-list"></ol>
+    <ol id="constraint-list"></ol>
   </div>
 
   <!-- -------------------------------------------------------------- -->
   <!-- Add Custom Outputs                                             -->
   <!-- -------------------------------------------------------------- -->
   <div class="form-row" id="add-output-container">
-      <h3>Add Outputs</h3>
-      <div>
-          <div class="form-row">
-              <!-- Type -->
-              <select type="text" id="output-message-type" style="width: 140px;">
-                  <option value="default">Default Msg</option>
-                  <option value="custom">Custom Msg</option>
-                  <option value="payload">Custom Payload</option>
-              </select>
+    <h3>Add Outputs</h3>
+    <div>
+      <div class="form-row">
+        <!-- Type -->
+        <select type="text" id="output-message-type" style="width: 140px;">
+          <option value="default">Default Msg</option>
+          <option value="custom">Custom Msg</option>
+          <option value="payload">Custom Payload</option>
+        </select>
 
-              <input type="text" id="output-message-value" style="width: 62%"/>
-              <input type="hidden" id="output-message-value-type" />
-          </div>
-
-
-          <!-- Output Comparator Selection -->
-          <div class="form-row">
-              <select type="text" id="output-comparator-property-type" style="width: 140px">
-                  <option value="always">Send Always</option>
-                  <option value="current_state">If State</option>
-                  <option value="previous_state">If Prev State</option>
-                  <option value="property">If Property</option>
-              </select>
-
-              <input type="text" id="output-comparator-property-value" style="width: 62%" disabled />
-          </div>
-
-          <div class="form-row">
-              <!-- Type -->
-              <select type="text" id="output-comparator-type" style="width: 140px;" disabled>
-                  <option value="is">Is</option>
-                  <option value="is_not">Is Not</option>
-
-                  <option value=">">&gt;</option>
-                  <option value=">=">&gt;=</option>
-                  <option value="<">&lt;</option>
-                  <option value="<=">&lt;=</option>
-
-                  <option value="includes">Includes</option>
-                  <option value="does_not_include">Does Not Include</option>
-              </select>
-
-              <input type="text" id="output-comparator-value" style="width: 62%" disabled />
-          </div>
-
-          <!-- Add Output Button -->
-          <button id="output-add-btn" style="width: 100%">Add Output</button>
+        <input type="text" id="output-message-value" style="width: 62%" />
+        <input type="hidden" id="output-message-value-type" />
       </div>
+
+
+      <!-- Output Comparator Selection -->
+      <div class="form-row">
+        <select type="text" id="output-comparator-property-type" style="width: 140px">
+          <option value="always">Send Always</option>
+          <option value="current_state">If State</option>
+          <option value="previous_state">If Prev State</option>
+          <option value="property">If Property</option>
+        </select>
+
+        <input type="text" id="output-comparator-property-value" style="width: 62%" disabled />
+      </div>
+
+      <div class="form-row">
+        <!-- Type -->
+        <select type="text" id="output-comparator-type" style="width: 140px;" disabled>
+          <option value="is">Is</option>
+          <option value="is_not">Is Not</option>
+
+          <option value=">">&gt;</option>
+          <option value=">=">&gt;=</option>
+          <option value="<">&lt;</option>
+          <option value="<=">&lt;=</option>
+
+          <option value="includes">Includes</option>
+          <option value="does_not_include">Does Not Include</option>
+        </select>
+
+        <input type="text" id="output-comparator-value" style="width: 62%" disabled />
+      </div>
+
+      <!-- Add Output Button -->
+      <button id="output-add-btn" style="width: 100%">Add Output</button>
+    </div>
   </div>
 
   <!-- Output List -->
@@ -628,12 +662,14 @@
   </div>
 
   <div class="form-row">
-    <input type="checkbox" id="node-input-outputinitially" style="display: inline-block; width: auto; vertical-align: top;">
+    <input type="checkbox" id="node-input-outputinitially"
+      style="display: inline-block; width: auto; vertical-align: top;">
     <label for="node-input-outputinitially" style="width: auto;">Output on Connect</label>
   </div>
 
   <div class="form-row">
-    <input type="checkbox" id="node-input-debugenabled" style="display: inline-block; width: auto; vertical-align: top;" />
+    <input type="checkbox" id="node-input-debugenabled"
+      style="display: inline-block; width: auto; vertical-align: top;" />
     <label for="node-input-debugenabled" style="width: auto;">Show Debug Information</label>
   </div>
 </script>
