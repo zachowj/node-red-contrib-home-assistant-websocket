@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [0.16.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.15.0...v0.16.0) (2019-10-24)
+
+### Bug Fixes
+
+- check for WS client before listening for events ([8d72dbc](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/8d72dbcdcbca0a928065e9ee17cd101ee5c004bb)), closes [#158](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/158)
+- css changed for NR v1.0 ([41539d7](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/41539d7df918f8e7356fa6e6a248ffe255137a46))
+- Remove event type from sub list when unsubscribing ([321561d](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/321561d324c8f460fc81b1093f3a1859013d9d04))
+- **config-server:** Revert ha_events for state_changed event so global context gets updated ([ef0c8d1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ef0c8d1c674e1c46bd89e149254fd168b6456ccd))
+
+### Features
+
+- **call-service:** Add debug flag for more information ([873603b](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/873603b29778c824bd3f8b2c72b80964efd440bf))
+- **wait-until:** Add trigger time to wait until node in status message ([eeac869](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/eeac86923a0f9402b36a9809201d3e8fdbb864eb)), closes [#157](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/157)
+- Add ability to disable caching of autocomplete results ([a90e041](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a90e041da7e7b9ab210d157fe29d622dd750aa0d))
+
 <a name="0.15.0"></a>
 
 # [0.15.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.14.2...v0.15.0) (2019-08-22)
