@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.16.3](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.16.0...v0.16.3) (2019-10-24)
+
+### Bug Fixes
+
+- fix JOI validate format ([24af2d4](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/24af2d434b20b91e469f7d22158837a7252fe3c5))
+
+## [0.16.2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.16.0...v0.16.2) (2019-10-24)
+
+### Bug Fixes
+
+- fix JOI validate format ([24af2d4](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/24af2d434b20b91e469f7d22158837a7252fe3c5))
+
+## [0.16.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.16.0...v0.16.1) (2019-10-24)
+
+### Bug Fixes
+
+- fix JOI validate format ([24af2d4](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/24af2d434b20b91e469f7d22158837a7252fe3c5))
+
 # [0.16.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.15.0...v0.16.0) (2019-10-24)
 
 ### Bug Fixes
