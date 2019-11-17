@@ -190,8 +190,12 @@
       <dt>State Type<span class="property-type">string</span></dt>
       <dd>Convert the state of the entity to the selected type. Boolean will be convert to true based on if the string is equal by default to (y|yes|true|on|home|open). Original value stored in msg.data.original_state</dd>
 
-      <dt>Output Initially<span class="property-type">boolean</span></dt>
-      <dd>Output once on startup/deploy then on each interval</dd>
+      <dt>Output only on state change<span class="property-type">boolean</span></dt>
+      <dd>Output only when state has changed and not on startup/deploy</dd>
+
+      <dt>Output on Connect<span class="property-type">boolean</span></dt>
+      <dd>Output once on startup/deploy</dd>
+
   </dl>
 
   <h3>Output Object:</h3>
