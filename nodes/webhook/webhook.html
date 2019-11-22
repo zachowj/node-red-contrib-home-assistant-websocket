@@ -1,0 +1,87 @@
+<link rel="stylesheet" type="text/css" href="homeassistant/static/common.css" />
+<script src="homeassistant/static/common.js"></script>
+<script type="text/javascript">
+  function generateId(length) {
+    const possible =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    return Array.from(
+      { length: length },
+      () => possible[Math.floor(Math.random() * possible.length)]
+    ).join("");
+  }
+
+  RED.nodes.registerType("ha-webhook", {
+    category: "home_assistant",
+    color: "#038FC7",
+    outputs: 1,
+    outputLabels: "",
+    icon: "font-awesome/fa-external-link-square",
+    paletteLabel: "webhook",
+    label: function() {
+      return this.name || `webhook`;
+    },
+    labelStyle: nodeVersion.labelStyle,
+    defaults: {
+      name: { value: "" },
+      server: { value: "", type: "server", required: true },
+      outputs: { value: 1 },
+      webhookId: { value: generateId(32), required: true }
+    },
+    oneditprepare: function() {
+      const node = this;
+      haServer.init(node, "#node-input-server");
+      $webhookId = $("#node-input-webhookId");
+
+      $("#copyId").on("click", function() {
+        const ele = $webhookId[0];
+        const id = ele.value;
+        ele.value = `https://<ip>:<port>/api/webhook/${id}`;
+
+        ele.select();
+        ele.setSelectionRange(0, 99999);
+
+        document.execCommand("copy");
+        ele.value = id;
+      });
+
+      $("#refresh").on("click", function() {
+        $webhookId.val(generateId(32));
+      });
+    },
+    oneditsave: function() {}
+  });
+</script>
+
+<script type="text/x-red" data-template-name="ha-webhook">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+    <input type="hidden" id="node-input-outputs"/>
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
+    <input type="text" id="node-input-server" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-webhookId"><i class="fa fa-cube"></i> ID</label>
+    <div style="display: inline-block; position: relative; width: 70%; height: 20px;">
+      <div style="position: absolute; left: 0px; right: 80px;">
+        <input type="text" id="node-input-webhookId" style="width: 100%" >
+      </div>
+      <a id="copyId" class="editor-button" style="position: absolute; right: 0px; top: 0px;"><i class="fa fa-copy"></i></a>
+      <a id="refresh" class="editor-button" style="position: absolute; right: 40px; top: 0px;"><i class="fa fa-refresh"></i></a>
+    </div>
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="ha-webhook">
+
+  <h3>Inputs</h3>
+
+  <h3>Configuration</h3>
+
+  <h3>Outputs</h3>
+</script>

@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-const EventsNode = require('../../lib/events-node');
+const EventsHaNode = require('../../lib/events-ha-node');
 
 module.exports = function(RED) {
     const nodeOptions = {
@@ -24,10 +24,9 @@ module.exports = function(RED) {
         }
     };
 
-    class ServerStateChangedNode extends EventsNode {
+    class ServerStateChangedNode extends EventsHaNode {
         constructor(nodeDefinition) {
             super(nodeDefinition, RED, nodeOptions);
-
             let eventTopic = 'ha_events:state_changed';
 
             if (this.nodeConfig.entityidfiltertype === 'exact') {
@@ -53,6 +52,10 @@ module.exports = function(RED) {
         }
 
         async onHaEventsStateChanged(evt, runAll) {
+            if (this.isEnabled === false) {
+                return;
+            }
+
             try {
                 const { entity_id, event } = this.utils.merge({}, evt);
 

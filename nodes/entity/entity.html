@@ -1,0 +1,218 @@
+<link rel="stylesheet" type="text/css" href="homeassistant/static/common.css" />
+<script src="homeassistant/static/common.js"></script>
+<script src="homeassistant/static/ifstate.js"></script>
+<script type="text/javascript">
+  RED.nodes.registerType("ha-entity", {
+    category: "home_assistant",
+    color: "#52C0F2",
+    inputs: 1,
+    outputs: 1,
+    icon: "font-awesome/fa-genderless",
+    align: "right",
+    paletteLabel: "sensor",
+    label: function() {
+      return this.name || `type: ${this.entityType}`;
+    },
+    labelStyle: nodeVersion.labelStyle,
+    defaults: {
+      name: { value: "" },
+      server: { value: "", type: "server", required: true },
+      version: { value: 1 },
+      outputs: { value: 1 },
+      entityType: { value: "sensor" },
+      config: {
+        value: [
+          { property: "name", value: "" },
+          { property: "device_class", value: "" },
+          { property: "icon", value: "" },
+          { property: "unit_of_measurement", value: "" }
+        ]
+      },
+      state: { value: "payload" },
+      stateType: { value: "msg" },
+      attributes: {
+        value: []
+      },
+      resend: { value: true }
+    },
+    oneditprepare: function() {
+      nodeVersion.check(this);
+      const node = this;
+      const stateTypes = {
+        sensor: ["msg", "flow", "global", "jsonata", "str", "bool", "date"],
+        binary_sensor: ["bool", "jsonata", "msg", "flow", "global"]
+      };
+      const attributeTypes = [
+        "str",
+        "num",
+        "bool",
+        "date",
+        "jsonata",
+        "msg",
+        "flow",
+        "global"
+      ];
+
+      haServer.init(node, "#node-input-server");
+
+      $("#node-input-state").typedInput({
+        types: stateTypes[$("#node-input-entityType").val()],
+        typeField: "#node-input-stateType",
+        type: node.stateType
+      });
+
+      $("#node-input-entityType")
+        .on("change", function() {
+          $("#node-input-state").typedInput("types", stateTypes[$(this).val()]);
+        })
+        .trigger("change");
+
+      $("#attributes")
+        .editableList({
+          addButton: true,
+          removable: true,
+          addButton: "add attribute",
+          header: $("<div>").append(
+            $.parseHTML(
+              "<div style='width:40%; display: inline-grid'>Attribute Key</div><div style='display: inline-grid'>Value</div>"
+            )
+          ),
+          addItem: function(container, index, data) {
+            const $row = $("<div />").appendTo(container);
+            $("<input />", {
+              type: "text",
+              name: "property",
+              style: "width: 40%;margin-right: 5px;"
+            })
+              .attr("autocomplete", "disable")
+              .appendTo($row)
+              .val(data.property);
+            const $value = $("<input />", {
+              type: "text",
+              name: "value",
+              style: "width: 55%;"
+            })
+              .appendTo($row)
+              .val(data.value)
+              .typedInput({ types: attributeTypes });
+            $value.typedInput("type", data.valueType);
+          }
+        })
+        .editableList("addItems", node.attributes);
+
+      $("#config")
+        .editableList({
+          addButton: false,
+          header: $("<div>Config (optional)</div>"),
+          addItem: function(container, index, data) {
+            const $row = $("<div />").appendTo(container);
+            $("<input />", {
+              type: "text",
+              name: "property",
+              value: data.property,
+              style: "width: 40%;",
+              readonly: true
+            }).appendTo($row);
+
+            $("<input />", {
+              type: "text",
+              name: "value",
+              value: data.value,
+              style: "margin-left: 10px;width: 55%;"
+            })
+              .attr("autocomplete", "disable")
+              .appendTo($row);
+          }
+        })
+        .editableList("addItems", node.config);
+    },
+    oneditsave: function() {
+      const node = this;
+      node.attributes = [];
+      node.config = [];
+      nodeVersion.update(this);
+
+      $("#attributes")
+        .editableList("items")
+        .each(function(i) {
+          const $row = $(this);
+          node.attributes.push({
+            property: $row.find("input[name=property]").val(),
+            value: $row.find("input[name=value]").typedInput("value"),
+            valueType: $row.find("input[name=value]").typedInput("type")
+          });
+        });
+
+      $("#config")
+        .editableList("items")
+        .each(function(i) {
+          const $row = $(this);
+          node.config.push({
+            property: $row.find("input[name=property]").val(),
+            value: $row.find("input[name=value]").val()
+          });
+        });
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="ha-entity">
+  <input type="hidden" id="node-input-version" />
+
+  <div class="form-row">
+    <label for="node-input-name">Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+    <input type="hidden" id="node-input-outputs"/>
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-server">Server</label>
+    <input type="text" id="node-input-server" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-entityType">Type</label>
+    <select id="node-input-entityType" style="width: 70%;">
+      <option value="sensor">Sensor</option>
+      <option value="binary_sensor">Binary Sensor</option>
+    </select>
+  </div>
+
+  <div class="form-row checkboxOption">
+    <input type="checkbox" id="node-input-resend">
+    <label for="node-input-resend">Resend state and attributes</label>
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-state">State</label>
+    <input type="text" id="node-input-state" style="width: 70%;" />
+    <input type="hidden" id="node-input-stateType" />
+  </div>
+
+
+  <div class="form-row">
+    <ol id="attributes"></ol>
+  </div>
+
+  <div class="form-row">
+    <ol id="config"></ol>
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="ha-entity">
+  <p>Get the current state of an Entity</p>
+
+  <h3>Inputs</h3>
+  <dl class="message-properties">
+      <dt class="optional"><span class="property-type">string</span> </dt>
+      <dd></dd>
+  </dl>
+
+  <h3>Configuration</h3>
+  <dl class="message-properties">
+  </dl>
+
+  <h3>Outputs</h3>
+  <dl class="message-properties">
+  </dl>
+</script>

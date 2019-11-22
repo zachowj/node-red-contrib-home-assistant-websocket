@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 const ta = require('time-ago');
-const EventsNode = require('../../lib/events-node');
+const EventsHaNode = require('../../lib/events-ha-node');
 
 module.exports = function(RED) {
     const nodeOptions = {
@@ -20,7 +20,7 @@ module.exports = function(RED) {
         }
     };
 
-    class TimeSinceStateNode extends EventsNode {
+    class TimeSinceStateNode extends EventsHaNode {
         constructor(nodeDefinition) {
             super(nodeDefinition, RED, nodeOptions);
             this.init();
@@ -65,8 +65,8 @@ module.exports = function(RED) {
             }
         }
 
-        onClose() {
-            super.onClose();
+        onClose(removed) {
+            super.onClose(removed);
             if (this.timer) {
                 clearInterval(this.timer);
                 this.timer = null;
@@ -74,7 +74,7 @@ module.exports = function(RED) {
         }
 
         async onTimer() {
-            if (!this.isConnected) return;
+            if (!this.isConnected || this.isEnabled === false) return;
 
             const pollState = this.utils.merge(
                 {},

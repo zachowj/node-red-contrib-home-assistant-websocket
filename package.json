@@ -42,8 +42,10 @@
       "server-state-changed": "nodes/events-state-changed/events-state-changed.js",
       "trigger-state": "nodes/trigger-state/trigger-state.js",
       "poll-state": "nodes/poll-state/poll-state.js",
+      "ha-webhook": "nodes/webhook/webhook.js",
       "api-call-service": "nodes/call-service/call-service.js",
       "ha-fire-event": "nodes/fire-event/fire-event.js",
+      "ha-entity": "nodes/entity/entity.js",
       "api-current-state": "nodes/current-state/current-state.js",
       "ha-get-entities": "nodes/get-entities/get-entities.js",
       "api-get-history": "nodes/get-history/get-history.js",
@@ -66,6 +68,7 @@
     "mustache": "3.1.0",
     "p-iteration": "1.1.8",
     "selectn": "1.1.2",
+    "slugify": "^1.3.6",
     "time-ago": "0.2.1",
     "timestring": "6.0.0",
     "ws": "7.2.0"

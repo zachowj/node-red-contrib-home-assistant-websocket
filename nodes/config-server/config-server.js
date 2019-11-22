@@ -163,6 +163,7 @@ module.exports = function(RED) {
             this.setOnContext('states', []);
             this.setOnContext('services', []);
             this.setOnContext('isConnected', false);
+            this.exposedNodes = [];
 
             if (this.credentials.host && !this.homeAssistant) {
                 this.homeAssistant = new HomeAssistant({

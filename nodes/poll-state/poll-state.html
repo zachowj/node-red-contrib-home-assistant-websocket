@@ -18,6 +18,13 @@
       name: { value: "" },
       server: { value: "", type: "server", required: true },
       version: { value: 1 },
+      exposeToHomeAssistant: { value: false },
+      haConfig: {
+        value: [
+          { property: "name", value: "" },
+          { property: "icon", value: "" }
+        ]
+      },
       updateinterval: { value: "60", validate: v => !isNaN(v) },
       updateIntervalUnits: { value: "seconds" },
       outputinitially: { value: false },
@@ -81,6 +88,7 @@
       }
 
       ifState.init("#node-input-halt_if", "#node-input-halt_if_compare");
+      exposeNode.render(this);
     },
     oneditsave: function() {
       this.entity_id = $("#entity_id")
@@ -93,6 +101,7 @@
       }
       $("#node-input-outputs").val(outputs);
       nodeVersion.update(this);
+      this.haConfig = exposeNode.getValues();
     },
     oneditresize: function() {
       ifState.resize();

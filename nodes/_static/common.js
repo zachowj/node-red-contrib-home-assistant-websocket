@@ -133,3 +133,87 @@ var haServer = (function($, RED) {
 
     // eslint-disable-next-line no-undef
 })(jQuery, RED);
+
+// eslint-disable-next-line no-unused-vars
+var exposeNode = (function($) {
+    function render(node) {
+        const $row = $('<div />', {
+            class: `form-row checkboxOption${
+                node.type === 'trigger-state' ? 'Left' : ''
+            }`
+        });
+        $('<input />', {
+            type: 'checkbox',
+            id: 'node-input-exposeToHomeAssistant',
+            checked: node.exposeToHomeAssistant
+        })
+            .on('change', function() {
+                $('#haConfigRow').toggle(
+                    $('#node-input-exposeToHomeAssistant').is(':checked') ===
+                        true
+                );
+            })
+            .appendTo($row);
+        $('<label />', {
+            for: 'node-input-exposeToHomeAssistant',
+            text: 'Expose to Home Assistant'
+        }).appendTo($row);
+        const $configRow = $('<div />', {
+            class: 'form-row',
+            id: 'haConfigRow'
+        });
+        const $configList = $('<ol />', { id: 'haConfig' }).appendTo(
+            $configRow
+        );
+
+        $configList
+            .editableList({
+                addButton: false,
+                header: $('<div>Home Assistant Config (optional)</div>'),
+                addItem: function(container, index, data) {
+                    const $row = $('<div />').appendTo(container);
+                    $('<input />', {
+                        type: 'text',
+                        name: 'property',
+                        value: data.property,
+                        style: 'width: 40%;',
+                        readonly: true
+                    }).appendTo($row);
+
+                    $('<input />', {
+                        type: 'text',
+                        name: 'value',
+                        value: data.value,
+                        style: 'margin-left: 10px;width: 55%;'
+                    })
+                        .attr('autocomplete', 'disable')
+                        .appendTo($row);
+                }
+            })
+            .editableList('addItems', node.haConfig);
+
+        $('#dialog-form')
+            .append($row)
+            .append($configRow);
+    }
+
+    function getValues() {
+        const arr = [];
+        $('#haConfig')
+            .editableList('items')
+            .each(function(i) {
+                const $row = $(this);
+                arr.push({
+                    property: $row.find('input[name=property]').val(),
+                    value: $row.find('input[name=value]').val()
+                });
+            });
+
+        return arr;
+    }
+    return {
+        render,
+        getValues
+    };
+    // eslint-disable-next-line no-undef
+})(jQuery);

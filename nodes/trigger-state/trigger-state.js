@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-const EventsNode = require('../../lib/events-node');
+const EventsHaNode = require('../../lib/events-ha-node');
 const { reduce } = require('p-iteration');
 const RenderTemplate = require('../../lib/mustache-context');
 
@@ -18,7 +18,6 @@ module.exports = function(RED) {
                 return nodeDef.entityid;
             },
             entityidfiltertype: {},
-            isenabled: {},
             constraints: {},
             customoutputs: {},
             outputinitially: {},
@@ -28,7 +27,7 @@ module.exports = function(RED) {
         }
     };
 
-    class TriggerState extends EventsNode {
+    class TriggerState extends EventsHaNode {
         constructor(nodeDefinition) {
             super(nodeDefinition, RED, nodeOptions);
 
@@ -45,8 +44,6 @@ module.exports = function(RED) {
 
             this.NUM_DEFAULT_MESSAGES = 2;
 
-            this.loadPersistedData();
-
             if (this.nodeConfig.outputinitially) {
                 // Here for when the node is deploy without the server config being deployed
                 if (this.isConnected) {
@@ -62,14 +59,14 @@ module.exports = function(RED) {
 
         onInput({ message }) {
             if (message === 'enable' || message.payload === 'enable') {
-                this.isenabled = true;
-                this.saveNodeData('isenabled', true);
+                this.isEnabled = true;
+                this.saveNodeData('isEnabled', true);
                 this.updateConnectionStatus();
                 return;
             }
             if (message === 'disable' || message.payload === 'disable') {
-                this.isenabled = false;
-                this.saveNodeData('isenabled', false);
+                this.isEnabled = false;
+                this.saveNodeData('isEnabled', false);
                 this.updateConnectionStatus();
                 return;
             }
@@ -108,10 +105,14 @@ module.exports = function(RED) {
         }
 
         async onEntityStateChanged(eventMessage) {
-            if (this.isenabled === false) {
+            if (this.isEnabled === false) {
                 this.debugToClient(
                     'incoming: node is currently disabled, ignoring received event'
                 );
+                return;
+            }
+
+            if (!this.utils.selectn('event.new_state', eventMessage)) {
                 return;
             }
 
@@ -239,7 +240,7 @@ module.exports = function(RED) {
                 if (comparatorResult === false) {
                     this.debugToClient(
                         `constraint comparator: failed entity "${constraintTarget.entityid}" property "${propertyValue}" with value ${actualValue} failed "${comparatorType}" check against (${comparatorValueDatatype}) ${comparatorValue}`
-                    ); // eslint-disable-line
+          ); // eslint-disable-line
                 }
 
                 comparatorResults.push({
@@ -364,7 +365,7 @@ module.exports = function(RED) {
             if (!comparatorMatched) {
                 this.debugToClient(
                     `output comparator failed: property "${output.comparatorPropertyValue}" with value ${actualValue} failed "${output.comparatorType}" check against ${output.comparatorValue}`
-                ); // eslint-disable-line
+        ); // eslint-disable-line
                 return null;
             }
 
@@ -408,28 +409,6 @@ module.exports = function(RED) {
                 payload,
                 data: eventMessage
             };
-        }
-
-        async loadPersistedData() {
-            try {
-                const data = await this.getNodeData();
-                if (
-                    data &&
-                    Object.prototype.hasOwnProperty.call(data, 'isenabled')
-                ) {
-                    this.isenabled = data.isenabled;
-                    this.updateConnectionStatus();
-                }
-            } catch (e) {
-                this.error(e.message);
-            }
-        }
-
-        async onClose(removed) {
-            super.onClose();
-            if (removed) {
-                await this.removeNodeData();
-            }
         }
 
         shouldIncludeEvent(entityId) {
