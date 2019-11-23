@@ -166,6 +166,11 @@ var exposeNode = (function($) {
             $configRow
         );
 
+        // set default for nodes created before exposeToHomeAssistant was aded
+        const haConfig = node.haConfig || [
+            { property: 'name', value: '' },
+            { property: 'icon', value: '' }
+        ];
         $configList
             .editableList({
                 addButton: false,
@@ -190,7 +195,7 @@ var exposeNode = (function($) {
                         .appendTo($row);
                 }
             })
-            .editableList('addItems', node.haConfig);
+            .editableList('addItems', haConfig);
 
         $('#dialog-form')
             .append($row)
