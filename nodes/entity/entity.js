@@ -61,7 +61,7 @@ module.exports = function(RED) {
 
         async registerEntity() {
             if (this.websocketClient.integrationVersion === 0) {
-                this.error('Node-RED integration version to low.');
+                this.error(this.integrationErrorMessage);
                 this.setStatusFailed('Error');
                 return;
             }
@@ -126,7 +126,7 @@ module.exports = function(RED) {
 
         async onInput({ parsedMessage, message }) {
             if (this.websocketClient.integrationVersion === 0) {
-                this.error('Node-RED integration version to low.');
+                this.error(this.integrationErrorMessage);
                 this.setStatusFailed('Error');
                 return false;
             }

@@ -54,7 +54,7 @@ module.exports = function(RED) {
             }
 
             if (!this.nodeConfig.webhookId) {
-                this.error('Webhook ID needed to create webhook.');
+                this.error(this.integrationErrorMessage);
                 this.setStatusFailed('Error');
                 return;
             }
