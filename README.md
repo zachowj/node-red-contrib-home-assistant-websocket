@@ -71,6 +71,8 @@ and every time the entity changes if desired
 
 ### Webhook
 
+_Need [Custom Integration](https://github.com/zachowj/hass-node-red) installed in Home Assistant for node to function_
+
 Outputs the data received from the created webhook in Home Assistant
 
 ### Call Service
@@ -82,6 +84,8 @@ Sends a request to home assistant for any domain and service available ( `light/
 Fire an event on the event bus
 
 ### Sensor
+
+_Need [Custom Integration](https://github.com/zachowj/hass-node-red) installed in Home Assistant for node to function_
 
 Creates a sensor or binary sensor in Home Assistant which can be updated
 from this node
