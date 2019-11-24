@@ -39,8 +39,25 @@
       nodeVersion.check(this);
       const node = this;
       const stateTypes = {
-        sensor: ["msg", "flow", "global", "jsonata", "str", "bool", "date"],
-        binary_sensor: ["bool", "jsonata", "msg", "flow", "global"]
+        sensor: [
+          "msg",
+          "flow",
+          "global",
+          "jsonata",
+          "str",
+          "num",
+          "bool",
+          "date"
+        ],
+        binary_sensor: [
+          "msg",
+          "flow",
+          "global",
+          "jsonata",
+          "str",
+          "num",
+          "bool"
+        ]
       };
       const attributeTypes = [
         "str",
