@@ -29,7 +29,8 @@ module.exports = function(RED) {
         async onEvent(evt) {
             const message = {
                 topic: this.nodeConfig.webhookId,
-                payload: evt.data
+                payload: evt.data.payload,
+                headers: evt.data.headers
             };
 
             this.setStatusSuccess('Received');
