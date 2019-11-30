@@ -185,10 +185,11 @@ module.exports = function(RED) {
                 state: state,
                 attributes: attr
             };
-            this.saveNodeData('lastPayload', {
-                state: payload.state,
-                attributes: payload.attributes
-            });
+            this.lastPayload = {
+                state: state,
+                attributes: attr
+            };
+            this.saveNodeData('lastPayload', this.lastPayload);
 
             this.websocketClient.send(payload);
             this.setStatusSuccess(state);
