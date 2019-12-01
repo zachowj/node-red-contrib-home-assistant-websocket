@@ -7,7 +7,11 @@ module.exports = function(RED) {
             server: { isNode: true },
             outputs: 1,
             webhookId: {},
-            exposeToHomeAssistant: nodeConfig => true
+            exposeToHomeAssistant: nodeConfig => true,
+            payloadLocation: {},
+            payloadLocationType: {},
+            headersLocation: {},
+            headersLocationType: {}
         }
     };
 
@@ -28,11 +32,23 @@ module.exports = function(RED) {
 
         async onEvent(evt) {
             const message = {
-                topic: this.nodeConfig.webhookId,
-                payload: evt.data.payload,
-                headers: evt.data.headers
+                topic: this.nodeConfig.webhookId
             };
 
+            // Set Payload Location
+            this.setContextValue(
+                evt.data.payload,
+                this.nodeConfig.payloadLocationType,
+                this.nodeConfig.payloadLocation,
+                message
+            );
+            // Set Headers Location
+            this.setContextValue(
+                evt.data.headers,
+                this.nodeConfig.headersLocationType,
+                this.nodeConfig.headersLocation,
+                message
+            );
             this.setStatusSuccess('Received');
             this.send(message);
         }
