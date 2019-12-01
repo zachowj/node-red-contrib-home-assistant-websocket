@@ -135,7 +135,7 @@ module.exports = function(RED) {
                     apiDomain === 'homeassistant' &&
                     entityId.indexOf(',') !== -1
                 ) {
-                    apiData.entity_id = entityId.split(',');
+                    apiData.entity_id = entityId.split(',').map(e => e.trim());
                 } else {
                     apiData.entity_id = entityId;
                 }
