@@ -108,10 +108,21 @@ module.exports = function(RED) {
             this.registerEntity();
         }
 
+        onHaIntegration(type) {
+            super.onHaIntegration(type);
+
+            if (type === 'unloaded') {
+                this.error(
+                    'Node-RED custom integration has been removed from Home Assistant it is needed for this node to function.'
+                );
+                this.setStatusFailed('Error');
+            }
+        }
+
         onClose(removed) {
             super.onClose(removed);
 
-            if (this.isConnected && removed) {
+            if (this.registered && this.isConnected && removed) {
                 const payload = {
                     type: 'nodered/discovery',
                     server_id: this.nodeConfig.server.id,

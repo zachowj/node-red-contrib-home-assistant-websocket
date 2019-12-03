@@ -54,14 +54,17 @@ module.exports = function(RED) {
         }
 
         onHaIntegration(type) {
-            if (type === 'loaded') {
-                this.registerEntity();
-            } else if (type === 'unloaded') {
-                this.registered = false;
+            super.onHaIntegration(type);
+
+            if (type === 'unloaded') {
                 if (this.removeWebhook) {
                     this.removeWebhook();
                     this.removeWebhook = null;
                 }
+                this.error(
+                    'Node-RED custom integration has been removed from Home Assistant it is needed for this node to function.'
+                );
+                this.setStatusFailed('Error');
             }
         }
 
@@ -94,7 +97,7 @@ module.exports = function(RED) {
         onClose(removed) {
             super.onClose(removed);
 
-            if (this.isConnected && this.removeWebhook) {
+            if (this.registered && this.isConnected && this.removeWebhook) {
                 this.removeWebhook();
             }
         }
