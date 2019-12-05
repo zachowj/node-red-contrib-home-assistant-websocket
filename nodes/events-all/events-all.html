@@ -35,7 +35,7 @@
     labelStyle: nodeVersion.labelStyle,
     oneditprepare: function() {
       haServer.init(this, "#node-input-server");
-      exposeNode.render(this);
+      exposeNode.init(this);
 
       $("#node-input-event_type")
         .on("change keyup", function() {

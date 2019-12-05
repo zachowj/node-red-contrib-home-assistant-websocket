@@ -37,6 +37,8 @@
       haServer.init(node, "#node-input-server");
       $webhookId = $("#node-input-webhookId");
 
+      exposeNode.init(node);
+
       $("#copyId").on("click", function() {
         const ele = $webhookId[0];
         const id = ele.value;

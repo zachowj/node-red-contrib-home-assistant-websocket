@@ -136,8 +136,65 @@ var haServer = (function($, RED) {
 
 // eslint-disable-next-line no-unused-vars
 var exposeNode = (function($) {
-    function render(node) {
+    let node;
+
+    function getServerId() {
+        const selectedServer = $('#node-input-server').val();
+
+        if (!selectedServer || selectedServer === '_ADD_') {
+            return;
+        }
+
+        return selectedServer;
+    }
+
+    function getVersion(callback) {
+        if (!getServerId()) {
+            callback(node);
+            return;
+        }
+
+        $.getJSON(
+            `homeassistant/${getServerId()}/version?_=${Date.now()}`
+        ).done(data => {
+            node.integrationVersion = data.version;
+            if (callback) {
+                callback(node);
+            }
+        });
+    }
+
+    function init(n) {
+        node = n;
+        render();
+        const callback = getCallback();
+
+        $('#node-input-server').on('change', () => getVersion(callback));
+    }
+
+    function render() {
+        switch (node.type) {
+            case 'ha-webhook':
+            case 'ha-entity':
+                renderAlert();
+                break;
+            default:
+                renderEventNode();
+        }
+    }
+
+    function getCallback() {
+        switch (node.type) {
+            case 'ha-webhook':
+            case 'ha-entity':
+                return renderAlert;
+            default:
+                return toggleExpose;
+        }
+    }
+    function renderEventNode() {
         const $row = $('<div />', {
+            id: 'exposeToHa',
             class: `form-row checkboxOption${
                 node.type === 'trigger-state' ? 'Left' : ''
             }`
@@ -200,6 +257,7 @@ var exposeNode = (function($) {
         $('#dialog-form')
             .append($row)
             .append($configRow);
+        $('#node-input-exposeToHomeAssistant').trigger('change');
     }
 
     function getValues() {
@@ -216,8 +274,27 @@ var exposeNode = (function($) {
 
         return arr;
     }
+
+    function renderAlert() {
+        if (!$('#integrationAlert').length) {
+            const alertText =
+                '<div id="integrationAlert" class="ui-state-error ha-alertBox"><strong>Attention:</strong> This node requires <a href="https://github.com/zachowj/hass-node-red" target="_blank">Node-RED custom integration <i class="fa fa-external-link external-link"></i></a> to be installed in Home Assistant for it to function.</strong></div>';
+            $('#dialog-form').prepend(alertText);
+        }
+        $('#integrationAlert').toggle(node.integrationVersion === 0);
+    }
+
+    function toggleExpose() {
+        if (node.integrationVersion === 0) {
+            $('#node-input-exposeToHomeAssistant')
+                .prop('checked', false)
+                .trigger('change');
+        }
+        $('#exposeToHa').toggle(node.integrationVersion !== 0);
+    }
+
     return {
-        render,
+        init,
         getValues
     };
     // eslint-disable-next-line no-undef

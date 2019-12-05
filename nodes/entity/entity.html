@@ -72,6 +72,8 @@
 
       haServer.init(node, "#node-input-server");
 
+      exposeNode.init(node);
+
       $("#node-input-state").typedInput({
         types: stateTypes[$("#node-input-entityType").val()],
         typeField: "#node-input-stateType",
@@ -120,7 +122,7 @@
       $("#config")
         .editableList({
           addButton: false,
-          header: $("<div>Config (optional)</div>"),
+          header: $("<div>Home Assistant Config (optional)</div>"),
           addItem: function(container, index, data) {
             const $row = $("<div />").appendTo(container);
             $("<input />", {
