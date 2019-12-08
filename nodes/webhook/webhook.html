@@ -105,10 +105,27 @@
 </script>
 
 <script type="text/x-red" data-help-name="ha-webhook">
-
-  <h3>Inputs</h3>
+  <p>Creates a webhook in Home Assistant where the request will be passed to this node.</p>
+  <p>This nodes requires <a href="https://github.com/zachowj/hass-node-red" target="_blank">Node-RED custom integration <i class="fa fa-external-link external-link"></i></a> to be installed in Home Assistant</p>
 
   <h3>Configuration</h3>
+  <dl class="message-properties">
+    <dt>ID<span class="property-type">string</span></dt>
+    <dd>A string to be used for the webhook URL in Home Assistant.</dd>
+
+    <dt>Payload<span class="property-type">string</span></dt>
+    <dd>Customizable location for the webhook payload. Defaults to msg.payload</dd>
+
+    <dt>Headers<span class="property-type">number</span></dt>
+    <dd>Customizable location for the webhook request headers.</dd>
+  </dl>
 
   <h3>Outputs</h3>
+  <dl class="message-properties">
+    <dt>topic<span class="property-type">string</span></dt>
+    <dd>webhook ID</dd>
+
+    <dt>payload<span class="property-type">object | number | string</span></dt>
+    <dd>The parsed body from the webhook request.</dd>
+  </dl>
 </script>

@@ -219,16 +219,35 @@
 </script>
 
 <script type="text/x-red" data-help-name="ha-entity">
-  <p>Get the current state of an Entity</p>
+  <p>Creates a sensor in Home Assistant that can be updated from this node.</p>
+  <p>This nodes requires <a href="https://github.com/zachowj/hass-node-red" target="_blank">Node-RED custom integration <i class="fa fa-external-link external-link"></i></a> to be installed in Home Assistant
+  </p>
 
   <h3>Inputs</h3>
   <dl class="message-properties">
-      <dt class="optional"><span class="property-type">string</span> </dt>
-      <dd></dd>
-  </dl>
+    <dt>state<span class="property-type">string | number | boolean</span></dt>
+    <dd>The state the entity should be updated to</dd>
+
+    <dt class="optional">attributes<span class="property-type">object</span></dt>
+    <dd>Key/Value pair of attributes to update. The key should be a string and value can be a <code>[string | number | boolean | object]</code></dd>
+  </dl
 
   <h3>Configuration</h3>
   <dl class="message-properties">
+    <dt>Type<span class="property-type">[sensor|binary_sensor]</span></dt>
+    <dd>The state the entity should be updated to</dd>
+
+    <dt>State<span class="property-type">string | number | boolean</span></dt>
+    <dd>The state the entity should be updated to</dd>
+
+    <dt class="optional">Attributes<span class="property-type">object</span></dt>
+    <dd>Key/Value pair of attributes to update. The key should be a string and value can be a [string | number | boolean | object]</dd>
+
+    <dt class="optional">Home Assistant Config<span class="property-type">object</span></dt>
+    <dd>Configuration options available for the selected entity</dd>
+
+    <dt>Resend state and attributes<span class="property-type">boolean</span></dt>
+    <dd>When creating the entity in Home Assistant this will also send the last updated state and attributes then node sent to Home Assistant</dd>
   </dl>
 
   <h3>Outputs</h3>
