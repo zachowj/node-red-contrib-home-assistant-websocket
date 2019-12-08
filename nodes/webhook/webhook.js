@@ -8,10 +8,13 @@ module.exports = function(RED) {
             outputs: 1,
             webhookId: {},
             exposeToHomeAssistant: nodeConfig => true,
-            payloadLocation: {},
-            payloadLocationType: {},
+            payloadLocation: nodeConfig =>
+                nodeConfig.payloadLocation || 'payload',
+            payloadLocationType: nodeConfig =>
+                nodeConfig.payloadLocationType || 'msg',
             headersLocation: {},
-            headersLocationType: {}
+            headersLocationType: nodeConfig =>
+                nodeConfig.headersLocationType || 'none'
         }
     };
 

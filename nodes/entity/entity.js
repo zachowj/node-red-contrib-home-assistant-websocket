@@ -16,7 +16,8 @@ module.exports = function(RED) {
             exposeToHomeAssistant: nodeConfig => true,
             resend: {},
             outputLocation: {},
-            outputLocationType: {}
+            outputLocationType: nodeConfig =>
+                nodeConfig.outputLocationType || 'none'
         },
         input: {
             state: {
