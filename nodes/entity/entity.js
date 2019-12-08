@@ -140,6 +140,15 @@ module.exports = function(RED) {
         }
 
         async onInput({ parsedMessage, message }) {
+            if (!this.isConnected) {
+                this.setStatusFailed('No Connection');
+                this.error(
+                    'Sensor update attempted without connection to server.',
+                    message
+                );
+
+                return;
+            }
             if (this.websocketClient.integrationVersion === 0) {
                 this.error(this.integrationErrorMessage);
                 this.setStatusFailed('Error');
