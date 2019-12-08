@@ -14,7 +14,9 @@ module.exports = function(RED) {
             attributes: {},
             config: {},
             exposeToHomeAssistant: nodeConfig => true,
-            resend: {}
+            resend: {},
+            outputLocation: {},
+            outputLocationType: {}
         },
         input: {
             state: {
@@ -202,8 +204,31 @@ module.exports = function(RED) {
             };
             this.saveNodeData('lastPayload', this.lastPayload);
 
-            this.websocketClient.send(payload);
-            this.setStatusSuccess(state);
+            this.websocketClient
+                .send(payload)
+                .then(() => {
+                    this.setStatusSuccess(state);
+
+                    if (this.nodeConfig.outputLocationType !== 'none') {
+                        this.setContextValue(
+                            payload,
+                            this.nodeConfig.outputLocationType || 'msg',
+                            this.nodeConfig.outputLocation || 'payload',
+                            message
+                        );
+                    }
+
+                    this.send(message);
+                })
+                .catch(err => {
+                    this.error(
+                        `Entity API error. ${
+                            err.message ? ` Error Message: ${err.message}` : ''
+                        }`,
+                        message
+                    );
+                    this.setStatusFailed('API Error');
+                });
         }
 
         getValue(value, valueType, msg) {

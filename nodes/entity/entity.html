@@ -33,7 +33,9 @@
       attributes: {
         value: []
       },
-      resend: { value: true }
+      resend: { value: true },
+      outputLocation: { value: "payload" },
+      outputLocationType: { value: "none" }
     },
     oneditprepare: function() {
       nodeVersion.check(this);
@@ -144,6 +146,20 @@
           }
         })
         .editableList("addItems", node.config);
+
+      $("#node-input-outputLocation").typedInput({
+        types: [
+          "msg",
+          "flow",
+          "global",
+          {
+            value: "none",
+            label: "None",
+            hasValue: false
+          }
+        ],
+        typeField: "#node-input-outputLocationType"
+      });
     },
     oneditsave: function() {
       const node = this;
@@ -197,17 +213,11 @@
     </select>
   </div>
 
-  <div class="form-row checkboxOption">
-    <input type="checkbox" id="node-input-resend">
-    <label for="node-input-resend">Resend state and attributes</label>
-  </div>
-
   <div class="form-row">
     <label for="node-input-state">State</label>
-    <input type="text" id="node-input-state" style="width: 70%;" />
+    <input type="text" id="node-input-state" style="width: 68%;" />
     <input type="hidden" id="node-input-stateType" />
   </div>
-
 
   <div class="form-row">
     <ol id="attributes"></ol>
@@ -215,6 +225,17 @@
 
   <div class="form-row">
     <ol id="config"></ol>
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-outputLocation">Output Location</label>
+    <input type="hidden" id="node-input-outputLocationType" />
+    <input type="text" id="node-input-outputLocation" style="width: 68%;" />
+  </div>
+
+  <div class="form-row checkboxOption">
+    <input type="checkbox" id="node-input-resend">
+    <label for="node-input-resend">Resend state and attributes</label>
   </div>
 </script>
 
