@@ -18,6 +18,7 @@
       name: { value: "" },
       server: { value: "", type: "server", required: true },
       version: { value: 1 },
+      debugenabled: { value: false },
       outputs: { value: 1 },
       entityType: { value: "sensor" },
       config: {
@@ -236,6 +237,11 @@
   <div class="form-row checkboxOption">
     <input type="checkbox" id="node-input-resend">
     <label for="node-input-resend">Resend state and attributes</label>
+  </div>
+
+  <div class="form-row checkboxOption">
+    <input type="checkbox" id="node-input-debugenabled" />
+    <label for="node-input-debugenabled">Show Debug Information</label>
   </div>
 </script>
 

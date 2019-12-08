@@ -95,6 +95,8 @@ module.exports = function(RED) {
                 payload.attributes = this.lastPayload.attributes;
             }
 
+            this.debugToClient(payload);
+
             await this.websocketClient.send(payload);
             this.setStatusSuccess('Registered');
             this.registered = true;
@@ -203,6 +205,7 @@ module.exports = function(RED) {
                 attributes: attr
             };
             this.saveNodeData('lastPayload', this.lastPayload);
+            this.debugToClient(payload);
 
             this.websocketClient
                 .send(payload)
