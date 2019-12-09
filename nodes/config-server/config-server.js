@@ -99,6 +99,14 @@ module.exports = function(RED) {
             );
 
             res.json(uniqArray);
+        },
+        getIntegrationVersion: function(req, res, next) {
+            const data = { version: 0 };
+
+            if (this.websocket && this.websocket.isConnected) {
+                data.version = this.websocket.integrationVersion;
+            }
+            res.json(data);
         }
     };
 
@@ -159,10 +167,16 @@ module.exports = function(RED) {
                 httpHandlers.disableCache.bind(this),
                 httpHandlers.getProperties.bind(this)
             );
+            this.RED.httpAdmin.get(
+                `/homeassistant/${this.id}/version`,
+                RED.auth.needsPermission('server.read'),
+                httpHandlers.getIntegrationVersion.bind(this)
+            );
 
             this.setOnContext('states', []);
             this.setOnContext('services', []);
             this.setOnContext('isConnected', false);
+            this.exposedNodes = [];
 
             if (this.credentials.host && !this.homeAssistant) {
                 this.homeAssistant = new HomeAssistant({

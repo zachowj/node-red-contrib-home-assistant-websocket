@@ -1,4 +1,4 @@
-const EventsNode = require('../../lib/events-node');
+const EventsHaNode = require('../../lib/events-ha-node');
 
 module.exports = function(RED) {
     const nodeOptions = {
@@ -7,7 +7,7 @@ module.exports = function(RED) {
         }
     };
 
-    class ServerEventsNode extends EventsNode {
+    class ServerEventsNode extends EventsHaNode {
         constructor(nodeDefinition) {
             super(nodeDefinition, RED, nodeOptions);
 
@@ -38,6 +38,8 @@ module.exports = function(RED) {
         }
 
         onHaEventsAll(evt) {
+            if (this.isEnabled === false) return;
+
             this.send({
                 event_type: evt.event_type,
                 topic: evt.event_type,
@@ -47,6 +49,8 @@ module.exports = function(RED) {
         }
 
         clientEvent(type, data) {
+            if (this.isEnabled === false) return;
+
             if (
                 !this.nodeConfig.event_type ||
                 this.nodeConfig.event_type === 'home_assistant_client'
@@ -65,7 +69,7 @@ module.exports = function(RED) {
         }
 
         onClose(nodeRemoved) {
-            super.onClose();
+            super.onClose(nodeRemoved);
 
             if (nodeRemoved) {
                 delete this.nodeConfig.server.homeAssistant.eventsList[this.id];

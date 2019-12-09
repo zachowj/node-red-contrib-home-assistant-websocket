@@ -6,7 +6,7 @@
     color: "#038FC7",
     inputs: 1,
     outputs: 2,
-    outputLabels: function (index) {
+    outputLabels: function(index) {
       const NUM_DEFAULT_OUTPUTS = 2;
 
       if (index === 0) return "allowed";
@@ -27,7 +27,7 @@
     },
     icon: "trigger.png",
     paletteLabel: "trigger: state",
-    label: function () {
+    label: function() {
       return this.name || `trigger-state: ${this.entityid}`;
     },
     labelStyle: nodeVersion.labelStyle,
@@ -39,6 +39,13 @@
         value: "",
         type: "server",
         required: true
+      },
+      exposeToHomeAssistant: { value: false },
+      haConfig: {
+        value: [
+          { property: "name", value: "" },
+          { property: "icon", value: "" }
+        ]
       },
       entityid: {
         value: "",
@@ -69,7 +76,7 @@
         value: "str"
       }
     },
-    oneditprepare: function () {
+    oneditprepare: function() {
       // Outputs List
       let node = this;
       const NUM_DEFAULT_OUTPUTS = 2;
@@ -112,8 +119,8 @@
       const utils = {
         getRandomId: () =>
           Math.random()
-          .toString(36)
-          .slice(2)
+            .toString(36)
+            .slice(2)
       };
 
       let availableProperties = [];
@@ -145,11 +152,12 @@
           source: availablePropertiesPrefixes,
           minLength: 0
         });
-        $("#constraint-target-type").on("change", function () {
+        $("#constraint-target-type").on("change", function() {
           $("#constraint-property-value").autocomplete("option", {
-            source: $(this).val() === "this_entity" ?
-              availablePropertiesPrefixes :
-              availableProperties
+            source:
+              $(this).val() === "this_entity"
+                ? availablePropertiesPrefixes
+                : availableProperties
           });
         });
       });
@@ -158,7 +166,7 @@
       // * Add Constraints
       // **************************
       const constraintsHandler = {
-        onTargetTypeChange: function (e) {
+        onTargetTypeChange: function(e) {
           const val = e.target.value;
           if (val === "this_entity") {
             $constraints.targetValue.attr("disabled", "disabled").val("");
@@ -174,7 +182,7 @@
               .trigger("change");
           }
         },
-        onPropertyTypeChange: function (e) {
+        onPropertyTypeChange: function(e) {
           const val = e.target.value;
           if (val === "current_state" || val === "previous_state") {
             $constraints.propertyValue.attr("disabled", "disabled").val("");
@@ -182,10 +190,10 @@
             $constraints.propertyValue.removeAttr("disabled");
           }
         },
-        onComparatorTypeChange: function (e) {
+        onComparatorTypeChange: function(e) {
           const val = e.target.value; // Placeholder
         },
-        onAddConstraintButton: function (e) {
+        onAddConstraintButton: function(e) {
           const constraint = {
             id: utils.getRandomId(),
             targetType: $constraints.targetType.val(),
@@ -214,7 +222,7 @@
           $constraints.list.editableList("addItem", constraint);
           $constraints.targetValue.val("");
         },
-        onEditableListAdd: function (row, index, data) {
+        onEditableListAdd: function(row, index, data) {
           const $row = $(row);
           const {
             targetType,
@@ -227,17 +235,16 @@
           } = data;
 
           const entityText =
-            targetType === "this_entity" ?
-            "<strong>This entity&#8217;s</strong>" :
-            `Entity ID <strong>${targetValue}</strong>`;
+            targetType === "this_entity"
+              ? "<strong>This entity&#8217;s</strong>"
+              : `Entity ID <strong>${targetValue}</strong>`;
           const propertyText =
-            propertyType === "property" ?
-            propertyValue :
-            propertyType.replace("_", " ");
+            propertyType === "property"
+              ? propertyValue
+              : propertyType.replace("_", " ");
 
           const comparatorTypeText = comparatorType.replace("_", " ");
-          const comparatorText =
-            `${comparatorTypeText} <strong>${comparatorValue}</strong> (${comparatorValueDatatype})`;
+          const comparatorText = `${comparatorTypeText} <strong>${comparatorValue}</strong> (${comparatorValueDatatype})`;
 
           const rowHtml = `${entityText} ${propertyText} ${comparatorText}`;
           $row.html(rowHtml);
@@ -293,7 +300,7 @@
       // * Add Custom Outputs
       // **************************
       const outputsHandler = {
-        onAddButtonClicked: function () {
+        onAddButtonClicked: function() {
           const output = {
             outputId: utils.getRandomId(),
 
@@ -329,40 +336,42 @@
 
           $customoutputs.list.editableList("addItem", output);
         },
-        onEditableListAdd: function (row, index, d) {
+        onEditableListAdd: function(row, index, d) {
           const $row = $(row);
 
           const messageText =
             d.messageType === "default" ? "default message" : d.messageValue;
 
           const sendWhenText =
-            d.comparatorPropertyType === "always" ?
-            "always" :
-            `${d.comparatorPropertyValue} ${d.comparatorType.replace(
+            d.comparatorPropertyType === "always"
+              ? "always"
+              : `${d.comparatorPropertyValue} ${d.comparatorType.replace(
                   "_",
                   ""
                 )} ${d.comparatorValue}`;
 
           const where =
-            d.messageType === "default" ?
-            "Send" :
-            d.messageType === "custom" ?
-            "Msg" :
-            "Payload";
+            d.messageType === "default"
+              ? "Send"
+              : d.messageType === "custom"
+              ? "Msg"
+              : "Payload";
 
           const html = `${where} <strong>${messageText}</strong>, if <strong>${sendWhenText}</strong>`;
 
           $row.html(html);
         },
-        onEditableListRemove: function (data) {
+        onEditableListRemove: function(data) {
           // node-red uses a map of old output index to new output index to re-map
           // links between nodes. If new index is -1 then it was removed
 
           let customOutputRemovedIndex = node.customoutputs.indexOf(data);
-          node.outputs = !isNaN(node.outputs) ? {
-            0: 0,
-            1: 1
-          } : node.outputs;
+          node.outputs = !isNaN(node.outputs)
+            ? {
+                0: 0,
+                1: 1
+              }
+            : node.outputs;
           node.outputs[customOutputRemovedIndex + NUM_DEFAULT_OUTPUTS] = -1;
 
           node.customoutputs.forEach((o, customOutputIndex) => {
@@ -384,27 +393,27 @@
               return;
             // output previously removed caused this output to be remapped
             if (customOutputAlreadyMapped) {
-              node.outputs[customAllIndex] = outputIsBeforeRemoval ?
-                node.outputs[customAllIndex] :
-                node.outputs[customAllIndex] - 1;
+              node.outputs[customAllIndex] = outputIsBeforeRemoval
+                ? node.outputs[customAllIndex]
+                : node.outputs[customAllIndex] - 1;
               return;
             }
 
             // output exists after removal and hasn't been mapped, remap to current index - 1
-            node.outputs[customAllIndex] = outputIsBeforeRemoval ?
-              customAllIndex :
-              customAllIndex - 1;
+            node.outputs[customAllIndex] = outputIsBeforeRemoval
+              ? customAllIndex
+              : customAllIndex - 1;
           });
 
           $outputs.val(JSON.stringify(node.outputs));
         },
-        onMessageTypeChange: function (e) {
+        onMessageTypeChange: function(e) {
           const val = e.target.value;
           $customoutputs.messageValue.typedInput(
             val === "default" ? "hide" : "show"
           );
         },
-        comparatorPropertyTypeChange: function (e) {
+        comparatorPropertyTypeChange: function(e) {
           const val = e.target.value;
           if (val === "always") {
             $customoutputs.comparatorPropertyValue.attr("disabled", "disabled");
@@ -478,8 +487,9 @@
       node.customoutputs.forEach(o =>
         $customoutputs.list.editableList("addItem", o)
       );
+      exposeNode.init(node);
     },
-    oneditsave: function () {
+    oneditsave: function() {
       const $constraintsList = $("#constraint-list");
       const $outputList = $("#output-list");
       const $entityid = $("#node-input-entityid");
@@ -489,7 +499,7 @@
       // Compile Constraints
       const nodeConstraints = [];
       const listConstraints = $constraintsList.editableList("items");
-      listConstraints.each(function (i) {
+      listConstraints.each(function(i) {
         nodeConstraints.push($(this).data("data"));
       });
       this.constraints = nodeConstraints;
@@ -497,12 +507,13 @@
       // Compile Outputs
       const nodeOutputs = [];
       const listOutputs = $outputList.editableList("items");
-      listOutputs.each(function (i) {
+      listOutputs.each(function(i) {
         nodeOutputs.push($(this).data("data"));
       });
       this.customoutputs = nodeOutputs;
 
       this.outputs = this.customoutputs.length + 2;
+      this.haConfig = exposeNode.getValues();
     }
   });
 </script>
@@ -661,16 +672,14 @@
     <ol id="output-list"></ol>
   </div>
 
-  <div class="form-row">
-    <input type="checkbox" id="node-input-outputinitially"
-      style="display: inline-block; width: auto; vertical-align: top;">
-    <label for="node-input-outputinitially" style="width: auto;">Output on Connect</label>
+  <div class="form-row checkboxOptionLeft">
+    <input type="checkbox" id="node-input-outputinitially">
+    <label for="node-input-outputinitially">Output on Connect</label>
   </div>
 
-  <div class="form-row">
-    <input type="checkbox" id="node-input-debugenabled"
-      style="display: inline-block; width: auto; vertical-align: top;" />
-    <label for="node-input-debugenabled" style="width: auto;">Show Debug Information</label>
+  <div class="form-row checkboxOptionLeft">
+    <input type="checkbox" id="node-input-debugenabled" />
+    <label for="node-input-debugenabled">Show Debug Information</label>
   </div>
 </script>
 

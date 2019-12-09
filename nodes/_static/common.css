@@ -19,12 +19,24 @@
 
 .form-row.checkboxOption input {
   margin-left: 105px;
+  margin-right: 5px;
   display: inline-block;
   width: auto;
-  vertical-align: baseline;
+  vertical-align: top;
 }
 
 .form-row.checkboxOption label {
+  width: auto;
+}
+
+.form-row.checkboxOptionLeft input {
+  display: inline-block;
+  margin-right: 5px;
+  width: auto;
+  vertical-align: top;
+}
+
+.form-row.checkboxOptionLeft label {
   width: auto;
   margin-right: 20px;
 }

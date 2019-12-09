@@ -10,7 +10,7 @@
     outputLabels: nodeVersion.ifStateLabels,
     icon: "arrow-right-bold-hexagon-outline.png",
     paletteLabel: "events: state",
-    label: function () {
+    label: function() {
       return (
         this.name || `state_changed: ${this.entityidfilter || "all entities"}`
       );
@@ -27,6 +27,13 @@
       },
       version: {
         value: 1
+      },
+      exposeToHomeAssistant: { value: false },
+      haConfig: {
+        value: [
+          { property: "name", value: "" },
+          { property: "icon", value: "" }
+        ]
       },
       entityidfilter: {
         value: "",
@@ -53,19 +60,19 @@
         value: true
       }
     },
-    oneditprepare: function () {
-      nodeVersion.check(this);
-
+    oneditprepare: function() {
       const $entityidfilter = $("#node-input-entityidfilter");
       const $entityidfiltertype = $("#node-input-entityidfiltertype");
+      const node = this;
+
+      nodeVersion.check(this);
+      haServer.init(node, "#node-input-server");
+      exposeNode.init(node);
 
       $entityidfilter.val(this.entityidfilter);
       this.entityidfiltertype = this.entityidfiltertype || "substring";
       $entityidfiltertype.val(this.entityidfiltertype);
 
-      const node = this;
-
-      haServer.init(node, "#node-input-server");
       haServer.autocomplete("entities", entities => {
         node.availableEntities = entities;
         $entityidfilter.autocomplete({
@@ -84,7 +91,7 @@
 
       ifState.init("#node-input-haltifstate", "#node-input-halt_if_compare");
     },
-    oneditsave: function () {
+    oneditsave: function() {
       this.entityidfilter = $("#node-input-entityidfilter").val();
       let outputs = $("#node-input-haltifstate").val() ? 2 : 1;
       // Swap inputs for the new 'if state' location
@@ -96,8 +103,9 @@
       }
       $("#node-input-outputs").val(outputs);
       nodeVersion.update(this);
+      this.haConfig = exposeNode.getValues();
     },
-    oneditresize: function () {
+    oneditresize: function() {
       ifState.resize();
     }
   });
@@ -196,6 +204,8 @@
       <dt>Output on Connect<span class="property-type">boolean</span></dt>
       <dd>Output once on startup/deploy</dd>
 
+      <dt>Expose to Home Assistant <span class="property-type">boolean</span></dt>
+      <dd>Creates a switch within Home Assistant to enable/disable this node. This feature requires <a href="https://github.com/zachowj/hass-node-red" target="_blank">Node-RED custom integration <i class="fa fa-external-link external-link"></i></a> to be installed in Home Assistant</dd>
   </dl>
 
   <h3>Output Object:</h3>

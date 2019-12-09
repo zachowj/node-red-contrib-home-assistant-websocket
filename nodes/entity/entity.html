@@ -1,0 +1,283 @@
+<link rel="stylesheet" type="text/css" href="homeassistant/static/common.css" />
+<script src="homeassistant/static/common.js"></script>
+<script src="homeassistant/static/ifstate.js"></script>
+<script type="text/javascript">
+  RED.nodes.registerType("ha-entity", {
+    category: "home_assistant",
+    color: "#52C0F2",
+    inputs: 1,
+    outputs: 1,
+    icon: "font-awesome/fa-genderless",
+    align: "right",
+    paletteLabel: "sensor",
+    label: function() {
+      return this.name || `type: ${this.entityType}`;
+    },
+    labelStyle: nodeVersion.labelStyle,
+    defaults: {
+      name: { value: "" },
+      server: { value: "", type: "server", required: true },
+      version: { value: 1 },
+      debugenabled: { value: false },
+      outputs: { value: 1 },
+      entityType: { value: "sensor" },
+      config: {
+        value: [
+          { property: "name", value: "" },
+          { property: "device_class", value: "" },
+          { property: "icon", value: "" },
+          { property: "unit_of_measurement", value: "" }
+        ]
+      },
+      state: { value: "payload" },
+      stateType: { value: "msg" },
+      attributes: {
+        value: []
+      },
+      resend: { value: true },
+      outputLocation: { value: "payload" },
+      outputLocationType: { value: "none" }
+    },
+    oneditprepare: function() {
+      nodeVersion.check(this);
+      const node = this;
+      const stateTypes = {
+        sensor: [
+          "msg",
+          "flow",
+          "global",
+          "jsonata",
+          "str",
+          "num",
+          "bool",
+          "date"
+        ],
+        binary_sensor: [
+          "msg",
+          "flow",
+          "global",
+          "jsonata",
+          "str",
+          "num",
+          "bool"
+        ]
+      };
+      const attributeTypes = [
+        "str",
+        "num",
+        "bool",
+        "date",
+        "jsonata",
+        "msg",
+        "flow",
+        "global"
+      ];
+
+      haServer.init(node, "#node-input-server");
+
+      exposeNode.init(node);
+
+      $("#node-input-state").typedInput({
+        types: stateTypes[$("#node-input-entityType").val()],
+        typeField: "#node-input-stateType",
+        type: node.stateType
+      });
+
+      $("#node-input-entityType")
+        .on("change", function() {
+          $("#node-input-state").typedInput("types", stateTypes[$(this).val()]);
+        })
+        .trigger("change");
+
+      $("#attributes")
+        .editableList({
+          addButton: true,
+          removable: true,
+          addButton: "add attribute",
+          header: $("<div>").append(
+            $.parseHTML(
+              "<div style='width:40%; display: inline-grid'>Attribute Key</div><div style='display: inline-grid'>Value</div>"
+            )
+          ),
+          addItem: function(container, index, data) {
+            const $row = $("<div />").appendTo(container);
+            $("<input />", {
+              type: "text",
+              name: "property",
+              style: "width: 40%;margin-right: 5px;"
+            })
+              .attr("autocomplete", "disable")
+              .appendTo($row)
+              .val(data.property);
+            const $value = $("<input />", {
+              type: "text",
+              name: "value",
+              style: "width: 55%;"
+            })
+              .appendTo($row)
+              .val(data.value)
+              .typedInput({ types: attributeTypes });
+            $value.typedInput("type", data.valueType);
+          }
+        })
+        .editableList("addItems", node.attributes);
+
+      $("#config")
+        .editableList({
+          addButton: false,
+          header: $("<div>Home Assistant Config (optional)</div>"),
+          addItem: function(container, index, data) {
+            const $row = $("<div />").appendTo(container);
+            $("<input />", {
+              type: "text",
+              name: "property",
+              value: data.property,
+              style: "width: 40%;",
+              readonly: true
+            }).appendTo($row);
+
+            $("<input />", {
+              type: "text",
+              name: "value",
+              value: data.value,
+              style: "margin-left: 10px;width: 55%;"
+            })
+              .attr("autocomplete", "disable")
+              .appendTo($row);
+          }
+        })
+        .editableList("addItems", node.config);
+
+      $("#node-input-outputLocation").typedInput({
+        types: [
+          "msg",
+          "flow",
+          "global",
+          {
+            value: "none",
+            label: "None",
+            hasValue: false
+          }
+        ],
+        typeField: "#node-input-outputLocationType"
+      });
+    },
+    oneditsave: function() {
+      const node = this;
+      node.attributes = [];
+      node.config = [];
+      nodeVersion.update(this);
+
+      $("#attributes")
+        .editableList("items")
+        .each(function(i) {
+          const $row = $(this);
+          node.attributes.push({
+            property: $row.find("input[name=property]").val(),
+            value: $row.find("input[name=value]").typedInput("value"),
+            valueType: $row.find("input[name=value]").typedInput("type")
+          });
+        });
+
+      $("#config")
+        .editableList("items")
+        .each(function(i) {
+          const $row = $(this);
+          node.config.push({
+            property: $row.find("input[name=property]").val(),
+            value: $row.find("input[name=value]").val()
+          });
+        });
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="ha-entity">
+  <input type="hidden" id="node-input-version" />
+
+  <div class="form-row">
+    <label for="node-input-name">Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+    <input type="hidden" id="node-input-outputs"/>
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-server">Server</label>
+    <input type="text" id="node-input-server" />
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-entityType">Type</label>
+    <select id="node-input-entityType" style="width: 70%;">
+      <option value="sensor">Sensor</option>
+      <option value="binary_sensor">Binary Sensor</option>
+    </select>
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-state">State</label>
+    <input type="text" id="node-input-state" style="width: 68%;" />
+    <input type="hidden" id="node-input-stateType" />
+  </div>
+
+  <div class="form-row">
+    <ol id="attributes"></ol>
+  </div>
+
+  <div class="form-row">
+    <ol id="config"></ol>
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-outputLocation">Output Location</label>
+    <input type="hidden" id="node-input-outputLocationType" />
+    <input type="text" id="node-input-outputLocation" style="width: 68%;" />
+  </div>
+
+  <div class="form-row checkboxOption">
+    <input type="checkbox" id="node-input-resend">
+    <label for="node-input-resend">Resend state and attributes</label>
+  </div>
+
+  <div class="form-row checkboxOption">
+    <input type="checkbox" id="node-input-debugenabled" />
+    <label for="node-input-debugenabled">Show Debug Information</label>
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="ha-entity">
+  <p>Creates a sensor in Home Assistant that can be updated from this node.</p>
+  <p>This nodes requires <a href="https://github.com/zachowj/hass-node-red" target="_blank">Node-RED custom integration <i class="fa fa-external-link external-link"></i></a> to be installed in Home Assistant
+  </p>
+
+  <h3>Inputs</h3>
+  <dl class="message-properties">
+    <dt>state<span class="property-type">string | number | boolean</span></dt>
+    <dd>The state the entity should be updated to</dd>
+
+    <dt class="optional">attributes<span class="property-type">object</span></dt>
+    <dd>Key/Value pair of attributes to update. The key should be a string and value can be a <code>[string | number | boolean | object]</code></dd>
+  </dl
+
+  <h3>Configuration</h3>
+  <dl class="message-properties">
+    <dt>Type<span class="property-type">[sensor|binary_sensor]</span></dt>
+    <dd>The state the entity should be updated to</dd>
+
+    <dt>State<span class="property-type">string | number | boolean</span></dt>
+    <dd>The state the entity should be updated to</dd>
+
+    <dt class="optional">Attributes<span class="property-type">object</span></dt>
+    <dd>Key/Value pair of attributes to update. The key should be a string and value can be a [string | number | boolean | object]</dd>
+
+    <dt class="optional">Home Assistant Config<span class="property-type">object</span></dt>
+    <dd>Configuration options available for the selected entity</dd>
+
+    <dt>Resend state and attributes<span class="property-type">boolean</span></dt>
+    <dd>When creating the entity in Home Assistant this will also send the last updated state and attributes then node sent to Home Assistant</dd>
+  </dl>
+
+  <h3>Outputs</h3>
+  <dl class="message-properties">
+  </dl>
+</script>
