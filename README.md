@@ -1,8 +1,8 @@
 # node-red-contrib-home-assistant-websocket
 
-[![Build Status](https://travis-ci.com/zachowj/node-red-contrib-home-assistant-websocket.svg?branch=master)](https://travis-ci.com/zachowj/node-red-contrib-home-assistant-websocket) [![Coverage Status](https://coveralls.io/repos/github/zachowj/node-red-contrib-home-assistant-websocket/badge.svg?branch=master)](https://coveralls.io/github/zachowj/node-red-contrib-home-assistant-websocket?branch=master)
+[![Release Version][release-shield]][release-link] [![Build Status][buildstatus-shield]][buildstatus-link] [![License][license-shield]](LICENSE.md)
 
-[![Buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoff.ee/zachowj)
+[![BuyMeCoffee][buymecoffee-shield]][buymecoffee-link]
 
 Various nodes to assist in setting up automation using [Node-RED](https://nodered.org/) communicating with [Home Assistant](https://home-assistant.io/).
 
@@ -46,67 +46,65 @@ If you have been using [@Ayapejian](https://github.com/AYapejian/node-red-contri
 
 If you have been using the [@Spartan-II-117](https://github.com/Spartan-II-117/node-red-contrib-home-assistant-llat) fork this should be a drop in replacement.
 
----
-
-## Included Nodes
+## Nodes
 
 The installed nodes have more detailed information in the Node-RED info pane shown when the node is selected. Below is a quick summary
 
-### All Events
+#### All Events
 
 Listens for all types of events from home assistant with the ability to filter by event type
 
-### State Changed Event
+#### State Changed Event
 
 Listens for only `state_changed` events from home assistant
 
-### State Trigger
+#### State Trigger
 
 Much like the `State Changed Node` however provides some advanced functionality around common automation use cases.
 
-### Poll State
+#### Poll State
 
 Outputs the state of an entity at regular intervals, optionally also at startup
 and every time the entity changes if desired
 
-### Webhook
+#### Webhook
 
 _Need [Custom Integration](https://github.com/zachowj/hass-node-red) installed in Home Assistant for node to function_
 
 Outputs the data received from the created webhook in Home Assistant
 
-### Call Service
+#### Call Service
 
 Sends a request to home assistant for any domain and service available ( `light/turn_on`, `input_select/select_option`, etc..)
 
-### Fire Event
+#### Fire Event
 
 Fire an event on the event bus
 
-### Sensor
+#### Sensor
 
 _Need [Custom Integration](https://github.com/zachowj/hass-node-red) installed in Home Assistant for node to function_
 
 Creates a sensor or binary sensor in Home Assistant which can be updated
 from this node
 
-### Current State
+#### Current State
 
 Fetches the last known state for any entity on input
 
-### Get Entities
+#### Get Entities
 
 Get entities based on search criteria with 3 different output options
 
-### Get History
+#### Get History
 
 Fetches HomeAssistant history on input
 
-### Get Template
+#### Get Template
 
 Allows rendering of templates on input
 
-### Wait Until
+#### Wait Until
 
 When an input is received the node will wait until the condition is met or the timeout occurs then will pass on the last received message
 
@@ -128,3 +126,11 @@ Check out the wiki page for setting up an environment with Home Assistant/Node R
 
 - [home-assistant-js-websocket](https://github.com/home-assistant/home-assistant-js-websocket)
 - [@Spartan-II-117](https://github.com/Spartan-II-117)
+
+[buildstatus-shield]: https://img.shields.io/travis/com/zachowj/node-red-contrib-home-assistant-websocket?style=for-the-badge
+[buildstatus-link]: https://travis-ci.com/zachowj/node-red-contrib-home-assistant-websocket
+[license-shield]: https://img.shields.io/github/license/zachowj/node-red-contrib-home-assistant-websocket.svg?style=for-the-badge
+[release-link]: https://github.com/zachowj/node-red-contrib-home-assistant-websocket/releases
+[release-shield]: https://img.shields.io/github/v/release/zachowj/node-red-contrib-home-assistant-websocket?style=for-the-badge
+[buymecoffee-link]: https://www.buymeacoffee.com/zachowj
+[buymecoffee-shield]: https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png
