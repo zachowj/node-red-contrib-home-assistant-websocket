@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [0.17.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.16.3...v0.17.0) (2019-12-09)
+
+### Bug Fixes
+
+- **call-service:** Remove spaces around entity ids for homeassistant domain ([564670a](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/564670ae8f8bac74d773a32d5d672b1692eb7d1c)), closes [#170](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/170)
+
+### Features
+
+- Custom Integration ([#173](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/173)) ([0d9f94e](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/0d9f94e192d76176d3421fb29ebb79da0472e727))
+
 ## [0.16.3](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.16.0...v0.16.3) (2019-10-24)
 
 ### Bug Fixes
