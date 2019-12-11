@@ -184,8 +184,23 @@ module.exports = function(RED) {
                 return;
             }
 
+            let attributes = [];
+            if (parsedMessage.attributes.source === 'message') {
+                for (const [prop, val] of Object.entries(
+                    parsedMessage.attributes.value
+                )) {
+                    attributes.push({
+                        property: prop,
+                        value: val,
+                        valueType: 'str'
+                    });
+                }
+            } else {
+                attributes = parsedMessage.attributes.value;
+            }
+
             // Change string to lower-case and remove unwanted characters
-            parsedMessage.attributes.value.forEach(x => {
+            attributes.forEach(x => {
                 const property = slugify(x.property, {
                     replacement: '_',
                     remove: /[^A-Za-z0-9-_~ ]/,
