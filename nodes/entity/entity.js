@@ -191,8 +191,7 @@ module.exports = function(RED) {
                 )) {
                     attributes.push({
                         property: prop,
-                        value: val,
-                        valueType: 'str'
+                        value: val
                     });
                 }
             } else {
