@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.17.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.17.0...v0.17.1) (2019-12-11)
+
+### Bug Fixes
+
+- **sensor:** Fix reading attributes object when received in message object ([18849d9](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/18849d917984d9449c241ca9a9312dcfdcb98ea6))
+
 # [0.17.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.16.3...v0.17.0) (2019-12-09)
 
 ### Bug Fixes
