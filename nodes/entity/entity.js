@@ -11,13 +11,14 @@ module.exports = function(RED) {
             entityType: {},
             state: {},
             stateType: {},
-            attributes: {},
+            attributes: nodeConfig => nodeConfig.attributes || [],
             config: {},
             exposeToHomeAssistant: nodeConfig => true,
             resend: {},
             outputLocation: {},
             outputLocationType: nodeConfig =>
-                nodeConfig.outputLocationType || 'none'
+                nodeConfig.outputLocationType || 'none',
+            inputOverride: nodeConfig => nodeConfig.inputOverride || 'allow'
         },
         input: {
             state: {
@@ -156,25 +157,24 @@ module.exports = function(RED) {
                 return false;
             }
 
-            const attr = {};
-            // Set default for state from input to string
-            if (
+            let state = parsedMessage.state.value;
+            let stateType = parsedMessage.stateType.value;
+            if (this.nodeConfig.inputOverride === 'block') {
+                state = this.nodeConfig.state;
+                stateType = this.nodeConfig.stateType;
+            } else if (
                 parsedMessage.state.source === 'message' &&
-                parsedMessage.stateType.source !== 'message'
+                stateType !== 'message'
             ) {
-                parsedMessage.stateType.value = 'str';
+                // Set default for state from input to string
+                stateType = 'str';
             }
 
-            let state;
             try {
-                state = this.getValue(
-                    parsedMessage.state.value,
-                    parsedMessage.stateType.value,
-                    message
-                );
+                state = this.getValue(state, stateType, message);
             } catch (e) {
                 this.setStatusFailed('Error');
-                this.node.error(e.message, message);
+                this.node.error(`State: ${e.message}`, message);
                 return;
             }
 
@@ -185,7 +185,23 @@ module.exports = function(RED) {
             }
 
             let attributes = [];
-            if (parsedMessage.attributes.source === 'message') {
+            if (
+                parsedMessage.attributes.source !== 'message' ||
+                this.nodeConfig.inputOverride === 'block'
+            ) {
+                attributes = this.nodeConfig.attributes;
+            } else {
+                if (this.nodeConfig.inputOverride === 'merge') {
+                    const keys = Object.keys(
+                        parsedMessage.attributes.value
+                    ).map(e => e.toLowerCase());
+                    this.nodeConfig.attributes.forEach(ele => {
+                        if (!keys.includes(ele.property.toLowerCase())) {
+                            attributes.push(ele);
+                        }
+                    });
+                }
+
                 for (const [prop, val] of Object.entries(
                     parsedMessage.attributes.value
                 )) {
@@ -194,28 +210,28 @@ module.exports = function(RED) {
                         value: val
                     });
                 }
-            } else {
-                attributes = parsedMessage.attributes.value;
             }
 
-            // Change string to lower-case and remove unwanted characters
-            attributes.forEach(x => {
-                const property = slugify(x.property, {
-                    replacement: '_',
-                    remove: /[^A-Za-z0-9-_~ ]/,
-                    lower: true
-                });
-                try {
+            const attr = {};
+            try {
+                attributes.forEach(x => {
+                    // Change string to lower-case and remove unwanted characters
+                    const property = slugify(x.property, {
+                        replacement: '_',
+                        remove: /[^A-Za-z0-9-_~ ]/,
+                        lower: true
+                    });
                     attr[property] = this.getValue(
                         x.value,
                         x.valueType,
                         message
                     );
-                } catch (e) {
-                    this.setStatusFailed('Error');
-                    this.node.error(e.message, message);
-                }
-            });
+                });
+            } catch (e) {
+                this.setStatusFailed('Error');
+                this.node.error(`Attribute: ${e.message}`, message);
+                return;
+            }
 
             const payload = {
                 type: 'nodered/entity',

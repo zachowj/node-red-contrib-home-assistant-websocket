@@ -31,12 +31,11 @@
       },
       state: { value: "payload" },
       stateType: { value: "msg" },
-      attributes: {
-        value: []
-      },
+      attributes: { value: [] },
       resend: { value: true },
       outputLocation: { value: "payload" },
-      outputLocationType: { value: "none" }
+      outputLocationType: { value: "none" },
+      inputOverride: { value: "allow" }
     },
     oneditprepare: function() {
       nodeVersion.check(this);
@@ -234,6 +233,15 @@
     <input type="text" id="node-input-outputLocation" style="width: 68%;" />
   </div>
 
+  <div class="form-row">
+    <label for="node-input-inputOverride">Input Override</label>
+    <select id="node-input-inputOverride" style="width: 68%;">
+      <option value="allow">Allow</option>
+      <option value="merge">Merge</option>
+      <option value="block">Block</option>
+    </select>
+  </div>
+
   <div class="form-row checkboxOption">
     <input type="checkbox" id="node-input-resend">
     <label for="node-input-resend">Resend state and attributes</label>
@@ -272,6 +280,9 @@
 
     <dt class="optional">Home Assistant Config<span class="property-type">object</span></dt>
     <dd>Configuration options available for the selected entity</dd>
+
+    <dt>Input Override<span class="property-type">accept | merge | block</span></dt>
+    <dd>Determine how input values will be handled. When merge is selected the message object values will override the configuration values.</dd>
 
     <dt>Resend state and attributes<span class="property-type">boolean</span></dt>
     <dd>When creating the entity in Home Assistant this will also send the last updated state and attributes then node sent to Home Assistant</dd>
