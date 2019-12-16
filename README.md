@@ -127,8 +127,8 @@ Check out the wiki page for setting up an environment with Home Assistant/Node R
 - [home-assistant-js-websocket](https://github.com/home-assistant/home-assistant-js-websocket)
 - [@Spartan-II-117](https://github.com/Spartan-II-117)
 
-[buildstatus-shield]: https://img.shields.io/travis/com/zachowj/node-red-contrib-home-assistant-websocket?style=for-the-badge
-[buildstatus-link]: https://travis-ci.com/zachowj/node-red-contrib-home-assistant-websocket
+[buildstatus-shield]: https://img.shields.io/github/workflow/status/zachowj/node-red-contrib-home-assistant-websocket/ci/master?style=for-the-badge
+[buildstatus-link]: https://github.com/zachowj/node-red-contrib-home-assistant-websocket/actions
 [license-shield]: https://img.shields.io/github/license/zachowj/node-red-contrib-home-assistant-websocket.svg?style=for-the-badge
 [release-link]: https://github.com/zachowj/node-red-contrib-home-assistant-websocket/releases
 [release-shield]: https://img.shields.io/github/v/release/zachowj/node-red-contrib-home-assistant-websocket?style=for-the-badge
