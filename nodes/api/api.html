@@ -15,6 +15,7 @@
     defaults: {
       name: { value: "" },
       server: { value: "", type: "server", required: true },
+      debugenabled: { value: false },
       protocol: { value: "websocket" },
       method: { value: "get" },
       path: { value: "" },
@@ -131,6 +132,11 @@
       <option value="arraybuffer">a binary buffer</option>
       <option value="json">a parsed JSON object</option>
     </select>
+  </div>
+
+  <div class="form-row checkboxOption">
+    <input type="checkbox" id="node-input-debugenabled" />
+    <label for="node-input-debugenabled">Show Debug Information</label>
   </div>
 </script>
 

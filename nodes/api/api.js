@@ -154,6 +154,8 @@ module.exports = function(RED) {
                     return;
                 }
 
+                this.debugToClient({ method, path, data });
+
                 apiCall = this.httpClient[`_${method}`].bind(
                     this.httpClient,
                     path,
@@ -172,6 +174,8 @@ module.exports = function(RED) {
                         node.setStatusFailed();
                         return null;
                     }
+
+                    this.debugToClient(json);
 
                     apiCall = this.websocketClient.send.bind(
                         this.websocketClient,
