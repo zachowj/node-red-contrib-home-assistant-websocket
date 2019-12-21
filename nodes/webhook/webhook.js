@@ -101,7 +101,7 @@ module.exports = function(RED) {
             super.onClose(removed);
 
             if (this.registered && this.isConnected && this.removeWebhook) {
-                this.removeWebhook();
+                this.removeWebhook().catch(() => {});
             }
         }
     }
