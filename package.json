@@ -103,7 +103,7 @@
       "eslint -c .eslintrc.js --fix",
       "git add"
     ],
-    "*.{json,md}": [
+    "*.{css,html,json,md,yaml,yml}": [
       "prettier --write",
       "git add"
     ]

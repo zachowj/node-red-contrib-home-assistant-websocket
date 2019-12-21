@@ -4,6 +4,6 @@ module.exports = {
     parserOptions: { sourceType: 'module' },
     env: { browser: true, mocha: true },
     rules: {
-        'prettier/prettier': ['error', { tabWidth: 4, singleQuote: true }]
+        'prettier/prettier': ['error']
     }
 };

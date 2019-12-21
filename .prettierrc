@@ -1,0 +1,10 @@
+{
+    "tabWidth": 4,
+    "singleQuote": true,
+    "overrides": [
+        {
+            "files": ["*.css", "*.html", "*.json", "*.md", "*.yaml", "*.yml"],
+            "options": { "tabWidth": 2, "singleQuote": false }
+        }
+    ]
+}
