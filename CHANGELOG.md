@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [0.18.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.17.1...v0.18.0) (2019-12-21)
+
+### Bug Fixes
+
+- Catch rejection for lost connection when unsubbing ([0008406](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/00084065cfe32018c75cdb3f9ef2d57ae0ed933a))
+
+### Features
+
+- **api:** Add debug ouput option ([72cf55b](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/72cf55bc94192690e00532d29a6b471532f86201))
+- **sensor:** Add the ability to choose how input values are handled ([cbd48b9](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/cbd48b9b2b17fa2567f725836a2e9edf9b1658fd))
+
 ## [0.17.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.17.0...v0.17.1) (2019-12-11)
 
 ### Bug Fixes
