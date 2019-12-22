@@ -13,9 +13,7 @@ module.exports = function(RED) {
             dataType: nodeDef => nodeDef.dataType || 'json',
             mergecontext: {},
             name: {},
-            server: {
-                isNode: true
-            },
+            server: { isNode: true },
             output_location: {},
             output_location_type: {},
             mustacheAltTags: {}

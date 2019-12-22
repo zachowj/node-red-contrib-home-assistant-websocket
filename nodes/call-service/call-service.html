@@ -9,54 +9,26 @@
     icon: "router-wireless.png",
     align: "right",
     paletteLabel: "call service",
-    label: function () {
+    label: function() {
       return this.name || `svc: ${this.service_domain}:${this.service}`;
     },
     labelStyle: nodeVersion.labelStyle,
     defaults: {
-      name: {
-        value: ""
-      },
-      server: {
-        value: "",
-        type: "server",
-        required: true
-      },
-      version: {
-        value: 1
-      },
-      debugenabled: {
-        value: false
-      },
-      service_domain: {
-        value: ""
-      },
-      service: {
-        value: ""
-      },
-      entityId: {
-        value: ""
-      },
-      data: {
-        value: ""
-      },
-      dataType: {
-        value: "json"
-      },
-      mergecontext: {
-        value: null
-      },
-      output_location: {
-        value: "payload"
-      },
-      output_location_type: {
-        value: "none"
-      },
-      mustacheAltTags: {
-        value: false
-      }
+      name: { value: "" },
+      server: { value: "", type: "server", required: true },
+      version: { value: 1 },
+      debugenabled: { value: false },
+      service_domain: { value: "" },
+      service: { value: "" },
+      entityId: { value: "" },
+      data: { value: "" },
+      dataType: { value: "json" },
+      mergecontext: { value: null },
+      output_location: { value: "payload" },
+      output_location_type: { value: "none" },
+      mustacheAltTags: { value: false }
     },
-    oneditprepare: function () {
+    oneditprepare: function() {
       nodeVersion.check(this);
       const node = this;
 
@@ -94,7 +66,7 @@
         })
         .typedInput("width", "68%");
 
-      $data.on("change", function () {
+      $data.on("change", function() {
         $("#mustacheAltTags").toggle($dataType.val() === "json");
       });
 
@@ -111,12 +83,12 @@
         }
 
         $entityIdField
-          .on("keydown", function (event) {
+          .on("keydown", function(event) {
             if (
               event.keyCode === $.ui.keyCode.TAB &&
               $(this)
-              .autocomplete()
-              .data("uiAutocomplete").menu.active
+                .autocomplete()
+                .data("uiAutocomplete").menu.active
             ) {
               event.preventDefault();
             }
@@ -124,7 +96,7 @@
           .autocomplete({
             source: node.availableEntities,
             minLength: 0,
-            source: function (request, response) {
+            source: function(request, response) {
               // delegate back to autocomplete, but extract the last term
               response(
                 $.ui.autocomplete.filter(
@@ -133,11 +105,11 @@
                 )
               );
             },
-            focus: function () {
+            focus: function() {
               // prevent value inserted on focus
               return false;
             },
-            select: function (event, ui) {
+            select: function(event, ui) {
               var terms = split(this.value);
               // remove the current input
               terms.pop();
@@ -158,18 +130,21 @@
         $domainField
           .autocomplete({
             source: node.allDomains,
-            create: (evt, ui) => updateDomainSelection({
-              event: evt
-            }),
-            change: (evt, ui) => updateDomainSelection({
-              event: evt
-            }),
-            select: (evt, ui) => updateDomainSelection({
-              event: evt
-            }),
+            create: (evt, ui) =>
+              updateDomainSelection({
+                event: evt
+              }),
+            change: (evt, ui) =>
+              updateDomainSelection({
+                event: evt
+              }),
+            select: (evt, ui) =>
+              updateDomainSelection({
+                event: evt
+              }),
             minLength: 0
           })
-          .focus(function () {
+          .focus(function() {
             $domainField.autocomplete("search");
           });
 
@@ -183,10 +158,7 @@
         return node;
       });
 
-      function updateServiceSelection({
-        event,
-        serviceText
-      }) {
+      function updateServiceSelection({ event, serviceText }) {
         let selectedServiceText = serviceText;
         if (!selectedServiceText && event) {
           selectedServiceText = $(event.target).val();
@@ -198,9 +170,9 @@
             node.selectedDomain.services[selectedServiceText];
           // If a known service
           if (node.selectedService) {
-            const serviceDesc = node.selectedService.description ?
-              node.selectedService.description :
-              "No description provided by home assistant";
+            const serviceDesc = node.selectedService.description
+              ? node.selectedService.description
+              : "No description provided by home assistant";
             const fields = node.selectedService.fields;
 
             let tableRows = Object.keys(fields).reduce((tRows, k) => {
@@ -247,42 +219,44 @@
         }
       }
 
-      function updateDomainSelection({
-        event,
-        domainText
-      }) {
+      function updateDomainSelection({ event, domainText }) {
         let selectedDomainText = domainText;
         if (!selectedDomainText && event) {
           selectedDomainText = $(event.target).val();
         }
 
         const knownDomain = node.allDomains.indexOf(selectedDomainText) > -1;
-        node.selectedDomain = knownDomain ? {
-            services: node.allServices[selectedDomainText],
-            name: selectedDomainText
-          } :
-          (node.selectedDomain = {
-            services: {}
-          });
+        node.selectedDomain = knownDomain
+          ? {
+              services: node.allServices[selectedDomainText],
+              name: selectedDomainText
+            }
+          : (node.selectedDomain = {
+              services: {}
+            });
 
         $serviceField
           .autocomplete({
             source: Object.keys(node.selectedDomain.services).sort(),
-            create: (evt, ui) => updateServiceSelection({
-              event: evt
-            }),
-            change: (evt, ui) => updateServiceSelection({
-              event: evt
-            }),
-            select: (evt, ui) => updateServiceSelection({
-              event: evt
-            }),
-            focus: (evt, ui) => updateServiceSelection({
-              event: evt
-            }),
+            create: (evt, ui) =>
+              updateServiceSelection({
+                event: evt
+              }),
+            change: (evt, ui) =>
+              updateServiceSelection({
+                event: evt
+              }),
+            select: (evt, ui) =>
+              updateServiceSelection({
+                event: evt
+              }),
+            focus: (evt, ui) =>
+              updateServiceSelection({
+                event: evt
+              }),
             minLength: 0
           })
-          .focus(function () {
+          .focus(function() {
             $serviceField.autocomplete("search");
           });
       }
@@ -306,7 +280,7 @@
         })
         .typedInput("width", "68%");
     },
-    oneditsave: function () {
+    oneditsave: function() {
       let entityId = $("#node-input-entityId").val();
       this.service_domain = $("#service_domain").val();
       this.service = $("#service").val();
@@ -396,7 +370,6 @@
     <input type="checkbox" id="node-input-debugenabled" style="display: inline-block; width: auto; vertical-align: top;" />
     <label for="node-input-debugenabled" style="width: auto;">Show Debug Information</label>
   </div>
-
 </script>
 
 <script type="text/x-red" data-help-name="api-call-service">

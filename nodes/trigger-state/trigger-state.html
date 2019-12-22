@@ -32,14 +32,8 @@
     },
     labelStyle: nodeVersion.labelStyle,
     defaults: {
-      name: {
-        value: ""
-      },
-      server: {
-        value: "",
-        type: "server",
-        required: true
-      },
+      name: { value: "" },
+      server: { value: "", type: "server", required: true },
       exposeToHomeAssistant: { value: false },
       haConfig: {
         value: [
@@ -47,34 +41,15 @@
           { property: "icon", value: "" }
         ]
       },
-      entityid: {
-        value: "",
-        required: true
-      },
-      entityidfiltertype: {
-        value: "exact"
-      },
-      debugenabled: {
-        value: false
-      },
-      constraints: {
-        value: []
-      },
-      constraintsmustmatch: {
-        value: "all"
-      },
-      outputs: {
-        value: 2
-      },
-      customoutputs: {
-        value: []
-      },
-      outputinitially: {
-        value: false
-      },
-      state_type: {
-        value: "str"
-      }
+      entityid: { value: "", required: true },
+      entityidfiltertype: { value: "exact" },
+      debugenabled: { value: false },
+      constraints: { value: [] },
+      constraintsmustmatch: { value: "all" },
+      outputs: { value: 2 },
+      customoutputs: { value: [] },
+      outputinitially: { value: false },
+      state_type: { value: "str" }
     },
     oneditprepare: function() {
       // Outputs List

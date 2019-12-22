@@ -21,9 +21,7 @@ module.exports = function(RED) {
             constraints: {},
             customoutputs: {},
             outputinitially: {},
-            state_type: {
-                value: 'str'
-            }
+            state_type: { value: 'str' }
         }
     };
 
@@ -240,7 +238,7 @@ module.exports = function(RED) {
                 if (comparatorResult === false) {
                     this.debugToClient(
                         `constraint comparator: failed entity "${constraintTarget.entityid}" property "${propertyValue}" with value ${actualValue} failed "${comparatorType}" check against (${comparatorValueDatatype}) ${comparatorValue}`
-          ); // eslint-disable-line
+                    ); // eslint-disable-line
                 }
 
                 comparatorResults.push({
@@ -365,7 +363,7 @@ module.exports = function(RED) {
             if (!comparatorMatched) {
                 this.debugToClient(
                     `output comparator failed: property "${output.comparatorPropertyValue}" with value ${actualValue} failed "${output.comparatorType}" check against ${output.comparatorValue}`
-        ); // eslint-disable-line
+                ); // eslint-disable-line
                 return null;
             }
 

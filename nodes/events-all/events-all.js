@@ -2,9 +2,7 @@ const EventsHaNode = require('../../lib/events-ha-node');
 
 module.exports = function(RED) {
     const nodeOptions = {
-        config: {
-            event_type: {}
-        }
+        config: { event_type: {} }
     };
 
     class ServerEventsNode extends EventsHaNode {

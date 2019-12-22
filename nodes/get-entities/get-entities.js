@@ -7,9 +7,7 @@ module.exports = function(RED) {
     const nodeOptions = {
         debug: true,
         config: {
-            server: {
-                isNode: true
-            },
+            server: { isNode: true },
             name: {},
             rules: {},
             output_type: {},

@@ -17,17 +17,9 @@
     },
     labelStyle: nodeVersion.labelStyle,
     defaults: {
-      name: {
-        value: ""
-      },
-      server: {
-        value: "",
-        type: "server",
-        required: true
-      },
-      version: {
-        value: 1
-      },
+      name: { value: "" },
+      server: { value: "", type: "server", required: true },
+      version: { value: 1 },
       exposeToHomeAssistant: { value: false },
       haConfig: {
         value: [
@@ -35,30 +27,15 @@
           { property: "icon", value: "" }
         ]
       },
-      entityidfilter: {
-        value: "",
-        required: true
-      },
-      entityidfiltertype: {
-        value: "exact"
-      },
-      outputinitially: {
-        value: false
-      },
-      state_type: {
-        value: "str"
-      },
-      haltifstate: {
-        value: ""
-      },
+      entityidfilter: { value: "", required: true },
+      entityidfiltertype: { value: "exact" },
+      outputinitially: { value: false },
+      state_type: { value: "str" },
+      haltifstate: { value: "" },
       halt_if_type: {},
       halt_if_compare: {},
-      outputs: {
-        value: 1
-      },
-      output_only_on_state_change: {
-        value: true
-      }
+      outputs: { value: 1 },
+      output_only_on_state_change: { value: true }
     },
     oneditprepare: function() {
       const $entityidfilter = $("#node-input-entityidfilter");

@@ -4,44 +4,23 @@
   RED.nodes.registerType("server", {
     category: "config",
     defaults: {
-      name: {
-        value: "Home Assistant",
-        required: false
-      },
-      legacy: {
-        value: false
-      },
-      hassio: {
-        value: false
-      },
-      rejectUnauthorizedCerts: {
-        value: true
-      },
-      ha_boolean: {
-        value: "y|yes|true|on|home|open"
-      },
-      connectionDelay: {
-        value: true
-      },
-      cacheJson: {
-        value: true
-      }
+      name: { value: "Home Assistant", required: false },
+      legacy: { value: false },
+      hassio: { value: false },
+      rejectUnauthorizedCerts: { value: true },
+      ha_boolean: { value: "y|yes|true|on|home|open" },
+      connectionDelay: { value: true },
+      cacheJson: { value: true }
     },
     credentials: {
-      host: {
-        value: "",
-        required: true
-      },
-      access_token: {
-        value: "",
-        required: false
-      }
+      host: { value: "", required: true },
+      access_token: { value: "", required: false }
     },
     icon: "home.png",
-    label: function () {
+    label: function() {
       return this.name || this.url;
     },
-    oneditprepare: function () {
+    oneditprepare: function() {
       const $hassio = $("#node-config-input-hassio");
       const $host = $("#node-config-input-host");
       const $legacy = $("#node-config-input-legacy");
@@ -73,7 +52,7 @@
         $(".hassio").toggle($hassio.prop("checked"));
       }
       updateHassio();
-      $hassio.on("click", function () {
+      $hassio.on("click", function() {
         updateHassio();
       });
 
@@ -89,11 +68,11 @@
         );
       }
       updateLegacy();
-      $legacy.on("click", function () {
+      $legacy.on("click", function() {
         updateLegacy();
       });
     },
-    oneditsave: function () {
+    oneditsave: function() {
       const hassio = $("#node-config-input-hassio").is(":checked");
       const $host = $("#node-config-input-host");
       const hostname = $host.val();
@@ -170,7 +149,6 @@
     <input type="checkbox" id="node-config-input-cacheJson" style="width: auto;margin-left: 125px;vertical-align: top" />
     <label for="node-config-input-cacheJson" style="width: auto;"> Cache Autocomplete Results</label>
   </div>
-
 </script>
 
 <script type="text/x-red" data-help-name="server">
