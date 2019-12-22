@@ -1,23 +1,23 @@
-#versionUpdate {
+#version-update {
   padding: 0.5em;
   margin-bottom: 1em;
 }
 
-#versionUpdate p {
+#version-update p {
   margin: 0;
 }
 
-#versionUpdate strong {
+#version-update strong {
   padding-right: 5px;
 }
 
-#errorIfState {
+#error-if-state {
   text-align: center;
   padding: 5px;
   margin-top: 5px;
 }
 
-.form-row.checkboxOption input {
+.form-row.checkbox-option input {
   margin-left: 105px;
   margin-right: 5px;
   display: inline-block;
@@ -25,23 +25,23 @@
   vertical-align: top;
 }
 
-.form-row.checkboxOption label {
+.form-row.checkbox-option label {
   width: auto;
 }
 
-.form-row.checkboxOptionLeft input {
+.form-row.checkbox-option-left input {
   display: inline-block;
   margin-right: 5px;
   width: auto;
   vertical-align: top;
 }
 
-.form-row.checkboxOptionLeft label {
+.form-row.checkbox-option-left label {
   width: auto;
   margin-right: 20px;
 }
 
-.ha-nodeLabelLegacy {
+.ha-node-label-legacy {
   fill: #fdfd96;
   stroke-width: 0;
   font-size: 14px;
@@ -62,7 +62,7 @@ li span.property-type {
   float: right;
 }
 
-.ha-alertBox {
+.ha-alert-box {
   padding: 10px;
   margin-bottom: 10px;
 }

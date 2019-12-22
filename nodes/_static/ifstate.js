@@ -19,7 +19,7 @@ var ifState = (function($) {
     };
 
     const init = function(input, compare, nodeName) {
-        $('#errorIfState').remove();
+        $('#error-if-state').remove();
 
         $input = $(input);
         const $compare = $(compare);

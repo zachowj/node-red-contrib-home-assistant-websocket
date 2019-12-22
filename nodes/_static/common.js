@@ -22,7 +22,7 @@ var nodeVersion = (function($) {
 
     function check(node) {
         node.version = node.version === undefined ? 0 : Number(node.version);
-        const versionAlert = `<div id="versionUpdate" class="ui-state-error ha-alertBox"><p><strong>Alert:</strong>This node will be updated to version ${
+        const versionAlert = `<div id="version-update" class="ui-state-error ha-alert-box"><p><strong>Alert:</strong>This node will be updated to version ${
             node._def.defaults.version.value
         } from ${node.version} (<a href="${wikiLink(
             node.type
@@ -55,7 +55,7 @@ var nodeVersion = (function($) {
         return `${
             this._def.defaults.version &&
             Number(this.version) !== this._def.defaults.version.value
-                ? 'ha-nodeLabelLegacy '
+                ? 'ha-node-label-legacy '
                 : ''
         }${this.name ? 'node_label_italic' : ''}`;
     }
@@ -195,7 +195,7 @@ var exposeNode = (function($) {
     function renderEventNode() {
         const $row = $('<div />', {
             id: 'exposeToHa',
-            class: `form-row checkboxOption${
+            class: `form-row checkbox-option${
                 node.type === 'trigger-state' ? 'Left' : ''
             }`
         });
@@ -278,7 +278,7 @@ var exposeNode = (function($) {
     function renderAlert() {
         if (!$('#integrationAlert').length) {
             const alertText =
-                '<div id="integrationAlert" class="ui-state-error ha-alertBox"><strong>Attention:</strong> This node requires <a href="https://github.com/zachowj/hass-node-red" target="_blank">Node-RED custom integration <i class="fa fa-external-link external-link"></i></a> to be installed in Home Assistant for it to function.</strong></div>';
+                '<div id="integrationAlert" class="ui-state-error ha-alert-box"><strong>Attention:</strong> This node requires <a href="https://github.com/zachowj/hass-node-red" target="_blank">Node-RED custom integration <i class="fa fa-external-link external-link"></i></a> to be installed in Home Assistant for it to function.</strong></div>';
             $('#dialog-form').prepend(alertText);
         }
         $('#integrationAlert').toggle(node.integrationVersion === 0);
