@@ -1,7 +1,7 @@
 # Cookbook
 
 Here is a collection of beginner to advanced flows and explanations to help you
-further educate yourself in the world of Home Automation.
+further, educate yourself in the world of Home Automation.
 
 **Also see:**
 
