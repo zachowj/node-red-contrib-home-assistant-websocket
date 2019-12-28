@@ -38,14 +38,6 @@ Under the server node config just check the checkbox for `I use Hass.io`
 
 The add-on can be found here: <https://github.com/hassio-addons/addon-node-red#readme>
 
-## Migrating
-
-Coming from a different version, e.g. [@Ayapejian](https://github.com/AYapejian/node-red-contrib-home-assistant) or [@Spartan-II-117](https://github.com/Spartan-II-117/node-red-contrib-home-assistant-llat)?
-
-If you have been using [@Ayapejian](https://github.com/AYapejian/node-red-contrib-home-assistant) version there are some breaking changes with two of the nodes. The ‘Poll State’ and ‘Current State’ both have a little different formatted outputs. Check your nodes and make sure they are outputting what you expect. A more in depth example can be found [here](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/wiki/Migration).
-
-If you have been using the [@Spartan-II-117](https://github.com/Spartan-II-117/node-red-contrib-home-assistant-llat) fork this should be a drop in replacement.
-
 ## Nodes
 
 The installed nodes have more detailed information in the Node-RED info pane shown when the node is selected. Below is a quick summary
