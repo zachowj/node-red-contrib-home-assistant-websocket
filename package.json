@@ -22,8 +22,9 @@
     "lint:fix": "eslint . --fix",
     "release": "standard-version",
     "release:pre": "standard-version -p",
-    "docs:dev": "vuepress --debug dev docs",
-    "docs:build": "vuepress build docs"
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs",
+    "docs:lint": "prettier --write docs/**/*.md"
   },
   "repository": {
     "type": "git",

@@ -3,7 +3,7 @@
 For your first flow, we'll start simple and set up a flow to turn on and off a
 light when the sun comes up and goes down.
 
-This example we'll use the `sun.sun` entity states `below_horizon`/`above_horizon` from
+This example will use the state, `below_horizon`/`above_horizon`, of the `sun.sun` entity from
 Home Assistant to trigger the light.
 
 ## Events: state
@@ -66,3 +66,4 @@ Node-RED.
 - [Importing and Exporting Flows](https://nodered.org/docs/user-guide/editor/workspace/import-export)
 - [Call Service Node](./node/call-service.md)
 - [Events: state Node](./node/events-state.md)
+- [Conditionals](./conditions.md)

@@ -15,7 +15,7 @@ jobs:
           node-version: "10.x"
       - run: npm install
       - name: Run prettier
-        run: npx run prettier --write 'docs/**/*.md'
+        run: npm run docs:lint
       - uses: stefanzweifel/git-auto-commit-action@v2.5.0
         with:
           commit_message: Apply prettier changes

@@ -8,6 +8,7 @@ Sends a request to home assistant for any domain and service available (`light/t
 
 - **Type:** string
 - **Required**
+- Accepts [Mustache Templates](/guide/mustache-templates.md)
 
 Service domain to call
 
@@ -15,18 +16,21 @@ Service domain to call
 
 - **Type:** string
 - **Required**
+- Accepts [Mustache Templates](/guide/mustache-templates.md)
 
 Service service to call
 
 ### Entity Id
 
 - **Type:** string
+- Accepts [Mustache Templates](/guide/mustache-templates.md)
 
 A comma delimited list of entity ids
 
 ### Data
 
 - **Type:** JSON
+- Accepts [Mustache Templates](/guide/mustache-templates.md) when data type is JSON
 
 JSON object to pass along.
 
@@ -97,10 +101,6 @@ Service `data` used in call, if one was used
   }
 }
 ```
-
-## Templates
-
-You can use templates in the `Domain`, `Service`, `Entity Id`, and `data` fields. Templates only work in the data field when the data type is JSON.
 
 **Also see:**
 

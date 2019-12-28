@@ -8,7 +8,8 @@ module.exports = {
         repo: 'zachowj/node-red-contrib-home-assistant-websocket',
         repoLabel: 'Github',
         docsDir: 'docs',
-        docsBranch: 'dev',
+        // docsBranch: 'dev',
+        docsBranch: 'docs',
         editLinks: true,
         editLinkText: 'Help us improve this page!',
         lastUpdated: 'Last Updated',
@@ -41,8 +42,8 @@ module.exports = {
                     children: [
                         '',
                         'first-flow',
-                        'mustache-templates',
                         'conditionals',
+                        'mustache-templates',
                         'jsonata'
                     ]
                 },
