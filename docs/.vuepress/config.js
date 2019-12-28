@@ -1,5 +1,5 @@
 module.exports = {
-    base: '/node-red-contrib-home-assistant/',
+    base: '/node-red-contrib-home-assistant-websocket/',
     title: 'node-red-contrib-home-assistant-websocket',
     description:
         'Node-RED integration with Home Assistant through the WebSocket and HTTP API',
