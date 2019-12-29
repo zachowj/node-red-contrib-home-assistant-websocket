@@ -1,22 +1,73 @@
 # Poll State
 
-Outputs the state of an entity at regular intervals, optionally also at startup
-and every time the entity changes if desired
+Polls for state at regular intervals, optionally also outputting at start and when state changes. Useful for either alerts for non-communicating devices (time since change > 1 day for example) or dashboard graphs with consistent interval charts
 
-## Config
+## Configuration
 
-### Event Type
+<!-- TODO: More Config need details -->
+
+### Update Interval
+
+- Type: `number`
+
+The amount of time between checking / sending updates
+
+### If State
 
 - Type: `string`
-- Default: `all event types`
 
-filter by event type or leave blank for all events
+If the conditional statement is evaluated as true send the message to the first output otherwise send it to the second output. If blank there will only be one output.
 
-**Also see:**
+### State Type
 
-- [Base URL](../guide/assets.md#base-url)
-- [Deploy Guide > GitHub Pages](../guide/deploy.md#github-pages)
+- Type: `string`
 
-## Input
+Convert the state of the entity to the selected type. Boolean will be convert to true based on if the string is equal by default to (y|yes|true|on|home|open). Original value stored in msg.data.original_state
 
-## Output
+### Output Initially
+
+- Type: `boolean`
+
+Output once on startup/deploy then on each interval
+
+### Expose to Home Assistant
+
+- Type: `boolean`
+
+Creates a switch within Home Assistant to enable/disable this node. This feature requires <a href="https://github.com/zachowj/hass-node-red" target="_blank">Node-RED custom integration <i class="fa fa-external-link external-link"></i></a> to be installed in Home Assistant
+
+## Outputs
+
+### topic
+
+- Type: `string`
+
+entity_id of changed entity
+
+### payload.data
+
+- Type: `object`
+
+The last known state of the entity
+
+### payload.data.timeSinceChanged
+
+- Type: `string`
+
+Human readable format string of time since last updated, example "1 hour ago"
+
+### payload.data.timeSinceChangedMs
+
+- Type: `number`
+
+Number of milliseconds since last changed
+
+## References
+
+- [Home Assistant State Objects](https://home-assistant.io/docs/configuration/state_object/)
+
+## Changelog
+
+#### Version 1
+
+- "if state"/"halt if" will now send the message to the first output if true and to the second if not. The old behavior, sending the message to the second output if true, will continue to be in place until you edit one of the existing nodes via the UI and at that time the outputs will automatically be switched.

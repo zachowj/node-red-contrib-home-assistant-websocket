@@ -57,6 +57,7 @@ module.exports = {
                 {
                     title: 'Nodes',
                     collapsable: false,
+                    sidebarDepth: 2,
                     children: [
                         'call-service',
                         'current-state',

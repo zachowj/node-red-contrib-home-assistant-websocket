@@ -1,21 +1,51 @@
 # Get Template
 
-Allows rendering of templates on input
+Can either set template in the node configuration or pass in the `msg.template` property of the incoming message. Passing template via `msg.template` will override the template string set in node configuration.
 
-## Config
+::: tip NOTE:
+Node will output any Home Assistant API errors for catching with the 'catch all'
+node
+:::
 
-### Event Type
+## Configuration
+
+### template
 
 - Type: `string`
-- Default: `all event types`
 
-filter by event type or leave blank for all events
+Jinja template to be rendered, discarded if `msg.template` is provided via input msg
 
-**Also see:**
+### Template Location
 
-- [Base URL](../guide/assets.md#base-url)
-- [Deploy Guide > GitHub Pages](../guide/deploy.md#github-pages)
+Customizable location to output original template
 
-## Input
+### Results
 
-## Output
+Customizable location to output rendered template
+
+## Inputs
+
+### template
+
+- Type: `string`
+
+Jinja template to be rendered
+
+## Outputs
+
+### template
+
+- Type: `string`
+
+The original template sent to home assistant for rendering
+
+### payload
+
+- Type: `string`
+
+The rendered template
+
+## References
+
+- [Home Assistant Template Docs](https://home-assistant.io/docs/configuration/templating/)
+- [Jinja Docs](http://jinja.pocoo.org/docs/dev/templates/)

@@ -15,14 +15,13 @@ When it is chosen with a conditional, not JSONata it will return a value of the 
 
 ![](./images/jsonata_2.png)
 
-There are many ways to accomplish what these examples show not using JSONata. JSONata just gives you another tool in your toolbox.
-
-[https://docs.jsonata.org](https://docs.jsonata.org)
-
-[http://try.jsonata.org](http://try.jsonata.org)
-
 ## Examples
 
 - [Increase lights brightness with remote](/cookbook/jsonata.html#increase-lights-brightness-with-remote)
 - [Notification of lights left on when leaving home](/cookbook/jsonata.html#notification-of-lights-left-on-when-leaving-home)
 - [OR conditional for the events: state node](/cookbook/jsonata.html#or-conditional-for-the-events-state-node)
+
+**Also see:**
+
+- [https://docs.jsonata.org](https://docs.jsonata.org)
+- [http://try.jsonata.org](http://try.jsonata.org)

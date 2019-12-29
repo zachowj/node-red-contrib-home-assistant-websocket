@@ -6,6 +6,9 @@ sidebarDepth: 2
 
 ## Prerequisites
 
+Have Node-RED installed and working, if you need to
+install Node-RED see [here](https://nodered.org/docs/getting-started/installation).
+
 - [Node.js](https://nodejs.org) v8.12 or newer
 - [Node-RED](https://nodered.org/) v0.19 or newer
 
@@ -79,6 +82,11 @@ below and click on the Create Token Button. Give it a name, it can be anything y
 want to identify it with. Copy the generated access token into Node-RED.
 
 ![screenshot](./images/generate-token_02.png)
+
+::: tip
+Creating a separate Home Assistant user for Node-RED and using their access token will give you the
+ability to track which entities where changed by Node-RED.
+:::
 
 ## Migrating
 

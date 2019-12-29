@@ -24,7 +24,7 @@
     "release:pre": "standard-version -p",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
-    "docs:lint": "prettier --write docs/**/*.md"
+    "docs:lint": "prettier --write docs/{.vuepress/**,**}/*.{js,md,html}"
   },
   "repository": {
     "type": "git",

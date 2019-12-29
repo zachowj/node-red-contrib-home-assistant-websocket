@@ -2,20 +2,63 @@
 
 When an input is received the node will wait until the condition is met or the timeout occurs then will pass on the last received message
 
-## Config
+## Configuration
 
-### Event Type
+### Entity ID
 
 - Type: `string`
-- Default: `all event types`
 
-filter by event type or leave blank for all events
+The id of a of an entity to use for the comparison.
 
-**Also see:**
+### Wait Until
 
-- [Base URL](../guide/assets.md#base-url)
-- [Deploy Guide > GitHub Pages](../guide/deploy.md#github-pages)
+- Type: `string`
 
-## Input
+The <code>property</code> field will be checked against the <code>value</code> field using the comparator.
 
-## Output
+### Timeout
+
+- Type: `number`
+
+The amount of time to wait for the condition to become true before deactivating the node and passing the message object to the second output. If the timeout is equal to zero the node will wait indefinitely for the condition to be met..
+
+### Entity Location
+
+- Type: `object`
+
+The entity object can also be pass with the message object.
+
+### Check against current state
+
+- Type: `boolean`
+
+When input is received it will check the comparator against current state instead of waiting for a state change.
+
+## Inputs
+
+### reset
+
+If the received message has this property set to any value the node will be set to inactive and the timeout cleared.
+
+### payload
+
+- Type: `object`
+
+Override config values by passing in a property with a valid value.
+
+- entityId
+- property
+- comparator
+- value
+- valueType
+- timeout
+- timeoutUnits
+- entityLocation
+- entityLocationType
+- checkCurrentState
+
+## Outputs
+
+Will output the last received message when the condition is true or the timeout
+occurs. If the condition becomes true the message will be pass to the first
+output. If the timeout passes the message will be sent to the second output.

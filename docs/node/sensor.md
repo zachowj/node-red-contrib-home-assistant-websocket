@@ -8,20 +8,58 @@ _Needs [Custom Integration](https://github.com/zachowj/hass-node-red) installed
 in Home Assistant for this node to function_
 :::
 
-## Config
+## Configuration
 
-### Event Type
+### Type
 
-- Type: `string`
-- Default: `all event types`
+- Type: `[sensor|binary_sensor]`
 
-filter by event type or leave blank for all events
+The state the entity should be updated to
 
-**Also see:**
+### State
 
-- [Base URL](../guide/assets.md#base-url)
-- [Deploy Guide > GitHub Pages](../guide/deploy.md#github-pages)
+- Type: `string | number | boolean`
 
-## Input
+The state the entity should be updated to
 
-## Output
+### Attributes
+
+- Type: `object`
+
+Key/Value pair of attributes to update. The key should be a string and value can be a [string | number | boolean | object]
+
+### Home Assistant Config
+
+- Type: `object`
+
+Configuration options available for the selected entity
+
+### Input Override
+
+- Type: `accept | merge | block`
+
+Determine how input values will be handled. When merge is selected the message object values will override the configuration values.
+
+### Resend state and attributes
+
+- Type: `boolean`
+
+When creating the entity in Home Assistant this will also send the last updated state and attributes then node sent to Home Assistant
+
+## Inputs
+
+properties of `msg.payload`
+
+### state
+
+- Type: `string | number | boolean`
+
+The state the entity should be updated to
+
+### attributes
+
+- Type: `object`
+
+Key/Value pair of attributes to update. The key should be a string and value can be a `[string | number | boolean | object]`
+
+<!-- TODO: outputs -->

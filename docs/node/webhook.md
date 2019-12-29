@@ -7,20 +7,38 @@ _Needs [Custom Integration](https://github.com/zachowj/hass-node-red) installed
 in Home Assistant for this node to function_
 :::
 
-## Config
+## Configuration
 
-### Event Type
+### ID
 
 - Type: `string`
-- Default: `all event types`
 
-filter by event type or leave blank for all events
+A string to be used for the webhook URL in Home Assistant.
 
-**Also see:**
+### Payload
 
-- [Base URL](../guide/assets.md#base-url)
-- [Deploy Guide > GitHub Pages](../guide/deploy.md#github-pages)
+- Type: `string`
 
-## Input
+Customizable location for the webhook payload. Defaults to msg.payload
 
-## Output
+### Headers
+
+- Type: `number`
+
+Customizable location for the webhook request headers.
+
+## Outputs
+
+### topic
+
+- Type: `string`
+
+webhook ID
+
+### payload
+
+- Type: `object | number | string`
+
+The parsed body from the webhook request.
+
+<!-- TODO: add headers info -->
