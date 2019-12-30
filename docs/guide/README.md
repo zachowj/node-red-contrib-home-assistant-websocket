@@ -53,7 +53,7 @@ disconnected you probably have incorrectly entered the base URL or access token.
 - **Base Url** is the web address and port you use to access the Home Assistant frontend (e.g.,
   http://localhost:8123, http://192.198.x.x, and http://example.duckdns.org).
 
-- **Access Token** is generated in Home Assistant there are [instructions below](#generating-access-token) on how to
+- **Access Token** is generated in Home Assistant there are [instructions below](#generate-access-token) on how to
   generate one.
 
 ::: tip
@@ -71,15 +71,15 @@ autocomplete results try unchecking `Cache Autocomplete Results` in the
 server config and restarting Node-RED.
 :::
 
-### Generating Access Token
+### Generate Access Token
 
 Goto your Home Assistant home page and in the bottom left corner click on the blue circle with the letter in it. In the screenshot below it's the "J".
 
 ![screenshot](./images/generate-token_01.png)
 
-Scroll down to the bottom of the page and it should look like the screenshot
-below and click on the Create Token Button. Give it a name, it can be anything you
-want to identify it with. Copy the generated access token into Node-RED.
+- Scroll down to the bottom of the page and it should look like the screenshot below and click on the Create Token Button
+- Give it a name, it can be anything you want to identify it
+- Copy the generated access token into Node-RED
 
 ![screenshot](./images/generate-token_02.png)
 

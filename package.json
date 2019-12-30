@@ -78,6 +78,7 @@
   },
   "devDependencies": {
     "@vuepress/plugin-back-to-top": "^1.2.0",
+    "@vuepress/plugin-medium-zoom": "^1.2.0",
     "coveralls": "^3.0.9",
     "eslint": "^6.7.2",
     "eslint-config-prettier": "^6.7.0",

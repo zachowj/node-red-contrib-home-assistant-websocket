@@ -3,7 +3,8 @@ module.exports = {
     title: 'node-red-contrib-home-assistant-websocket',
     description:
         'Node-RED integration with Home Assistant through the WebSocket and HTTP API',
-    plugins: [['@vuepress/plugin-back-to-top', true]],
+    head: [['link', { rel: 'icon', href: '/logo.png' }]],
+    plugins: [['@vuepress/plugin-back-to-top', true], '@vuepress/medium-zoom'],
     themeConfig: {
         repo: 'zachowj/node-red-contrib-home-assistant-websocket',
         repoLabel: 'Github',
@@ -25,7 +26,6 @@ module.exports = {
                     title: 'Cookbook',
                     collapsable: false,
                     children: [
-                        'garage-door-notification',
                         'get-entities',
                         'jsonata',
                         'motion-triggered-light',
@@ -59,6 +59,7 @@ module.exports = {
                     collapsable: false,
                     sidebarDepth: 2,
                     children: [
+                        'API',
                         'call-service',
                         'current-state',
                         'events-all',
@@ -71,8 +72,7 @@ module.exports = {
                         'sensor',
                         'trigger-state',
                         'wait-until',
-                        'webhook',
-                        'API'
+                        'webhook'
                     ]
                 }
             ]
