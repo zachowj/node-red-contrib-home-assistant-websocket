@@ -3,7 +3,7 @@ module.exports = {
     title: 'node-red-contrib-home-assistant-websocket',
     description:
         'Node-RED integration with Home Assistant through the WebSocket and HTTP API',
-    head: [['link', { rel: 'icon', href: '/logo.png' }]],
+    head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
     plugins: [['@vuepress/plugin-back-to-top', true], '@vuepress/medium-zoom'],
     themeConfig: {
         repo: 'zachowj/node-red-contrib-home-assistant-websocket',
