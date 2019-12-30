@@ -18,7 +18,7 @@ filter by event type or leave blank for all events
 Leaving this empty will listen for all events from Home Assistant which may
 overload the websocket message queue.
 
-[GitHub Issue #153](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/153)
+[GitHub Issue #153](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/153#issuecomment-539290950)
 :::
 
 ### Expose to Home Assistant
@@ -51,9 +51,10 @@ original event object
 
 ## Client Events
 
-Possible Event Types
+Use `home_assistant_client` as the event type to receive events from the
+Websocket client.
 
-<!-- TODO: More Information -->
+Events send from the client:
 
 - **connecting** - when trying to connect to HA
 - **connected** - after the authorization has been accepted

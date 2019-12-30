@@ -1,6 +1,6 @@
 # Vacation Mode
 
-Four steps to adding a vacation mode to your home and having
+Five steps to adding a vacation mode to your home and having
 lights turn on and off at random intervals. It also automatically prompts you with a
 notification about turning on vacation mode if you have been gone longer than 24 hours.
 
@@ -41,8 +41,10 @@ This flow will fire when the actionable notification is triggered to activate va
 
 ## Step 4
 
-1. Set up a group of lights and switches in Home Assistant that you want to turn
-   on and off while vacation mode is active.
+Set up a group of lights and switches in Home Assistant that you want to turn
+on and off while vacation mode is active. This can be done without creating a
+group in Home Assistant by modifying the `get-entities` node in the below flow to
+`entity_id` `in` `light.night_light,light.kitchen,switch.bedroom_light,switch.laundry_room`.
 
 ```yaml
 group:
@@ -55,8 +57,10 @@ group:
       - switch.laundry_room
 ```
 
-2. This flow will run between sunset and midnight turning lights on and off at
-   random intervals if vacation mode is enabled.
+## Step 5
+
+This flow will run between sunset and midnight turning lights on and off at
+random intervals if vacation mode is enabled.
 
 ![screenshot](./images/vacation-mode_03.png)
 

@@ -2,7 +2,7 @@
 
 Here are three examples of how one might use the new `get entities` node.
 
-## Example #1
+## Example 1
 
 You have a presence detection of some sort running in Home Assistant and you want to get a notification when you leave if any doors or windows are left open.
 
@@ -16,7 +16,7 @@ Using the `get entities` node here to get a possible list of entity ids [binary_
 
 ---
 
-## Example #2
+## Example 2
 
 Sort of a Vacation or Away script to randomly turn on some lights around your home.
 
@@ -30,7 +30,7 @@ Using an `inject` node here but you could use your preference of timer node. The
 
 ---
 
-## Example #3
+## Example 3
 
 On Reddit the other day a user posted this [How can I join 1 to 4 pre-defined messages together based on 4 separate entity states?](https://www.reddit.com/r/homeassistant/comments/a628cw/nodered_how_can_i_join_1_to_4_predefined_messages/) (Their solution can be found in the post)
 
