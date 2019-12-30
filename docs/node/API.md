@@ -2,40 +2,46 @@
 
 ## Config
 
-### Protocol
+### Protocol <Badge text="required"/>
 
-- **Type**: `websocket|http`
-- **Default**: `websocket`
+- Type: `string`
+- Values: `websocket|http`
+- Default: `websocket`
 
 Protocol to use to access Home Assistant API.
 
 ### Method
 
-- **Type**: `get|post`
+- Type: `string`
+- Values: `get|post`
 
 Type of method to use to access the HTTP endpoint.
 
 ### Path
 
-- **Type**: `string`
+- Type: `string`
+- Accepts [Mustache Templates](/guide/mustache-templates.md)
 
 URL of the API endpoint.
 
 ### Params
 
-- **Type**: `JSON`
+- Type: `Object`
+- Accepts [Mustache Templates](/guide/mustache-templates.md)
 
 A JSON object with key/value pairs that will be converted into URL parameters.
 
 ### Data
 
-- **Type**: `JSON`
+- Type: `Object`
+- Accepts [Mustache Templates](/guide/mustache-templates.md) when the data type
+  is JSON
 
 JSON Object to send for WebSocket requests and HTTP posts.
 
 ### Results
 
-- **Type**: `string`
+- Type: `string`
 
   Location to save the API results.
 
@@ -45,53 +51,46 @@ All properties need to be under `msg.payload`.
 
 ### protocol
 
-- **Type**: `websocket|http`
+- Type: `string`
+- Values: `websocket|http`
 
 Overrides or sets the protocol property of the config.
 
 ### method
 
-- **Type**: `get|post`
+- Type: `string`
+- Values: `get|post`
 
 Overrides or sets the method property of the config.
 
 ### path
 
-- **Type**: `string`
+- Type: `string`
 
 Overrides or sets the path property of the config.
 
 ### data
 
-- **Type**: `JSON|string`
+- Type: `Object|string`
 
 Overrides or sets the data/params property of the config.
 
 ### location
 
-- **Type**: `string`
+- Type: `string`
 
 Overrides or sets the results property of the config.
 
 ### locationType
 
-- **Type**: `msg|flow|global`
+- Type: `string`
+- Values: `msg|flow|global`
 
 Overrides or sets the results type property of the config.
 
 ## Output
 
 Will output the results received from the API call to the location defined in the config.
-
-## Templates
-
-Templates can be used in path, params and data fields. When using templates the
-top level is a property of the message object: `msg.payload` would be <code v-pre>{{payload}}</code>. Templates will only work in the data field when the data type is
-JSON.
-
-**Also see:**
-
-- [Mustache Templates](../guide/mustache-templates.md)
 
 ## References
 

@@ -100,9 +100,8 @@ When an input is received the node will wait until the condition is met or the t
 
 ## Contribute
 
-[Setting up development environment](https://zachowj.github.io/node-red-contrib-home-assistant-websocket/guide/development.html)
-
-[Help with Documentation](https://zachowj.github.io/node-red-contrib-home-assistant-websocket/guide/documentation.html)
+- [Setting up Development Environment](https://zachowj.github.io/node-red-contrib-home-assistant-websocket/guide/development.html)
+- [Help with Documentation](https://zachowj.github.io/node-red-contrib-home-assistant-websocket/guide/documentation.html)
 
 ## Authors
 

@@ -41,7 +41,7 @@ module.exports = {
                     collapsable: false,
                     children: [
                         '',
-                        'first-flow',
+                        'first-automation',
                         'conditionals',
                         'mustache-templates',
                         'jsonata'

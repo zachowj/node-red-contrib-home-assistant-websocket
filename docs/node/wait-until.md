@@ -4,17 +4,17 @@ When an input is received the node will wait until the condition is met or the t
 
 ## Configuration
 
-### Entity ID
+### Entity ID <Badge text="required"/>
 
 - Type: `string`
 
 The id of a of an entity to use for the comparison.
 
-### Wait Until
+### Wait Until <Badge text="required"/>
 
 - Type: `string`
 
-The <code>property</code> field will be checked against the <code>value</code> field using the comparator.
+The `property` field will be checked against the `value` field using the comparator.
 
 ### Timeout
 
@@ -24,7 +24,7 @@ The amount of time to wait for the condition to become true before deactivating 
 
 ### Entity Location
 
-- Type: `object`
+- Type: `string`
 
 The entity object can also be pass with the message object.
 
@@ -34,7 +34,7 @@ The entity object can also be pass with the message object.
 
 When input is received it will check the comparator against current state instead of waiting for a state change.
 
-## Inputs
+## Input
 
 ### reset
 
@@ -57,7 +57,7 @@ Override config values by passing in a property with a valid value.
 - entityLocationType
 - checkCurrentState
 
-## Outputs
+## Output
 
 Will output the last received message when the condition is true or the timeout
 occurs. If the condition becomes true the message will be pass to the first

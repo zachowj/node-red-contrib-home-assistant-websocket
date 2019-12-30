@@ -1,6 +1,6 @@
-# First Flow
+# First Automation
 
-For your first flow, we'll start simple and set up a flow to turn on and off a
+For your first automation, we'll start simple and set up a automation to turn on and off a
 light when the sun comes up and goes down.
 
 This example will use the state, `below_horizon`/`above_horizon`, of the `sun.sun` entity from
@@ -10,7 +10,7 @@ Home Assistant to trigger the light.
 
 Place an Events: state node onto the workspace and double click on it to edit.
 
-![screenshot](./images/first-flow_01.png)
+![screenshot](./images/first-automation_01.png)
 
 ## Entity ID
 
@@ -27,7 +27,7 @@ and all messages will flow through it.
 
 For this example we will set the **If State** to `above_horizon`.
 
-![screenshot](./images/first-flow_02.png)
+![screenshot](./images/first-automation_02.png)
 
 ## Call Service
 
@@ -38,7 +38,7 @@ Service Node.
 Drag two Call Service nodes onto the workspace and connect them to each of the
 outputs from the Events: state node.
 
-![screenshot](./images/first-flow_03.png)
+![screenshot](./images/first-automation_03.png)
 
 Since we made the conditional in the Events: state node _if state is equal to
 above_horizon_ the top output will be the action to turn off the light and the bottom output will be the action to turn on the light.
@@ -48,14 +48,14 @@ Entity Id. **Domain** is going to be `light`, **Service** is going to be
 `turn_off`, and **Entity Id** is going to be `light.front_porch`. The Second
 Call Service node will be the same except the **Service** is going to be `turn_on`.
 
-![screenshot](./images/first-flow_04.png)
+![screenshot](./images/first-automation_04.png)
 
-## Complete Flow
+## Completed Automation
 
 At this point, you can deploy and should have your first working automation in
 Node-RED.
 
-![screenshot](./images/first-flow_05.png)
+![screenshot](./images/first-automation_05.png)
 
 ```
 [{"id":"b74ada49.d7e408","type":"server-state-changed","z":"ffbd7f06.4a014","name":"","version":1,"exposeToHomeAssistant":false,"haConfig":[{"property":"name","value":""},{"property":"icon","value":""}],"entityidfilter":"sun.sun","entityidfiltertype":"exact","outputinitially":false,"state_type":"str","haltifstate":"above_horizon","halt_if_type":"str","halt_if_compare":"is","outputs":2,"output_only_on_state_change":true,"x":244,"y":784,"wires":[["1f467cbb.0c3983"],["da5ff3e0.cbb2a"]]},{"id":"1f467cbb.0c3983","type":"api-call-service","z":"ffbd7f06.4a014","name":"","version":1,"debugenabled":false,"service_domain":"light","service":"turn_off","entityId":"light.front_porch","data":"","dataType":"json","mergecontext":"","output_location":"","output_location_type":"none","mustacheAltTags":false,"x":474,"y":784,"wires":[[]]},{"id":"da5ff3e0.cbb2a","type":"api-call-service","z":"ffbd7f06.4a014","name":"","version":1,"debugenabled":false,"service_domain":"light","service":"turn_on","entityId":"light.front_porch","data":"","dataType":"json","mergecontext":"","output_location":"","output_location_type":"none","mustacheAltTags":false,"x":474,"y":832,"wires":[[]]}]

@@ -4,7 +4,7 @@ Fire an event to Home Assistants event bus
 
 ## Configuration
 
-### Event
+### Event <Badge text="required"/>
 
 - Type: `string`
 

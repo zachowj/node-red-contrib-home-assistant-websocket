@@ -4,19 +4,25 @@ Polls for state at regular intervals, optionally also outputting at start and wh
 
 ## Configuration
 
-<!-- TODO: More Config need details -->
+### Entity ID <Badge text="required"/>
+
+The entity id of the entity to poll for.
 
 ### Update Interval
 
 - Type: `number`
 
-The amount of time between checking / sending updates
+The amount of time between checking / sending updates.
 
 ### If State
 
 - Type: `string`
 
 If the conditional statement is evaluated as true send the message to the first output otherwise send it to the second output. If blank there will only be one output.
+
+**Also see:**
+
+- [Conditionals](/guide/conditionals.md)
 
 ### State Type
 
@@ -34,7 +40,7 @@ Output once on startup/deploy then on each interval
 
 - Type: `boolean`
 
-Creates a switch within Home Assistant to enable/disable this node. This feature requires <a href="https://github.com/zachowj/hass-node-red" target="_blank">Node-RED custom integration <i class="fa fa-external-link external-link"></i></a> to be installed in Home Assistant
+Creates a switch within Home Assistant to enable/disable this node. This feature requires [Node-RED custom integration](https://github.com/zachowj/hass-node-red) to be installed in Home Assistant
 
 ## Outputs
 
