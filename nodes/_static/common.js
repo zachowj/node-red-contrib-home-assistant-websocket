@@ -14,10 +14,10 @@ var nodeVersion = (function($) {
                 name = 'poll-state';
                 break;
             case 'server-state-changed':
-                name = 'events-state-changed';
+                name = 'events-state';
                 break;
         }
-        return `https://github.com/zachowj/node-red-contrib-home-assistant-websocket/wiki/${name}`;
+        return `https://zachowj.github.io/node-red-contrib-home-assistant-websocket/node/${name}.html#changelog`;
     }
 
     function check(node) {
