@@ -18,7 +18,7 @@ matches for entity_id field
 - Values: `exact|substring|regex`
 - Default: `exact`
 
-Substring can be a comma delimited list.
+Substring can be a comma-delimited list.
 
 ### If State
 
@@ -36,13 +36,13 @@ If the conditional is evaluated as true send the message to the first output oth
 - Values: `string|number|boolean`
 - Default: `string`
 
-Convert the state of the entity to the selected type. Boolean will be convert to true based on if the string is equal by default to (`y|yes|true|on|home|open`). Original value stored in msg.data.original_state
+Convert the state of the entity to the selected type. Boolean will be converted to true based on if the string is equal by default to (`y|yes|true|on|home|open`). Original value stored in msg.data.original_state
 
 ### Output only on state change
 
 - Type: `boolean`
 
-Output only when state has changed and not on startup/deploy
+Output only when the state has changed and not on startup/deploy
 
 ### Output on Connect
 
@@ -74,7 +74,7 @@ The current state of the entity that triggered the event.
 
 - Type `Object`
 
-original event object from homeassistant
+original event object from Home Assistant
 
 Example output of the data property:
 
@@ -122,6 +122,6 @@ Example output of the data property:
 
 - "if state"/"halt if" will now send the message to the first output if true and
   to the second if not. The old behavior, sending the message to the second
-  output if true, will continue to be in place until you edit one of the
+  output if true will continue to be in place until you edit one of the
   existing nodes via the UI and at that time the outputs will automatically be
   switched.

@@ -1,6 +1,6 @@
 # First Automation
 
-For your first automation, we'll start simple and set up a automation to turn on and off a
+For your first automation, we'll start simple and set up an automation to turn on and off a
 light when the sun comes up and goes down.
 
 This example will use the state, `below_horizon`/`above_horizon`, of the `sun.sun` entity from

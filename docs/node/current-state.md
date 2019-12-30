@@ -1,6 +1,6 @@
 # Current State
 
-Returns the current state of an entity. Useful for using as conditional logic to automation flows.
+Returns the current state of an entity. Useful for using conditional logic to automation flows.
 
 ## Configuration
 
@@ -28,7 +28,7 @@ output.
 - Values: `string|number|boolean`
 - Default: `string`
 
-Convert the state of the entity to the selected type. Boolean will be convert to true based on if the string is equal by default to (`y|yes|true|on|home|open`). Original value stored in `msg.data.original_state`
+Convert the state of the entity to the selected type. Boolean will be converted to true based on if the string is equal by default to (`y|yes|true|on|home|open`). Original value stored in `msg.data.original_state`
 
 ### State Location
 
@@ -123,7 +123,7 @@ The entity to which this state belongs
 
 - Type: `object`
 
-Supported attributes of state set by homeassistant
+Supported attributes of state set by Home Assistant
 
 ### data.last_changed
 

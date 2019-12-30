@@ -1,6 +1,6 @@
 # Poll State
 
-Polls for state at regular intervals, optionally also outputting at start and when state changes. Useful for either alerts for non-communicating devices (time since change > 1 day for example) or dashboard graphs with consistent interval charts
+Polls for the state at regular intervals, optionally also outputting at the start and when the state changes. Useful for either alert for non-communicating devices (time since change > 1 day for example) or dashboard graphs with consistent interval charts
 
 ## Configuration
 
@@ -12,7 +12,7 @@ The entity id of the entity to poll for.
 
 - Type: `number`
 
-The amount of time between checking / sending updates.
+The amount of time between checking/sending updates.
 
 ### If State
 
@@ -28,7 +28,7 @@ If the conditional statement is evaluated as true send the message to the first 
 
 - Type: `string`
 
-Convert the state of the entity to the selected type. Boolean will be convert to true based on if the string is equal by default to (y|yes|true|on|home|open). Original value stored in msg.data.original_state
+Convert the state of the entity to the selected type. Boolean will be converted to true based on if the string is equal by default to (y|yes|true|on|home|open). Original value stored in msg.data.original_state
 
 ### Output Initially
 

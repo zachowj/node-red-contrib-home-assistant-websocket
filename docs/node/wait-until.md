@@ -8,7 +8,7 @@ When an input is received the node will wait until the condition is met or the t
 
 - Type: `string`
 
-The id of a of an entity to use for the comparison.
+The id of an entity to use for the comparison.
 
 ### Wait Until <Badge text="required"/>
 
@@ -20,7 +20,7 @@ The `property` field will be checked against the `value` field using the compara
 
 - Type: `number`
 
-The amount of time to wait for the condition to become true before deactivating the node and passing the message object to the second output. If the timeout is equal to zero the node will wait indefinitely for the condition to be met..
+The amount of time to wait for the condition to become true before deactivating the node and passing the message object to the second output. If the timeout is equal to zero the node will wait indefinitely for the condition to be met.
 
 ### Entity Location
 
@@ -28,11 +28,11 @@ The amount of time to wait for the condition to become true before deactivating 
 
 The entity object can also be pass with the message object.
 
-### Check against current state
+### Check against the current state
 
 - Type: `boolean`
 
-When input is received it will check the comparator against current state instead of waiting for a state change.
+When an input is received it will check the comparator against the current state instead of waiting for a state change.
 
 ## Input
 

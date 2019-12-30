@@ -23,7 +23,7 @@ Service service to call
 - Type: `string`
 - Accepts [Mustache Templates](/guide/mustache-templates.md)
 
-A comma delimited list of entity ids
+A comma-delimited list of entity ids
 
 ### Data
 
@@ -61,11 +61,11 @@ If the incoming message has a `payload` property with `domain`, `service` set it
 
 If the incoming message has a `payload.data` that is an object or parsable into an object these properties will be <strong>merged</strong> with any config values set.
 
-If the node has a property value in it's config for `Merge Context` then the `flow` and `global` contexts will be checked for this property which should be an object that will also be merged into the data payload.
+If the node has a property value in its config for `Merge Context` then the `flow` and `global` contexts will be checked for this property which should be an object that will also be merged into the data payload.
 
 #### Merge Resolution
 
-As seen above the `data` property has a lot going on in the way of data merging, in the end all of these are optional and the right most will win in the event that a property exists in multiple objects
+As seen above the `data` property has a lot going on in the way of data merging, in the end, all of these are optional and the rightmost will win if a property exists in multiple objects
 
 Config Data, Global Data, Flow Data, Payload Data ( payload data property always
 wins if provided
@@ -86,7 +86,7 @@ Service service to call
 
 - Type: `Object`
 
-Service data to send with api call
+Service data to send with API call
 
 ## Output
 
@@ -108,7 +108,7 @@ Service `service` was called with
 
 - Type: `Object`
 
-Service `data` used in call, if one was used
+Service `data` used in a call, if one was used
 
 #### Example of output:
 
@@ -128,6 +128,6 @@ Service `data` used in call, if one was used
 
 - Entity ids are no longer merged with the data property on the front end
 - The data field does not have to be valid JSON until after templates are rendered. This change will allow you to assign numbers to properties as an actual number and not a `string` using templates.
-- `entity_id`  in the data property will supersede the entity id field
+- `entity_id` in the data property will supersede the entity id field
 - Flows exported from version 0.14.0 will lose the entity id when imported into
   a previous version

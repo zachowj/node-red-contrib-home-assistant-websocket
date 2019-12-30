@@ -12,25 +12,25 @@ Fetches history from Home Assistant (all history for the past day by default)
 
 - Type: `string`
 
-Exact entity_id to fetch history for, must be an exact match as is passed directly to the home-assistant api
+Exact entity_id to fetch history for must be an exact match as is passed directly to the Home Assistant API
 
 ### startdate
 
 - Type: `string | date`
 
-Date to start fetching history from. Will override the nodes configuration if passed in
+Date to start fetching history from. Will override the node's configuration if passed in
 
 ### enddate
 
 - Type: `string | date`
 
-Date to fetch history to. Will override the nodes configuration if passed in
+Date to fetch history to. Will override the node's configuration if passed in
 
 ### relativetime
 
 - Type: `string`
 
-A timestring to be parsed into datetime string
+A time string to be parsed into datetime string
 
 ### Flatten
 
@@ -100,19 +100,19 @@ ISO date string used to fetch history
 
 - Type: `string`
 
-The timestring parsed into the startdate
+The time string parsed into the start date
 
 ### entityid
 
 - Type: `string`
 
-entityid string used during fetch history call
+The entity id string used during fetch history call
 
 ### entityidtype
 
 - Type: `string`
 
-  `is` or `includes` depending on match type. NOTE: `includes` fetches all history for time period then filters according to value, this will be less performant than exact (`is`) matching
+  `is` or `includes` depending on the match type. NOTE: `includes` fetches all history for time period then filters according to value, this will be less performant than exact (`is`) matching
 
 ## Details
 

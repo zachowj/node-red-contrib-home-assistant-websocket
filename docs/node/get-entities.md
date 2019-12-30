@@ -6,11 +6,11 @@ Get Entities based on search criteria
 
 ### Search Criteria
 
-All search criteria has to be true for an entity to be valid.
+All search criteria have to be true for an entity to be valid.
 
 ### Property
 
-Has autocomplete with all properties currently set on all loaded entities.
+Has autocompleted with all properties currently set on all loaded entities.
 
 ## Inputs
 
@@ -59,7 +59,7 @@ Sends a message for each state object. In the same format as if the split node w
 
 ## State Object Format
 
-Sample output when the Output Type is array:
+Sample output when the Output Type is an array:
 
 ```json
 [

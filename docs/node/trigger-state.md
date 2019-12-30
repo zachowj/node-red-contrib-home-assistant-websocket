@@ -1,9 +1,9 @@
 # Trigger: state
 
-Much like the `State Changed Node` however provides some advanced functionality
+Much like the `State Changed Node` however, provides some advanced functionality
 around common automation use cases.
 
-Advanced version of `server:state-changed` node
+An advanced version of `server:state-changed` node
 
 <!-- TODO: Needs a total rework -->
 
@@ -17,8 +17,8 @@ This node has two default outputs "allowed" and "blocked". If all the constraint
 
 All the above constraints need to be true for any custom outputs to be sent,
 having zero constraints is a valid option. Each custom output can send the
-default message or a custom message. Also, each one can have its own constraint
-whether or not to be sent.
+default message or a custom message. Also, each one can have its constraint
+on whether or not to be sent.
 
 ## Input
 
@@ -57,7 +57,7 @@ The original home assistant event containing `entity_id` `new_state` and `old_st
 
 ## Testing
 
-To test automation without having to manually change state in home assistant send an input `payload` as an object which contains `entity_id`, `new_state`, and `old_state` properties. This will trigger the node as if the event came from home assistant.
+To test automation without having to manually change state in-home assistant send an input `payload` as an object which contains `entity_id`, `new_state`, and `old_state` properties. This will trigger the node as if the event came from Home Assistant.
 
 ```json
 {

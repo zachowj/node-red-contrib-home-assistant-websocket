@@ -48,7 +48,7 @@ from this node
 
 ## [Trigger: state](./trigger-state.md)
 
-Much like the `State Changed Node` however provides some advanced functionality around common automation use cases.
+Much like the `State Changed Node` however, provides some advanced functionality around common automation use cases.
 
 ## [Wait Until](./wait-until.md)
 

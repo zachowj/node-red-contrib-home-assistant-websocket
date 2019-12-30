@@ -16,7 +16,7 @@ filter by event type or leave blank for all events
 
 ::: danger
 Leaving this empty will listen for all events from Home Assistant which may
-overload the websocket message queue.
+overload the WebSocket message queue.
 
 [GitHub Issue #153](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/153#issuecomment-539290950)
 :::
@@ -54,11 +54,11 @@ original event object
 Use `home_assistant_client` as the event type to receive events from the
 Websocket client.
 
-Events send from the client:
+Events sent from the client:
 
 - **connecting** - when trying to connect to HA
 - **connected** - after the authorization has been accepted
 - **disconnected** - when the socket stops attempting to connect or disconnected after having been connected
-- **error** - when a disconnect happens of the websocket with an error
+- **error** - when a disconnect happens of the WebSocket with an error
 - **states_loaded** - the first time all states are loaded from HA
 - **services_loaded** - the first time all services are loaded from HA

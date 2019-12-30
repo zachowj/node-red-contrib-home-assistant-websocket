@@ -1,9 +1,9 @@
 # Get Template
 
-Can either set template in the node configuration or pass in the `msg.template` property of the incoming message. Passing template via `msg.template` will override the template string set in node configuration.
+Can either set the template in the node configuration or pass in the `msg.template` property of the incoming message. Passing template via `msg.template` will override the template string set in node configuration.
 
 ::: tip NOTE:
-Node will output any Home Assistant API errors for catching with the 'catch all'
+The node will output any Home Assistant API errors for catching with the 'catch-all'
 node
 :::
 
@@ -37,7 +37,7 @@ Jinja template to be rendered
 
 - Type: `string`
 
-The original template sent to home assistant for rendering
+The original template sent to Home Assistant for rendering
 
 ### payload
 
