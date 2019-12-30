@@ -6,13 +6,11 @@
 
 Various nodes to assist in setting up automation using [Node-RED](https://nodered.org/) communicating with [Home Assistant](https://home-assistant.io/).
 
-## Project status
-
-Project is going through active development and as such will probably have a few 'growing pain' bugs as well as node type, input, output and functionality changes. At this stage backwards compatibility between versions is not a main concern and a new version **may mean you'll have to recreate certain nodes.**
-
 ## Getting Started
 
-This assumes you have [Node-RED](https://nodered.org) already installed and working, if you need to install Node-RED see [here](https://nodered.org/docs/getting-started/installation).
+Documentation can be found [here](https://zachowj.github.io/node-red-contrib-home-assistant-websocket/).
+
+This assumes you have [Node-RED](https://nodered.org) installed and working, if you need to install Node-RED see [here](https://nodered.org/docs/getting-started/installation).
 
 **NOTE:** This requires at least [Node.js](https://nodejs.org) v8.12.x and [Node-RED](https://nodered.org/) v0.19.x.
 
@@ -37,14 +35,6 @@ The Community Hass.io add-on ships with this node right out of the box.
 Under the server node config just check the checkbox for `I use Hass.io`
 
 The add-on can be found here: <https://github.com/hassio-addons/addon-node-red#readme>
-
-## Migrating
-
-Coming from a different version, e.g. [@Ayapejian](https://github.com/AYapejian/node-red-contrib-home-assistant) or [@Spartan-II-117](https://github.com/Spartan-II-117/node-red-contrib-home-assistant-llat)?
-
-If you have been using [@Ayapejian](https://github.com/AYapejian/node-red-contrib-home-assistant) version there are some breaking changes with two of the nodes. The ‘Poll State’ and ‘Current State’ both have a little different formatted outputs. Check your nodes and make sure they are outputting what you expect. A more in depth example can be found [here](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/wiki/Migration).
-
-If you have been using the [@Spartan-II-117](https://github.com/Spartan-II-117/node-red-contrib-home-assistant-llat) fork this should be a drop in replacement.
 
 ## Nodes
 
@@ -108,11 +98,10 @@ Allows rendering of templates on input
 
 When an input is received the node will wait until the condition is met or the timeout occurs then will pass on the last received message
 
-## Development
+## Contribute
 
-Check out the wiki page for setting up an environment with Home Assistant/Node Red.
-
-[Development Wiki](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/wiki/Development)
+- [Setting up Development Environment](https://zachowj.github.io/node-red-contrib-home-assistant-websocket/guide/development.html)
+- [Help with Documentation](https://zachowj.github.io/node-red-contrib-home-assistant-websocket/guide/documentation.html)
 
 ## Authors
 

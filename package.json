@@ -21,7 +21,10 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "release": "standard-version",
-    "release:pre": "standard-version -p"
+    "release:pre": "standard-version -p",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs",
+    "docs:lint": "prettier --write docs/{.vuepress/**,**}/*.{js,md,html}"
   },
   "repository": {
     "type": "git",
@@ -74,6 +77,8 @@
     "ws": "7.2.0"
   },
   "devDependencies": {
+    "@vuepress/plugin-back-to-top": "^1.2.0",
+    "@vuepress/plugin-medium-zoom": "^1.2.0",
     "coveralls": "^3.0.9",
     "eslint": "^6.7.2",
     "eslint-config-prettier": "^6.7.0",
@@ -91,7 +96,8 @@
     "node-red-node-test-helper": "^0.2.3",
     "nodemon": "^2.0.1",
     "nyc": "^14.1.1",
-    "prettier": "^1.19.1"
+    "prettier": "^1.19.1",
+    "vuepress": "^1.2.0"
   },
   "husky": {
     "hooks": {
