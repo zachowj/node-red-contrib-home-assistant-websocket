@@ -7,8 +7,9 @@ Returns the current state of an entity. Useful for using conditional logic to au
 ### Entity ID <Badge text="required"/>
 
 - Type: `string`
+- Accepts [Mustache Templates](/guide/mustache-templates.md)
 
-Match for entity_id field
+The id of the entity to return.
 
 ### If State
 
@@ -149,6 +150,6 @@ Milliseconds of last time entity state changed
 
 ## Changelog
 
-### Version 1
+#### Version 1
 
 - "if state"/"halt if" will now send the message to the first output if true and to the second if not. The old behavior, sending the message to the second output if true, will continue to be in place until you edit one of the existing nodes via the UI and at that time the outputs will automatically be switched.
