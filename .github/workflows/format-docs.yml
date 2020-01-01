@@ -16,10 +16,9 @@ jobs:
       - run: npm install
       - name: Run prettier
         run: npm run docs:lint
-      - uses: stefanzweifel/git-auto-commit-action@v2.5.0
+      - uses: zachowj/git-auto-commit-action@master
         with:
-          commit_message: Apply prettier changes
-          branch: ${{ github.head_ref }}
-          commit_options: "--no-verify"
+          commit_message: "docs: Apply prettier changes for docs"
+          branch: dev
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
