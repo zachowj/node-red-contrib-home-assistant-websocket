@@ -374,75 +374,155 @@
 
 <!-- Documentation in this file is generated from /docs/node/call-service.md -->
 <script type="text/x-red" data-help-name="api-call-service">
-  <p>Call a Home Assistant service</p>
+  <html>
+    <head></head>
+    <body>
+      <p>
+        Sends a request to home assistant for any domain and service available
+        (<code>light/turn_on</code>, <code>input_select/select_option</code>,
+        etc..)
+      </p>
+      <h3>Configuration</h3>
+      <dl class="message-properties">
+        <dt>
+          Domain (<strong>required</strong>)<span class="property-type"
+            >string</span
+          >
+        </dt>
+        <ul>
+          <li>
+            Accepts
+            <a
+              href="https://zachowj.github.io/node-red-contrib-home-assistant-websocket/guide/mustache-templates.html"
+              >Mustache Templates</a
+            >
+          </li>
+        </ul>
+        <dd>Service domain to call</dd>
+        <dt>
+          Service (<strong>required</strong>)<span class="property-type"
+            >string</span
+          >
+        </dt>
+        <ul>
+          <li>
+            Accepts
+            <a
+              href="https://zachowj.github.io/node-red-contrib-home-assistant-websocket/guide/mustache-templates.html"
+              >Mustache Templates</a
+            >
+          </li>
+        </ul>
+        <dd>Service service to call</dd>
+        <dt>Entity Id<span class="property-type">string</span></dt>
+        <ul>
+          <li>
+            Accepts
+            <a
+              href="https://zachowj.github.io/node-red-contrib-home-assistant-websocket/guide/mustache-templates.html"
+              >Mustache Templates</a
+            >
+          </li>
+        </ul>
+        <dd>A comma-delimited list of entity ids.</dd>
+        <div class="custom-block tip">
+          <p class="custom-block-title">NOTICE</p>
+          <p>
+            If <code>entity_id</code> exists in the data property it will have
+            precedence over this value.
+          </p>
+        </div>
+        <dt>Data<span class="property-type">JSON</span></dt>
+        <ul>
+          <li>
+            Accepts
+            <a
+              href="https://zachowj.github.io/node-red-contrib-home-assistant-websocket/guide/mustache-templates.html"
+              >Mustache Templates</a
+            >
+            when data type is JSON
+          </li>
+        </ul>
+        <dd>JSON object to pass along.</dd>
+        <dt>Merge Context<span class="property-type">string</span></dt>
+        <dd>
+          If defined will attempt to merge the global and flow context variable
+          into the config
+        </dd>
+        <dt>
+          Alternative Template Tags<span class="property-type">boolean</span>
+        </dt>
+        <dd>
+          Will change the tags used for mustache template to
+          <code>&lt;%</code> and <code>%&gt;</code>
+        </dd>
+        <dt>Output Location<span class="property-type">string</span></dt>
+        <ul>
+          <li>Default: <code>None</code></li>
+        </ul>
+        <dd>Customizable location for the output of the node.</dd>
+      </dl>
 
-  <h3>Config</h3>
-  <dl class="message-properties">
-    <dt>Domain <span class="property-type">string</span></dt>
-    <dd>Service domain to call</dd>
+      <h3>Input</h3>
+      <dl class="message-properties">
+        <dd>All properties need to be under <code>msg.payload</code>.</dd>
+        <h5>Merging</h5>
+        <dd>
+          If the incoming message has a <code>payload</code> property with
+          <code>domain</code>, <code>service</code> set it will override any
+          config values if set.
+        </dd>
+        <dd>
+          If the incoming message has a <code>payload.data</code> that is an
+          object or parsable into an object these properties will be
+          &lt;strong&gt;merged&lt;/strong&gt; with any config values set.
+        </dd>
+        <dd>
+          If the node has a property value in its config for
+          <code>Merge Context</code> then the <code>flow</code> and
+          <code>global</code> contexts will be checked for this property which
+          should be an object that will also be merged into the data payload.
+        </dd>
+        <h5>Merge Resolution</h5>
+        <dd>
+          As seen above the <code>data</code> property has a lot going on in the
+          way of data merging, in the end, all of these are optional and the
+          rightmost will win if a property exists in multiple objects
+        </dd>
+        <dd>
+          Config Data, Global Data, Flow Data, Payload Data ( payload data
+          property always wins if provided
+        </dd>
+        <dt>domain<span class="property-type">string</span></dt>
+        <dd>Service domain to call</dd>
+        <dt>service<span class="property-type">string</span></dt>
+        <dd>Service service to call</dd>
+        <dt>data<span class="property-type">Object</span></dt>
+        <dd>Service data to send with API call</dd>
+      </dl>
 
-    <dt>Service <span class="property-type">string</span></dt>
-    <dd>Service service to call</dd>
-
-    <dt class="optional">Entity Id <span class="property-type">string</span></dt>
-    <dd>A comma delimited list of entity ids</dd>
-
-    <dt class="optional">Data <span class="property-type">JSON</span></dt>
-    <dd>JSON object to pass along.</dd>
-
-    <dt class="optional">Merge Context <span class="property-type">string</span></dt>
-    <dd>If defined will attempt to merge the global and flow context variable into the config</dd>
-
-    <dt class="optional">Alternative template tags <span class="property-type">boolean</span></dt>
-    <dd>Will change the tags used for mustache template to <code>&lt;%</code> and <code>%&gt;</code></dd>
-  </dl>
-
-  <h3>Inputs</h3>
-  <dl class="message-properties">
-    <dt class="optional">
-      payload.domain <span class="property-type">string</span>
-    </dt>
-    <dd>Service domain to call</dd>
-    <dt class="optional">
-      payload.service <span class="property-type">string</span>
-    </dt>
-    <dd>Service service to call</dd>
-    <dt class="optional">
-      payload.data <span class="property-type">object</span>
-    </dt>
-    <dd>Service data to send with api call</dd>
-  </dl>
-
-  <h3>Outputs</h3>
-  <dl class="message-properties">
-    <dt>
-      payload.domain <span class="property-type">string</span>
-    </dt>
-    <dd>Service <code>domain</code> service was called with</dd>
-    <dt>
-      payload.service <span class="property-type">string</span>
-    </dt>
-    <dd>Service <code>service</code> was called with</dd>
-    <dt class="optional">
-      payload.data <span class="property-type">object</span>
-    </dt>
-    <dd>Service <code>data</code> used in call, if one was used</dd>
-  </dl>
-
-  <h3>Templates</h3>
-  <p>You can use templates in the <code>Domain</code>, <code>Service</code>, <code>Entity Id</code>, and <code>data</code> fields. When using templates the top level is a property of the message object: <code>msg.payload</code> would be <code>{{payload}}</code>. You can also access the <code>flow, global and states</code> contexts <code>{{flow.foobar}}</code> <code>{{global.something}}</code>. For the <code>states</code> context you can use the <code>{{entity.domain.entity_id}}</code> to just get the state or drill further down like <code>{{entity.light.kitchen.attributes.friendly_name}}</code>. <code>{{entity.light.kitchen}}</code> and <code>{{entity.light.kitchen.state}}</code> are equivalent.</p><p>Templates only work in the data field when the data type is JSON.</p><p>By default, Mustache will replace certain characters with their HTML escape codes. To stop that happening, you can use triple braces: <code>{{{payload}}}</code>.</p>
-
-  <h3>Details</h3>
-  <p>If the incoming message has a <code>payload</code> property with <code>domain</code>, <code>service</code> set it will override any config values if set.</p>
-  <p>If the incoming message has a <code>payload.data</code> that is an object or parsable into an object these properties will be <strong>merged</strong> with any config values set.<p>
-  <p>If the node has a property value in it&#39;s config for <code>Merge Context</code> then the <code>flow</code> and <code>global</code> contexts will be checked for this property which should be an object that will also be merged into the data payload.<p>
-
-  <h3>Merge Resolution</h3>
-  <p>As seen above the <code>data</code> property has a lot going on in the way of data merging, in the end all of these are optional and the right most will win in the event that a property exists in multiple objects<p>
-  <p>Config Data, Global Data, Flow Data, Payload Data ( payload data property always wins if provided )<p>
-
-  <h3>References</h3>
-  <ul>
-    <li><a href="https://home-assistant.io/developers/rest_api/#get-apiservices">HA API call service</a></li>
-  </ul>
+      <h3>Output</h3>
+      <dl class="message-properties">
+        <dd>
+          All properties will be under what is defined in
+          <code>Output Location</code> in the config.
+        </dd>
+        <dt>domain<span class="property-type">string</span></dt>
+        <dd>Service <code>domain</code> service was called with</dd>
+        <dt>service<span class="property-type">string</span></dt>
+        <dd>Service <code>service</code> was called with</dd>
+        <dt>data<span class="property-type">Object</span></dt>
+        <dd>Service <code>data</code> used in a call, if one was used</dd>
+        <h5>Example of output:</h5>
+        <pre><code class="language-json">{
+    &quot;domain&quot;: &quot;light&quot;,
+    &quot;service&quot;: &quot;turn_on&quot;,
+    &quot;data&quot;: {
+      &quot;entity_id&quot;: &quot;light.kitchen&quot;
+    }
+  }
+  </code></pre>
+      </dl>
+    </body>
+  </html>
 </script>

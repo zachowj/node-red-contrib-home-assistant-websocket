@@ -177,47 +177,89 @@
 
 <!-- Documentation in this file is generated from /docs/node/poll-state.md -->
 <script type="text/x-red" data-help-name="poll-state">
-  <p>Polls for state of given entity and outputs time since last changed</p>
+  <html>
+    <head></head>
+    <body>
+      <p>
+        Polls for the state at regular intervals, optionally also outputting at
+        the start and when the state changes. Useful for either alert for
+        non-communicating devices (time since change &gt; 1 day for example) or
+        dashboard graphs with consistent interval charts
+      </p>
+      <h3>Configuration</h3>
+      <dl class="message-properties">
+        <dt>
+          Entity ID (<strong>required</strong>)<span class="property-type"></span>
+        </dt>
+        <dd>The entity id of the entity to poll for.</dd>
+        <dt>Update Interval<span class="property-type">number</span></dt>
+        <dd>The amount of time between checking/sending updates.</dd>
+        <dt>If State<span class="property-type">string</span></dt>
+        <dd>
+          If the conditional statement is evaluated as true send the message to
+          the first output otherwise send it to the second output. If blank there
+          will only be one output.
+        </dd>
+        <dd><strong>Also see:</strong></dd>
+        <ul>
+          <li>
+            <a
+              href="https://zachowj.github.io/node-red-contrib-home-assistant-websocket/guide/conditionals.html"
+              >Conditionals</a
+            >
+          </li>
+        </ul>
+        <dt>State Type<span class="property-type">string</span></dt>
+        <dd>
+          Convert the state of the entity to the selected type. Boolean will be
+          converted to true based on if the string is equal by default to
+          (y|yes|true|on|home|open). Original value stored in
+          msg.data.original_state
+        </dd>
+        <dt>Output Initially<span class="property-type">boolean</span></dt>
+        <dd>Output once on startup/deploy then on each interval</dd>
+        <dt>
+          Expose to Home Assistant<span class="property-type">boolean</span>
+        </dt>
+        <dd>
+          Creates a switch within Home Assistant to enable/disable this node. This
+          feature requires
+          <a href="https://github.com/zachowj/hass-node-red"
+            >Node-RED custom integration</a
+          >
+          to be installed in Home Assistant
+        </dd>
+      </dl>
 
-  <h3>Config</h3>
-  <dl class="message-properties">
-    <dt>Update Interval<span class="property-type">number</span></dt>
-    <dd>The amount of time between checking / sending updates</dd>
+      <h3>Outputs</h3>
+      <dl class="message-properties">
+        <dt>topic<span class="property-type">string</span></dt>
+        <dd>entity_id of changed entity</dd>
+        <dt>payload.data<span class="property-type">object</span></dt>
+        <dd>The last known state of the entity</dd>
+        <dt>
+          payload.data.timeSinceChanged<span class="property-type">string</span>
+        </dt>
+        <dd>
+          Human readable format string of time since last updated, example &quot;1
+          hour ago&quot;
+        </dd>
+        <dt>
+          payload.data.timeSinceChangedMs<span class="property-type">number</span>
+        </dt>
+        <dd>Number of milliseconds since last changed</dd>
+      </dl>
 
-    <dt>If state <span class="property-type">string</span></dt>
-    <dd>If the conditional statement is evaluated as true send the message to the first output otherwise send it to the second output. If blank there will only be one output.</dd>
-
-    <dt>State Type<span class="property-type">string</span></dt>
-    <dd>Convert the state of the entity to the selected type. Boolean will be convert to true based on if the string is equal by default to (y|yes|true|on|home|open). Original value stored in msg.data.original_state</dd>
-
-    <dt>Output Initially<span class="property-type">boolean</span></dt>
-    <dd>Output once on startup/deploy then on each interval</dd>
-
-    <dt>Expose to Home Assistant <span class="property-type">boolean</span></dt>
-    <dd>Creates a switch within Home Assistant to enable/disable this node. This feature requires <a href="https://github.com/zachowj/hass-node-red" target="_blank">Node-RED custom integration <i class="fa fa-external-link external-link"></i></a> to be installed in Home Assistant</dd>
-  </dl>
-
-  <h3>Outputs</h3>
-  <dl class="message-properties">
-    <dt>topic<span class="property-type">string</span></dt>
-    <dd>entity_id of changed entity</dd>
-
-    <dt>payload.data<span class="property-type">object</span></dt>
-    <dd>The last known state of the entity</dd>
-
-    <dt>payload.data.timeSinceChanged<span class="property-type">string</span></dt>
-    <dd>Human readable format string of time since last updated, example "1 hour ago"</dd>
-
-    <dt>payload.data.timeSinceChangedMs<span class="property-type">number</span></dt>
-    <dd>Number of milliseconds since last changed</dd>
-  </dl>
-
-  <h3>Details</h3>
-  <p>Polls for state at regular intervals, optionally also outputing at start and when state changes. Useful for either alerts for non-communicating devices (time since change > 1 day for example) or dashboard graphs with consistent interval charts</p>
-  <p>NOTE: The last changed calculation is based on homeassistant&#39;s <code>last_changed</code> property so anything that changes that field will result in your last changed time outputted here to be changed.</p>
-
-  <h3>References</h3>
-  <ul>
-      <li><a href="https://home-assistant.io/docs/configuration/state_object/">HA State Objects</a></li>
-  </ul>
+      <h3>References</h3>
+      <dl class="message-properties">
+        <ul>
+          <li>
+            <a href="https://home-assistant.io/docs/configuration/state_object/"
+              >Home Assistant State Objects</a
+            >
+          </li>
+        </ul>
+      </dl>
+    </body>
+  </html>
 </script>

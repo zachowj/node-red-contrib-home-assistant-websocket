@@ -142,57 +142,116 @@
 
 <!-- Documentation in this file is generated from /docs/node/API.md -->
 <script type="text/x-red" data-help-name="ha-api">
-  <h3>Configuration</h3>
-  <dl class="message-properties">
-    <dt>Protocol<span class="property-type">[websocket|http] string</span></dt>
-    <dd>Protocol to use to access Home Assistant API.</dd>
+  <html>
+    <head></head>
+    <body>
+      <h3>Config</h3>
+      <dl class="message-properties">
+        <dt>
+          Protocol (<strong>required</strong>)<span class="property-type"
+            >string</span
+          >
+        </dt>
+        <ul>
+          <li>Values: <code>websocket|http</code></li>
+          <li>Default: <code>websocket</code></li>
+        </ul>
+        <dd>Protocol to use to access Home Assistant API.</dd>
+        <dt>Method<span class="property-type">string</span></dt>
+        <ul>
+          <li>Values: <code>get|post</code></li>
+        </ul>
+        <dd>Type of method to use to access the HTTP endpoint.</dd>
+        <dt>Path<span class="property-type">string</span></dt>
+        <ul>
+          <li>
+            Accepts
+            <a
+              href="https://zachowj.github.io/node-red-contrib-home-assistant-websocket/guide/mustache-templates.html"
+              >Mustache Templates</a
+            >
+          </li>
+        </ul>
+        <dd>URL of the API endpoint.</dd>
+        <dt>Params<span class="property-type">Object</span></dt>
+        <ul>
+          <li>
+            Accepts
+            <a
+              href="https://zachowj.github.io/node-red-contrib-home-assistant-websocket/guide/mustache-templates.html"
+              >Mustache Templates</a
+            >
+          </li>
+        </ul>
+        <dd>
+          A JSON object with key/value pairs that will be converted into URL
+          parameters.
+        </dd>
+        <dt>Data<span class="property-type">Object</span></dt>
+        <ul>
+          <li>
+            Accepts
+            <a
+              href="https://zachowj.github.io/node-red-contrib-home-assistant-websocket/guide/mustache-templates.html"
+              >Mustache Templates</a
+            >
+            when the data type is JSON
+          </li>
+        </ul>
+        <dd>JSON Object to send for WebSocket requests and HTTP posts.</dd>
+        <dt>Results<span class="property-type">string</span></dt>
+      </dl>
 
-    <dt>Method<span class="property-type">[get|post] string</span></dt>
-    <dd>Type of method to use to access the HTTP endpoint.</dd>
+      <h3>Input</h3>
+      <dl class="message-properties">
+        <dd>All properties need to be under <code>msg.payload</code>.</dd>
+        <dt>protocol<span class="property-type">string</span></dt>
+        <ul>
+          <li>Values: <code>websocket|http</code></li>
+        </ul>
+        <dd>Overrides or sets the protocol property of the config.</dd>
+        <dt>method<span class="property-type">string</span></dt>
+        <ul>
+          <li>Values: <code>get|post</code></li>
+        </ul>
+        <dd>Overrides or sets the method property of the config.</dd>
+        <dt>path<span class="property-type">string</span></dt>
+        <dd>Overrides or sets the path property of the config.</dd>
+        <dt>data<span class="property-type">Object|string</span></dt>
+        <dd>Overrides or sets the data/params property of the config.</dd>
+        <dt>location<span class="property-type">string</span></dt>
+        <dd>Overrides or sets the results property of the config.</dd>
+        <dt>locationType<span class="property-type">string</span></dt>
+        <ul>
+          <li>Values: <code>msg|flow|global</code></li>
+        </ul>
+        <dd>Overrides or sets the results type property of the config.</dd>
+      </dl>
 
-    <dt>Path<span class="property-type">string</span></dt>
-    <dd>URL of the API endpoint.</dd>
-
-    <dt>Params<span class="property-type">JSON</span></dt>
-    <dd>JSON object with key/value pairs that will be converted into URL parameters.</dd>
-
-    <dt>Data<span class="property-type">JSON</span></dt>
-    <dd>JSON Object to send for WebSocket requests and HTTP posts.</dd>
-
-    <dt>Results<span class="property-type">string</span></dt>
-    <dd>Location to save the API results.</dd>
-  </dl>
-
-  <h3>Inputs</h3>
-  <dl class="message-properties">
-    <dt>payload.protocol<span class="property-type">[websocket|http] string</span></dt>
-    <dd>Overrides or sets the protocol property of the config.</dd>
-
-    <dt>payload.method<span class="property-type">[get|post] string</span></dt>
-    <dd>Overrides or sets the method property of the config.</dd>
-
-    <dt>payload.path<span class="property-type">string</span></dt>
-    <dd>Overrides or sets the path property of the config.</dd>
-
-    <dt>payload.data<span class="property-type">JSON | string</span></dt>
-    <dd>Overrides or sets the data/params property of the config.</dd>
-
-    <dt>payload.location<span class="property-type">string</span></dt>
-    <dd>Overrides or sets the results property of the config.</dd>
-
-    <dt>payload.locationType<span class="property-type">[msg|flow|global] string</span></dt>
-    <dd>Overrides or sets the results type property of the config.</dd>
-  </dl>
-
-  <h3>Outputs</h3>
-  <p>Will output the results received from the API call to the location defined in the config.</p>
-
-  <h3>Templates</h3>
-  <p>Templates can be used in path, params and data fields. When using templates the top level is a property of the message object: <code>msg.payload</code> would be <code>{{payload}}</code>. Templates will only work in the data field when the data type is JSON.</p>
-
-  <h3>References</h3>
-  <p>
-    <a href="https://developers.home-assistant.io/docs/en/external_api_rest.html">http api</a><br />
-    <a href="https://developers.home-assistant.io/docs/en/external_api_websocket.html">websocket api</a>
-  </p>
+      <h3>Output</h3>
+      <dl class="message-properties">
+        <dd>
+          Will output the results received from the API call to the location
+          defined in the config.
+        </dd>
+      </dl>
+      <h3>References</h3>
+      <dl class="message-properties">
+        <ul>
+          <li>
+            <a
+              href="https://developers.home-assistant.io/docs/en/external_api_rest.html"
+              >http api</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://developers.home-assistant.io/docs/en/external_api_websocket.html"
+              >websocket api</a
+            >
+          </li>
+        </ul>
+      </dl>
+    </body>
+  </html>
 </script>

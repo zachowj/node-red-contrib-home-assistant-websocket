@@ -660,65 +660,88 @@
 
 <!-- Documentation in this file is generated from /docs/node/triger-state.md -->
 <script type="text/x-red" data-help-name="trigger-state">
-  <p>Advanced version of &#39;server:state-changed&#39; node</p>
+  <html>
+    <head></head>
+    <body>
+      <p>
+        Much like the <code>State Changed Node</code> however, provides some
+        advanced functionality around common automation use cases.
+      </p>
+      <p>An advanced version of <code>server:state-changed</code> node</p>
+      <h3>Configuration</h3>
+      <dl class="message-properties">
+        <dt>Constraints<span class="property-type"></span></dt>
+        <dd>
+          This node has two default outputs &quot;allowed&quot; and
+          &quot;blocked&quot;. If all the constraints are true the default message
+          will be sent to the &quot;allowed&quot; output otherwise it will be sent
+          to the &quot;blocked&quot; output.
+        </dd>
+        <dt>Custom Outputs<span class="property-type"></span></dt>
+        <dd>
+          All the above constraints need to be true for any custom outputs to be
+          sent, having zero constraints is a valid option. Each custom output can
+          send the default message or a custom message. Also, each one can have
+          its constraint on whether or not to be sent.
+        </dd>
+      </dl>
 
-  <h3>Inputs</h3>
-  <dl class="message-properties">
-    <dt class="optional">
-      [payload|msg]<span class="property-type">string|object</span>
-    </dt>
-    <dd>
-      If incoming payload or message is a string and equal to &#39;enable&#39; or &#39;disable&#39; then set the node accordingly.
-      Saves over restarts.
-    </dd>
+      <h3>Input</h3>
+      <dl class="message-properties">
+        <dt>Enable / Disable<span class="property-type">string</span></dt>
+        <dd>
+          If incoming payload or message is a string and equal to
+          <code>enable</code> or <code>disable</code> then set the node
+          accordingly. Saves over restarts.
+        </dd>
+        <dt>Output Initially<span class="property-type">boolean</span></dt>
+        <dd>Output once on startup/deploy.</dd>
+      </dl>
 
-    <dt>Output Initially<sp class="property-type">boolean</span></dt>
-    <dd>Output once on startup/deploy.</dd>
-  </dl>
+      <h3>Output</h3>
+      <dl class="message-properties">
+        <dt>topic<span class="property-type">string</span></dt>
+        <dd>The entity_id that triggered the node</dd>
+        <dt>payload<span class="property-type">string</span></dt>
+        <dd>The state as sent by home assistant</dd>
+        <dt>data<span class="property-type">object</span></dt>
+        <dd>
+          The original home assistant event containing <code>entity_id</code>
+          <code>new_state</code> and <code>old_state</code> properties
+        </dd>
+      </dl>
 
-  <h3>Outputs</h3>
-  <dl class="message-properties">
-    <dt>
-      topic <span class="property-type">string</span>
-    </dt>
-    <dd>The entity_id that triggered the node</dd>
-    <dt>
-      payload <span class="property-type">string</span>
-    </dt>
-    <dd>The state as sent by home assistant</dd>
-    <dt>
-      data <span class="property-type">object</span>
-    </dt>
-    <dd>The original home assistant event containing <code>entity_id</code> <code>new_state</code> and <code>old_state</code> properties</dd>
-  </dl>
-
-  <h3>Details</h3>
-  <dl class="message-properties">
-    <dt>Constraints</dt>
-    <dd>This node has two default outputs "allowed" and "blocked". If all the constraints are true the default message will be sent to the "allowed" output otherwise it will be sent to the "blocked" output.</dd>
-
-    <dt>Custom Outputs</dt>
-    <dd>All the above constraints need to be true for any custom outputs to be sent, having zero constraints is a valid option. Each custom output can send the default message or a custom message. Also, each one can have its own constraint whether or not to be sent.</dd>
-  </dl>
-
-  <h3>Testing</h3>
-  <p>To test automation without having to manually change state in home assistant send an input <code>payload</code> as an object which contains <code>entity_id</code>, <code>new_state</code>, and <code>old_state</code> properties.  This will trigger the node as if the event came from home assistant.</p>
-
-  <code>
-  <pre>
-  {
-    "entity_id": "test_entity",
-    "old_state": {
-      "state": "on"
+      <h3>Testing</h3>
+      <dl class="message-properties">
+        <dd>
+          To test automation without having to manually change state in-home
+          assistant send an input <code>payload</code> as an object which contains
+          <code>entity_id</code>, <code>new_state</code>, and
+          <code>old_state</code> properties. This will trigger the node as if the
+          event came from Home Assistant.
+        </dd>
+        <pre><code class="language-json">{
+    &quot;entity_id&quot;: &quot;test_entity&quot;,
+    &quot;old_state&quot;: {
+      &quot;state&quot;: &quot;on&quot;
     },
-    "new_state": {
-      "state": "off"
+    &quot;new_state&quot;: {
+      &quot;state&quot;: &quot;off&quot;
     }
-  }</pre>
-  </code>
+  }
+  </code></pre>
+      </dl>
 
-  <h3>References</h3>
-  <ul>
-      <li><a href="https://home-assistant.io/docs/configuration/state_object">HA State Object</a></li>
-  </ul>
+      <h3>References</h3>
+      <dl class="message-properties">
+        <ul>
+          <li>
+            <a href="https://home-assistant.io/docs/configuration/state_object"
+              >HA State Object</a
+            >
+          </li>
+        </ul>
+      </dl>
+    </body>
+  </html>
 </script>

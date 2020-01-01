@@ -59,49 +59,58 @@
 
 <!-- Documentation in this file is generated from /docs/node/fire-event.md -->
 <script type="text/x-red" data-help-name="ha-fire-event">
-  <p>Fire an event to Home Assistants event bus</p>
+  <html>
+    <head></head>
+    <body>
+      <p>Fire an event to Home Assistants event bus</p>
+      <h3>Configuration</h3>
+      <dl class="message-properties">
+        <dt>
+          Event (<strong>required</strong>)<span class="property-type"
+            >string</span
+          >
+        </dt>
+        <dd>Event name to fire</dd>
+        <dt>data<span class="property-type">Object</span></dt>
+        <dd>JSON object to pass along</dd>
+      </dl>
 
-  <h3>Config</h3>
-  <dl class="message-properties">
-    <dt>Event <span class="property-type">string</span></dt>
-    <dd>Event name to fire</dd>
-    <dt class="optional">data <span class="property-type">JSON</span></dt>
-    <dd>JSON object to pass along</dd>
-    <dt>Templates</dt>
-    <dd>You can use templates in the <code>Entity Id</code> and <code>data</code> fields. When using templates the top level is a property of the message object: <code>msg.payload</code> would be <code>{{payload}}</code>. You can also access the <code>flow, global and states</code> contexts <code>{{flow.foobar}}</code> <code>{{global.something}}</code>. For the <code>states</code> context you can use the <code>{{states.domain.entity_id}}</code> to just get the state or drill further down like <code>{{states.light.kitchen.attributes.friendly_name}}</code>. <code>{{states.light.kitchen}}</code> and <code>{{states.light.kitchen.state}}</code> are equivalent.</dd>
-  </dl>
+      <h3>Inputs</h3>
+      <dl class="message-properties">
+        <dd>
+          If the incoming message has a <code>payload</code> property with
+          <code>event</code> set it will override any config values if set. If the
+          incoming message has a <code>payload.data</code> that is an object or
+          parsable into an object these properties will be
+          <strong>merged</strong> with any config values set. If the node has a
+          property value in its config for <code>Merge Context</code> then the
+          <code>flow</code> and <code>global</code> contexts will be checked for
+          this property which should be an object that will also be merged into
+          the data payload.
+        </dd>
+        <dt>payload.event<span class="property-type">string</span></dt>
+        <dd>Event to fire</dd>
+        <dt>payload.data<span class="property-type">Object</span></dt>
+        <dd>Event data to send</dd>
+      </dl>
 
-  <h3>Inputs</h3>
-  <dl class="message-properties">
-    <dt class="optional">
-      payload.event <span class="property-type">string</span>
-    </dt>
-    <dd>Event to fire</dd>
-    <dt class="optional">
-      payload.data <span class="property-type">object</span>
-    </dt>
-    <dd>Event data to send</dd>
-  </dl>
+      <h3>Outputs</h3>
+      <dl class="message-properties">
+        <dt>payload.event_type<span class="property-type">string</span></dt>
+        <dd>Event Type that was fired</dd>
+        <dt>payload.data<span class="property-type">Object</span></dt>
+        <dd>The event <code>data</code> sent if one was used</dd>
+      </dl>
 
-  <h3>Outputs</h3>
-  <dl class="message-properties">
-    <dt>
-      payload.event_type <span class="property-type">string</span>
-    </dt>
-    <dd>Event Type that was fired</dd>
-    <dt class="optional">
-      payload.data <span class="property-type">object</span>
-    </dt>
-    <dd>Event <code>data</code> sent, if one was used</dd>
-  </dl>
-
-  <h3>Details</h3>
-  <p>If the incoming message has a <code>payload</code> property with <code>event</code> set it will override any config values if set.</p>
-  <p>If the incoming message has a <code>payload.data</code> that is an object or parsable into an object these properties will be <strong>merged</strong> with any config values set.<p>
-  <p>If the node has a property value in it&#39;s config for <code>Merge Context</code> then the <code>flow</code> and <code>global</code> contexts will be checked for this property which should be an object that will also be merged into the data payload.<p>
-
-  <h3>References</h3>
-  <ul>
-    <li><a href="https://developers.home-assistant.io/docs/en/dev_101_events.html#firing-events">HA Events</a></li>
-  </ul>
+      <h3>References</h3>
+      <dl class="message-properties">
+        <dd>
+          <a
+            href="https://developers.home-assistant.io/docs/en/dev_101_events.html#firing-events"
+            >Home Assistant Events</a
+          >
+        </dd>
+      </dl>
+    </body>
+  </html>
 </script>

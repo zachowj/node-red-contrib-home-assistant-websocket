@@ -193,51 +193,84 @@
 
 <!-- Documentation in this file is generated from /docs/node/wait-until.md -->
 <script type="text/x-red" data-help-name="ha-wait-until">
-  <p>When an input is received the node will wait until the condition is met or the timeout occurs then will pass on the last received message.</p>
+  <html>
+    <head></head>
+    <body>
+      <p>
+        When an input is received the node will wait until the condition is met or
+        the timeout occurs then will pass on the last received message
+      </p>
+      <h3>Configuration</h3>
+      <dl class="message-properties">
+        <dt>
+          Entity ID (<strong>required</strong>)<span class="property-type"
+            >string</span
+          >
+        </dt>
+        <dd>The id of an entity to use for the comparison.</dd>
+        <dt>
+          Wait Until (<strong>required</strong>)<span class="property-type"
+            >string</span
+          >
+        </dt>
+        <dd>
+          The <code>property</code> field will be checked against the
+          <code>value</code> field using the comparator.
+        </dd>
+        <dt>Timeout<span class="property-type">number</span></dt>
+        <dd>
+          The amount of time to wait for the condition to become true before
+          deactivating the node and passing the message object to the second
+          output. If the timeout is equal to zero the node will wait indefinitely
+          for the condition to be met.
+        </dd>
+        <dt>Entity Location<span class="property-type">string</span></dt>
+        <dd>The entity object can also be pass with the message object.</dd>
+        <dt>
+          Check against the current state<span class="property-type"
+            >boolean</span
+          >
+        </dt>
+        <dd>
+          When an input is received it will check the comparator against the
+          current state instead of waiting for a state change.
+        </dd>
+      </dl>
 
-  <h3>Inputs</h3>
-  <dl class="message-properties">
-    <dt class="optional">reset <span class="property-type"></span> </dt>
-    <dd>If the received message has this property set to any value the node will be set to inactive and the timeout cleared.</dd>
+      <h3>Input</h3>
+      <dl class="message-properties">
+        <dt>reset<span class="property-type"></span></dt>
+        <dd>
+          If the received message has this property set to any value the node will
+          be set to inactive and the timeout cleared.
+        </dd>
+        <dt>payload<span class="property-type">object</span></dt>
+        <dd>
+          Override config values by passing in a property with a valid value.
+        </dd>
+        <ul>
+          <li>entityId</li>
+          <li>property</li>
+          <li>comparator</li>
+          <li>value</li>
+          <li>valueType</li>
+          <li>timeout</li>
+          <li>timeoutUnits</li>
+          <li>entityLocation</li>
+          <li>entityLocationType</li>
+          <li>checkCurrentState</li>
+        </ul>
+      </dl>
 
-    <dt class="optional">payload <span class="property-type">object</span> </dt>
-    <dd>
-      Override config values by passing in a property with a valid value.
-      <ul>
-        <li>entityId</li>
-        <li>property</li>
-        <li>comparator</li>
-        <li>value</li>
-        <li>valueType</li>
-        <li>timeout</li>
-        <li>timeoutUnits</li>
-        <li>entityLocation</li>
-        <li>entityLocationType</li>
-        <li>checkCurrentState</li>
-      </ul>
-    </dd>
-
-  </dl>
-
-  <h3>Configuration</h3>
-  <dl class="message-properties">
-    <dt>Entity ID<span class="property-type">string</span></dt>
-    <dd>The id of a of an entity to use for the comparison.</dd>
-
-    <dt>Wait Until <span class="property-type">string</span></dt>
-    <dd>The <code>property</code> field will be checked against the <code>value</code> field using the comparator.</dd>
-
-    <dt>Timeout<span class="property-type">number</span></dt>
-    <dd>The amount of time to wait for the condition to become true before deactivating the node and passing the message object to the second output. If the timeout is equal to zero the node will wait indefinitely for the condition to be met..</dd>
-
-    <dt>Entity Location <span class="property-type optional">object</span></dt>
-    <dd>The entity object can also be pass with the message object.</dd>
-
-    <dt>Check against current state <span class="property-type optional">boolean</span></dt>
-    <dd>When input is received it will check the comparator against current state instead of waiting for a state change.</dd>
-
-  </dl>
-
-  <h3>Outputs</h3>
-    Will output the last received message when the condition is true or the timeout occurs. If the condition becomes true the message will be pass to the first output. If the timeout passes the message will be sent to the second output.
+      <h3>Output</h3>
+      <dl class="message-properties">
+        <dd>
+          Will output the last received message when the condition is true or the
+          timeout occurs. If the condition becomes true the message will be pass
+          to the first output. If the timeout passes the message will be sent to
+          the second output.
+        </dd>
+      </dl>
+    </body>
+  </html>
 </script>

@@ -141,41 +141,62 @@
 
 <!-- Documentation in this file is generated from /docs/node/get-template.md -->
 <script type="text/x-red" data-help-name="api-render-template">
-  <p>Calls Home Assistant to render a jinja2 template</p>
+  <html>
+    <head></head>
+    <body>
+      <p>
+        Can either set the template in the node configuration or pass in the
+        <code>msg.template</code> property of the incoming message. Passing
+        template via <code>msg.template</code> will override the template string
+        set in node configuration.
+      </p>
+      <div class="custom-block tip">
+        <p class="custom-block-title">NOTE:</p>
+        <p>
+          The node will output any Home Assistant API errors for catching with the
+          &apos;catch-all&apos; node
+        </p>
+      </div>
+      <h3>Configuration</h3>
+      <dl class="message-properties">
+        <dt>template<span class="property-type">string</span></dt>
+        <dd>
+          Jinja template to be rendered, discarded if <code>msg.template</code> is
+          provided via input msg
+        </dd>
+        <dt>Template Location<span class="property-type"></span></dt>
+        <dd>Customizable location to output original template</dd>
+        <dt>Results<span class="property-type"></span></dt>
+        <dd>Customizable location to output rendered template</dd>
+      </dl>
 
-  <h3>Details</h3>
-  <p>Can either set template in the node configuration or pass in the `msg.template` property of the incoming message.  Passing template via `msg.template` will override the template string set in node configuration. </p>
-  <p class="ha-additional-info">NOTE: Node will output any home assistant API errors for catching with the 'catch all' node</p>
+      <h3>Inputs</h3>
+      <dl class="message-properties">
+        <dt>template<span class="property-type">string</span></dt>
+        <dd>Jinja template to be rendered</dd>
+      </dl>
 
-  <h3>Configuration</h3>
-  <dl class="message-properties">
-    <dt class="optional"> template <span class="property-type">string</span></dt>
-    <dd>Jinja template to be rendered, discarded if `msg.template` is provided via input msg </dd>
+      <h3>Outputs</h3>
+      <dl class="message-properties">
+        <dt>template<span class="property-type">string</span></dt>
+        <dd>The original template sent to Home Assistant for rendering</dd>
+        <dt>payload<span class="property-type">string</span></dt>
+        <dd>The rendered template</dd>
+      </dl>
 
-    <dt>Template Location</dt>
-    <dd>Customizable location to output original template</dd>
-
-    <dt>Results</dt>
-    <dd>Customizable location to output rendered template</dd>
-  </dl>
-
-  <h3>Inputs</h3>
-  <dl class="message-properties">
-    <dt class="optional"> template <span class="property-type">string</span> </dt>
-    <dd> Jinja template to be rendered </dd>
-  </dl>
-
-  <h3>Outputs</h3>
-  <dl class="message-properties">
-    <dt> template <span class="property-type">string</span></dt>
-    <dd>The original template sent to home assistant for rendering</dd>
-    <dt> payload <span class="property-type">string</span></dt>
-    <dd>The rendered template</dd>
-  </dl>
-
-  <h3>References</h3>
-  <ul>
-    <li><a href="https://home-assistant.io/docs/configuration/templating/">Home Assistant Template Docs</a></li>
-    <li><a href="http://jinja.pocoo.org/docs/dev/templates/">Jinja Docs</a></li>
-  </ul>
+      <h3>References</h3>
+      <dl class="message-properties">
+        <ul>
+          <li>
+            <a href="https://home-assistant.io/docs/configuration/templating/"
+              >Home Assistant Template Docs</a
+            >
+          </li>
+          <li>
+            <a href="http://jinja.pocoo.org/docs/dev/templates/">Jinja Docs</a>
+          </li>
+        </ul>
+      </dl>
+    </body>
+  </html>
 </script>

@@ -153,58 +153,101 @@
 
 <!-- Documentation in this file is generated from /docs/node/call-service.md -->
 <script type="text/x-red" data-help-name="server">
-  <p>Home Assistant connection configuration</p>
-
-    <h3>Config</h3>
-    <dl class="message-properties">
-        <dt>Name <span class="property-type">string</span></dt>
+  <html>
+    <head></head>
+    <body>
+      <p>Home Assistant connection configuration</p>
+      <h3>Config</h3>
+      <dl class="message-properties">
+        <dt>Name<span class="property-type"></span></dt>
         <dd>Label for this configuration, see details below for implications</dd>
-
-        <dt>Hass.io <span class="property-type">boolean</span></dt>
-        <dd>If you&#39;re running Node-RED as a Hass.io Add-on check this. No other information is needed.</dd>
-
-        <dt>Base URL <span class="property-type">string</span></dt>
-        <dd>The base url and port the home assistant instance can be reached at, for example: <code>http://192.168.0.100:8123</code> or <code>https://homeassistant.mysite.com</code></dd>
-
-        <dt>Access Token / Password <span class="property-type">string</span></dt>
+        <dt>Hass.io<span class="property-type"></span></dt>
+        <dd>
+          If you&apos;re running Node-RED as a Hass.io Add-on check this. No other
+          information is needed.
+        </dd>
+        <dt>Base URL<span class="property-type"></span></dt>
+        <dd>
+          The base URL and port the home assistant instance can be reached at, for
+          example: <code>http://192.168.0.100:8123</code> or
+          <code>https://homeassistant.mysite.com</code>
+        </dd>
+        <dt>Access Token / Password<span class="property-type"></span></dt>
         <dd>Long-lived Access Token or Password used to contact the API</dd>
+        <dt>Legacy Password<span class="property-type"></span></dt>
+        <dd>
+          If you&apos;re using the legacy password to log into Home Assistant
+          check this and enter your password in the password text box.
+        </dd>
+        <dt>Unauthorized SSL Certificates<span class="property-type"></span></dt>
+        <dd>
+          This will allow you to use self-signed certificates. Only use this if
+          you know what you&apos;re doing.
+        </dd>
+        <dt>State Boolean<span class="property-type"></span></dt>
+        <dd>
+          A list of strings, not case sensitive, delimited by vertical pipe, |,
+          that will return true for State Type Boolean.
+        </dd>
+        <dt>Cache Autocomplete Results<span class="property-type"></span></dt>
+        <dd>
+          Enables the caching of the JSON autocomplete requests. Enabling or
+          disabling this may require a restart of Node-RED for it to take effect.
+        </dd>
+      </dl>
 
-        <dt>Legacy Password <span class="property-type">boolean</span></dt>
-        <dd>If you&#39;re using the legacy password to log into Home Assistant check this and enter your password in the password text box.</dd>
-
-        <dt>Unauthorized SSL Certificates <span class="property-type">boolean</span></dt>
-        <dd>This will allow you to use self-signed certificates. Only use this if you know what you&#39;re doing.</dd>
-
-        <dt>State Boolean <span class="property-type">string | delimited</span></dt>
-        <dd>A list of strings, not case sensitive, delimited by vertial pipe, | , that will return true for State Type Boolean.</dd>
-
-        <dt>Cache Autocomplete Results</dt>
-        <dd>Enables the caching of the JSON autocomplete requests. Enabling or disabling this may require a restart of Node-RED for it to take effect.</dd>
-    </dl>
-
-  <h3>Details</h3>
-  <p>Every node requires a configuration attached to define how to contact home assistant, that is this config node&#39;s main purpose.</p>
-
-  <h4>Context</h4>
-  <p>Each config node will also make some data available on the global context, the <code>Name</code> value in this node is used as a, camelcased, namespace for those values</p>
-  <p>Currently <code>states</code>, <code>services</code> and <code>events</code> is made available on the global context.  <code>states</code> is always set to all available states at startup and updated whenever state changes occur so it should be always up to date. <code>services</code> and <code>events</code> is only updated on initial deploy.</p>
-
-  <h4>Context Example</h4>
-  <p>Say we have a config node with name <code>My Awesome server</code>, with an entity setup in homeassistant as <code>switch.my_switch</code>.  This state would be available within function nodes and you could fetch using something like the below code</p>
-  <p>NOTE: It&#39;s likely one of the state or trigger nodes will better serve most use cases, this is simply provided as an option for more advanced cases, or to implement functionality I haven&#39;t thought of/gotten around to</p>
-
-  <pre>
-  const haCtx = global.get(&#39;homeassistant&#39;);
+      <h3>Details</h3>
+      <dl class="message-properties">
+        <dd>
+          Every node requires a configuration attached to define how to contact
+          Home Assistant, which is this config node&apos;s main purpose.
+        </dd>
+        <dt>Context<span class="property-type"></span></dt>
+        <dd>
+          Each config node will also make some data available on the global
+          context, the <code>Name</code> value in this node is used as, camelcase,
+          the namespace for those values
+        </dd>
+        <dd>
+          Currently <code>states</code>, <code>services</code> and
+          <code>events</code> is made available on the global context.
+          <code>states</code> is always set to all available states at startup and
+          updated whenever state changes occur so it should be always up to date.
+          <code>services</code> and <code>events</code> is only updated on initial
+          deploy.
+        </dd>
+        <dt>Context Example<span class="property-type"></span></dt>
+        <dd>
+          Say we have a config node with the name <code>My Awesome server</code>,
+          with an entity set up in Home Assistant as
+          <code>switch.my_switch</code>. This state would be available within
+          function nodes and you could fetch using something like the below code
+        </dd>
+        <pre><code class="language-js">const haCtx = global.get(&quot;homeassistant&quot;);
   const configCtx = haCtx.myAwesomeServer;
-  const entityState = configCtx.states[&#39;switch.my_switch&#39;];
-  return (entityState.state === &#39;on&#39;) ? true : false;
-  </pre>
+  const entityState = configCtx.states[&quot;switch.my_switch&quot;];
+  return entityState.state === &quot;on&quot; ? true : false;
+  </code></pre>
+      </dl>
 
-  <h3>Connection Issues</h3>
-  <p>Communication with homeassistant is accomplished via a combination of WebSocket and the REST API, if you are having troubles communicating with home assistant make sure you can access the API outside of node-red, but from the same server node-red is running on, using a REST client, curl, or any number of other methods to validate the connection<p>
-
-  <h3>References</h3>
-  <ul>
-      <li><a href="https://home-assistant.io/developers/rest_api">HA REST API</a></li>
-  </ul>
+      <h3>Connection Issues</h3>
+      <dl class="message-properties">
+        <dd>
+          Communication with Home Assistant is accomplished via a combination of
+          WebSocket and the REST API if you are having troubles communicating with
+          home assistant make sure you can access the API outside of node-red, but
+          from the same server node-red is running on, using a REST client, curl,
+          or any number of other methods to validate the connection
+        </dd>
+      </dl>
+      <h3>References</h3>
+      <dl class="message-properties">
+        <dd>
+          <a href="https://home-assistant.io/developers/rest_api"
+            >Home Assistant REST API</a
+          >
+        </dd>
+      </dl>
+    </body>
+  </html>
 </script>
