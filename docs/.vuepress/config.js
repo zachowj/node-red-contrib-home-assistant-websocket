@@ -60,6 +60,7 @@ module.exports = {
                     children: [
                         'API',
                         'call-service',
+                        'config-server',
                         'current-state',
                         'events-all',
                         'events-state',

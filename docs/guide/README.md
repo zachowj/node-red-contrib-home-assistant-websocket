@@ -9,8 +9,8 @@ sidebarDepth: 2
 Have Node-RED installed and working, if you need to
 install Node-RED see [here](https://nodered.org/docs/getting-started/installation).
 
-- [Node.js](https://nodejs.org) v8.12 or newer
-- [Node-RED](https://nodered.org/) v0.19 or newer
+- [Node.js](https://nodejs.org) v10.0 or newer
+- [Node-RED](https://nodered.org/) v1.0 or newer
 
 ## Installation
 
@@ -33,7 +33,8 @@ $ npm install node-red-contrib-home-assistant-websocket
 
 ### Hass.io
 
-The Community Hass.io add-on ships with this node right out of the box. Under the server node config check the checkbox for `I use Hass.io`.
+The Community Hass.io add-on ships with this node right out of the box. Under
+the server node config check the checkbox for `I use the Hass.io Add-on`.
 
 The add-on can be found here: <https://github.com/hassio-addons/addon-node-red#readme>
 

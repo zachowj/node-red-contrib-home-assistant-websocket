@@ -40,6 +40,7 @@ md.use(require('markdown-it-container'), 'vuepress-custom-container', {
 const files = {
     API: 'api',
     'call-service': 'call-service',
+    'config-server': 'config-server',
     'current-state': 'current-state',
     sensor: 'entity',
     'events-all': 'events-all',
