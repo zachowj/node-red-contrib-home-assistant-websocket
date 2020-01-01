@@ -23,7 +23,11 @@ Service service to call
 - Type: `string`
 - Accepts [Mustache Templates](/guide/mustache-templates.md)
 
-A comma-delimited list of entity ids
+A comma-delimited list of entity ids.
+
+::: tip NOTICE
+If `entity_id` exists in the data property it will have precedence over this value.
+:::
 
 ### Data
 
