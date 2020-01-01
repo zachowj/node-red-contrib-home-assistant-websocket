@@ -17,10 +17,9 @@ jobs:
       - run: npm install
       - name: Convert Docs
         run: npm run docs:convert
-      - uses: stefanzweifel/git-auto-commit-action@v2.5.0
+      - uses: zachowj/git-auto-commit-action@master
         with:
           commit_message: Convert markdown docs to Node-RED help files
           branch: dev
-          commit_options: "--no-verify"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
