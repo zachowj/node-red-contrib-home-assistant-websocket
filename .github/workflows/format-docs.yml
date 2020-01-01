@@ -20,5 +20,6 @@ jobs:
         with:
           commit_message: Apply prettier changes
           branch: ${{ github.head_ref }}
+          commit_options: "--no-verify"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -21,5 +21,6 @@ jobs:
         with:
           commit_message: Convert markdown docs to Node-RED help files
           branch: ${{ github.head_ref }}
+          commit_options: "--no-verify"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
