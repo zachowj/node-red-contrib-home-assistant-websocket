@@ -46,6 +46,10 @@ and every time the entity changes if desired
 Creates a sensor or binary sensor in Home Assistant which can be updated
 from this node
 
+## [Server Config](./config-server.md)
+
+Home Assistant connection configuration
+
 ## [Trigger: state](./trigger-state.md)
 
 Much like the `State Changed Node` however, provides some advanced functionality around common automation use cases.

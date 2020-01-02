@@ -6,43 +6,43 @@ Home Assistant connection configuration
 
 ### Name
 
-- Type: string
+- Type: `string`
 
 Label for this configuration, see details below for implications
 
 ### Hass.io
 
-- Type: boolean
+- Type: `boolean`
 
 If you're running Node-RED as a Hass.io Add-on check this. No other information is needed.
 
 ### Base URL
 
-- Type: string
+- Type: `string`
 
 The base URL and port the home assistant instance can be reached at, for example: `http://192.168.0.100:8123` or `https://homeassistant.mysite.com`
 
 ### Access Token / Password
 
-- Type: string
+- Type: `string`
 
 Long-lived Access Token or Password used to contact the API
 
 ### Legacy Password
 
-- Type: boolean
+- Type: `boolean`
 
 If you're using the legacy password to log into Home Assistant check this and enter your password in the password text box.
 
 ### Unauthorized SSL Certificates
 
-- Type: boolean
+- Type: `boolean`
 
 This will allow you to use self-signed certificates. Only use this if you know what you're doing.
 
 ### State Boolean
 
-- Type: string | delimited
+- Type: `string | delimited`
 
 A list of strings, not case sensitive, delimited by vertical pipe, |, that will return true for State Type Boolean.
 

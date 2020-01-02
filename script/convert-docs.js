@@ -57,13 +57,13 @@ const files = {
 
 function plugins($) {
     $.prototype.wrapAll = function(wrapper) {
-        var $container = $(wrapper).clone();
+        const $container = $(wrapper).clone();
         $(this)
             .eq(0)
             .before($container);
 
-        for (var i in this) {
-            var clone = $(this)
+        for (const i in this) {
+            const clone = $(this)
                 .eq(i)
                 .clone();
             $container.append($('<div>' + clone + '</div>').html());
