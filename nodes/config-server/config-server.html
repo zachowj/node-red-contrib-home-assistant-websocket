@@ -159,32 +159,36 @@
       <p>Home Assistant connection configuration</p>
       <h3>Config</h3>
       <dl class="message-properties">
-        <dt>Name<span class="property-type"></span></dt>
+        <dt>Name<span class="property-type">string</span></dt>
         <dd>Label for this configuration, see details below for implications</dd>
-        <dt>Hass.io<span class="property-type"></span></dt>
+        <dt>Hass.io<span class="property-type">boolean</span></dt>
         <dd>
           If you&apos;re running Node-RED as a Hass.io Add-on check this. No other
           information is needed.
         </dd>
-        <dt>Base URL<span class="property-type"></span></dt>
+        <dt>Base URL<span class="property-type">string</span></dt>
         <dd>
           The base URL and port the home assistant instance can be reached at, for
           example: <code>http://192.168.0.100:8123</code> or
           <code>https://homeassistant.mysite.com</code>
         </dd>
-        <dt>Access Token / Password<span class="property-type"></span></dt>
+        <dt>Access Token / Password<span class="property-type">string</span></dt>
         <dd>Long-lived Access Token or Password used to contact the API</dd>
-        <dt>Legacy Password<span class="property-type"></span></dt>
+        <dt>Legacy Password<span class="property-type">boolean</span></dt>
         <dd>
           If you&apos;re using the legacy password to log into Home Assistant
           check this and enter your password in the password text box.
         </dd>
-        <dt>Unauthorized SSL Certificates<span class="property-type"></span></dt>
+        <dt>
+          Unauthorized SSL Certificates<span class="property-type">boolean</span>
+        </dt>
         <dd>
           This will allow you to use self-signed certificates. Only use this if
           you know what you&apos;re doing.
         </dd>
-        <dt>State Boolean<span class="property-type"></span></dt>
+        <dt>
+          State Boolean<span class="property-type">string | delimited</span>
+        </dt>
         <dd>
           A list of strings, not case sensitive, delimited by vertical pipe, |,
           that will return true for State Type Boolean.
