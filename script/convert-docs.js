@@ -75,10 +75,7 @@ function plugins($) {
 }
 
 for (const file in files) {
-    let contents = fs.readFileSync(
-        `../node-red-contrib-home-assistant-websocket/docs/node/${file}.md`,
-        'utf8'
-    );
+    let contents = fs.readFileSync(`docs/node/${file}.md`, 'utf8');
 
     contents = contents
         .replace(/<Badge text="(.+)"\/>/g, '(**$1**)')
@@ -96,7 +93,7 @@ for (const file in files) {
     $('h1').remove();
 
     // increase header element by one to conform to Node-RED titles being <h3></h3>
-    $('h2,h3,h4,h5,h6').each(
+    $('h2,h3,h4,h5').each(
         (i, item) => (item.tagName = `h${Number(item.tagName[1]) + 1}`)
     );
 
@@ -104,7 +101,9 @@ for (const file in files) {
     $('a').each((i, item) => {
         const href = $(item).attr('href');
         if (href.startsWith('.') || href.startsWith('/')) {
-            $(item).attr('href', `${docsUrl}${href.replace('.md', '.html')}`);
+            $(item)
+                .attr('href', `${docsUrl}${href.replace('.md', '.html')}`)
+                .attr('rel', 'noopener noreferrer');
         }
     });
 
@@ -158,7 +157,7 @@ for (const file in files) {
         files: `nodes/${files[file]}/${files[file]}.html`,
         from: /<script type="text\/x-red" data-help-name="(\S+)">.*<\/script>/gs,
         to: (_, match) => {
-            return `<script type="text/x-red" data-help-name="${match}">${renderedHtml}</script>`;
+            return `<script type="text/x-red" data-help-name="${match}">\n${renderedHtml}</script>`;
         }
     };
     try {

@@ -7,8 +7,7 @@
     "url": "https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues"
   },
   "scripts": {
-    "test": "mocha \"test/**/*_spec.js\"",
-    "test:watch": "nodemon -w test/ -w lib/ -w nodes/ --exec ./node_modules/.bin/mocha test/*",
+    "clean": "npm run docker:down",
     "dev": "npm run docker:up",
     "dev:clean": "npm run docker:down",
     "docker:up": "npm run docker -- up --build --abort-on-container-exit --remove-orphans",
@@ -17,15 +16,16 @@
     "docker:logs": "npm run docker -- logs -f && true",
     "docker": "docker-compose -f docker/docker-compose.yml",
     "docker-map": "docker-compose -f docker/docker-compose.mapped.yml",
-    "clean": "npm run docker:down",
-    "lint": "eslint . && prettier --check {docs,lib,nodes,script,test}/**/*.{css,js,md,html}",
-    "lint:fix": "eslint . --fix && prettier --write {docs,lib,nodes,script,test}/**/*.{css,js,md,html}",
-    "release": "standard-version",
-    "release:pre": "standard-version -p",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "docs:lint": "prettier --write docs/{.vuepress/**,**}/*.{js,md,html}",
-    "docs:convert": "node script/convert-docs"
+    "lint": "eslint . && prettier --check {docs,lib,nodes,script,test}/**/*.{css,js,md,html}",
+    "lint:fix": "eslint . --fix && prettier --write {docs,lib,nodes,script,test}/**/*.{css,js,md,html}",
+    "prepublish": "node script/convert-docs",
+    "release": "standard-version",
+    "release:pre": "standard-version -p",
+    "test": "mocha \"test/**/*_spec.js\"",
+    "test:watch": "nodemon -w test/ -w lib/ -w nodes/ --exec ./node_modules/.bin/mocha test/*"
   },
   "repository": {
     "type": "git",
@@ -79,6 +79,7 @@
   },
   "devDependencies": {
     "@vuepress/plugin-back-to-top": "^1.2.0",
+    "@vuepress/plugin-google-analytics": "^1.2.0",
     "@vuepress/plugin-medium-zoom": "^1.2.0",
     "cheerio": "^1.0.0-rc.3",
     "coveralls": "^3.0.9",
@@ -100,8 +101,8 @@
     "node-red-node-test-helper": "^0.2.3",
     "nodemon": "^2.0.1",
     "nyc": "^14.1.1",
-    "replace-in-file": "^5.0.2",
     "prettier": "^1.19.1",
+    "replace-in-file": "^5.0.2",
     "vuepress": "^1.2.0"
   },
   "husky": {
