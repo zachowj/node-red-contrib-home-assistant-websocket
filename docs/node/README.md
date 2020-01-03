@@ -16,7 +16,7 @@ Fetches the last known state for any entity on input
 
 Listens for all types of events from home assistant with the ability to filter by event type
 
-## [Events: state](event-state.md)
+## [Events: state](events-state.md)
 
 Listens for only `state_changed` events from home assistant
 
