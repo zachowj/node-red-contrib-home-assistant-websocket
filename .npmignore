@@ -1,10 +1,12 @@
 coverage/
-test/
 docs/
+script/
+test/
 .dockerignore
 .eslintignore
 .eslintrc.js
 .github
+.prettierignore
 .prettierrc
 .vscode
 docker
