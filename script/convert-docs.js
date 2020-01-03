@@ -35,7 +35,7 @@ md.use(require('markdown-it-container'), 'vuepress-custom-container', {
             return '</div>\n';
         }
     }
-});
+}).use(require('markdown-it-inline-comments'));
 
 const files = {
     API: 'api',
@@ -77,10 +77,7 @@ function plugins($) {
 for (const file in files) {
     let contents = fs.readFileSync(`docs/node/${file}.md`, 'utf8');
 
-    contents = contents
-        .replace(/<Badge text="(.+)"\/>/g, '(**$1**)')
-        // Remove Comments
-        .replace(/<!--.*-->/g, '');
+    contents = contents.replace(/<Badge text="(.+)"\/>/g, '(**$1**)');
 
     const html = md.render(contents);
 
