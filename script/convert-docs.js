@@ -164,6 +164,5 @@ for (const file in files) {
         replace.sync(options);
     } catch (error) {
         console.error('Error occurred:', error);
-        process.exit(1);
     }
 }
