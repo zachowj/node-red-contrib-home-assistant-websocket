@@ -1,0 +1,106 @@
+#version-update {
+    padding: 0.5em;
+    margin-bottom: 1em;
+}
+
+#version-update p {
+    margin: 0;
+}
+
+#version-update strong {
+    padding-right: 5px;
+}
+
+#error-if-state {
+    text-align: center;
+    padding: 5px;
+    margin-top: 5px;
+}
+
+.form-row.checkbox-option input {
+    margin-left: 105px;
+    margin-right: 5px;
+    display: inline-block;
+    width: auto;
+    vertical-align: top;
+}
+
+.form-row.checkbox-option label {
+    width: auto;
+}
+
+.form-row.checkbox-option-left input {
+    display: inline-block;
+    margin-right: 5px;
+    width: auto;
+    vertical-align: top;
+}
+
+.form-row.checkbox-option-left label {
+    width: auto;
+    margin-right: 20px;
+}
+
+.ha-node-label-legacy {
+    fill: #fdfd96;
+    stroke-width: 0;
+    font-size: 14px;
+    pointer-events: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+li span.property-type {
+    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    color: #666;
+    font-style: italic;
+    font-size: 11px;
+    float: right;
+}
+
+.ha-alert-box {
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.custom-block .custom-block-title {
+    font-weight: 600;
+}
+.custom-block.tip,
+.custom-block.warning,
+.custom-block.danger {
+    padding: 0.1rem 1.5rem;
+    border-left-width: 0.5rem;
+    border-left-style: solid;
+    margin: 1rem 0;
+}
+.custom-block.tip {
+    background-color: #f3f5f7;
+    border-color: #42b983;
+}
+.custom-block.warning {
+    background-color: rgba(255, 229, 100, 0.3);
+    border-color: #e7c000;
+    color: #6b5900;
+}
+.custom-block.warning .custom-block-title {
+    color: #b29400;
+}
+.custom-block.warning a {
+    color: #6b5900;
+}
+.custom-block.danger {
+    background-color: #ffe6e6;
+    border-color: #c00;
+    color: #4d0000;
+}
+.custom-block.danger .custom-block-title {
+    color: #900;
+}
+.custom-block.danger a {
+    color: #4d0000;
+}

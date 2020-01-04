@@ -1,0 +1,76 @@
+<input type="hidden" id="node-input-version" />
+
+<div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+    <input type="hidden" id="node-input-outputs" />
+</div>
+
+<div class="form-row">
+    <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
+    <input type="text" id="node-input-server" />
+</div>
+
+<div class="form-row">
+    <label for="entity_id"><i class="fa fa-cube"></i> Entity ID</label>
+    <input type="text" id="entity_id" />
+</div>
+
+<div class="form-row">
+    <label for="node-input-halt_if_compare"
+        ><i class="fa fa-check-square"></i> If State</label
+    >
+    <div style="width: 70%;display: inline-block;">
+        <select
+            type="text"
+            id="node-input-halt_if_compare"
+            style="width: auto;"
+        >
+            <option value="is">is</option>
+            <option value="is_not">is not</option>
+            <option value="lt">&lt;</option>
+            <option value="lte">&lt;=</option>
+            <option value="gt">&gt;</option>
+            <option value="gte">&gt;=</option>
+            <option value="includes">in</option>
+            <option value="does_not_include">not in</option>
+            <option value="jsonata">JSONata</option>
+        </select>
+        <input type="text" id="node-input-halt_if" />
+    </div>
+    <input type="hidden" id="node-input-halt_if_type" />
+    <p id="error-if-state" class="ui-state-error">ifState.js not loaded</p>
+</div>
+
+<div class="form-row">
+    <label for="node-input-state_type"
+        ><i class="fa fa-tint"></i> State Type</label
+    >
+    <select type="text" id="node-input-state_type" style="width: auto;">
+        <option value="str">String</option>
+        <option value="num">Number</option>
+        <option value="habool">Boolean</option>
+    </select>
+</div>
+
+<div class="form-row" id="state_location">
+    <label for="node-input-state_location">State Location</label>
+    <input type="hidden" id="node-input-override_payload" />
+    <input type="text" id="node-input-state_location" />
+</div>
+
+<div class="form-row" id="entity_location">
+    <label for="node-input-entity_location">Entity Location</label>
+    <input type="hidden" id="node-input-override_data" />
+    <input type="text" id="node-input-entity_location" />
+</div>
+
+<div class="form-row checkbox-option">
+    <input type="checkbox" id="node-input-override_topic" />&nbsp;
+    <label for="node-input-override_topic">Override Topic</label>
+</div>
+
+<div class="form-row checkbox-option">
+    <input type="checkbox" id="node-input-blockInputOverrides" />&nbsp;
+    <label for="node-input-blockInputOverrides">Block Input Overrides</label>
+</div>

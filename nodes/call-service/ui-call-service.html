@@ -1,0 +1,92 @@
+<input type="hidden" id="node-input-version" />
+
+<div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+</div>
+
+<div class="form-row">
+    <label for="node-input-server"
+        ><i class="fa fa-dot-circle-o"></i> Server</label
+    >
+    <input type="text" id="node-input-server" />
+</div>
+
+<div class="form-row">
+    <label for="service_domain"><i class="fa fa-cube"></i> Domain</label>
+    <input type="text" id="service_domain" />
+</div>
+
+<div class="form-row">
+    <label for="service"><i class="fa fa-cube"></i> Service</label>
+    <input type="text" id="service" />
+</div>
+
+<div class="form-row">
+    <label for="node-input-entityId"
+        ><i class="fa fa-cube"></i> Entity Id</label
+    >
+    <input type="text" id="node-input-entityId" />
+</div>
+
+<div class="form-row">
+    <label for="node-input-data"><i class="fa fa-dot-circle-o"></i> Data</label>
+    <input type="text" id="node-input-data" />
+    <input type="hidden" id="node-input-dataType" />
+</div>
+
+<div class="form-row checkbox-option" id="mustacheAltTags">
+    <input type="checkbox" id="node-input-mustacheAltTags" />&nbsp;
+    <label for="node-input-mustacheAltTags"
+        >Use alternative template tags for the Data field</label
+    >
+</div>
+
+<div class="form-row">
+    <label for="node-input-mergecontext">Merge Context</label>
+    <input
+        type="text"
+        id="node-input-mergecontext"
+        placeholder="lightOptions"
+    />
+</div>
+
+<div class="form-row output-option" id="output_location">
+    <label for="node-input-output_location">Output Location</label>
+    <input type="hidden" id="node-input-output_location_type" />
+    <input type="text" id="node-input-output_location" />
+</div>
+
+<div id="service-data-desc" class="form-row">
+    <h4>Service: <span class="title"></span></h4>
+    <div class="unknown-service">Unknown Service</div>
+    <div class="known-service">
+        <p class="service-description"></p>
+        <table
+            id="service-data-table"
+            style="width: 100%;"
+            border="1"
+            cellpadding="10"
+        >
+            <thead>
+                <tr>
+                    <th>Property</th>
+                    <th>Desc</th>
+                    <th>Example</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<div class="form-row">
+    <input
+        type="checkbox"
+        id="node-input-debugenabled"
+        style="display: inline-block; width: auto; vertical-align: top;"
+    />
+    <label for="node-input-debugenabled" style="width: auto;"
+        >Show Debug Information</label
+    >
+</div>

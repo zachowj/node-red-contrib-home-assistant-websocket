@@ -5,5 +5,13 @@ module.exports = {
     env: { browser: true, mocha: true },
     rules: {
         'prettier/prettier': ['error']
+    },
+    globals: {
+        RED: 'readonly',
+        $: 'readonly',
+        exposeNode: 'readonly',
+        haServer: 'readonly',
+        ifState: 'readonly',
+        nodeVersion: 'readonly'
     }
 };

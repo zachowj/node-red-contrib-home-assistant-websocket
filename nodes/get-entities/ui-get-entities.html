@@ -1,0 +1,53 @@
+<div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+</div>
+
+<div class="form-row">
+    <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
+    <input type="text" id="node-input-server" />
+</div>
+
+<div class="form-row">
+    <ol id="logic"></ol>
+</div>
+
+<div class="form-row">
+    <label for="node-input-output_type" style="width: 160px;"
+        >Output Type</label
+    >
+    <select id="node-input-output_type">
+        <option value="array">Array</option>
+        <option value="count">Count</option>
+        <option value="random">Random</option>
+        <option value="split">Split</option>
+    </select>
+</div>
+
+<div class="form-row output-option" id="output_empty_results">
+    <input
+        type="checkbox"
+        id="node-input-output_empty_results"
+        style="margin-left: 165px;display:inline-block; width:15px; vertical-align:top;"
+    />
+    <label for="node-input-output_empty_results" style="width: auto;"
+        >Send Empty Results</label
+    >
+</div>
+
+<div class="form-row output-option" id="output_results_count">
+    <label for="node-input-output_results_count" style="width: 160px;"
+        >Max Number of Results</label
+    >
+    <input
+        type="text"
+        id="node-input-output_results_count"
+        style="width: 150px;"
+    />
+</div>
+
+<div class="form-row output-option" id="output_location">
+    <label for="node-input-output_location">Output Location</label>
+    <input type="hidden" id="node-input-output_location_type" />
+    <input type="text" id="node-input-output_location" />
+</div>

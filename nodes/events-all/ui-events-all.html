@@ -1,0 +1,27 @@
+<div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+</div>
+
+<div class="form-row">
+    <label for="node-input-server"
+        ><i class="fa fa-dot-circle-o"></i> Server</label
+    >
+    <input type="text" id="node-input-server" />
+</div>
+
+<div class="form-row">
+    <label for="node-input-event_type"
+        ><i class="fa fa-tag"></i> Event Type</label
+    >
+    <input
+        type="text"
+        id="node-input-event_type"
+        placeholder="leave empty for all events"
+    />
+</div>
+
+<div id="eventAlert" class="ui-state-error ha-alert-box">
+    <strong>Alert:</strong> Leaving Event Type empty and listening for all
+    events may overload the websocket message queue.
+</div>

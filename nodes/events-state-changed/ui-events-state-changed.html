@@ -1,0 +1,88 @@
+<input type="hidden" id="node-input-version" />
+
+<!-- Name -->
+<div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+    <input type="hidden" id="node-input-outputs" />
+</div>
+
+<!-- Server -->
+<div class="form-row">
+    <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
+    <input type="text" id="node-input-server" />
+</div>
+
+<!-- Entity ID Filter and Filter Type -->
+<div class="form-row">
+    <label for="node-input-entityidfilter"
+        ><i class="fa fa-tag"></i> Entity ID</label
+    >
+
+    <input type="text" id="node-input-entityidfilter" style="width: 50%;" />
+
+    <select type="text" id="node-input-entityidfiltertype" style="width: 20%;">
+        <option value="exact">Exact</option>
+        <option value="substring">Substring</option>
+        <option value="regex">Regex</option>
+    </select>
+</div>
+
+<div class="form-row">
+    <label for="node-input-haltifstate"
+        ><i class="fa fa-check-square"></i> If State</label
+    >
+    <div style="width: 70%;display: inline-block;">
+        <select
+            type="text"
+            id="node-input-halt_if_compare"
+            style="width: auto;"
+        >
+            <option value="is">is</option>
+            <option value="is_not">is not</option>
+            <option value="lt">&lt;</option>
+            <option value="lte">&lt;=</option>
+            <option value="gt">&gt;</option>
+            <option value="gte">&gt;=</option>
+            <option value="includes">in</option>
+            <option value="does_not_include">not in</option>
+            <option value="jsonata">JSONata</option>
+        </select>
+        <input type="text" id="node-input-haltifstate" />
+    </div>
+    <input type="hidden" id="node-input-halt_if_type" />
+    <p id="error-if-state" class="ui-state-error">ifState.js not loaded</p>
+</div>
+
+<div class="form-row">
+    <label for="node-input-state_type"
+        ><i class="fa fa-tint"></i> State Type</label
+    >
+    <select type="text" id="node-input-state_type" style="width: auto;">
+        <option value="str">String</option>
+        <option value="num">Number</option>
+        <option value="habool">Boolean</option>
+    </select>
+</div>
+
+<div class="form-row">
+    <input
+        type="checkbox"
+        id="node-input-output_only_on_state_change"
+        style="display: inline-block; width: auto; vertical-align: top;margin-left: 105px;"
+    />
+    <label for="node-input-output_only_on_state_change" style="width: auto;"
+        >Output only on state change</label
+    >
+</div>
+
+<div class="form-row">
+    <input
+        type="checkbox"
+        id="node-input-outputinitially"
+        style="display: inline-block; width: auto; vertical-align: top;margin-left: 105px;"
+    />
+    <label for="node-input-outputinitially" style="width: auto;"
+        >Output on Connect</label
+    >
+</div>

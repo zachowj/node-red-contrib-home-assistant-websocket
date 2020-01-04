@@ -1,144 +1,76 @@
-<link rel="stylesheet" type="text/css" href="homeassistant/static/common.css" />
-<script src="homeassistant/static/common.js"></script>
-<script type="text/javascript">
-  RED.nodes.registerType("ha-api", {
-    category: "home_assistant",
-    color: "#52C0F2",
-    inputs: 1,
-    outputs: 1,
-    icon: "plane.png",
-    paletteLabel: "API",
-    label: function() {
-      return this.name || "API";
-    },
-    labelStyle: nodeVersion.labelStyle,
-    defaults: {
-      name: { value: "" },
-      server: { value: "", type: "server", required: true },
-      debugenabled: { value: false },
-      protocol: { value: "websocket" },
-      method: { value: "get" },
-      path: { value: "" },
-      data: { value: "" },
-      dataType: { value: "json" },
-      location: { value: "payload" },
-      locationType: { value: "msg" },
-      responseType: { value: "json" }
-    },
-    oneditprepare: function() {
-      const node = this;
-      const $server = $("#node-input-server");
-      const utils = {
-        setDefaultServerSelection: function() {
-          let defaultServer;
-          RED.nodes.eachConfig(n => {
-            if (n.type === "server" && !defaultServer) defaultServer = n.id;
-          });
-          if (defaultServer) $server.val(defaultServer);
-        }
-      };
-
-      if (!node.server) {
-        utils.setDefaultServerSelection();
-      }
-
-      $("#node-input-data")
-        .typedInput({
-          types: ["json", "jsonata"],
-          typeField: "#node-input-dataType"
-        })
-        .typedInput("width", "68%");
-
-      $("#node-input-protocol")
-        .on("change", function() {
-          const isHttp = $(this).val() === "http";
-          $(".http").toggle(isHttp);
-          $("#node-input-method").trigger("change");
-        })
-        .trigger("change");
-
-      $("#node-input-method").on("change", function() {
-        const label =
-          $("#node-input-protocol").val() === "http" &&
-          $("#node-input-method").val() === "get"
-            ? "Params"
-            : "Data";
-        $("#data-label").text(label);
-      });
-
-      $("#node-input-location")
-        .typedInput({
-          types: [
-            "msg",
-            "flow",
-            "global",
-            { value: "none", label: "None", hasValue: false }
-          ],
-          typeField: "#node-input-locationType"
-        })
-        .typedInput("width", "68%");
-    }
-  });
-</script>
-
 <script type="text/x-red" data-template-name="ha-api">
-  <div class="form-row">
-    <label for="node-input-name">Name</label>
-    <input type="text" id="node-input-name" placeholder="Name">
-  </div>
-
-  <div class="form-row">
-    <label for="node-input-server">Server</label>
-    <input type="text" id="node-input-server" />
-  </div>
-
-  <div class="form-row">
-    <label for="node-input-protocol">Protocol</label>
-    <select type="text" id="node-input-protocol" style="width:70%;">
-      <option value="websocket">WebSocket</option>
-      <option value="http">HTTP</option>
-    </select>
-  </div>
-
-  <div class="form-row http">
-    <label for="node-input-method">Method</label>
-    <select type="text" id="node-input-method" style="width:70%;">
-      <option value="get">GET</option>
-      <option value="post">POST</option>
-    </select>
-  </div>
-
-  <div class="form-row http">
-    <label for="node-input-path">Path</label>
-    <input type="text" id="node-input-path" placeholder="config">
-  </div>
-
-  <div class="form-row">
-    <label id="data-label" for="node-input-data">Data</label>
-    <input type="text" id="node-input-data">
-    <input type="hidden" id="node-input-dataType">
-  </div>
-
-  <div class="form-row">
-    <label for="node-input-location">Results</label>
-    <input type="text" id="node-input-location">
-    <input type="hidden" id="node-input-locationType">
-  </div>
-
-  <div class="form-row http">
-    <label for="node-input-responseType">Return</label>
-    <select id="node-input-responseType" style="width:70%;">
-      <option value="text">a UTF-8 string</option>
-      <option value="arraybuffer">a binary buffer</option>
-      <option value="json">a parsed JSON object</option>
-    </select>
-  </div>
-
-  <div class="form-row checkbox-option">
-    <input type="checkbox" id="node-input-debugenabled" />
-    <label for="node-input-debugenabled">Show Debug Information</label>
-  </div>
+    <div class="form-row"><label for="node-input-name">Name</label> <input type="text" id="node-input-name" placeholder="Name"></div><div class="form-row"><label for="node-input-server">Server</label> <input type="text" id="node-input-server"></div><div class="form-row"><label for="node-input-protocol">Protocol</label> <select type="text" id="node-input-protocol" style="width:70%"><option value="websocket">WebSocket</option><option value="http">HTTP</option></select></div><div class="form-row http"><label for="node-input-method">Method</label> <select type="text" id="node-input-method" style="width:70%"><option value="get">GET</option><option value="post">POST</option></select></div><div class="form-row http"><label for="node-input-path">Path</label> <input type="text" id="node-input-path" placeholder="config"></div><div class="form-row"><label id="data-label" for="node-input-data">Data</label> <input type="text" id="node-input-data"> <input type="hidden" id="node-input-dataType"></div><div class="form-row"><label for="node-input-location">Results</label> <input type="text" id="node-input-location"> <input type="hidden" id="node-input-locationType"></div><div class="form-row http"><label for="node-input-responseType">Return</label> <select id="node-input-responseType" style="width:70%"><option value="text">a UTF-8 string</option><option value="arraybuffer">a binary buffer</option><option value="json">a parsed JSON object</option></select></div><div class="form-row checkbox-option"><input type="checkbox" id="node-input-debugenabled"> <label for="node-input-debugenabled">Show Debug Information</label></div>
 </script>
-
-<!-- Documentation in this file is generated from /docs/node/API.md -->
-<script type="text/x-red" data-help-name="ha-api"></script>
+<script>
+    RED.nodes.registerType('ha-api', {
+        category: 'home_assistant',
+        color: '#52C0F2',
+        inputs: 1,
+        outputs: 1,
+        icon: 'plane.png',
+        paletteLabel: 'API',
+        label: function() {
+            return this.name || 'API';
+        },
+        labelStyle: nodeVersion.labelStyle,
+        defaults: {
+            name: { value: '' },
+            server: { value: '', type: 'server', required: !0 },
+            debugenabled: { value: !1 },
+            protocol: { value: 'websocket' },
+            method: { value: 'get' },
+            path: { value: '' },
+            data: { value: '' },
+            dataType: { value: 'json' },
+            location: { value: 'payload' },
+            locationType: { value: 'msg' },
+            responseType: { value: 'json' }
+        },
+        oneditprepare: function() {
+            const e = $('#node-input-server'),
+                t = function() {
+                    let t;
+                    RED.nodes.eachConfig(e => {
+                        'server' !== e.type || t || (t = e.id);
+                    }),
+                        t && e.val(t);
+                };
+            this.server || t(),
+                $('#node-input-data')
+                    .typedInput({
+                        types: ['json', 'jsonata'],
+                        typeField: '#node-input-dataType'
+                    })
+                    .typedInput('width', '68%'),
+                $('#node-input-protocol')
+                    .on('change', function() {
+                        const e = 'http' === $(this).val();
+                        $('.http').toggle(e),
+                            $('#node-input-method').trigger('change');
+                    })
+                    .trigger('change'),
+                $('#node-input-method').on('change', function() {
+                    const e =
+                        'http' === $('#node-input-protocol').val() &&
+                        'get' === $('#node-input-method').val()
+                            ? 'Params'
+                            : 'Data';
+                    $('#data-label').text(e);
+                }),
+                $('#node-input-location')
+                    .typedInput({
+                        types: [
+                            'msg',
+                            'flow',
+                            'global',
+                            { value: 'none', label: 'None', hasValue: !1 }
+                        ],
+                        typeField: '#node-input-locationType'
+                    })
+                    .typedInput('width', '68%');
+        }
+    });
+</script>
+<script type="text/x-red" data-help-name="ha-api">
+    <h1>API</h1><h2>Config</h2><h3>Protocol &lt;Badge text=&quot;required&quot;/&gt;</h3><ul><li>Type: <code>string</code></li><li>Values: <code>websocket|http</code></li><li>Default: <code>websocket</code></li></ul><p>Protocol to use to access Home Assistant API.</p><h3>Method</h3><ul><li>Type: <code>string</code></li><li>Values: <code>get|post</code></li></ul><p>Type of method to use to access the HTTP endpoint.</p><h3>Path</h3><ul><li>Type: <code>string</code></li><li>Accepts <a href="/guide/mustache-templates.md">Mustache Templates</a></li></ul><p>URL of the API endpoint.</p><h3>Params</h3><ul><li>Type: <code>Object</code></li><li>Accepts <a href="/guide/mustache-templates.md">Mustache Templates</a></li></ul><p>A JSON object with key/value pairs that will be converted into URL parameters.</p><h3>Data</h3><ul><li>Type: <code>Object</code></li><li>Accepts <a href="/guide/mustache-templates.md">Mustache Templates</a> when the data type is JSON</li></ul><p>JSON Object to send for WebSocket requests and HTTP posts.</p><h3>Results</h3><ul><li><p>Type: <code>string</code></p><p>Location to save the API results.</p></li></ul><h2>Input</h2><p>All properties need to be under <code>msg.payload</code>.</p><h3>protocol</h3><ul><li>Type: <code>string</code></li><li>Values: <code>websocket|http</code></li></ul><p>Overrides or sets the protocol property of the config.</p><h3>method</h3><ul><li>Type: <code>string</code></li><li>Values: <code>get|post</code></li></ul><p>Overrides or sets the method property of the config.</p><h3>path</h3><ul><li>Type: <code>string</code></li></ul><p>Overrides or sets the path property of the config.</p><h3>data</h3><ul><li>Type: <code>Object|string</code></li></ul><p>Overrides or sets the data/params property of the config.</p><h3>location</h3><ul><li>Type: <code>string</code></li></ul><p>Overrides or sets the results property of the config.</p><h3>locationType</h3><ul><li>Type: <code>string</code></li><li>Values: <code>msg|flow|global</code></li></ul><p>Overrides or sets the results type property of the config.</p><h2>Output</h2><p>Will output the results received from the API call to the location defined in the config.</p><h2>References</h2><ul><li><a href="https://developers.home-assistant.io/docs/en/external_api_rest.html">http api</a></li><li><a href="https://developers.home-assistant.io/docs/en/external_api_websocket.html">websocket api</a></li></ul>
+</script>

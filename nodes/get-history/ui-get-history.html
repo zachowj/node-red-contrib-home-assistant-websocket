@@ -1,0 +1,112 @@
+<div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+</div>
+
+<div class="form-row">
+    <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
+    <input type="text" id="node-input-server" />
+</div>
+
+<!-- Comparator Selection -->
+<div class="form-row">
+    <label for="entity_id"><i class="fa fa-date"></i> Entity ID</label>
+
+    <select type="text" id="node-input-entityidtype" style="width: 80px;">
+        <option value="is">Is</option>
+        <option value="includes">Includes</option>
+    </select>
+
+    <input type="text" id="entity_id" style="width: 52%;" />
+</div>
+
+<div class="form-row">
+    <input
+        type="checkbox"
+        id="node-input-useRelativeTime"
+        style="display: inline-block; width: auto; vertical-align: top;margin-left: 105px;"
+    />&nbsp;
+    <label for="node-input-useRelativeTime" style="width: auto;"
+        >Use Relative Time</label
+    >
+</div>
+
+<div class="form-row relative_row">
+    <label for="node-input-relativeTime"
+        ><i class="fa fa-date"></i> In the Last</label
+    >
+    <input
+        type="text"
+        id="node-input-relativeTime"
+        autofocus="autofocus"
+        placeholder="20 minutes"
+    />
+</div>
+
+<div class="form-row date_row">
+    <label for="node-input-startdate"
+        ><i class="fa fa-date"></i> Start Date</label
+    >
+    <input type="text" id="node-input-startdate" autofocus="autofocus" />
+</div>
+
+<div class="form-row date_row">
+    <label for="node-input-enddate"><i class="fa fa-date"></i> End Date</label>
+    <input type="text" id="node-input-enddate" />
+</div>
+
+<div class="form-row form-tips date_row">
+    <ul>
+        <li>dates must be in ISO format</li>
+        <li>example: "2018-01-27T13:00:00+00:00"</li>
+    </ul>
+</div>
+
+<div class="form-row form-tips relative_row">
+    <p>
+        <code>timestring</code> will parse the following keywords into time
+        values:
+    </p>
+    <ol>
+        <li>
+            <code>ms, milli, millisecond, milliseconds</code> - will parse to
+            milliseconds
+        </li>
+        <li>
+            <code>s, sec, secs, second, seconds</code> - will parse to seconds
+        </li>
+        <li>
+            <code>m, min, mins, minute, minutes</code> - will parse to minutes
+        </li>
+        <li><code>h, hr, hrs, hour, hours</code> - will parse to hours</li>
+        <li><code>d, day, days</code> - will parse to days</li>
+        <li><code>w, week, weeks</code> - will parse to weeks</li>
+        <li>
+            <code>mon, mth, mths, month, months</code> - will parse to months
+        </li>
+        <li><code>y, yr, yrs, year, years</code> - will parse to years</li>
+    </ol>
+</div>
+
+<div class="form-row">
+    <input
+        type="checkbox"
+        id="node-input-flatten"
+        style="display: inline-block; width: auto; vertical-align: top;margin-left: 105px;"
+    />&nbsp;
+    <label for="node-input-flatten" style="width: auto;">Flatten Results</label>
+</div>
+
+<div class="form-row">
+    <label for="node-input-output_type">Output Type</label>
+    <select id="node-input-output_type">
+        <option value="array">Array</option>
+        <option value="split">Split</option>
+    </select>
+</div>
+
+<div class="form-row output-option" id="output_location">
+    <label for="node-input-output_location">Output Location</label>
+    <input type="hidden" id="node-input-output_location_type" />
+    <input type="text" id="node-input-output_location" />
+</div>

@@ -6,12 +6,12 @@ module.exports = function(RED) {
     const HomeAssistant = require('../../lib/home-assistant');
 
     // Handle static files
-    RED.httpAdmin.get('/homeassistant/static/*', function(req, res, next) {
-        res.sendFile(req.params[0], {
-            root: require('path').join(__dirname, '..', '/_static'),
-            dotfiles: 'deny'
-        });
-    });
+    // RED.httpAdmin.get('/homeassistant/static/*', function(req, res, next) {
+    //     res.sendFile(req.params[0], {
+    //         root: require('path').join(__dirname, '../..', '/libs'),
+    //         dotfiles: 'deny'
+    //     });
+    // });
 
     const httpHandlers = {
         disableCache: function(req, res, next) {

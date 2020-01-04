@@ -1,0 +1,99 @@
+<div class="form-row">
+    <label for="node-config-input-name" style="width: 120px"
+        ><i class="fa fa-tag"></i> Name</label
+    >
+    <input type="text" id="node-config-input-name" />
+</div>
+
+<div class="form-row">
+    <input
+        type="checkbox"
+        id="node-config-input-hassio"
+        style="width: auto;margin-left: 125px;vertical-align: top"
+    />
+    <label for="node-config-input-hassio" style="width: auto;">
+        I use the Hass.io Add-on</label
+    >
+</div>
+
+<div class="form-row hassio">
+    <input
+        type="checkbox"
+        id="node-config-input-connectionDelay"
+        style="width: auto;margin-left: 125px;vertical-align: top"
+    />
+    <label for="node-config-input-connectionDelay" style="width: auto;">
+        Delay connection attempts</label
+    >
+</div>
+
+<div id="server-info">
+    <div class="form-row">
+        <label for="node-config-input-host" style="width: 120px"
+            ><i class="fa fa-link"></i> Base URL</label
+        >
+        <input
+            type="text"
+            id="node-config-input-host"
+            placeholder="http://localhost:8123"
+        />
+    </div>
+
+    <div class="form-row">
+        <label
+            id="access-token-label"
+            for="node-config-input-access_token"
+            style="width: 120px"
+            ><i class="fa fa-user-secret"></i> Access Token</label
+        >
+        <input
+            type="text"
+            id="node-config-input-access_token"
+            placeholder="access token"
+        />
+    </div>
+
+    <div class="form-row">
+        <input
+            type="checkbox"
+            id="node-config-input-legacy"
+            style="width: auto;margin-left: 125px;vertical-align: top"
+        />
+        <label for="node-config-input-legacy" style="width: auto;">
+            Use Legacy API Password</label
+        >
+    </div>
+
+    <div class="form-row">
+        <input
+            type="checkbox"
+            id="accept_unauthorized_certs"
+            style="width: auto;margin-left: 125px;vertical-align: top"
+        />
+        <label for="accept_unauthorized_certs" style="width: auto;">
+            Accept Unauthorized SSL Certificates</label
+        >
+    </div>
+</div>
+
+<div class="form-row">
+    <label for="node-config-input-ha_boolean" style="width: 120px"
+        ><i class="fa fa-link"></i> State Boolean</label
+    >
+    <input
+        type="text"
+        id="node-config-input-ha_boolean"
+        placeholder="y|yes|true|on|home|open"
+    />
+</div>
+
+<div class="form-row">
+    <input
+        type="checkbox"
+        id="node-config-input-cacheJson"
+        style="width: auto;margin-left: 125px;vertical-align: top"
+    />
+    <label for="node-config-input-cacheJson" style="width: auto;">
+        Cache Autocomplete Results</label
+    >
+</div>

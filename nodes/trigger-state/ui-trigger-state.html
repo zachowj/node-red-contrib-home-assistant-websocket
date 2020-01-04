@@ -1,0 +1,205 @@
+<!-- Name -->
+<div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+</div>
+
+<!-- Server -->
+<div class="form-row">
+    <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
+    <input type="text" id="node-input-server" />
+</div>
+
+<!-- Entity ID Filter and Filter Type -->
+<div class="form-row">
+    <label for="node-input-entityid"><i class="fa fa-tag"></i> Entity ID</label>
+    <input type="text" id="node-input-entityid" style="width: 50%;" />
+    <select type="text" id="node-input-entityidfiltertype" style="width: 20%;">
+        <option value="exact">Exact</option>
+        <option value="substring">Substring</option>
+        <option value="regex">Regex</option>
+    </select>
+</div>
+
+<div class="form-row">
+    <label for="node-input-state_type"
+        ><i class="fa fa-tint"></i> State Type</label
+    >
+    <select type="text" id="node-input-state_type" style="width: auto;">
+        <option value="str">String</option>
+        <option value="num">Number</option>
+        <option value="habool">Boolean</option>
+    </select>
+</div>
+
+<!-- -------------------------------------------------------------- -->
+<!-- Add Custom Constraints                                         -->
+<!-- -------------------------------------------------------------- -->
+<div class="form-row" id="add-constraint-container">
+    <h3>Add Constraints</h3>
+    <div>
+        <!-- Target Selection -->
+        <div class="form-row">
+            <!-- Type -->
+            <select
+                type="text"
+                id="constraint-target-type"
+                style="width: 140px;"
+            >
+                <option value="this_entity">This Entity</option>
+                <option value="entity_id">Entity ID</option>
+            </select>
+
+            <!-- Value -->
+            <input
+                type="text"
+                id="constraint-target-value"
+                style="width: 62%"
+                disabled
+            />
+        </div>
+
+        <!-- Property Selection -->
+        <div class="form-row">
+            <!-- Type -->
+            <select
+                type="text"
+                id="constraint-property-type"
+                style="width: 140px;"
+            >
+                <option value="current_state">Current State</option>
+                <option value="previous_state">Previous State</option>
+                <option value="property">Property</option>
+            </select>
+
+            <!-- Value -->
+            <input
+                type="text"
+                id="constraint-property-value"
+                style="width: 62%"
+                disabled
+            />
+        </div>
+
+        <!-- Comparator Selection -->
+        <div class="form-row">
+            <!-- Type -->
+            <select
+                type="text"
+                id="constraint-comparator-type"
+                style="width: 140px;"
+            >
+                <option value="is">Is</option>
+                <option value="is_not">Is Not</option>
+
+                <option value=">">&gt;</option>
+                <option value=">=">&gt;=</option>
+                <option value="<">&lt;</option>
+                <option value="<=">&lt;=</option>
+
+                <option value="includes">Includes</option>
+                <option value="does_not_include">Does Not Include</option>
+            </select>
+
+            <!-- Value -->
+            <input type="text" id="constraint-comparator-value" />
+        </div>
+
+        <!-- Add Constraint Button -->
+        <button id="constraint-add-btn" style="width: 100%">
+            Add Constraint
+        </button>
+    </div>
+</div>
+
+<!-- Constraints List -->
+<div class="form-row">
+    <ol id="constraint-list"></ol>
+</div>
+
+<!-- -------------------------------------------------------------- -->
+<!-- Add Custom Outputs                                             -->
+<!-- -------------------------------------------------------------- -->
+<div class="form-row" id="add-output-container">
+    <h3>Add Outputs</h3>
+    <div>
+        <div class="form-row">
+            <!-- Type -->
+            <select type="text" id="output-message-type" style="width: 140px;">
+                <option value="default">Default Msg</option>
+                <option value="custom">Custom Msg</option>
+                <option value="payload">Custom Payload</option>
+            </select>
+
+            <input type="text" id="output-message-value" style="width: 62%" />
+            <input type="hidden" id="output-message-value-type" />
+        </div>
+
+        <!-- Output Comparator Selection -->
+        <div class="form-row">
+            <select
+                type="text"
+                id="output-comparator-property-type"
+                style="width: 140px"
+            >
+                <option value="always">Send Always</option>
+                <option value="current_state">If State</option>
+                <option value="previous_state">If Prev State</option>
+                <option value="property">If Property</option>
+            </select>
+
+            <input
+                type="text"
+                id="output-comparator-property-value"
+                style="width: 62%"
+                disabled
+            />
+        </div>
+
+        <div class="form-row">
+            <!-- Type -->
+            <select
+                type="text"
+                id="output-comparator-type"
+                style="width: 140px;"
+                disabled
+            >
+                <option value="is">Is</option>
+                <option value="is_not">Is Not</option>
+
+                <option value=">">&gt;</option>
+                <option value=">=">&gt;=</option>
+                <option value="<">&lt;</option>
+                <option value="<=">&lt;=</option>
+
+                <option value="includes">Includes</option>
+                <option value="does_not_include">Does Not Include</option>
+            </select>
+
+            <input
+                type="text"
+                id="output-comparator-value"
+                style="width: 62%"
+                disabled
+            />
+        </div>
+
+        <!-- Add Output Button -->
+        <button id="output-add-btn" style="width: 100%">Add Output</button>
+    </div>
+</div>
+
+<!-- Output List -->
+<div class="form-row">
+    <ol id="output-list"></ol>
+</div>
+
+<div class="form-row checkbox-option-left">
+    <input type="checkbox" id="node-input-outputinitially" />
+    <label for="node-input-outputinitially">Output on Connect</label>
+</div>
+
+<div class="form-row checkbox-option-left">
+    <input type="checkbox" id="node-input-debugenabled" />
+    <label for="node-input-debugenabled">Show Debug Information</label>
+</div>

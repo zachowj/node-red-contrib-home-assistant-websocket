@@ -1,0 +1,89 @@
+<div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+    <input type="hidden" id="node-input-outputs" />
+</div>
+
+<div class="form-row">
+    <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
+    <input type="text" id="node-input-server" />
+</div>
+
+<div class="form-row">
+    <label for="entityId"><i class="fa fa-cube"></i> Entity ID</label>
+    <input type="text" id="node-input-entityId" />
+</div>
+
+<div class="form-row">
+    <label for="node-input-property"
+        ><i class="fa fa-hand-paper-o"></i> Wait Until</label
+    >
+    <input type="text" id="node-input-property" placeholder="property" />
+</div>
+
+<div class="form-row">
+    <select
+        id="node-input-comparator"
+        style="margin-right: 5px;margin-left: 105px;width: auto;"
+    >
+        <option value="is">is</option>
+        <option value="is_not">is not</option>
+        <option value="lt">&lt;</option>
+        <option value="lte">&lt;=</option>
+        <option value="gt">&gt;</option>
+        <option value="gte">&gt;=</option>
+        <option value="includes">in</option>
+        <option value="does_not_include">not in</option>
+        <option value="jsonata">JSONata</option>
+    </select>
+    <input id="node-input-valueType" type="hidden" />
+    <input
+        id="node-input-value"
+        type="text"
+        placeholder="value"
+        style="width: 46%;"
+    />
+</div>
+
+<div class="form-row">
+    <label for="node-input-timeout"
+        ><i class="fa fa-clock-o"></i> Timeout</label
+    >
+    <input
+        type="text"
+        id="node-input-timeout"
+        style="text-align:end; width:50px !important"
+    />
+    <select id="node-input-timeoutUnits" style="width:auto !important">
+        <option value="milliseconds">milliseconds</option>
+        <option value="seconds">seconds</option>
+        <option value="minutes">minutes</option>
+        <option value="hours">hours</option>
+        <option value="days">days</option>
+    </select>
+</div>
+
+<div class="form-row">
+    <label for="node-input-entityLocation">Entity Location</label>
+    <input type="hidden" id="node-input-entityLocationType" />
+    <input type="text" id="node-input-entityLocation" />
+</div>
+
+<div class="form-row">
+    <input
+        type="checkbox"
+        id="node-input-checkCurrentState"
+        checked
+        style="margin-left:105px;display:inline-block; width:auto; vertical-align:baseline;"
+    />&nbsp;
+    <label
+        for="node-input-checkCurrentState"
+        style="width: auto;margin-right: 20px;"
+        >Check against current state</label
+    >
+</div>
+
+<div class="form-row checkbox-option">
+    <input type="checkbox" id="node-input-blockInputOverrides" />&nbsp;
+    <label for="node-input-blockInputOverrides">Block Input Overrides</label>
+</div>
