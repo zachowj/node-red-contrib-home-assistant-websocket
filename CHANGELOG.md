@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.19.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.19.0...v0.19.1) (2020-01-04)
+
+### Bug Fixes
+
+- include correct files when publishing to npm ([8f8eb6f](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/8f8eb6f2f082e562556c08bdbec18e4b6dcf38c7))
+
 # [0.19.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.18.0...v0.19.0) (2020-01-04)
 
 ### Bug Fixes
