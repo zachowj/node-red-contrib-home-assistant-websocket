@@ -97,6 +97,7 @@ module.exports = function(RED) {
                 startdate = new Date(
                     Date.now() - timestring(relativeTime, 'ms')
                 ).toISOString();
+                enddate = null;
             }
 
             const apiRequest =
@@ -111,8 +112,9 @@ module.exports = function(RED) {
 
             this.setStatusSending('Requesting');
 
+            let results;
             try {
-                var results = await apiRequest;
+                results = await apiRequest;
                 message.startdate = startdate;
                 message.enddate = enddate || null;
                 message.entityid = entityid || null;
