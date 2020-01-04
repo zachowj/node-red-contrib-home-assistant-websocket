@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [0.19.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.18.0...v0.19.0) (2020-01-04)
+
+### Bug Fixes
+
+- point changelog to new documentation ([0c1a93e](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/0c1a93e739df022c65a7ff6b444a6ada4fd30c7a))
+- run correct task for convert docs action ([b9b3ee4](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/b9b3ee494540474c2e13df116c9d182a82c6d9b6))
+
+### Features
+
+- **docs:** Markdown docs will be automattically convert to NR help files ([5abfb62](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/5abfb620a39703e00fb0efabec1f06f19c47b46f))
+
 # [0.18.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.17.1...v0.18.0) (2019-12-21)
 
 ### Bug Fixes
