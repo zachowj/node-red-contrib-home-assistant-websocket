@@ -1,6 +1,8 @@
 .vscode/
 .env
 node_modules
+nodes/**/*.html
+!nodes/**/ui-*.html
 _scratchpad
 settings.js
 _scratchpad_flows
