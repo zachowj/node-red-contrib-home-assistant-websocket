@@ -92,14 +92,14 @@ ability to track which entities where changed by Node-RED.
 
 ## Migrating
 
-Coming from a different version, e.g. [@Ayapejian](https://github.com/AYapejian/node-red-contrib-home-assistant) or [@Spartan-II-117](https://github.com/Spartan-II-117/node-red-contrib-home-assistant-llat)?
+Coming from a different version, e.g. [node-red-contrib-home-assistant](https://github.com/AYapejian/node-red-contrib-home-assistant) or [node-red-contrib-home-assistant-llat](https://github.com/Spartan-II-117/node-red-contrib-home-assistant-llat)?
 
 If you have been using
-[@Ayapejian](https://github.com/AYapejian/node-red-contrib-home-assistant)
-version there are some breaking changes with two of the nodes. The [poll state](./node/poll-state.md)
-and [current state](./node/current_state.md) both have a little different formatted outputs. Check your nodes
+[node-red-contrib-home-assistant](https://github.com/AYapejian/node-red-contrib-home-assistant)
+version there are some breaking changes with two of the nodes. The [poll state](/node/poll-state.md)
+and [current state](/node/current-state.md) both have a little different formatted outputs. Check your nodes
 and make sure they are outputting what you expect. A more in-depth example can
 be found
 [here](./migration.md).
 
-If you have been using the [@Spartan-II-117](https://github.com/Spartan-II-117/node-red-contrib-home-assistant-llat) fork this should be a drop-in replacement.
+If you have been using the [node-red-contrib-home-assistant-llat](https://github.com/Spartan-II-117/node-red-contrib-home-assistant-llat) fork this should be a drop-in replacement.

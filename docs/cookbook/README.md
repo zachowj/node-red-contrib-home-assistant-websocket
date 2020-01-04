@@ -4,7 +4,7 @@ Here is a collection of beginner to advanced flows and explanations to help you
 further educate yourself in the world of Home Automation with Node-RED.
 
 - [Get Entities Examples](./get-entities.md)
-- [JSONata Examples](./json-data.md)
+- [JSONata Examples](./jsonata.md)
 - [Motion Triggered Light](./motion-triggered-light.md)
 - [Saving and Restoring States](./saving-and-restoring-states.md)
 - [Turn Light On/Off with Sunset/Sunrise](./sun-events.md)

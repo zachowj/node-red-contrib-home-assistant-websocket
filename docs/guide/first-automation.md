@@ -62,6 +62,6 @@ Node-RED.
 **Also see:**
 
 - [Importing and Exporting Flows](https://nodered.org/docs/user-guide/editor/workspace/import-export)
-- [Call Service Node](./node/call-service.md)
-- [Events: state Node](./node/events-state.md)
+- [Call Service Node](/node/call-service.md)
+- [Events: state Node](/node/events-state.md)
 - [Conditionals](./conditionals.md)
