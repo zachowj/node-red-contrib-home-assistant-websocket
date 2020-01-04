@@ -1,5 +1,8 @@
 coverage/
 docs/
+lib/common
+!nodes/**/*.html
+nodes/**/ui-*
 script/
 test/
 .dockerignore
@@ -10,5 +13,6 @@ test/
 .prettierrc
 .vscode
 docker
+gulpfile.js
 package-lock.json
 TODO
