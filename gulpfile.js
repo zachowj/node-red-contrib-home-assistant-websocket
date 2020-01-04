@@ -1,22 +1,37 @@
 const fs = require('fs');
 const path = require('path');
+const del = require('del');
+
+// General
 const { src, dest, series } = require('gulp');
-const cheerio = require('gulp-cheerio');
 const concat = require('gulp-concat');
-const markdownIt = require('gulp-markdownit');
-const gulpHtmlmin = require('gulp-htmlmin');
 const gulpIf = require('gulp-if');
 const lazypipe = require('lazypipe');
 const merge = require('merge-stream');
 const rename = require('gulp-rename');
-const replace = require('gulp-string-replace');
-const terser = require('gulp-terser');
 const wrap = require('gulp-wrap');
 
-const md = require('markdown-it')();
+// HTML
+const gulpHtmlmin = require('gulp-htmlmin');
+
+// Scripts
+const terser = require('gulp-terser');
+
+// Styles
+var sass = require('gulp-sass');
+var postcss = require('gulp-postcss');
+var prefix = require('autoprefixer');
+var minify = require('cssnano');
+
+// Markdown-It
+const cheerio = require('gulp-cheerio');
+const markdownIt = require('gulp-markdownit');
 const markdownitContainer = require('markdown-it-container');
 const markdownitInlineComments = require('markdown-it-inline-comments');
+const md = require('markdown-it')();
+const replace = require('gulp-string-replace');
 
+// Constants
 const docsUrl =
     'https://zachowj.github.io/node-red-contrib-home-assistant-websocket';
 const editorFilePath = 'nodes';
@@ -54,13 +69,26 @@ function getFolders(dir) {
     });
 }
 
-const buildCss = lazypipe()
-    .pipe(gulpHtmlmin, {
-        collapseWhitespace: true,
-        minifyCSS: true
+// Compile sass and wrap it
+const buildSass = lazypipe()
+    .pipe(sass, {
+        outputStyle: 'expanded',
+        sourceComments: true
     })
+    .pipe(postcss, [
+        prefix({
+            cascade: true,
+            remove: true
+        }),
+        minify({
+            discardComments: {
+                removeAll: true
+            }
+        })
+    ])
     .pipe(wrap, uiCssWrap);
 
+// Shrink js and wrap it
 const buildJs = lazypipe()
     .pipe(terser)
     .pipe(wrap, uiJsWrap);
@@ -70,8 +98,14 @@ const buildForm = lazypipe().pipe(gulpHtmlmin, {
     minifyCSS: true
 });
 
+// Covert markdown ducmentation to html and modify it to look more like Node-RED
+// help files.
 const buildHelp = lazypipe()
-    .pipe(replace, /<Badge text="(.+)"\/>/g, '')
+    .pipe(replace, /<Badge text="(.+)"\/>/g, '', {
+        logs: {
+            enabled: false
+        }
+    })
     .pipe(markdownIt, {
         plugins: [
             [
@@ -114,7 +148,7 @@ const buildHelp = lazypipe()
             markdownitInlineComments
         ]
     })
-    .pipe(cheerio, ($, file) => {
+    .pipe(cheerio, $ => {
         $.prototype.wrapAll = function(wrapper) {
             const $container = $(wrapper).clone();
             $(this)
@@ -203,12 +237,12 @@ const buildEditorFiles = done => {
 
     const tasks = folders.map(folder => {
         return src([
-            'lib/_static/*',
+            'lib/common/*',
             `nodes/${folder}/ui-*.js`,
             `nodes/${folder}/ui-*.html`,
             `docs/node/${nodeMap[folder].doc}.md`
         ])
-            .pipe(gulpIf(file => file.extname === '.css', buildCss()))
+            .pipe(gulpIf(file => file.extname === '.sass', buildSass()))
             .pipe(gulpIf(file => file.extname === '.js', buildJs()))
             .pipe(gulpIf(file => file.extname === '.html', buildForm()))
             .pipe(gulpIf(file => file.extname === '.md', buildHelp()))
@@ -239,4 +273,11 @@ const buildEditorFiles = done => {
     return merge(tasks);
 };
 
-exports.build = series(buildEditorFiles);
+// Clean generated files
+const cleanFiles = done => {
+    del.sync(['nodes/*/*.html', '!nodes/*/ui-*.html'], { onlyFiles: true });
+
+    return done();
+};
+
+exports.build = series(cleanFiles, buildEditorFiles);
