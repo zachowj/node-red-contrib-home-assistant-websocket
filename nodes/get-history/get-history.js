@@ -136,7 +136,7 @@ module.exports = function(RED) {
                         this.setStatusFailed('No Results');
                         return;
                     }
-                    if (entityidtype.value === 'is') {
+                    if (entityidtype.value === 'is' && !flatten) {
                         results = results[0];
                     }
 
