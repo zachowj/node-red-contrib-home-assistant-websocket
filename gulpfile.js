@@ -3,13 +3,15 @@ const path = require('path');
 const del = require('del');
 
 // General
-const { src, dest, series } = require('gulp');
+const { src, dest, series, task, watch } = require('gulp');
 const concat = require('gulp-concat');
 const gulpIf = require('gulp-if');
 const lazypipe = require('lazypipe');
 const merge = require('merge-stream');
-const rename = require('gulp-rename');
 const wrap = require('gulp-wrap');
+
+const nodemon = require('nodemon');
+const browserSync = require('browser-sync');
 
 // HTML
 const gulpHtmlmin = require('gulp-htmlmin');
@@ -63,6 +65,10 @@ const nodeMap = {
     webhook: { doc: 'webhook', type: 'ha-webhook' }
 };
 
+let nodemonInstance;
+let browserSyncInstance;
+let currentFolder;
+
 function getFolders(dir) {
     return fs.readdirSync(dir).filter(function(file) {
         return fs.statSync(path.join(dir, file)).isDirectory();
@@ -93,14 +99,23 @@ const buildJs = lazypipe()
     .pipe(terser)
     .pipe(wrap, uiJsWrap);
 
-const buildForm = lazypipe().pipe(gulpHtmlmin, {
-    collapseWhitespace: true,
-    minifyCSS: true
-});
+const buildForm = lazypipe()
+    .pipe(gulpHtmlmin, {
+        collapseWhitespace: true,
+        minifyCSS: true
+    })
+    .pipe(() =>
+        wrap(
+            uiFormWrap,
+            { type: nodeMap[currentFolder].type },
+            { variable: 'data' }
+        )
+    );
 
-// Covert markdown ducmentation to html and modify it to look more like Node-RED
+// Covert markdown documentation to html and modify it to look more like Node-RED
 // help files.
 const buildHelp = lazypipe()
+    // TODO: handle this better
     .pipe(replace, /<Badge text="(.+)"\/>/g, '', {
         logs: {
             enabled: false
@@ -227,57 +242,103 @@ const buildHelp = lazypipe()
         collapseWhitespace: true,
         minifyCSS: true
     })
-    .pipe(rename, path => {
-        path.extname = '.md';
-    });
+    .pipe(() =>
+        wrap(
+            uiHelpWrap,
+            { type: nodeMap[currentFolder].type },
+            { variable: 'data' }
+        )
+    );
 
-const buildEditorFiles = done => {
+task('buildEditorFiles', done => {
     const folders = getFolders(editorFilePath);
     if (folders.length === 0) return done();
 
     const tasks = folders.map(folder => {
+        currentFolder = folder;
         return src([
             'lib/common/*',
             `nodes/${folder}/ui-*.js`,
             `nodes/${folder}/ui-*.html`,
             `docs/node/${nodeMap[folder].doc}.md`
         ])
-            .pipe(gulpIf(file => file.extname === '.sass', buildSass()))
+            .pipe(gulpIf(file => file.extname === '.scss', buildSass()))
             .pipe(gulpIf(file => file.extname === '.js', buildJs()))
             .pipe(gulpIf(file => file.extname === '.html', buildForm()))
             .pipe(gulpIf(file => file.extname === '.md', buildHelp()))
-            .pipe(
-                gulpIf(
-                    file => file.extname === '.html',
-                    wrap(
-                        uiFormWrap,
-                        { type: nodeMap[folder].type },
-                        { variable: 'data' }
-                    )
-                )
-            )
-            .pipe(
-                gulpIf(
-                    file => file.extname === '.md',
-                    wrap(
-                        uiHelpWrap,
-                        { type: nodeMap[folder].type },
-                        { variable: 'data' }
-                    )
-                )
-            )
             .pipe(concat(folder + '.html'))
             .pipe(dest(editorFilePath + '/' + folder));
     });
 
     return merge(tasks);
-};
+});
 
 // Clean generated files
-const cleanFiles = done => {
+task('cleanFiles', done => {
     del.sync(['nodes/*/*.html', '!nodes/*/ui-*.html'], { onlyFiles: true });
 
     return done();
-};
+});
 
-exports.build = series(cleanFiles, buildEditorFiles);
+// nodemon and browser-sync code modified from
+// https://github.com/connio/node-red-contrib-connio/blob/master/gulpfile.js
+function runNodemonAndBrowserSync(done) {
+    nodemonInstance = nodemon(`
+    nodemon
+    --ignore **/*
+    --exec node-red -u ~/.node-red
+  `);
+
+    nodemon
+        .once('start', () => {
+            browserSyncInstance = browserSync.create();
+            browserSyncInstance.init({
+                ui: false,
+                proxy: {
+                    target: 'http://localhost:1880',
+                    ws: true
+                },
+                ghostMode: false,
+                open: false,
+                reloadDelay: 3000
+            });
+        })
+        .on('quit', () => process.exit(0));
+
+    done();
+}
+
+function restartNodemon(done) {
+    nodemonInstance.restart();
+
+    done();
+}
+function restartNodemonAndBrowserSync(done) {
+    nodemonInstance.restart();
+    browserSyncInstance.reload();
+
+    done();
+}
+
+module.exports = {
+    build: series('cleanFiles', 'buildEditorFiles'),
+
+    start: series(
+        'cleanFiles',
+        'buildEditorFiles',
+        runNodemonAndBrowserSync,
+        function watcher(done) {
+            watch(
+                ['lib/common/*', 'nodes/*/ui-*', 'docs/node/*.md'],
+                series(
+                    'cleanFiles',
+                    'buildEditorFiles',
+                    restartNodemonAndBrowserSync
+                )
+            );
+            // only server side files modified restart node-red only
+            watch(['nodes/*/*.js', '!nodes/*/ui-*.js'], restartNodemon);
+            done();
+        }
+    )
+};
