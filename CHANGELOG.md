@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.19.2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.19.1...v0.19.2) (2020-01-06)
+
+### Bug Fixes
+
+- **get-history:** Don't send an enddate when using relative time ([d536c3c](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d536c3ced8392c9a821e7809e7762cc1413bd041)), closes [#183](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/183)
+- **get-history:** Fix for using flatten results with output type split ([38b9c9c](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/38b9c9c3267c403532082bbc0b0cf8549576399d))
+
 ## [0.19.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.19.0...v0.19.1) (2020-01-04)
 
 ### Bug Fixes
