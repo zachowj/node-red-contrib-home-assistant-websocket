@@ -33,6 +33,7 @@ module.exports = {
                         'jsonata',
                         'motion-triggered-light',
                         'saving-and-restoring-states',
+                        'get-state_changed-events-based-on-area',
                         'sun-events',
                         'vacation-mode'
                     ]
