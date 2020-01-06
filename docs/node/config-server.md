@@ -1,4 +1,4 @@
-# Server Config
+# Config Server
 
 Home Assistant connection configuration
 
