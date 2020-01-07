@@ -36,5 +36,5 @@ jobs:
       - name: Make dev npm release
         uses: epeli/npm-release@v1
         with:
-          type: stable
+          type: prerelease
           token: ${{ secrets.npm_token }}
