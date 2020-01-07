@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [master, dev]
+    branches: dev
 
 jobs:
   build:
@@ -27,3 +27,14 @@ jobs:
         run: npm test
         env:
           CI: true
+  prerelease:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Make dev npm release
+        uses: epeli/npm-release@v1
+        with:
+          type: stable
+          token: ${{ secrets.npm_token }}
