@@ -28,30 +28,20 @@ jobs:
         env:
           CI: true
 
-  prerelease-npm:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
+  publish-npm:
+    if: github.event_name == 'push'
     needs: build
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set Default Release Type
+        run: echo "::set-env name=RELEASE_TYPE::prerelease"
+      - name: Set Tagged Release Type
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: echo "::set-env name=RELEASE_TYPE::release"
       - uses: actions/checkout@v1
       - name: Make dev npm release
         uses: epeli/npm-release@v1
         with:
-          type: prerelease
+          type: ${{ env.RELEASE_TYPE }}
           token: ${{ secrets.npm_token }}
-
-  publish-npm:
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 12
-          registry-url: https://registry.npmjs.org/
-      - run: npm ci
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
