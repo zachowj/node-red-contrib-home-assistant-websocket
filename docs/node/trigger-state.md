@@ -11,7 +11,13 @@ An advanced version of `server:state-changed` node
 
 ### Constraints
 
-This node has two default outputs "allowed" and "blocked". If all the constraints are true the default message will be sent to the "allowed" output otherwise it will be sent to the "blocked" output.
+This node has two default outputs "allowed" and "blocked". If all the
+constraints are true the default message will be sent to the "allowed" output
+otherwise it will be sent to the "blocked" output.
+
+**See Also:**
+
+- [Conditionals](/guide/conditionals.md)
 
 ### Custom Outputs
 

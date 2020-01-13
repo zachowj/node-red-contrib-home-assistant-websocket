@@ -10,9 +10,15 @@ Various nodes to assist in setting up automation using [Node-RED](https://nodere
 
 Documentation can be found [here](https://zachowj.github.io/node-red-contrib-home-assistant-websocket/).
 
-This assumes you have [Node-RED](https://nodered.org) installed and working, if you need to install Node-RED see [here](https://nodered.org/docs/getting-started/installation).
+### Prerequisites
 
-**NOTE:** This requires at least [Node.js](https://nodejs.org) v8.12.x and [Node-RED](https://nodered.org/) v0.19.x.
+Have Node-RED installed and working, if you need to
+install Node-RED see [here](https://nodered.org/docs/getting-started/installation).
+
+- [Node.js](https://nodejs.org) v10.0 or newer
+- [Node-RED](https://nodered.org/) v1.0 or newer
+
+### Installation
 
 Install via Node-RED Manage Palette
 

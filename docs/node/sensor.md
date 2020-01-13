@@ -49,6 +49,12 @@ Determine how input values will be handled. When merge is selected the message o
 
 When creating the entity in Home Assistant this will also send the last updated state and attributes then node sent to Home Assistant
 
+::: danger WARNING
+Sensor nodes will not work in a subflow due to the way they register themselves
+with Home Assistant. After a Node-RED restart a new sensor will be created in
+Home Assistant.
+:::
+
 ## Inputs
 
 properties of `msg.payload`

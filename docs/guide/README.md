@@ -35,7 +35,8 @@ $ npm install node-red-contrib-home-assistant-websocket
 
 The Community Hass.io add-on ships with this node right out of the box. Under
 the server node config check the checkbox for `I use the Hass.io Add-on`. No
-other information is needed an you're ready to start your [first automation](./first-automation.md).
+other information is needed and you're ready to start your [first
+automation](./first-automation.md).
 
 The add-on can be found here: <https://github.com/hassio-addons/addon-node-red#readme>
 
@@ -75,6 +76,11 @@ server config and restarting Node-RED.
 
 ### Generate Access Token
 
+::: danger WARNING
+The user used to create the access token must be in the administrator group for
+this package to function correctly.
+:::
+
 Goto your Home Assistant home page and in the bottom left corner click on the blue circle with the letter in it. In the screenshot below it's the "J".
 
 ![screenshot](./images/generate-token_01.png)
@@ -87,7 +93,7 @@ Goto your Home Assistant home page and in the bottom left corner click on the bl
 
 ::: tip
 Creating a separate Home Assistant user for Node-RED and using their access token will give you the
-ability to track which entities where changed by Node-RED.
+ability to track which entities were changed by Node-RED.
 :::
 
 ## Migrating
