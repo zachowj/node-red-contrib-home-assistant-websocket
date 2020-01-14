@@ -144,3 +144,30 @@ li span.property-type {
         }
     }
 }
+
+.badge {
+    display: inline-block;
+    font-size: 12px;
+    height: 16px;
+    line-height: 16px;
+    border-radius: 3px;
+    padding: 0 6px;
+    color: #fff;
+    background-color: #42b983;
+
+    &.tip,
+    &.green {
+        background-color: #42b983;
+    }
+    &.error {
+        background-color: #da5961;
+    }
+    &.warning,
+    &.warn,
+    &.yellow {
+        background-color: #e7c000;
+    }
+    & + & {
+        margin-left: 5px;
+    }
+}

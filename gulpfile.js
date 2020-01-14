@@ -31,7 +31,6 @@ const markdownIt = require('gulp-markdownit');
 const markdownitContainer = require('markdown-it-container');
 const markdownitInlineComments = require('markdown-it-inline-comments');
 const md = require('markdown-it')();
-const replace = require('gulp-string-replace');
 
 // Constants
 const docsUrl =
@@ -115,13 +114,8 @@ const buildForm = lazypipe()
 // Covert markdown documentation to html and modify it to look more like Node-RED
 // help files.
 const buildHelp = lazypipe()
-    // TODO: handle this better
-    .pipe(replace, /<Badge text="(.+)"\/>/g, '', {
-        logs: {
-            enabled: false
-        }
-    })
     .pipe(markdownIt, {
+        options: { html: true },
         plugins: [
             [
                 markdownitContainer,
@@ -182,6 +176,19 @@ const buildHelp = lazypipe()
         };
 
         // Make things look more like Node-RED docs.
+
+        // Handle <badge />
+        $('badge').each((i, item) => {
+            item.tagName = 'span';
+            const $item = $(item)
+                .addClass('badge')
+                .text(item.attribs.text || item.attribs.type);
+            if (item.attribs.type) {
+                $item.addClass(item.attribs.type);
+            }
+
+            return item;
+        });
 
         // Remove H1 title
         $('h1').remove();
