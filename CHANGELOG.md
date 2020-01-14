@@ -1,6 +1,17 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [0.19.4](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.19.3...v0.19.4) (2020-01-14)
+
+### Features
+
+- Add search button to find home assisant instances for server config ([8f25ef6](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/8f25ef61c14972cdea61f93ad5f631cf47a64ae1))
+- **wait-until:** Add ability to use mustache templates for entity id field ([6d9e183](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/6d9e183657a0cf3856a608fab9c6db2e2e3f7404)), closes [#189](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/189)
+
+### Bug Fixes
+
+- Fix 'in' conditional ([78a3d22](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/78a3d22f54e80c237e651b1da00f7f7583aeced7))
 
 ## [0.19.3](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.19.2...v0.19.3) (2020-01-06)
 
