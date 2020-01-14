@@ -70,6 +70,39 @@ RED.nodes.registerType('server', {
         $legacy.on('click', function() {
             updateLegacy();
         });
+
+        try {
+            $host.autocomplete('destroy');
+        } catch (err) {}
+        const $discovery = $('#discoverInstances');
+        $discovery.on('click', function() {
+            if ($(this).hasClass('disabled')) return;
+            const $icon = $('i', this)
+                .removeClass('fa-search')
+                .addClass('spinner');
+            $discovery.addClass('disabled');
+            $host
+                .autocomplete({
+                    source: (request, response) => {
+                        $.ajax({
+                            dataType: 'json',
+                            url: '/homeassistant/discover',
+                            cache: false
+                        }).done(data => {
+                            response(data);
+                        });
+                    },
+                    minLength: 0,
+                    response: () => {
+                        $icon.addClass('fa-search').removeClass('spinner');
+                        $discovery.removeClass('disabled');
+                    },
+                    close: (event, ui) => {
+                        $host.autocomplete('destroy');
+                    }
+                })
+                .autocomplete('search', '');
+        });
     },
     oneditsave: function() {
         const hassio = $('#node-config-input-hassio').is(':checked');

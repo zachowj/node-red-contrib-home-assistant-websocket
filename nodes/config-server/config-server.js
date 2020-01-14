@@ -1,18 +1,10 @@
 const BaseNode = require('../../lib/base-node');
+const HomeAssistant = require('../../lib/home-assistant');
+const bonjour = require('bonjour')();
 const flatten = require('flat');
 const uniq = require('lodash.uniq');
 
 module.exports = function(RED) {
-    const HomeAssistant = require('../../lib/home-assistant');
-
-    // Handle static files
-    // RED.httpAdmin.get('/homeassistant/static/*', function(req, res, next) {
-    //     res.sendFile(req.params[0], {
-    //         root: require('path').join(__dirname, '../..', '/libs'),
-    //         dotfiles: 'deny'
-    //     });
-    // });
-
     const httpHandlers = {
         disableCache: function(req, res, next) {
             if (this.nodeConfig.cacheJson === false) {
@@ -109,6 +101,23 @@ module.exports = function(RED) {
             res.json(data);
         }
     };
+
+    RED.httpAdmin.get('/homeassistant/discover', async function(req, res) {
+        const instances = [];
+        bonjour.find({ type: 'home-assistant' }, service => {
+            instances.push({
+                label: service.name
+                    ? `${service.name} (${service.txt.base_url})`
+                    : service.txt.base_url,
+                value: service.txt.base_url
+            });
+        });
+
+        // Add a bit of delay for all services to be discovered
+        setTimeout(() => {
+            res.json(instances);
+        }, 3000);
+    });
 
     const nodeOptions = {
         debug: true,

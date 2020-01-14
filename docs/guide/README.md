@@ -47,7 +47,11 @@ pencil icon next to the Server field.
 
 ![screenshot](./images/getting-started_01.png)
 
-Fill in the Base Url and Access Token on the server config node then Add/Update the
+Search for a local Home Assistant instance or manually fill in the Base Url.
+
+![screenshot](./images/getting-started_03.png)
+
+Enter an Access Token on the server config node then Add/Update the
 Server Config and Events: all nodes and deploy. After deploying a green box with
 a status message, i.e. connected, stated_changed, should appear below
 the Events: all node. If you see an open box with the status of connecting or
