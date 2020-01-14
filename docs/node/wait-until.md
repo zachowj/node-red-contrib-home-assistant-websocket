@@ -7,6 +7,7 @@ When an input is received the node will wait until the condition is met or the t
 ### Entity ID <Badge text="required"/>
 
 - Type: `string`
+- Accepts [Mustache Templates](/guide/mustache-templates.md)
 
 The id of an entity to use for the comparison.
 
@@ -46,16 +47,17 @@ If the received message has this property set to any value the node will be set 
 
 Override config values by passing in a property with a valid value.
 
-- entityId
-- property
-- comparator
-- value
-- valueType
-- timeout
-- timeoutUnits
-- entityLocation
-- entityLocationType
-- checkCurrentState
+- `entity_id`
+- `entityId` <Badge type="warning" text="deprecated" />
+- `property`
+- `comparator`
+- `value`
+- `valueType`
+- `timeout`
+- `timeoutUnits`
+- `entityLocation`
+- `entityLocationType`
+- `checkCurrentState`
 
 ## Output
 

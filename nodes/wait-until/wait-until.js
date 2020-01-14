@@ -1,7 +1,8 @@
-module.exports = function(RED) {
-    const Joi = require('@hapi/joi');
-    const EventsNode = require('../../lib/events-node');
+const EventsNode = require('../../lib/events-node');
+const Joi = require('@hapi/joi');
+const RenderTemplate = require('../../lib/mustache-context');
 
+module.exports = function(RED) {
     const nodeOptions = {
         config: {
             name: {},
@@ -26,7 +27,7 @@ module.exports = function(RED) {
         },
         input: {
             entityId: {
-                messageProp: 'payload.entityId',
+                messageProp: ['payload.entity_id', 'payload.entityId'],
                 configProp: 'entityId',
                 validation: {
                     haltOnFail: true,
@@ -201,8 +202,18 @@ module.exports = function(RED) {
                 return null;
             }
 
+            const entityId =
+                parsedMessage.entityId.source === 'message'
+                    ? parsedMessage.entityId.value
+                    : RenderTemplate(
+                          parsedMessage.entityId.value,
+                          message,
+                          node.node.context(),
+                          node.utils.toCamelCase(node.nodeConfig.server.name)
+                      );
+
             node.savedConfig = {
-                entityId: parsedMessage.entityId.value,
+                entityId: entityId,
                 property: parsedMessage.property.value,
                 comparator: parsedMessage.comparator.value,
                 value: parsedMessage.value.value,
