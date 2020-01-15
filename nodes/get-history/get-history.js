@@ -1,6 +1,7 @@
-const Joi = require('@hapi/joi');
-const timestring = require('timestring');
 const BaseNode = require('../../lib/base-node');
+const Joi = require('@hapi/joi');
+const RenderTemplate = require('../../lib/mustache-context');
+const timestring = require('timestring');
 
 module.exports = function(RED) {
     const nodeOptions = {
@@ -20,8 +21,8 @@ module.exports = function(RED) {
             output_location: {}
         },
         input: {
-            startdate: {
-                messageProp: 'startdate',
+            startDate: {
+                messageProp: ['payload.startdate', 'startdate'],
                 configProp: 'startdate',
                 default: () => {
                     const yesterday = new Date();
@@ -35,8 +36,8 @@ module.exports = function(RED) {
                         .label('startdate')
                 }
             },
-            enddate: {
-                messageProp: 'enddate',
+            endDate: {
+                messageProp: ['payload.enddate', 'enddate'],
                 configProp: 'enddate',
                 validation: {
                     schema: Joi.date()
@@ -45,20 +46,20 @@ module.exports = function(RED) {
                         .label('enddate')
                 }
             },
-            entityid: {
-                messageProp: 'entityid',
+            entityId: {
+                messageProp: ['payload.entity_id', 'entityid'],
                 configProp: 'entityid'
             },
-            entityidtype: {
-                messageProp: 'entityidtype',
+            entityIdType: {
+                messageProp: ['payload.entityidtype', 'entityidtype'],
                 configProp: 'entityidtype'
             },
             relativeTime: {
-                messageProp: 'relativetime',
+                messageProp: ['payload.relativetime', 'relativetime'],
                 configProp: 'relativeTime'
             },
             flatten: {
-                messageProp: 'flatten',
+                messageProp: ['payload.flatten', 'flatten'],
                 configProp: 'flatten'
             }
         }
@@ -71,16 +72,24 @@ module.exports = function(RED) {
 
         async onInput({ parsedMessage, message }) {
             let {
-                startdate,
-                enddate,
-                entityid,
-                entityidtype,
+                startDate,
+                endDate,
+                entityId,
+                entityIdType,
                 relativeTime,
                 flatten
             } = parsedMessage;
-            startdate = startdate.value;
-            enddate = enddate.value;
-            entityid = entityid.value;
+            startDate = startDate.value;
+            endDate = endDate.value;
+            entityId =
+                parsedMessage.entityId.source === 'message'
+                    ? entityId.value
+                    : RenderTemplate(
+                          entityId.value,
+                          message,
+                          this.node.context(),
+                          this.utils.toCamelCase(this.nodeConfig.server.name)
+                      );
             relativeTime = relativeTime.value;
             flatten = flatten.value;
             const useRelativeTime = this.nodeConfig.useRelativeTime;
@@ -94,19 +103,19 @@ module.exports = function(RED) {
                 useRelativeTime ||
                 parsedMessage.relativeTime.source === 'message'
             ) {
-                startdate = new Date(
+                startDate = new Date(
                     Date.now() - timestring(relativeTime, 'ms')
                 ).toISOString();
-                enddate = null;
+                endDate = new Date().toISOString();
             }
 
             const apiRequest =
-                entityidtype.value === 'includes' && entityid
-                    ? this.httpClient.getHistory(startdate, null, enddate, {
+                entityIdType.value === 'includes' && entityId
+                    ? this.httpClient.getHistory(startDate, null, endDate, {
                           flatten: flatten,
-                          include: new RegExp(entityid)
+                          include: new RegExp(entityId)
                       })
-                    : this.httpClient.getHistory(startdate, entityid, enddate, {
+                    : this.httpClient.getHistory(startDate, entityId, endDate, {
                           flatten: flatten
                       });
 
@@ -115,9 +124,9 @@ module.exports = function(RED) {
             let results;
             try {
                 results = await apiRequest;
-                message.startdate = startdate;
-                message.enddate = enddate || null;
-                message.entityid = entityid || null;
+                message.startdate = startDate;
+                message.enddate = endDate || null;
+                message.entity_id = entityId || null;
             } catch (err) {
                 this.error(`Error get-history: ${err.message}`, message);
                 this.setStatusFailed('Error');
@@ -136,7 +145,7 @@ module.exports = function(RED) {
                         this.setStatusFailed('No Results');
                         return;
                     }
-                    if (entityidtype.value === 'is' && !flatten) {
+                    if (entityIdType.value === 'is' && !flatten) {
                         results = results[0];
                     }
 
