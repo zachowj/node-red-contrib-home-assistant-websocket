@@ -188,54 +188,60 @@ module.exports = function(RED) {
             this.exposedNodes = [];
 
             if (this.credentials.host && !this.homeAssistant) {
-                this.homeAssistant = new HomeAssistant({
-                    baseUrl: this.credentials.host,
-                    apiPass: this.credentials.access_token,
-                    legacy: this.nodeConfig.legacy,
-                    rejectUnauthorizedCerts: this.nodeConfig
-                        .rejectUnauthorizedCerts,
-                    connectionDelay: this.nodeConfig.connectionDelay
-                });
-                this.http = this.homeAssistant.http;
-                this.websocket = this.homeAssistant.websocket;
-
-                this.homeAssistant
-                    .startListening()
-                    .catch(err => this.node.error(err));
-
-                this.websocket.addListener(
-                    'ha_client:close',
-                    this.onHaEventsClose.bind(this)
-                );
-                this.websocket.addListener(
-                    'ha_client:open',
-                    this.onHaEventsOpen.bind(this)
-                );
-                this.websocket.addListener(
-                    'ha_client:connecting',
-                    this.onHaEventsConnecting.bind(this)
-                );
-                this.websocket.addListener(
-                    'ha_client:error',
-                    this.onHaEventsError.bind(this)
-                );
-                this.websocket.addListener(
-                    'ha_client:states_loaded',
-                    this.onHaStatesLoaded.bind(this)
-                );
-                this.websocket.addListener(
-                    'ha_client:services_loaded',
-                    this.onHaServicesLoaded.bind(this)
-                );
-                this.websocket.once(
-                    'ha_client:connected',
-                    this.registerEvents.bind(this)
-                );
-                this.websocket.addListener(
-                    'ha_events:state_changed',
-                    this.onHaStateChanged.bind(this)
-                );
+                this.init();
             }
+        }
+
+        async init() {
+            this.homeAssistant = new HomeAssistant({
+                baseUrl: this.credentials.host,
+                apiPass: this.credentials.access_token,
+                legacy: this.nodeConfig.legacy,
+                rejectUnauthorizedCerts: this.nodeConfig
+                    .rejectUnauthorizedCerts,
+                connectionDelay: this.nodeConfig.connectionDelay
+            });
+            this.http = this.homeAssistant.http;
+            this.websocket = this.homeAssistant.websocket;
+
+            this.websocket.addListener(
+                'ha_client:close',
+                this.onHaEventsClose.bind(this)
+            );
+            this.websocket.addListener(
+                'ha_client:open',
+                this.onHaEventsOpen.bind(this)
+            );
+            this.websocket.addListener(
+                'ha_client:connecting',
+                this.onHaEventsConnecting.bind(this)
+            );
+            this.websocket.addListener(
+                'ha_client:error',
+                this.onHaEventsError.bind(this)
+            );
+            this.websocket.addListener(
+                'ha_client:states_loaded',
+                this.onHaStatesLoaded.bind(this)
+            );
+            this.websocket.addListener(
+                'ha_client:services_loaded',
+                this.onHaServicesLoaded.bind(this)
+            );
+            this.websocket.once(
+                'ha_client:connected',
+                this.registerEvents.bind(this)
+            );
+            this.websocket.addListener(
+                'ha_events:state_changed',
+                this.onHaStateChanged.bind(this)
+            );
+
+            await this.homeAssistant.connect().catch(err => {
+                this.websocket.connectionState = this.websocket.ERROR;
+                this.websocket.emit('updateNodesStatuses');
+                this.node.error(err);
+            });
         }
 
         get nameAsCamelcase() {
@@ -283,8 +289,7 @@ module.exports = function(RED) {
 
         onHaEventsConnecting() {
             this.setOnContext('isConnected', false);
-            this.debug(`WebSocket Connecting ${this.credentials.host}`);
-            this.debug('config server event listener connecting');
+            this.log(`WebSocket Connecting ${this.credentials.host}`);
         }
 
         onHaEventsClose() {
@@ -292,7 +297,6 @@ module.exports = function(RED) {
                 this.log(`WebSocket Closed ${this.credentials.host}`);
             }
             this.setOnContext('isConnected', false);
-            this.debug('config server event listener closed');
         }
 
         onHaEventsError(err) {
@@ -323,12 +327,8 @@ module.exports = function(RED) {
 
     RED.nodes.registerType('server', ConfigServerNode, {
         credentials: {
-            host: {
-                type: 'text'
-            },
-            access_token: {
-                type: 'text'
-            }
+            host: { type: 'text' },
+            access_token: { type: 'text' }
         }
     });
 };
