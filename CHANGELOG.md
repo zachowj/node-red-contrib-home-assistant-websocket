@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.19.5](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.19.4...v0.19.5) (2020-01-24)
+
+### Bug Fixes
+
+- **get-history:** Set end date when using relative time ([9414210](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/9414210)), closes [#191](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/191) [#190](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/190) [#177](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/177)
+- fix crash when base url was missing http:// or https:// ([2ef2166](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/2ef2166))
+
+### Build System
+
+- **gulp:** Watch for lib/\*.js file changes ([0d28013](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/0d28013))
+
 ### [0.19.4](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.19.3...v0.19.4) (2020-01-14)
 
 ### Features
