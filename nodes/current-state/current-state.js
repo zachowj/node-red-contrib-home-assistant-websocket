@@ -108,23 +108,19 @@ module.exports = function(RED) {
                 message
             );
 
-            let isIfState;
-            try {
-                isIfState = await this.getComparatorResult(
-                    config.halt_if_compare,
-                    config.halt_if,
-                    entity.state,
-                    config.halt_if_type,
-                    {
-                        message,
-                        entity
-                    }
-                );
-            } catch (e) {
+            const isIfState = await this.getComparatorResult(
+                config.halt_if_compare,
+                config.halt_if,
+                entity.state,
+                config.halt_if_type,
+                {
+                    message,
+                    entity
+                }
+            ).catch(e => {
                 this.setStatusFailed('Error');
                 this.node.error(e.message, message);
-                return;
-            }
+            });
 
             // Handle version 0 'halt if' outputs
             if (config.version < 1) {
