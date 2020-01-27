@@ -1,9 +1,9 @@
-name: CI
+name: release
 
 on:
-  pull_request:
   push:
-    branches: dev
+    branches: master
+    tags: "v*"
 
 jobs:
   build:
@@ -29,14 +29,15 @@ jobs:
           CI: true
 
   publish-npm:
-    if: github.event_name == 'push'
     needs: build
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
-      - name: npm release
-        uses: epeli/npm-release@v1
+      - uses: actions/setup-node@v1
         with:
-          type: prerelease
-          token: ${{ secrets.npm_token }}
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+      - run: npm ci
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
