@@ -4,7 +4,7 @@
 
 A remote with a button that when clicked it increases the brightness of a given light by an amount that is set from an input_number inside Home Assistant.
 
-![](./images/jsonata_1.png)
+![screenshot](./images/jsonata_1.png)
 
 <<< @/examples/cookbook/jsonata/increase-lights-brightness-with-remote.json
 
@@ -24,13 +24,13 @@ JSONata expression in the call-service node
 
 Get notified when light or switch is left on when you leave. This a remake of Example #1 from this [post](https://community.home-assistant.io/t/examples-for-using-the-new-get-entities-node/85777) showing how to manipulate entities and get the desired output.
 
-![](./images/jsonata_2.png)
+![screenshot](./images/jsonata_2.png)
 
 <<< @/examples/cookbook/jsonata/notification-of-lights-on-when-leaving-home.json
 
 This is the same as above but uses an event:state node and shows how to use the `$entity()` and `$prevEntity()` functions to compare states.
 
-![](./images/jsonata_3.png)
+![screenshot](./images/jsonata_3.png)
 
 <<< @/examples/cookbook/jsonata/notification-of-lights-on-when-leaving-home_02.json
 
@@ -52,7 +52,7 @@ The trigger-state node is great if you have several conditions you want to check
 
 Motion sensor at the front door triggers and have a text to speech notification be sent if at least one person is home.
 
-![](./images/jsonata_3.png)
+![screenshot](./images/jsonata_3.png)
 
 <<< @/examples/cookbook/jsonata/or-conditional-for-the-events-state-node.json
 

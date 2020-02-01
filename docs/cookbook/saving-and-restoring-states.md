@@ -3,15 +3,15 @@
 Here are several examples using the get-entities node to get the states of
 several entities and then how to restore the entity states.
 
-![](./images/saving-and-restoring-states_01.png)
+![screenshot](./images/saving-and-restoring-states_01.png)
 
 <<< @/examples/cookbook/saving-and-restoring-states/example_01.json
 
-![](./images/saving-and-restoring-states_02.png)
+![screenshot](./images/saving-and-restoring-states_02.png)
 
 <<< @/examples/cookbook/saving-and-restoring-states/example_02.json
 
-![](./images/saving-and-restoring-states_03.png)
+![screenshot](./images/saving-and-restoring-states_03.png)
 
 <<< @/examples/cookbook/saving-and-restoring-states/example_03.json
 

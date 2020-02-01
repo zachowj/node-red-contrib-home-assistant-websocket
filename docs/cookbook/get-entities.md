@@ -8,7 +8,7 @@ You have a presence detection of some sort running in Home Assistant and you wan
 
 Using the `get entities` node here to get a possible list of entity ids [binary_sensor.front_door, binary_sensor.back_door, binary_sensor.front_window, binary_sensor.back_window] if their state is equal to `open`. The entities are returned with the output `Split`. This means that a message is sent for each valid entity. We then are using a template node to format the payload into the entity friendly name and joining them back into one payload using the `join` node.
 
-![](./images/get-entities_03.png)
+![screenshot](./images/get-entities_03.png)
 
 <<< @/examples/cookbook/get-entities/example_01.json
 
@@ -18,7 +18,7 @@ Sort of a Vacation or Away script to randomly turn on some lights around your ho
 
 Using an `inject` node here but you could use your preference of timer node. The `get entities` node is randomly choosing one entity from the criteria where `entity_id starts with light.`.
 
-![](./images/get-entities_02.png)
+![screenshot](./images/get-entities_02.png)
 
 <<< @/examples/cookbook/get-entities/example_02.json
 
@@ -30,7 +30,7 @@ On Reddit the other day a user posted this [How can I join 1 to 4 pre-defined me
 
 Here's my take on it using the `get entities` and a `function` node. Using the `Array` output option here.
 
-![](./images/get-entities_01.png)
+![screenshot](./images/get-entities_01.png)
 
 <<< @/examples/cookbook/get-entities/example_03.json
 

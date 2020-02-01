@@ -9,11 +9,11 @@ There are three functions added for JSONata expressions within the Home Assistan
 
 When JSONata appears in the conditional dropdown it expects the expression to return a boolean, true or false.
 
-![](./images/jsonata_1.png)
+![screenshot](./images/jsonata_1.png)
 
 When it is chosen with a conditional, not JSONata it will return a value of the evaluated expression that will be checked against the conditional chosen.
 
-![](./images/jsonata_2.png)
+![screenshot](./images/jsonata_2.png)
 
 ## Examples
 
