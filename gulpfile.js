@@ -20,10 +20,10 @@ const gulpHtmlmin = require('gulp-htmlmin');
 const terser = require('gulp-terser');
 
 // Styles
-var sass = require('gulp-sass');
-var postcss = require('gulp-postcss');
-var prefix = require('autoprefixer');
-var minify = require('cssnano');
+const sass = require('gulp-sass');
+const postcss = require('gulp-postcss');
+const prefix = require('autoprefixer');
+const minify = require('cssnano');
 
 // Markdown-It
 const cheerio = require('gulp-cheerio');
@@ -128,7 +128,7 @@ const buildHelp = lazypipe()
                     },
 
                     render: function(tokens, idx) {
-                        var m = tokens[idx].info
+                        const m = tokens[idx].info
                             .trim()
                             .match(/^(tip|warning|danger)\s?(.*)$/);
 
