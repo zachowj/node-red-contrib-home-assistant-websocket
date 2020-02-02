@@ -62,11 +62,11 @@ Currently `states`, `services` and `events` is made available on the global cont
 
 ### Context Example
 
-Say we have a config node with the name `My Awesome server`, with an entity set up in Home Assistant as `switch.my_switch`. This state would be available within function nodes and you could fetch using something like the below code
+Say we have a config node with the name `Home Assistant`, with an entity set up in Home Assistant as `switch.my_switch`. This state would be available within function nodes and you could fetch using something like the below code
 
 ```js
 const haCtx = global.get("homeassistant");
-const configCtx = haCtx.myAwesomeServer;
+const configCtx = haCtx.homeAssistant;
 const entityState = configCtx.states["switch.my_switch"];
 return entityState.state === "on" ? true : false;
 ```
