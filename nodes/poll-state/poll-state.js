@@ -73,7 +73,7 @@ module.exports = function(RED) {
             }
         }
 
-        async onTimer() {
+        async onTimer(triggered = false) {
             if (!this.isConnected || this.isEnabled === false) return;
 
             const pollState = this.utils.merge(
@@ -139,27 +139,38 @@ module.exports = function(RED) {
                 return;
             }
 
+            const statusMessage = `${pollState.state}${triggered &&
+                ` (triggered)`}`;
+
             // Handle version 0 'halt if' outputs
             if (this.nodeConfig.version < 1) {
                 if (this.nodeConfig.halt_if && isIfState) {
-                    this.setStatusFailed(pollState.state);
+                    this.setStatusFailed(statusMessage);
                     this.send([null, msg]);
                     return;
                 }
-                this.setStatusSuccess(pollState.state);
+                this.setStatusSuccess(statusMessage);
                 this.send([msg, null]);
                 return;
             }
 
             // Check 'if state' and send to correct output
             if (this.nodeConfig.halt_if && !isIfState) {
-                this.setStatusFailed(pollState.state);
+                this.setStatusFailed(statusMessage);
                 this.send([null, msg]);
                 return;
             }
 
-            this.setStatusSuccess(pollState.state);
+            this.setStatusSuccess(statusMessage);
             this.send([msg, null]);
+        }
+
+        getNodeEntityId() {
+            return this.nodeConfig.entity_id;
+        }
+
+        triggerNode(eventMessage) {
+            this.onTimer(true);
         }
 
         calculateTimeSinceChanged(entityState) {

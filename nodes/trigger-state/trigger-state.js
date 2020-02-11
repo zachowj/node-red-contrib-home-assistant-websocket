@@ -152,7 +152,11 @@ module.exports = function(RED) {
                     this.nodeConfig.constraints,
                     eventMessage
                 );
-                const state = eventMessage.event.new_state.state;
+                const statusText = `${
+                    eventMessage.event.new_state.state
+                }${eventMessage.event_type === 'triggered' &&
+                    ' (triggered)'} at: ${this.getPrettyDate()}`;
+
                 let outputs = this.getDefaultMessageOutputs(
                     constraintComparatorResults,
                     eventMessage
@@ -160,7 +164,7 @@ module.exports = function(RED) {
                 let status = {
                     fill: 'green',
                     shape: 'dot',
-                    text: `${state} at: ${this.getPrettyDate()}`
+                    text: statusText
                 };
 
                 // If a constraint comparator failed we're done, also if no custom outputs to look at
@@ -172,7 +176,7 @@ module.exports = function(RED) {
                         status = {
                             fill: 'red',
                             shape: 'ring',
-                            text: `${state} at: ${this.getPrettyDate()}`
+                            text: statusText
                         };
                     }
                     this.debugToClient(
@@ -201,6 +205,17 @@ module.exports = function(RED) {
             } catch (e) {
                 this.error(e);
             }
+        }
+
+        getNodeEntityId() {
+            return (
+                this.nodeConfig.entityidfiltertype === 'exact' &&
+                this.nodeConfig.entityidfilter
+            );
+        }
+
+        triggerNode(eventMessage) {
+            this.onEntityStateChanged(eventMessage);
         }
 
         async getConstraintComparatorResults(constraints, eventMessage) {
