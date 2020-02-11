@@ -109,18 +109,9 @@ When an input is received the node will wait until the condition is met or the t
 - [Setting up Development Environment](https://zachowj.github.io/node-red-contrib-home-assistant-websocket/guide/development.html)
 - [Help with Documentation](https://zachowj.github.io/node-red-contrib-home-assistant-websocket/guide/documentation.html)
 
-## Authors
+## Contributors
 
-- **[@AYapejian](https://github.com/AYapejian)** - [node-red-contrib-home-assistant](https://github.com/AYapejian/node-red-contrib-home-assistant)
-- **[@AYapejian](https://github.com/AYapejian)** - [node-home-assistant](https://github.com/AYapejian/node-home-assistant)
-- **[@zachowj](https://github.com/AYapejian)** - [node-red-contrib-home-assistant-websocket](https://github.com/AYapejian/node-home-assistant-websocket)
-
-[List of all authors and contributors](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/graphs/contributors)
-
-## Acknowledgments
-
-- [home-assistant-js-websocket](https://github.com/home-assistant/home-assistant-js-websocket)
-- [@Spartan-II-117](https://github.com/Spartan-II-117)
+[List of all contributors](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/graphs/contributors)
 
 [buildstatus-shield]: https://img.shields.io/github/workflow/status/zachowj/node-red-contrib-home-assistant-websocket/CI/dev?label=dev%20build&style=for-the-badge
 [buildstatus-link]: https://github.com/zachowj/node-red-contrib-home-assistant-websocket/actions
