@@ -1,8 +1,15 @@
-# Changelog
+# Change Log
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [0.19.5](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.19.4...v0.19.5) (2020-01-24)
+# [0.20.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.19.5...v0.20.0) (2020-02-12)
+
+### Features
+
+- Add ability to handle nodered.trigger service call ([aba9eab](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/aba9eabc37dad38e3054aae5abe1bbaf6492c23b))
+- **integration:** Handle nodered:loaded event from when HA loads custom component ([072cec7](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/072cec7f5dd1c991f8da65f28aec67365f4aa407))
+
+## [0.19.5](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.19.4...v0.19.5) (2020-01-24)
 
 ### Bug Fixes
 
