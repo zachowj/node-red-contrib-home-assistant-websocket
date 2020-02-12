@@ -2,7 +2,9 @@ name: release
 
 on:
   push:
-    branches: master
+    branches:
+      - master
+      - "!dev"
     tags: "v*"
 
 jobs:
