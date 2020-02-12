@@ -152,10 +152,11 @@ module.exports = function(RED) {
                     this.nodeConfig.constraints,
                     eventMessage
                 );
-                const statusText = `${
-                    eventMessage.event.new_state.state
-                }${eventMessage.event_type === 'triggered' &&
-                    ' (triggered)'} at: ${this.getPrettyDate()}`;
+                const statusText = `${eventMessage.event.new_state.state}${
+                    eventMessage.event_type === 'triggered'
+                        ? ' (triggered)'
+                        : ''
+                } at: ${this.getPrettyDate()}`;
 
                 let outputs = this.getDefaultMessageOutputs(
                     constraintComparatorResults,

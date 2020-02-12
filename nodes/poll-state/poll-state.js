@@ -139,8 +139,9 @@ module.exports = function(RED) {
                 return;
             }
 
-            const statusMessage = `${pollState.state}${triggered &&
-                ` (triggered)`}`;
+            const statusMessage = `${pollState.state}${
+                triggered === true ? ` (triggered)` : ''
+            }`;
 
             // Handle version 0 'halt if' outputs
             if (this.nodeConfig.version < 1) {

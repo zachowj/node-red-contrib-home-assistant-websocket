@@ -115,8 +115,9 @@ module.exports = function(RED) {
                 data: event
             };
 
-            const statusMessage = `${event.new_state.state}${evt.event_type ===
-                'triggered' && ` (triggered)`}`;
+            const statusMessage = `${event.new_state.state}${
+                evt.event_type === 'triggered' ? ` (triggered)` : ''
+            }`;
 
             // Handle version 0 'halt if' outputs. The output were reversed true
             // was sent to the second output and false was the first output
