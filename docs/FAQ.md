@@ -16,8 +16,8 @@ If your flow runs before Node-RED has had a chance to connect to Home Assistant
 and retrieve the latest state information. The cache will be empty and this
 error is thrown.
 
-Hass.io users have a 5-second delay between connection attempts because of
-how the hass.io proxy works and the high CPU usage it can cause, [Issue
+Home Assistant Add-on users have a 5-second delay between connection attempts because of
+how the supervisor proxy works and the high CPU usage it can cause, [Issue
 #76](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/76#issuecomment-453877333).
 The delay can be turned off in the server config.
 

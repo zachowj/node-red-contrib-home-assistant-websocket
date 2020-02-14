@@ -124,7 +124,7 @@ module.exports = function(RED) {
         config: {
             name: {},
             legacy: {},
-            hassio: {},
+            addon: {},
             rejectUnauthorizedCerts: {},
             ha_boolean: {},
             connectionDelay: {},
@@ -145,9 +145,13 @@ module.exports = function(RED) {
 
                 this.RED.nodes.addCredentials(this.id, this.credentials);
             }
-            // Check if using Hass.io URL and import proxy token
-            if (this.credentials.host === 'http://hassio/homeassistant') {
-                this.credentials.access_token = process.env.HASSIO_TOKEN;
+            // Check if using HA Add-on and import proxy token
+            if (
+                this.nodeConfig.addon ||
+                this.credentials.host === 'http://hassio/homeassistant'
+            ) {
+                this.credentials.host = 'http://supervisor/core';
+                this.credentials.access_token = process.env.SUPERVISOR_TOKEN;
 
                 this.RED.nodes.addCredentials(this.id, this.credentials);
             }

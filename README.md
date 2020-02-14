@@ -34,11 +34,11 @@ $ npm install node-red-contrib-home-assistant-websocket
 # then restart node-red
 ```
 
-For [Hass.io](https://hass.io/) add-on users:
+For [Home Assistant](https://www.home-assistant.io/hassio/) add-on users:
 
-The Community Hass.io add-on ships with this node right out of the box.
+The Community add-on ships with this node right out of the box.
 
-Under the server node config just check the checkbox for `I use Hass.io`
+Under the server node config just check the checkbox for `I use the Home Assistant Add-on`
 
 The add-on can be found here: <https://github.com/hassio-addons/addon-node-red#readme>
 

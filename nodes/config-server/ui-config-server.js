@@ -3,7 +3,7 @@ RED.nodes.registerType('server', {
     defaults: {
         name: { value: 'Home Assistant', required: false },
         legacy: { value: false },
-        hassio: { value: false },
+        addon: { value: false },
         rejectUnauthorizedCerts: { value: true },
         ha_boolean: { value: 'y|yes|true|on|home|open' },
         connectionDelay: { value: true },
@@ -18,7 +18,7 @@ RED.nodes.registerType('server', {
         return this.name || this.url;
     },
     oneditprepare: function() {
-        const $hassio = $('#node-config-input-hassio');
+        const $addon = $('#node-config-input-addon');
         const $host = $('#node-config-input-host');
         const $legacy = $('#node-config-input-legacy');
 
@@ -37,20 +37,18 @@ RED.nodes.registerType('server', {
             $('#node-config-input-cacheJson').prop('checked', true);
         }
 
-        if (
-            !$hassio.prop('checked') &&
-            $host.val() === 'http://hassio/homeassistant'
-        ) {
-            $hassio.prop('checked', true);
+        // Still need to check if host is hassio url for backward compatibility
+        if ($host.val() === 'http://hassio/homeassistant') {
+            $addon.prop('checked', true);
         }
 
-        function updateHassio() {
-            $('#server-info').toggle(!$hassio.prop('checked'));
-            $('.hassio').toggle($hassio.prop('checked'));
+        function updateAddon() {
+            $('#server-info').toggle(!$addon.prop('checked'));
+            $('.addon').toggle($addon.prop('checked'));
         }
-        updateHassio();
-        $hassio.on('click', function() {
-            updateHassio();
+        updateAddon();
+        $addon.on('click', function() {
+            updateAddon();
         });
 
         function updateLegacy() {
@@ -105,17 +103,14 @@ RED.nodes.registerType('server', {
         });
     },
     oneditsave: function() {
-        const hassio = $('#node-config-input-hassio').is(':checked');
+        const addon = $('#node-config-input-addon').is(':checked');
         const $host = $('#node-config-input-host');
         const hostname = $host.val();
 
-        if (hassio) {
-            $host.val('http://hassio/homeassistant');
+        if (addon) {
+            this.addon = true;
             this.legacy = false;
             this.rejectUnauthorizedCerts = true;
-            // this.connectionDelay = $("#node-config-input-connectionDelay").is(
-            //   ":checked"
-            // );
         } else {
             const parser = document.createElement('a');
             parser.href = hostname;

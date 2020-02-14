@@ -31,10 +31,10 @@ $ npm install node-red-contrib-home-assistant-websocket
 # restart Node-RED
 ```
 
-### Hass.io
+### Home Assistant Add-on
 
-The Community Hass.io add-on ships with this node right out of the box. Under
-the server node config check the checkbox for `I use the Hass.io Add-on`. No
+The Community Home Assistant add-on ships with this set of nodes right out of the box. Under
+the server node config check the checkbox for `I use the Home Assistant Add-on`. No
 other information is needed and you're ready to start your [first
 automation](./first-automation.md).
 
