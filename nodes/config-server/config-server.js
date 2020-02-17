@@ -243,7 +243,7 @@ module.exports = function(RED) {
 
             await this.homeAssistant.connect().catch(err => {
                 this.websocket.connectionState = this.websocket.ERROR;
-                this.websocket.emit('updateNodesStatuses');
+                this.websocket.emit('updateNodeStatus');
                 this.node.error(err);
             });
         }
