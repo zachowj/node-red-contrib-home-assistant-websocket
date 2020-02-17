@@ -33,8 +33,8 @@ $ npm install node-red-contrib-home-assistant-websocket
 
 ### Home Assistant Add-on
 
-The Community Home Assistant add-on ships with this set of nodes right out of the box. Under
-the server node config check the checkbox for `I use the Home Assistant Add-on`. No
+The Community Home Assistant add-on ships with this set of nodes right out of
+the box and comes configured to connect to Home Assistant. No
 other information is needed and you're ready to start your [first
 automation](./first-automation.md).
 
