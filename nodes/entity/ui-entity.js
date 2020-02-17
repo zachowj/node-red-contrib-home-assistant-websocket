@@ -5,7 +5,7 @@ RED.nodes.registerType('ha-entity', {
     outputs: 1,
     icon: 'font-awesome/fa-genderless',
     align: 'right',
-    paletteLabel: 'sensor',
+    paletteLabel: 'entity',
     label: function() {
         return this.name || `type: ${this.entityType}`;
     },
@@ -37,6 +37,15 @@ RED.nodes.registerType('ha-entity', {
         nodeVersion.check(this);
         const node = this;
         const stateTypes = {
+            binary_sensor: [
+                'msg',
+                'flow',
+                'global',
+                'jsonata',
+                'str',
+                'num',
+                'bool'
+            ],
             sensor: [
                 'msg',
                 'flow',
@@ -47,15 +56,17 @@ RED.nodes.registerType('ha-entity', {
                 'bool',
                 'date'
             ],
+            switch: ['msg']
+        };
+        const haConfigOptions = {
             binary_sensor: [
-                'msg',
-                'flow',
-                'global',
-                'jsonata',
-                'str',
-                'num',
-                'bool'
-            ]
+                'name',
+                'device_class',
+                'icon',
+                'unit_of_measurement'
+            ],
+            sensor: ['name', 'device_class', 'icon', 'unit_of_measurement'],
+            switch: ['name', 'icon']
         };
         const attributeTypes = [
             'str',
@@ -67,6 +78,14 @@ RED.nodes.registerType('ha-entity', {
             'flow',
             'global'
         ];
+        const switchRows = [
+            'state',
+            'attributes',
+            'output-location',
+            'input-override',
+            'resend',
+            'debug'
+        ];
 
         haServer.init(node, '#node-input-server');
 
@@ -77,15 +96,6 @@ RED.nodes.registerType('ha-entity', {
             typeField: '#node-input-stateType',
             type: node.stateType
         });
-
-        $('#node-input-entityType')
-            .on('change', function() {
-                $('#node-input-state').typedInput(
-                    'types',
-                    stateTypes[$(this).val()]
-                );
-            })
-            .trigger('change');
 
         $('#attributes')
             .editableList({
@@ -144,6 +154,34 @@ RED.nodes.registerType('ha-entity', {
                 }
             })
             .editableList('addItems', node.config);
+
+        $('#node-input-entityType')
+            .on('change', function() {
+                const value = $(this).val();
+
+                $('#node-input-state').typedInput('types', stateTypes[value]);
+
+                switch (value) {
+                    case 'binary_sensor':
+                    case 'sensor':
+                        node.outputs = 1;
+                        // Show all form-rows
+                        $('.form-row').show();
+                        // Show all config items
+                        $('#config').editableList('filter', () => true);
+                        break;
+                    case 'switch':
+                        node.outputs = 2;
+                        // create a comma delimited list of ids
+                        $(`#${switchRows.join('-row,#')}-row`).hide();
+                        // filter config options
+                        $('#config').editableList('filter', data =>
+                            haConfigOptions[value].includes(data.property)
+                        );
+                        break;
+                }
+            })
+            .trigger('change');
 
         $('#node-input-outputLocation').typedInput({
             types: [

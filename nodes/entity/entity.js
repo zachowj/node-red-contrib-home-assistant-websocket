@@ -1,8 +1,7 @@
 const slugify = require('slugify');
+const EventsHaNode = require('../../lib/events-ha-node');
 
 module.exports = function(RED) {
-    const EventsNode = require('../../lib/events-node');
-
     const nodeOptions = {
         config: {
             name: {},
@@ -39,7 +38,7 @@ module.exports = function(RED) {
         }
     };
 
-    class EntityNode extends EventsNode {
+    class EntityNode extends EventsHaNode {
         constructor(nodeDefinition) {
             super(nodeDefinition, RED, nodeOptions);
             this.registered = false;
@@ -60,10 +59,34 @@ module.exports = function(RED) {
             }
         }
 
-        // Disable connection status
-        setConnectionStatus() {}
+        setConnectionStatus(additionalText) {
+            if (this.nodeConfig.entityType === 'switch') {
+                this.node.status({
+                    shape: this.isEnabled ? 'dot' : 'ring',
+                    fill: 'blue',
+                    text: `${
+                        this.isEnabled ? 'on' : 'off'
+                    } at: ${this.getPrettyDate()}`
+                });
+            }
+        }
+
+        setStatus(
+            opts = {
+                shape: 'dot',
+                fill: 'blue',
+                text: ''
+            }
+        ) {
+            this.node.status(opts);
+        }
 
         async registerEntity() {
+            if (this.nodeConfig.entityType === 'switch') {
+                super.registerEntity();
+                return;
+            }
+
             if (this.websocketClient.integrationVersion === 0) {
                 this.error(this.integrationErrorMessage);
                 this.setStatusFailed('Error');
@@ -76,12 +99,8 @@ module.exports = function(RED) {
 
             const config = {};
             this.nodeConfig.config
-                .filter(c => {
-                    return c.value.length;
-                })
-                .forEach(e => {
-                    config[e.property] = e.value;
-                });
+                .filter(c => c.value.length)
+                .forEach(e => (config[e.property] = e.value));
 
             const payload = {
                 type: 'nodered/discovery',
@@ -141,7 +160,23 @@ module.exports = function(RED) {
             }
         }
 
+        handleSwitchInput(message) {
+            if (this.isEnabled) {
+                this.setStatusSuccess('input');
+                this.send([message, null]);
+            } else {
+                this.setStatusFailed('input');
+                this.send([null, message]);
+            }
+        }
+
         async onInput({ parsedMessage, message }) {
+            // Handle entity node type switch
+            if (this.nodeConfig.entityType === 'switch') {
+                this.handleSwitchInput(message);
+                return;
+            }
+
             if (!this.isConnected) {
                 this.setStatusFailed('No Connection');
                 this.error(
@@ -274,6 +309,21 @@ module.exports = function(RED) {
                 });
         }
 
+        handleTriggerMessage(data = {}) {
+            const msg = {
+                topic: 'triggered',
+                payload: data.payload
+            };
+
+            if (this.isEnabled) {
+                this.setStatusSuccess('triggered');
+                this.send([msg, null]);
+            } else {
+                this.setStatusFailed('triggered');
+                this.send([null, msg]);
+            }
+        }
+
         getValue(value, valueType, msg) {
             let val;
             switch (valueType) {
@@ -312,16 +362,24 @@ module.exports = function(RED) {
         }
 
         async loadPersistedData() {
+            let data;
             try {
-                const data = await this.getNodeData();
-                if (
-                    data &&
-                    Object.prototype.hasOwnProperty.call(data, 'lastPayload')
-                ) {
-                    this.lastPayload = data.lastPayload;
-                }
+                data = await this.getNodeData();
             } catch (e) {
-                this.error(e.message);
+                this.error(e.message, {});
+            }
+
+            if (!data) return;
+
+            if (
+                this.nodeConfig.entityType === 'switch' &&
+                Object.prototype.hasOwnProperty.call(data, 'isEnabled')
+            ) {
+                this.isEnabled = data.isEnabled;
+                this.updateConnectionStatus();
+            }
+            if (Object.prototype.hasOwnProperty.call(data, 'lastPayload')) {
+                this.lastPayload = data.lastPayload;
             }
         }
     }
