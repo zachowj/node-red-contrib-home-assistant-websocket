@@ -168,7 +168,7 @@ RED.nodes.registerType('ha-entity', {
                         // Show all form-rows
                         $('.form-row').show();
                         // Show all config items
-                        $('#config').editableList('filter', () => true);
+                        $('#config').editableList('filter', null);
                         break;
                     case 'switch':
                         node.outputs = 2;

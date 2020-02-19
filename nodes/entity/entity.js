@@ -61,13 +61,19 @@ module.exports = function(RED) {
 
         setConnectionStatus(additionalText) {
             if (this.nodeConfig.entityType === 'switch') {
-                this.node.status({
-                    shape: this.isEnabled ? 'dot' : 'ring',
-                    fill: 'blue',
-                    text: `${
-                        this.isEnabled ? 'on' : 'off'
-                    } at: ${this.getPrettyDate()}`
-                });
+                let status = this.getConnectionStatus();
+                if (this.connectionState === this.websocketClient.CONNECTED) {
+                    status = {
+                        shape: this.isEnabled ? 'dot' : 'ring',
+                        fill: 'blue',
+                        text: `${
+                            this.isEnabled ? 'on' : 'off'
+                        } at: ${this.getPrettyDate()}`
+                    };
+                }
+                this.node.status(status);
+            } else {
+                super.setConnectionStatus(additionalText);
             }
         }
 
@@ -160,6 +166,25 @@ module.exports = function(RED) {
             }
         }
 
+        async onInput({ parsedMessage, message }) {
+            switch (this.nodeConfig.entityType) {
+                case 'binary_sensor':
+                case 'sensor':
+                    this.handleSensorInput({ parsedMessage, message });
+                    break;
+                case 'switch':
+                    this.handleSwitchInput(message);
+                    break;
+                default:
+                    this.setStatusFailed('Error');
+                    this.error(
+                        `Invalid entity type: ${this.nodeConfig.entityType}`,
+                        message
+                    );
+                    break;
+            }
+        }
+
         handleSwitchInput(message) {
             if (this.isEnabled) {
                 this.setStatusSuccess('input');
@@ -170,13 +195,7 @@ module.exports = function(RED) {
             }
         }
 
-        async onInput({ parsedMessage, message }) {
-            // Handle entity node type switch
-            if (this.nodeConfig.entityType === 'switch') {
-                this.handleSwitchInput(message);
-                return;
-            }
-
+        handleSensorInput({ parsedMessage, message }) {
             if (!this.isConnected) {
                 this.setStatusFailed('No Connection');
                 this.error(
@@ -186,6 +205,7 @@ module.exports = function(RED) {
 
                 return;
             }
+
             if (this.websocketClient.integrationVersion === 0) {
                 this.error(this.integrationErrorMessage);
                 this.setStatusFailed('Error');
@@ -219,33 +239,7 @@ module.exports = function(RED) {
                 return;
             }
 
-            let attributes = [];
-            if (
-                parsedMessage.attributes.source !== 'message' ||
-                this.nodeConfig.inputOverride === 'block'
-            ) {
-                attributes = this.nodeConfig.attributes;
-            } else {
-                if (this.nodeConfig.inputOverride === 'merge') {
-                    const keys = Object.keys(
-                        parsedMessage.attributes.value
-                    ).map(e => e.toLowerCase());
-                    this.nodeConfig.attributes.forEach(ele => {
-                        if (!keys.includes(ele.property.toLowerCase())) {
-                            attributes.push(ele);
-                        }
-                    });
-                }
-
-                for (const [prop, val] of Object.entries(
-                    parsedMessage.attributes.value
-                )) {
-                    attributes.push({
-                        property: prop,
-                        value: val
-                    });
-                }
-            }
+            const attributes = this.getAttributes(parsedMessage);
 
             const attr = {};
             try {
@@ -322,6 +316,36 @@ module.exports = function(RED) {
                 this.setStatusFailed('triggered');
                 this.send([null, msg]);
             }
+        }
+
+        getAttributes(parsedMessage) {
+            let attributes = [];
+            if (
+                parsedMessage.attributes.source !== 'message' ||
+                this.nodeConfig.inputOverride === 'block'
+            ) {
+                attributes = this.nodeConfig.attributes;
+            } else {
+                if (this.nodeConfig.inputOverride === 'merge') {
+                    const keys = Object.keys(
+                        parsedMessage.attributes.value
+                    ).map(e => e.toLowerCase());
+                    this.nodeConfig.attributes.forEach(ele => {
+                        if (!keys.includes(ele.property.toLowerCase())) {
+                            attributes.push(ele);
+                        }
+                    });
+                }
+                for (const [prop, val] of Object.entries(
+                    parsedMessage.attributes.value
+                )) {
+                    attributes.push({
+                        property: prop,
+                        value: val
+                    });
+                }
+            }
+            return attributes;
         }
 
         getValue(value, valueType, msg) {
