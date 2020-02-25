@@ -20,6 +20,7 @@ RED.nodes.registerType('ha-wait-until', {
         value: { value: '' },
         valueType: { value: 'str' },
         timeout: { value: 0 },
+        timeoutType: { value: 'num' },
         timeoutUnits: { value: 'seconds' },
         entityLocation: { value: 'data' },
         entityLocationType: { value: 'none' },
@@ -107,7 +108,21 @@ RED.nodes.registerType('ha-wait-until', {
             $('#node-input-value').typedInput('types', types);
         });
 
-        $('#node-input-timeout').spinner({ min: 0 });
+        $('#node-input-timeout')
+            .typedInput({
+                default: 'num',
+                types: ['num', 'jsonata'],
+                typeField: '#node-input-timeoutType'
+            })
+            .on('change', function(_, timeoutType) {
+                if (timeoutType === true) return;
+
+                node.outputs =
+                    timeoutType === 'jsonata' ||
+                    (timeoutType === 'num' && this.value > 0)
+                        ? 2
+                        : 1;
+            });
 
         const NoneType = { value: 'none', label: 'None', hasValue: false };
         $('#node-input-entityLocation')
@@ -120,9 +135,5 @@ RED.nodes.registerType('ha-wait-until', {
         if (node.blockInputOverrides === undefined) {
             $('#node-input-blockInputOverrides').prop('checked', true);
         }
-    },
-    oneditsave: function() {
-        const outputs = $('#node-input-timeout').val() > 0 ? 2 : 1;
-        $('#node-input-outputs').val(outputs);
     }
 });

@@ -1,7 +1,6 @@
 <div class="form-row">
     <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
     <input type="text" id="node-input-name" placeholder="Name" />
-    <input type="hidden" id="node-input-outputs" />
 </div>
 
 <div class="form-row">
@@ -15,9 +14,9 @@
 </div>
 
 <div class="form-row">
-    <label for="node-input-property"
-        ><i class="fa fa-hand-paper-o"></i> Wait Until</label
-    >
+    <label for="node-input-property">
+        <i class="fa fa-hand-paper-o"></i> Wait Until
+    </label>
     <input type="text" id="node-input-property" placeholder="property" />
 </div>
 
@@ -46,14 +45,11 @@
 </div>
 
 <div class="form-row">
-    <label for="node-input-timeout"
-        ><i class="fa fa-clock-o"></i> Timeout</label
-    >
-    <input
-        type="text"
-        id="node-input-timeout"
-        style="text-align:end; width:50px !important"
-    />
+    <label for="node-input-timeout">
+        <i class="fa fa-clock-o"></i> Timeout
+    </label>
+    <input type="text" id="node-input-timeout" style="width: 43%;" />
+    <input type="hidden" id="node-input-timeoutType" />
     <select id="node-input-timeoutUnits" style="width:auto !important">
         <option value="milliseconds">milliseconds</option>
         <option value="seconds">seconds</option>
@@ -79,8 +75,9 @@
     <label
         for="node-input-checkCurrentState"
         style="width: auto;margin-right: 20px;"
-        >Check against current state</label
     >
+        Check against current state
+    </label>
 </div>
 
 <div class="form-row checkbox-option">

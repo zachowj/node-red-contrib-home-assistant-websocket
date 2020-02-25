@@ -16,6 +16,7 @@ module.exports = function(RED) {
             value: {},
             valueType: {},
             timeout: {},
+            timeoutType: nodeDef => nodeDef.timeoutType || 'num',
             timeoutUnits: {},
             entityLocation: {},
             entityLocationType: {},
@@ -79,10 +80,7 @@ module.exports = function(RED) {
             },
             timeout: {
                 messageProp: 'payload.timeout',
-                configProp: 'timeout',
-                validation: {
-                    schema: Joi.number().label('timeout')
-                }
+                configProp: 'timeout'
             },
             timeoutUnits: {
                 messageProp: 'payload.timeoutUnits',
@@ -133,87 +131,68 @@ module.exports = function(RED) {
         }
 
         async onEntityChange(evt) {
-            try {
-                const event = Object.assign({}, evt.event);
+            const event = Object.assign({}, evt.event);
 
-                if (!this.active) {
-                    return null;
+            if (!this.active) {
+                return null;
+            }
+
+            const result = await this.getComparatorResult(
+                this.savedConfig.comparator,
+                this.savedConfig.value,
+                this.utils.selectn(this.savedConfig.property, event.new_state),
+                this.savedConfig.valueType,
+                {
+                    message: this.savedMessage,
+                    entity: event.new_state
                 }
+            ).catch(e => {
+                this.setStatusFailed('Error');
+                this.node.error(e.message, {});
+            });
 
-                let result;
+            if (!result) {
+                return;
+            }
+
+            clearTimeout(this.timeoutId);
+            this.active = false;
+            this.setStatusSuccess('true');
+
+            if (
+                this.savedConfig.entityLocationType !== 'none' &&
+                this.savedConfig.entityLocation
+            ) {
+                event.new_state.timeSinceChangedMs =
+                    Date.now() -
+                    new Date(event.new_state.last_changed).getTime();
+
                 try {
-                    result = await this.getComparatorResult(
-                        this.savedConfig.comparator,
-                        this.savedConfig.value,
-                        this.utils.selectn(
-                            this.savedConfig.property,
-                            event.new_state
-                        ),
-                        this.savedConfig.valueType,
-                        {
-                            message: this.savedMessage,
-                            entity: event.new_state
-                        }
-                    );
-                } catch (e) {
-                    this.setStatusFailed('Error');
-                    this.node.error(e.message, {});
-                    return;
-                }
-                if (!result) {
-                    return null;
-                }
-
-                clearTimeout(this.timeoutId);
-                this.active = false;
-                this.setStatusSuccess('true');
-
-                if (
-                    this.savedConfig.entityLocationType !== 'none' &&
-                    this.savedConfig.entityLocation
-                ) {
-                    event.new_state.timeSinceChangedMs =
-                        Date.now() -
-                        new Date(event.new_state.last_changed).getTime();
-
                     this.setContextValue(
                         event.new_state,
                         this.savedConfig.entityLocationType,
                         this.savedConfig.entityLocation,
                         this.savedMessage
                     );
+                } catch (e) {
+                    this.error(e, this.savedMessage);
                 }
-
-                this.send([this.savedMessage, null]);
-            } catch (e) {
-                this.error(e, this.savedMessage);
             }
+
+            this.send([this.savedMessage, null]);
         }
 
         async onInput({ message, parsedMessage }) {
-            const node = this;
-            clearTimeout(node.timeoutId);
+            clearTimeout(this.timeoutId);
 
             if (Object.prototype.hasOwnProperty.call(message, 'reset')) {
-                node.status({
-                    text: 'reset'
-                });
-                node.active = false;
-                return null;
+                this.status({ text: 'reset' });
+                this.active = false;
+                return;
             }
 
-            const entityId =
-                parsedMessage.entityId.source === 'message'
-                    ? parsedMessage.entityId.value
-                    : RenderTemplate(
-                          parsedMessage.entityId.value,
-                          message,
-                          node.node.context(),
-                          node.utils.toCamelCase(node.nodeConfig.server.name)
-                      );
-
-            node.savedConfig = {
-                entityId: entityId,
+            const config = {
+                entityId: parsedMessage.entityId.value,
                 property: parsedMessage.property.value,
                 comparator: parsedMessage.comparator.value,
                 value: parsedMessage.value.value,
@@ -226,86 +205,136 @@ module.exports = function(RED) {
             };
 
             // If blocking input overrides reset values to nodeConfig
-            if (node.nodeConfig.blockInputOverrides === true) {
-                Object.keys(node.savedConfig).forEach(
+            if (this.nodeConfig.blockInputOverrides === true) {
+                Object.keys(config).forEach(
                     key =>
-                        (node.savedConfig[key] = (key in node.nodeConfig
-                            ? node.nodeConfig
-                            : node.savedConfig)[key])
+                        (config[key] = (key in this.nodeConfig
+                            ? this.nodeConfig
+                            : config)[key])
                 );
             }
 
-            node.removeEventClientListeners();
-            node.addEventClientListener(
-                `ha_events:state_changed:${node.savedConfig.entityId}`,
-                node.onEntityChange.bind(node)
+            // Render mustache templates in the entity id field
+            config.entityId =
+                parsedMessage.entityId.source === 'message'
+                    ? parsedMessage.entityId.value
+                    : RenderTemplate(
+                          parsedMessage.entityId.value,
+                          message,
+                          this.node.context(),
+                          this.utils.toCamelCase(this.nodeConfig.server.name)
+                      );
+
+            // If the timeout field is jsonata type evaluate the expression and
+            // it to timeout
+            let timeout = config.timeout;
+            if (
+                parsedMessage.timeout.source === 'config' &&
+                this.nodeConfig.timeoutType === 'jsonata'
+            ) {
+                try {
+                    timeout = this.evaluateJSONata(timeout, message);
+                } catch (e) {
+                    this.node.error(`JSONata Error: ${e.message}`);
+                    this.setStatusFailed('Error');
+                    return;
+                }
+                config.timeout = timeout;
+            }
+
+            // Validate if timeout is a number >= 0
+            if (isNaN(timeout) || timeout < 0) {
+                this.node.error(`Invalid value for 'timeout': ${timeout}`);
+                this.setStatusFailed('Error');
+                return;
+            }
+
+            this.removeEventClientListeners();
+            this.addEventClientListener(
+                `ha_events:state_changed:${config.entityId}`,
+                this.onEntityChange.bind(this)
             );
 
-            node.savedMessage = message;
-            node.active = true;
+            this.savedMessage = message;
+            this.active = true;
             let statusText = 'waiting';
 
-            const timeout = node.savedConfig.timeout;
             if (timeout > 0) {
-                const timeoutUnits = node.savedConfig.timeoutUnits;
-                if (timeoutUnits === 'milliseconds') {
-                    node.timeout = timeout;
-                    statusText = `waiting for ${timeout} milliseconds`;
-                } else if (timeoutUnits === 'minutes') {
-                    node.timeout = timeout * (60 * 1000);
-                    statusText = `waiting for ${timeout} minutes: ${node.timeoutStatus()}`;
-                } else if (timeoutUnits === 'hours') {
-                    node.timeout = timeout * (60 * 60 * 1000);
-                    statusText = `waiting until ${node.timeoutStatus(
-                        node.timeout
-                    )}`;
-                } else if (timeoutUnits === 'days') {
-                    node.timeout = timeout * (24 * 60 * 60 * 1000);
-                    statusText = `waiting until ${node.timeoutStatus(
-                        node.timeout
-                    )}`;
-                } else {
-                    node.timeout = timeout * 1000;
-                    statusText = `waiting for ${timeout} seconds: ${node.timeoutStatus()}`;
-                }
+                statusText = this.getWaitStatusText(
+                    timeout,
+                    config.timeoutUnits
+                );
+                timeout = this.getTimeoutInMilliseconds(
+                    timeout,
+                    config.timeoutUnits
+                );
 
-                node.timeoutId = setTimeout(async () => {
+                this.timeoutId = setTimeout(async () => {
                     const state = Object.assign(
                         {},
-                        await node.nodeConfig.server.homeAssistant.getStates(
-                            node.savedConfig.entityId
+                        await this.nodeConfig.server.homeAssistant.getStates(
+                            config.entityId
                         )
                     );
 
                     state.timeSinceChangedMs =
                         Date.now() - new Date(state.last_changed).getTime();
 
-                    node.setContextValue(
+                    this.setContextValue(
                         state,
-                        node.savedConfig.entityLocationType,
-                        node.savedConfig.entityLocation,
+                        config.entityLocationType,
+                        config.entityLocation,
                         message
                     );
 
-                    node.active = false;
-                    node.send([null, message]);
-                    node.setStatusFailed('timed out');
-                }, node.timeout);
+                    this.active = false;
+                    this.send([null, message]);
+                    this.setStatusFailed('timed out');
+                }, timeout);
             }
-            node.setStatus({
-                text: statusText
-            });
+            this.setStatus({ text: statusText });
+            this.savedConfig = config;
 
-            if (node.nodeConfig.checkCurrentState === true) {
-                const currentState = await node.nodeConfig.server.homeAssistant.getStates(
-                    node.savedConfig.entityId
+            if (this.nodeConfig.checkCurrentState === true) {
+                const currentState = await this.nodeConfig.server.homeAssistant.getStates(
+                    config.entityId
                 );
 
-                node.onEntityChange({
-                    event: {
-                        new_state: currentState
-                    }
-                });
+                this.onEntityChange({ event: { new_state: currentState } });
+            }
+        }
+
+        getWaitStatusText(timeout, timeoutUnits) {
+            const timeoutMs = this.getTimeoutInMilliseconds(
+                timeout,
+                timeoutUnits
+            );
+            switch (timeoutUnits) {
+                case 'milliseconds':
+                    return `waiting for ${timeout} milliseconds`;
+                case 'hours':
+                case 'days':
+                    return `waiting until ${this.timeoutStatus(timeoutMs)}`;
+                case 'minutes':
+                default:
+                    return `waiting for ${timeout} ${timeoutUnits}: ${this.timeoutStatus(
+                        timeoutMs
+                    )}`;
+            }
+        }
+
+        getTimeoutInMilliseconds(timeout, timeoutUnits) {
+            switch (timeoutUnits) {
+                case 'milliseconds':
+                    return timeout;
+                case 'minutes':
+                    return timeout * (60 * 1000);
+                case 'hours':
+                    return timeout * (60 * 60 * 1000);
+                case 'days':
+                    return timeout * (24 * 60 * 60 * 1000);
+                default:
+                    return timeout * 1000;
             }
         }
 
