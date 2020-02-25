@@ -154,6 +154,8 @@ module.exports = function(RED) {
                 this.credentials.access_token = process.env.SUPERVISOR_TOKEN;
 
                 this.RED.nodes.addCredentials(this.id, this.credentials);
+            } else {
+                this.nodeConfig.connectionDelay = false;
             }
 
             this.RED.httpAdmin.get(
