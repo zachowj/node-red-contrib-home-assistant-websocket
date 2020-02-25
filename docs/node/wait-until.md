@@ -11,6 +11,14 @@ When an input is received the node will wait until the condition is met or the t
 
 The id of an entity to use for the comparison.
 
+### Entity ID Filter Types <Badge text="required"/>
+
+- Type: `string`
+- Values: `exact|substring|regex`
+- Default: `exact`
+
+Substring can be a comma-delimited list.
+
 ### Wait Until <Badge text="required"/>
 
 - Type: `string`
@@ -49,6 +57,7 @@ Override config values by passing in a property with a valid value.
 
 - `entity_id`
 - `entityId` <Badge type="warning" text="deprecated" />
+- `entityIdFilterType`
 - `property`
 - `comparator`
 - `value`

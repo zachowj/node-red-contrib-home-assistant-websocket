@@ -424,25 +424,6 @@ module.exports = function(RED) {
                 data: eventMessage
             };
         }
-
-        shouldIncludeEvent(entityId) {
-            if (!this.nodeConfig.entityidfilter) return true;
-            const filter = this.nodeConfig.entityidfilter;
-            const type = this.nodeConfig.entityidfiltertype;
-
-            if (type === 'substring') {
-                const found = this.nodeConfig.entityidfilter.filter(
-                    filterStr => entityId.indexOf(filterStr) >= 0
-                );
-                return found.length > 0;
-            }
-
-            if (type === 'regex') {
-                return filter.test(entityId);
-            }
-
-            return filter === entityId;
-        }
     }
 
     RED.nodes.registerType('trigger-state', TriggerState);

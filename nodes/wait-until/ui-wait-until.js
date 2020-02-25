@@ -15,6 +15,7 @@ RED.nodes.registerType('ha-wait-until', {
         server: { value: '', type: 'server', required: true },
         outputs: { value: 1 },
         entityId: { value: '' },
+        entityIdFilterType: { value: 'exact' },
         property: { value: '' },
         comparator: { value: 'is' },
         value: { value: '' },
@@ -132,8 +133,12 @@ RED.nodes.registerType('ha-wait-until', {
             })
             .typedInput('width', '68%');
 
+        // Set defaults if undefined
         if (node.blockInputOverrides === undefined) {
             $('#node-input-blockInputOverrides').prop('checked', true);
         }
+        $('#node-input-entityIdFilterType').val(
+            node.entityIdFilterType || 'exact'
+        );
     }
 });

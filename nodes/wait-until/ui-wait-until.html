@@ -10,7 +10,13 @@
 
 <div class="form-row">
     <label for="entityId"><i class="fa fa-cube"></i> Entity ID</label>
-    <input type="text" id="node-input-entityId" />
+    <input type="text" id="node-input-entityId" style="width: 50%;" />
+
+    <select type="text" id="node-input-entityIdFilterType" style="width: 20%;">
+        <option value="exact">Exact</option>
+        <option value="substring">Substring</option>
+        <option value="regex">Regex</option>
+    </select>
 </div>
 
 <div class="form-row">

@@ -173,27 +173,6 @@ module.exports = function(RED) {
                 this.onHaEventsStateChanged(eventMessage, true);
             }
         }
-
-        shouldIncludeEvent(entityId) {
-            if (!this.nodeConfig.entityidfilter) return true;
-            const filter = this.nodeConfig.entityidfilter;
-            const type = this.nodeConfig.entityidfiltertype;
-
-            if (type === 'exact') {
-                return filter === entityId;
-            }
-
-            if (type === 'substring') {
-                const found = this.nodeConfig.entityidfilter.filter(
-                    filterStr => entityId.indexOf(filterStr) >= 0
-                );
-                return found.length > 0;
-            }
-
-            if (type === 'regex') {
-                return filter.test(entityId);
-            }
-        }
     }
 
     RED.nodes.registerType('server-state-changed', ServerStateChangedNode);

@@ -10,7 +10,17 @@ module.exports = function(RED) {
                 isNode: true
             },
             outputs: 1,
-            entityId: {},
+            entityId: nodeDef => {
+                if (!nodeDef.entityId) return undefined;
+
+                if (nodeDef.entityIdFilterType === 'substring')
+                    return nodeDef.entityId.split(',').map(f => f.trim());
+                if (nodeDef.entityIdFilterType === 'regex')
+                    return new RegExp(nodeDef.entityId);
+                return nodeDef.entityId;
+            },
+            entityIdFilterType: nodeDef =>
+                nodeDef.entityIdFilterType || 'exact',
             property: {},
             comparator: {},
             value: {},
@@ -32,7 +42,23 @@ module.exports = function(RED) {
                 configProp: 'entityId',
                 validation: {
                     haltOnFail: true,
-                    schema: Joi.string().label('entityId')
+                    schema: Joi.alternatives()
+                        .try(
+                            Joi.array().items(Joi.string()),
+                            Joi.string(),
+                            Joi.object().instance(RegExp)
+                        )
+                        .label('entity_id')
+                }
+            },
+            entityIdFilterType: {
+                messageProp: 'payload.entityIdFilterType',
+                configProp: 'entityIdFilterType',
+                default: 'exact',
+                validation: {
+                    schema: Joi.string()
+                        .valid('exact', 'regex', 'substring')
+                        .label('entityIdFilterType')
                 }
             },
             property: {
@@ -137,6 +163,10 @@ module.exports = function(RED) {
                 return null;
             }
 
+            if (!this.shouldIncludeEvent(event.entity_id)) {
+                return;
+            }
+
             const result = await this.getComparatorResult(
                 this.savedConfig.comparator,
                 this.savedConfig.value,
@@ -193,6 +223,7 @@ module.exports = function(RED) {
 
             const config = {
                 entityId: parsedMessage.entityId.value,
+                entityIdFilterType: parsedMessage.entityIdFilterType.value,
                 property: parsedMessage.property.value,
                 comparator: parsedMessage.comparator.value,
                 value: parsedMessage.value.value,
@@ -215,15 +246,17 @@ module.exports = function(RED) {
             }
 
             // Render mustache templates in the entity id field
-            config.entityId =
-                parsedMessage.entityId.source === 'message'
-                    ? parsedMessage.entityId.value
-                    : RenderTemplate(
-                          parsedMessage.entityId.value,
-                          message,
-                          this.node.context(),
-                          this.utils.toCamelCase(this.nodeConfig.server.name)
-                      );
+            if (
+                parsedMessage.entityId.source === 'config' &&
+                config.entityIdFilterType === 'exact'
+            ) {
+                config.entityId = RenderTemplate(
+                    parsedMessage.entityId.value,
+                    message,
+                    this.node.context(),
+                    this.utils.toCamelCase(this.nodeConfig.server.name)
+                );
+            }
 
             // If the timeout field is jsonata type evaluate the expression and
             // it to timeout
@@ -250,8 +283,14 @@ module.exports = function(RED) {
             }
 
             this.removeEventClientListeners();
+            let eventTopic = 'ha_events:state_changed';
+
+            if (config.entityId === 'exact') {
+                eventTopic = `${eventTopic}:${config.entityId}`;
+            }
+
             this.addEventClientListener(
-                `ha_events:state_changed:${config.entityId}`,
+                eventTopic,
                 this.onEntityChange.bind(this)
             );
 
