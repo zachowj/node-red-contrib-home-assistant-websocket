@@ -73,16 +73,15 @@ Outputs the data received from the created webhook in Home Assistant
 
 Sends a request to home assistant for any domain and service available ( `light/turn_on`, `input_select/select_option`, etc..)
 
-#### Fire Event
-
-Fire an event on the event bus
-
-#### Sensor
+#### Entity
 
 _Need [Custom Integration](https://github.com/zachowj/hass-node-red) installed in Home Assistant for node to function_
 
-Creates a sensor or binary sensor in Home Assistant which can be updated
-from this node
+Creates an entity in Home Assistant which can be manipulated from this node
+
+#### Fire Event
+
+Fire an event on the event bus
 
 #### Current State
 
