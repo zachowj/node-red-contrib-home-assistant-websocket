@@ -1,7 +1,8 @@
-# Sensor
+# Entity
 
-Creates a sensor or binary sensor in Home Assistant which can be updated
-from this node.
+Creates an entity in Home Assistant which can be manipulated from this node.
+
+`binary sensor`, `sensor`, and `switch`
 
 ::: warning
 _Needs [Custom Integration](https://github.com/zachowj/hass-node-red) installed
@@ -13,7 +14,7 @@ in Home Assistant for this node to function_
 ### Type <Badge text="required"/>
 
 - Type: `string`
-- Values `sensor|binary_sensor`
+- Values `binary_sensor|sensor|switch`
 - Default: `sensor`
 
 The state the entity should be updated to
@@ -50,8 +51,8 @@ Determine how input values will be handled. When merge is selected the message o
 When creating the entity in Home Assistant this will also send the last updated state and attributes then node sent to Home Assistant
 
 ::: danger WARNING
-Sensor nodes will not work in a subflow due to the way they register themselves
-with Home Assistant. After a Node-RED restart a new sensor will be created in
+Entity nodes will not work in a subflow due to the way they register themselves
+with Home Assistant. After a Node-RED restart a new entity will be created in
 Home Assistant.
 :::
 

@@ -48,7 +48,7 @@ const nodeMap = {
     'call-service': { doc: 'call-service', type: 'api-call-service' },
     'config-server': { doc: 'config-server', type: 'server' },
     'current-state': { doc: 'current-state', type: 'api-current-state' },
-    entity: { doc: 'sensor', type: 'ha-entity' },
+    entity: { doc: 'entity', type: 'ha-entity' },
     'events-all': { doc: 'events-all', type: 'server-events' },
     'events-state-changed': {
         doc: 'events-state',

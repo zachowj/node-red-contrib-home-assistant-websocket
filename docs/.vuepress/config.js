@@ -67,6 +67,7 @@ module.exports = {
                         'call-service',
                         'config-server',
                         'current-state',
+                        'entity',
                         'events-all',
                         'events-state',
                         'fire-event',
@@ -74,7 +75,6 @@ module.exports = {
                         'get-history',
                         'get-template',
                         'poll-state',
-                        'sensor',
                         'trigger-state',
                         'wait-until',
                         'webhook'
