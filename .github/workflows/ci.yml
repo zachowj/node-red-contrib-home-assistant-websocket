@@ -28,7 +28,7 @@ jobs:
         env:
           CI: true
 
-  publishnpm:
+  publish-npm:
     if: github.event_name == 'push'
     needs: build
     runs-on: ubuntu-latest
@@ -40,10 +40,12 @@ jobs:
         with:
           token: ${{ secrets.npm_token }}
 
-      - if: jobs.publishnpm.steps.publish.type != 'none'
+      - run: |
+          echo ${{ steps.publish }}
+      - if: steps.publish.type != 'none'
         run: |
-          echo "Version changed: ${{ jobs.publishnpm.steps.publish.old-version }} => ${{ jobs.publishnpm.steps.publish.version }}"
-      - if: jobs.publishnpm.steps.publish.type == 'none'
+          echo "Version changed: ${{ steps.publish.old-version }} => ${{ steps.publish.version }}"
+      - if: steps.publish.type == 'none'
         name: npm next release
         uses: epeli/npm-release@v1
         with:
