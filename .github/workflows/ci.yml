@@ -39,13 +39,10 @@ jobs:
         uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.npm_token }}
-
-      - run: |
-          echo ${{ steps.publish }}
-      - if: steps.publish.type != 'none'
+      - if: steps.publish.outputs.type != 'none'
         run: |
-          echo "Version changed: ${{ steps.publish.old-version }} => ${{ steps.publish.version }}"
-      - if: steps.publish.type == 'none'
+          echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
+      - if: steps.publish.outputs.type == 'none'
         name: npm next release
         uses: epeli/npm-release@v1
         with:
