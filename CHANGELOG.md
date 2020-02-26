@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [0.21.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.20.2...v0.21.0) (2020-02-26)
+
+### Bug Fixes
+
+- Prior to 0.90.0 is_admin doesn't exist check for it to exist and not true ([3f07f55](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/3f07f55cbb257347e95e9033bf1dbd46936c2036)), closes [#207](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/207)
+
+### Features
+
+- **entity:** Rename sensor node to entity and add new entity type switch ([059c340](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/059c3403a4f90eefa7d5921d93c4e765f0c0601a))
+- **wait-until:** Entity Id can be a exact match, substring or Regex match ([9738bb5](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/9738bb530d74df84f3cf69fd1f8e6e1df6094e4c))
+- **wait-until:** Timeout property can be a JSONata expression to allow for dynamic timeout values ([9dcbe1a](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/9dcbe1a1ba6e803b578cb74206f6835a9a6965b6)), closes [#206](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/206)
+
 ## [0.20.2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.20.1...v0.20.2) (2020-02-14)
 
 ### Bug Fixes
