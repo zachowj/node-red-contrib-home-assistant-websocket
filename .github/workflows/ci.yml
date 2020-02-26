@@ -35,7 +35,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: npm release
+      - id: publish
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.npm_token }}
+
+      - if: steps.publish.type != 'none'
+        run: |
+          echo "Version changed: ${{ steps.publish.old-version }} => ${{ steps.publish.version }}"
+      - if: steps.publish.type == 'none'
+        name: npm next release
         uses: epeli/npm-release@v1
         with:
           type: prerelease
