@@ -38,7 +38,11 @@ RED.nodes.registerType('server', {
         }
 
         // Still need to check if host is hassio url for backward compatibility
-        if ($host.val() === 'http://hassio/homeassistant') {
+        const addonBaseUrls = [
+            'http://hassio/homeassistant',
+            'http://supervisor/core'
+        ];
+        if (addonBaseUrls.includes($host.val())) {
             $addon.prop('checked', true);
         }
 

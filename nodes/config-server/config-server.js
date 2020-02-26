@@ -146,16 +146,18 @@ module.exports = function(RED) {
                 this.RED.nodes.addCredentials(this.id, this.credentials);
             }
             // Check if using HA Add-on and import proxy token
+            const addonBaseUrls = [
+                'http://hassio/homeassistant',
+                'http://supervisor/core'
+            ];
             if (
                 this.nodeConfig.addon ||
-                this.credentials.host === 'http://hassio/homeassistant'
+                addonBaseUrls.includes(this.credentials.host)
             ) {
                 this.credentials.host = 'http://supervisor/core';
                 this.credentials.access_token = process.env.SUPERVISOR_TOKEN;
 
                 this.RED.nodes.addCredentials(this.id, this.credentials);
-            } else {
-                this.nodeConfig.connectionDelay = false;
             }
 
             this.RED.httpAdmin.get(
