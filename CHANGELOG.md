@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.21.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.21.0...v0.21.1) (2020-02-26)
+
+### Bug Fixes
+
+- fix breaking change caused by rebranding hassio ([c6dcaac](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/c6dcaac10c601557295c35b335dd19b3cb3086ad))
+
 # [0.21.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.20.2...v0.21.0) (2020-02-26)
 
 ### Bug Fixes
