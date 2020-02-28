@@ -1,18 +1,11 @@
 /* eslint-disable camelcase */
 const EventsHaNode = require('../../lib/events-ha-node');
+const utils = require('../../lib/utils');
 
 module.exports = function(RED) {
     const nodeOptions = {
         config: {
-            entityidfilter: nodeDef => {
-                if (!nodeDef.entityidfilter) return undefined;
-
-                if (nodeDef.entityidfiltertype === 'substring')
-                    return nodeDef.entityidfilter.split(',').map(f => f.trim());
-                if (nodeDef.entityidfiltertype === 'regex')
-                    return new RegExp(nodeDef.entityidfilter);
-                return nodeDef.entityidfilter;
-            },
+            entityidfilter: {},
             entityidfiltertype: {},
             haltIfState: nodeDef =>
                 nodeDef.haltifstate ? nodeDef.haltifstate.trim() : null,
@@ -81,7 +74,13 @@ module.exports = function(RED) {
                 );
             }
 
-            if (!this.shouldIncludeEvent(entity_id)) {
+            if (
+                !utils.shouldIncludeEvent(
+                    entity_id,
+                    this.nodeConfig.entityidfilter,
+                    this.nodeConfig.entityidfiltertype
+                )
+            ) {
                 return;
             }
 

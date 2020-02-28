@@ -2,21 +2,14 @@
 const EventsHaNode = require('../../lib/events-ha-node');
 const { reduce } = require('p-iteration');
 const RenderTemplate = require('../../lib/mustache-context');
+const utils = require('../../lib/utils');
 
 module.exports = function(RED) {
     const nodeOptions = {
         debug: true,
         config: {
             entityid: {},
-            entityidfilter: nodeDef => {
-                if (!nodeDef.entityid) return undefined;
-
-                if (nodeDef.entityidfiltertype === 'substring')
-                    return nodeDef.entityid.split(',').map(f => f.trim());
-                if (nodeDef.entityidfiltertype === 'regex')
-                    return new RegExp(nodeDef.entityid);
-                return nodeDef.entityid;
-            },
+            entityidfilter: {},
             entityidfiltertype: {},
             constraints: {},
             customoutputs: {},
@@ -116,7 +109,13 @@ module.exports = function(RED) {
 
             eventMessage = this.utils.merge({}, eventMessage);
 
-            if (!this.shouldIncludeEvent(eventMessage.entity_id)) {
+            if (
+                !utils.shouldIncludeEvent(
+                    eventMessage.entity_id,
+                    this.nodeConfig.entityidfilter,
+                    this.nodeConfig.entityidfiltertype
+                )
+            ) {
                 return;
             }
 

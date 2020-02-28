@@ -1,6 +1,7 @@
 const EventsNode = require('../../lib/events-node');
 const Joi = require('@hapi/joi');
 const RenderTemplate = require('../../lib/mustache-context');
+const utils = require('../../lib/utils');
 
 module.exports = function(RED) {
     const nodeOptions = {
@@ -10,15 +11,7 @@ module.exports = function(RED) {
                 isNode: true
             },
             outputs: 1,
-            entityId: nodeDef => {
-                if (!nodeDef.entityId) return undefined;
-
-                if (nodeDef.entityIdFilterType === 'substring')
-                    return nodeDef.entityId.split(',').map(f => f.trim());
-                if (nodeDef.entityIdFilterType === 'regex')
-                    return new RegExp(nodeDef.entityId);
-                return nodeDef.entityId;
-            },
+            entityId: {},
             entityIdFilterType: nodeDef =>
                 nodeDef.entityIdFilterType || 'exact',
             property: {},
@@ -163,7 +156,13 @@ module.exports = function(RED) {
                 return null;
             }
 
-            if (!this.shouldIncludeEvent(event.entity_id)) {
+            if (
+                !utils.shouldIncludeEvent(
+                    event.entity_id,
+                    this.nodeConfig.entityId,
+                    this.nodeConfig.entityIdFilterType
+                )
+            ) {
                 return;
             }
 
@@ -334,12 +333,21 @@ module.exports = function(RED) {
             this.setStatus({ text: statusText });
             this.savedConfig = config;
 
-            if (this.nodeConfig.checkCurrentState === true) {
+            // Only check current state when filter type is exact
+            if (
+                config.checkCurrentState === true &&
+                config.entityIdFilterType === 'exact'
+            ) {
                 const currentState = await this.nodeConfig.server.homeAssistant.getStates(
                     config.entityId
                 );
 
-                this.onEntityChange({ event: { new_state: currentState } });
+                this.onEntityChange({
+                    event: {
+                        entity_id: config.entityId,
+                        new_state: currentState
+                    }
+                });
             }
         }
 

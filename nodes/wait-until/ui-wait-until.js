@@ -137,8 +137,10 @@ RED.nodes.registerType('ha-wait-until', {
         if (node.blockInputOverrides === undefined) {
             $('#node-input-blockInputOverrides').prop('checked', true);
         }
-        $('#node-input-entityIdFilterType').val(
-            node.entityIdFilterType || 'exact'
-        );
+        const $filterType = $('#node-input-entityIdFilterType');
+        $filterType.val(node.entityIdFilterType || 'exact');
+        $filterType.on('change', function() {
+            $('.exact-only').toggle($filterType.val() === 'exact');
+        });
     }
 });
