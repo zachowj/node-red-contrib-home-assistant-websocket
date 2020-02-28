@@ -9,7 +9,6 @@ module.exports = function(RED) {
         debug: true,
         config: {
             entityid: {},
-            entityidfilter: {},
             entityidfiltertype: {},
             constraints: {},
             customoutputs: {},
@@ -112,7 +111,7 @@ module.exports = function(RED) {
             if (
                 !utils.shouldIncludeEvent(
                     eventMessage.entity_id,
-                    this.nodeConfig.entityidfilter,
+                    this.nodeConfig.entityid,
                     this.nodeConfig.entityidfiltertype
                 )
             ) {
@@ -210,7 +209,7 @@ module.exports = function(RED) {
         getNodeEntityId() {
             return (
                 this.nodeConfig.entityidfiltertype === 'exact' &&
-                this.nodeConfig.entityidfilter
+                this.nodeConfig.entityid
             );
         }
 
