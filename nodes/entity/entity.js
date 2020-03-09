@@ -48,15 +48,6 @@ module.exports = function(RED) {
 
         async init() {
             await this.loadPersistedData();
-
-            this.addEventClientListener(
-                `ha_events:config_update`,
-                this.onConfigUpdate.bind(this)
-            );
-
-            if (this.isConnected) {
-                this.registerEntity();
-            }
         }
 
         setConnectionStatus(additionalText) {
@@ -153,7 +144,12 @@ module.exports = function(RED) {
         onClose(removed) {
             super.onClose(removed);
 
-            if (this.registered && this.isConnected && removed) {
+            if (
+                this.nodeConfig.entityType !== 'switch' &&
+                this.registered &&
+                this.isConnected &&
+                removed
+            ) {
                 const payload = {
                     type: 'nodered/discovery',
                     server_id: this.nodeConfig.server.id,
