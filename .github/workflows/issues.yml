@@ -1,3 +1,5 @@
+name: Issues
+
 on:
   issues:
     types: [opened, edited]
