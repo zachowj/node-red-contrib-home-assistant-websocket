@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.21.5](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.21.4...v0.21.5) (2020-03-09)
+
+### Bug Fixes
+
+- Use correct entity type when removing node from integration ([f842578](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f842578ead04f61d76bf57c0bb046e51dfde3f90)), closes [#217](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/217)
+
 ## [0.21.4](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.21.3...v0.21.4) (2020-03-06)
 
 ## [0.21.3](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.21.2...v0.21.3) (2020-02-28)
