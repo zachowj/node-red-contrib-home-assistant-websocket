@@ -35,7 +35,8 @@ module.exports = {
                         'saving-and-restoring-states',
                         'get-state_changed-events-based-on-area',
                         'sun-events',
-                        'vacation-mode'
+                        'vacation-mode',
+                        'expiration-date-monitor'
                     ]
                 }
             ],
