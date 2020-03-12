@@ -80,7 +80,7 @@ module.exports = function(RED) {
             const pollState = await this.nodeConfig.server.homeAssistant.getStates(
                 this.nodeConfig.entity_id
             );
-            if (!pollState.entity_id) {
+            if (!pollState) {
                 this.error(
                     `could not find state with entity_id "${this.nodeConfig.entity_id}"`,
                     {}

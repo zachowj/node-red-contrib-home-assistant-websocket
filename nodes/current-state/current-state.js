@@ -67,7 +67,7 @@ module.exports = function(RED) {
             const entity = await config.server.homeAssistant.getStates(
                 entityId
             );
-            if (!entity.entity_id) {
+            if (!entity) {
                 this.node.error(
                     `Entity could not be found in cache for entity_id: ${entityId}`,
                     message
