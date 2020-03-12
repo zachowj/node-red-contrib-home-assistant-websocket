@@ -62,7 +62,6 @@
     "@hapi/joi": "17.1.0",
     "axios": "0.19.2",
     "bonjour": "3.5.0",
-    "date-fns": "2.9.0",
     "debug": "4.1.1",
     "flat": "5.0.0",
     "home-assistant-js-websocket": "4.4.0",
