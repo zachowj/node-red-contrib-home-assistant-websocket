@@ -1,4 +1,5 @@
 const helper = require('node-red-node-test-helper');
+
 const getHistory = require('../nodes/get-history/get-history.js');
 
 helper.init(require.resolve('node-red'));

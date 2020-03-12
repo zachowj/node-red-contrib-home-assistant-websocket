@@ -1,8 +1,11 @@
-const BaseNode = require('../../lib/base-node');
-const HomeAssistant = require('../../lib/home-assistant');
 const bonjour = require('bonjour')();
 const flatten = require('flat');
+const selectn = require('selectn');
 const uniq = require('lodash.uniq');
+
+const BaseNode = require('../../lib/base-node');
+const HomeAssistant = require('../../lib/home-assistant');
+const { toCamelCase } = require('../../lib/utils');
 
 module.exports = function(RED) {
     const httpHandlers = {
@@ -255,7 +258,7 @@ module.exports = function(RED) {
         }
 
         get nameAsCamelcase() {
-            return this.utils.toCamelCase(this.nodeConfig.name);
+            return toCamelCase(this.nodeConfig.name);
         }
 
         setOnContext(key, value) {
@@ -317,7 +320,7 @@ module.exports = function(RED) {
         // Close WebSocket client on redeploy or node-RED shutdown
         async onClose(removed) {
             super.onClose();
-            const webSocketClient = this.utils.selectn(
+            const webSocketClient = selectn(
                 'homeAssistant.websocket.client',
                 this
             );

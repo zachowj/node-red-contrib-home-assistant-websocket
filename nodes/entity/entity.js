@@ -1,4 +1,5 @@
 const slugify = require('slugify');
+
 const EventsHaNode = require('../../lib/events-ha-node');
 
 module.exports = function(RED) {

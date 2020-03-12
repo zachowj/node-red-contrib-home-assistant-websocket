@@ -1,4 +1,6 @@
 /* eslint-disable camelcase */
+const selectn = require('selectn');
+
 const BaseNode = require('../../lib/base-node');
 const RenderTemplate = require('../../lib/mustache-context');
 
@@ -57,24 +59,23 @@ module.exports = function(RED) {
 
             if (message && message.payload) {
                 payload = this.tryToObject(message.payload);
-                payloadDomain = this.utils.selectn('domain', payload);
-                payloadService = this.utils.selectn('service', payload);
+                payloadDomain = selectn('domain', payload);
+                payloadService = selectn('service', payload);
             }
             const configDomain = config.service_domain;
             const configService = config.service;
-            const serverName = this.utils.toCamelCase(config.server.name);
             const context = this.node.context();
             const apiDomain = RenderTemplate(
                 payloadDomain || configDomain,
                 message,
                 context,
-                serverName
+                config.server.name
             );
             const apiService = RenderTemplate(
                 payloadService || configService,
                 message,
                 context,
-                serverName
+                config.server.name
             );
             let configData;
             if (config.dataType === 'jsonata' && config.data) {
@@ -92,7 +93,7 @@ module.exports = function(RED) {
                     config.data,
                     message,
                     context,
-                    serverName,
+                    config.server.name,
                     config.mustacheAltTags
                 );
             }
@@ -125,7 +126,7 @@ module.exports = function(RED) {
                     config.entityId,
                     message,
                     context,
-                    serverName,
+                    config.server.name,
                     config.mustacheAltTags
                 );
                 // homeassistant domain requires entity_id to be an array for multiple ids
@@ -180,7 +181,7 @@ module.exports = function(RED) {
         getApiData(payload, data) {
             let contextData = {};
 
-            let payloadData = this.utils.selectn('data', payload);
+            let payloadData = selectn('data', payload);
             let configData = this.tryToObject(data);
             payloadData = payloadData || {};
             configData = configData || {};
@@ -192,10 +193,10 @@ module.exports = function(RED) {
                 let globalVal = ctx.global.get(this.nodeConfig.mergecontext);
                 flowVal = flowVal || {};
                 globalVal = globalVal || {};
-                contextData = this.utils.merge({}, globalVal, flowVal);
+                contextData = { ...globalVal, ...flowVal };
             }
 
-            return this.utils.merge({}, configData, contextData, payloadData);
+            return { ...configData, ...contextData, ...payloadData };
         }
     }
 

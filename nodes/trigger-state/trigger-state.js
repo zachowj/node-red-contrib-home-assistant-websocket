@@ -1,8 +1,10 @@
 /* eslint-disable camelcase */
-const EventsHaNode = require('../../lib/events-ha-node');
+const selectn = require('selectn');
 const { reduce } = require('p-iteration');
+
+const EventsHaNode = require('../../lib/events-ha-node');
 const RenderTemplate = require('../../lib/mustache-context');
-const utils = require('../../lib/utils');
+const { shouldIncludeEvent } = require('../../lib/utils');
 
 module.exports = function(RED) {
     const nodeOptions = {
@@ -13,7 +15,7 @@ module.exports = function(RED) {
             constraints: {},
             customoutputs: {},
             outputinitially: {},
-            state_type: { value: 'str' }
+            state_type: {}
         }
     };
 
@@ -102,14 +104,14 @@ module.exports = function(RED) {
                 return;
             }
 
-            if (!this.utils.selectn('event.new_state', eventMessage)) {
+            if (!selectn('event.new_state', eventMessage)) {
                 return;
             }
 
-            eventMessage = this.utils.merge({}, eventMessage);
+            eventMessage = { ...eventMessage };
 
             if (
-                !utils.shouldIncludeEvent(
+                !shouldIncludeEvent(
                     eventMessage.entity_id,
                     this.nodeConfig.entityid,
                     this.nodeConfig.entityidfiltertype
@@ -233,7 +235,7 @@ module.exports = function(RED) {
                     eventMessage.event
                 );
 
-                const actualValue = this.utils.selectn(
+                const actualValue = selectn(
                     constraint.propertyValue,
                     constraintTarget.state
                 );
@@ -306,7 +308,7 @@ module.exports = function(RED) {
                     };
 
                     if (output.comparatorPropertyType !== 'always') {
-                        result.actualValue = this.utils.selectn(
+                        result.actualValue = selectn(
                             output.comparatorPropertyValue,
                             eventMessage.event
                         );
@@ -391,7 +393,7 @@ module.exports = function(RED) {
                     output.messageValue,
                     eventMessage.event,
                     this.node.context(),
-                    this.utils.toCamelCase(this.nodeConfig.server.name)
+                    this.nodeConfig.server.name
                 );
 
                 switch (output.messageValueType) {

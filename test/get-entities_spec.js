@@ -1,5 +1,6 @@
-const helper = require('node-red-node-test-helper');
 const currentState = require('../nodes/get-entities/get-entities.js');
+
+const helper = require('node-red-node-test-helper');
 
 helper.init(require.resolve('node-red'));
 

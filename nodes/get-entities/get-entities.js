@@ -1,7 +1,9 @@
-const BaseNode = require('../../lib/base-node');
-const { shuffle } = require('lodash');
-const { filter } = require('p-iteration');
 const Joi = require('@hapi/joi');
+const selectn = require('selectn');
+const { shuffle } = require('lodash');
+
+const BaseNode = require('../../lib/base-node');
+const { filter } = require('p-iteration');
 
 module.exports = function(RED) {
     const nodeOptions = {
@@ -146,7 +148,7 @@ module.exports = function(RED) {
                         Date.now() - new Date(entity.last_changed).getTime();
 
                     for (const rule of rules) {
-                        const value = this.utils.selectn(rule.property, entity);
+                        const value = selectn(rule.property, entity);
                         const result = await this.getComparatorResult(
                             rule.logic,
                             rule.value,

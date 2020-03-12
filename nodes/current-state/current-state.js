@@ -1,6 +1,7 @@
-const RenderTemplate = require('../../lib/mustache-context');
-const BaseNode = require('../../lib/base-node');
 const Joi = require('@hapi/joi');
+
+const BaseNode = require('../../lib/base-node');
+const RenderTemplate = require('../../lib/mustache-context');
 
 module.exports = function(RED) {
     const nodeOptions = {
@@ -55,7 +56,7 @@ module.exports = function(RED) {
                     : parsedMessage.entity_id.value,
                 message,
                 this.node.context(),
-                this.utils.toCamelCase(config.server.name)
+                config.server.name
             );
 
             if (config.server === null) {
@@ -63,11 +64,9 @@ module.exports = function(RED) {
                 return;
             }
 
-            const entity = this.utils.merge(
-                {},
-                await config.server.homeAssistant.getStates(entityId)
+            const entity = await config.server.homeAssistant.getStates(
+                entityId
             );
-
             if (!entity.entity_id) {
                 this.node.error(
                     `Entity could not be found in cache for entity_id: ${entityId}`,

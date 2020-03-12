@@ -1,3 +1,5 @@
+const selectn = require('selectn');
+
 const EventsHaNode = require('../../lib/events-ha-node');
 
 module.exports = function(RED) {
@@ -28,7 +30,7 @@ module.exports = function(RED) {
             }
 
             // Registering only needed event types
-            if (this.utils.selectn('nodeConfig.server.homeAssistant', this)) {
+            if (selectn('nodeConfig.server.homeAssistant', this)) {
                 this.nodeConfig.server.homeAssistant.eventsList[this.id] =
                     this.nodeConfig.event_type || '__ALL__';
                 this.updateEventList();

@@ -1,6 +1,7 @@
-const RenderTemplate = require('../../lib/mustache-context');
-const BaseNode = require('../../lib/base-node');
 const Joi = require('@hapi/joi');
+
+const BaseNode = require('../../lib/base-node');
+const RenderTemplate = require('../../lib/mustache-context');
 
 module.exports = function(RED) {
     const nodeOptions = {
@@ -114,7 +115,6 @@ module.exports = function(RED) {
                 return;
             }
 
-            const serverName = node.utils.toCamelCase(config.server.name);
             let data;
             if (parsedMessage.dataType.value === 'jsonata') {
                 try {
@@ -133,7 +133,7 @@ module.exports = function(RED) {
                         : parsedMessage.data.value,
                     message,
                     node.node.context(),
-                    serverName
+                    config.server.name
                 );
             }
 
@@ -145,7 +145,7 @@ module.exports = function(RED) {
                     parsedMessage.path.value,
                     message,
                     node.node.context(),
-                    serverName
+                    config.server.name
                 ).replace(/^\/(?:api\/)?/, '');
 
                 if (!path) {

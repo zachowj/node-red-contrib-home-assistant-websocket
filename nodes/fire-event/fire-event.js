@@ -1,4 +1,5 @@
 const Joi = require('@hapi/joi');
+
 const BaseNode = require('../../lib/base-node');
 const RenderTemplate = require('../../lib/mustache-context');
 
@@ -64,7 +65,7 @@ module.exports = function(RED) {
                 parsedMessage.event.value,
                 message,
                 this.node.context(),
-                this.utils.toCamelCase(this.nodeConfig.server.name)
+                this.nodeConfig.server.name
             );
             let eventData;
             if (parsedMessage.dataType.value === 'jsonata') {
@@ -84,7 +85,7 @@ module.exports = function(RED) {
                         : parsedMessage.data.value,
                     message,
                     this.node.context(),
-                    this.utils.toCamelCase(this.nodeConfig.server.name)
+                    this.nodeConfig.server.name
                 );
             }
 

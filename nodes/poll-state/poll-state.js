@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 const ta = require('time-ago');
+
 const EventsHaNode = require('../../lib/events-ha-node');
 
 module.exports = function(RED) {
@@ -76,13 +77,9 @@ module.exports = function(RED) {
         async onTimer(triggered = false) {
             if (!this.isConnected || this.isEnabled === false) return;
 
-            const pollState = this.utils.merge(
-                {},
-                await this.nodeConfig.server.homeAssistant.getStates(
-                    this.nodeConfig.entity_id
-                )
+            const pollState = await this.nodeConfig.server.homeAssistant.getStates(
+                this.nodeConfig.entity_id
             );
-
             if (!pollState.entity_id) {
                 this.error(
                     `could not find state with entity_id "${this.nodeConfig.entity_id}"`,

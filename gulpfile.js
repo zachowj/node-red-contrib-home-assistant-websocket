@@ -1,17 +1,17 @@
+const del = require('del');
 const fs = require('fs');
 const path = require('path');
-const del = require('del');
 
 // General
-const { src, dest, series, task, watch } = require('gulp');
 const concat = require('gulp-concat');
 const gulpIf = require('gulp-if');
 const lazypipe = require('lazypipe');
 const merge = require('merge-stream');
 const wrap = require('gulp-wrap');
+const { src, dest, series, task, watch } = require('gulp');
 
-const nodemon = require('nodemon');
 const browserSync = require('browser-sync');
+const nodemon = require('nodemon');
 
 // HTML
 const gulpHtmlmin = require('gulp-htmlmin');
@@ -20,10 +20,10 @@ const gulpHtmlmin = require('gulp-htmlmin');
 const terser = require('gulp-terser');
 
 // Styles
-const sass = require('gulp-sass');
+const minify = require('cssnano');
 const postcss = require('gulp-postcss');
 const prefix = require('autoprefixer');
-const minify = require('cssnano');
+const sass = require('gulp-sass');
 
 // Markdown-It
 const cheerio = require('gulp-cheerio');

@@ -1,4 +1,5 @@
 const helper = require('node-red-node-test-helper');
+
 const currentState = require('../nodes/current-state/current-state.js');
 
 helper.init(require.resolve('node-red'));

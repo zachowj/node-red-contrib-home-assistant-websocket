@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 const EventsHaNode = require('../../lib/events-ha-node');
-const utils = require('../../lib/utils');
+const { shouldIncludeEvent } = require('../../lib/utils');
 
 module.exports = function(RED) {
     const nodeOptions = {
@@ -49,7 +49,7 @@ module.exports = function(RED) {
             if (this.isEnabled === false) {
                 return;
             }
-            const { entity_id, event } = this.utils.merge({}, evt);
+            const { entity_id, event } = { ...evt };
 
             if (!event.new_state) {
                 return null;
@@ -75,7 +75,7 @@ module.exports = function(RED) {
             }
 
             if (
-                !utils.shouldIncludeEvent(
+                !shouldIncludeEvent(
                     entity_id,
                     this.nodeConfig.entityidfilter,
                     this.nodeConfig.entityidfiltertype

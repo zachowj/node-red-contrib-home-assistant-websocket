@@ -1,7 +1,9 @@
-const EventsNode = require('../../lib/events-node');
 const Joi = require('@hapi/joi');
+const selectn = require('selectn');
+
+const EventsNode = require('../../lib/events-node');
 const RenderTemplate = require('../../lib/mustache-context');
-const utils = require('../../lib/utils');
+const { shouldIncludeEvent } = require('../../lib/utils');
 
 module.exports = function(RED) {
     const nodeOptions = {
@@ -157,7 +159,7 @@ module.exports = function(RED) {
             }
 
             if (
-                !utils.shouldIncludeEvent(
+                !shouldIncludeEvent(
                     event.entity_id,
                     this.nodeConfig.entityId,
                     this.nodeConfig.entityIdFilterType
@@ -169,7 +171,7 @@ module.exports = function(RED) {
             const result = await this.getComparatorResult(
                 this.savedConfig.comparator,
                 this.savedConfig.value,
-                this.utils.selectn(this.savedConfig.property, event.new_state),
+                selectn(this.savedConfig.property, event.new_state),
                 this.savedConfig.valueType,
                 {
                     message: this.savedMessage,
@@ -253,7 +255,7 @@ module.exports = function(RED) {
                     parsedMessage.entityId.value,
                     message,
                     this.node.context(),
-                    this.utils.toCamelCase(this.nodeConfig.server.name)
+                    this.nodeConfig.server.name
                 );
             }
 

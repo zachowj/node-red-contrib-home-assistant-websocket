@@ -1,7 +1,8 @@
-const BaseNode = require('../../lib/base-node');
 const Joi = require('@hapi/joi');
-const RenderTemplate = require('../../lib/mustache-context');
 const timestring = require('timestring');
+
+const BaseNode = require('../../lib/base-node');
+const RenderTemplate = require('../../lib/mustache-context');
 
 module.exports = function(RED) {
     const nodeOptions = {
@@ -88,7 +89,7 @@ module.exports = function(RED) {
                           entityId.value,
                           message,
                           this.node.context(),
-                          this.utils.toCamelCase(this.nodeConfig.server.name)
+                          this.nodeConfig.server.name
                       );
             relativeTime = relativeTime.value;
             flatten = flatten.value;
