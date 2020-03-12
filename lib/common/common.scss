@@ -85,10 +85,15 @@ li span.property-type {
     &.tip {
         background-color: #f3f5f7;
         border-color: #42b983;
+        color: #2c3e50;
+
+        a {
+            color: #3eaf7c;
+        }
     }
 
     &.warning {
-        background-color: rgba(255, 229, 100, 0.3);
+        background-color: #fff6c6;
         border-color: #e7c000;
         color: #6b5900;
 
@@ -97,7 +102,7 @@ li span.property-type {
         }
 
         a {
-            color: #6b5900;
+            color: #2c3e50;
         }
     }
 
@@ -111,7 +116,7 @@ li span.property-type {
         }
 
         a {
-            color: #4d0000;
+            color: #2c3e50;
         }
     }
 }
