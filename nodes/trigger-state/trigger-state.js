@@ -15,7 +15,7 @@ module.exports = function(RED) {
             constraints: {},
             customoutputs: {},
             outputinitially: {},
-            state_type: {}
+            state_type: { value: 'str' }
         }
     };
 
