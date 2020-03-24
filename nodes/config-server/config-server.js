@@ -165,30 +165,21 @@ module.exports = function(RED) {
                 this.nodeConfig.connectionDelay = false;
             }
 
-            this.RED.httpAdmin.get(
-                `/homeassistant/${this.id}/entities`,
-                RED.auth.needsPermission('server.read'),
-                httpHandlers.disableCache.bind(this),
-                httpHandlers.getEntities.bind(this)
+            const endpoints = {
+                entities: httpHandlers.getEntities,
+                states: httpHandlers.getStates,
+                services: httpHandlers.getServices,
+                properties: httpHandlers.getProperties
+            };
+            Object.entries(endpoints).forEach(([key, value]) =>
+                this.RED.httpAdmin.get(
+                    `/homeassistant/${this.id}/${key}`,
+                    RED.auth.needsPermission('server.read'),
+                    httpHandlers.disableCache.bind(this),
+                    value.bind(this)
+                )
             );
-            this.RED.httpAdmin.get(
-                `/homeassistant/${this.id}/states`,
-                RED.auth.needsPermission('server.read'),
-                httpHandlers.disableCache.bind(this),
-                httpHandlers.getStates.bind(this)
-            );
-            this.RED.httpAdmin.get(
-                `/homeassistant/${this.id}/services`,
-                RED.auth.needsPermission('server.read'),
-                httpHandlers.disableCache.bind(this),
-                httpHandlers.getServices.bind(this)
-            );
-            this.RED.httpAdmin.get(
-                `/homeassistant/${this.id}/properties`,
-                RED.auth.needsPermission('server.read'),
-                httpHandlers.disableCache.bind(this),
-                httpHandlers.getProperties.bind(this)
-            );
+
             this.RED.httpAdmin.get(
                 `/homeassistant/${this.id}/version`,
                 RED.auth.needsPermission('server.read'),
@@ -217,37 +208,21 @@ module.exports = function(RED) {
             this.http = this.homeAssistant.http;
             this.websocket = this.homeAssistant.websocket;
 
-            this.websocket.addListener(
-                'ha_client:close',
-                this.onHaEventsClose.bind(this)
-            );
-            this.websocket.addListener(
-                'ha_client:open',
-                this.onHaEventsOpen.bind(this)
-            );
-            this.websocket.addListener(
-                'ha_client:connecting',
-                this.onHaEventsConnecting.bind(this)
-            );
-            this.websocket.addListener(
-                'ha_client:error',
-                this.onHaEventsError.bind(this)
-            );
-            this.websocket.addListener(
-                'ha_client:states_loaded',
-                this.onHaStatesLoaded.bind(this)
-            );
-            this.websocket.addListener(
-                'ha_client:services_loaded',
-                this.onHaServicesLoaded.bind(this)
+            // Setup event listeners
+            const events = {
+                'ha_client:close': this.onHaEventsClose,
+                'ha_client:open': this.onHaEventsOpen,
+                'ha_client:connecting': this.onHaEventsConnecting,
+                'ha_client:error': this.onHaEventsError,
+                'ha_client:states_loaded': this.onHaStatesLoaded,
+                'ha_client:services_loaded': this.onHaServicesLoaded
+            };
+            Object.entries(events).forEach(([event, callback]) =>
+                this.websocket.addListener(event, callback.bind(this))
             );
             this.websocket.once(
                 'ha_client:connected',
                 this.registerEvents.bind(this)
-            );
-            this.websocket.addListener(
-                'ha_events:state_changed',
-                this.onHaStateChanged.bind(this)
             );
 
             await this.homeAssistant.connect().catch(err => {
