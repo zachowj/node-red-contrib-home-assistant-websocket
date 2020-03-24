@@ -3,22 +3,22 @@ const ta = require('time-ago');
 
 const EventsHaNode = require('../../lib/events-ha-node');
 
-module.exports = function(RED) {
+module.exports = function (RED) {
     const nodeOptions = {
         config: {
-            entity_id: nodeDef => (nodeDef.entity_id || '').trim(),
-            updateinterval: nodeDef =>
+            entity_id: (nodeDef) => (nodeDef.entity_id || '').trim(),
+            updateinterval: (nodeDef) =>
                 !isNaN(nodeDef.updateinterval)
                     ? Number(nodeDef.updateinterval)
                     : 60,
             updateIntervalUnits: {},
             outputinitially: {},
             outputonchanged: {},
-            state_type: nodeDef => nodeDef.state_type || 'str',
+            state_type: (nodeDef) => nodeDef.state_type || 'str',
             halt_if: {},
-            halt_if_type: nodeDef => nodeDef.halt_if_type || 'str',
-            halt_if_compare: nodeDef => nodeDef.halt_if_compare || 'is'
-        }
+            halt_if_type: (nodeDef) => nodeDef.halt_if_type || 'str',
+            halt_if_compare: (nodeDef) => nodeDef.halt_if_compare || 'is',
+        },
     };
 
     class TimeSinceStateNode extends EventsHaNode {
@@ -88,7 +88,7 @@ module.exports = function(RED) {
                 this.status({
                     fill: 'red',
                     shape: 'ring',
-                    text: `no state found for ${this.nodeConfig.entity_id}`
+                    text: `no state found for ${this.nodeConfig.entity_id}`,
                 });
                 return;
             }
@@ -116,7 +116,7 @@ module.exports = function(RED) {
             const msg = {
                 topic: this.nodeConfig.entity_id,
                 payload: pollState.state,
-                data: pollState
+                data: pollState,
             };
 
             let isIfState;
@@ -127,7 +127,7 @@ module.exports = function(RED) {
                     pollState.state,
                     this.nodeConfig.halt_if_type,
                     {
-                        entity: pollState
+                        entity: pollState,
                     }
                 );
             } catch (e) {

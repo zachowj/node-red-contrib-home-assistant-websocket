@@ -2,9 +2,9 @@ const selectn = require('selectn');
 
 const EventsHaNode = require('../../lib/events-ha-node');
 
-module.exports = function(RED) {
+module.exports = function (RED) {
     const nodeOptions = {
-        config: { event_type: {} }
+        config: { event_type: {} },
     };
 
     class ServerEventsNode extends EventsHaNode {
@@ -43,7 +43,7 @@ module.exports = function(RED) {
             this.send({
                 event_type: evt.event_type,
                 topic: evt.event_type,
-                payload: evt
+                payload: evt,
             });
             this.setStatusSuccess(evt.event_type);
         }
@@ -59,7 +59,7 @@ module.exports = function(RED) {
                     event_type: 'home_assistant_client',
                     topic: `home_assistant_client:${type}`,
                     payload: type,
-                    data: data
+                    data: data,
                 });
 
                 if (type === 'states_loaded' || type === 'services_loaded') {

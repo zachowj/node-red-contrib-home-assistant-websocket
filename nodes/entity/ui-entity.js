@@ -6,7 +6,7 @@ RED.nodes.registerType('ha-entity', {
     icon: 'font-awesome/fa-genderless',
     align: 'right',
     paletteLabel: 'entity',
-    label: function() {
+    label: function () {
         return this.name || `type: ${this.entityType}`;
     },
     labelStyle: nodeVersion.labelStyle,
@@ -22,8 +22,8 @@ RED.nodes.registerType('ha-entity', {
                 { property: 'name', value: '' },
                 { property: 'device_class', value: '' },
                 { property: 'icon', value: '' },
-                { property: 'unit_of_measurement', value: '' }
-            ]
+                { property: 'unit_of_measurement', value: '' },
+            ],
         },
         state: { value: 'payload' },
         stateType: { value: 'msg' },
@@ -31,9 +31,9 @@ RED.nodes.registerType('ha-entity', {
         resend: { value: true },
         outputLocation: { value: 'payload' },
         outputLocationType: { value: 'none' },
-        inputOverride: { value: 'allow' }
+        inputOverride: { value: 'allow' },
     },
-    oneditprepare: function() {
+    oneditprepare: function () {
         nodeVersion.check(this);
         const node = this;
         const stateTypes = {
@@ -44,7 +44,7 @@ RED.nodes.registerType('ha-entity', {
                 'jsonata',
                 'str',
                 'num',
-                'bool'
+                'bool',
             ],
             sensor: [
                 'msg',
@@ -54,19 +54,19 @@ RED.nodes.registerType('ha-entity', {
                 'str',
                 'num',
                 'bool',
-                'date'
+                'date',
             ],
-            switch: ['msg']
+            switch: ['msg'],
         };
         const haConfigOptions = {
             binary_sensor: [
                 'name',
                 'device_class',
                 'icon',
-                'unit_of_measurement'
+                'unit_of_measurement',
             ],
             sensor: ['name', 'device_class', 'icon', 'unit_of_measurement'],
-            switch: ['name', 'icon']
+            switch: ['name', 'icon'],
         };
         const attributeTypes = [
             'str',
@@ -76,7 +76,7 @@ RED.nodes.registerType('ha-entity', {
             'jsonata',
             'msg',
             'flow',
-            'global'
+            'global',
         ];
         const switchRows = [
             'state',
@@ -84,7 +84,7 @@ RED.nodes.registerType('ha-entity', {
             'output-location',
             'input-override',
             'resend',
-            'debug'
+            'debug',
         ];
 
         haServer.init(node, '#node-input-server');
@@ -94,7 +94,7 @@ RED.nodes.registerType('ha-entity', {
         $('#node-input-state').typedInput({
             types: stateTypes[$('#node-input-entityType').val()],
             typeField: '#node-input-stateType',
-            type: node.stateType
+            type: node.stateType,
         });
 
         $('#attributes')
@@ -106,12 +106,12 @@ RED.nodes.registerType('ha-entity', {
                         "<div style='width:40%; display: inline-grid'>Attribute Key</div><div style='display: inline-grid'>Value</div>"
                     )
                 ),
-                addItem: function(container, index, data) {
+                addItem: function (container, index, data) {
                     const $row = $('<div />').appendTo(container);
                     $('<input />', {
                         type: 'text',
                         name: 'property',
-                        style: 'width: 40%;margin-right: 5px;'
+                        style: 'width: 40%;margin-right: 5px;',
                     })
                         .attr('autocomplete', 'disable')
                         .appendTo($row)
@@ -119,13 +119,13 @@ RED.nodes.registerType('ha-entity', {
                     const $value = $('<input />', {
                         type: 'text',
                         name: 'value',
-                        style: 'width: 55%;'
+                        style: 'width: 55%;',
                     })
                         .appendTo($row)
                         .val(data.value)
                         .typedInput({ types: attributeTypes });
                     $value.typedInput('type', data.valueType);
-                }
+                },
             })
             .editableList('addItems', node.attributes);
 
@@ -133,30 +133,30 @@ RED.nodes.registerType('ha-entity', {
             .editableList({
                 addButton: false,
                 header: $('<div>Home Assistant Config (optional)</div>'),
-                addItem: function(container, index, data) {
+                addItem: function (container, index, data) {
                     const $row = $('<div />').appendTo(container);
                     $('<input />', {
                         type: 'text',
                         name: 'property',
                         value: data.property,
                         style: 'width: 40%;',
-                        readonly: true
+                        readonly: true,
                     }).appendTo($row);
 
                     $('<input />', {
                         type: 'text',
                         name: 'value',
                         value: data.value,
-                        style: 'margin-left: 10px;width: 55%;'
+                        style: 'margin-left: 10px;width: 55%;',
                     })
                         .attr('autocomplete', 'disable')
                         .appendTo($row);
-                }
+                },
             })
             .editableList('addItems', node.config);
 
         $('#node-input-entityType')
-            .on('change', function() {
+            .on('change', function () {
                 const value = $(this).val();
 
                 $('#node-input-state').typedInput('types', stateTypes[value]);
@@ -175,7 +175,7 @@ RED.nodes.registerType('ha-entity', {
                         // create a comma delimited list of ids
                         $(`#${switchRows.join('-row,#')}-row`).hide();
                         // filter config options
-                        $('#config').editableList('filter', data =>
+                        $('#config').editableList('filter', (data) =>
                             haConfigOptions[value].includes(data.property)
                         );
                         break;
@@ -191,13 +191,13 @@ RED.nodes.registerType('ha-entity', {
                 {
                     value: 'none',
                     label: 'None',
-                    hasValue: false
-                }
+                    hasValue: false,
+                },
             ],
-            typeField: '#node-input-outputLocationType'
+            typeField: '#node-input-outputLocationType',
         });
     },
-    oneditsave: function() {
+    oneditsave: function () {
         const node = this;
         node.attributes = [];
         node.config = [];
@@ -205,23 +205,25 @@ RED.nodes.registerType('ha-entity', {
 
         $('#attributes')
             .editableList('items')
-            .each(function(i) {
+            .each(function (i) {
                 const $row = $(this);
                 node.attributes.push({
                     property: $row.find('input[name=property]').val(),
                     value: $row.find('input[name=value]').typedInput('value'),
-                    valueType: $row.find('input[name=value]').typedInput('type')
+                    valueType: $row
+                        .find('input[name=value]')
+                        .typedInput('type'),
                 });
             });
 
         $('#config')
             .editableList('items')
-            .each(function(i) {
+            .each(function (i) {
                 const $row = $(this);
                 node.config.push({
                     property: $row.find('input[name=property]').val(),
-                    value: $row.find('input[name=value]').val()
+                    value: $row.find('input[name=value]').val(),
                 });
             });
-    }
+    },
 });

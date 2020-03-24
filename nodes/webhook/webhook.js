@@ -1,4 +1,4 @@
-module.exports = function(RED) {
+module.exports = function (RED) {
     const EventsNode = require('../../lib/events-node');
 
     const nodeOptions = {
@@ -7,15 +7,15 @@ module.exports = function(RED) {
             server: { isNode: true },
             outputs: 1,
             webhookId: {},
-            exposeToHomeAssistant: nodeConfig => true,
-            payloadLocation: nodeConfig =>
+            exposeToHomeAssistant: (nodeConfig) => true,
+            payloadLocation: (nodeConfig) =>
                 nodeConfig.payloadLocation || 'payload',
-            payloadLocationType: nodeConfig =>
+            payloadLocationType: (nodeConfig) =>
                 nodeConfig.payloadLocationType || 'msg',
             headersLocation: {},
-            headersLocationType: nodeConfig =>
-                nodeConfig.headersLocationType || 'none'
-        }
+            headersLocationType: (nodeConfig) =>
+                nodeConfig.headersLocationType || 'none',
+        },
     };
 
     class Webhook extends EventsNode {
@@ -35,7 +35,7 @@ module.exports = function(RED) {
 
         async onEvent(evt) {
             const message = {
-                topic: this.nodeConfig.webhookId
+                topic: this.nodeConfig.webhookId,
             };
 
             // Set Payload Location
@@ -89,7 +89,7 @@ module.exports = function(RED) {
                         type: 'nodered/webhook',
                         webhook_id: this.nodeConfig.webhookId,
                         name: this.id,
-                        server_id: this.nodeConfig.server.id
+                        server_id: this.nodeConfig.server.id,
                     }
                 );
             }

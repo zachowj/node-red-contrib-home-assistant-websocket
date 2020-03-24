@@ -3,7 +3,7 @@ RED.nodes.registerType('trigger-state', {
     color: '#038FC7',
     inputs: 1,
     outputs: 2,
-    outputLabels: function(index) {
+    outputLabels: function (index) {
         const NUM_DEFAULT_OUTPUTS = 2;
 
         if (index === 0) return 'allowed';
@@ -24,7 +24,7 @@ RED.nodes.registerType('trigger-state', {
     },
     icon: 'trigger.png',
     paletteLabel: 'trigger: state',
-    label: function() {
+    label: function () {
         return this.name || `trigger-state: ${this.entityid}`;
     },
     labelStyle: nodeVersion.labelStyle,
@@ -35,8 +35,8 @@ RED.nodes.registerType('trigger-state', {
         haConfig: {
             value: [
                 { property: 'name', value: '' },
-                { property: 'icon', value: '' }
-            ]
+                { property: 'icon', value: '' },
+            ],
         },
         entityid: { value: '', required: true },
         entityidfiltertype: { value: 'exact' },
@@ -46,9 +46,9 @@ RED.nodes.registerType('trigger-state', {
         outputs: { value: 2 },
         customoutputs: { value: [] },
         outputinitially: { value: false },
-        state_type: { value: 'str' }
+        state_type: { value: 'str' },
     },
-    oneditprepare: function() {
+    oneditprepare: function () {
         // Outputs List
         const node = this;
         const NUM_DEFAULT_OUTPUTS = 2;
@@ -71,7 +71,7 @@ RED.nodes.registerType('trigger-state', {
             propertyType: $('#constraint-property-type'),
             propertyValue: $('#constraint-property-value'),
             comparatorType: $('#constraint-comparator-type'),
-            comparatorValue: $('#constraint-comparator-value')
+            comparatorValue: $('#constraint-comparator-value'),
         };
 
         const $customoutputs = {
@@ -85,51 +85,48 @@ RED.nodes.registerType('trigger-state', {
             comparatorPropertyType: $('#output-comparator-property-type'),
             comparatorPropertyValue: $('#output-comparator-property-value'),
             comparatorType: $('#output-comparator-type'),
-            comparatorValue: $('#output-comparator-value')
+            comparatorValue: $('#output-comparator-value'),
         };
 
         const utils = {
-            getRandomId: () =>
-                Math.random()
-                    .toString(36)
-                    .slice(2)
+            getRandomId: () => Math.random().toString(36).slice(2),
         };
 
         let availableProperties = [];
         let availablePropertiesPrefixes = [];
         haServer.init(node, '#node-input-server');
-        haServer.autocomplete('entities', entities => {
+        haServer.autocomplete('entities', (entities) => {
             node.availableEntities = entities;
             $entityid.autocomplete({
                 source: node.availableEntities,
-                minLength: 0
+                minLength: 0,
             });
             $('#constraint-target-value').autocomplete({
                 source: node.availableEntities,
-                minLength: 0
+                minLength: 0,
             });
         });
-        haServer.autocomplete('properties', properties => {
+        haServer.autocomplete('properties', (properties) => {
             availableProperties = properties;
             // prefix properties with new_state and old_state
             availablePropertiesPrefixes = []
                 .concat(
-                    properties.map(e => `new_state.${e}`),
-                    properties.map(e => `old_state.${e}`)
+                    properties.map((e) => `new_state.${e}`),
+                    properties.map((e) => `old_state.${e}`)
                 )
                 .sort();
             $(
                 '#constraint-property-value,#output-comparator-property-value'
             ).autocomplete({
                 source: availablePropertiesPrefixes,
-                minLength: 0
+                minLength: 0,
             });
-            $('#constraint-target-type').on('change', function() {
+            $('#constraint-target-type').on('change', function () {
                 $('#constraint-property-value').autocomplete('option', {
                     source:
                         $(this).val() === 'this_entity'
                             ? availablePropertiesPrefixes
-                            : availableProperties
+                            : availableProperties,
                 });
             });
         });
@@ -138,7 +135,7 @@ RED.nodes.registerType('trigger-state', {
         // * Add Constraints
         // **************************
         const constraintsHandler = {
-            onTargetTypeChange: function(e) {
+            onTargetTypeChange: function (e) {
                 const val = e.target.value;
                 if (val === 'this_entity') {
                     $constraints.targetValue
@@ -156,7 +153,7 @@ RED.nodes.registerType('trigger-state', {
                         .trigger('change');
                 }
             },
-            onPropertyTypeChange: function(e) {
+            onPropertyTypeChange: function (e) {
                 const val = e.target.value;
                 if (val === 'current_state' || val === 'previous_state') {
                     $constraints.propertyValue
@@ -166,10 +163,10 @@ RED.nodes.registerType('trigger-state', {
                     $constraints.propertyValue.removeAttr('disabled');
                 }
             },
-            onComparatorTypeChange: function(e) {
+            onComparatorTypeChange: function (e) {
                 // const val = e.target.value; // Placeholder
             },
-            onAddConstraintButton: function(e) {
+            onAddConstraintButton: function (e) {
                 const constraint = {
                     id: utils.getRandomId(),
                     targetType: $constraints.targetType.val(),
@@ -182,7 +179,7 @@ RED.nodes.registerType('trigger-state', {
                     ),
                     comparatorValue: $constraints.comparatorValue.typedInput(
                         'value'
-                    )
+                    ),
                 };
 
                 if (constraint.propertyType === 'current_state')
@@ -200,7 +197,7 @@ RED.nodes.registerType('trigger-state', {
                 $constraints.list.editableList('addItem', constraint);
                 $constraints.targetValue.val('');
             },
-            onEditableListAdd: function(row, index, data) {
+            onEditableListAdd: function (row, index, data) {
                 const $row = $(row);
                 const {
                     targetType,
@@ -209,7 +206,7 @@ RED.nodes.registerType('trigger-state', {
                     propertyValue,
                     comparatorType,
                     comparatorValue,
-                    comparatorValueDatatype
+                    comparatorValueDatatype,
                 } = data;
 
                 const entityText =
@@ -226,7 +223,7 @@ RED.nodes.registerType('trigger-state', {
 
                 const rowHtml = `${entityText} ${propertyText} ${comparatorText}`;
                 $row.html(rowHtml);
-            }
+            },
         };
 
         // Constraint select menu change handlers
@@ -254,7 +251,7 @@ RED.nodes.registerType('trigger-state', {
             height: 159,
             sortable: true,
             removable: true,
-            addItem: constraintsHandler.onEditableListAdd
+            addItem: constraintsHandler.onEditableListAdd,
         });
 
         $constraints.comparatorValue.typedInput({
@@ -267,13 +264,13 @@ RED.nodes.registerType('trigger-state', {
                 'jsonata',
                 {
                     value: 'entity',
-                    label: 'entity.'
+                    label: 'entity.',
                 },
                 {
                     value: 'prevEntity',
-                    label: 'prev entity.'
-                }
-            ]
+                    label: 'prev entity.',
+                },
+            ],
         });
         $constraints.comparatorValue.typedInput('width', '233px');
 
@@ -281,7 +278,7 @@ RED.nodes.registerType('trigger-state', {
         // * Add Custom Outputs
         // **************************
         const outputsHandler = {
-            onAddButtonClicked: function() {
+            onAddButtonClicked: function () {
                 const output = {
                     outputId: utils.getRandomId(),
 
@@ -293,7 +290,7 @@ RED.nodes.registerType('trigger-state', {
                     comparatorPropertyValue: $customoutputs.comparatorPropertyValue.val(),
 
                     comparatorType: $customoutputs.comparatorType.val(),
-                    comparatorValue: $customoutputs.comparatorValue.val()
+                    comparatorValue: $customoutputs.comparatorValue.val(),
                 };
 
                 // Removing an output and adding in same edit session means output
@@ -319,7 +316,7 @@ RED.nodes.registerType('trigger-state', {
 
                 $customoutputs.list.editableList('addItem', output);
             },
-            onEditableListAdd: function(row, index, d) {
+            onEditableListAdd: function (row, index, d) {
                 const $row = $(row);
 
                 const messageText =
@@ -347,7 +344,7 @@ RED.nodes.registerType('trigger-state', {
 
                 $row.html(html);
             },
-            onEditableListRemove: function(data) {
+            onEditableListRemove: function (data) {
                 // node-red uses a map of old output index to new output index to re-map
                 // links between nodes. If new index is -1 then it was removed
 
@@ -357,7 +354,7 @@ RED.nodes.registerType('trigger-state', {
                 node.outputs = !isNaN(node.outputs)
                     ? {
                           0: 0,
-                          1: 1
+                          1: 1,
                       }
                     : node.outputs;
                 node.outputs[
@@ -398,13 +395,13 @@ RED.nodes.registerType('trigger-state', {
 
                 $outputs.val(JSON.stringify(node.outputs));
             },
-            onMessageTypeChange: function(e) {
+            onMessageTypeChange: function (e) {
                 const val = e.target.value;
                 $customoutputs.messageValue.typedInput(
                     val === 'default' ? 'hide' : 'show'
                 );
             },
-            comparatorPropertyTypeChange: function(e) {
+            comparatorPropertyTypeChange: function (e) {
                 const val = e.target.value;
                 if (val === 'always') {
                     $customoutputs.comparatorPropertyValue.attr(
@@ -431,7 +428,7 @@ RED.nodes.registerType('trigger-state', {
                     $customoutputs.comparatorType.removeAttr('disabled');
                     $customoutputs.comparatorValue.removeAttr('disabled');
                 }
-            }
+            },
         };
 
         $customoutputs.list.editableList({
@@ -440,7 +437,7 @@ RED.nodes.registerType('trigger-state', {
             sortable: false,
             removable: true,
             removeItem: outputsHandler.onEditableListRemove,
-            addItem: outputsHandler.onEditableListAdd
+            addItem: outputsHandler.onEditableListAdd,
         });
 
         // Constraint select menu change handlers
@@ -452,7 +449,7 @@ RED.nodes.registerType('trigger-state', {
         $customoutputs.messageValue.typedInput({
             default: 'json',
             types: ['str', 'num', 'bool', 'json'],
-            typeField: '#output-message-value-type'
+            typeField: '#output-message-value-type',
         });
         $customoutputs.messageType.trigger('change');
 
@@ -469,26 +466,26 @@ RED.nodes.registerType('trigger-state', {
         $accordionContraint.accordion({
             active: true,
             collapsible: true,
-            heightStyle: 'content'
+            heightStyle: 'content',
         });
         $accordionOutput.accordion({
             active: false,
             collapsible: true,
-            heightStyle: 'content'
+            heightStyle: 'content',
         });
 
         $entityid.val(node.entityid);
 
         // Add previous constraints/outputs to editable lists
-        node.constraints.forEach(c =>
+        node.constraints.forEach((c) =>
             $constraints.list.editableList('addItem', c)
         );
-        node.customoutputs.forEach(o =>
+        node.customoutputs.forEach((o) =>
             $customoutputs.list.editableList('addItem', o)
         );
         exposeNode.init(node);
     },
-    oneditsave: function() {
+    oneditsave: function () {
         const $constraintsList = $('#constraint-list');
         const $outputList = $('#output-list');
         const $entityid = $('#node-input-entityid');
@@ -498,7 +495,7 @@ RED.nodes.registerType('trigger-state', {
         // Compile Constraints
         const nodeConstraints = [];
         const listConstraints = $constraintsList.editableList('items');
-        listConstraints.each(function(i) {
+        listConstraints.each(function (i) {
             nodeConstraints.push($(this).data('data'));
         });
         this.constraints = nodeConstraints;
@@ -506,12 +503,12 @@ RED.nodes.registerType('trigger-state', {
         // Compile Outputs
         const nodeOutputs = [];
         const listOutputs = $outputList.editableList('items');
-        listOutputs.each(function(i) {
+        listOutputs.each(function (i) {
             nodeOutputs.push($(this).data('data'));
         });
         this.customoutputs = nodeOutputs;
 
         this.outputs = this.customoutputs.length + 2;
         this.haConfig = exposeNode.getValues();
-    }
+    },
 });

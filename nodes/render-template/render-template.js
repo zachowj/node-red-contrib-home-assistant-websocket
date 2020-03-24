@@ -2,7 +2,7 @@ const Joi = require('@hapi/joi');
 
 const BaseNode = require('../../lib/base-node');
 
-module.exports = function(RED) {
+module.exports = function (RED) {
     const nodeOptions = {
         debug: true,
         config: {
@@ -12,7 +12,7 @@ module.exports = function(RED) {
             resultsLocation: {},
             resultsLocationType: {},
             templateLocation: {},
-            templateLocationType: {}
+            templateLocationType: {},
         },
         input: {
             template: {
@@ -20,15 +20,13 @@ module.exports = function(RED) {
                 configProp: 'template',
                 validation: {
                     haltOnFail: true,
-                    schema: Joi.string()
-                        .required()
-                        .label('template')
-                }
+                    schema: Joi.string().required().label('template'),
+                },
             },
             resultsLocation: {
                 messageProp: 'resultsLocation',
                 configProp: 'resultsLocation',
-                default: 'payload'
+                default: 'payload',
             },
             resultsLocationType: {
                 messageProp: 'resultsLocationType',
@@ -38,13 +36,13 @@ module.exports = function(RED) {
                     haltOnFail: true,
                     schema: Joi.string()
                         .valid('msg', 'flow', 'global', 'none')
-                        .label('resultsLocationType')
-                }
+                        .label('resultsLocationType'),
+                },
             },
             templateLocation: {
                 messageProp: 'templateLocation',
                 configProp: 'templateLocation',
-                default: 'template'
+                default: 'template',
             },
             templateLocationType: {
                 messageProp: 'templateLocationType',
@@ -54,10 +52,10 @@ module.exports = function(RED) {
                     haltOnFail: true,
                     schema: Joi.string()
                         .valid('msg', 'flow', 'global', 'none')
-                        .label('templateLocationType')
-                }
-            }
-        }
+                        .label('templateLocationType'),
+                },
+            },
+        },
     };
 
     class RenderTemplateNode extends BaseNode {
@@ -71,7 +69,7 @@ module.exports = function(RED) {
                 templateLocation,
                 templateLocationType,
                 resultsLocation,
-                resultsLocationType
+                resultsLocationType,
             } = parsedMessage;
 
             if (this.nodeConfig.server === null) {
@@ -83,7 +81,7 @@ module.exports = function(RED) {
 
             return this.httpClient
                 .renderTemplate(template.value)
-                .then(res => {
+                .then((res) => {
                     this.setContextValue(
                         template.value,
                         templateLocationType.value,
@@ -100,7 +98,7 @@ module.exports = function(RED) {
                     this.node.send(message);
                     this.setStatusSuccess();
                 })
-                .catch(err => {
+                .catch((err) => {
                     this.error(`Error get-template: ${err.message}`, message);
                     this.setStatusFailed('Error');
                 });

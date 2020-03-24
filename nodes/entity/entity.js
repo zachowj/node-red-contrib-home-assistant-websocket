@@ -2,7 +2,7 @@ const slugify = require('slugify');
 
 const EventsHaNode = require('../../lib/events-ha-node');
 
-module.exports = function(RED) {
+module.exports = function (RED) {
     const nodeOptions = {
         config: {
             name: {},
@@ -11,32 +11,32 @@ module.exports = function(RED) {
             entityType: {},
             state: {},
             stateType: {},
-            attributes: nodeConfig => nodeConfig.attributes || [],
+            attributes: (nodeConfig) => nodeConfig.attributes || [],
             config: {},
-            exposeToHomeAssistant: nodeConfig => true,
+            exposeToHomeAssistant: (nodeConfig) => true,
             resend: {},
             outputLocation: {},
-            outputLocationType: nodeConfig =>
+            outputLocationType: (nodeConfig) =>
                 nodeConfig.outputLocationType || 'none',
-            inputOverride: nodeConfig => nodeConfig.inputOverride || 'allow'
+            inputOverride: (nodeConfig) => nodeConfig.inputOverride || 'allow',
         },
         input: {
             state: {
                 messageProp: 'payload.state',
                 configProp: 'state',
-                default: 'payload'
+                default: 'payload',
             },
             stateType: {
                 messageProp: 'payload.stateType',
                 configProp: 'stateType',
-                default: 'msg'
+                default: 'msg',
             },
             attributes: {
                 messageProp: 'payload.attributes',
                 configProp: 'attributes',
-                default: []
-            }
-        }
+                default: [],
+            },
+        },
     };
 
     class EntityNode extends EventsHaNode {
@@ -60,7 +60,7 @@ module.exports = function(RED) {
                         fill: 'blue',
                         text: `${
                             this.isEnabled ? 'on' : 'off'
-                        } at: ${this.getPrettyDate()}`
+                        } at: ${this.getPrettyDate()}`,
                     };
                 }
                 this.node.status(status);
@@ -73,7 +73,7 @@ module.exports = function(RED) {
             opts = {
                 shape: 'dot',
                 fill: 'blue',
-                text: ''
+                text: '',
             }
         ) {
             this.node.status(opts);
@@ -97,15 +97,15 @@ module.exports = function(RED) {
 
             const config = {};
             this.nodeConfig.config
-                .filter(c => c.value.length)
-                .forEach(e => (config[e.property] = e.value));
+                .filter((c) => c.value.length)
+                .forEach((e) => (config[e.property] = e.value));
 
             const payload = {
                 type: 'nodered/discovery',
                 server_id: this.nodeConfig.server.id,
                 node_id: this.id,
                 component: this.nodeConfig.entityType,
-                config: config
+                config: config,
             };
 
             // Add state and attributes to payload if resend enabled
@@ -156,7 +156,7 @@ module.exports = function(RED) {
                     server_id: this.nodeConfig.server.id,
                     node_id: this.id,
                     component: this.nodeConfig.entityType,
-                    remove: true
+                    remove: true,
                 };
 
                 this.websocketClient.send(payload);
@@ -240,12 +240,12 @@ module.exports = function(RED) {
 
             const attr = {};
             try {
-                attributes.forEach(x => {
+                attributes.forEach((x) => {
                     // Change string to lower-case and remove unwanted characters
                     const property = slugify(x.property, {
                         replacement: '_',
                         remove: /[^A-Za-z0-9-_~ ]/,
-                        lower: true
+                        lower: true,
                     });
                     attr[property] = this.getValue(
                         x.value,
@@ -264,11 +264,11 @@ module.exports = function(RED) {
                 server_id: this.nodeConfig.server.id,
                 node_id: this.id,
                 state: state,
-                attributes: attr
+                attributes: attr,
             };
             this.lastPayload = {
                 state: state,
-                attributes: attr
+                attributes: attr,
             };
             this.saveNodeData('lastPayload', this.lastPayload);
             this.debugToClient(payload);
@@ -289,7 +289,7 @@ module.exports = function(RED) {
 
                     this.send(message);
                 })
-                .catch(err => {
+                .catch((err) => {
                     this.error(
                         `Entity API error. ${
                             err.message ? ` Error Message: ${err.message}` : ''
@@ -303,7 +303,7 @@ module.exports = function(RED) {
         handleTriggerMessage(data = {}) {
             const msg = {
                 topic: 'triggered',
-                payload: data.payload
+                payload: data.payload,
             };
 
             if (this.isEnabled) {
@@ -326,8 +326,8 @@ module.exports = function(RED) {
                 if (this.nodeConfig.inputOverride === 'merge') {
                     const keys = Object.keys(
                         parsedMessage.attributes.value
-                    ).map(e => e.toLowerCase());
-                    this.nodeConfig.attributes.forEach(ele => {
+                    ).map((e) => e.toLowerCase());
+                    this.nodeConfig.attributes.forEach((ele) => {
                         if (!keys.includes(ele.property.toLowerCase())) {
                             attributes.push(ele);
                         }
@@ -338,7 +338,7 @@ module.exports = function(RED) {
                 )) {
                     attributes.push({
                         property: prop,
-                        value: val
+                        value: val,
                     });
                 }
             }

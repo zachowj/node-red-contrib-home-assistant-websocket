@@ -5,7 +5,7 @@ const { shuffle } = require('lodash');
 const BaseNode = require('../../lib/base-node');
 const { filter } = require('p-iteration');
 
-module.exports = function(RED) {
+module.exports = function (RED) {
     const nodeOptions = {
         debug: true,
         config: {
@@ -16,7 +16,7 @@ module.exports = function(RED) {
             output_empty_results: {},
             output_location_type: {},
             output_location: {},
-            output_results_count: {}
+            output_results_count: {},
         },
         input: {
             outputType: {
@@ -27,8 +27,8 @@ module.exports = function(RED) {
                     haltOnFail: true,
                     schema: Joi.string()
                         .valid('array', 'count', 'random', 'split')
-                        .label('OutputType')
-                }
+                        .label('OutputType'),
+                },
             },
             outputEmptyResults: {
                 messageProp: 'payload.outputEmptyResults',
@@ -36,8 +36,8 @@ module.exports = function(RED) {
                 default: false,
                 validation: {
                     haltOnFail: true,
-                    schema: Joi.boolean().label('outputEmptyResults')
-                }
+                    schema: Joi.boolean().label('outputEmptyResults'),
+                },
             },
             outputLocationType: {
                 messageProp: 'payload.outputLocationType',
@@ -47,8 +47,8 @@ module.exports = function(RED) {
                     haltOnFail: true,
                     schema: Joi.string()
                         .valid('array', 'msg', 'flow', 'global')
-                        .label('outputLocationType')
-                }
+                        .label('outputLocationType'),
+                },
             },
             outputLocation: {
                 messageProp: 'payload.outputLocation',
@@ -56,8 +56,8 @@ module.exports = function(RED) {
                 default: 'payload',
                 validation: {
                     haltOnFail: true,
-                    schema: Joi.string().label('outputLocation')
-                }
+                    schema: Joi.string().label('outputLocation'),
+                },
             },
             outputResultsCount: {
                 messageProp: 'payload.outputResultsCount',
@@ -65,8 +65,8 @@ module.exports = function(RED) {
                 default: 1,
                 validation: {
                     haltOnFail: true,
-                    schema: Joi.number().label('outputResultsCount')
-                }
+                    schema: Joi.number().label('outputResultsCount'),
+                },
             },
             rules: {
                 messageProp: 'payload.rules',
@@ -80,7 +80,7 @@ module.exports = function(RED) {
                                 property: Joi.when('logic', {
                                     is: 'jsonata',
                                     then: Joi.any(),
-                                    otherwise: Joi.string()
+                                    otherwise: Joi.string(),
                                 }),
                                 logic: Joi.string().valid(
                                     'is',
@@ -106,13 +106,13 @@ module.exports = function(RED) {
                                     'flow',
                                     'global',
                                     'entity'
-                                )
+                                ),
                             })
                         )
-                        .label('rules')
-                }
-            }
-        }
+                        .label('rules'),
+                },
+            },
+        },
     };
 
     class GetEntitiesNode extends BaseNode {
@@ -135,40 +135,45 @@ module.exports = function(RED) {
                     'local state cache missing sending empty payload'
                 );
                 return {
-                    payload: {}
+                    payload: {},
                 };
             }
 
             let entities;
             try {
-                entities = await filter(Object.values(states), async entity => {
-                    const rules = parsedMessage.rules.value;
+                entities = await filter(
+                    Object.values(states),
+                    async (entity) => {
+                        const rules = parsedMessage.rules.value;
 
-                    entity.timeSinceChangedMs =
-                        Date.now() - new Date(entity.last_changed).getTime();
+                        entity.timeSinceChangedMs =
+                            Date.now() -
+                            new Date(entity.last_changed).getTime();
 
-                    for (const rule of rules) {
-                        const value = selectn(rule.property, entity);
-                        const result = await this.getComparatorResult(
-                            rule.logic,
-                            rule.value,
-                            value,
-                            rule.valueType,
-                            {
-                                message,
-                                entity
+                        for (const rule of rules) {
+                            const value = selectn(rule.property, entity);
+                            const result = await this.getComparatorResult(
+                                rule.logic,
+                                rule.value,
+                                value,
+                                rule.valueType,
+                                {
+                                    message,
+                                    entity,
+                                }
+                            );
+                            if (
+                                (rule.logic !== 'jsonata' &&
+                                    value === undefined) ||
+                                !result
+                            ) {
+                                return false;
                             }
-                        );
-                        if (
-                            (rule.logic !== 'jsonata' && value === undefined) ||
-                            !result
-                        ) {
-                            return false;
                         }
-                    }
 
-                    return true;
-                });
+                        return true;
+                    }
+                );
             } catch (e) {
                 this.setStatusFailed('Error');
                 this.node.error(e.message, {});

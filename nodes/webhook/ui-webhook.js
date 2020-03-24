@@ -15,7 +15,7 @@ RED.nodes.registerType('ha-webhook', {
     outputLabels: '',
     icon: 'font-awesome/fa-external-link-square',
     paletteLabel: 'webhook',
-    label: function() {
+    label: function () {
         return this.name || `webhook`;
     },
     labelStyle: nodeVersion.labelStyle,
@@ -27,16 +27,16 @@ RED.nodes.registerType('ha-webhook', {
         payloadLocation: { value: 'payload' },
         payloadLocationType: { value: 'msg' },
         headersLocation: { value: 'headers' },
-        headersLocationType: { value: 'none' }
+        headersLocationType: { value: 'none' },
     },
-    oneditprepare: function() {
+    oneditprepare: function () {
         const node = this;
         haServer.init(node, '#node-input-server');
         const $webhookId = $('#node-input-webhookId');
 
         exposeNode.init(node);
 
-        $('#copyId').on('click', function() {
+        $('#copyId').on('click', function () {
             const ele = $webhookId[0];
             const id = ele.value;
             ele.value = `https://<ip>:<port>/api/webhook/${id}`;
@@ -48,18 +48,18 @@ RED.nodes.registerType('ha-webhook', {
             ele.value = id;
         });
 
-        $('#refresh').on('click', function() {
+        $('#refresh').on('click', function () {
             $webhookId.val(generateId(32));
         });
 
         const NoneType = { value: 'none', label: 'None', hasValue: false };
         $('#node-input-payloadLocation').typedInput({
             types: ['msg', 'flow', 'global', NoneType],
-            typeField: '#node-input-payloadLocationType'
+            typeField: '#node-input-payloadLocationType',
         });
         $('#node-input-headersLocation').typedInput({
             types: ['msg', 'flow', 'global', NoneType],
-            typeField: '#node-input-headersLocationType'
+            typeField: '#node-input-headersLocationType',
         });
-    }
+    },
 });

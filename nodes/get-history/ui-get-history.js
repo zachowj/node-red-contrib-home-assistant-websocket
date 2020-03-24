@@ -5,7 +5,7 @@ RED.nodes.registerType('api-get-history', {
     outputs: 1,
     icon: 'history.png',
     paletteLabel: 'get history',
-    label: function() {
+    label: function () {
         if (this.name) {
             return this.name;
         }
@@ -30,9 +30,9 @@ RED.nodes.registerType('api-get-history', {
         flatten: { value: true },
         output_type: { value: 'array' },
         output_location_type: { value: 'msg' },
-        output_location: { value: 'payload' }
+        output_location: { value: 'payload' },
     },
-    oneditprepare: function() {
+    oneditprepare: function () {
         const NODE = this;
         const $entityIdField = $('#entity_id');
         $entityIdField.val(this.entityid);
@@ -41,16 +41,16 @@ RED.nodes.registerType('api-get-history', {
 
         haServer.init(NODE, '#node-input-server');
         let availableEntities = [];
-        haServer.autocomplete('entities', entities => {
+        haServer.autocomplete('entities', (entities) => {
             availableEntities = entities;
 
             $entityIdField.autocomplete({
                 source: availableEntities,
-                minLength: 0
+                minLength: 0,
             });
         });
 
-        $('#node-input-useRelativeTime').on('change', function() {
+        $('#node-input-useRelativeTime').on('change', function () {
             if (this.checked) {
                 $('.relative_row').show();
                 $('.date_row').hide();
@@ -69,18 +69,16 @@ RED.nodes.registerType('api-get-history', {
 
         $('#node-input-output_location').typedInput({
             types: ['msg', 'flow', 'global'],
-            typeField: '#node-input-output_location_type'
+            typeField: '#node-input-output_location_type',
         });
 
         $('#node-input-output_type')
-            .on('change', e =>
+            .on('change', (e) =>
                 $('.output-option').toggle(e.target.value === 'array')
             )
             .trigger('change');
     },
-    oneditsave: function() {
-        this.entityid = $('#entity_id')
-            .val()
-            .trim();
-    }
+    oneditsave: function () {
+        this.entityid = $('#entity_id').val().trim();
+    },
 });

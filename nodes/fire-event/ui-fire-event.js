@@ -6,7 +6,7 @@ RED.nodes.registerType('ha-fire-event', {
     icon: 'radiotower.png',
     align: 'right',
     paletteLabel: 'fire event',
-    label: function() {
+    label: function () {
         return this.name || `Event: ${this.event}`;
     },
     labelStyle: nodeVersion.labelStyle,
@@ -15,17 +15,17 @@ RED.nodes.registerType('ha-fire-event', {
         server: { value: '', type: 'server', required: true },
         event: { value: '' },
         data: { value: '' },
-        dataType: { value: 'json' }
+        dataType: { value: 'json' },
     },
-    oneditprepare: function() {
+    oneditprepare: function () {
         const node = this;
         haServer.init(node, '#node-input-server');
 
         $('#node-input-data')
             .typedInput({
                 types: ['json', 'jsonata'],
-                typeField: '#node-input-dataType'
+                typeField: '#node-input-dataType',
             })
             .typedInput('width', '68%');
-    }
+    },
 });

@@ -3,32 +3,32 @@ const Joi = require('@hapi/joi');
 const BaseNode = require('../../lib/base-node');
 const RenderTemplate = require('../../lib/mustache-context');
 
-module.exports = function(RED) {
+module.exports = function (RED) {
     const nodeOptions = {
         config: {
             halt_if: {},
-            halt_if_type: nodeDef => nodeDef.halt_if_type || 'str',
-            halt_if_compare: nodeDef => nodeDef.halt_if_compare || 'is',
+            halt_if_type: (nodeDef) => nodeDef.halt_if_type || 'str',
+            halt_if_compare: (nodeDef) => nodeDef.halt_if_compare || 'is',
             override_topic: {},
             entity_id: {},
-            state_type: nodeDef => nodeDef.state_type || 'str',
-            state_location: nodeDef => nodeDef.state_location || 'payload',
+            state_type: (nodeDef) => nodeDef.state_type || 'str',
+            state_location: (nodeDef) => nodeDef.state_location || 'payload',
             // state location type
-            override_payload: nodeDef => {
+            override_payload: (nodeDef) => {
                 if (nodeDef.state_location === undefined) {
                     return nodeDef.override_payload !== false ? 'msg' : 'none';
                 }
                 return nodeDef.override_payload;
             },
-            entity_location: nodeDef => nodeDef.entity_location || 'data',
+            entity_location: (nodeDef) => nodeDef.entity_location || 'data',
             // entity location type
-            override_data: nodeDef => {
+            override_data: (nodeDef) => {
                 if (nodeDef.entity_location === undefined) {
                     return nodeDef.override_data !== false ? 'msg' : 'none';
                 }
                 return nodeDef.override_data;
             },
-            blockInputOverrides: {}
+            blockInputOverrides: {},
         },
         input: {
             entity_id: {
@@ -36,10 +36,10 @@ module.exports = function(RED) {
                 configProp: 'entity_id',
                 validation: {
                     haltOnFail: true,
-                    schema: Joi.string().label('entity_id')
-                }
-            }
-        }
+                    schema: Joi.string().label('entity_id'),
+                },
+            },
+        },
     };
 
     class CurrentStateNode extends BaseNode {
@@ -114,9 +114,9 @@ module.exports = function(RED) {
                 config.halt_if_type,
                 {
                     message,
-                    entity
+                    entity,
                 }
-            ).catch(e => {
+            ).catch((e) => {
                 this.setStatusFailed('Error');
                 this.node.error(e.message, message);
             });

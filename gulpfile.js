@@ -52,7 +52,7 @@ const nodeMap = {
     'events-all': { doc: 'events-all', type: 'server-events' },
     'events-state-changed': {
         doc: 'events-state',
-        type: 'server-state-changed'
+        type: 'server-state-changed',
     },
     'fire-event': { doc: 'fire-event', type: 'ha-fire-event' },
     'get-entities': { doc: 'get-entities', type: 'ha-get-entities' },
@@ -61,7 +61,7 @@ const nodeMap = {
     'render-template': { doc: 'get-template', type: 'api-render-template' },
     'trigger-state': { doc: 'trigger-state', type: 'trigger-state' },
     'wait-until': { doc: 'wait-until', type: 'ha-wait-until' },
-    webhook: { doc: 'webhook', type: 'ha-webhook' }
+    webhook: { doc: 'webhook', type: 'ha-webhook' },
 };
 
 let nodemonInstance;
@@ -69,7 +69,7 @@ let browserSyncInstance;
 let currentFolder;
 
 function getFolders(dir) {
-    return fs.readdirSync(dir).filter(function(file) {
+    return fs.readdirSync(dir).filter(function (file) {
         return fs.statSync(path.join(dir, file)).isDirectory();
     });
 }
@@ -78,30 +78,28 @@ function getFolders(dir) {
 const buildSass = lazypipe()
     .pipe(sass, {
         outputStyle: 'expanded',
-        sourceComments: true
+        sourceComments: true,
     })
     .pipe(postcss, [
         prefix({
             cascade: true,
-            remove: true
+            remove: true,
         }),
         minify({
             discardComments: {
-                removeAll: true
-            }
-        })
+                removeAll: true,
+            },
+        }),
     ])
     .pipe(wrap, uiCssWrap);
 
 // Shrink js and wrap it
-const buildJs = lazypipe()
-    .pipe(terser)
-    .pipe(wrap, uiJsWrap);
+const buildJs = lazypipe().pipe(terser).pipe(wrap, uiJsWrap);
 
 const buildForm = lazypipe()
     .pipe(gulpHtmlmin, {
         collapseWhitespace: true,
-        minifyCSS: true
+        minifyCSS: true,
     })
     .pipe(() =>
         wrap(
@@ -121,13 +119,13 @@ const buildHelp = lazypipe()
                 markdownitContainer,
                 'vuepress-custom-container',
                 {
-                    validate: function(params) {
+                    validate: function (params) {
                         return params
                             .trim()
                             .match(/^(?:tip|warning|danger)\s?(.*)$/);
                     },
 
-                    render: function(tokens, idx) {
+                    render: function (tokens, idx) {
                         const m = tokens[idx].info
                             .trim()
                             .match(/^(tip|warning|danger)\s?(.*)$/);
@@ -151,27 +149,21 @@ const buildHelp = lazypipe()
                             // closing tag
                             return '</div>\n';
                         }
-                    }
-                }
+                    },
+                },
             ],
-            markdownitInlineComments
-        ]
+            markdownitInlineComments,
+        ],
     })
-    .pipe(cheerio, $ => {
-        $.prototype.wrapAll = function(wrapper) {
+    .pipe(cheerio, ($) => {
+        $.prototype.wrapAll = function (wrapper) {
             const $container = $(wrapper).clone();
-            $(this)
-                .eq(0)
-                .before($container);
+            $(this).eq(0).before($container);
 
             for (const i in this) {
-                const clone = $(this)
-                    .eq(i)
-                    .clone();
+                const clone = $(this).eq(i).clone();
                 $container.append($('<div>' + clone + '</div>').html());
-                $(this)
-                    .eq(i)
-                    .remove();
+                $(this).eq(i).remove();
             }
         };
 
@@ -226,10 +218,7 @@ const buildHelp = lazypipe()
         // h4 is the property name and the first li will contain the type
         // Pattern: h4 > ul > li
         $('h4').each((i, item) => {
-            const li = $(item)
-                .next()
-                .find('li')
-                .eq(0);
+            const li = $(item).next().find('li').eq(0);
 
             const property = li.find('code').text();
             $(item).append(`<span class="property-type">${property}</span>`);
@@ -247,7 +236,7 @@ const buildHelp = lazypipe()
     })
     .pipe(gulpHtmlmin, {
         collapseWhitespace: true,
-        minifyCSS: true
+        minifyCSS: true,
     })
     .pipe(() =>
         wrap(
@@ -257,22 +246,22 @@ const buildHelp = lazypipe()
         )
     );
 
-task('buildEditorFiles', done => {
+task('buildEditorFiles', (done) => {
     const folders = getFolders(editorFilePath);
     if (folders.length === 0) return done();
 
-    const tasks = folders.map(folder => {
+    const tasks = folders.map((folder) => {
         currentFolder = folder;
         return src([
             'lib/common/*',
             `nodes/${folder}/ui-*.js`,
             `nodes/${folder}/ui-*.html`,
-            `docs/node/${nodeMap[folder].doc}.md`
+            `docs/node/${nodeMap[folder].doc}.md`,
         ])
-            .pipe(gulpIf(file => file.extname === '.scss', buildSass()))
-            .pipe(gulpIf(file => file.extname === '.js', buildJs()))
-            .pipe(gulpIf(file => file.extname === '.html', buildForm()))
-            .pipe(gulpIf(file => file.extname === '.md', buildHelp()))
+            .pipe(gulpIf((file) => file.extname === '.scss', buildSass()))
+            .pipe(gulpIf((file) => file.extname === '.js', buildJs()))
+            .pipe(gulpIf((file) => file.extname === '.html', buildForm()))
+            .pipe(gulpIf((file) => file.extname === '.md', buildHelp()))
             .pipe(concat(folder + '.html'))
             .pipe(dest(editorFilePath + '/' + folder));
     });
@@ -281,7 +270,7 @@ task('buildEditorFiles', done => {
 });
 
 // Clean generated files
-task('cleanFiles', done => {
+task('cleanFiles', (done) => {
     del.sync(['nodes/*/*.html', '!nodes/*/ui-*.html'], { onlyFiles: true });
 
     return done();
@@ -303,11 +292,11 @@ function runNodemonAndBrowserSync(done) {
                 ui: false,
                 proxy: {
                     target: 'http://localhost:1880',
-                    ws: true
+                    ws: true,
                 },
                 ghostMode: false,
                 open: false,
-                reloadDelay: 3000
+                reloadDelay: 3000,
             });
         })
         .on('quit', () => process.exit(0));
@@ -350,5 +339,5 @@ module.exports = {
             );
             done();
         }
-    )
+    ),
 };

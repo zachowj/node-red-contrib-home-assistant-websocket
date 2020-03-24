@@ -4,7 +4,7 @@ const timestring = require('timestring');
 const BaseNode = require('../../lib/base-node');
 const RenderTemplate = require('../../lib/mustache-context');
 
-module.exports = function(RED) {
+module.exports = function (RED) {
     const nodeOptions = {
         debug: true,
         config: {
@@ -19,7 +19,7 @@ module.exports = function(RED) {
             flatten: {},
             output_type: {},
             output_location_type: {},
-            output_location: {}
+            output_location: {},
         },
         input: {
             startDate: {
@@ -31,39 +31,33 @@ module.exports = function(RED) {
                     return yesterday.toISOString();
                 },
                 validation: {
-                    schema: Joi.date()
-                        .optional()
-                        .allow('')
-                        .label('startdate')
-                }
+                    schema: Joi.date().optional().allow('').label('startdate'),
+                },
             },
             endDate: {
                 messageProp: ['payload.enddate', 'enddate'],
                 configProp: 'enddate',
                 validation: {
-                    schema: Joi.date()
-                        .optional()
-                        .allow('')
-                        .label('enddate')
-                }
+                    schema: Joi.date().optional().allow('').label('enddate'),
+                },
             },
             entityId: {
                 messageProp: ['payload.entity_id', 'entityid'],
-                configProp: 'entityid'
+                configProp: 'entityid',
             },
             entityIdType: {
                 messageProp: ['payload.entityidtype', 'entityidtype'],
-                configProp: 'entityidtype'
+                configProp: 'entityidtype',
             },
             relativeTime: {
                 messageProp: ['payload.relativetime', 'relativetime'],
-                configProp: 'relativeTime'
+                configProp: 'relativeTime',
             },
             flatten: {
                 messageProp: ['payload.flatten', 'flatten'],
-                configProp: 'flatten'
-            }
-        }
+                configProp: 'flatten',
+            },
+        },
     };
 
     class GetHistoryNode extends BaseNode {
@@ -78,7 +72,7 @@ module.exports = function(RED) {
                 entityId,
                 entityIdType,
                 relativeTime,
-                flatten
+                flatten,
             } = parsedMessage;
             startDate = startDate.value;
             endDate = endDate.value;
@@ -114,10 +108,10 @@ module.exports = function(RED) {
                 entityIdType.value === 'includes' && entityId
                     ? this.httpClient.getHistory(startDate, null, endDate, {
                           flatten: flatten,
-                          include: new RegExp(entityId)
+                          include: new RegExp(entityId),
                       })
                     : this.httpClient.getHistory(startDate, entityId, endDate, {
-                          flatten: flatten
+                          flatten: flatten,
                       });
 
             this.setStatusSending('Requesting');

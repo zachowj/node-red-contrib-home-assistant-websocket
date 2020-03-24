@@ -6,7 +6,7 @@ const EventsHaNode = require('../../lib/events-ha-node');
 const RenderTemplate = require('../../lib/mustache-context');
 const { shouldIncludeEvent } = require('../../lib/utils');
 
-module.exports = function(RED) {
+module.exports = function (RED) {
     const nodeOptions = {
         debug: true,
         config: {
@@ -15,8 +15,8 @@ module.exports = function(RED) {
             constraints: {},
             customoutputs: {},
             outputinitially: {},
-            state_type: { value: 'str' }
-        }
+            state_type: { value: 'str' },
+        },
     };
 
     class TriggerState extends EventsHaNode {
@@ -68,7 +68,7 @@ module.exports = function(RED) {
                 const evt = {
                     event_type: 'state_changed',
                     entity_id: entity_id,
-                    event: message.payload
+                    event: message.payload,
                 };
 
                 this.onEntityStateChanged(evt);
@@ -88,8 +88,8 @@ module.exports = function(RED) {
                     event: {
                         entity_id: entityId,
                         old_state: entities[entityId],
-                        new_state: entities[entityId]
-                    }
+                        new_state: entities[entityId],
+                    },
                 };
 
                 this.onEntityStateChanged(eventMessage);
@@ -165,7 +165,7 @@ module.exports = function(RED) {
                 let status = {
                     fill: 'green',
                     shape: 'dot',
-                    text: statusText
+                    text: statusText,
                 };
 
                 // If a constraint comparator failed we're done, also if no custom outputs to look at
@@ -177,7 +177,7 @@ module.exports = function(RED) {
                         status = {
                             fill: 'red',
                             shape: 'ring',
-                            text: statusText
+                            text: statusText,
                         };
                     }
                     this.debugToClient(
@@ -193,7 +193,7 @@ module.exports = function(RED) {
                     eventMessage
                 );
                 const customOutputMessages = customOutputsComparatorResults.map(
-                    r => r.message
+                    (r) => r.message
                 );
 
                 outputs = outputs.concat(customOutputMessages);
@@ -228,7 +228,7 @@ module.exports = function(RED) {
                     comparatorType,
                     comparatorValue,
                     comparatorValueDatatype,
-                    propertyValue
+                    propertyValue,
                 } = constraint;
                 const constraintTarget = await this.getConstraintTargetData(
                     constraint,
@@ -247,7 +247,7 @@ module.exports = function(RED) {
                     comparatorValueDatatype,
                     {
                         entity: eventMessage.event.new_state,
-                        prevEntity: eventMessage.event.old_state
+                        prevEntity: eventMessage.event.old_state,
                     }
                 );
 
@@ -261,15 +261,15 @@ module.exports = function(RED) {
                     constraint,
                     constraintTarget,
                     actualValue,
-                    comparatorResult
+                    comparatorResult,
                 });
             }
             const failedComparators = comparatorResults.filter(
-                res => !res.comparatorResult
+                (res) => !res.comparatorResult
             );
             return {
                 all: comparatorResults || [],
-                failed: failedComparators || []
+                failed: failedComparators || [],
             };
         }
 
@@ -279,7 +279,7 @@ module.exports = function(RED) {
             const msg = {
                 topic: entity_id,
                 payload: event.new_state.state,
-                data: eventMessage
+                data: eventMessage,
             };
             let outputs;
 
@@ -304,7 +304,7 @@ module.exports = function(RED) {
                         output,
                         comparatorMatched: true,
                         actualValue: null,
-                        message: null
+                        message: null,
                     };
 
                     if (output.comparatorPropertyType !== 'always') {
@@ -319,7 +319,7 @@ module.exports = function(RED) {
                             output.comparatorValueDatatype,
                             {
                                 entity: eventMessage.event.new_state,
-                                prevEntity: eventMessage.event.old_state
+                                prevEntity: eventMessage.event.old_state,
                             }
                         );
                     }
@@ -337,7 +337,7 @@ module.exports = function(RED) {
         async getConstraintTargetData(constraint, triggerEvent) {
             const targetData = {
                 entityid: null,
-                state: null
+                state: null,
             };
             try {
                 const isTargetThisEntity =
@@ -357,7 +357,7 @@ module.exports = function(RED) {
                     constraint.propertyType === 'current_state'
                 ) {
                     targetData.state = {
-                        new_state: targetData.state
+                        new_state: targetData.state,
                     };
                 }
             } catch (e) {
@@ -421,7 +421,7 @@ module.exports = function(RED) {
             return {
                 topic: eventMessage.entity_id,
                 payload,
-                data: eventMessage
+                data: eventMessage,
             };
         }
     }

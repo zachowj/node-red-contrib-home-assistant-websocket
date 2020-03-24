@@ -2,19 +2,19 @@
 const EventsHaNode = require('../../lib/events-ha-node');
 const { shouldIncludeEvent } = require('../../lib/utils');
 
-module.exports = function(RED) {
+module.exports = function (RED) {
     const nodeOptions = {
         config: {
             entityidfilter: {},
             entityidfiltertype: {},
-            haltIfState: nodeDef =>
+            haltIfState: (nodeDef) =>
                 nodeDef.haltifstate ? nodeDef.haltifstate.trim() : null,
-            halt_if_type: nodeDef => nodeDef.halt_if_type || 'str',
-            halt_if_compare: nodeDef => nodeDef.halt_if_compare || 'is',
+            halt_if_type: (nodeDef) => nodeDef.halt_if_type || 'str',
+            halt_if_compare: (nodeDef) => nodeDef.halt_if_compare || 'is',
             outputinitially: {},
-            state_type: nodeDef => nodeDef.state_type || 'str',
-            output_only_on_state_change: {}
-        }
+            state_type: (nodeDef) => nodeDef.state_type || 'str',
+            output_only_on_state_change: {},
+        },
     };
 
     class ServerStateChangedNode extends EventsHaNode {
@@ -101,9 +101,9 @@ module.exports = function(RED) {
                 config.halt_if_type,
                 {
                     entity: event.new_state,
-                    prevEntity: event.old_state
+                    prevEntity: event.old_state,
                 }
-            ).catch(e => {
+            ).catch((e) => {
                 this.setStatusFailed('Error');
                 this.node.error(e.message, {});
             });
@@ -111,7 +111,7 @@ module.exports = function(RED) {
             const msg = {
                 topic: entity_id,
                 payload: event.new_state.state,
-                data: event
+                data: event,
             };
 
             const statusMessage = `${event.new_state.state}${
@@ -165,8 +165,8 @@ module.exports = function(RED) {
                     event: {
                         entity_id: entityId,
                         old_state: entities[entityId],
-                        new_state: entities[entityId]
-                    }
+                        new_state: entities[entityId],
+                    },
                 };
 
                 this.onHaEventsStateChanged(eventMessage, true);

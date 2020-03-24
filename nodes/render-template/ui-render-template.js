@@ -5,7 +5,7 @@ RED.nodes.registerType('api-render-template', {
     outputs: 1,
     icon: 'parser-json.png',
     paletteLabel: 'get template',
-    label: function() {
+    label: function () {
         return this.name || `template: ${this.template || ''}`;
     },
     labelStyle: nodeVersion.labelStyle,
@@ -16,19 +16,19 @@ RED.nodes.registerType('api-render-template', {
         resultsLocation: { value: 'payload' },
         resultsLocationType: { value: 'msg' },
         templateLocation: { value: 'template' },
-        templateLocationType: { value: 'msg' }
+        templateLocationType: { value: 'msg' },
     },
-    oneditprepare: function() {
+    oneditprepare: function () {
         const $server = $('#node-input-server');
         const utils = {
-            setDefaultServerSelection: function() {
+            setDefaultServerSelection: function () {
                 let defaultServer;
-                RED.nodes.eachConfig(n => {
+                RED.nodes.eachConfig((n) => {
                     if (n.type === 'server' && !defaultServer)
                         defaultServer = n.id;
                 });
                 if (defaultServer) $server.val(defaultServer);
-            }
+            },
         };
 
         if (!this.server) {
@@ -48,9 +48,9 @@ RED.nodes.registerType('api-render-template', {
                 'msg',
                 'flow',
                 'global',
-                { value: 'none', label: 'none', hasValue: false }
+                { value: 'none', label: 'none', hasValue: false },
             ],
-            typeField: '#node-input-templateLocationType'
+            typeField: '#node-input-templateLocationType',
         });
 
         $('#node-input-resultsLocation').typedInput({
@@ -58,9 +58,9 @@ RED.nodes.registerType('api-render-template', {
                 'msg',
                 'flow',
                 'global',
-                { value: 'none', label: 'none', hasValue: false }
+                { value: 'none', label: 'none', hasValue: false },
             ],
-            typeField: '#node-input-resultsLocationType'
+            typeField: '#node-input-resultsLocationType',
         });
 
         // NOTE: Copypasta from node-red/nodes/core/template node
@@ -68,11 +68,11 @@ RED.nodes.registerType('api-render-template', {
         // TODO: Add a preview render button for testing (or call render on debounced keyup)
         this.editor = RED.editor.createEditor({
             id: 'node-input-template-editor',
-            value: $inputTemplate.val()
+            value: $inputTemplate.val(),
         });
         this.editor.focus();
     },
-    oneditresize: function(size) {
+    oneditresize: function (size) {
         const $rows = $('#dialog-form>div:not(.node-text-editor-row)');
         const $editorRow = $('#dialog-form>div.node-text-editor-row');
         const $textEditor = $('.node-text-editor');
@@ -89,14 +89,14 @@ RED.nodes.registerType('api-render-template', {
         $textEditor.css('height', `${height}px`);
         this.editor.resize();
     },
-    oneditcancel: function() {
+    oneditcancel: function () {
         this.editor.destroy();
         delete this.editor;
     },
-    oneditsave: function() {
+    oneditsave: function () {
         const newValue = this.editor.getValue();
         $('#node-input-template').val(newValue);
         this.editor.destroy();
         delete this.editor;
-    }
+    },
 });

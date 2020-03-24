@@ -7,9 +7,9 @@ const BaseNode = require('../../lib/base-node');
 const HomeAssistant = require('../../lib/home-assistant');
 const { toCamelCase } = require('../../lib/utils');
 
-module.exports = function(RED) {
+module.exports = function (RED) {
     const httpHandlers = {
-        disableCache: function(req, res, next) {
+        disableCache: function (req, res, next) {
             if (this.nodeConfig.cacheJson === false) {
                 res.setHeader('Surrogate-Control', 'no-store');
                 res.setHeader(
@@ -21,37 +21,37 @@ module.exports = function(RED) {
             }
             next();
         },
-        getEntities: function(req, res, next) {
+        getEntities: function (req, res, next) {
             if (!this.homeAssistant) {
                 return res.json([]);
             }
 
             return this.homeAssistant
                 .getEntities()
-                .then(states => res.json(states))
-                .catch(e => this.error(e.message));
+                .then((states) => res.json(states))
+                .catch((e) => this.error(e.message));
         },
-        getStates: function(req, res, next) {
+        getStates: function (req, res, next) {
             if (!this.homeAssistant) {
                 return res.json([]);
             }
 
             return this.homeAssistant
                 .getStates()
-                .then(states => res.json(states))
-                .catch(e => this.error(e.message));
+                .then((states) => res.json(states))
+                .catch((e) => this.error(e.message));
         },
-        getServices: function(req, res, next) {
+        getServices: function (req, res, next) {
             if (!this.homeAssistant) {
                 return res.json([]);
             }
 
             return this.homeAssistant
                 .getServices()
-                .then(services => res.json(services))
-                .catch(e => this.error(e.message));
+                .then((services) => res.json(services))
+                .catch((e) => this.error(e.message));
         },
-        getProperties: async function(req, res, next) {
+        getProperties: async function (req, res, next) {
             if (!this.homeAssistant) {
                 return res.json([]);
             }
@@ -74,10 +74,10 @@ module.exports = function(RED) {
 
             if (singleEntity) {
                 flat = Object.keys(flatten(states)).filter(
-                    e => e.indexOf(req.query.term) !== -1
+                    (e) => e.indexOf(req.query.term) !== -1
                 );
             } else {
-                flat = Object.values(states).map(entity =>
+                flat = Object.values(states).map((entity) =>
                     Object.keys(flatten(entity))
                 );
             }
@@ -95,24 +95,24 @@ module.exports = function(RED) {
 
             res.json(uniqArray);
         },
-        getIntegrationVersion: function(req, res, next) {
+        getIntegrationVersion: function (req, res, next) {
             const data = { version: 0 };
 
             if (this.websocket && this.websocket.isConnected) {
                 data.version = this.websocket.integrationVersion;
             }
             res.json(data);
-        }
+        },
     };
 
-    RED.httpAdmin.get('/homeassistant/discover', async function(req, res) {
+    RED.httpAdmin.get('/homeassistant/discover', async function (req, res) {
         const instances = [];
-        bonjour.find({ type: 'home-assistant' }, service => {
+        bonjour.find({ type: 'home-assistant' }, (service) => {
             instances.push({
                 label: service.name
                     ? `${service.name} (${service.txt.base_url})`
                     : service.txt.base_url,
-                value: service.txt.base_url
+                value: service.txt.base_url,
             });
         });
 
@@ -131,8 +131,8 @@ module.exports = function(RED) {
             rejectUnauthorizedCerts: {},
             ha_boolean: {},
             connectionDelay: {},
-            cacheJson: {}
-        }
+            cacheJson: {},
+        },
     };
 
     class ConfigServerNode extends BaseNode {
@@ -151,7 +151,7 @@ module.exports = function(RED) {
             // Check if using HA Add-on and import proxy token
             const addonBaseUrls = [
                 'http://hassio/homeassistant',
-                'http://supervisor/core'
+                'http://supervisor/core',
             ];
             if (
                 this.nodeConfig.addon ||
@@ -169,7 +169,7 @@ module.exports = function(RED) {
                 entities: httpHandlers.getEntities,
                 states: httpHandlers.getStates,
                 services: httpHandlers.getServices,
-                properties: httpHandlers.getProperties
+                properties: httpHandlers.getProperties,
             };
             Object.entries(endpoints).forEach(([key, value]) =>
                 this.RED.httpAdmin.get(
@@ -203,7 +203,7 @@ module.exports = function(RED) {
                 legacy: this.nodeConfig.legacy,
                 rejectUnauthorizedCerts: this.nodeConfig
                     .rejectUnauthorizedCerts,
-                connectionDelay: this.nodeConfig.connectionDelay
+                connectionDelay: this.nodeConfig.connectionDelay,
             });
             this.http = this.homeAssistant.http;
             this.websocket = this.homeAssistant.websocket;
@@ -215,7 +215,7 @@ module.exports = function(RED) {
                 'ha_client:connecting': this.onHaEventsConnecting,
                 'ha_client:error': this.onHaEventsError,
                 'ha_client:states_loaded': this.onHaStatesLoaded,
-                'ha_client:services_loaded': this.onHaServicesLoaded
+                'ha_client:services_loaded': this.onHaServicesLoaded,
             };
             Object.entries(events).forEach(([event, callback]) =>
                 this.websocket.addListener(event, callback.bind(this))
@@ -225,7 +225,7 @@ module.exports = function(RED) {
                 this.registerEvents.bind(this)
             );
 
-            await this.homeAssistant.connect().catch(err => {
+            await this.homeAssistant.connect().catch((err) => {
                 this.websocket.connectionState = this.websocket.ERROR;
                 this.websocket.emit('updateNodeStatus');
                 this.node.error(err);
@@ -316,7 +316,7 @@ module.exports = function(RED) {
     RED.nodes.registerType('server', ConfigServerNode, {
         credentials: {
             host: { type: 'text' },
-            access_token: { type: 'text' }
-        }
+            access_token: { type: 'text' },
+        },
     });
 };

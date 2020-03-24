@@ -5,7 +5,7 @@ RED.nodes.registerType('ha-get-entities', {
     outputs: 1,
     icon: 'pagesearch.png',
     paletteLabel: 'get entities',
-    label: function() {
+    label: function () {
         return this.name || 'get entities';
     },
     labelStyle: nodeVersion.labelStyle,
@@ -13,7 +13,7 @@ RED.nodes.registerType('ha-get-entities', {
         server: { value: '', type: 'server', required: true },
         name: { value: '' },
         rules: {
-            value: [{ property: '', logic: 'is', value: '', valueType: 'str' }]
+            value: [{ property: '', logic: 'is', value: '', valueType: 'str' }],
         },
         output_type: { value: 'array' },
         output_empty_results: { value: false },
@@ -21,15 +21,15 @@ RED.nodes.registerType('ha-get-entities', {
         output_location: { value: 'payload' },
         output_results_count: {
             value: 1,
-            validate: function(v) {
+            validate: function (v) {
                 if ($('#node-input-output_type').val() === 'random') {
                     return Number.isInteger(Number(v));
                 }
                 return true;
-            }
-        }
+            },
+        },
     },
-    oneditprepare: function() {
+    oneditprepare: function () {
         const NODE = this;
         const operators = [
             { value: 'is', text: 'is' },
@@ -42,7 +42,7 @@ RED.nodes.registerType('ha-get-entities', {
             { value: 'does_not_include', text: 'not in' },
             { value: 'starts_with', text: 'starts with' },
             { value: 'in_group', text: 'in group' },
-            { value: 'jsonata', text: 'JSONata' }
+            { value: 'jsonata', text: 'JSONata' },
         ];
         const typeEntity = { value: 'entity', label: 'entity.' };
         const defaultTypes = [
@@ -54,17 +54,17 @@ RED.nodes.registerType('ha-get-entities', {
             'msg',
             'flow',
             'global',
-            typeEntity
+            typeEntity,
         ];
         const $logic = $('#logic');
 
         let availableProperties = [];
         haServer.init(NODE, '#node-input-server');
-        haServer.autocomplete('properties', entities => {
+        haServer.autocomplete('properties', (entities) => {
             availableProperties = entities;
             $('.input-property').autocomplete({
                 source: availableProperties,
-                minLength: 0
+                minLength: 0,
             });
         });
 
@@ -72,10 +72,10 @@ RED.nodes.registerType('ha-get-entities', {
             addButton: true,
             removable: true,
             height: 321,
-            addItem: function(container, index, data) {
+            addItem: function (container, index, data) {
                 const $row = $('<div />').appendTo(container);
                 const $row2 = $('<div />', {
-                    style: 'margin-top: 10px;'
+                    style: 'margin-top: 10px;',
                 }).appendTo(container);
 
                 if (!Object.prototype.hasOwnProperty.call(data, 'logic')) {
@@ -84,26 +84,26 @@ RED.nodes.registerType('ha-get-entities', {
 
                 $('<span />', {
                     text: 'Property',
-                    style: 'padding-right: 47px;'
+                    style: 'padding-right: 47px;',
                 }).appendTo($row);
                 const $property = $('<input />', {
                     type: 'text',
                     class: 'input-property',
-                    style: 'margin-left: 5px;'
+                    style: 'margin-left: 5px;',
                 })
                     .appendTo($row)
                     .val(data.property);
 
                 $property.autocomplete({
                     source: availableProperties,
-                    minLength: 0
+                    minLength: 0,
                 });
 
                 const $logicField = $('<select/>', {
-                    style: 'margin-right: 5px;width: auto;'
+                    style: 'margin-right: 5px;width: auto;',
                 })
                     .appendTo($row2)
-                    .change(function(e) {
+                    .change(function (e) {
                         let types = defaultTypes;
 
                         $property.prop(
@@ -125,7 +125,7 @@ RED.nodes.registerType('ha-get-entities', {
                                     'msg',
                                     'flow',
                                     'global',
-                                    typeEntity
+                                    typeEntity,
                                 ];
                                 break;
                             case 'includes':
@@ -138,7 +138,7 @@ RED.nodes.registerType('ha-get-entities', {
                                     'msg',
                                     'flow',
                                     'global',
-                                    typeEntity
+                                    typeEntity,
                                 ];
                                 break;
                             case 'jsonata':
@@ -159,7 +159,7 @@ RED.nodes.registerType('ha-get-entities', {
                 const $value = $('<input />', {
                     class: 'input-value',
                     type: 'text',
-                    style: 'width: 70%;'
+                    style: 'width: 70%;',
                 })
                     .appendTo($row2)
                     .val(data.value)
@@ -167,19 +167,19 @@ RED.nodes.registerType('ha-get-entities', {
 
                 $value.typedInput('type', data.valueType);
                 $logicField.val(data.logic).trigger('change');
-            }
+            },
         });
 
         $logic.editableList('addItems', NODE.rules);
         $('#node-input-output_location').typedInput({
             types: ['msg', 'flow', 'global'],
-            typeField: '#node-input-output_location_type'
+            typeField: '#node-input-output_location_type',
         });
 
         $('#node-input-output_results_count').spinner({ min: 1 });
 
         $('#node-input-output_type')
-            .on('change', function(e) {
+            .on('change', function (e) {
                 $('.output-option').hide();
                 switch (e.target.value) {
                     case 'array':
@@ -200,12 +200,12 @@ RED.nodes.registerType('ha-get-entities', {
             })
             .trigger('change');
     },
-    oneditsave: function() {
+    oneditsave: function () {
         const rules = $('#logic').editableList('items');
         const NODE = this;
         NODE.rules = [];
 
-        rules.each(function(i) {
+        rules.each(function (i) {
             const $rule = $(this);
             const inputProperty = $rule.find('.input-property').val();
             const selectLogic = $rule.find('select').val();
@@ -218,8 +218,8 @@ RED.nodes.registerType('ha-get-entities', {
                 property: inputProperty,
                 logic: selectLogic,
                 value: inputValue,
-                valueType: inputValueType
+                valueType: inputValueType,
             });
         });
-    }
+    },
 });

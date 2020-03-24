@@ -7,7 +7,7 @@ module.exports = {
     plugins: [
         ['@vuepress/google-analytics', { ga: 'UA-155074503-1' }],
         ['@vuepress/plugin-back-to-top', true],
-        '@vuepress/medium-zoom'
+        '@vuepress/medium-zoom',
     ],
     themeConfig: {
         repo: 'zachowj/node-red-contrib-home-assistant-websocket',
@@ -21,7 +21,7 @@ module.exports = {
             { text: 'Guides', link: '/guide/' },
             { text: 'Nodes', link: '/node/' },
             { text: 'FAQ', link: '/FAQ.md' },
-            { text: 'Cookbook', link: '/cookbook/' }
+            { text: 'Cookbook', link: '/cookbook/' },
         ],
         sidebar: {
             '/cookbook/': [
@@ -36,9 +36,9 @@ module.exports = {
                         'get-state_changed-events-based-on-area',
                         'sun-events',
                         'vacation-mode',
-                        'expiration-date-monitor'
-                    ]
-                }
+                        'expiration-date-monitor',
+                    ],
+                },
             ],
             '/guide/': [
                 {
@@ -49,14 +49,14 @@ module.exports = {
                         'first-automation',
                         'conditionals',
                         'mustache-templates',
-                        'jsonata'
-                    ]
+                        'jsonata',
+                    ],
                 },
                 {
                     title: 'Contribute to',
                     collapsable: false,
-                    children: ['development', 'documentation']
-                }
+                    children: ['development', 'documentation'],
+                },
             ],
             '/node/': [
                 {
@@ -78,10 +78,10 @@ module.exports = {
                         'poll-state',
                         'trigger-state',
                         'wait-until',
-                        'webhook'
-                    ]
-                }
-            ]
-        }
-    }
+                        'webhook',
+                    ],
+                },
+            ],
+        },
+    },
 };

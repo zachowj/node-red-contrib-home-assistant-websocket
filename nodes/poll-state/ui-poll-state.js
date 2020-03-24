@@ -6,7 +6,7 @@ RED.nodes.registerType('poll-state', {
     outputLabels: nodeVersion.ifStateLabels,
     icon: 'timer.png',
     paletteLabel: 'poll state',
-    label: function() {
+    label: function () {
         return this.name || `poll state: ${this.entity_id}`;
     },
     labelStyle: nodeVersion.labelStyle,
@@ -18,10 +18,10 @@ RED.nodes.registerType('poll-state', {
         haConfig: {
             value: [
                 { property: 'name', value: '' },
-                { property: 'icon', value: '' }
-            ]
+                { property: 'icon', value: '' },
+            ],
         },
-        updateinterval: { value: '60', validate: v => !isNaN(v) },
+        updateinterval: { value: '60', validate: (v) => !isNaN(v) },
         updateIntervalUnits: { value: 'seconds' },
         outputinitially: { value: false },
         outputonchanged: { value: false },
@@ -30,9 +30,9 @@ RED.nodes.registerType('poll-state', {
         halt_if: { value: '' },
         halt_if_type: { value: 'str' },
         halt_if_compare: { value: 'is' },
-        outputs: { value: 1 }
+        outputs: { value: 1 },
     },
-    oneditprepare: function() {
+    oneditprepare: function () {
         nodeVersion.check(this);
         const $entityIdField = $('#entity_id');
         $entityIdField.val(this.entity_id);
@@ -40,7 +40,7 @@ RED.nodes.registerType('poll-state', {
         const node = this;
 
         haServer.init(node, '#node-input-server');
-        haServer.autocomplete('entities', entities => {
+        haServer.autocomplete('entities', (entities) => {
             node.availableEntities = entities;
 
             $entityIdField.autocomplete({
@@ -55,7 +55,7 @@ RED.nodes.registerType('poll-state', {
                     } else {
                         $(evt.target).addClass('input-error');
                     }
-                }
+                },
             });
 
             const validSelection =
@@ -84,10 +84,8 @@ RED.nodes.registerType('poll-state', {
         ifState.init('#node-input-halt_if', '#node-input-halt_if_compare');
         exposeNode.init(node);
     },
-    oneditsave: function() {
-        this.entity_id = $('#entity_id')
-            .val()
-            .trim();
+    oneditsave: function () {
+        this.entity_id = $('#entity_id').val().trim();
         let outputs = $('#node-input-halt_if').val() ? 2 : 1;
         // Swap inputs for the new 'if state' location
         if (this.version === 0 && outputs === 2) {
@@ -97,7 +95,7 @@ RED.nodes.registerType('poll-state', {
         nodeVersion.update(this);
         this.haConfig = exposeNode.getValues();
     },
-    oneditresize: function() {
+    oneditresize: function () {
         ifState.resize();
-    }
+    },
 });

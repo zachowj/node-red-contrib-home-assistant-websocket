@@ -6,7 +6,7 @@ RED.nodes.registerType('api-call-service', {
     icon: 'router-wireless.png',
     align: 'right',
     paletteLabel: 'call service',
-    label: function() {
+    label: function () {
         return this.name || `svc: ${this.service_domain}:${this.service}`;
     },
     labelStyle: nodeVersion.labelStyle,
@@ -23,9 +23,9 @@ RED.nodes.registerType('api-call-service', {
         mergecontext: { value: null },
         output_location: { value: 'payload' },
         output_location_type: { value: 'none' },
-        mustacheAltTags: { value: false }
+        mustacheAltTags: { value: false },
     },
-    oneditprepare: function() {
+    oneditprepare: function () {
         nodeVersion.check(this);
         const node = this;
 
@@ -61,16 +61,16 @@ RED.nodes.registerType('api-call-service', {
         $data
             .typedInput({
                 types: ['json', 'jsonata'],
-                typeField: '#node-input-dataType'
+                typeField: '#node-input-dataType',
             })
             .typedInput('width', '68%');
 
-        $data.on('change', function() {
+        $data.on('change', function () {
             $('#mustacheAltTags').toggle($dataType.val() === 'json');
         });
 
         haServer.init(node, '#node-input-server');
-        haServer.autocomplete('entities', entities => {
+        haServer.autocomplete('entities', (entities) => {
             node.availableEntities = entities;
 
             function split(val) {
@@ -82,12 +82,11 @@ RED.nodes.registerType('api-call-service', {
             }
 
             $entityIdField
-                .on('keydown', function(event) {
+                .on('keydown', function (event) {
                     if (
                         event.keyCode === $.ui.keyCode.TAB &&
-                        $(this)
-                            .autocomplete()
-                            .data('uiAutocomplete').menu.active
+                        $(this).autocomplete().data('uiAutocomplete').menu
+                            .active
                     ) {
                         event.preventDefault();
                     }
@@ -95,7 +94,7 @@ RED.nodes.registerType('api-call-service', {
                 .autocomplete({
                     // source: node.availableEntities,
                     minLength: 0,
-                    source: function(request, response) {
+                    source: function (request, response) {
                         // delegate back to autocomplete, but extract the last term
                         response(
                             $.ui.autocomplete.filter(
@@ -104,11 +103,11 @@ RED.nodes.registerType('api-call-service', {
                             )
                         );
                     },
-                    focus: function() {
+                    focus: function () {
                         // prevent value inserted on focus
                         return false;
                     },
-                    select: function(event, ui) {
+                    select: function (event, ui) {
                         var terms = split(this.value);
                         // remove the current input
                         terms.pop();
@@ -118,11 +117,11 @@ RED.nodes.registerType('api-call-service', {
                         terms.push('');
                         this.value = terms.join(', ');
                         return false;
-                    }
+                    },
                 });
         });
 
-        haServer.autocomplete('services', services => {
+        haServer.autocomplete('services', (services) => {
             node.allServices = services;
             node.allDomains = Object.keys(node.allServices).sort();
 
@@ -131,27 +130,27 @@ RED.nodes.registerType('api-call-service', {
                     source: node.allDomains,
                     create: (evt, ui) =>
                         updateDomainSelection({
-                            event: evt
+                            event: evt,
                         }),
                     change: (evt, ui) =>
                         updateDomainSelection({
-                            event: evt
+                            event: evt,
                         }),
                     select: (evt, ui) =>
                         updateDomainSelection({
-                            event: evt
+                            event: evt,
                         }),
-                    minLength: 0
+                    minLength: 0,
                 })
-                .focus(function() {
+                .focus(function () {
                     $domainField.autocomplete('search');
                 });
 
             updateDomainSelection({
-                domainText: node.service_domain || ''
+                domainText: node.service_domain || '',
             });
             updateServiceSelection({
-                serviceText: node.service || ''
+                serviceText: node.service || '',
             });
 
             return node;
@@ -180,9 +179,9 @@ RED.nodes.registerType('api-call-service', {
                             return;
                         }
                         tRows.push(
-                            `<tr><td><code>${k}</code></td><td>${fields[k]
-                                .description || ''}</td><td>${fields[k]
-                                .example || ''}</td></tr>`
+                            `<tr><td><code>${k}</code></td><td>${
+                                fields[k].description || ''
+                            }</td><td>${fields[k].example || ''}</td></tr>`
                         );
                         return tRows;
                     }, []);
@@ -230,10 +229,10 @@ RED.nodes.registerType('api-call-service', {
             node.selectedDomain = knownDomain
                 ? {
                       services: node.allServices[selectedDomainText],
-                      name: selectedDomainText
+                      name: selectedDomainText,
                   }
                 : (node.selectedDomain = {
-                      services: {}
+                      services: {},
                   });
 
             $serviceField
@@ -241,23 +240,23 @@ RED.nodes.registerType('api-call-service', {
                     source: Object.keys(node.selectedDomain.services).sort(),
                     create: (evt, ui) =>
                         updateServiceSelection({
-                            event: evt
+                            event: evt,
                         }),
                     change: (evt, ui) =>
                         updateServiceSelection({
-                            event: evt
+                            event: evt,
                         }),
                     select: (evt, ui) =>
                         updateServiceSelection({
-                            event: evt
+                            event: evt,
                         }),
                     focus: (evt, ui) =>
                         updateServiceSelection({
-                            event: evt
+                            event: evt,
                         }),
-                    minLength: 0
+                    minLength: 0,
                 })
-                .focus(function() {
+                .focus(function () {
                     $serviceField.autocomplete('search');
                 });
         }
@@ -274,14 +273,14 @@ RED.nodes.registerType('api-call-service', {
                     {
                         value: 'none',
                         label: 'None',
-                        hasValue: false
-                    }
+                        hasValue: false,
+                    },
                 ],
-                typeField: '#node-input-output_location_type'
+                typeField: '#node-input-output_location_type',
             })
             .typedInput('width', '68%');
     },
-    oneditsave: function() {
+    oneditsave: function () {
         const entityId = $('#node-input-entityId').val();
         this.service_domain = $('#service_domain').val();
         this.service = $('#service').val();
@@ -292,5 +291,5 @@ RED.nodes.registerType('api-call-service', {
         }
 
         nodeVersion.update(this);
-    }
+    },
 });

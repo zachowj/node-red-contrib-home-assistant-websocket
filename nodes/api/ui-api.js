@@ -5,7 +5,7 @@ RED.nodes.registerType('ha-api', {
     outputs: 1,
     icon: 'plane.png',
     paletteLabel: 'API',
-    label: function() {
+    label: function () {
         return this.name || 'API';
     },
     labelStyle: nodeVersion.labelStyle,
@@ -20,20 +20,20 @@ RED.nodes.registerType('ha-api', {
         dataType: { value: 'json' },
         location: { value: 'payload' },
         locationType: { value: 'msg' },
-        responseType: { value: 'json' }
+        responseType: { value: 'json' },
     },
-    oneditprepare: function() {
+    oneditprepare: function () {
         const node = this;
         const $server = $('#node-input-server');
         const utils = {
-            setDefaultServerSelection: function() {
+            setDefaultServerSelection: function () {
                 let defaultServer;
-                RED.nodes.eachConfig(n => {
+                RED.nodes.eachConfig((n) => {
                     if (n.type === 'server' && !defaultServer)
                         defaultServer = n.id;
                 });
                 if (defaultServer) $server.val(defaultServer);
-            }
+            },
         };
 
         if (!node.server) {
@@ -43,19 +43,19 @@ RED.nodes.registerType('ha-api', {
         $('#node-input-data')
             .typedInput({
                 types: ['json', 'jsonata'],
-                typeField: '#node-input-dataType'
+                typeField: '#node-input-dataType',
             })
             .typedInput('width', '68%');
 
         $('#node-input-protocol')
-            .on('change', function() {
+            .on('change', function () {
                 const isHttp = $(this).val() === 'http';
                 $('.http').toggle(isHttp);
                 $('#node-input-method').trigger('change');
             })
             .trigger('change');
 
-        $('#node-input-method').on('change', function() {
+        $('#node-input-method').on('change', function () {
             const label =
                 $('#node-input-protocol').val() === 'http' &&
                 $('#node-input-method').val() === 'get'
@@ -70,10 +70,10 @@ RED.nodes.registerType('ha-api', {
                     'msg',
                     'flow',
                     'global',
-                    { value: 'none', label: 'None', hasValue: false }
+                    { value: 'none', label: 'None', hasValue: false },
                 ],
-                typeField: '#node-input-locationType'
+                typeField: '#node-input-locationType',
             })
             .typedInput('width', '68%');
-    }
+    },
 });

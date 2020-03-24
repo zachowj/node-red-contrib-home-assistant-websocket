@@ -5,31 +5,31 @@ const EventsNode = require('../../lib/events-node');
 const RenderTemplate = require('../../lib/mustache-context');
 const { shouldIncludeEvent } = require('../../lib/utils');
 
-module.exports = function(RED) {
+module.exports = function (RED) {
     const nodeOptions = {
         config: {
             name: {},
             server: {
-                isNode: true
+                isNode: true,
             },
             outputs: 1,
             entityId: {},
-            entityIdFilterType: nodeDef =>
+            entityIdFilterType: (nodeDef) =>
                 nodeDef.entityIdFilterType || 'exact',
             property: {},
             comparator: {},
             value: {},
             valueType: {},
             timeout: {},
-            timeoutType: nodeDef => nodeDef.timeoutType || 'num',
+            timeoutType: (nodeDef) => nodeDef.timeoutType || 'num',
             timeoutUnits: {},
             entityLocation: {},
             entityLocationType: {},
             checkCurrentState: {},
-            blockInputOverrides: nodeDef =>
+            blockInputOverrides: (nodeDef) =>
                 nodeDef.blockInputOverrides === undefined
                     ? true
-                    : nodeDef.blockInputOverrides
+                    : nodeDef.blockInputOverrides,
         },
         input: {
             entityId: {
@@ -43,8 +43,8 @@ module.exports = function(RED) {
                             Joi.string(),
                             Joi.object().instance(RegExp)
                         )
-                        .label('entity_id')
-                }
+                        .label('entity_id'),
+                },
             },
             entityIdFilterType: {
                 messageProp: 'payload.entityIdFilterType',
@@ -53,16 +53,16 @@ module.exports = function(RED) {
                 validation: {
                     schema: Joi.string()
                         .valid('exact', 'regex', 'substring')
-                        .label('entityIdFilterType')
-                }
+                        .label('entityIdFilterType'),
+                },
             },
             property: {
                 messageProp: 'payload.property',
                 configProp: 'property',
                 validation: {
                     haltOnFail: true,
-                    schema: Joi.string().label('property')
-                }
+                    schema: Joi.string().label('property'),
+                },
             },
             comparator: {
                 messageProp: 'payload.comparator',
@@ -81,27 +81,27 @@ module.exports = function(RED) {
                             'does_not_include',
                             'jsonata'
                         )
-                        .label('comparator')
-                }
+                        .label('comparator'),
+                },
             },
             value: {
                 messageProp: 'payload.value',
                 configProp: 'value',
                 validation: {
-                    schema: Joi.string().label('value')
-                }
+                    schema: Joi.string().label('value'),
+                },
             },
             valueType: {
                 messageProp: 'payload.valueType',
                 configProp: 'valueType',
                 validation: {
                     haltOnFail: true,
-                    schema: Joi.string().label('valueType')
-                }
+                    schema: Joi.string().label('valueType'),
+                },
             },
             timeout: {
                 messageProp: 'payload.timeout',
-                configProp: 'timeout'
+                configProp: 'timeout',
             },
             timeoutUnits: {
                 messageProp: 'payload.timeoutUnits',
@@ -116,31 +116,31 @@ module.exports = function(RED) {
                             'hours',
                             'days'
                         )
-                        .label('timeoutUnits')
-                }
+                        .label('timeoutUnits'),
+                },
             },
             entityLocation: {
                 messageProp: 'payload.entityLocation',
                 configProp: 'entityLocation',
                 validation: {
-                    schema: Joi.string().label('entityLocation')
-                }
+                    schema: Joi.string().label('entityLocation'),
+                },
             },
             entityLocationType: {
                 messageProp: 'payload.entityLocationType',
                 configProp: 'entityLocationType',
                 validation: {
-                    schema: Joi.string().label('entityLocationType')
-                }
+                    schema: Joi.string().label('entityLocationType'),
+                },
             },
             checkCurrentState: {
                 messageProp: 'payload.checkCurrentState',
                 configProp: 'checkCurrentState',
                 validation: {
-                    schema: Joi.boolean().label('checkCurrentState')
-                }
-            }
-        }
+                    schema: Joi.boolean().label('checkCurrentState'),
+                },
+            },
+        },
     };
 
     class WaitUntilNode extends EventsNode {
@@ -175,9 +175,9 @@ module.exports = function(RED) {
                 this.savedConfig.valueType,
                 {
                     message: this.savedMessage,
-                    entity: event.new_state
+                    entity: event.new_state,
                 }
-            ).catch(e => {
+            ).catch((e) => {
                 this.setStatusFailed('Error');
                 this.node.error(e.message, {});
             });
@@ -233,13 +233,13 @@ module.exports = function(RED) {
                 timeoutUnits: parsedMessage.timeoutUnits.value,
                 entityLocation: parsedMessage.entityLocation.value,
                 entityLocationType: parsedMessage.entityLocationType.value,
-                checkCurrentState: parsedMessage.checkCurrentState.value
+                checkCurrentState: parsedMessage.checkCurrentState.value,
             };
 
             // If blocking input overrides reset values to nodeConfig
             if (this.nodeConfig.blockInputOverrides === true) {
                 Object.keys(config).forEach(
-                    key =>
+                    (key) =>
                         (config[key] = (key in this.nodeConfig
                             ? this.nodeConfig
                             : config)[key])
@@ -347,8 +347,8 @@ module.exports = function(RED) {
                 this.onEntityChange({
                     event: {
                         entity_id: config.entityId,
-                        new_state: currentState
-                    }
+                        new_state: currentState,
+                    },
                 });
             }
         }
@@ -395,7 +395,7 @@ module.exports = function(RED) {
                 hour12: false,
                 hour: 'numeric',
                 minute: 'numeric',
-                second: 'numeric'
+                second: 'numeric',
             });
 
             return timeoutStr;

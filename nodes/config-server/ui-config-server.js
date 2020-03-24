@@ -7,17 +7,17 @@ RED.nodes.registerType('server', {
         rejectUnauthorizedCerts: { value: true },
         ha_boolean: { value: 'y|yes|true|on|home|open' },
         connectionDelay: { value: true },
-        cacheJson: { value: true }
+        cacheJson: { value: true },
     },
     credentials: {
         host: { value: '', required: true },
-        access_token: { value: '', required: false }
+        access_token: { value: '', required: false },
     },
     icon: 'home.png',
-    label: function() {
+    label: function () {
         return this.name || this.url;
     },
-    oneditprepare: function() {
+    oneditprepare: function () {
         const $addon = $('#node-config-input-addon');
         const $host = $('#node-config-input-host');
         const $legacy = $('#node-config-input-legacy');
@@ -40,7 +40,7 @@ RED.nodes.registerType('server', {
         // Still need to check if host is hassio url for backward compatibility
         const addonBaseUrls = [
             'http://hassio/homeassistant',
-            'http://supervisor/core'
+            'http://supervisor/core',
         ];
         if (addonBaseUrls.includes($host.val())) {
             $addon.prop('checked', true);
@@ -51,7 +51,7 @@ RED.nodes.registerType('server', {
             $('.addon').toggle($addon.prop('checked'));
         }
         updateAddon();
-        $addon.on('click', function() {
+        $addon.on('click', function () {
             updateAddon();
         });
 
@@ -69,7 +69,7 @@ RED.nodes.registerType('server', {
             );
         }
         updateLegacy();
-        $legacy.on('click', function() {
+        $legacy.on('click', function () {
             updateLegacy();
         });
 
@@ -77,7 +77,7 @@ RED.nodes.registerType('server', {
             $host.autocomplete('destroy');
         } catch (err) {}
         const $discovery = $('#discoverInstances');
-        $discovery.on('click', function() {
+        $discovery.on('click', function () {
             if ($(this).hasClass('disabled')) return;
             const $icon = $('i', this)
                 .removeClass('fa-search')
@@ -89,8 +89,8 @@ RED.nodes.registerType('server', {
                         $.ajax({
                             dataType: 'json',
                             url: '/homeassistant/discover',
-                            cache: false
-                        }).done(data => {
+                            cache: false,
+                        }).done((data) => {
                             response(data);
                         });
                     },
@@ -101,12 +101,12 @@ RED.nodes.registerType('server', {
                     },
                     close: (event, ui) => {
                         $host.autocomplete('destroy');
-                    }
+                    },
                 })
                 .autocomplete('search', '');
         });
     },
-    oneditsave: function() {
+    oneditsave: function () {
         const addon = $('#node-config-input-addon').is(':checked');
         const $host = $('#node-config-input-host');
         const hostname = $host.val();
@@ -129,5 +129,5 @@ RED.nodes.registerType('server', {
             ).prop('checked');
             this.connectionDelay = false;
         }
-    }
+    },
 });

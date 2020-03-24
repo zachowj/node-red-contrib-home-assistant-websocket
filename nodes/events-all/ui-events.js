@@ -9,29 +9,29 @@ RED.nodes.registerType('server-events', {
         haConfig: {
             value: [
                 { property: 'name', value: '' },
-                { property: 'icon', value: '' }
-            ]
-        }
+                { property: 'icon', value: '' },
+            ],
+        },
     },
     inputs: 0,
     outputs: 1,
     icon: 'arrow-right-bold.png',
     paletteLabel: 'events: all',
-    label: function() {
+    label: function () {
         return this.name || `events: ${this.event_type || 'all'}`;
     },
     labelStyle: nodeVersion.labelStyle,
-    oneditprepare: function() {
+    oneditprepare: function () {
         haServer.init(this, '#node-input-server');
         exposeNode.init(this);
 
         $('#node-input-event_type')
-            .on('change keyup', function() {
+            .on('change keyup', function () {
                 $('#eventAlert').toggle($(this).val().length === 0);
             })
             .trigger('change');
     },
-    oneditsave: function() {
+    oneditsave: function () {
         this.haConfig = exposeNode.getValues();
-    }
+    },
 });
