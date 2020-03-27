@@ -216,6 +216,7 @@ module.exports = function (RED) {
                 'ha_client:error': this.onHaEventsError,
                 'ha_client:states_loaded': this.onHaStatesLoaded,
                 'ha_client:services_loaded': this.onHaServicesLoaded,
+                'ha_events:state_changed': this.onHaStateChanged,
             };
             Object.entries(events).forEach(([event, callback]) =>
                 this.websocket.addListener(event, callback.bind(this))
