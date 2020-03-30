@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [0.22.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.21.5...v0.22.0) (2020-03-30)
+
+### Bug Fixes
+
+- Process msg property even when set to false ([7028eae](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/7028eaeb9e825ba9a492c5f61abe394f8cd929c9)), closes [#219](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/219)
+- **trigger-state:** Restore default value for state_type ([4a26221](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/4a26221a1a2a2fcf3081e83fb110961013852835))
+- Wait for persistent data to be loaded before registering with HA ([2f76691](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/2f7669144b10bf9940c11be3400e37590941dd30)), closes [#223](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/223)
+
+### Features
+
+- Improve colors to work better in dark themes ([d153070](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d153070ca3bd00b303eeab2ee97ebb1a2dc524bf))
+
 ## [0.21.5](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.21.4...v0.21.5) (2020-03-09)
 
 ### Bug Fixes
