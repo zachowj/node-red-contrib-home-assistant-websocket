@@ -7,15 +7,7 @@
     "url": "https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues"
   },
   "scripts": {
-    "clean": "npm run docker:down",
-    "dev": "npm run docker:up",
-    "dev:clean": "npm run docker:down",
-    "docker:up": "npm run docker -- up --build --abort-on-container-exit --remove-orphans",
-    "docker:down": "npm run docker -- down -vt5 && npm run docker -- rm -fv",
-    "docker:restart": "npm run docker -- restart",
-    "docker:logs": "npm run docker -- logs -f && true",
-    "docker": "docker-compose -f docker/docker-compose.yml",
-    "docker-map": "docker-compose -f docker/docker-compose.mapped.yml",
+    "dev": "gulp start",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "docs:lint": "prettier --write docs/{.vuepress/**,**}/*.{js,md,html}",
@@ -71,10 +63,10 @@
     "mustache": "4.0.1",
     "p-iteration": "1.1.8",
     "selectn": "1.1.2",
-    "slugify": "1.4.0",
+    "slugify": "1.3.6",
     "time-ago": "0.2.1",
     "timestring": "6.0.0",
-    "ws": "7.2.3"
+    "ws": "7.2.1"
   },
   "devDependencies": {
     "@vuepress/plugin-back-to-top": "^1.4.0",
