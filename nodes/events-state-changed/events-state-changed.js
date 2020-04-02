@@ -49,7 +49,7 @@ module.exports = function (RED) {
             if (this.isEnabled === false) {
                 return;
             }
-            const { entity_id, event } = { ...evt };
+            const { entity_id, event } = JSON.parse(JSON.stringify(evt));
 
             if (!event.new_state) {
                 return null;
