@@ -152,10 +152,10 @@ module.exports = function (RED) {
         }
 
         async onEntityChange(evt) {
-            const event = Object.assign({}, evt.event);
+            const event = evt.event;
 
             if (!this.active) {
-                return null;
+                return;
             }
 
             if (

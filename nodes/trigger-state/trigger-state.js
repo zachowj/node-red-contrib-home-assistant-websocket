@@ -108,8 +108,6 @@ module.exports = function (RED) {
                 return;
             }
 
-            eventMessage = { ...eventMessage };
-
             if (
                 !shouldIncludeEvent(
                     eventMessage.entity_id,

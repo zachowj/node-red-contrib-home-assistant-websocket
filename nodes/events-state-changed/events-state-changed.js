@@ -49,10 +49,10 @@ module.exports = function (RED) {
             if (this.isEnabled === false) {
                 return;
             }
-            const { entity_id, event } = JSON.parse(JSON.stringify(evt));
+            const { entity_id, event } = evt;
 
             if (!event.new_state) {
-                return null;
+                return;
             }
 
             event.new_state.timeSinceChangedMs =
