@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.22.2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.22.1...v0.22.2) (2020-04-03)
+
+### Bug Fixes
+
+- "NaN" for events-state-changed ([5aa5b71](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/5aa5b71e945ba6e3fd16063511d47e2fcbc31b7e))
+- final final fix for NaN bug ([10325fa](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/10325fa7cfd6bc1dc0c7115a989c5a3d2a271d3e))
+- Final fix for NaN ??? ([b363e27](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/b363e27659d8b0482b2de9f18899d4420d8cecef))
+- null state for event and states data ([9dc1a7b](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/9dc1a7b01258a4aada1fb48614774329429f5cc2))
+
 ## [0.22.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.22.0...v0.22.1) (2020-03-30)
 
 ### Bug Fixes
