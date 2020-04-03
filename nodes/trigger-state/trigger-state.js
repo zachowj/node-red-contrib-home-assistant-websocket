@@ -1,4 +1,5 @@
 /* eslint-disable camelcase */
+const cloneDeep = require('lodash.clonedeep');
 const selectn = require('selectn');
 const { reduce } = require('p-iteration');
 
@@ -96,7 +97,7 @@ module.exports = function (RED) {
             }
         }
 
-        async onEntityStateChanged(eventMessage) {
+        async onEntityStateChanged(evt) {
             if (this.isEnabled === false) {
                 this.debugToClient(
                     'incoming: node is currently disabled, ignoring received event'
@@ -104,9 +105,11 @@ module.exports = function (RED) {
                 return;
             }
 
-            if (!selectn('event.new_state', eventMessage)) {
+            if (!selectn('event.new_state', evt)) {
                 return;
             }
+
+            const eventMessage = cloneDeep(evt);
 
             if (
                 !shouldIncludeEvent(

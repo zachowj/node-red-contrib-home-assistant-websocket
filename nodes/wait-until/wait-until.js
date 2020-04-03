@@ -1,3 +1,4 @@
+const cloneDeep = require('lodash.clonedeep');
 const Joi = require('@hapi/joi');
 const selectn = require('selectn');
 
@@ -152,7 +153,7 @@ module.exports = function (RED) {
         }
 
         async onEntityChange(evt) {
-            const event = evt.event;
+            const { event } = cloneDeep(evt);
 
             if (!this.active) {
                 return;

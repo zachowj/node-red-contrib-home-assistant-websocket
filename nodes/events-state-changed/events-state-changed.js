@@ -1,4 +1,5 @@
 /* eslint-disable camelcase */
+const cloneDeep = require('lodash.clonedeep');
 const EventsHaNode = require('../../lib/events-ha-node');
 const { shouldIncludeEvent } = require('../../lib/utils');
 
@@ -49,7 +50,7 @@ module.exports = function (RED) {
             if (this.isEnabled === false) {
                 return;
             }
-            const { entity_id, event } = evt;
+            const { entity_id, event } = cloneDeep(evt);
 
             if (!event.new_state) {
                 return;
