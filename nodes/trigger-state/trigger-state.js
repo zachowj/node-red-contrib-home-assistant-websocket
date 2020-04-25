@@ -55,12 +55,14 @@ module.exports = function (RED) {
                 this.isEnabled = true;
                 this.saveNodeData('isEnabled', true);
                 this.updateConnectionStatus();
+                this.updateHomeAssistant();
                 return;
             }
             if (message === 'disable' || message.payload === 'disable') {
                 this.isEnabled = false;
                 this.saveNodeData('isEnabled', false);
                 this.updateConnectionStatus();
+                this.updateHomeAssistant();
                 return;
             }
 
