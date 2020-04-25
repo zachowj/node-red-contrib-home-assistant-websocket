@@ -24,10 +24,7 @@ module.exports = function (RED) {
     class TimeSinceStateNode extends EventsHaNode {
         constructor(nodeDefinition) {
             super(nodeDefinition, RED, nodeOptions);
-            this.init();
-        }
 
-        init() {
             if (!this.nodeConfig.entity_id) {
                 throw new Error('Entity Id is required');
             }
