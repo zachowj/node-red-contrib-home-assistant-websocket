@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.22.3](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.22.2...v0.22.3) (2020-04-25)
+
+### Bug Fixes
+
+- **poll-state:** stop init() from overriding super.init() and being called twice ([0162db6](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/0162db632059dbc88857efeafcc245f79948c21e)), closes [#236](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/236)
+- **trigger-state:** enable/disable inputs correctly update state of switch in HA ([b86e32a](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/b86e32a9355fa6a5f416ad3bfd324b832af05329)), closes [#233](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/233)
+
 ## [0.22.2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.22.1...v0.22.2) (2020-04-03)
 
 ### Bug Fixes
