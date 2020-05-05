@@ -53,6 +53,15 @@ module.exports = {
                     ],
                 },
                 {
+                    title: 'Custom Integration',
+                    collapsable: false,
+                    children: [
+                        'custom_integration/',
+                        'custom_integration/event-nodes',
+                        'custom_integration/switch',
+                    ],
+                },
+                {
                     title: 'Contribute to',
                     collapsable: false,
                     children: ['development', 'documentation'],
