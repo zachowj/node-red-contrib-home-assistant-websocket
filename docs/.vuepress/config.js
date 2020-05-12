@@ -22,6 +22,7 @@ module.exports = {
             { text: 'Nodes', link: '/node/' },
             { text: 'FAQ', link: '/FAQ.md' },
             { text: 'Cookbook', link: '/cookbook/' },
+            { text: 'Scrubber', link: '/scrubber/' },
         ],
         sidebar: {
             '/cookbook/': [
