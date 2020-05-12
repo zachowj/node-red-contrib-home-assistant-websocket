@@ -94,7 +94,7 @@ textarea {
 
 button {
     font-size: 14px !important;
-    border-radius: 1px;
+    border-radius: 4px;
     vertical-align: middle;
     line-height: 20px;
     box-sizing: border-box;
@@ -117,7 +117,7 @@ button {
     opacity: 0;
 }
 
-.error {
+span {
     font-weight: 600;
     display: inline-block;
     font-size: 14px;
@@ -126,18 +126,13 @@ button {
     border-radius: 3px;
     padding: 6px;
     color: #fff;
+}
+
+.error {
     background-color: #da5961;
 }
 
 .copied {
-    font-weight: 600;
-    display: inline-block;
-    font-size: 14px;
-    height: 18px;
-    line-height: 18px;
-    border-radius: 3px;
-    padding: 6px;
-    color: #fff;
     background-color: #e7c000;
 }
 </style>
