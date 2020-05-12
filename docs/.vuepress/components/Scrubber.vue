@@ -71,6 +71,7 @@ export default {
                 );
             }
             this.after = JSON.stringify(json);            
+            ga('send', 'event', 'Scrubber', 'click', "scrub");
         },
         copy: function() {                        
             const copyText = this.$refs.copyme;
@@ -81,6 +82,7 @@ export default {
             setTimeout(() => {
                 this.showCopied = false;
             }, 1500);
+            ga('send', 'event', 'Scrubber', 'click', "copy");
         }
     }
 }
