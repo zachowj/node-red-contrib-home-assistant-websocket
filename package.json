@@ -71,9 +71,9 @@
     "ws": "7.2.3"
   },
   "devDependencies": {
-    "@vuepress/plugin-back-to-top": "^1.4.1",
-    "@vuepress/plugin-google-analytics": "^1.4.1",
-    "@vuepress/plugin-medium-zoom": "^1.4.1",
+    "@vuepress/plugin-back-to-top": "^1.5.0",
+    "@vuepress/plugin-google-analytics": "^1.5.0",
+    "@vuepress/plugin-medium-zoom": "^1.5.0",
     "autoprefixer": "^9.7.6",
     "browser-sync": "^2.26.7",
     "cheerio": "^1.0.0-rc.3",
@@ -114,7 +114,7 @@
     "nodemon": "^2.0.3",
     "nyc": "^15.0.1",
     "prettier": "^2.0.5",
-    "vuepress": "^1.4.1"
+    "vuepress": "^1.5.0"
   },
   "husky": {
     "hooks": {
