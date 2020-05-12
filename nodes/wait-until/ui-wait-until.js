@@ -4,7 +4,7 @@ RED.nodes.registerType('ha-wait-until', {
     inputs: 1,
     outputs: 1,
     outputLabels: ['', 'timed out'],
-    icon: 'wait-until.png',
+    icon: 'ha-wait-until.svg',
     paletteLabel: 'wait until',
     label: function () {
         return this.name || `wait until`;

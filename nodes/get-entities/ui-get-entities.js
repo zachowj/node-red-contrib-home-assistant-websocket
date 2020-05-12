@@ -3,7 +3,7 @@ RED.nodes.registerType('ha-get-entities', {
     color: '#52C0F2',
     inputs: 1,
     outputs: 1,
-    icon: 'pagesearch.png',
+    icon: 'ha-get-entities.svg',
     paletteLabel: 'get entities',
     label: function () {
         return this.name || 'get entities';

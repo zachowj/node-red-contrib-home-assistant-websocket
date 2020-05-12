@@ -3,7 +3,7 @@ RED.nodes.registerType('ha-api', {
     color: '#52C0F2',
     inputs: 1,
     outputs: 1,
-    icon: 'plane.png',
+    icon: 'font-awesome/fa-paper-plane-o',
     paletteLabel: 'API',
     label: function () {
         return this.name || 'API';

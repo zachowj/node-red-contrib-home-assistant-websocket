@@ -4,7 +4,7 @@ RED.nodes.registerType('poll-state', {
     inputs: 0,
     outputs: 1,
     outputLabels: nodeVersion.ifStateLabels,
-    icon: 'timer.png',
+    icon: 'ha-poll-state.svg',
     paletteLabel: 'poll state',
     label: function () {
         return this.name || `poll state: ${this.entity_id}`;

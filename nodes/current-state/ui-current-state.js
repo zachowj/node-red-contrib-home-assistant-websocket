@@ -4,7 +4,7 @@ RED.nodes.registerType('api-current-state', {
     inputs: 1,
     outputs: 1,
     outputLabels: nodeVersion.ifStateLabels,
-    icon: 'code.png',
+    icon: 'ha-current-state.svg',
     paletteLabel: 'current state',
     label: function () {
         return this.name || `current_state: ${this.entity_id}`;

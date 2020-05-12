@@ -3,7 +3,7 @@ RED.nodes.registerType('api-get-history', {
     color: '#52C0F2',
     inputs: 1,
     outputs: 1,
-    icon: 'history.png',
+    icon: 'ha-get-history.svg',
     paletteLabel: 'get history',
     label: function () {
         if (this.name) {

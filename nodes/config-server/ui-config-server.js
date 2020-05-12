@@ -13,7 +13,7 @@ RED.nodes.registerType('server', {
         host: { value: '', required: true },
         access_token: { value: '', required: false },
     },
-    icon: 'home.png',
+    icon: 'font-awesome/fa-home',
     label: function () {
         return this.name || this.url;
     },

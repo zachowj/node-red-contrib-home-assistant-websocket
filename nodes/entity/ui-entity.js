@@ -3,7 +3,14 @@ RED.nodes.registerType('ha-entity', {
     color: '#52C0F2',
     inputs: 1,
     outputs: 1,
-    icon: 'font-awesome/fa-genderless',
+    icon: function () {
+        const icon =
+            this.entityType === 'switch'
+                ? 'ha-entity-switch.svg'
+                : 'font-awesome/fa-genderless';
+
+        return icon;
+    },
     align: 'right',
     paletteLabel: 'entity',
     label: function () {

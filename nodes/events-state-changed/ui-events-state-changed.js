@@ -4,7 +4,7 @@ RED.nodes.registerType('server-state-changed', {
     inputs: 0,
     outputs: 1,
     outputLabels: nodeVersion.ifStateLabels,
-    icon: 'arrow-right-bold-hexagon-outline.png',
+    icon: 'ha-events-state-changed.svg',
     paletteLabel: 'events: state',
     label: function () {
         return (

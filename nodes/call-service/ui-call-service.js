@@ -3,7 +3,7 @@ RED.nodes.registerType('api-call-service', {
     color: '#52C0F2',
     inputs: 1,
     outputs: 1,
-    icon: 'router-wireless.png',
+    icon: 'ha-call-service.svg',
     align: 'right',
     paletteLabel: 'call service',
     label: function () {

@@ -3,7 +3,7 @@ RED.nodes.registerType('ha-fire-event', {
     color: '#52C0F2',
     inputs: 1,
     outputs: 1,
-    icon: 'radiotower.png',
+    icon: 'ha-fire-event.svg',
     align: 'right',
     paletteLabel: 'fire event',
     label: function () {

@@ -3,7 +3,7 @@ RED.nodes.registerType('api-render-template', {
     color: '#52C0F2',
     inputs: 1,
     outputs: 1,
-    icon: 'parser-json.png',
+    icon: 'ha-render-template.svg',
     paletteLabel: 'get template',
     label: function () {
         return this.name || `template: ${this.template || ''}`;

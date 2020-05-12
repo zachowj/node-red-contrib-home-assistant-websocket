@@ -15,7 +15,7 @@ RED.nodes.registerType('server-events', {
     },
     inputs: 0,
     outputs: 1,
-    icon: 'arrow-right-bold.png',
+    icon: 'ha-events-all.svg',
     paletteLabel: 'events: all',
     label: function () {
         return this.name || `events: ${this.event_type || 'all'}`;

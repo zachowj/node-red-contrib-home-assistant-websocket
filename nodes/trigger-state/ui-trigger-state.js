@@ -22,7 +22,7 @@ RED.nodes.registerType('trigger-state', {
         }
         return label;
     },
-    icon: 'trigger.png',
+    icon: 'font-awesome/fa-map-signs',
     paletteLabel: 'trigger: state',
     label: function () {
         return this.name || `trigger-state: ${this.entityid}`;
