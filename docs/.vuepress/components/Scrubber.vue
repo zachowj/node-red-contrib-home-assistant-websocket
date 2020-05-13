@@ -89,11 +89,11 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="stylus">
 textarea {
     width: 100%;
     height: 10em;
-    border-color: #3eaf7c;
+    border-color: $accentColor;
 }
 
 button {
@@ -109,21 +109,20 @@ button {
     text-align: center;
     cursor: pointer;
     padding: 6px 14px;
-    border-color: #3eaf7c;
+    border-color: $accentColor;
     color: #fff;
-    background: #3eaf7c;
+    background: $accentColor;
     margin: 12px 0;
 }
 
 button:hover {
-    background-color: #4abf8a;
+    background-color: lighten($accentColor, 10%);
 }
 
-.fade-enter-active,
 .fade-leave-active {
-    transition: opacity 0.5s;
+    transition: opacity 0.7s;
 }
-.fade-enter,
+
 .fade-leave-to {
     opacity: 0;
 }
@@ -138,12 +137,11 @@ span {
     padding: 6px;
     color: #fff;
 }
-
 .error {
-    background-color: #da5961;
+    background-color: $badgeErrorColor;
 }
 
 .copied {
-    background-color: #e7c000;
+    background-color: $badgeWarningColor;
 }
 </style>
