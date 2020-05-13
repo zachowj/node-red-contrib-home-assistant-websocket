@@ -1,6 +1,9 @@
 <template>
     <div>
-        <textarea v-model="before" placeholder="paste Node-RED flow export here"></textarea>
+        <textarea
+            v-model="before"
+            placeholder="paste Node-RED flow export here"
+        ></textarea>
 
         <button v-on:click="scrub">Scrub</button>
         <transition name="fade">
@@ -34,16 +37,16 @@ const haNodes = [
 ];
 
 export default {
-    data: function() {
+    data: function () {
         return {
-            after: "",
-            before: "",
+            after: '',
+            before: '',
             showCopied: false,
-            showError: false
-        }
+            showError: false,
+        };
     },
     methods: {
-        scrub: function(event) {
+        scrub: function (event) {
             let json;
             try {
                 json = JSON.parse(this.before);
@@ -70,32 +73,34 @@ export default {
                     (ele) => delete json[i][ele]
                 );
             }
-            this.after = JSON.stringify(json);            
-            ga('send', 'event', 'Scrubber', 'click', "scrub");
+            this.after = JSON.stringify(json);
         },
-        copy: function() {                        
+        copy: function () {
             const copyText = this.$refs.copyme;
-            
+
             copyText.select();
             document.execCommand('copy');
             this.showCopied = true;
             setTimeout(() => {
                 this.showCopied = false;
             }, 1500);
-            ga('send', 'event', 'Scrubber', 'click', "copy");
-        }
-    }
-}
+        },
+    },
+};
 </script>
 
 <style scoped>
 textarea {
     width: 100%;
     height: 10em;
+    border-color: #3eaf7c;
 }
 
 button {
-    font-size: 14px !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+        Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    font-size: 16px !important;
     border-radius: 4px;
     vertical-align: middle;
     line-height: 20px;
@@ -105,9 +110,13 @@ button {
     cursor: pointer;
     padding: 6px 14px;
     border-color: #3eaf7c;
-    color: #eee !important;
+    color: #fff;
     background: #3eaf7c;
     margin: 12px 0;
+}
+
+button:hover {
+    background-color: #4abf8a;
 }
 
 .fade-enter-active,
