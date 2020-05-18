@@ -2,7 +2,7 @@
     <div>
         <textarea
             v-model="before"
-            placeholder="paste Node-RED flow export here"
+            placeholder="paste exported Node-RED flow here"
         ></textarea>
 
         <button v-on:click="scrub">Scrub</button>
