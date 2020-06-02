@@ -13,7 +13,7 @@ RED.nodes.registerType('ha-webhook', {
     color: '#038FC7',
     outputs: 1,
     outputLabels: '',
-    icon: 'font-awesome/fa-external-link-square',
+    icon: 'ha-webhook.svg',
     paletteLabel: 'webhook',
     label: function () {
         return this.name || `webhook`;
