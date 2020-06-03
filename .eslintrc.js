@@ -5,7 +5,7 @@ module.exports = {
     env: { browser: true, mocha: true },
     rules: {
         'prettier/prettier': ['error'],
-        'sort-requires/sort-requires': 2
+        'sort-requires/sort-requires': 2,
     },
     globals: {
         RED: 'readonly',
@@ -13,7 +13,7 @@ module.exports = {
         exposeNode: 'readonly',
         haServer: 'readonly',
         ifState: 'readonly',
-        nodeVersion: 'readonly'
+        nodeVersion: 'readonly',
     },
-    plugins: ['sort-requires']
+    plugins: ['sort-requires'],
 };
