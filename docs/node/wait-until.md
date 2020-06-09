@@ -1,6 +1,8 @@
 # Wait Until
 
-When an input is received the node will wait until the condition is met or the timeout occurs then will pass on the last received message
+When an input is received the node will wait until the condition is met or the
+timeout occurs then will pass on the last received message. Any new input will
+reset the timeout timer.
 
 ## Configuration
 
