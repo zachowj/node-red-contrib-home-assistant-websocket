@@ -39,11 +39,11 @@ module.exports = function (RED) {
 
             if (this.nodeConfig.outputinitially) {
                 // Here for when the node is deploy without the server config being deployed
-                if (this.isConnected) {
+                if (this.isHomeAssistantRunning) {
                     this.onDeploy();
                 } else {
                     this.addEventClientListener(
-                        'ha_client:states_loaded',
+                        'ha_client:initial_connection_ready',
                         this.onStatesLoaded.bind(this)
                     );
                 }

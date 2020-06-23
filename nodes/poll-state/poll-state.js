@@ -57,7 +57,7 @@ module.exports = function (RED) {
 
             if (this.nodeConfig.outputinitially) {
                 this.addEventClientListener(
-                    'ha_client:states_loaded',
+                    'ha_client:initial_connection_ready',
                     this.onTimer.bind(this)
                 );
             }
@@ -72,7 +72,9 @@ module.exports = function (RED) {
         }
 
         async onTimer(triggered = false) {
-            if (!this.isConnected || this.isEnabled === false) return;
+            if (!this.isHomeAssistantRunning || this.isEnabled === false) {
+                return;
+            }
 
             const pollState = await this.nodeConfig.server.homeAssistant.getStates(
                 this.nodeConfig.entity_id

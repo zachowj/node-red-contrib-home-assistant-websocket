@@ -38,7 +38,7 @@ module.exports = function (RED) {
                     this.onDeploy();
                 } else {
                     this.addEventClientListener(
-                        'ha_client:states_loaded',
+                        'ha_client:initial_connection_ready',
                         this.onStatesLoaded.bind(this)
                     );
                 }

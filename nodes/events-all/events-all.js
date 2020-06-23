@@ -92,6 +92,11 @@ module.exports = function (RED) {
             this.clientEvent('connecting');
         }
 
+        onHaEventsRunning() {
+            super.onHaEventsRunning();
+            this.clientEvent('running');
+        }
+
         onHaEventsError(err) {
             super.onHaEventsError(err);
             if (err) {
