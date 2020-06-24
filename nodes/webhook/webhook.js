@@ -22,7 +22,7 @@ module.exports = function (RED) {
         constructor(nodeDefinition) {
             super(nodeDefinition, RED, nodeOptions);
 
-            if (this.isConnected) {
+            if (this.isIntegrationLoaded) {
                 this.registerEntity();
             }
         }

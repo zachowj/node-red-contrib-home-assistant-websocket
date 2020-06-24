@@ -42,13 +42,6 @@ module.exports = function (RED) {
     class EntityNode extends EventsHaNode {
         constructor(nodeDefinition) {
             super(nodeDefinition, RED, nodeOptions);
-            this.registered = false;
-
-            this.init();
-        }
-
-        async init() {
-            await this.loadPersistedData();
         }
 
         setConnectionStatus(additionalText) {
@@ -124,11 +117,9 @@ module.exports = function (RED) {
         onHaEventsClose() {
             super.onHaEventsClose();
 
-            this.registered = false;
-        }
-
-        async onConfigUpdate() {
-            this.registerEntity();
+            if (this.nodeConfig.entityType !== 'switch') {
+                this.registered = false;
+            }
         }
 
         onHaIntegration(type) {
@@ -148,7 +139,7 @@ module.exports = function (RED) {
             if (
                 this.nodeConfig.entityType !== 'switch' &&
                 this.registered &&
-                this.isConnected &&
+                this.isIntegrationLoaded &&
                 removed
             ) {
                 const payload = {
