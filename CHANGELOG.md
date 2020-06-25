@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.22.6](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.22.5...v0.22.6) (2020-06-25)
+
+### Bug Fixes
+
+- Wait until HA is in running state to emit events ([92cdb64](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/92cdb64335f88387acf046463fa1ae7448cbf33e)), closes [#246](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/246)
+- Wait until integration is loaded before attempting to register entities ([1d8eb04](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/1d8eb04c71e2b51bbe78590595aa69e22977d2c9)), closes [#247](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/247)
+
 ## [0.22.5](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.22.4...v0.22.5) (2020-06-03)
 
 ## [0.22.4](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.22.3...v0.22.4) (2020-06-03)
