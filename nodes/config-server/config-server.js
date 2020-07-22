@@ -5,6 +5,7 @@ const uniq = require('lodash.uniq');
 
 const BaseNode = require('../../lib/base-node');
 const HomeAssistant = require('../../lib/home-assistant');
+const { INTEGRATION_NOT_LOADED } = require('../../lib/const');
 const { toCamelCase } = require('../../lib/utils');
 
 module.exports = function (RED) {
@@ -96,11 +97,9 @@ module.exports = function (RED) {
             res.json(uniqArray);
         },
         getIntegrationVersion: function (req, res, next) {
-            const data = { version: 0 };
+            const client = this.websocket;
+            const data = { version: client ? client.integrationVersion : 0 };
 
-            if (this.websocket && this.websocket.isConnected) {
-                data.version = this.websocket.integrationVersion;
-            }
             res.json(data);
         },
     };
@@ -214,9 +213,11 @@ module.exports = function (RED) {
                 'ha_client:open': this.onHaEventsOpen,
                 'ha_client:connecting': this.onHaEventsConnecting,
                 'ha_client:error': this.onHaEventsError,
+                'ha_client:running': this.onHaEventsRunning,
                 'ha_client:states_loaded': this.onHaStatesLoaded,
                 'ha_client:services_loaded': this.onHaServicesLoaded,
                 'ha_events:state_changed': this.onHaStateChanged,
+                integration: this.onIntegrationEvent,
             };
             Object.entries(events).forEach(([event, callback]) =>
                 this.websocket.addListener(event, callback.bind(this))
@@ -256,8 +257,7 @@ module.exports = function (RED) {
         onHaEventsOpen() {
             this.setOnContext('isConnected', true);
 
-            this.log(`WebSocket Connected to ${this.credentials.host}`);
-            this.debug('config server event listener connected');
+            this.log(`Connected to ${this.credentials.host}`);
         }
 
         onHaStateChanged(changedEntity) {
@@ -270,26 +270,36 @@ module.exports = function (RED) {
 
         onHaStatesLoaded(states) {
             this.setOnContext('states', states);
+            this.debug('States Loaded');
         }
 
         onHaServicesLoaded(services) {
             this.setOnContext('services', services);
+            this.debug('Services Loaded');
         }
 
         onHaEventsConnecting() {
             this.setOnContext('isConnected', false);
-            this.log(`WebSocket Connecting ${this.credentials.host}`);
+            this.setOnContext('isRunning', false);
+            this.log(`Connecting to ${this.credentials.host}`);
         }
 
         onHaEventsClose() {
             if (this.getFromContext('isConnected')) {
-                this.log(`WebSocket Closed ${this.credentials.host}`);
+                this.log(`Connection closed to ${this.credentials.host}`);
             }
             this.setOnContext('isConnected', false);
+            this.setOnContext('isRunning', false);
+        }
+
+        onHaEventsRunning() {
+            this.setOnContext('isRunning', true);
+            this.debug(`HA State: running`);
         }
 
         onHaEventsError(err) {
             this.setOnContext('isConnected', false);
+            this.setOnContext('isRunning', false);
             this.debug(err);
         }
 
@@ -302,9 +312,19 @@ module.exports = function (RED) {
             );
 
             if (webSocketClient) {
-                this.log(`Closing WebSocket ${this.credentials.host}`);
+                this.log(`Closing connection to ${this.credentials.host}`);
                 webSocketClient.close();
             }
+        }
+
+        onIntegrationEvent(eventType) {
+            if (
+                eventType === INTEGRATION_NOT_LOADED &&
+                !this.isHomeAssistantRunning
+            ) {
+                return;
+            }
+            this.debug(`Integration: ${eventType}`);
         }
 
         registerEvents() {

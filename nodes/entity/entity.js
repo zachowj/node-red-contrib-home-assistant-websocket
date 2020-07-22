@@ -1,6 +1,7 @@
 const slugify = require('slugify');
 
 const EventsHaNode = require('../../lib/events-ha-node');
+const { INTEGRATION_UNLOADED } = require('../../lib/const');
 
 module.exports = function (RED) {
     const nodeOptions = {
@@ -109,6 +110,7 @@ module.exports = function (RED) {
 
             this.debugToClient(payload);
 
+            this.debug(`Registering ${this.nodeConfig.entityType} with HA`);
             await this.websocketClient.send(payload);
             this.setStatusSuccess('Registered');
             this.registered = true;
@@ -125,7 +127,7 @@ module.exports = function (RED) {
         onHaIntegration(type) {
             super.onHaIntegration(type);
 
-            if (type === 'unloaded') {
+            if (type === INTEGRATION_UNLOADED) {
                 this.error(
                     'Node-RED custom integration has been removed from Home Assistant it is needed for this node to function.'
                 );
@@ -149,7 +151,9 @@ module.exports = function (RED) {
                     component: this.nodeConfig.entityType,
                     remove: true,
                 };
-
+                this.debug(
+                    `Unregistering ${this.nodeConfig.entityType} from HA`
+                );
                 this.websocketClient.send(payload);
             }
         }
