@@ -93,7 +93,8 @@ module.exports = function (RED) {
                         webhook_id: this.nodeConfig.webhookId,
                         name: this.id,
                         server_id: this.nodeConfig.server.id,
-                    }
+                    },
+                    { resubscribe: false }
                 );
             }
             this.setStatusSuccess('Registered');
