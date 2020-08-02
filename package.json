@@ -16,7 +16,7 @@
     "lint:fix": "eslint . --fix && prettier --write {docs,lib,nodes,script,test}/**/*.{css,js,md,html}",
     "prepublish": "gulp build",
     "release": "standard-version",
-    "release:pre": "standard-version -p",
+    "release:minor": "standard-version --release-as minor",
     "test": "mocha \"test/**/*_spec.js\"",
     "test:watch": "nodemon -w test/ -w lib/ -w nodes/ --exec ./node_modules/.bin/mocha test/*"
   },
@@ -114,6 +114,7 @@
     "nodemon": "^2.0.4",
     "nyc": "^15.1.0",
     "prettier": "^2.0.5",
+    "standard-version": "^8.0.2",
     "vuepress": "^1.5.2"
   },
   "husky": {
