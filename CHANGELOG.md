@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.24.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.23.0...v0.24.0) (2020-08-04)
+
+### Features
+
+- **events-all:** Add option to output events before HA state = running ([3f2e6ec](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/3f2e6ec6c858a9e1148f8df1b37ae05ee651a25f))
+
 ## [0.23.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.22.6...v0.23.0) (2020-08-02)
 
 ### Features
