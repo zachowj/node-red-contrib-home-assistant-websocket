@@ -12,6 +12,7 @@ RED.nodes.registerType('server-events', {
                 { property: 'icon', value: '' },
             ],
         },
+        waitForRunning: { value: true },
     },
     inputs: 0,
     outputs: 1,
@@ -24,6 +25,10 @@ RED.nodes.registerType('server-events', {
     oneditprepare: function () {
         haServer.init(this, '#node-input-server');
         exposeNode.init(this);
+
+        if (this.waitForRunning === undefined) {
+            $('#node-input-waitForRunning').prop('checked', true);
+        }
 
         $('#node-input-event_type')
             .on('change keyup', function () {

@@ -24,6 +24,12 @@ overload the WebSocket message queue.
 [GitHub Issue #153](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/153#issuecomment-539290950)
 :::
 
+### Output only after Home Assistant is running
+
+- Type: `boolean`
+
+What until Home Assistant has reported its state as `running` before outputing events. Client events will always output.
+
 ### Expose to Home Assistant
 
 - Type: `boolean`

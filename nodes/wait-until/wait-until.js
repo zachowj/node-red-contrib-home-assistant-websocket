@@ -155,7 +155,7 @@ module.exports = function (RED) {
         async onEntityChange(evt) {
             const { event } = cloneDeep(evt);
 
-            if (!this.active) {
+            if (!this.active || !this.isHomeAssistantRunning) {
                 return;
             }
 

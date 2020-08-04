@@ -4,7 +4,10 @@ const EventsHaNode = require('../../lib/events-ha-node');
 
 module.exports = function (RED) {
     const nodeOptions = {
-        config: { event_type: {} },
+        config: {
+            event_type: {},
+            waitForRunning: (nodeDef) => nodeDef.waitForRunning || true,
+        },
     };
 
     class ServerEventsNode extends EventsHaNode {
@@ -39,6 +42,13 @@ module.exports = function (RED) {
 
         onHaEventsAll(evt) {
             if (this.isEnabled === false) return;
+
+            if (
+                !this.isHomeAssistantRunning &&
+                this.nodeConfig.waitForRunning === true
+            ) {
+                return;
+            }
 
             this.send({
                 event_type: evt.event_type,

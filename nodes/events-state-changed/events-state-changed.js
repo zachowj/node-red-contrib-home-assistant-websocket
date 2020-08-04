@@ -47,7 +47,7 @@ module.exports = function (RED) {
 
         async onHaEventsStateChanged(evt, runAll) {
             const config = this.nodeConfig;
-            if (this.isEnabled === false) {
+            if (this.isEnabled === false || !this.isHomeAssistantRunning) {
                 return;
             }
             const { entity_id, event } = cloneDeep(evt);

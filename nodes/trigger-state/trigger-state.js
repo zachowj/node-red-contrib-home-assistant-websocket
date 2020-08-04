@@ -107,7 +107,10 @@ module.exports = function (RED) {
                 return;
             }
 
-            if (!selectn('event.new_state', evt)) {
+            if (
+                !selectn('event.new_state', evt) ||
+                !this.isHomeAssistantRunning
+            ) {
                 return;
             }
 
