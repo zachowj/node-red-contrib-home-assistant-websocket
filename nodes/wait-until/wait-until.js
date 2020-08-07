@@ -162,8 +162,8 @@ module.exports = function (RED) {
             if (
                 !shouldIncludeEvent(
                     event.entity_id,
-                    this.nodeConfig.entityId,
-                    this.nodeConfig.entityIdFilterType
+                    this.savedConfig.entityId,
+                    this.savedConfig.entityIdFilterType
                 )
             ) {
                 return;
@@ -287,7 +287,7 @@ module.exports = function (RED) {
             this.removeEventClientListeners();
             let eventTopic = 'ha_events:state_changed';
 
-            if (config.entityId === 'exact') {
+            if (config.entityIdFilterType === 'exact') {
                 eventTopic = `${eventTopic}:${config.entityId}`;
             }
 
