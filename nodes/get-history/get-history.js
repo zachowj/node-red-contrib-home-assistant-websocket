@@ -1,4 +1,4 @@
-const Joi = require('@hapi/joi');
+const Joi = require('joi');
 const timestring = require('timestring');
 
 const BaseNode = require('../../lib/base-node');

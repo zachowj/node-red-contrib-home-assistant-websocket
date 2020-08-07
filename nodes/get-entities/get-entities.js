@@ -1,4 +1,4 @@
-const Joi = require('@hapi/joi');
+const Joi = require('joi');
 const selectn = require('selectn');
 const { shuffle } = require('lodash');
 

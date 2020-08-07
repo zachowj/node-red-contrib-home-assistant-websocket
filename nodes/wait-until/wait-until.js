@@ -1,5 +1,5 @@
 const cloneDeep = require('lodash.clonedeep');
-const Joi = require('@hapi/joi');
+const Joi = require('joi');
 const selectn = require('selectn');
 
 const EventsNode = require('../../lib/events-node');

@@ -1,4 +1,4 @@
-const Joi = require('@hapi/joi');
+const Joi = require('joi');
 
 const BaseNode = require('../../lib/base-node');
 const RenderTemplate = require('../../lib/mustache-context');
