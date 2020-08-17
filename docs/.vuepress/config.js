@@ -38,6 +38,7 @@ module.exports = {
                         'sun-events',
                         'vacation-mode',
                         'expiration-date-monitor',
+                        'using-date-and-time-entities-to-trigger-flows',
                     ],
                 },
             ],

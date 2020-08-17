@@ -11,6 +11,7 @@ further educate yourself in the world of Home Automation with Node-RED.
 - [Turn Light On/Off with Sunset/Sunrise](./sun-events.md)
 - [Vacation Mode](./vacation-mode.md)
 - [Expiration Date Monitor](./expiration-date-monitor.md)
+- [Using date and time entities to trigger flows](./using-date-and-time-entities-to-trigger-flows.md)
 
 All JSON exports are also available under the examples tab in the Node-RED
 import menu.
