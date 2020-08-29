@@ -34,7 +34,7 @@ module.exports = function (RED) {
 
             if (this.nodeConfig.outputinitially) {
                 // Here for when the node is deploy without the server config being deployed
-                if (this.isConnected) {
+                if (this.isIntegrationLoaded) {
                     this.onDeploy();
                 } else {
                     this.addEventClientListener(
