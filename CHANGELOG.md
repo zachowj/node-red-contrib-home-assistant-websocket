@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.25.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.24.1...v0.25.0) (2020-08-29)
+
+### Bug Fixes
+
+- **events-state:** Waiit until HA is running before outputting ([3e62ab7](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/3e62ab7c6c042149b9153657cae92523a35f2002)), closes [#248](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/248)
+
+### Documentation
+
+- Add another example to using datetime entities to trigger flows ([e6ca74e](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/e6ca74ea3050ed894d191c8e410af31ea9da887a))
+- Add Using date and time entities to trigger flows ([2b5f228](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/2b5f2284f336ce5634412896f78a83a36a3b7f50))
+
 ### [0.24.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.24.0...v0.24.1) (2020-08-08)
 
 ### Bug Fixes
