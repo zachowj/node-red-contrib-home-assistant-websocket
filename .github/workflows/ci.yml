@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x]
+        node-version: [10, 12, 14]
 
     steps:
       - uses: actions/checkout@v2
@@ -27,11 +27,6 @@ jobs:
         run: npm test
         env:
           CI: true
-
-  publish-npm:
-    if: github.event_name == 'push'
-    needs: build
-    runs-on: ubuntu-latest
 
   release-please:
     if: github.event_name == 'push'
