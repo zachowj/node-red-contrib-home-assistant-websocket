@@ -7,7 +7,6 @@
     "url": "https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues"
   },
   "scripts": {
-    "clean": "npm run docker:down",
     "dev": "gulp start",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
@@ -15,8 +14,6 @@
     "lint": "eslint . && prettier --check {docs,lib,nodes,script,test}/**/*.{css,js,md,html}",
     "lint:fix": "eslint . --fix && prettier --write {docs,lib,nodes,script,test}/**/*.{css,js,md,html}",
     "prepublish": "gulp build",
-    "release": "standard-version",
-    "release:minor": "standard-version --release-as minor",
     "test": "mocha \"test/**/*_spec.js\"",
     "test:watch": "nodemon -w test/ -w lib/ -w nodes/ --exec ./node_modules/.bin/mocha test/*"
   },
@@ -52,12 +49,12 @@
     }
   },
   "dependencies": {
-    "joi": "17.2.1",
     "axios": "0.20.0",
     "bonjour": "3.5.0",
     "debug": "4.1.1",
     "flat": "5.0.2",
     "home-assistant-js-websocket": "5.6.0",
+    "joi": "17.2.1",
     "lodash.clonedeep": "4.5.0",
     "lodash.merge": "4.6.2",
     "lodash.uniq": "4.5.0",
@@ -114,7 +111,6 @@
     "nodemon": "^2.0.4",
     "nyc": "^15.1.0",
     "prettier": "^2.1.1",
-    "standard-version": "^9.0.0",
     "vuepress": "^1.5.4"
   },
   "husky": {
