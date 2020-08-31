@@ -33,23 +33,33 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
 
+  release-please:
+    if: github.event_name == 'push'
+    needs: build
+    runs-on: ubuntu-latest
     steps:
+      - uses: GoogleCloudPlatform/release-please-action@v1.6.3
+        id: release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: node
+          package-name: node-red-contrib-home-assistant-websocket
       - uses: actions/checkout@v2
+        if: ${{ steps.release.outputs.release_created }}
       - uses: actions/setup-node@v1
         with:
-          node-version: "12"
-      - name: npm install
-        run: npm ci
-      - id: publish
-        uses: JS-DevTools/npm-publish@v1
-        with:
-          token: ${{ secrets.npm_token }}
-      - if: steps.publish.outputs.type != 'none'
-        run: |
-          echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
-      - if: steps.publish.outputs.type == 'none'
-        name: npm next release
+          node-version: 12
+          registry-url: "https://registry.npmjs.org"
+        if: ${{ steps.release.outputs.release_created }}
+      - run: npm ci
+        if: ${{ steps.release.outputs.release_created }}
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+        if: ${{ steps.release.outputs.release_created }}
+      - name: npm next release
         uses: epeli/npm-release@v1
         with:
           type: prerelease
           token: ${{ secrets.npm_token }}
+        if: ${{ !steps.release.outputs.release_created }}
