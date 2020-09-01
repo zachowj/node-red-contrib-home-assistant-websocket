@@ -253,7 +253,7 @@ task('buildEditorFiles', (done) => {
     const tasks = folders.map((folder) => {
         currentFolder = folder;
         return src([
-            'lib/common/*',
+            'lib/ui/*',
             `nodes/${folder}/ui-*.js`,
             `nodes/${folder}/ui-*.html`,
             `docs/node/${nodeMap[folder].doc}.md`,
