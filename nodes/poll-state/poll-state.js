@@ -56,10 +56,14 @@ module.exports = function (RED) {
             }
 
             if (this.nodeConfig.outputinitially) {
-                this.addEventClientListener(
-                    'ha_client:initial_connection_ready',
-                    this.onTimer.bind(this)
-                );
+                if (this.isHomeAssistantRunning) {
+                    this.onTimer();
+                } else {
+                    this.addEventClientListener(
+                        'ha_client:initial_connection_ready',
+                        this.onTimer.bind(this)
+                    );
+                }
             }
         }
 
