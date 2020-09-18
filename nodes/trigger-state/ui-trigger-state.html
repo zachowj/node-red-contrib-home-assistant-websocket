@@ -13,8 +13,8 @@
 <!-- Entity ID Filter and Filter Type -->
 <div class="form-row">
     <label for="node-input-entityid"><i class="fa fa-tag"></i> Entity ID</label>
-    <input type="text" id="node-input-entityid" style="width: 50%;" />
-    <select type="text" id="node-input-entityidfiltertype" style="width: 20%;">
+    <input type="text" id="node-input-entityid" style="width: 50%" />
+    <select type="text" id="node-input-entityidfiltertype" style="width: 20%">
         <option value="exact">Exact</option>
         <option value="substring">Substring</option>
         <option value="regex">Regex</option>
@@ -25,7 +25,7 @@
     <label for="node-input-state_type"
         ><i class="fa fa-tint"></i> State Type</label
     >
-    <select type="text" id="node-input-state_type" style="width: auto;">
+    <select type="text" id="node-input-state_type" style="width: auto">
         <option value="str">String</option>
         <option value="num">Number</option>
         <option value="habool">Boolean</option>
@@ -44,7 +44,7 @@
             <select
                 type="text"
                 id="constraint-target-type"
-                style="width: 140px;"
+                style="width: 140px"
             >
                 <option value="this_entity">This Entity</option>
                 <option value="entity_id">Entity ID</option>
@@ -54,7 +54,7 @@
             <input
                 type="text"
                 id="constraint-target-value"
-                style="width: 62%;"
+                style="width: 62%"
                 disabled
             />
         </div>
@@ -65,7 +65,7 @@
             <select
                 type="text"
                 id="constraint-property-type"
-                style="width: 140px;"
+                style="width: 140px"
             >
                 <option value="current_state">Current State</option>
                 <option value="previous_state">Previous State</option>
@@ -76,7 +76,7 @@
             <input
                 type="text"
                 id="constraint-property-value"
-                style="width: 62%;"
+                style="width: 62%"
                 disabled
             />
         </div>
@@ -87,7 +87,7 @@
             <select
                 type="text"
                 id="constraint-comparator-type"
-                style="width: 140px;"
+                style="width: 140px"
             >
                 <option value="is">Is</option>
                 <option value="is_not">Is Not</option>
@@ -106,7 +106,7 @@
         </div>
 
         <!-- Add Constraint Button -->
-        <button id="constraint-add-btn" style="width: 100%;">
+        <button id="constraint-add-btn" style="width: 100%">
             Add Constraint
         </button>
     </div>
@@ -125,13 +125,13 @@
     <div>
         <div class="form-row">
             <!-- Type -->
-            <select type="text" id="output-message-type" style="width: 140px;">
+            <select type="text" id="output-message-type" style="width: 140px">
                 <option value="default">Default Msg</option>
                 <option value="custom">Custom Msg</option>
                 <option value="payload">Custom Payload</option>
             </select>
 
-            <input type="text" id="output-message-value" style="width: 62%;" />
+            <input type="text" id="output-message-value" style="width: 62%" />
             <input type="hidden" id="output-message-value-type" />
         </div>
 
@@ -140,7 +140,7 @@
             <select
                 type="text"
                 id="output-comparator-property-type"
-                style="width: 140px;"
+                style="width: 140px"
             >
                 <option value="always">Send Always</option>
                 <option value="current_state">If State</option>
@@ -151,7 +151,7 @@
             <input
                 type="text"
                 id="output-comparator-property-value"
-                style="width: 62%;"
+                style="width: 62%"
                 disabled
             />
         </div>
@@ -161,7 +161,7 @@
             <select
                 type="text"
                 id="output-comparator-type"
-                style="width: 140px;"
+                style="width: 140px"
                 disabled
             >
                 <option value="is">Is</option>
@@ -179,13 +179,13 @@
             <input
                 type="text"
                 id="output-comparator-value"
-                style="width: 62%;"
+                style="width: 62%"
                 disabled
             />
         </div>
 
         <!-- Add Output Button -->
-        <button id="output-add-btn" style="width: 100%;">Add Output</button>
+        <button id="output-add-btn" style="width: 100%">Add Output</button>
     </div>
 </div>
 

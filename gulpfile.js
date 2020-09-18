@@ -141,10 +141,11 @@ const buildHelp = lazypipe()
                             }
 
                             // opening tag
-                            return `<div class="custom-block ${m[1]
-                                }">\n<p class="custom-block-title">${md.utils.escapeHtml(
-                                    m[2] || title
-                                )}</p>\n`;
+                            return `<div class="custom-block ${
+                                m[1]
+                            }">\n<p class="custom-block-title">${md.utils.escapeHtml(
+                                m[2] || title
+                            )}</p>\n`;
                         } else {
                             // closing tag
                             return '</div>\n';

@@ -1,5 +1,3 @@
-const helper = require('node-red-node-test-helper');
-
 const { getLocationData, getZoneData } = require('../lib/utils');
 
 describe('utils', () => {
