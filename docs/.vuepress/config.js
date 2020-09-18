@@ -91,6 +91,7 @@ module.exports = {
                         'trigger-state',
                         'wait-until',
                         'webhook',
+                        'zone',
                     ],
                 },
             ],

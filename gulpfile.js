@@ -62,6 +62,7 @@ const nodeMap = {
     'trigger-state': { doc: 'trigger-state', type: 'trigger-state' },
     'wait-until': { doc: 'wait-until', type: 'ha-wait-until' },
     webhook: { doc: 'webhook', type: 'ha-webhook' },
+    zone: { doc: 'zone', type: 'ha-zone' },
 };
 
 let nodemonInstance;
@@ -140,11 +141,10 @@ const buildHelp = lazypipe()
                             }
 
                             // opening tag
-                            return `<div class="custom-block ${
-                                m[1]
-                            }">\n<p class="custom-block-title">${md.utils.escapeHtml(
-                                m[2] || title
-                            )}</p>\n`;
+                            return `<div class="custom-block ${m[1]
+                                }">\n<p class="custom-block-title">${md.utils.escapeHtml(
+                                    m[2] || title
+                                )}</p>\n`;
                         } else {
                             // closing tag
                             return '</div>\n';

@@ -14,8 +14,8 @@
     "lint": "eslint . && prettier --check {docs,lib,nodes,script,test}/**/*.{css,js,md,html}",
     "lint:fix": "eslint . --fix && prettier --write {docs,lib,nodes,script,test}/**/*.{css,js,md,html}",
     "prepublish": "gulp build",
-    "test": "mocha \"test/**/*_spec.js\"",
-    "test:watch": "nodemon -w test/ -w lib/ -w nodes/ --exec ./node_modules/.bin/mocha test/*"
+    "test": "mocha test/**/*_spec.js",
+    "test:watch": "mocha --watch --recursive"
   },
   "repository": {
     "type": "git",
@@ -37,6 +37,7 @@
       "trigger-state": "nodes/trigger-state/trigger-state.js",
       "poll-state": "nodes/poll-state/poll-state.js",
       "ha-webhook": "nodes/webhook/webhook.js",
+      "ha-zone": "nodes/zone/zone.js",
       "api-call-service": "nodes/call-service/call-service.js",
       "ha-entity": "nodes/entity/entity.js",
       "ha-fire-event": "nodes/fire-event/fire-event.js",
@@ -53,6 +54,7 @@
     "bonjour": "3.5.0",
     "debug": "4.1.1",
     "flat": "5.0.2",
+    "geolib": "3.3.1",
     "home-assistant-js-websocket": "5.6.0",
     "joi": "17.2.1",
     "lodash.clonedeep": "4.5.0",
