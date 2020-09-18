@@ -78,7 +78,7 @@
     "cheerio": "^1.0.0-rc.3",
     "cssnano": "^4.1.10",
     "del": "^5.1.0",
-    "eslint": "^7.8.1",
+    "eslint": "^7.9.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.22.0",
@@ -101,8 +101,8 @@
     "gulp-wrap": "^0.15.0",
     "husky": "^4.3.0",
     "lazypipe": "^1.0.2",
-    "lint-staged": "^10.3.0",
-    "markdown-it": "^11.0.0",
+    "lint-staged": "^10.4.0",
+    "markdown-it": "^11.0.1",
     "markdown-it-container": "^3.0.0",
     "markdown-it-inline-comments": "^1.0.1",
     "merge-stream": "^2.0.0",
@@ -112,7 +112,7 @@
     "node-sass": "^4.14.1",
     "nodemon": "^2.0.4",
     "nyc": "^15.1.0",
-    "prettier": "^2.1.1",
+    "prettier": "^2.1.2",
     "vuepress": "^1.5.4"
   },
   "husky": {
