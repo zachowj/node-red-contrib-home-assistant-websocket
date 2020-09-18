@@ -103,6 +103,10 @@ Allows rendering of templates on input
 
 When an input is received the node will wait until the condition is met or the timeout occurs then will pass on the last received message
 
+#### Zone
+
+Outputs when one of the configured entities enter or leaves one of the defined zones.
+
 ## Contribute
 
 - [Setting up Development Environment](https://zachowj.github.io/node-red-contrib-home-assistant-websocket/guide/development.html)
