@@ -12,7 +12,7 @@ RED.nodes.registerType('ha-zone', {
         server: { value: '', type: 'server', required: true },
         name: { value: '' },
         entities: {
-            value: [],
+            value: [''],
             required: true,
             validate: function (v) {
                 return v.length;
@@ -20,7 +20,7 @@ RED.nodes.registerType('ha-zone', {
         },
         event: { value: 'enter' },
         zones: {
-            value: [],
+            value: [''],
             required: true,
             validate: function (v) {
                 return v.length;
