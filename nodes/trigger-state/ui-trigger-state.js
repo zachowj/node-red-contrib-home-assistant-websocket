@@ -61,8 +61,6 @@ RED.nodes.registerType('trigger-state', {
     },
     oneditprepare: function () {
         const node = this;
-        const NUM_DEFAULT_OUTPUTS = 2;
-
         const $constraintList = $('#constraint-list');
         const $outputList = $('#output-list');
 
@@ -96,7 +94,9 @@ RED.nodes.registerType('trigger-state', {
             outputItems.each(function (i) {
                 const data = $(this).data('data');
                 outputs[
-                    data.hasOwnProperty('index') ? data.index : data._index
+                    Object.prototype.hasOwnProperty.call(data, 'index')
+                        ? data.index
+                        : data._index
                 ] = i + 2;
             });
         };
@@ -287,11 +287,11 @@ RED.nodes.registerType('trigger-state', {
             height: 'auto',
             header: $('<div>').append('Custom outputs'),
             addItem: function (container, index, opt) {
-                if (!opt.hasOwnProperty('condition')) {
+                if (!Object.prototype.hasOwnProperty.call(opt, 'condition')) {
                     opt.condition = {};
                 }
                 const data = opt.condition;
-                if (!opt.hasOwnProperty('index')) {
+                if (!Object.prototype.hasOwnProperty.call(opt, 'index')) {
                     opt._index = Math.floor(
                         (0x99999 - 0x10000) * Math.random()
                     ).toString();
@@ -340,7 +340,9 @@ RED.nodes.registerType('trigger-state', {
 
                 const currentOutputs = getOutputs();
                 currentOutputs[
-                    opt.hasOwnProperty('index') ? opt.index : opt._index
+                    Object.prototype.hasOwnProperty.call(opt, 'index')
+                        ? opt.index
+                        : opt._index
                 ] = index + 2;
                 saveOutputs(currentOutputs);
 
@@ -378,7 +380,7 @@ RED.nodes.registerType('trigger-state', {
             },
             removeItem: function (opt) {
                 const currentOutputs = getOutputs();
-                if (opt.hasOwnProperty('index')) {
+                if (Object.prototype.hasOwnProperty.call(opt, 'index')) {
                     currentOutputs[opt.index] = -1;
                 } else {
                     delete currentOutputs[opt._index];
@@ -403,12 +405,12 @@ RED.nodes.registerType('trigger-state', {
     oneditsave: function () {
         const constraintsItems = $('#constraint-list').editableList('items');
         const outputItems = $('#output-list').editableList('items');
-        let constraints = [];
-        let outputs = [];
+        const constraints = [];
+        const outputs = [];
 
         constraintsItems.each(function () {
             const $this = $(this);
-            $comparatorValue = $this.find('.comparator-value');
+            const $comparatorValue = $this.find('.comparator-value');
             const constraint = {
                 targetType: $this.find('.target-type').val(),
                 targetValue: $this.find('.target-value').val(),
