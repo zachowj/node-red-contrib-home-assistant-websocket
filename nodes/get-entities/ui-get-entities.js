@@ -71,11 +71,13 @@ RED.nodes.registerType('ha-get-entities', {
         $logic.editableList({
             addButton: true,
             removable: true,
-            height: 321,
+            height: 'auto',
             addItem: function (container, index, data) {
-                const $row = $('<div />').appendTo(container);
+                const $row = $('<div />', {
+                    class: 'editable-list-row',
+                }).appendTo(container);
                 const $row2 = $('<div />', {
-                    style: 'margin-top: 10px;',
+                    class: 'editable-list-row',
                 }).appendTo(container);
 
                 if (!Object.prototype.hasOwnProperty.call(data, 'logic')) {
