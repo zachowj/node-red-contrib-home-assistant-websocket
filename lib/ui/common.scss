@@ -52,6 +52,22 @@
     }
 }
 
+.editable-list-row {
+    margin-bottom: 4px;
+}
+
+#constraint-list {
+    min-width: 446px;
+
+    input {
+        width: 65%;
+    }
+}
+
+#output-list input {
+    width: 62%;
+}
+
 .ha-node-label-legacy {
     fill: #fdfd96;
     stroke-width: 0;

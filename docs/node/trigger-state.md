@@ -9,10 +9,10 @@ An advanced version of `server:state-changed` node
 
 ## Configuration
 
-### Constraints
+### Conditions
 
 This node has two default outputs "allowed" and "blocked". If all the
-constraints are true the default message will be sent to the "allowed" output
+conditions are true the default message will be sent to the "allowed" output
 otherwise it will be sent to the "blocked" output.
 
 **See Also:**
@@ -21,8 +21,8 @@ otherwise it will be sent to the "blocked" output.
 
 ### Custom Outputs
 
-All the above constraints need to be true for any custom outputs to be sent,
-having zero constraints is a valid option. Each custom output can send the
+All the above conditions need to be true for any custom outputs to be sent,
+having zero conditions is a valid option. Each custom output can send the
 default message or a custom message. Also, each one can have its constraint
 on whether or not to be sent.
 
