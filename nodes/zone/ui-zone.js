@@ -11,6 +11,13 @@ RED.nodes.registerType('ha-zone', {
     defaults: {
         server: { value: '', type: 'server', required: true },
         name: { value: '' },
+        exposeToHomeAssistant: { value: false },
+        haConfig: {
+            value: [
+                { property: 'name', value: '' },
+                { property: 'icon', value: '' },
+            ],
+        },
         entities: {
             value: [''],
             required: true,
@@ -42,6 +49,8 @@ RED.nodes.registerType('ha-zone', {
             );
             zones = entities.filter((entities) => entities.startsWith('zone.'));
         });
+        exposeNode.init(this);
+
         $entities.editableList({
             addButton: true,
             removable: true,
@@ -100,5 +109,6 @@ RED.nodes.registerType('ha-zone', {
         });
         this.entities = Array.from(entities);
         this.zones = Array.from(zones);
+        this.haConfig = exposeNode.getValues();
     },
 });
