@@ -48,6 +48,8 @@ RED.nodes.registerType('ha-zone', {
                     entities.startsWith('device_tracker.')
             );
             zones = entities.filter((entities) => entities.startsWith('zone.'));
+            $entities.find('input').autocomplete('option', 'source', devices);
+            $zones.find('input').autocomplete('option', 'source', zones);
         });
         exposeNode.init(this);
 
