@@ -44,7 +44,7 @@ RED.nodes.registerType('trigger-state', {
         constraints: {
             value: [
                 {
-                    targetType: 'entity_id',
+                    targetType: 'this_entity',
                     targetValue: '',
                     propertyType: 'current_state',
                     propertyValue: 'new_state.state',
