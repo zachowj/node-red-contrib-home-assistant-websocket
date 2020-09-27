@@ -71,6 +71,10 @@ RED.nodes.registerType('trigger-state', {
         haServer.init(node, '#node-input-server');
         haServer.autocomplete('entities', (entities) => {
             availableEntities = entities;
+            $('#node-input-entityid').autocomplete({
+                source: entities,
+                minLength: 0,
+            });
         });
         haServer.autocomplete('properties', (properties) => {
             availableProperties = properties;
