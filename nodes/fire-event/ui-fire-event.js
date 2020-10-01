@@ -21,11 +21,9 @@ RED.nodes.registerType('ha-fire-event', {
         const node = this;
         haServer.init(node, '#node-input-server');
 
-        $('#node-input-data')
-            .typedInput({
-                types: ['json', 'jsonata'],
-                typeField: '#node-input-dataType',
-            })
-            .typedInput('width', '68%');
+        $('#node-input-data').typedInput({
+            types: ['json', 'jsonata'],
+            typeField: '#node-input-dataType',
+        });
     },
 });

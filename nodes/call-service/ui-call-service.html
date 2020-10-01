@@ -6,9 +6,9 @@
 </div>
 
 <div class="form-row">
-    <label for="node-input-server"
-        ><i class="fa fa-dot-circle-o"></i> Server</label
-    >
+    <label for="node-input-server">
+        <i class="fa fa-dot-circle-o"></i> Server
+    </label>
     <input type="text" id="node-input-server" />
 </div>
 
@@ -23,23 +23,23 @@
 </div>
 
 <div class="form-row">
-    <label for="node-input-entityId"
-        ><i class="fa fa-cube"></i> Entity Id</label
-    >
+    <label for="node-input-entityId">
+        <i class="fa fa-cube"></i> Entity Id
+    </label>
     <input type="text" id="node-input-entityId" />
 </div>
 
 <div class="form-row">
     <label for="node-input-data"><i class="fa fa-dot-circle-o"></i> Data</label>
-    <input type="text" id="node-input-data" />
+    <input type="text" id="node-input-data" style="width: 70%" />
     <input type="hidden" id="node-input-dataType" />
 </div>
 
 <div class="form-row checkbox-option" id="mustacheAltTags">
     <input type="checkbox" id="node-input-mustacheAltTags" />&nbsp;
-    <label for="node-input-mustacheAltTags"
-        >Use alternative template tags for the Data field</label
-    >
+    <label for="node-input-mustacheAltTags">
+        Use alternative template tags for the Data field
+    </label>
 </div>
 
 <div class="form-row">
@@ -54,7 +54,7 @@
 <div class="form-row output-option" id="output_location">
     <label for="node-input-output_location">Output Location</label>
     <input type="hidden" id="node-input-output_location_type" />
-    <input type="text" id="node-input-output_location" />
+    <input type="text" id="node-input-output_location" style="width: 70%" />
 </div>
 
 <div id="service-data-desc" class="form-row">
@@ -62,12 +62,7 @@
     <div class="unknown-service">Unknown Service</div>
     <div class="known-service">
         <p class="service-description"></p>
-        <table
-            id="service-data-table"
-            style="width: 100%"
-            border="1"
-            cellpadding="10"
-        >
+        <table id="service-data-table" style="width: 100%" cellpadding="10">
             <thead>
                 <tr>
                     <th>Property</th>
@@ -80,13 +75,7 @@
     </div>
 </div>
 
-<div class="form-row">
-    <input
-        type="checkbox"
-        id="node-input-debugenabled"
-        style="display: inline-block; width: auto; vertical-align: top"
-    />
-    <label for="node-input-debugenabled" style="width: auto"
-        >Show Debug Information</label
-    >
+<div class="form-row checkbox-option">
+    <input type="checkbox" id="node-input-debugenabled" />
+    <label for="node-input-debugenabled"> Show Debug Information </label>
 </div>

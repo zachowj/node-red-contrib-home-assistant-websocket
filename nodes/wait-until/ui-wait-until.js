@@ -65,13 +65,11 @@ RED.nodes.registerType('ha-wait-until', {
             'global',
             entityType,
         ];
-        $('#node-input-value')
-            .typedInput({
-                default: 'str',
-                types: defaultTypes,
-                typeField: '#node-input-valueType',
-            })
-            .typedInput('width', '45%');
+        $('#node-input-value').typedInput({
+            default: 'str',
+            types: defaultTypes,
+            typeField: '#node-input-valueType',
+        });
 
         $('#node-input-comparator').change(function (e) {
             let types = defaultTypes;
@@ -126,12 +124,10 @@ RED.nodes.registerType('ha-wait-until', {
             });
 
         const NoneType = { value: 'none', label: 'None', hasValue: false };
-        $('#node-input-entityLocation')
-            .typedInput({
-                types: ['msg', 'flow', 'global', NoneType],
-                typeField: '#node-input-entityLocationType',
-            })
-            .typedInput('width', '68%');
+        $('#node-input-entityLocation').typedInput({
+            types: ['msg', 'flow', 'global', NoneType],
+            typeField: '#node-input-entityLocationType',
+        });
 
         // Set defaults if undefined
         if (node.blockInputOverrides === undefined) {

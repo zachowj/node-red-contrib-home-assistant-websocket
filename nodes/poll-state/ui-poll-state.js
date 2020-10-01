@@ -95,7 +95,4 @@ RED.nodes.registerType('poll-state', {
         nodeVersion.update(this);
         this.haConfig = exposeNode.getValues();
     },
-    oneditresize: function () {
-        ifState.resize();
-    },
 });

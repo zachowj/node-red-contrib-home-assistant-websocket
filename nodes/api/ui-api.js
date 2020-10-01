@@ -40,12 +40,10 @@ RED.nodes.registerType('ha-api', {
             utils.setDefaultServerSelection();
         }
 
-        $('#node-input-data')
-            .typedInput({
-                types: ['json', 'jsonata'],
-                typeField: '#node-input-dataType',
-            })
-            .typedInput('width', '68%');
+        $('#node-input-data').typedInput({
+            types: ['json', 'jsonata'],
+            typeField: '#node-input-dataType',
+        });
 
         $('#node-input-protocol')
             .on('change', function () {
@@ -64,16 +62,14 @@ RED.nodes.registerType('ha-api', {
             $('#data-label').text(label);
         });
 
-        $('#node-input-location')
-            .typedInput({
-                types: [
-                    'msg',
-                    'flow',
-                    'global',
-                    { value: 'none', label: 'None', hasValue: false },
-                ],
-                typeField: '#node-input-locationType',
-            })
-            .typedInput('width', '68%');
+        $('#node-input-location').typedInput({
+            types: [
+                'msg',
+                'flow',
+                'global',
+                { value: 'none', label: 'None', hasValue: false },
+            ],
+            typeField: '#node-input-locationType',
+        });
     },
 });

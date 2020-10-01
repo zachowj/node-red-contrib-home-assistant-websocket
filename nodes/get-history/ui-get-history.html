@@ -12,7 +12,7 @@
 <div class="form-row">
     <label for="entity_id"><i class="fa fa-date"></i> Entity ID</label>
 
-    <select type="text" id="node-input-entityidtype" style="width: 80px">
+    <select type="text" id="node-input-entityidtype" style="width: 18%">
         <option value="is">Is</option>
         <option value="includes">Includes</option>
     </select>
@@ -20,20 +20,9 @@
     <input type="text" id="entity_id" style="width: 52%" />
 </div>
 
-<div class="form-row">
-    <input
-        type="checkbox"
-        id="node-input-useRelativeTime"
-        style="
-            display: inline-block;
-            width: auto;
-            vertical-align: top;
-            margin-left: 105px;
-        "
-    />&nbsp;
-    <label for="node-input-useRelativeTime" style="width: auto">
-        Use Relative Time
-    </label>
+<div class="form-row checkbox-option">
+    <input type="checkbox" id="node-input-useRelativeTime" />
+    <label for="node-input-useRelativeTime"> Use Relative Time </label>
 </div>
 
 <div class="form-row relative_row">
@@ -49,9 +38,9 @@
 </div>
 
 <div class="form-row date_row">
-    <label for="node-input-startdate"
-        ><i class="fa fa-date"></i> Start Date</label
-    >
+    <label for="node-input-startdate">
+        <i class="fa fa-date"></i> Start Date
+    </label>
     <input type="text" id="node-input-startdate" autofocus="autofocus" />
 </div>
 
@@ -93,23 +82,14 @@
     </ol>
 </div>
 
-<div class="form-row">
-    <input
-        type="checkbox"
-        id="node-input-flatten"
-        style="
-            display: inline-block;
-            width: auto;
-            vertical-align: top;
-            margin-left: 105px;
-        "
-    />&nbsp;
-    <label for="node-input-flatten" style="width: auto">Flatten Results</label>
+<div class="form-row checkbox-option">
+    <input type="checkbox" id="node-input-flatten" />
+    <label for="node-input-flatten">Flatten Results</label>
 </div>
 
 <div class="form-row">
     <label for="node-input-output_type">Output Type</label>
-    <select id="node-input-output_type">
+    <select id="node-input-output_type" style="width: 70%">
         <option value="array">Array</option>
         <option value="split">Split</option>
     </select>
@@ -118,5 +98,5 @@
 <div class="form-row output-option" id="output_location">
     <label for="node-input-output_location">Output Location</label>
     <input type="hidden" id="node-input-output_location_type" />
-    <input type="text" id="node-input-output_location" />
+    <input type="text" id="node-input-output_location" style="width: 70%" />
 </div>

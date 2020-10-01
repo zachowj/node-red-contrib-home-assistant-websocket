@@ -58,12 +58,10 @@ RED.nodes.registerType('api-call-service', {
             } catch (e) {}
         }
 
-        $data
-            .typedInput({
-                types: ['json', 'jsonata'],
-                typeField: '#node-input-dataType',
-            })
-            .typedInput('width', '68%');
+        $data.typedInput({
+            types: ['json', 'jsonata'],
+            typeField: '#node-input-dataType',
+        });
 
         $data.on('change', function () {
             $('#mustacheAltTags').toggle($dataType.val() === 'json');
@@ -264,21 +262,19 @@ RED.nodes.registerType('api-call-service', {
         if (!this.output_location) {
             $('#node-input-output_location').val('payload');
         }
-        $('#node-input-output_location')
-            .typedInput({
-                types: [
-                    'msg',
-                    'flow',
-                    'global',
-                    {
-                        value: 'none',
-                        label: 'None',
-                        hasValue: false,
-                    },
-                ],
-                typeField: '#node-input-output_location_type',
-            })
-            .typedInput('width', '68%');
+        $('#node-input-output_location').typedInput({
+            types: [
+                'msg',
+                'flow',
+                'global',
+                {
+                    value: 'none',
+                    label: 'None',
+                    hasValue: false,
+                },
+            ],
+            typeField: '#node-input-output_location_type',
+        });
     },
     oneditsave: function () {
         const entityId = $('#node-input-entityId').val();

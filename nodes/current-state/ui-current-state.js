@@ -63,18 +63,14 @@ RED.nodes.registerType('api-current-state', {
         }
 
         const NoneType = { value: 'none', label: 'None', hasValue: false };
-        $stateLocation
-            .typedInput({
-                types: ['msg', 'flow', 'global', NoneType],
-                typeField: '#node-input-override_payload',
-            })
-            .typedInput('width', '68%');
-        $entityLocation
-            .typedInput({
-                types: ['msg', 'flow', 'global', NoneType],
-                typeField: '#node-input-override_data',
-            })
-            .typedInput('width', '68%');
+        $stateLocation.typedInput({
+            types: ['msg', 'flow', 'global', NoneType],
+            typeField: '#node-input-override_payload',
+        });
+        $entityLocation.typedInput({
+            types: ['msg', 'flow', 'global', NoneType],
+            typeField: '#node-input-override_data',
+        });
 
         if (node.state_type === undefined) {
             $('#node-input-state_type').val('str');
@@ -99,8 +95,5 @@ RED.nodes.registerType('api-current-state', {
         }
         $('#node-input-outputs').val(outputs);
         nodeVersion.update(this);
-    },
-    oneditresize: function () {
-        ifState.resize();
     },
 });

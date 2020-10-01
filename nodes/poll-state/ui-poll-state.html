@@ -1,9 +1,9 @@
 <input type="hidden" id="node-input-version" />
+<input type="hidden" id="node-input-outputs" />
 
 <div class="form-row">
     <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
     <input type="text" id="node-input-name" placeholder="Name" />
-    <input type="hidden" id="node-input-outputs" />
 </div>
 
 <div class="form-row">
@@ -17,9 +17,9 @@
 </div>
 
 <div class="form-row">
-    <label for="node-input-updateinterval"
-        ><i class="fa fa-clock-o"></i> Update Interval</label
-    >
+    <label for="node-input-updateinterval">
+        <i class="fa fa-clock-o"></i> Update Interval
+    </label>
     <input
         type="text"
         id="node-input-updateinterval"
@@ -33,30 +33,28 @@
 </div>
 
 <div class="form-row">
-    <label for="node-input-halt_if_compare"
-        ><i class="fa fa-check-square"></i> If State</label
-    >
-    <div style="width: 70%; display: inline-block">
-        <select type="text" id="node-input-halt_if_compare" style="width: auto">
-            <option value="is">is</option>
-            <option value="is_not">is not</option>
-            <option value="lt">&lt;</option>
-            <option value="lte">&lt;=</option>
-            <option value="gt">&gt;</option>
-            <option value="gte">&gt;=</option>
-            <option value="includes">in</option>
-            <option value="does_not_include">not in</option>
-            <option value="jsonata">JSONata</option>
-        </select>
-        <input type="text" id="node-input-halt_if" />
-    </div>
+    <label for="node-input-halt_if_compare">
+        <i class="fa fa-check-square"></i> If State
+    </label>
+    <select type="text" id="node-input-halt_if_compare" style="width: 20%">
+        <option value="is">is</option>
+        <option value="is_not">is not</option>
+        <option value="lt">&lt;</option>
+        <option value="lte">&lt;=</option>
+        <option value="gt">&gt;</option>
+        <option value="gte">&gt;=</option>
+        <option value="includes">in</option>
+        <option value="does_not_include">not in</option>
+        <option value="jsonata">JSONata</option>
+    </select>
+    <input type="text" id="node-input-halt_if" style="width: 50%" />
     <input type="hidden" id="node-input-halt_if_type" />
 </div>
 
 <div class="form-row">
-    <label for="node-input-state_type"
-        ><i class="fa fa-tint"></i> State Type</label
-    >
+    <label for="node-input-state_type">
+        <i class="fa fa-tint"></i> State Type
+    </label>
     <select type="text" id="node-input-state_type" style="width: auto">
         <option value="str">String</option>
         <option value="num">Number</option>
@@ -64,34 +62,12 @@
     </select>
 </div>
 
-<div class="form-row">
-    <input
-        type="checkbox"
-        id="node-input-outputonchanged"
-        style="
-            display: inline-block;
-            width: auto;
-            vertical-align: top;
-            margin-left: 105px;
-        "
-    />
-    <label for="node-input-outputonchanged" style="width: auto"
-        >Output on Changed</label
-    >
+<div class="form-row checkbox-option">
+    <input type="checkbox" id="node-input-outputonchanged" />
+    <label for="node-input-outputonchanged"> Output on Changed </label>
 </div>
 
-<div class="form-row">
-    <input
-        type="checkbox"
-        id="node-input-outputinitially"
-        style="
-            display: inline-block;
-            width: auto;
-            vertical-align: top;
-            margin-left: 105px;
-        "
-    />
-    <label for="node-input-outputinitially" style="width: auto"
-        >Output on Connect</label
-    >
+<div class="form-row checkbox-option">
+    <input type="checkbox" id="node-input-outputinitially" />
+    <label for="node-input-outputinitially"> Output on Connect </label>
 </div>

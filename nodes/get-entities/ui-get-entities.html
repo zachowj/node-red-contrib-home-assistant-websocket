@@ -13,8 +13,8 @@
 </div>
 
 <div class="form-row">
-    <label for="node-input-output_type" style="width: 160px">Output Type</label>
-    <select id="node-input-output_type">
+    <label for="node-input-output_type">Output Type</label>
+    <select id="node-input-output_type" style="width: 70%">
         <option value="array">Array</option>
         <option value="count">Count</option>
         <option value="random">Random</option>
@@ -22,26 +22,15 @@
     </select>
 </div>
 
-<div class="form-row output-option" id="output_empty_results">
-    <input
-        type="checkbox"
-        id="node-input-output_empty_results"
-        style="
-            margin-left: 165px;
-            display: inline-block;
-            width: 15px;
-            vertical-align: top;
-        "
-    />
-    <label for="node-input-output_empty_results" style="width: auto"
-        >Send Empty Results</label
-    >
+<div class="form-row checkbox-option output-option" id="output_empty_results">
+    <input type="checkbox" id="node-input-output_empty_results" />
+    <label for="node-input-output_empty_results">Send Empty Results</label>
 </div>
 
 <div class="form-row output-option" id="output_results_count">
-    <label for="node-input-output_results_count" style="width: 160px"
-        >Max Number of Results</label
-    >
+    <label for="node-input-output_results_count" style="width: 160px">
+        Max Number of Results
+    </label>
     <input
         type="text"
         id="node-input-output_results_count"
@@ -52,5 +41,5 @@
 <div class="form-row output-option" id="output_location">
     <label for="node-input-output_location">Output Location</label>
     <input type="hidden" id="node-input-output_location_type" />
-    <input type="text" id="node-input-output_location" />
+    <input type="text" id="node-input-output_location" style="width: 70%" />
 </div>
