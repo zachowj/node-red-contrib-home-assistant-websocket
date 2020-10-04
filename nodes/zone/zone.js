@@ -1,8 +1,12 @@
 const cloneDeep = require('lodash.clonedeep');
 
 const EventsHaNode = require('../../lib/events-ha-node');
+const {
+    ZONE_ENTER,
+    ZONE_LEAVE,
+    ZONE_ENTER_OR_LEAVE,
+} = require('../../lib/const');
 const { getLocationData, getZoneData, inZone } = require('../../lib/utils');
-const { ZONE_ENTER, ZONE_LEAVE } = require('../../lib/const');
 
 module.exports = function (RED) {
     const nodeOptions = {
@@ -18,7 +22,6 @@ module.exports = function (RED) {
             super(nodeDefinition, RED, nodeOptions);
 
             for (const entity of this.nodeConfig.entities) {
-                console.log(entity);
                 this.addEventClientListener(
                     `ha_events:state_changed:${entity}`,
                     this.onStateChanged.bind(this)
@@ -72,7 +75,9 @@ module.exports = function (RED) {
 
                 return (
                     (config.event === ZONE_ENTER && !fromMatch && toMatch) ||
-                    (config.event === ZONE_LEAVE && fromMatch && !toMatch)
+                    (config.event === ZONE_LEAVE && fromMatch && !toMatch) ||
+                    (config.event === ZONE_ENTER_OR_LEAVE &&
+                        fromMatch !== toMatch)
                 );
             });
 
@@ -83,11 +88,11 @@ module.exports = function (RED) {
             const node = this;
             const entities = await this.nodeConfig.server.homeAssistant.getStates();
             const zones = [];
-            Object.keys(entities).forEach((entityId) => {
+            for (const entityId in entities) {
                 if (node.nodeConfig.zones.includes(entityId)) {
                     zones.push(entities[entityId]);
                 }
-            });
+            }
 
             return zones;
         }
