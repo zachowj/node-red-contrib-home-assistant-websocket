@@ -4,7 +4,11 @@ const selectn = require('selectn');
 
 const EventsNode = require('../../lib/events-node');
 const RenderTemplate = require('../../lib/mustache-context');
-const { shouldIncludeEvent } = require('../../lib/utils');
+const {
+    shouldIncludeEvent,
+    getWaitStatusText,
+    getTimeInMilliseconds,
+} = require('../../lib/utils');
 
 module.exports = function (RED) {
     const nodeOptions = {
@@ -301,14 +305,8 @@ module.exports = function (RED) {
             let statusText = 'waiting';
 
             if (timeout > 0) {
-                statusText = this.getWaitStatusText(
-                    timeout,
-                    config.timeoutUnits
-                );
-                timeout = this.getTimeoutInMilliseconds(
-                    timeout,
-                    config.timeoutUnits
-                );
+                statusText = getWaitStatusText(timeout, config.timeoutUnits);
+                timeout = getTimeInMilliseconds(timeout, config.timeoutUnits);
 
                 this.timeoutId = setTimeout(async () => {
                     const state = Object.assign(
@@ -352,54 +350,6 @@ module.exports = function (RED) {
                     },
                 });
             }
-        }
-
-        getWaitStatusText(timeout, timeoutUnits) {
-            const timeoutMs = this.getTimeoutInMilliseconds(
-                timeout,
-                timeoutUnits
-            );
-            switch (timeoutUnits) {
-                case 'milliseconds':
-                    return `waiting for ${timeout} milliseconds`;
-                case 'hours':
-                case 'days':
-                    return `waiting until ${this.timeoutStatus(timeoutMs)}`;
-                case 'minutes':
-                default:
-                    return `waiting for ${timeout} ${timeoutUnits}: ${this.timeoutStatus(
-                        timeoutMs
-                    )}`;
-            }
-        }
-
-        getTimeoutInMilliseconds(timeout, timeoutUnits) {
-            switch (timeoutUnits) {
-                case 'milliseconds':
-                    return timeout;
-                case 'minutes':
-                    return timeout * (60 * 1000);
-                case 'hours':
-                    return timeout * (60 * 60 * 1000);
-                case 'days':
-                    return timeout * (24 * 60 * 60 * 1000);
-                default:
-                    return timeout * 1000;
-            }
-        }
-
-        timeoutStatus(milliseconds = 0) {
-            const timeout = Date.now() + milliseconds;
-            const timeoutStr = new Date(timeout).toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric',
-                hour12: false,
-                hour: 'numeric',
-                minute: 'numeric',
-                second: 'numeric',
-            });
-
-            return timeoutStr;
         }
     }
 
