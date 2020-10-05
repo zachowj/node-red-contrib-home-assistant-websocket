@@ -20,9 +20,14 @@ module.exports = function (RED) {
             outputinitially: {},
             state_type: (nodeDef) => nodeDef.state_type || 'str',
             output_only_on_state_change: {},
-            for: { value: '0' },
-            forType: { value: 'num' },
-            forUnits: { value: 'minutes' },
+            for: (nodeDef) => nodeDef.for || '0',
+            forType: (nodeDef) => nodeDef.forType || 'num',
+            forUnits: (nodeDef) => nodeDef.forUnits || 'minutes',
+            ignorePrevStateNull: {},
+            ignorePrevStateUnknown: {},
+            ignorePrevStateUnavailable: {},
+            ignoreCurrentStateUnknown: {},
+            ignoreCurrentStateUnavailable: {},
         },
     };
 
@@ -59,7 +64,6 @@ module.exports = function (RED) {
             if (
                 this.isEnabled === false ||
                 !this.isHomeAssistantRunning ||
-                !evt.event.new_state ||
                 !shouldIncludeEvent(
                     evt.entity_id,
                     this.nodeConfig.entityidfilter,
@@ -72,6 +76,20 @@ module.exports = function (RED) {
             const eventMessage = cloneDeep(evt);
             const oldState = selectn('event.old_state', eventMessage);
             const newState = selectn('event.new_state', eventMessage);
+
+            if (
+                (config.ignorePrevStateNull && !oldState) ||
+                (config.ignorePrevStateUnknown &&
+                    oldState.state === 'unknown') ||
+                (config.ignorePrevStateUnavailable &&
+                    oldState.state === 'unavailable') ||
+                (config.ignoreCurrentStateUnknown &&
+                    newState.state === 'unknown') ||
+                (config.ignoreCurrentStateUnavailable &&
+                    newState.state === 'unavailable')
+            ) {
+                return;
+            }
 
             // Convert and save original state if needed
             this.castState(oldState, config.state_type);

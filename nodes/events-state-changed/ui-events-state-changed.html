@@ -82,3 +82,32 @@
     <input type="checkbox" id="node-input-outputinitially" />
     <label for="node-input-outputinitially"> Output on Connect </label>
 </div>
+
+<div class="form-row checkbox-option">
+    <label><i class="fa fa-ban"></i> Ignore state change event when:</label>
+    <br />
+    <input type="checkbox" id="node-input-ignorePrevStateNull" />
+    <label for="node-input-ignorePrevStateNull">
+        Previous state doesn't exist
+    </label>
+    <br />
+    <input type="checkbox" id="node-input-ignorePrevStateUnknown" />
+    <label for="node-input-ignorePrevStateUnknown">
+        Previous state is <code>unknown</code>
+    </label>
+    <br />
+    <input type="checkbox" id="node-input-ignorePrevStateUnavailable" />
+    <label for="node-input-ignorePrevStateUnavailable">
+        Previous state is <code>unavailable</code>
+    </label>
+    <br />
+    <input type="checkbox" id="node-input-ignoreCurrentStateUnknown" />
+    <label for="node-input-ignoreCurrentStateUnknown">
+        Current state is <code>unknown</code>
+    </label>
+    <br />
+    <input type="checkbox" id="node-input-ignoreCurrentStateUnavailable" />
+    <label for="node-input-ignoreCurrentStateUnavailable">
+        Current state is <code>unavailable</code>
+    </label>
+</div>

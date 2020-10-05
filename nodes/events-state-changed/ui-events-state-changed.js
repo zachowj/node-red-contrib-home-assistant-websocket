@@ -36,6 +36,11 @@ RED.nodes.registerType('server-state-changed', {
         for: { value: 0 },
         forType: { value: 'num' },
         forUnits: { value: 'minutes' },
+        ignorePrevStateNull: { value: false },
+        ignorePrevStateUnknown: { value: false },
+        ignorePrevStateUnavailable: { value: false },
+        ignoreCurrentStateUnknown: { value: false },
+        ignoreCurrentStateUnavailable: { value: false },
     },
     oneditprepare: function () {
         const $entityidfilter = $('#node-input-entityidfilter');
