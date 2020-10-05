@@ -33,6 +33,9 @@ RED.nodes.registerType('server-state-changed', {
         halt_if_compare: {},
         outputs: { value: 1 },
         output_only_on_state_change: { value: true },
+        for: { value: 0 },
+        forType: { value: 'num' },
+        forUnits: { value: 'minutes' },
     },
     oneditprepare: function () {
         const $entityidfilter = $('#node-input-entityidfilter');
@@ -64,6 +67,12 @@ RED.nodes.registerType('server-state-changed', {
         }
 
         ifState.init('#node-input-haltifstate', '#node-input-halt_if_compare');
+
+        $('#node-input-for').typedInput({
+            default: 'num',
+            types: ['num', 'jsonata', 'flow', 'global'],
+            typeField: '#node-input-forType',
+        });
     },
     oneditsave: function () {
         this.entityidfilter = $('#node-input-entityidfilter').val();
@@ -78,8 +87,5 @@ RED.nodes.registerType('server-state-changed', {
         $('#node-input-outputs').val(outputs);
         nodeVersion.update(this);
         this.haConfig = exposeNode.getValues();
-    },
-    oneditresize: function () {
-        ifState.resize();
     },
 });

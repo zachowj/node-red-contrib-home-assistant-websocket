@@ -30,6 +30,16 @@ If the conditional is evaluated as true send the message to the first output oth
 
 - [Conditionals](/guide/conditionals.md)
 
+### For
+
+- Type: `number`
+
+An amount of time an entity's state needs to be in that state before triggering.
+
+::: tip
+Output on Connect state changes will not start a timer.
+:::
+
 ### State Type
 
 - Type: `string`
