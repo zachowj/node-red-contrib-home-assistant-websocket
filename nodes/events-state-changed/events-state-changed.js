@@ -158,7 +158,7 @@ module.exports = function (RED) {
                 text: statusText,
             });
 
-            clearInterval(this.topics[eventMessage.entity_id].id);
+            clearTimeout(this.topics[eventMessage.entity_id].id);
             this.topics[eventMessage.entity_id].id = setTimeout(
                 this.output.bind(this, eventMessage, isIfState),
                 timeout
@@ -219,7 +219,7 @@ module.exports = function (RED) {
                     : ''
             }`;
 
-            clearInterval(this.topics[eventMessage.entity_id].id);
+            clearTimeout(this.topics[eventMessage.entity_id].id);
 
             // Handle version 0 'halt if' outputs. The output were reversed true
             // was sent to the second output and false was the first output
