@@ -72,18 +72,6 @@
 </div>
 
 <div class="form-row checkbox-option">
-    <input type="checkbox" id="node-input-output_only_on_state_change" />
-    <label for="node-input-output_only_on_state_change">
-        Output only on state change
-    </label>
-</div>
-
-<div class="form-row checkbox-option">
-    <input type="checkbox" id="node-input-outputinitially" />
-    <label for="node-input-outputinitially"> Output on Connect </label>
-</div>
-
-<div class="form-row checkbox-option">
     <p><i class="fa fa-ban"></i> Ignore state change event when:</p>
     <input type="checkbox" id="node-input-ignorePrevStateNull" />
     <label for="node-input-ignorePrevStateNull">
@@ -109,4 +97,14 @@
     <label for="node-input-ignoreCurrentStateUnavailable">
         Current state is <code>unavailable</code>
     </label>
+    <br />
+    <input type="checkbox" id="node-input-output_only_on_state_change" />
+    <label for="node-input-output_only_on_state_change">
+        Current state equals previous state
+    </label>
+</div>
+
+<div class="form-row checkbox-option">
+    <input type="checkbox" id="node-input-outputinitially" />
+    <label for="node-input-outputinitially"> Output on Connect </label>
 </div>
