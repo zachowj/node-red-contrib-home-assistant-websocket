@@ -206,7 +206,7 @@ module.exports = function (RED) {
             const msg = {
                 topic: eventMessage.entity_id,
                 payload: eventMessage.event.new_state.state,
-                data: eventMessage,
+                data: eventMessage.event,
             };
 
             eventMessage.event.new_state.timeSinceChangedMs =
