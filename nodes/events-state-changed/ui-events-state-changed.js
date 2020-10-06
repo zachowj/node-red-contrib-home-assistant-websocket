@@ -71,6 +71,10 @@ RED.nodes.registerType('server-state-changed', {
             $('#node-input-halt_if_compare').val('is');
         }
 
+        if (this.forUnits === undefined) {
+            $('#node-input-forUnits').val('minutes');
+        }
+
         ifState.init('#node-input-haltifstate', '#node-input-halt_if_compare');
 
         $('#node-input-for').typedInput({
