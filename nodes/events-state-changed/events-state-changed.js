@@ -112,11 +112,27 @@ module.exports = function (RED) {
             }
             const validTimer = timer > 0;
 
-            // If if state is not used and prev and current state is the same return because  timer should already be running
-            if (validTimer && oldState.state === newState.state) return;
+            if (validTimer) {
+                if (
+                    // If if state is not used and prev and current state is the same return because  timer should already be running
+                    oldState.state === newState.state ||
+                    // Don't run timers for on connect updates
+                    runAll ||
+                    // Timer already active and ifState is still true turn don't update
+                    (isIfState && this.topics[eventMessage.entity_id].active)
+                ) {
+                    return;
+                }
 
-            // Don't run timers for on connect updates
-            if (validTimer && runAll) return;
+                if (
+                    ['lt', 'lte', 'gt', 'gte'].includes(
+                        config.halt_if_compare
+                    ) &&
+                    !isIfState
+                ) {
+                    this.topics[eventMessage.entity_id].active = false;
+                }
+            }
 
             if (
                 !validTimer ||
@@ -141,6 +157,7 @@ module.exports = function (RED) {
             });
 
             clearTimeout(this.topics[eventMessage.entity_id].id);
+            this.topics[eventMessage.entity_id].active = true;
             this.topics[eventMessage.entity_id].id = setTimeout(
                 this.output.bind(this, eventMessage, isIfState),
                 timeout
