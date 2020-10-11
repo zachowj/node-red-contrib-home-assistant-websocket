@@ -126,12 +126,7 @@ module.exports = function (RED) {
                     return;
                 }
 
-                if (
-                    ['lt', 'lte', 'gt', 'gte'].includes(
-                        config.halt_if_compare
-                    ) &&
-                    !isIfState
-                ) {
+                if (!isIfState) {
                     this.topics[eventMessage.entity_id].active = false;
                 }
             }
