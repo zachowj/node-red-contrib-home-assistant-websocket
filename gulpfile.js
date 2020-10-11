@@ -326,7 +326,7 @@ module.exports = {
         runNodemonAndBrowserSync,
         function watcher(done) {
             watch(
-                ['lib/common/*', 'nodes/*/ui-*', 'docs/node/*.md'],
+                ['lib/ui/*', 'nodes/*/ui-*', 'docs/node/*.md'],
                 series(
                     'cleanFiles',
                     'buildEditorFiles',
