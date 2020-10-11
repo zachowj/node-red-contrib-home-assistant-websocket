@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.27.3](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.27.2...v0.27.3) (2020-10-11)
+
+
+### Bug Fixes
+
+* **events-state:** reset timer active flag when condition is false ([d119307](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d119307618e27d3d7044601a3614d678bf51b88b))
+
 ### [0.27.2](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.27.1...v0.27.2) (2020-10-11)
 
 
