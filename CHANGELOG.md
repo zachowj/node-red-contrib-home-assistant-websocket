@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.27.4](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.27.3...v0.27.4) (2020-10-11)
+
+
+### Bug Fixes
+
+* **events-state:** fix logic when checking for valid event ([b6118a5](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/b6118a5ca91dcdcf310e95af22627b6c24ef87f6))
+
 ### [0.27.3](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.27.2...v0.27.3) (2020-10-11)
 
 
