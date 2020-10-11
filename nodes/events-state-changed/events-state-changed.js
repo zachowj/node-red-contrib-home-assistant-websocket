@@ -126,7 +126,7 @@ module.exports = function (RED) {
                     return;
                 }
 
-                if (!isIfState) {
+                if (config.haltIfState && !isIfState) {
                     this.topics[eventMessage.entity_id].active = false;
                 }
             }
