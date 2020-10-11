@@ -277,25 +277,25 @@ module.exports = function (RED) {
 
         isEventValid(evt) {
             if (
-                shouldIncludeEvent(
+                !shouldIncludeEvent(
                     evt.entity_id,
                     this.nodeConfig.entityidfilter,
                     this.nodeConfig.entityidfiltertype
                 ) ||
-                (this.nodeConfig.ignorePrevStateNull && evt.event.old_state) ||
+                (this.nodeConfig.ignorePrevStateNull && !evt.event.old_state) ||
                 (this.nodeConfig.ignorePrevStateUnknown &&
-                    evt.event.old_state.state !== 'unknown') ||
+                    evt.event.old_state.state === 'unknown') ||
                 (this.nodeConfig.ignorePrevStateUnavailable &&
-                    evt.event.old_state.state !== 'unavailable') ||
+                    evt.event.old_state.state === 'unavailable') ||
                 (this.nodeConfig.ignoreCurrentStateUnknown &&
-                    evt.event.new_state.state !== 'unknown') ||
+                    evt.event.new_state.state === 'unknown') ||
                 (this.nodeConfig.ignoreCurrentStateUnavailable &&
-                    evt.event.new_state.state !== 'unavailable')
+                    evt.event.new_state.state === 'unavailable')
             ) {
-                return true;
+                return false;
             }
 
-            return false;
+            return true;
         }
     }
 
