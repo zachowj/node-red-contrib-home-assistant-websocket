@@ -119,7 +119,9 @@ module.exports = function (RED) {
                     // Don't run timers for on connect updates
                     runAll ||
                     // Timer already active and ifState is still true turn don't update
-                    (isIfState && this.topics[eventMessage.entity_id].active)
+                    (config.haltIfState &&
+                        isIfState &&
+                        this.topics[eventMessage.entity_id].active)
                 ) {
                     return;
                 }
