@@ -60,36 +60,18 @@ module.exports = function (RED) {
         }
 
         async onHaEventsStateChanged(evt, runAll) {
-            const config = this.nodeConfig;
             if (
                 this.isEnabled === false ||
                 !this.isHomeAssistantRunning ||
-                !shouldIncludeEvent(
-                    evt.entity_id,
-                    this.nodeConfig.entityidfilter,
-                    this.nodeConfig.entityidfiltertype
-                )
+                !this.isEventValid(evt)
             ) {
                 return;
             }
 
+            const config = this.nodeConfig;
             const eventMessage = cloneDeep(evt);
             const oldState = selectn('event.old_state', eventMessage);
             const newState = selectn('event.new_state', eventMessage);
-
-            if (
-                (config.ignorePrevStateNull && !oldState) ||
-                (config.ignorePrevStateUnknown &&
-                    oldState.state === 'unknown') ||
-                (config.ignorePrevStateUnavailable &&
-                    oldState.state === 'unavailable') ||
-                (config.ignoreCurrentStateUnknown &&
-                    newState.state === 'unknown') ||
-                (config.ignoreCurrentStateUnavailable &&
-                    newState.state === 'unavailable')
-            ) {
-                return;
-            }
 
             // Convert and save original state if needed
             this.castState(oldState, config.state_type);
@@ -277,6 +259,29 @@ module.exports = function (RED) {
 
                 this.onHaEventsStateChanged(eventMessage, true);
             }
+        }
+
+        isEventValid(evt) {
+            if (
+                shouldIncludeEvent(
+                    evt.entity_id,
+                    this.nodeConfig.entityidfilter,
+                    this.nodeConfig.entityidfiltertype
+                ) ||
+                (this.nodeConfig.ignorePrevStateNull && evt.event.old_state) ||
+                (this.nodeConfig.ignorePrevStateUnknown &&
+                    evt.event.old_state.state !== 'unknown') ||
+                (this.nodeConfig.ignorePrevStateUnavailable &&
+                    evt.event.old_state.state !== 'unavailable') ||
+                (this.nodeConfig.ignoreCurrentStateUnknown &&
+                    evt.event.new_state.state !== 'unknown') ||
+                (this.nodeConfig.ignoreCurrentStateUnavailable &&
+                    evt.event.new_state.state !== 'unavailable')
+            ) {
+                return true;
+            }
+
+            return false;
         }
     }
 
