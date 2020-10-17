@@ -94,5 +94,5 @@ Will output the results received from the API call to the location defined in th
 
 ## References
 
-- [http api](https://developers.home-assistant.io/docs/en/external_api_rest.html)
-- [websocket api](https://developers.home-assistant.io/docs/en/external_api_websocket.html)
+- [http api](https://developers.home-assistant.io/docs/api/rest)
+- [websocket api](https://developers.home-assistant.io/docs/api/websocket)
