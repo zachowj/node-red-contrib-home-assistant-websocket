@@ -27,32 +27,26 @@ module.exports = function (RED) {
                 return res.json([]);
             }
 
-            return this.homeAssistant
-                .getEntities()
-                .then((states) => res.json(states))
-                .catch((e) => this.error(e.message));
+            const states = this.homeAssistant.getEntities();
+            res.json(states);
         },
         getStates: function (req, res, next) {
             if (!this.homeAssistant) {
                 return res.json([]);
             }
 
-            return this.homeAssistant
-                .getStates()
-                .then((states) => res.json(states))
-                .catch((e) => this.error(e.message));
+            const states = this.homeAssistant.getStates();
+            res.json(states);
         },
         getServices: function (req, res, next) {
             if (!this.homeAssistant) {
                 return res.json([]);
             }
 
-            return this.homeAssistant
-                .getServices()
-                .then((services) => res.json(services))
-                .catch((e) => this.error(e.message));
+            const services = this.homeAssistant.getServices();
+            res.json(services);
         },
-        getProperties: async function (req, res, next) {
+        getProperties: function (req, res, next) {
             if (!this.homeAssistant) {
                 return res.json([]);
             }
@@ -60,17 +54,11 @@ module.exports = function (RED) {
             let flat = [];
             let singleEntity = !!req.query.entityId;
 
-            try {
-                var states = await this.homeAssistant.getStates(
-                    req.query.entityId
-                );
+            let states = this.homeAssistant.getStates(req.query.entityId);
 
-                if (!states) {
-                    states = await this.homeAssistant.getStates();
-                    singleEntity = false;
-                }
-            } catch (e) {
-                this.error(e.message);
+            if (!states) {
+                states = this.homeAssistant.getStates();
+                singleEntity = false;
             }
 
             if (singleEntity) {
@@ -104,7 +92,7 @@ module.exports = function (RED) {
         },
     };
 
-    RED.httpAdmin.get('/homeassistant/discover', async function (req, res) {
+    RED.httpAdmin.get('/homeassistant/discover', function (req, res) {
         const instances = [];
         bonjour.find({ type: 'home-assistant' }, (service) => {
             instances.push({

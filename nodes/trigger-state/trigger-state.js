@@ -1,7 +1,6 @@
 /* eslint-disable camelcase */
 const cloneDeep = require('lodash.clonedeep');
 const selectn = require('selectn');
-const { reduce } = require('p-iteration');
 
 const EventsHaNode = require('../../lib/events-ha-node');
 const RenderTemplate = require('../../lib/mustache-context');
@@ -78,8 +77,8 @@ module.exports = function (RED) {
             }
         }
 
-        async onDeploy() {
-            const entities = await this.nodeConfig.server.homeAssistant.getStates();
+        onDeploy() {
+            const entities = this.nodeConfig.server.homeAssistant.getStates();
             this.onStatesLoaded(entities);
         }
 
@@ -99,7 +98,7 @@ module.exports = function (RED) {
             }
         }
 
-        async onEntityStateChanged(evt) {
+        onEntityStateChanged(evt) {
             if (this.isEnabled === false) {
                 this.debugToClient(
                     'incoming: node is currently disabled, ignoring received event'
@@ -154,7 +153,7 @@ module.exports = function (RED) {
                         eventMessage.event.new_state.last_changed
                     ).getTime();
 
-                const constraintComparatorResults = await this.getConstraintComparatorResults(
+                const constraintComparatorResults = this.getConstraintComparatorResults(
                     this.nodeConfig.constraints,
                     eventMessage
                 );
@@ -194,7 +193,7 @@ module.exports = function (RED) {
                     return this.send(outputs);
                 }
 
-                const customOutputsComparatorResults = await this.getCustomOutputsComparatorResults(
+                const customOutputsComparatorResults = this.getCustomOutputsComparatorResults(
                     this.nodeConfig.customoutputs,
                     eventMessage
                 );
@@ -225,7 +224,7 @@ module.exports = function (RED) {
             this.onEntityStateChanged(eventMessage);
         }
 
-        async getConstraintComparatorResults(constraints, eventMessage) {
+        getConstraintComparatorResults(constraints, eventMessage) {
             const comparatorResults = [];
 
             // Check constraints
@@ -236,7 +235,7 @@ module.exports = function (RED) {
                     comparatorValueDatatype,
                     propertyValue,
                 } = constraint;
-                const constraintTarget = await this.getConstraintTargetData(
+                const constraintTarget = this.getConstraintTargetData(
                     constraint,
                     eventMessage.event
                 );
@@ -246,7 +245,7 @@ module.exports = function (RED) {
                     constraintTarget.state
                 );
 
-                const comparatorResult = await this.getComparatorResult(
+                const comparatorResult = this.getComparatorResult(
                     comparatorType,
                     comparatorValue,
                     actualValue,
@@ -303,44 +302,37 @@ module.exports = function (RED) {
         }
 
         getCustomOutputsComparatorResults(outputs, eventMessage) {
-            return reduce(
-                outputs,
-                async (acc, output, reduceIndex) => {
-                    const result = {
-                        output,
-                        comparatorMatched: true,
-                        actualValue: null,
-                        message: null,
-                    };
+            return outputs.reduce((acc, output) => {
+                const result = {
+                    output,
+                    comparatorMatched: true,
+                    actualValue: null,
+                    message: null,
+                };
 
-                    if (output.comparatorPropertyType !== 'always') {
-                        result.actualValue = selectn(
-                            output.comparatorPropertyValue,
-                            eventMessage.event
-                        );
-                        result.comparatorMatched = await this.getComparatorResult(
-                            output.comparatorType,
-                            output.comparatorValue,
-                            result.actualValue,
-                            output.comparatorValueDataType,
-                            {
-                                entity: eventMessage.event.new_state,
-                                prevEntity: eventMessage.event.old_state,
-                            }
-                        );
-                    }
-                    result.message = this.getOutputMessage(
-                        result,
-                        eventMessage
+                if (output.comparatorPropertyType !== 'always') {
+                    result.actualValue = selectn(
+                        output.comparatorPropertyValue,
+                        eventMessage.event
                     );
-                    acc.push(result);
-                    return acc;
-                },
-                []
-            );
+                    result.comparatorMatched = this.getComparatorResult(
+                        output.comparatorType,
+                        output.comparatorValue,
+                        result.actualValue,
+                        output.comparatorValueDataType,
+                        {
+                            entity: eventMessage.event.new_state,
+                            prevEntity: eventMessage.event.old_state,
+                        }
+                    );
+                }
+                result.message = this.getOutputMessage(result, eventMessage);
+                acc.push(result);
+                return acc;
+            }, []);
         }
 
-        async getConstraintTargetData(constraint, triggerEvent) {
+        getConstraintTargetData(constraint, triggerEvent) {
             const targetData = {
                 entityid: null,
                 state: null,
@@ -354,7 +346,7 @@ module.exports = function (RED) {
 
                 targetData.state = isTargetThisEntity
                     ? triggerEvent
-                    : await this.nodeConfig.server.homeAssistant.getStates(
+                    : this.nodeConfig.server.homeAssistant.getStates(
                           targetData.entityid
                       );
 

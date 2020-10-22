@@ -3,7 +3,6 @@ const selectn = require('selectn');
 const { shuffle } = require('lodash');
 
 const BaseNode = require('../../lib/base-node');
-const { filter } = require('p-iteration');
 
 module.exports = function (RED) {
     const nodeOptions = {
@@ -121,7 +120,7 @@ module.exports = function (RED) {
         }
 
         /* eslint-disable camelcase */
-        async onInput({ message, parsedMessage }) {
+        onInput({ message, parsedMessage }) {
             let noPayload = false;
 
             if (this.nodeConfig.server === null) {
@@ -129,7 +128,7 @@ module.exports = function (RED) {
                 return;
             }
 
-            const states = await this.nodeConfig.server.homeAssistant.getStates();
+            const states = this.nodeConfig.server.homeAssistant.getStates();
             if (!states) {
                 this.node.warn(
                     'local state cache missing sending empty payload'
@@ -141,39 +140,34 @@ module.exports = function (RED) {
 
             let entities;
             try {
-                entities = await filter(
-                    Object.values(states),
-                    async (entity) => {
-                        const rules = parsedMessage.rules.value;
+                entities = Object.values(states).filter((entity) => {
+                    const rules = parsedMessage.rules.value;
 
-                        entity.timeSinceChangedMs =
-                            Date.now() -
-                            new Date(entity.last_changed).getTime();
+                    entity.timeSinceChangedMs =
+                        Date.now() - new Date(entity.last_changed).getTime();
 
-                        for (const rule of rules) {
-                            const value = selectn(rule.property, entity);
-                            const result = await this.getComparatorResult(
-                                rule.logic,
-                                rule.value,
-                                value,
-                                rule.valueType,
-                                {
-                                    message,
-                                    entity,
-                                }
-                            );
-                            if (
-                                (rule.logic !== 'jsonata' &&
-                                    value === undefined) ||
-                                !result
-                            ) {
-                                return false;
+                    for (const rule of rules) {
+                        const value = selectn(rule.property, entity);
+                        const result = this.getComparatorResult(
+                            rule.logic,
+                            rule.value,
+                            value,
+                            rule.valueType,
+                            {
+                                message,
+                                entity,
                             }
+                        );
+                        if (
+                            (rule.logic !== 'jsonata' && value === undefined) ||
+                            !result
+                        ) {
+                            return false;
                         }
-
-                        return true;
                     }
-                );
+
+                    return true;
+                });
             } catch (e) {
                 this.setStatusFailed('Error');
                 this.node.error(e.message, {});

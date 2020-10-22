@@ -156,7 +156,7 @@ module.exports = function (RED) {
             this.timeoutId = -1;
         }
 
-        async onEntityChange(evt) {
+        onEntityChange(evt) {
             const { event } = cloneDeep(evt);
 
             if (!this.active || !this.isHomeAssistantRunning) {
@@ -173,7 +173,7 @@ module.exports = function (RED) {
                 return;
             }
 
-            const result = await this.getComparatorResult(
+            const result = this.getComparatorResult(
                 this.savedConfig.comparator,
                 this.savedConfig.value,
                 selectn(this.savedConfig.property, event.new_state),
@@ -182,10 +182,7 @@ module.exports = function (RED) {
                     message: this.savedMessage,
                     entity: event.new_state,
                 }
-            ).catch((e) => {
-                this.setStatusFailed('Error');
-                this.node.error(e.message, {});
-            });
+            );
 
             if (!result) {
                 return;
@@ -218,7 +215,7 @@ module.exports = function (RED) {
             this.send([this.savedMessage, null]);
         }
 
-        async onInput({ message, parsedMessage }) {
+        onInput({ message, parsedMessage }) {
             clearTimeout(this.timeoutId);
 
             if (Object.prototype.hasOwnProperty.call(message, 'reset')) {
@@ -308,10 +305,10 @@ module.exports = function (RED) {
                 statusText = getWaitStatusText(timeout, config.timeoutUnits);
                 timeout = getTimeInMilliseconds(timeout, config.timeoutUnits);
 
-                this.timeoutId = setTimeout(async () => {
+                this.timeoutId = setTimeout(() => {
                     const state = Object.assign(
                         {},
-                        await this.nodeConfig.server.homeAssistant.getStates(
+                        this.nodeConfig.server.homeAssistant.getStates(
                             config.entityId
                         )
                     );
@@ -339,7 +336,7 @@ module.exports = function (RED) {
                 config.checkCurrentState === true &&
                 config.entityIdFilterType === 'exact'
             ) {
-                const currentState = await this.nodeConfig.server.homeAssistant.getStates(
+                const currentState = this.nodeConfig.server.homeAssistant.getStates(
                     config.entityId
                 );
 

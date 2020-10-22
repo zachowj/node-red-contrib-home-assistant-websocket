@@ -59,7 +59,7 @@ module.exports = function (RED) {
             }
         }
 
-        async onHaEventsStateChanged(evt, runAll) {
+        onHaEventsStateChanged(evt, runAll) {
             if (
                 this.isEnabled === false ||
                 !this.isHomeAssistantRunning ||
@@ -87,7 +87,7 @@ module.exports = function (RED) {
             }
 
             // Get if state condition
-            const isIfState = await this.getComparatorResult(
+            const isIfState = this.getComparatorResult(
                 config.halt_if_compare,
                 config.haltIfState,
                 newState.state,
@@ -252,8 +252,8 @@ module.exports = function (RED) {
             this.onHaEventsStateChanged(eventMessage, false);
         }
 
-        async onDeploy() {
-            const entities = await this.nodeConfig.server.homeAssistant.getStates();
+        onDeploy() {
+            const entities = this.nodeConfig.server.homeAssistant.getStates();
             this.onStatesLoaded(entities);
         }
 

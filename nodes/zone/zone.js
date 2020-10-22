@@ -29,16 +29,13 @@ module.exports = function (RED) {
             }
         }
 
-        async onStateChanged(evt) {
+        onStateChanged(evt) {
             if (this.isEnabled === false || !this.isHomeAssistantRunning) {
                 return;
             }
             const { entity_id: entityId, event } = cloneDeep(evt);
 
-            const zones = await this.getValidZones(
-                event.old_state,
-                event.new_state
-            );
+            const zones = this.getValidZones(event.old_state, event.new_state);
 
             if (!zones.length) {
                 this.setStatusFailed(entityId);
@@ -61,12 +58,12 @@ module.exports = function (RED) {
             this.send(msg);
         }
 
-        async getValidZones(fromState, toState) {
+        getValidZones(fromState, toState) {
             const config = this.nodeConfig;
             const fromLocationData = getLocationData(fromState);
             const toLocationData = getLocationData(toState);
             if (!fromLocationData || !toLocationData) return [];
-            const zones = await this.getZones();
+            const zones = this.getZones();
             const validZones = zones.filter((zone) => {
                 const zoneData = getZoneData(zone);
                 if (!zoneData) return false;
@@ -84,9 +81,9 @@ module.exports = function (RED) {
             return validZones;
         }
 
-        async getZones() {
+        getZones() {
             const node = this;
-            const entities = await this.nodeConfig.server.homeAssistant.getStates();
+            const entities = this.nodeConfig.server.homeAssistant.getStates();
             const zones = [];
             for (const entityId in entities) {
                 if (node.nodeConfig.zones.includes(entityId)) {

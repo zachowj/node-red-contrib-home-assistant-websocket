@@ -158,7 +158,7 @@ module.exports = function (RED) {
             }
         }
 
-        async onInput({ parsedMessage, message }) {
+        onInput({ parsedMessage, message }) {
             switch (this.nodeConfig.entityType) {
                 case 'binary_sensor':
                 case 'sensor':

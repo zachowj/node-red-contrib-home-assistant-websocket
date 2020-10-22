@@ -48,7 +48,7 @@ module.exports = function (RED) {
         }
 
         /* eslint-disable camelcase */
-        async onInput({ parsedMessage, message }) {
+        onInput({ parsedMessage, message }) {
             const config = this.nodeConfig;
             const entityId = RenderTemplate(
                 config.blockInputOverrides === true
@@ -64,9 +64,7 @@ module.exports = function (RED) {
                 return;
             }
 
-            const entity = await config.server.homeAssistant.getStates(
-                entityId
-            );
+            const entity = config.server.homeAssistant.getStates(entityId);
             if (!entity) {
                 this.node.error(
                     `Entity could not be found in cache for entity_id: ${entityId}`,
@@ -107,7 +105,7 @@ module.exports = function (RED) {
                 message
             );
 
-            const isIfState = await this.getComparatorResult(
+            const isIfState = this.getComparatorResult(
                 config.halt_if_compare,
                 config.halt_if,
                 entity.state,
@@ -116,10 +114,7 @@ module.exports = function (RED) {
                     message,
                     entity,
                 }
-            ).catch((e) => {
-                this.setStatusFailed('Error');
-                this.node.error(e.message, message);
-            });
+            );
 
             // Handle version 0 'halt if' outputs
             if (config.version < 1) {

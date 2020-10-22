@@ -35,7 +35,7 @@ module.exports = function (RED) {
             this.removeWebhook = null;
         }
 
-        async onEvent(evt) {
+        onEvent(evt) {
             const message = {
                 topic: this.nodeConfig.webhookId,
             };
