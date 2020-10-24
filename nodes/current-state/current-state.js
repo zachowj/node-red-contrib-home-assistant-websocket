@@ -77,13 +77,7 @@ module.exports = function (RED) {
                 Date.now() - new Date(entity.last_changed).getTime();
 
             // Convert and save original state if needed
-            if (config.state_type !== 'str') {
-                entity.original_state = entity.state;
-                entity.state = this.getCastValue(
-                    config.state_type,
-                    entity.state
-                );
-            }
+            this.castState(entity, config.state_type);
 
             // default switch to true if undefined (backward compatibility)
             message.topic =

@@ -108,13 +108,7 @@ module.exports = function (RED) {
             pollState.timeSinceChangedMs = Date.now() - dateChanged.getTime();
 
             // Convert and save original state if needed
-            if (this.nodeConfig.state_type !== 'str') {
-                pollState.original_state = pollState.state;
-                pollState.state = this.getCastValue(
-                    this.nodeConfig.state_type,
-                    pollState.state
-                );
-            }
+            this.castState(pollState, this.nodeConfig.state_type);
 
             const msg = {
                 topic: this.nodeConfig.entity_id,
