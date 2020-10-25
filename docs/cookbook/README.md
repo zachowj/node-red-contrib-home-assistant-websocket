@@ -7,7 +7,7 @@ further educate yourself in the world of Home Automation with Node-RED.
 - [JSONata Examples](./jsonata.md)
 - [Motion Triggered Light](./motion-triggered-light.md)
 - [Saving and Restoring States](./saving-and-restoring-states.md)
-- [Get state_changed Events Based on Area](./get-state_changed-Events-based-on-area.md)
+- [Get state_changed Events Based on Area](./get-state_changed-events-based-on-area.md)
 - [Turn Light On/Off with Sunset/Sunrise](./sun-events.md)
 - [Vacation Mode](./vacation-mode.md)
 - [Expiration Date Monitor](./expiration-date-monitor.md)
