@@ -79,6 +79,17 @@ module.exports = function (RED) {
             // Convert and save original state if needed
             this.castState(entity, config.state_type);
 
+            const isIfState = this.getComparatorResult(
+                config.halt_if_compare,
+                config.halt_if,
+                entity.state,
+                config.halt_if_type,
+                {
+                    message,
+                    entity,
+                }
+            );
+
             // default switch to true if undefined (backward compatibility)
             message.topic =
                 config.override_topic !== false ? entityId : message.topic;
@@ -97,17 +108,6 @@ module.exports = function (RED) {
                 config.override_data,
                 config.entity_location,
                 message
-            );
-
-            const isIfState = this.getComparatorResult(
-                config.halt_if_compare,
-                config.halt_if,
-                entity.state,
-                config.halt_if_type,
-                {
-                    message,
-                    entity,
-                }
             );
 
             // Handle version 0 'halt if' outputs
