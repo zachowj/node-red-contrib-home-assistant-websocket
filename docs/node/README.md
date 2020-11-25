@@ -60,3 +60,7 @@ When an input is received the node will wait until the condition is met or the t
 ## [Webhook](./webhook.md)
 
 Outputs the data received from the created webhook in Home Assistant
+
+## [Zone](./zone.md)
+
+Outputs when one of the configured entities enter or leaves one of the defined zones
