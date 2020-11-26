@@ -150,7 +150,7 @@ RED.nodes.registerType('ha-get-entities', {
                         $value.typedInput('types', types);
                     });
 
-                for (var d in operators) {
+                for (const d in operators) {
                     $logicField.append(
                         $('<option></option>')
                             .val(operators[d].value)

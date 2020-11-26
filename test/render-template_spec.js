@@ -14,11 +14,11 @@ describe('render-template node', function () {
     });
 
     it('should be loaded', function (done) {
-        var flow = [
+        const flow = [
             { id: 'n1', type: 'api-render-template', name: 'render-template' },
         ];
         helper.load(renderTemplate, flow, function () {
-            var n1 = helper.getNode('n1');
+            const n1 = helper.getNode('n1');
             n1.should.have.property('name', 'render-template');
             done();
         });

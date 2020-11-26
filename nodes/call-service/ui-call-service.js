@@ -106,7 +106,7 @@ RED.nodes.registerType('api-call-service', {
                         return false;
                     },
                     select: function (event, ui) {
-                        var terms = split(this.value);
+                        const terms = split(this.value);
                         // remove the current input
                         terms.pop();
                         // add the selected item
@@ -174,7 +174,7 @@ RED.nodes.registerType('api-call-service', {
                     let tableRows = Object.keys(fields).reduce((tRows, k) => {
                         const fieldData = fields[k];
                         if (!fieldData.description && !fieldData.example) {
-                            return;
+                            return tRows;
                         }
                         tRows.push(
                             `<tr><td><code>${k}</code></td><td>${

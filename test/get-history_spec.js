@@ -15,9 +15,11 @@ describe('get-history node', function () {
     });
 
     it('should be loaded', function (done) {
-        var flow = [{ id: 'n1', type: 'api-get-history', name: 'get-history' }];
+        const flow = [
+            { id: 'n1', type: 'api-get-history', name: 'get-history' },
+        ];
         helper.load(getHistory, flow, function () {
-            var n1 = helper.getNode('n1');
+            const n1 = helper.getNode('n1');
             n1.should.have.property('name', 'get-history');
             done();
         });

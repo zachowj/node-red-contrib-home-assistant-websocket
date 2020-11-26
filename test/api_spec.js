@@ -15,9 +15,9 @@ describe('api node', function () {
     });
 
     it('should be loaded', function (done) {
-        var flow = [{ id: 'n1', type: 'ha-api', name: 'API' }];
+        const flow = [{ id: 'n1', type: 'ha-api', name: 'API' }];
         helper.load(api, flow, function () {
-            var n1 = helper.getNode('n1');
+            const n1 = helper.getNode('n1');
             n1.should.have.property('name', 'API');
             done();
         });

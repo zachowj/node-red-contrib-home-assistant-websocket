@@ -12,7 +12,7 @@ An environment with Home Assistant/Node Red can be easily spun up using docker a
 | service        | port mappings            | info                                                                                                                            |
 | -------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
 | home-assistant | `8123:8123`, `8300:8300` | exposed for local access via browser                                                                                            |
-| node-red       | `1880:1880`, `9123:9229` | exposed for local access via browser, `9123` is used for debugging. Includes default flow example connected to `home-assistant` |  |
+| node-red       | `1880:1880`, `9123:9229` | exposed for local access via browser, `9123` is used for debugging. Includes default flow example connected to `home-assistant` |
 
 ## Docker Tips
 

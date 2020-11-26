@@ -15,11 +15,11 @@ describe('current-state node', function () {
     });
 
     it('should be loaded', function (done) {
-        var flow = [
+        const flow = [
             { id: 'n1', type: 'api-current-state', name: 'current-state' },
         ];
         helper.load(currentState, flow, function () {
-            var n1 = helper.getNode('n1');
+            const n1 = helper.getNode('n1');
             n1.should.have.property('name', 'current-state');
             done();
         });

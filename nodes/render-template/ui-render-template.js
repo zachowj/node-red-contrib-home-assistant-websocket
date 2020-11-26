@@ -79,7 +79,7 @@ RED.nodes.registerType('api-render-template', {
         const $dialogForm = $('#dialog-form');
 
         let height = $dialogForm.height();
-        for (var i = 0; i < $rows.size(); i++) {
+        for (let i = 0; i < $rows.size(); i++) {
             height -= $($rows[i]).outerHeight(true);
         }
         height -=

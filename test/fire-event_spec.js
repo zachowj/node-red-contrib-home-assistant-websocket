@@ -15,9 +15,9 @@ describe('fire-event node', function () {
     });
 
     it('should be loaded', function (done) {
-        var flow = [{ id: 'n1', type: 'ha-fire-event', name: 'fire-event' }];
+        const flow = [{ id: 'n1', type: 'ha-fire-event', name: 'fire-event' }];
         helper.load(fireEvent, flow, function () {
-            var n1 = helper.getNode('n1');
+            const n1 = helper.getNode('n1');
             n1.should.have.property('name', 'fire-event');
             done();
         });

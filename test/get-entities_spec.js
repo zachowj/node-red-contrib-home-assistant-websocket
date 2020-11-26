@@ -15,11 +15,11 @@ describe('get-entities node', function () {
     });
 
     it('should be loaded', function (done) {
-        var flow = [
+        const flow = [
             { id: 'n1', type: 'ha-get-entities', name: 'get-entities' },
         ];
         helper.load(currentState, flow, function () {
-            var n1 = helper.getNode('n1');
+            const n1 = helper.getNode('n1');
             n1.should.have.property('name', 'get-entities');
             done();
         });
