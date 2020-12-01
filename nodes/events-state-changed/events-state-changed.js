@@ -70,18 +70,21 @@ module.exports = function (RED) {
 
             const config = this.nodeConfig;
             const eventMessage = cloneDeep(evt);
-            const oldState = selectn('event.old_state', eventMessage);
-            const newState = selectn('event.new_state', eventMessage);
+            const entityId = eventMessage.entity_id;
+            const oldEntity = selectn('event.old_state', eventMessage);
+            const newEntity = selectn('event.new_state', eventMessage);
+            const oldState = oldEntity ? oldEntity.state : undefined;
+            const newState = newEntity ? newEntity.state : undefined;
 
             // Convert and save original state if needed
-            this.castState(oldState, config.state_type);
-            this.castState(newState, config.state_type);
+            this.castState(oldEntity, config.state_type);
+            this.castState(newEntity, config.state_type);
 
             // Output only on state change
             if (
                 runAll === undefined &&
                 config.output_only_on_state_change === true &&
-                oldState.state === newState.state
+                oldState === newState
             ) {
                 return;
             }
@@ -90,17 +93,16 @@ module.exports = function (RED) {
             const isIfState = this.getComparatorResult(
                 config.halt_if_compare,
                 config.haltIfState,
-                newState.state,
+                newState,
                 config.halt_if_type,
                 {
-                    entity: newState,
-                    prevEntity: oldState,
+                    entity: newEntity,
+                    prevEntity: oldEntity,
                 }
             );
 
             // Track multiple entity ids
-            this.topics[eventMessage.entity_id] =
-                this.topics[eventMessage.entity_id] || {};
+            this.topics[entityId] = this.topics[entityId] || {};
 
             let timer;
             try {
@@ -114,20 +116,20 @@ module.exports = function (RED) {
 
             if (validTimer) {
                 if (
-                    // If if state is not used and prev and current state is the same return because  timer should already be running
-                    oldState.state === newState.state ||
-                    // Don't run timers for on connect updates
+                    // If the ifState is not used and prev and current state are the same return because timer should already be running
+                    oldState === newState ||
+                    // Don't run timers for on connection updates
                     runAll ||
                     // Timer already active and ifState is still true turn don't update
                     (config.haltIfState &&
                         isIfState &&
-                        this.topics[eventMessage.entity_id].active)
+                        this.topics[entityId].active)
                 ) {
                     return;
                 }
 
                 if (config.haltIfState && !isIfState) {
-                    this.topics[eventMessage.entity_id].active = false;
+                    this.topics[entityId].active = false;
                 }
             }
 
@@ -153,9 +155,9 @@ module.exports = function (RED) {
                 text: statusText,
             });
 
-            clearTimeout(this.topics[eventMessage.entity_id].id);
-            this.topics[eventMessage.entity_id].active = true;
-            this.topics[eventMessage.entity_id].id = setTimeout(
+            clearTimeout(this.topics[entityId].id);
+            this.topics[entityId].active = true;
+            this.topics[entityId].id = setTimeout(
                 this.output.bind(this, eventMessage, isIfState),
                 timeout
             );
