@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.27.6](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.27.5...v0.27.6) (2020-12-01)
+
+
+### Bug Fixes
+
+* **event-state:** check if old state is valid before attempting to access state ([a16e964](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a16e964c454a00367f4c8e300660bc5df01c7273))
+* fix eslint and prettier changes ([8497b1a](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/8497b1a0e98a02580baef5aa4cf6bc00d2806614))
+
+
+### Documentation
+
+* **cookbook:** Add starting a flow after HA restart example ([b82affd](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/b82affda5aca33aca2d4de753694ba934d855043))
+* Add zone to node index page ([0b5407a](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/0b5407a3c0a6fec52c8a3c2d10b6063233bfe7b3))
+
 ### [0.27.5](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.27.4...v0.27.5) (2020-11-19)
 
 
