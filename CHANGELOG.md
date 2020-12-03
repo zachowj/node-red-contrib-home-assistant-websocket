@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.27.7](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.27.6...v0.27.7) (2020-12-03)
+
+
+### Bug Fixes
+
+* fix exposedNode has already been declared error ([aeceffa](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/aeceffaae9967543abcd7fccd29fcd253f2a96c5))
+
 ### [0.27.6](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.27.5...v0.27.6) (2020-12-01)
 
 
