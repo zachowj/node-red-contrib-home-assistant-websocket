@@ -73,12 +73,11 @@ module.exports = function (RED) {
             const entityId = eventMessage.entity_id;
             const oldEntity = selectn('event.old_state', eventMessage);
             const newEntity = selectn('event.new_state', eventMessage);
-            const oldState = oldEntity ? oldEntity.state : undefined;
-            const newState = newEntity ? newEntity.state : undefined;
-
             // Convert and save original state if needed
             this.castState(oldEntity, config.state_type);
             this.castState(newEntity, config.state_type);
+            const oldState = oldEntity ? oldEntity.state : undefined;
+            const newState = newEntity ? newEntity.state : undefined;
 
             // Output only on state change
             if (
