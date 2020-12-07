@@ -16,9 +16,9 @@ If you have any questions about this flow please post them to [this topic](https
 
 - [Node-RED](https://nodered.org/) v1+
 - [Home Assistant](https://home-assistant.io) v0.118+
-- [WLED](https://github.com/Aircoookie/WLED) v0.10
+- [WLED](https://github.com/Aircoookie/WLED) v0.11+
 
-This is working with [WLED](https://github.com/Aircoookie/WLED) v0.10, not v0.11 as the presets have been fully redesigned, and [Home Assistant](https://home-assistant.io) v0.118 for the WLED preset service. The Home Assistant nodes to control WLED could be replaced with WLED nodes to sidestep then the requirements.
+[Home Assistant](https://home-assistant.io) v0.118 is required for the WLED preset service. The Home Assistant nodes to control WLED could be replaced with WLED nodes to sidestep these requirements.
 
 ### Integrations
 
@@ -36,24 +36,17 @@ The two entity nodes will require the Node-RED custom integration but the flow w
 
 ## Setup
 
-The flow has been modified so that it should run pretty much out of the box after changing the entity id for the light and setting up the JSON object that maps names to [WLED](https://github.com/Aircoookie/WLED) presets.
+The flow has been modified so that it should run pretty much out of the box after changing the entity id for the light and IP for the WLED controller.
 
-1. [Setting up WLED Presets](#presets)
-2. [Setting entity id](#entity-id-of-the-wled-light)
-3. [Modifing holiday date ranges](#setting-date-ranges-up)
-4. [Creating Home Assistant entities](#home-assistant-entities)
+1. [Setting up WLED variables](#wled-variable)
+1. [Modifing holiday date ranges](#setting-date-ranges-up)
+1. [Creating Home Assistant entities](#home-assistant-entities)
 
-### Presets
+### WLED variables
 
 ![screenshot of a node that needs to be editted](./images/holiday-lights-scheduler-and-demo-mode-for-wled_03.png)
 
-Edit the inject node, **Setup WLED Presets**, and there will be a JSON object that is a set of key/value pairs. The property, left side, will be an uppercase string that should only be alphanumeric characters and underscores. The value, right side, should be a number corresponding to a [WLED preset number](https://github.com/Aircoookie/WLED/wiki/Presets#earlier-versions-up-to-010).
-
-### Entity id of the WLED light
-
-![screenshot of a node that needs to be editted](./images/holiday-lights-scheduler-and-demo-mode-for-wled_04.png)
-
-The entity of your WLED light needs to be changed in two places.
+Edit the inject node, **Setup**, to edit the Home Assistant entity id of the holiday lights and IP address of the WLED controller. The entity of your WLED light needs to be changed in two places.
 
 ### Setting date ranges up
 
@@ -61,43 +54,69 @@ Holidays can be either a single day or a range of dates. If no holiday is define
 
 ![screenshot of a node that needs to be editted](./images/holiday-lights-scheduler-and-demo-mode-for-wled_08.png)
 
-In the `date ranges` node, a lot is going on but the main thing is the if statement that determines which preset to use.
+In the `date ranges` node, a lot is going on but the main thing is the switch statement that determines which preset to use.
 
-The `isToday` function can take two arguments but only the first one is required which is the start date of the holiday. The second argument is the end day of the holiday. Both of the arguments can take a number in the format of MONTHDAY or a string name defined in the `getHolidayDate` function on line #60.
+The `isToday` function can take two arguments but only the first one is required which is the start date of the holiday. The second argument is the end date of the holiday. Both of the arguments can take a number in the format of MONTHDAY or a holiday name defined in the `getHolidayDate` function on line #92.
 
-Line Numbers 16-40
+Lines 16 - 72
 
 ```javascript
-// Winter
-if (isToday(214)) preset = presets.VALENTINE;
-// President's Day changes every year, Veteran's Day & Flag Day always the same date
-// 6/14 Flag Day
-// 11/11 Veterans Day
-else if (
-  isToday(614) ||
-  isToday(1111) ||
-  isToday("President's Day") ||
-  isToday("Memorial Day")
-)
-  preset = presets.USA;
-else if (isToday(317)) preset = presets.ST_PATTY;
-else if (isToday("Easter")) preset = presets.EASTER;
-// Spring
-else if (isToday(504)) preset = presets.STARWARS;
-else if (isToday(505)) preset = presets.CINCO_DE_MAYO;
-// Summer
-else if (isToday(704)) preset = presets.INDEPENDENCE_DAY;
-// Autumn
-else if (isToday(1017, 1031)) preset = presets.HALLOWEEN;
-else if (isToday("Thanksgiving Day")) preset = presets.FALL;
-else if (isToday(1231)) preset = presets.NEW_YEARS;
-else if (isToday("Thanksgiving Day", 1231) || isToday(101, 106)) {
-  const activePreset = states[entityId].attributes.preset;
-  preset = getRandomPreset(christmasPresets.filter((e) => e !== activePreset));
-  updateInterval = 60;
-} else {
-  const currentSeason = states["sensor.season"].state;
-  preset = presets[currentSeason.toUpperCase()];
+switch (true) {
+  // Winter
+  case isToday(214):
+    preset = "Valentine";
+    break;
+  // President's Day changes every year, Veteran's Day & Flag Day always the same date
+  case isToday(614): // 6/14 Flag Day
+  case isToday(1111): // 11/11 Veterans Day
+  case isToday("President's Day"):
+  case isToday("Memorial Day"):
+    preset = "Red, White, and Blue";
+    break;
+  case isToday(317):
+    preset = "St Patty";
+    break;
+  case isToday("Easter"):
+    preset = "Easter";
+    break;
+  // Spring
+  case isToday(504):
+    preset = "Starwars";
+    break;
+  case isToday(505):
+    preset = "Cinco de Mayo";
+    break;
+  // Summer
+  case isToday(704):
+    preset = "Independence Day";
+    break;
+  // Autumn
+  case isToday(1017, 1031):
+    preset = "Halloween";
+    break;
+  case isToday("Thanksgiving Day"):
+    preset = "Autumn";
+    break;
+  case isToday(1231):
+    preset = "New Years";
+    break;
+  case isToday("Thanksgiving Day", 1231):
+  case isToday(101, 106):
+    const activePreset = states[entityId].attributes.preset;
+    const presetName = idLookup[activePreset];
+    preset = getRandomPreset(christmasPresets.filter((e) => e !== presetName));
+    updateInterval = 60;
+    break;
+  default:
+    const seasons = {
+      winter: "Winter",
+      spring: "Spring",
+      summer: "Summer",
+      autumn: "Autumn",
+    };
+    const currentSeason = states["sensor.season"].state;
+    preset = seasons[currentSeason];
+    break;
 }
 ```
 
