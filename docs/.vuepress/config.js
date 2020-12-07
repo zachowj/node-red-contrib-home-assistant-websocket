@@ -41,6 +41,7 @@ module.exports = {
                         'using-date-and-time-entities-to-trigger-flows',
                         'check-if-an-entity-was-turned-on-in-the-last-24-hours',
                         'starting-flow-after-home-assistant-restart',
+                        'holiday-lights-scheduler-and-demo-mode-for-wled',
                     ],
                 },
             ],
