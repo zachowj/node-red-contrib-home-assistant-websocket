@@ -97,7 +97,7 @@ else if (isToday("Thanksgiving Day", 1231) || isToday(101, 106)) {
   updateInterval = 60;
 } else {
   const currentSeason = states["sensor.season"].state;
-  preset = seasons[currentSeason.toUpperCase()];
+  preset = presets[currentSeason.toUpperCase()];
 }
 ```
 
