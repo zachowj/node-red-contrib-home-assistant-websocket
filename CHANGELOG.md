@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.27.9](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.27.8...v0.27.9) (2020-12-11)
+
+
+### Bug Fixes
+
+* check for valid value in list types of conditionals ([7fd9545](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/7fd95459d70f62577b38c4ae0360880b6b7e1dc8)), closes [#301](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/301)
+* **events-state:** cast state before setting new/old state ([f49fd82](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f49fd823952fe1c51b21c96fab919845b6dc3efe)), closes [#299](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/299)
+
+
+### Documentation
+
+* Add holiday light scheduler example ([5822c41](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/5822c411b93ba900988fae70248f6561aeb6db58))
+* Update holiday light scheduler for WLED v0.11 ([0a6054c](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/0a6054c329abb3cd8952b9b4b0b5ab57169ea660))
+* Update holiday lights example ([70aff6e](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/70aff6ea4804b956c0af608a92ebd5071829bfde))
+
 ### [0.27.8](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.27.7...v0.27.8) (2020-12-05)
 
 
