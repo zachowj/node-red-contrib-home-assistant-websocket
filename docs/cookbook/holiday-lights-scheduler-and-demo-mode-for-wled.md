@@ -1,8 +1,8 @@
 # Holiday lights scheduler and demo mode for WLED
 
-Here's a flow that's been in use for 3-4 years to control some outdoor house LEDs hooked up to an ESP8266 running [WLED](https://github.com/Aircoookie/WLED).
+Here's a flow to control some outdoor house LEDs hooked up to an ESP8266 running [WLED](https://github.com/Aircoookie/WLED).
 
-The holiday lights turn on each day at sunset and then off at midnight. It uses [WLED](https://github.com/Aircoookie/WLED) presets based on the day or season. It has a demo mode that will either cycle through all the defined presets or all the included effects.
+The holiday lights turn on each day at sunset and then off at midnight. It uses [WLED](https://github.com/Aircoookie/WLED) presets based on the day or season. It has a demo mode that will cycle through all the defined presets or all the included effects.
 
 ![screenshot of flow](./images/holiday-lights-scheduler-and-demo-mode-for-wled_01.png)
 
@@ -14,7 +14,6 @@ If you have any questions about this flow please post them to [this topic](https
 
 ## Requirements
 
-- [Node-RED](https://nodered.org/) v1+
 - [Home Assistant](https://home-assistant.io) v0.118+
 - [WLED](https://github.com/Aircoookie/WLED) v0.11+
 
@@ -32,7 +31,6 @@ The two entity nodes will require the Node-RED custom integration but the flow w
 ### Nodes
 
 - [eztimer](https://flows.nodered.org/node/node-red-contrib-eztimer)
-- [time-range-switch](https://flows.nodered.org/node/node-red-contrib-time-range-switch)
 
 ## Setup
 
