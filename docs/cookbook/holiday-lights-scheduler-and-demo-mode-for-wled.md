@@ -9,7 +9,7 @@ The holiday lights turn on each day at sunset and then off at midnight. It uses 
 <<< @/examples/cookbook/holiday-lights-scheduler-and-demo-mode-for-wled/holiday-lights-scheduler-and-demo-mode-for-wled.json
 
 ::: tip
-If you have any questions about this flow please post them to [this topic](https://community.home-assistant.io/t/example-holiday-lights-scheduler-and-demo-mode-for-wled/252808?u=kermit) on the Home Assistant forums.
+If you have any questions about this flow please post them to [this topic](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/discussions/306) in the discussions section.
 :::
 
 ## Requirements
