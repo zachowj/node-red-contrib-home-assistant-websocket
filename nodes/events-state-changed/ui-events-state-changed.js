@@ -1,6 +1,6 @@
 RED.nodes.registerType('server-state-changed', {
     category: 'home_assistant',
-    color: '#038FC7',
+    color: '#399CDF',
     inputs: 0,
     outputs: 1,
     outputLabels: nodeVersion.ifStateLabels,

@@ -1,6 +1,6 @@
 RED.nodes.registerType('api-get-history', {
     category: 'home_assistant',
-    color: '#52C0F2',
+    color: '#5BCBF7',
     inputs: 1,
     outputs: 1,
     icon: 'ha-get-history.svg',
