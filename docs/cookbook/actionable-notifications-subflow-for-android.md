@@ -1,5 +1,9 @@
 # Actionable Notifications Subflow for Android
 
+::: tip Questions and Discussion
+Post questions and follow the discussion about this recipe [here](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/discussions/311)
+:::
+
 ![screenshot](./images/actionable-notifications-subflow-for-android_01.png)
 
 <<< @/examples/cookbook/actionable-notifications-subflow-for-android/subflow.json

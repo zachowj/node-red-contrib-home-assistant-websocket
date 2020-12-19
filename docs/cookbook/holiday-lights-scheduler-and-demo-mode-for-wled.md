@@ -1,5 +1,9 @@
 # Holiday lights scheduler and demo mode for WLED
 
+::: tip Questions and Discussion
+Post questions and follow the discussion about this recipe [here](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/discussions/306)
+:::
+
 Here's a flow to control some outdoor house LEDs hooked up to an ESP8266 running [WLED](https://github.com/Aircoookie/WLED).
 
 The holiday lights turn on each day at sunset and then off at midnight. It uses [WLED](https://github.com/Aircoookie/WLED) presets based on the day or season. It has a demo mode that will cycle through all the defined presets or all the included effects.
@@ -7,10 +11,6 @@ The holiday lights turn on each day at sunset and then off at midnight. It uses 
 ![screenshot of flow](./images/holiday-lights-scheduler-and-demo-mode-for-wled_01.png)
 
 <<< @/examples/cookbook/holiday-lights-scheduler-and-demo-mode-for-wled/holiday-lights-scheduler-and-demo-mode-for-wled.json
-
-::: tip
-If you have any questions about this flow please post them to [this topic](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/discussions/306) in the discussions section.
-:::
 
 ## Requirements
 
