@@ -28,8 +28,22 @@ Post questions and follow the discussion about this recipe [here](https://github
 
 <<< @/examples/cookbook/actionable-notifications-subflow-for-android/demo.json
 
-## Use Case #1: Get notification when garage door is left open with ability to ignore the alert for an amount of time
+## Use Case #1: Get a notification when garage door is left open with ability to ignore the alert for an amount of time
 
 ![screenshot](./images/actionable-notifications-subflow-for-android_03.png)
 
 <<< @/examples/cookbook/actionable-notifications-subflow-for-android/use-case-01.json
+
+**Required Nodes**
+
+- [time-range-switch](https://flows.nodered.org/node/node-red-contrib-time-range-switch)
+
+## Use Case #2: Ask if vacation mode should be turned on after being away for 24 hours
+
+![screenshot](./images/actionable-notifications-subflow-for-android_04.png)
+
+<<< @/examples/cookbook/actionable-notifications-subflow-for-android/use-case-01.json
+
+**Also see:**
+
+- [Cookbook: Vacation Mode](./vacation-mode.md)
