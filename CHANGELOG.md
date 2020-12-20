@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.27.10](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.27.9...v0.27.10) (2020-12-20)
+
+
+### Documentation
+
+* **cookbook:** Add use case [#2](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2) to actionable notifications ([e1d4cab](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/e1d4cabbc0c6697f2f6fe80726b294c77fc2e27e))
+* Add actionalble notification subflow to cookbook ([51ad8f2](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/51ad8f2881af35e96473d87e2f18464b9c957554))
+* Add discussions links ([61c31bd](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/61c31bd24913c3db3be1b4797f93b59d837cbe12))
+* Add link to the discussion section for holiday lights ([c9c97b0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/c9c97b0cfabcec937536db46c3d37253e3666d3e))
+* fix actionable notifications use case 01 to use trigger nodes ([ee37b9e](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ee37b9e750a9d4677a8a2578a20be8ef7a3b5db1))
+* Fix Daily alarm using Datetime Entity Example to account for leading zeros ([c3cde97](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/c3cde978f6ffb1e0b2673567f07966dfe99b0954))
+* Update holiday lights example ([4aae90c](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/4aae90c431e330f21a6ae4972ff21ccfd698c61a))
+
 ### [0.27.9](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.27.8...v0.27.9) (2020-12-11)
 
 
