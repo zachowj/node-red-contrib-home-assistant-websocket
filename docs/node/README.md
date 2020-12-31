@@ -8,6 +8,10 @@ Access all points of the WebSocket and HTTP API.
 
 Sends a request to home assistant for any domain and service available ( `light/turn_on`, `input_select/select_option`, etc..)
 
+## [Config Server](./config-server.md)
+
+Home Assistant connection configuration
+
 ## [Current State](./current-state.md)
 
 Fetches the last known state for any entity on input
@@ -36,18 +40,18 @@ Get entities based on search criteria with 3 different output options
 
 Fetches HomeAssistant history on input
 
-## [Get Template](./get-template.md)
-
-Allows rendering of templates on input
-
 ## [Poll State](./poll-state.md)
 
 Outputs the state of an entity at regular intervals, optionally also at startup
 and every time the entity changes if desired
 
-## [Server Config](./config-server.md)
+## [Render Template](./render-template.md)
 
-Home Assistant connection configuration
+Allows rendering of templates on input
+
+## [Time](./time.md)
+
+A node that can be scheduled to trigger at a future date and time from a Home Assistant entity.
 
 ## [Trigger: state](./trigger-state.md)
 
