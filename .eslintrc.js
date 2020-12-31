@@ -14,6 +14,7 @@ module.exports = {
         haServer: 'readonly',
         ifState: 'readonly',
         nodeVersion: 'readonly',
+        ha: 'readonly',
     },
     plugins: ['sort-requires'],
 };

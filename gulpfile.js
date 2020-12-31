@@ -59,6 +59,7 @@ const nodeMap = {
     'get-history': { doc: 'get-history', type: 'api-get-history' },
     'poll-state': { doc: 'poll-state', type: 'poll-state' },
     'render-template': { doc: 'get-template', type: 'api-render-template' },
+    time: { doc: 'time', type: 'ha-time' },
     'trigger-state': { doc: 'trigger-state', type: 'trigger-state' },
     'wait-until': { doc: 'wait-until', type: 'ha-wait-until' },
     webhook: { doc: 'webhook', type: 'ha-webhook' },

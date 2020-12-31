@@ -1,0 +1,32 @@
+{
+  "ha-time": {
+    "errors": {
+      "invalid_jsonata_payload": "Invalid jsonata sending entity state as payload",
+      "jsonata_error": "JSONata Error: __message__",
+      "offset_nan": "Offset is not a number: __offset__"
+    },
+    "status": {
+      "in_the_past": "In the past",
+      "invalid_date": "Invalid date",
+      "invalid_property": "Invalid property",
+      "next_at": "Next at __nextTime__",
+      "sent": "Sent",
+      "sent_and_next": "Sent at __sentTime__ Next at __nextTime__",
+      "unavailable": "Unavailable",
+      "error": "Error"
+    },
+    "label": {
+      "name": "Name",
+      "server": "Server",
+      "entity_id": "Entity Id",
+      "property": "Property",
+      "offset": "Offset",
+      "seconds": "seconds",
+      "minutes": "minutes",
+      "hours": "hours",
+      "randomize_offset": "Randomize time within the offset",
+      "payload": "Payload",
+      "repeat_daily": "Repeat Daily"
+    }
+  }
+}

@@ -1,0 +1,93 @@
+<div class="ui-state-error ha-alert-box">
+    Alpha version: At this point anything could change or not work.<br />
+    Found an issue? Post it in
+    <a
+        href="https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues"
+        target="_blank"
+        rel="noreferrer"
+        >issues</a
+    >. Have questions or comments? Post them
+    <a
+        href="https://github.com/zachowj/node-red-contrib-home-assistant-websocket/discussions/313"
+        target="_blank"
+        rel="noreferrer"
+    >
+        here</a
+    >.
+</div>
+
+<div class="form-row">
+    <label for="node-input-name">
+        <i class="fa fa-tag"></i> <span data-i18n="ha-time.label.name"></span>
+    </label>
+    <input
+        type="text"
+        id="node-input-name"
+        data-i18n="[placeholder]ha-time.label.name"
+    />
+</div>
+
+<div class="form-row">
+    <label for="node-input-server">
+        <i class="fa fa-server"></i>
+        <span data-i18n="ha-time.label.server"></span>
+    </label>
+    <input type="text" id="node-input-server" />
+</div>
+
+<div class="form-row">
+    <label for="node-input-entityId">
+        <i class="fa fa-cube"></i>
+        <span data-i18n="ha-time.label.entity_id"></span>
+    </label>
+    <input type="text" id="node-input-entityId" />
+</div>
+
+<div class="form-row">
+    <label for="node-input-property">
+        <i class="fa fa-edit"></i>
+        <span data-i18n="ha-time.label.property"></span>
+    </label>
+    <input type="text" id="node-input-property" placeholder="state" />
+</div>
+
+<div class="form-row">
+    <label for="node-input-offset">
+        <i class="fa fa-clock-o"></i>
+        <span data-i18n="ha-time.label.offset"></span>
+    </label>
+    <input type="text" id="node-input-offset" style="width: 43%" />
+    <input type="hidden" id="node-input-offsetType" />
+    <select id="node-input-offsetUnits" style="width: 27%">
+        <option value="seconds" data-i18n="ha-time.label.seconds"></option>
+        <option value="minutes" data-i18n="ha-time.label.minutes"></option>
+        <option value="hours" data-i18n="ha-time.label.hours"></option>
+    </select>
+</div>
+
+<div class="form-row checkbox-option">
+    <label>
+        <input type="checkbox" id="node-input-randomOffset" /><span
+            data-i18n="ha-time.label.randomize_offset"
+        ></span>
+    </label>
+</div>
+
+<div class="form-row" id="entitiesFound"></div>
+
+<div class="form-row">
+    <label for="node-input-payload">
+        <i class="fa fa-cube"></i>
+        <span data-i18n="ha-time.label.payload"></span>
+    </label>
+    <input type="text" id="node-input-payload" />
+    <input type="hidden" id="node-input-payloadType" />
+</div>
+
+<div class="form-row checkbox-option">
+    <label>
+        <input type="checkbox" id="node-input-repeatDaily" /><span
+            data-i18n="ha-time.label.repeat_daily"
+        ></span>
+    </label>
+</div>

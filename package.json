@@ -36,6 +36,7 @@
       "server-state-changed": "nodes/events-state-changed/events-state-changed.js",
       "trigger-state": "nodes/trigger-state/trigger-state.js",
       "poll-state": "nodes/poll-state/poll-state.js",
+      "ha-time": "nodes/time/time.js",
       "ha-webhook": "nodes/webhook/webhook.js",
       "ha-zone": "nodes/zone/zone.js",
       "api-call-service": "nodes/call-service/call-service.js",
@@ -52,6 +53,7 @@
   "dependencies": {
     "axios": "0.21.0",
     "bonjour": "3.5.0",
+    "cron": "^1.8.2",
     "debug": "4.3.1",
     "flat": "5.0.2",
     "geolib": "3.3.1",
