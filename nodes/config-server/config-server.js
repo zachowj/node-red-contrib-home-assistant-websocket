@@ -2,6 +2,7 @@ const bonjour = require('bonjour')();
 const flatten = require('flat');
 const selectn = require('selectn');
 const uniq = require('lodash.uniq');
+const url = require('url');
 
 const BaseNode = require('../../lib/base-node');
 const HomeAssistant = require('../../lib/home-assistant');
@@ -184,8 +185,15 @@ module.exports = function (RED) {
         }
 
         async init() {
+            const baseUrl = this.credentials.host.trim();
+            const errorMessage = validateBaseUrl(baseUrl);
+            if (errorMessage) {
+                this.node.error(RED._(errorMessage, { url: baseUrl }));
+                return;
+            }
+
             this.homeAssistant = new HomeAssistant({
-                baseUrl: this.credentials.host,
+                baseUrl,
                 apiPass: this.credentials.access_token,
                 legacy: this.nodeConfig.legacy,
                 rejectUnauthorizedCerts: this.nodeConfig
@@ -328,4 +336,22 @@ module.exports = function (RED) {
             access_token: { type: 'text' },
         },
     });
+
+    function validateBaseUrl(baseUrl) {
+        if (!baseUrl) {
+            return 'config-server.errors.empty_base_url';
+        }
+
+        let parsedUrl;
+        try {
+            // eslint-disable-next-line no-new
+            parsedUrl = new url.URL(baseUrl);
+        } catch (e) {
+            return 'config-server.errors.invalid_base_url';
+        }
+
+        if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
+            return 'config-server.errors.invalid_protocol';
+        }
+    }
 };

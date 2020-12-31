@@ -1,0 +1,9 @@
+{
+  "config-server": {
+    "errors": {
+      "empty_base_url": "Home Assistant base URL needs to be set",
+      "invalid_base_url": "Invalid base URL for Home Assistant: [__url__]",
+      "invalid_protocol": "Home Assistnat base URL needs to begin with http:// or https://"
+    }
+  }
+}
