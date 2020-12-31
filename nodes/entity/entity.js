@@ -48,7 +48,10 @@ module.exports = function (RED) {
         setConnectionStatus(additionalText) {
             if (this.nodeConfig.entityType === 'switch') {
                 let status = this.getConnectionStatus();
-                if (this.connectionState === this.websocketClient.CONNECTED) {
+                if (
+                    this.websocketClient &&
+                    this.connectionState === this.websocketClient.CONNECTED
+                ) {
                     status = {
                         shape: this.isEnabled ? 'dot' : 'ring',
                         fill: 'blue',
