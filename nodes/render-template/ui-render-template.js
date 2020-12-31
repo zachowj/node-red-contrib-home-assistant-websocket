@@ -4,7 +4,7 @@ RED.nodes.registerType('api-render-template', {
     inputs: 1,
     outputs: 1,
     icon: 'ha-render-template.svg',
-    paletteLabel: 'get template',
+    paletteLabel: 'render template',
     label: function () {
         return this.name || `template: ${this.template || ''}`;
     },
