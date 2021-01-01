@@ -1,5 +1,20 @@
 <template>
     <div>
+        <p>
+            <label>
+                <input type="checkbox" v-model="replaceServerId" /> Replace Home
+                Assistant server id
+            </label>
+            <span v-if="replaceServerId">
+                with
+                <input
+                    type="text"
+                    v-model="serverId"
+                    placeholder="xxxxxxxx.xxxxx"
+                />
+            </span>
+        </p>
+
         <textarea
             v-model="before"
             placeholder="paste exported Node-RED flow here"
@@ -26,7 +41,11 @@ const haNodes = [
     'server-state-changed',
     'trigger-state',
     'poll-state',
+    'ha-time',
+    'ha-webhook',
+    'ha-zone',
     'api-call-service',
+    'ha-entity',
     'ha-fire-event',
     'api-current-state',
     'ha-get-entities',
@@ -41,6 +60,8 @@ export default {
         return {
             after: '',
             before: '',
+            replaceServerId: '',
+            serverId: '',
             showCopied: false,
             showError: false,
         };
@@ -66,12 +87,14 @@ export default {
                     continue;
                 }
                 if (haNodes.includes(type)) {
-                    delete json[i].server;
+                    json[i]['server'] = this.replaceServerId
+                        ? this.serverId
+                        : '';
                 }
 
-                ['lat', 'lon', 'latitude', 'longitude'].forEach(
-                    (ele) => delete json[i][ele]
-                );
+                ['lat', 'lon', 'latitude', 'longitude'].forEach((ele) => {
+                    if (json[i][ele]) json[i][ele] = '';
+                });
             }
             this.after = JSON.stringify(json);
         },
@@ -84,6 +107,18 @@ export default {
             setTimeout(() => {
                 this.showCopied = false;
             }, 1500);
+        },
+    },
+    mounted() {
+        console.log(localStorage.serverId);
+        if (localStorage.serverId) {
+            this.serverId = localStorage.serverId;
+        }
+    },
+    watch: {
+        serverId(newId) {
+            console.log(newId);
+            localStorage.serverId = newId;
         },
     },
 };
@@ -127,7 +162,7 @@ button:hover {
     opacity: 0;
 }
 
-span {
+span.error, span.copied {
     font-weight: 600;
     display: inline-block;
     font-size: 14px;
