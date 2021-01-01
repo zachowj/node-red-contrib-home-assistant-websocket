@@ -42,7 +42,7 @@ Post questions and follow the discussion about this recipe [here](https://github
 
 ![screenshot](./images/actionable-notifications-subflow-for-android_04.png)
 
-<<< @/examples/cookbook/actionable-notifications-subflow-for-android/use-case-01.json
+<<< @/examples/cookbook/actionable-notifications-subflow-for-android/use-case-02.json
 
 **Also see:**
 
