@@ -4,7 +4,11 @@ const selectn = require('selectn');
 const BaseNode = require('../../lib/base-node');
 const RenderTemplate = require('../../lib/mustache-context');
 
-const domainsNeedingArrays = ['homeassistant', 'input_datetime'];
+const domainsNeedingArrays = [
+    'homeassistant',
+    'input_datetime',
+    'input_number',
+];
 
 module.exports = function (RED) {
     const nodeOptions = {
