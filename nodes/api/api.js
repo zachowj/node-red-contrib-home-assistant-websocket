@@ -1,3 +1,5 @@
+const Joi = require('joi');
+
 const BaseNode = require('../../lib/base-node');
 const RenderTemplate = require('../../lib/mustache-context');
 
@@ -14,6 +16,80 @@ module.exports = function (RED) {
             location: {},
             locationType: {},
             responseType: {},
+        },
+        input: {
+            protocol: {
+                messageProp: 'payload.protocol',
+                configProp: 'protocol',
+                default: 'websocket',
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.string()
+                        .valid('websocket', 'http')
+                        .label('protocol'),
+                },
+            },
+            method: {
+                messageProp: 'payload.method',
+                configProp: 'method',
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.string().valid('get', 'post').label('method'),
+                },
+            },
+            path: {
+                messageProp: 'payload.path',
+                configProp: 'path',
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.string().allow('').label('path'),
+                },
+            },
+            data: {
+                messageProp: 'payload.data',
+                configProp: 'data',
+            },
+            dataType: {
+                messageProp: 'payload.dataType',
+                configProp: 'dataType',
+                default: 'json',
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.string()
+                        .valid('json', 'jsonata')
+                        .label('dataType'),
+                },
+            },
+            location: {
+                messageProp: 'payload.location',
+                configProp: 'location',
+                default: 'payload',
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.string().label('location'),
+                },
+            },
+            locationType: {
+                messageProp: 'payload.locationType',
+                configProp: 'locationType',
+                default: 'msg',
+                validation: {
+                    haltOnFail: true,
+                    schema: Joi.string()
+                        .valid('msg', 'flow', 'global', 'none')
+                        .label('locationType'),
+                },
+            },
+            responseType: {
+                messageProp: 'payload.responseType',
+                configProp: 'responseType',
+                default: 'json',
+                validation: {
+                    schema: Joi.string()
+                        .valid('json', 'text', 'arraybuffer')
+                        .label('responseType'),
+                },
+            },
         },
     };
     class ApiNode extends BaseNode {
@@ -134,10 +210,6 @@ module.exports = function (RED) {
                     );
                     node.setStatusFailed('API Error');
                 });
-        }
-
-        onClose(removed) {
-            // remove timer
         }
     }
 
