@@ -4,6 +4,8 @@ const selectn = require('selectn');
 const BaseNode = require('../../lib/base-node');
 const RenderTemplate = require('../../lib/mustache-context');
 
+const domainsNeedingArrays = ['homeassistant', 'input_datetime'];
+
 module.exports = function (RED) {
     const nodeOptions = {
         debug: true,
@@ -131,7 +133,7 @@ module.exports = function (RED) {
                 );
                 // homeassistant domain requires entity_id to be an array for multiple ids
                 if (
-                    apiDomain === 'homeassistant' &&
+                    domainsNeedingArrays.includes(apiDomain) &&
                     entityId.indexOf(',') !== -1
                 ) {
                     apiData.entity_id = entityId
