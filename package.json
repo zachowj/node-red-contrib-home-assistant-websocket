@@ -115,7 +115,8 @@
     "nyc": "^15.1.0",
     "postcss": "^8.1.10",
     "prettier": "^2.2.0",
-    "vuepress": "^1.7.1"
+    "vuepress": "^1.7.1",
+    "vuepress-plugin-code-copy": "^1.0.6"
   },
   "husky": {
     "hooks": {

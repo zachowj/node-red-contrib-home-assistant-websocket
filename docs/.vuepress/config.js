@@ -8,6 +8,7 @@ module.exports = {
         ['@vuepress/google-analytics', { ga: 'UA-155074503-1' }],
         ['@vuepress/plugin-back-to-top', true],
         '@vuepress/medium-zoom',
+        ['vuepress-plugin-code-copy', true],
     ],
     themeConfig: {
         repo: 'zachowj/node-red-contrib-home-assistant-websocket',
