@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.29.1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.29.0...v0.29.1) (2021-01-02)
+
+
+### Bug Fixes
+
+* **call-service:** input_datetime entity list needs to be an array for multiple entities ([ae53a73](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ae53a73a71532e54d68d8cba05903fb802a10c76)), closes [#323](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/323)
+* **call-service:** input_number requires entity list to be an array for multiple entities ([cf64bed](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/cf64bedb2cffe2f80887bb8e60d2e43b2b639109))
+
 ## [0.29.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.28.0...v0.29.0) (2021-01-02)
 
 
