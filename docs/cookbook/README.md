@@ -13,7 +13,7 @@ further educate yourself in the world of Home Automation with Node-RED.
 - [Expiration Date Monitor](./expiration-date-monitor.md)
 - [Using date and time entities to trigger flows](./using-date-and-time-entities-to-trigger-flows.md)
 - [Check if an entity was a certain state in the last 24 hours](./check-if-an-entity-was-turned-on-in-the-last-24-hours.md)
-- [Starting flow after Home Assistant reestart](./starting-flow-after-home-assistant-restart.md)
+- [Starting flow after Home Assistant restart](./starting-flow-after-home-assistant-restart.md)
 - [Holiday lights scheduler and demo mode for WLED](./holiday-lights-scheduler-and-demo-mode-for-wled.md)
 - [Actionable Notifications Subflow for Android](./actionable-notifications-subflow-for-android.md)
 
