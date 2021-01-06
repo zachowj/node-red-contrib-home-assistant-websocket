@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.29.2](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.29.1...v0.29.2) (2021-01-06)
+
+
+### Documentation
+
+* Update holiday lights export to include autogeneration of HA helpers ([ddb5741](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ddb57416b95f855c7853c99a68bb998bfc34bacb))
+* Update README.md ([#325](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/325)) ([9fe6023](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/9fe6023e4babd2f7d5761b3df3178604f62f28c8))
+
 ### [0.29.1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.29.0...v0.29.1) (2021-01-02)
 
 
