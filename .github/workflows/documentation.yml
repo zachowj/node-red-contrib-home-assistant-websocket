@@ -6,6 +6,7 @@ on:
       - dev
     paths:
       - "docs/**"
+      - "examples/**"
 
 jobs:
   build-deploy:
