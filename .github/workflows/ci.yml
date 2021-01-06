@@ -4,6 +4,14 @@ on:
   pull_request:
   push:
     branches: dev
+    paths:
+      - "docs/nodes/**"
+      - "examples/**"
+      - "lib/**"
+      - "nodes/**"
+      - "test/**"
+      - ".npmignore"
+      - "package*.json"
 
 jobs:
   build:
