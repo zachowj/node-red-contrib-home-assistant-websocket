@@ -15,7 +15,7 @@ RED.nodes.registerType('ha-fire-event', {
         server: { value: '', type: 'server', required: true },
         event: { value: '' },
         data: { value: '' },
-        dataType: { value: 'json' },
+        dataType: { value: 'jsonata' },
     },
     oneditprepare: function () {
         const node = this;
