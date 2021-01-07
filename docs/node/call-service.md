@@ -31,10 +31,14 @@ If `entity_id` exists in the data property it will have precedence over this val
 
 ### Data
 
-- Type: `JSON`
+- Type: `JSONata | JSON`
 - Accepts [Mustache Templates](/guide/mustache-templates.md) when data type is JSON
 
 JSON object to pass along.
+
+**Also see:**
+
+- [JSONata Guide](https://zachowj.github.io/node-red-contrib-home-assistant-websocket/guide/jsonata.html)
 
 ### Merge Context
 

@@ -19,7 +19,7 @@ RED.nodes.registerType('api-call-service', {
         service: { value: '' },
         entityId: { value: '' },
         data: { value: '' },
-        dataType: { value: 'json' },
+        dataType: { value: 'jsonata' },
         mergecontext: { value: null },
         output_location: { value: 'payload' },
         output_location_type: { value: 'none' },
