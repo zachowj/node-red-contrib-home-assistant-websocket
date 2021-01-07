@@ -17,7 +17,7 @@ RED.nodes.registerType('ha-api', {
         method: { value: 'get' },
         path: { value: '' },
         data: { value: '' },
-        dataType: { value: 'json' },
+        dataType: { value: 'jsonata' },
         location: { value: 'payload' },
         locationType: { value: 'msg' },
         responseType: { value: 'json' },
