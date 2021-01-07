@@ -40,6 +40,7 @@ RED.nodes.registerType('api-call-service', {
         const $serviceDataTableBody = $('tbody', $serviceDataDiv);
         const $unknownServiceDiv = $('.unknown-service', $serviceDataDiv);
         const $knownServiceDiv = $('.known-service', $serviceDataDiv);
+        const $loadExampleData = $('#example-data');
 
         $domainField.val(node.service_domain);
         $serviceField.val(node.service);
@@ -193,9 +194,11 @@ RED.nodes.registerType('api-call-service', {
                     );
                     if (tableRows) {
                         $('#service-data-table').show();
+                        $loadExampleData.show();
                         $serviceDataTableBody.html(tableRows);
                     } else {
                         $('#service-data-table').hide();
+                        $loadExampleData.hide();
                         $serviceDescDiv.append(
                             '<p>No fields documented by home-assistant<p>'
                         );
@@ -206,12 +209,14 @@ RED.nodes.registerType('api-call-service', {
                     // Hide service data fields and desc
                     $unknownServiceDiv.show();
                     $knownServiceDiv.hide();
+                    $loadExampleData.hide();
                     $('#service-data-desc .title').val('');
                 }
             } else {
                 // Hide service data fields and desc
                 $unknownServiceDiv.show();
                 $knownServiceDiv.hide();
+                $loadExampleData.hide();
                 $('#service-data-desc .title').val('');
             }
         }
@@ -274,6 +279,35 @@ RED.nodes.registerType('api-call-service', {
                 },
             ],
             typeField: '#node-input-output_location_type',
+        });
+
+        $loadExampleData.on('click', () => {
+            const fields = node.selectedService.fields;
+            const exampleData = Object.keys(fields).reduce((acc, key) => {
+                const val = fields[key].example;
+                if (key === 'entity_id') {
+                    $entityIdField.val(val);
+                    return acc;
+                }
+
+                if (val[0] === '[' && val[val.length - 1] === ']') {
+                    try {
+                        acc[key] = JSON.parse(val);
+                    } catch (e) {}
+                } else if (!isNaN(val)) {
+                    acc[key] = Number(val);
+                } else {
+                    if (val[0] === '"' && val[val.length - 1] === '"') {
+                        acc[key] = val.substring(1, val.length - 1);
+                    } else {
+                        acc[key] = val;
+                    }
+                }
+                return acc;
+            }, {});
+            if (Object.keys(exampleData).length) {
+                $data.typedInput('value', JSON.stringify(exampleData));
+            }
         });
     },
     oneditsave: function () {
