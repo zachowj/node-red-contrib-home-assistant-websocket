@@ -1,7 +1,16 @@
 const slugify = require('slugify');
 
 const EventsHaNode = require('../../lib/events-ha-node');
-const { INTEGRATION_UNLOADED } = require('../../lib/const');
+const {
+    INTEGRATION_UNLOADED,
+    STATUS_COLOR_YELLOW,
+    STATUS_SHAPE_RING,
+    STATUS_SHAPE_DOT,
+    STATUS_COLOR_BLUE,
+} = require('../../lib/const');
+
+const OUTPUT_TYPE_INPUT = 'input';
+const OUTPUT_TYPE_STATE_CHANGE = 'state change';
 
 module.exports = function (RED) {
     const nodeOptions = {
@@ -20,6 +29,9 @@ module.exports = function (RED) {
             outputLocationType: (nodeConfig) =>
                 nodeConfig.outputLocationType || 'none',
             inputOverride: (nodeConfig) => nodeConfig.inputOverride || 'allow',
+            outputOnStateChange: {},
+            outputPayload: {},
+            outputPayloadType: {},
         },
         input: {
             state: {
@@ -53,8 +65,10 @@ module.exports = function (RED) {
                     this.connectionState === this.websocketClient.CONNECTED
                 ) {
                     status = {
-                        shape: this.isEnabled ? 'dot' : 'ring',
-                        fill: 'blue',
+                        shape: this.isEnabled
+                            ? STATUS_SHAPE_DOT
+                            : STATUS_SHAPE_RING,
+                        fill: STATUS_COLOR_YELLOW,
                         text: `${
                             this.isEnabled ? 'on' : 'off'
                         } at: ${this.getPrettyDate()}`,
@@ -68,8 +82,8 @@ module.exports = function (RED) {
 
         setStatus(
             opts = {
-                shape: 'dot',
-                fill: 'blue',
+                shape: STATUS_SHAPE_DOT,
+                fill: STATUS_COLOR_YELLOW,
                 text: '',
             }
         ) {
@@ -117,6 +131,50 @@ module.exports = function (RED) {
             await this.websocketClient.send(payload);
             this.setStatusSuccess('Registered');
             this.registered = true;
+        }
+
+        onHaEventMessage(evt) {
+            super.onHaEventMessage(evt);
+            if (
+                evt.type === 'state_changed' &&
+                this.nodeConfig.outputOnStateChange
+            ) {
+                // fake a HA entity
+                const entity = {
+                    state: this.isEnabled,
+                };
+                let payload;
+                try {
+                    payload = this.getTypedInputValue(
+                        this.nodeConfig.outputPayload,
+                        this.nodeConfig.outputPayloadType,
+                        { entity }
+                    );
+                } catch (e) {
+                    this.setStatusFailed('Error');
+                    this.node.error(`JSONata Error: ${e.message}`, {});
+                    return;
+                }
+
+                const msg = {
+                    payload,
+                    outputType: OUTPUT_TYPE_STATE_CHANGE,
+                };
+                const opts = [msg, null];
+                const statusMessage = msg.payload || 'state change';
+                const status = {
+                    text: `${statusMessage} at: ${this.getPrettyDate()}`,
+                    fill: STATUS_COLOR_BLUE,
+                    shape: STATUS_SHAPE_DOT,
+                };
+                if (this.isEnabled) {
+                    this.send(opts);
+                } else {
+                    status.shape = STATUS_SHAPE_RING;
+                    this.send(opts.reverse());
+                }
+                this.setStatus(status);
+            }
         }
 
         onHaEventsClose() {
@@ -181,12 +239,22 @@ module.exports = function (RED) {
         }
 
         handleSwitchInput(message) {
+            if (typeof message.enable === 'boolean') {
+                this.isEnabled = message.enable;
+                this.updateHomeAssistant();
+                this.updateConnectionStatus();
+                return;
+            }
+
+            message.outputType = OUTPUT_TYPE_INPUT;
+            const output = [message, null];
+            const statusMessage = message.payload || OUTPUT_TYPE_INPUT;
             if (this.isEnabled) {
-                this.setStatusSuccess('input');
-                this.send([message, null]);
+                this.setStatusSuccess(statusMessage);
+                this.send(output);
             } else {
-                this.setStatusFailed('input');
-                this.send([null, message]);
+                this.setStatusFailed(statusMessage);
+                this.send(output.reverse());
             }
         }
 
@@ -221,7 +289,7 @@ module.exports = function (RED) {
             }
 
             try {
-                state = this.getValue(state, stateType, message);
+                state = this.getTypedInputValue(state, stateType, { message });
             } catch (e) {
                 this.setStatusFailed('Error');
                 this.node.error(`State: ${e.message}`, message);
@@ -245,11 +313,9 @@ module.exports = function (RED) {
                         remove: /[^A-Za-z0-9-_~ ]/,
                         lower: true,
                     });
-                    attr[property] = this.getValue(
-                        x.value,
-                        x.valueType,
-                        message
-                    );
+                    attr[property] = this.getValue(x.value, x.valueType, {
+                        message,
+                    });
                 });
             } catch (e) {
                 this.setStatusFailed('Error');
@@ -341,43 +407,6 @@ module.exports = function (RED) {
                 }
             }
             return attributes;
-        }
-
-        getValue(value, valueType, msg) {
-            let val;
-            switch (valueType) {
-                case 'msg':
-                case 'flow':
-                case 'global':
-                    val = this.getContextValue(valueType, value, msg);
-                    break;
-                case 'bool':
-                    val = value === 'true';
-                    break;
-                case 'json':
-                    try {
-                        val = JSON.parse(value);
-                    } catch (e) {
-                        // error parsing
-                    }
-                    break;
-                case 'date':
-                    val = Date.now();
-                    break;
-                case 'jsonata':
-                    try {
-                        val = this.evaluateJSONata(value, msg);
-                    } catch (e) {
-                        throw new Error(`JSONata Error: ${e.message}`);
-                    }
-                    break;
-                case 'num':
-                    val = Number(value);
-                    break;
-                default:
-                    val = value;
-            }
-            return val;
         }
 
         async loadPersistedData() {

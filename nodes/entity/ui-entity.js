@@ -39,6 +39,9 @@ RED.nodes.registerType('ha-entity', {
         outputLocation: { value: 'payload' },
         outputLocationType: { value: 'none' },
         inputOverride: { value: 'allow' },
+        outputOnStateChange: { value: false },
+        outputPayload: { value: '$entity().state ? "on": "off"' },
+        outputPayloadType: { value: 'jsonata' },
     },
     oneditprepare: function () {
         nodeVersion.check(this);
@@ -85,14 +88,25 @@ RED.nodes.registerType('ha-entity', {
             'flow',
             'global',
         ];
-        const switchRows = [
-            'state',
-            'attributes',
-            'output-location',
-            'input-override',
-            'resend',
-            'debug',
-        ];
+        const rows = {
+            binary_sensor: [
+                'state',
+                'attributes',
+                'output-location',
+                'input-override',
+                'resend',
+                'debug',
+            ],
+            sensor: [
+                'state',
+                'attributes',
+                'output-location',
+                'input-override',
+                'resend',
+                'debug',
+            ],
+            switch: ['output-on-state-change', 'output-payload'],
+        };
 
         haServer.init(node, '#node-input-server');
 
@@ -162,47 +176,73 @@ RED.nodes.registerType('ha-entity', {
             })
             .editableList('addItems', node.config);
 
+        const noneTypedInput = {
+            value: 'none',
+            label: 'none',
+            hasValue: false,
+        };
+        $('#node-input-outputLocation').typedInput({
+            types: ['msg', 'flow', 'global', noneTypedInput],
+            typeField: '#node-input-outputLocationType',
+        });
+
+        $('#node-input-outputPayload').typedInput({
+            types: ['str', 'num', 'bool', 'jsonata', 'date', noneTypedInput],
+            typeField: '#node-input-outputPayloadType',
+        });
+
         $('#node-input-entityType')
             .on('change', function () {
                 const value = $(this).val();
 
                 $('#node-input-state').typedInput('types', stateTypes[value]);
 
+                // Show/hide rows optional-row based on the rows map
+                $('#dialog-form .form-row').each(function () {
+                    const $this = $(this);
+                    const classes = $this.attr('class').split(' ');
+                    if (classes.includes('optional-row')) {
+                        const id = $this.attr('id');
+                        $this.toggle(
+                            rows[value].includes(id.replace(/-row$/, ''))
+                        );
+                    }
+                });
+
                 switch (value) {
-                    case 'binary_sensor':
-                    case 'sensor':
-                        node.outputs = 1;
-                        // Show all form-rows
-                        $('.form-row').show();
-                        // Show all config items
-                        $('#config').editableList('filter', null);
-                        break;
                     case 'switch':
                         node.outputs = 2;
-                        // create a comma delimited list of ids
-                        $(`#${switchRows.join('-row,#')}-row`).hide();
                         // filter config options
                         $('#config').editableList('filter', (data) =>
                             haConfigOptions[value].includes(data.property)
                         );
                         break;
+                    case 'binary_sensor':
+                    case 'sensor':
+                    default:
+                        node.outputs = 1;
+                        // Show all config items
+                        $('#config').editableList('filter', null);
+                        $('#node-input-outputOnStateChange')
+                            .prop('checked', false)
+                            .trigger('change');
+                        break;
                 }
             })
             .trigger('change');
 
-        $('#node-input-outputLocation').typedInput({
-            types: [
-                'msg',
-                'flow',
-                'global',
-                {
-                    value: 'none',
-                    label: 'None',
-                    hasValue: false,
-                },
-            ],
-            typeField: '#node-input-outputLocationType',
-        });
+        $('#node-input-outputOnStateChange')
+            .on('change', function () {
+                if (
+                    $('#node-input-entityType').val() === 'switch' &&
+                    $(this).prop('checked')
+                ) {
+                    $('#output-payload-row').show();
+                } else {
+                    $('#output-payload-row').hide();
+                }
+            })
+            .trigger('change');
     },
     oneditsave: function () {
         const node = this;

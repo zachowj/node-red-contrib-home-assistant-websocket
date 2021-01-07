@@ -1,0 +1,16 @@
+{
+  "ha-entity": {
+    "label": {
+      "name": "Name",
+      "server": "Server",
+      "type": "Type",
+      "state": "State",
+      "output_location": "Output Location",
+      "input_override": "Input Override",
+      "resend": "Resend state and attributes",
+      "on_state_change": "Output on state change",
+      "payload": "Payload",
+      "debug": "Show Debug Information"
+    }
+  }
+}
