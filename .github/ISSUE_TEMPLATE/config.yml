@@ -1,5 +1,10 @@
 blank_issues_enabled: false
+feature_request:
+  - name: Feature Request
+    url: https://github.com/zachowj/node-red-contrib-home-assistant-websocket/discussions/new
+    about: Suggest an idea for this project
+
 contact_links:
   - name: I have a question or need support
-    url: https://github.com/zachowj/node-red-contrib-home-assistant-websocket/discussions
+    url: https://github.com/zachowj/node-red-contrib-home-assistant-websocket/discussions/new
     about: Use Github Discussions to find support and ask general questions
