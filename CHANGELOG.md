@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.30.1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.30.0...v0.30.1) (2021-01-10)
+
+
+### Bug Fixes
+
+* **entity:** update getValue name change ([0531b86](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/0531b86f1f5fdef68dd96bcb203c42b3b4e406d6))
+
 ## [0.30.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.29.1...v0.30.0) (2021-01-10)
 
 
