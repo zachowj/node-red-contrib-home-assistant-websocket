@@ -2,6 +2,10 @@
 
 Sends a request to home assistant for any domain and service available (`light/turn_on`, `input_select/select_option`, etc..)
 
+::: tip Helpful Examples
+[Call Service Tips and Tricks](/guide/call-service.html)
+:::
+
 ## Configuration
 
 ### Domain <Badge text="required"/>
@@ -35,10 +39,6 @@ If `entity_id` exists in the data property it will have precedence over this val
 - Accepts [Mustache Templates](/guide/mustache-templates.md) when data type is JSON
 
 JSON object to pass along.
-
-**Also see:**
-
-- [JSONata Guide](https://zachowj.github.io/node-red-contrib-home-assistant-websocket/guide/jsonata.html)
 
 ### Merge Context
 

@@ -54,6 +54,7 @@ module.exports = {
                     children: [
                         '',
                         'first-automation',
+                        'call-service',
                         'conditionals',
                         'mustache-templates',
                         'jsonata',
