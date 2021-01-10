@@ -40,13 +40,13 @@ RED.nodes.registerType('ha-time', {
         haServer.autocomplete('entities', (entities) => {
             $('#node-input-entityId').autocomplete({
                 source: entities,
-                minLength: 0,
+                minLength: 2,
             });
         });
         haServer.autocomplete('properties', (properties) => {
             $('#node-input-property').autocomplete({
                 source: properties,
-                minLength: 0,
+                minLength: 2,
             });
         });
         exposeNode.init(this);
