@@ -32,6 +32,7 @@ RED.nodes.registerType('ha-time', {
         repeatDaily: { value: false },
         payload: { value: '$entity().state' },
         payloadType: { value: 'jsonata' },
+        debugenabled: { value: true },
     },
     oneditprepare: function () {
         const node = this;

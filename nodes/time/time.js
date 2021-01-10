@@ -85,6 +85,7 @@ module.exports = function (RED) {
                 // Doesn't match time format 00:00:00
                 if (digits === null) {
                     if (!isValidDate(dateString)) {
+                        this.debugToClient(`Invalid date`);
                         throw new Error(RED._('ha-time.errors.invalid_date'));
                     }
                     crontab = new Date(dateString);
@@ -95,6 +96,7 @@ module.exports = function (RED) {
                     crontab.setSeconds(digits.seconds);
                 }
             } catch (e) {
+                this.debugToClient(e.message);
                 this.setStatusFailed(e.message);
                 return;
             }
@@ -112,6 +114,7 @@ module.exports = function (RED) {
             if (this.nodeConfig.repeatDaily) {
                 crontab = `${crontab.getSeconds()} ${crontab.getMinutes()} ${crontab.getHours()} * * *`;
             } else if (crontab.getTime() < Date.now()) {
+                this.debugToClient(`date in the past`);
                 this.setStatusFailed(RED._('ha-time.status.in_the_past'));
                 return;
             }
