@@ -313,9 +313,13 @@ module.exports = function (RED) {
                         remove: /[^A-Za-z0-9-_~ ]/,
                         lower: true,
                     });
-                    attr[property] = this.getValue(x.value, x.valueType, {
-                        message,
-                    });
+                    attr[property] = this.getTypedInputValue(
+                        x.value,
+                        x.valueType,
+                        {
+                            message,
+                        }
+                    );
                 });
             } catch (e) {
                 this.setStatusFailed('Error');
