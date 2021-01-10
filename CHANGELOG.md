@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.30.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.29.1...v0.30.0) (2021-01-10)
+
+
+### Features
+
+* **call-service:** Add load example data button ([2ef840b](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/2ef840b4a0de49ff0df2bd2293cb2eadd9090faf))
+* **entity:** Add ability to have the switch entity output on state change ([703568e](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/703568e16094f2817ed53d0e4ecd592eae3dd331)), closes [#228](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/228)
+
+
+### Documentation
+
+* **cookbook:** Update vacation example ([f6080ca](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f6080ca3ad9cfed55bb3f8006ad972504de95a8a))
+* **guide:** Add call-service tips and tricks ([499ad96](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/499ad96068714bbab8511266e67c6750a1c73c83))
+* Update holiday lights export to include autogeneration of HA helpers ([ddb5741](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ddb57416b95f855c7853c99a68bb998bfc34bacb))
+* Update README.md ([#325](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/325)) ([9fe6023](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/9fe6023e4babd2f7d5761b3df3178604f62f28c8))
+
 ### [0.29.1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.29.0...v0.29.1) (2021-01-02)
 
 
