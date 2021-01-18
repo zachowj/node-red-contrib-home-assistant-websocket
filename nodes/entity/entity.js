@@ -338,7 +338,7 @@ module.exports = function (RED) {
                 state: state,
                 attributes: attr,
             };
-            this.saveNodeData('lastPayload', this.lastPayload);
+            this.storage.saveData('lastPayload', this.lastPayload);
             this.debugToClient(payload);
 
             this.websocketClient
@@ -414,12 +414,9 @@ module.exports = function (RED) {
         }
 
         async loadPersistedData() {
-            let data;
-            try {
-                data = await this.getNodeData();
-            } catch (e) {
+            const data = await this.storage.getData().catch((e) => {
                 this.error(e.message, {});
-            }
+            });
 
             if (!data) return;
 
