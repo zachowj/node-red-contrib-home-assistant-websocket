@@ -53,7 +53,10 @@ module.exports = function (RED) {
                 this.onStateChanged.bind(this)
             );
 
-            if (this.nodeConfig.offsetType === TYPEDINPUT_JSONATA) {
+            if (
+                this.nodeConfig.offsetType === TYPEDINPUT_JSONATA &&
+                this.nodeConfig.offset.length > 12
+            ) {
                 const ids = getEntitiesFromJsonata(this.nodeConfig.offset);
                 ids.forEach((id) => {
                     this.addEventClientListener(
@@ -230,7 +233,11 @@ module.exports = function (RED) {
                 try {
                     offset = this.evaluateJSONata(offset);
                 } catch (e) {
-                    this.node.error(RED._('ha-time.errors.jsonata_error'));
+                    this.node.error(
+                        RED._('ha-time.errors.jsonata_error', {
+                            message: e.message,
+                        })
+                    );
                     throw new Error('error');
                 }
             }
