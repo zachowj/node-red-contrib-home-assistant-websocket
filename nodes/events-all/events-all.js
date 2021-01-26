@@ -124,9 +124,7 @@ module.exports = function (RED) {
 
         updateEventList() {
             if (this.isConnected) {
-                this.websocketClient.subscribeEvents(
-                    this.nodeConfig.server.homeAssistant.eventsList
-                );
+                this.homeAssistant.subscribeEvents();
             }
         }
     }

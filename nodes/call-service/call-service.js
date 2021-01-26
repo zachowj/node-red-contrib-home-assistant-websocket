@@ -162,7 +162,7 @@ module.exports = function (RED) {
                 data: apiData,
             });
 
-            return this.websocketClient
+            return this.homeAssistant
                 .callService(apiDomain, apiService, apiData)
                 .then(() => {
                     this.setStatusSuccess(`${apiDomain}.${apiService} called`);

@@ -1,6 +1,11 @@
 module.exports = {
     root: true,
-    extends: ['standard', 'plugin:prettier/recommended'],
+    extends: [
+        'standard',
+        'plugin:prettier/recommended',
+        'plugin:mocha/recommended',
+        'plugin:chai-friendly/recommended',
+    ],
     parserOptions: { sourceType: 'module' },
     env: { browser: true, mocha: true },
     rules: {

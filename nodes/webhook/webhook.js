@@ -86,7 +86,7 @@ module.exports = function (RED) {
 
             if (!this.removeWebhook) {
                 this.debug(`Adding webhook to HA`);
-                this.removeWebhook = await this.websocketClient.client.subscribeMessage(
+                this.removeWebhook = await this.homeAssistant.subscribeMessage(
                     this.onEvent.bind(this),
                     {
                         type: 'nodered/webhook',

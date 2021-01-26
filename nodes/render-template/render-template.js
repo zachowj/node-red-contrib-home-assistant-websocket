@@ -79,7 +79,7 @@ module.exports = function (RED) {
 
             this.setStatusSending('Requesting');
 
-            return this.httpClient
+            return this.homeAssistant
                 .renderTemplate(template.value)
                 .then((res) => {
                     this.setContextValue(

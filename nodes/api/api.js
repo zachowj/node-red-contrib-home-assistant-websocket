@@ -152,8 +152,8 @@ module.exports = function (RED) {
 
                 this.debugToClient({ method, path, data });
 
-                apiCall = this.httpClient[`_${method}`].bind(
-                    this.httpClient,
+                apiCall = this.homeAssistant[method].bind(
+                    this.homeAssistant,
                     path,
                     data,
                     parsedMessage.responseType.value
@@ -173,8 +173,8 @@ module.exports = function (RED) {
 
                     this.debugToClient(json);
 
-                    apiCall = this.websocketClient.send.bind(
-                        this.websocketClient,
+                    apiCall = this.homeAssistant.send.bind(
+                        this.homeAssistant,
                         json
                     );
                 } catch (e) {

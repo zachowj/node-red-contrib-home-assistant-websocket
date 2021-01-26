@@ -98,7 +98,7 @@ module.exports = function (RED) {
 
             this.setStatusSending();
 
-            return this.httpClient
+            return this.homeAssistant
                 .fireEvent(eventType, eventData)
                 .then(() => {
                     this.setStatusSuccess(eventType);

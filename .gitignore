@@ -11,3 +11,4 @@ _docker-volumes/
 ./package-lock.json
 *.log
 coverage
+.nyc_output

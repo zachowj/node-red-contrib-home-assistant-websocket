@@ -60,10 +60,7 @@ module.exports = function (RED) {
         setConnectionStatus(additionalText) {
             if (this.nodeConfig.entityType === 'switch') {
                 let status = this.getConnectionStatus();
-                if (
-                    this.websocketClient &&
-                    this.connectionState === this.websocketClient.CONNECTED
-                ) {
+                if (this.isConnected) {
                     status = {
                         shape: this.isEnabled
                             ? STATUS_SHAPE_DOT
@@ -96,7 +93,7 @@ module.exports = function (RED) {
                 return;
             }
 
-            if (this.websocketClient.integrationVersion === 0) {
+            if (!this.isIntegrationLoaded) {
                 this.error(this.integrationErrorMessage);
                 this.setStatusFailed('Error');
                 return;
@@ -128,7 +125,7 @@ module.exports = function (RED) {
             this.debugToClient(payload);
 
             this.debug(`Registering ${this.nodeConfig.entityType} with HA`);
-            await this.websocketClient.send(payload);
+            await this.homeAssistant.send(payload);
             this.setStatusSuccess('Registered');
             this.registered = true;
         }
@@ -215,7 +212,7 @@ module.exports = function (RED) {
                 this.debug(
                     `Unregistering ${this.nodeConfig.entityType} from HA`
                 );
-                this.websocketClient.send(payload);
+                this.homeAssistant.send(payload);
             }
         }
 
@@ -269,7 +266,7 @@ module.exports = function (RED) {
                 return;
             }
 
-            if (this.websocketClient.integrationVersion === 0) {
+            if (!this.isIntegrationLoaded) {
                 this.error(this.integrationErrorMessage);
                 this.setStatusFailed('Error');
                 return false;
@@ -341,7 +338,7 @@ module.exports = function (RED) {
             this.storage.saveData('lastPayload', this.lastPayload);
             this.debugToClient(payload);
 
-            this.websocketClient
+            this.homeAssistant
                 .send(payload)
                 .then(() => {
                     this.setStatusSuccess(state);

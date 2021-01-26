@@ -106,13 +106,18 @@ module.exports = function (RED) {
 
             const apiRequest =
                 entityIdType.value === 'includes' && entityId
-                    ? this.httpClient.getHistory(startDate, null, endDate, {
+                    ? this.homeAssistant.getHistory(startDate, null, endDate, {
                           flatten: flatten,
                           include: new RegExp(entityId),
                       })
-                    : this.httpClient.getHistory(startDate, entityId, endDate, {
-                          flatten: flatten,
-                      });
+                    : this.homeAssistant.getHistory(
+                          startDate,
+                          entityId,
+                          endDate,
+                          {
+                              flatten: flatten,
+                          }
+                      );
 
             this.setStatusSending('Requesting');
 

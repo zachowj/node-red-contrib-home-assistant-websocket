@@ -1,18 +1,16 @@
 const bonjour = require('bonjour')();
 const flatten = require('flat');
-const selectn = require('selectn');
+const merge = require('lodash.merge');
 const uniq = require('lodash.uniq');
-const url = require('url');
 
-const BaseNode = require('../../lib/base-node');
-const HomeAssistant = require('../../lib/home-assistant');
+const createHomeAssistantClient = require('../../lib/HomeAssistant');
 const { INTEGRATION_NOT_LOADED } = require('../../lib/const');
 const { toCamelCase } = require('../../lib/utils');
 
 module.exports = function (RED) {
     const httpHandlers = {
         disableCache: function (req, res, next) {
-            if (this.nodeConfig.cacheJson === false) {
+            if (this.config.cacheJson === false) {
                 res.setHeader('Surrogate-Control', 'no-store');
                 res.setHeader(
                     'Cache-Control',
@@ -86,7 +84,7 @@ module.exports = function (RED) {
             res.json(uniqArray);
         },
         getIntegrationVersion: function (req, res, next) {
-            const client = this.websocket;
+            const client = this.homeAssistant;
             const data = { version: client ? client.integrationVersion : 0 };
 
             res.json(data);
@@ -110,22 +108,24 @@ module.exports = function (RED) {
         }, 3000);
     });
 
-    const nodeOptions = {
-        debug: true,
-        config: {
-            name: {},
-            legacy: {},
-            addon: {},
-            rejectUnauthorizedCerts: {},
-            ha_boolean: {},
-            connectionDelay: {},
-            cacheJson: {},
-        },
+    const nodeDefaults = {
+        name: {},
+        version: (nodeDef) => nodeDef.version || 0,
+        legacy: {},
+        addon: {},
+        rejectUnauthorizedCerts: {},
+        ha_boolean: {},
+        connectionDelay: {},
+        cacheJson: {},
     };
 
-    class ConfigServerNode extends BaseNode {
+    class ConfigServerNode {
         constructor(nodeDefinition) {
-            super(nodeDefinition, RED, nodeOptions);
+            RED.nodes.createNode(this, nodeDefinition);
+            this.node = this;
+
+            this.RED = RED;
+            this.config = merge({}, nodeDefaults, nodeDefinition);
 
             // For backwards compatibility prior to v0.0.4 when loading url and pass from flow.json
             if (nodeDefinition.url) {
@@ -142,7 +142,7 @@ module.exports = function (RED) {
                 'http://supervisor/core',
             ];
             if (
-                this.nodeConfig.addon ||
+                this.config.addon ||
                 addonBaseUrls.includes(this.credentials.host)
             ) {
                 this.credentials.host = 'http://supervisor/core';
@@ -150,7 +150,7 @@ module.exports = function (RED) {
 
                 this.RED.nodes.addCredentials(this.id, this.credentials);
             } else {
-                this.nodeConfig.connectionDelay = false;
+                this.config.connectionDelay = false;
             }
 
             const endpoints = {
@@ -182,27 +182,28 @@ module.exports = function (RED) {
             if (this.credentials.host && !this.homeAssistant) {
                 this.init();
             }
+
+            this.node.on('close', this.onClose.bind(this));
         }
 
         async init() {
-            const baseUrl = this.credentials.host.trim();
-            const errorMessage = validateBaseUrl(baseUrl);
-            if (errorMessage) {
-                this.node.error(RED._(errorMessage, { url: baseUrl }));
-                return;
+            try {
+                this.homeAssistant = createHomeAssistantClient(
+                    this.config,
+                    this.credentials
+                );
+
+                this.startListeners();
+
+                await this.homeAssistant.connect();
+            } catch (e) {
+                this.node.error(
+                    RED._(e.message, { base_url: this.credentials.host })
+                );
             }
+        }
 
-            this.homeAssistant = new HomeAssistant({
-                baseUrl,
-                apiPass: this.credentials.access_token,
-                legacy: this.nodeConfig.legacy,
-                rejectUnauthorizedCerts: this.nodeConfig
-                    .rejectUnauthorizedCerts,
-                connectionDelay: this.nodeConfig.connectionDelay,
-            });
-            this.http = this.homeAssistant.http;
-            this.websocket = this.homeAssistant.websocket;
-
+        startListeners() {
             // Setup event listeners
             const events = {
                 'ha_client:close': this.onHaEventsClose,
@@ -216,22 +217,17 @@ module.exports = function (RED) {
                 integration: this.onIntegrationEvent,
             };
             Object.entries(events).forEach(([event, callback]) =>
-                this.websocket.addListener(event, callback.bind(this))
+                this.homeAssistant.addListener(event, callback.bind(this))
             );
-            this.websocket.once(
+            this.homeAssistant.addListener(
                 'ha_client:connected',
-                this.registerEvents.bind(this)
+                this.registerEvents.bind(this),
+                { once: true }
             );
-
-            await this.homeAssistant.connect().catch((err) => {
-                this.websocket.connectionState = this.websocket.ERROR;
-                this.websocket.emit('updateNodeStatus');
-                this.node.error(err);
-            });
         }
 
         get nameAsCamelcase() {
-            return toCamelCase(this.nodeConfig.name);
+            return toCamelCase(this.config.name);
         }
 
         setOnContext(key, value) {
@@ -300,17 +296,12 @@ module.exports = function (RED) {
         }
 
         // Close WebSocket client on redeploy or node-RED shutdown
-        async onClose(removed) {
-            super.onClose();
-            const webSocketClient = selectn(
-                'homeAssistant.websocket.client',
-                this
-            );
-
-            if (webSocketClient) {
+        onClose(removed, done) {
+            if (this.HomeAssistant) {
                 this.log(`Closing connection to ${this.credentials.host}`);
-                webSocketClient.close();
+                this.HomeAssistant.close();
             }
+            done();
         }
 
         onIntegrationEvent(eventType) {
@@ -324,9 +315,7 @@ module.exports = function (RED) {
         }
 
         registerEvents() {
-            this.homeAssistant.websocket.subscribeEvents(
-                this.homeAssistant.eventsList
-            );
+            this.homeAssistant.subscribeEvents();
         }
     }
 
@@ -336,22 +325,4 @@ module.exports = function (RED) {
             access_token: { type: 'text' },
         },
     });
-
-    function validateBaseUrl(baseUrl) {
-        if (!baseUrl) {
-            return 'config-server.errors.empty_base_url';
-        }
-
-        let parsedUrl;
-        try {
-            // eslint-disable-next-line no-new
-            parsedUrl = new url.URL(baseUrl);
-        } catch (e) {
-            return 'config-server.errors.invalid_base_url';
-        }
-
-        if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
-            return 'config-server.errors.invalid_protocol';
-        }
-    }
 };
