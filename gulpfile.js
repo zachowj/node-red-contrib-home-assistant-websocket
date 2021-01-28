@@ -327,7 +327,7 @@ module.exports = {
         runNodemonAndBrowserSync,
         function watcher(done) {
             watch(
-                ['lib/ui/*', 'nodes/*/ui-*', 'docs/node/*.md'],
+                ['lib/ui/*', 'nodes/**/ui-*', 'docs/node/*.md'],
                 series(
                     'cleanFiles',
                     'buildEditorFiles',
@@ -336,7 +336,7 @@ module.exports = {
             );
             // only server side files modified restart node-red only
             watch(
-                ['nodes/*/*.js', '!nodes/*/ui-*.js', 'lib/*/*.js'],
+                ['nodes/**/*.js', '!nodes/**/ui-*.js', 'lib/**/*.js'],
                 restartNodemon
             );
             done();
