@@ -301,9 +301,7 @@ module.exports = function (RED) {
         }
 
         getEntity() {
-            return this.nodeConfig.server.homeAssistant.getStates(
-                this.nodeConfig.entityId
-            );
+            return this.homeAssistant.getStates(this.nodeConfig.entityId);
         }
     }
 

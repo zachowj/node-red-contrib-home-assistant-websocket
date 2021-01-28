@@ -80,7 +80,7 @@ module.exports = function (RED) {
                 return;
             }
 
-            const pollState = this.nodeConfig.server.homeAssistant.getStates(
+            const pollState = this.homeAssistant.getStates(
                 this.nodeConfig.entity_id
             );
             if (!pollState) {

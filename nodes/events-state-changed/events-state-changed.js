@@ -254,7 +254,7 @@ module.exports = function (RED) {
         }
 
         onDeploy() {
-            const entities = this.nodeConfig.server.homeAssistant.getStates();
+            const entities = this.homeAssistant.getStates();
             this.onStatesLoaded(entities);
         }
 

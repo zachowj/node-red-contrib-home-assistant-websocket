@@ -78,7 +78,7 @@ module.exports = function (RED) {
         }
 
         onDeploy() {
-            const entities = this.nodeConfig.server.homeAssistant.getStates();
+            const entities = this.homeAssistant.getStates();
             this.onStatesLoaded(entities);
         }
 
@@ -335,9 +335,7 @@ module.exports = function (RED) {
 
                 targetData.state = isTargetThisEntity
                     ? triggerEvent
-                    : this.nodeConfig.server.homeAssistant.getStates(
-                          targetData.entityid
-                      );
+                    : this.homeAssistant.getStates(targetData.entityid);
 
                 if (
                     !isTargetThisEntity &&

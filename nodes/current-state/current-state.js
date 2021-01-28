@@ -64,7 +64,7 @@ module.exports = function (RED) {
                 return;
             }
 
-            const entity = config.server.homeAssistant.getStates(entityId);
+            const entity = this.homeAssistant.getStates(entityId);
             if (!entity) {
                 this.node.error(
                     `Entity could not be found in cache for entity_id: ${entityId}`,

@@ -308,9 +308,7 @@ module.exports = function (RED) {
                 this.timeoutId = setTimeout(() => {
                     const state = Object.assign(
                         {},
-                        this.nodeConfig.server.homeAssistant.getStates(
-                            config.entityId
-                        )
+                        this.homeAssistant.getStates(config.entityId)
                     );
 
                     state.timeSinceChangedMs =
@@ -336,7 +334,7 @@ module.exports = function (RED) {
                 config.checkCurrentState === true &&
                 config.entityIdFilterType === 'exact'
             ) {
-                const currentState = this.nodeConfig.server.homeAssistant.getStates(
+                const currentState = this.homeAssistant.getStates(
                     config.entityId
                 );
 

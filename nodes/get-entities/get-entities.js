@@ -128,7 +128,7 @@ module.exports = function (RED) {
                 return;
             }
 
-            const states = this.nodeConfig.server.homeAssistant.getStates();
+            const states = this.homeAssistant.getStates();
             if (!states) {
                 this.node.warn(
                     'local state cache missing sending empty payload'

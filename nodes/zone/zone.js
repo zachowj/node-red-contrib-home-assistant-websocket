@@ -83,7 +83,7 @@ module.exports = function (RED) {
 
         getZones() {
             const node = this;
-            const entities = this.nodeConfig.server.homeAssistant.getStates();
+            const entities = this.homeAssistant.getStates();
             const zones = [];
             for (const entityId in entities) {
                 if (node.nodeConfig.zones.includes(entityId)) {
