@@ -129,7 +129,7 @@ function createRoutes(RED) {
 
     RED.httpAdmin.get('/homeassistant/discover', function (req, res) {
         const instances = [];
-        bonjour.find({ type: 'home-assistant' }, (service) => {
+        const browser = bonjour.find({ type: 'home-assistant' }, (service) => {
             instances.push({
                 label: service.name
                     ? `${service.name} (${service.txt.base_url})`
@@ -141,6 +141,7 @@ function createRoutes(RED) {
         // Add a bit of delay for all services to be discovered
         setTimeout(() => {
             res.json(instances);
+            browser.destroy();
         }, 3000);
     });
 }
