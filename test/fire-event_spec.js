@@ -1,3 +1,4 @@
+const expect = require('chai').expect;
 const helper = require('node-red-node-test-helper');
 
 const fireEvent = require('../src/index');
@@ -18,7 +19,7 @@ describe('fire-event node', function () {
         const flow = [{ id: 'n1', type: 'ha-fire-event', name: 'fire-event' }];
         helper.load(fireEvent, flow, function () {
             const n1 = helper.getNode('n1');
-            n1.should.have.property('name', 'fire-event');
+            expect(n1).to.have.property('name', 'fire-event');
             done();
         });
     });

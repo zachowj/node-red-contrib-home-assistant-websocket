@@ -1,3 +1,4 @@
+const expect = require('chai').expect;
 const helper = require('node-red-node-test-helper');
 
 const getHistory = require('../src/index');
@@ -20,7 +21,7 @@ describe('get-history node', function () {
         ];
         helper.load(getHistory, flow, function () {
             const n1 = helper.getNode('n1');
-            n1.should.have.property('name', 'get-history');
+            expect(n1).to.have.property('name', 'get-history');
             done();
         });
     });

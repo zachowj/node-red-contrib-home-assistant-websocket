@@ -1,3 +1,4 @@
+const expect = require('chai').expect;
 const helper = require('node-red-node-test-helper');
 
 const renderTemplate = require('../src/index');
@@ -20,7 +21,7 @@ describe('render-template node', function () {
         ];
         helper.load(renderTemplate, flow, function () {
             const n1 = helper.getNode('n1');
-            n1.should.have.property('name', 'render-template');
+            expect(n1).to.have.property('name', 'render-template');
             done();
         });
     });

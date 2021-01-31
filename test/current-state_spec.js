@@ -1,3 +1,4 @@
+const expect = require('chai').expect;
 const helper = require('node-red-node-test-helper');
 
 const currentState = require('../src/index');
@@ -20,7 +21,7 @@ describe('current-state node', function () {
         ];
         helper.load(currentState, flow, function () {
             const n1 = helper.getNode('n1');
-            n1.should.have.property('name', 'current-state');
+            expect(n1).to.have.property('name', 'current-state');
             done();
         });
     });

@@ -1,3 +1,4 @@
+const expect = require('chai').expect;
 const helper = require('node-red-node-test-helper');
 
 const api = require('../src/index');
@@ -18,7 +19,7 @@ describe('api node', function () {
         const flow = [{ id: 'n1', type: 'ha-api', name: 'API' }];
         helper.load(api, flow, function () {
             const n1 = helper.getNode('n1');
-            n1.should.have.property('name', 'API');
+            expect(n1).to.have.property('name', 'API');
             done();
         });
     });
