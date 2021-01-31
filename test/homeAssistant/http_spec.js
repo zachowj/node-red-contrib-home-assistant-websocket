@@ -1,8 +1,7 @@
-'use strict';
 const expect = require('chai').expect;
 const nock = require('nock');
 
-const HttpAPI = require('../../lib/HomeAssistant/Http');
+const HttpAPI = require('../homeAssistant/Http');
 
 describe('HTTP API', function () {
     const CREDS = {

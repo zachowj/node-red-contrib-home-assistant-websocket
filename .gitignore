@@ -1,14 +1,12 @@
 .vscode/
 .env
 node_modules
-nodes/**/*.html
-!nodes/**/ui-*.html
 _scratchpad
 .vscode/settings.js
 _scratchpad_flows
 .DS_Store
-_docker-volumes/
 ./package-lock.json
 *.log
 coverage
 .nyc_output
+dist/

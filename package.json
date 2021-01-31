@@ -11,8 +11,8 @@
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "docs:lint": "prettier --write docs/{.vuepress/**,**}/*.{js,md,html}",
-    "lint": "eslint . && prettier --check {docs,lib,nodes,script,test}/**/*.{css,js,md,html}",
-    "lint:fix": "eslint . --fix && prettier --write {docs,lib,nodes,script,test}/**/*.{css,js,md,html}",
+    "lint": "eslint . && prettier --check {docs,src,test,ui}/**/*.{css,js,md,html}",
+    "lint:fix": "eslint . --fix && prettier --write {docs,src,test,ui}/**/*.{css,js,md,html}",
     "prepublish": "gulp build",
     "test": "mocha test/**/*_spec.js",
     "test:watch": "mocha --watch --recursive"
@@ -31,29 +31,13 @@
   ],
   "node-red": {
     "nodes": {
-      "server": "nodes/config-server/config-server.js",
-      "server-events": "nodes/events-all/events-all.js",
-      "server-state-changed": "nodes/events-state-changed/events-state-changed.js",
-      "trigger-state": "nodes/trigger-state/trigger-state.js",
-      "poll-state": "nodes/poll-state/poll-state.js",
-      "ha-time": "nodes/time/time.js",
-      "ha-webhook": "nodes/webhook/webhook.js",
-      "ha-zone": "nodes/zone/zone.js",
-      "api-call-service": "nodes/call-service/call-service.js",
-      "ha-entity": "nodes/entity/entity.js",
-      "ha-fire-event": "nodes/fire-event/fire-event.js",
-      "api-current-state": "nodes/current-state/current-state.js",
-      "ha-get-entities": "nodes/get-entities/get-entities.js",
-      "api-get-history": "nodes/get-history/get-history.js",
-      "api-render-template": "nodes/render-template/render-template.js",
-      "ha-wait-until": "nodes/wait-until/wait-until.js",
-      "ha-api": "nodes/api/api.js"
+      "all": "dist/index.js"
     }
   },
   "dependencies": {
     "axios": "0.21.1",
     "bonjour": "3.5.0",
-    "cron": "^1.8.2",
+    "cron": "1.8.2",
     "debug": "4.3.1",
     "flat": "5.0.2",
     "geolib": "3.3.1",
@@ -71,6 +55,8 @@
     "ws": "7.4.2"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^17.1.0",
+    "@rollup/stream": "^2.0.0",
     "@vuepress/plugin-back-to-top": "^1.8.0",
     "@vuepress/plugin-google-analytics": "^1.8.0",
     "@vuepress/plugin-medium-zoom": "^1.8.0",
@@ -92,12 +78,15 @@
     "eslint-plugin-sort-requires": "^2.1.0",
     "eslint-plugin-standard": "^5.0.0",
     "gulp": "^4.0.2",
+    "gulp-better-rollup": "^4.0.1",
     "gulp-cheerio": "^1.0.0",
     "gulp-cli": "^2.3.0",
     "gulp-concat": "^2.6.1",
+    "gulp-flatmap": "^1.0.2",
     "gulp-htmlmin": "^5.0.1",
     "gulp-if": "^3.0.0",
     "gulp-markdownit": "^1.0.3",
+    "gulp-merge-json": "^2.1.1",
     "gulp-postcss": "^9.0.0",
     "gulp-sass": "^4.1.0",
     "gulp-string-replace": "^1.1.2",
@@ -119,6 +108,8 @@
     "nyc": "^15.1.0",
     "postcss": "^8.2.4",
     "prettier": "^2.2.1",
+    "rollup": "^2.38.1",
+    "vinyl-source-stream": "^2.0.0",
     "vuepress": "^1.8.0",
     "vuepress-plugin-code-copy": "^1.0.6"
   },
@@ -141,5 +132,9 @@
     "scripts": {
       "postchangelog": "prettier --write CHANGELOG.md"
     }
-  }
+  },
+  "files": [
+    "dist/**/*",
+    "examples/"
+  ]
 }

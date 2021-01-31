@@ -1,17 +1,20 @@
 const del = require('del');
-const fs = require('fs');
-const path = require('path');
 
 // General
 const concat = require('gulp-concat');
-const gulpIf = require('gulp-if');
+const flatmap = require('gulp-flatmap');
 const lazypipe = require('lazypipe');
 const merge = require('merge-stream');
+const mergeJson = require('gulp-merge-json');
 const wrap = require('gulp-wrap');
-const { src, dest, series, task, watch } = require('gulp');
+const { src, dest, series, task, watch, parallel } = require('gulp');
 
 const browserSync = require('browser-sync');
 const nodemon = require('nodemon');
+
+// Source
+const rollupStream = require('@rollup/stream');
+const source = require('vinyl-source-stream');
 
 // HTML
 const gulpHtmlmin = require('gulp-htmlmin');
@@ -35,7 +38,7 @@ const md = require('markdown-it')();
 // Constants
 const docsUrl =
     'https://zachowj.github.io/node-red-contrib-home-assistant-websocket';
-const editorFilePath = 'nodes';
+const editorFilePath = 'dist';
 const uiCssWrap = '<style><%= contents %></style>';
 const uiJsWrap = '<script type="text/javascript"><%= contents %></script>';
 const uiFormWrap =
@@ -50,7 +53,7 @@ const nodeMap = {
     'current-state': { doc: 'current-state', type: 'api-current-state' },
     entity: { doc: 'entity', type: 'ha-entity' },
     'events-all': { doc: 'events-all', type: 'server-events' },
-    'events-state-changed': {
+    'events-state': {
         doc: 'events-state',
         type: 'server-state-changed',
     },
@@ -68,13 +71,7 @@ const nodeMap = {
 
 let nodemonInstance;
 let browserSyncInstance;
-let currentFolder;
-
-function getFolders(dir) {
-    return fs.readdirSync(dir).filter(function (file) {
-        return fs.statSync(path.join(dir, file)).isDirectory();
-    });
-}
+let currentFilename;
 
 // Compile sass and wrap it
 const buildSass = lazypipe()
@@ -106,7 +103,7 @@ const buildForm = lazypipe()
     .pipe(() =>
         wrap(
             uiFormWrap,
-            { type: nodeMap[currentFolder].type },
+            { type: nodeMap[currentFilename].type },
             { variable: 'data' }
         )
     );
@@ -243,39 +240,105 @@ const buildHelp = lazypipe()
     .pipe(() =>
         wrap(
             uiHelpWrap,
-            { type: nodeMap[currentFolder].type },
+            { type: nodeMap[currentFilename].type },
             { variable: 'data' }
         )
     );
 
 task('buildEditorFiles', (done) => {
-    const folders = getFolders(editorFilePath);
-    if (folders.length === 0) return done();
+    const css = src(['ui/css/*.scss']).pipe(buildSass());
 
-    const tasks = folders.map((folder) => {
-        currentFolder = folder;
-        return src([
-            'lib/ui/*',
-            `nodes/${folder}/ui-*.js`,
-            `nodes/${folder}/ui-*.html`,
-            `docs/node/${nodeMap[folder].doc}.md`,
-        ])
-            .pipe(gulpIf((file) => file.extname === '.scss', buildSass()))
-            .pipe(gulpIf((file) => file.extname === '.js', buildJs()))
-            .pipe(gulpIf((file) => file.extname === '.html', buildForm()))
-            .pipe(gulpIf((file) => file.extname === '.md', buildHelp()))
-            .pipe(concat(folder + '.html'))
-            .pipe(dest(editorFilePath + '/' + folder));
-    });
+    const js = src(['ui/shared/*.js', 'ui/js/*.js'])
+        .pipe(concat('all.js'))
+        .pipe(buildJs());
 
-    return merge(tasks);
+    const html = src([
+        'ui/html/*.html',
+        `docs/node/*.md`,
+        `!docs/node/README.md`,
+    ]).pipe(
+        flatmap((stream, file) => {
+            const [filename, ext] = file.basename.split('.');
+
+            if (ext === 'md') {
+                const key = Object.keys(nodeMap).find(
+                    (i) => nodeMap[i].doc === filename
+                );
+                currentFilename = key;
+                return stream.pipe(buildHelp());
+            } else if (ext === 'html') {
+                currentFilename = filename;
+                return stream.pipe(buildForm());
+            }
+
+            throw Error(`Expecting md or html extension: ${file.basename}`);
+        })
+    );
+
+    return merge([css, js, html])
+        .pipe(concat('index.html'))
+        .pipe(dest(editorFilePath + '/'));
 });
+
+task('buildSource', () => {
+    const options = {
+        input: 'src/index.js',
+        output: {
+            dir: editorFilePath,
+            format: 'cjs',
+            exports: 'default',
+        },
+        plugins: [require('@rollup/plugin-commonjs')()],
+        external: [
+            'selectn',
+            'joi',
+            'lodash.merge',
+            'lodash.clonedeep',
+            'slugify',
+            'lodash',
+            'timestring',
+            'time-ago',
+            'cron',
+            'bonjour',
+            'flat',
+            'lodash.uniq',
+            'mustache',
+            'geolib',
+            'url',
+            'events',
+            'lowdb/adapters/FileAsync',
+            'lowdb',
+            'axios',
+            'debug',
+            'https',
+            'home-assistant-js-websocket',
+            'ws',
+        ],
+    };
+    return rollupStream(options)
+        .pipe(source('index.js'))
+        .pipe(dest(editorFilePath));
+});
+
+task('copyIcons', () => {
+    return src('icons/*').pipe(dest(`${editorFilePath}/icons`));
+});
+
+task('copyLocales', () => {
+    return src('locales/en-US/*')
+        .pipe(mergeJson({ fileName: 'index.json' }))
+        .pipe(dest(`${editorFilePath}/locales/en-US`));
+});
+
+task('copyAssets', parallel(['copyIcons', 'copyLocales']));
+
+task('buildAll', parallel(['buildEditorFiles', 'buildSource', 'copyAssets']));
 
 // Clean generated files
 task('cleanFiles', (done) => {
-    del.sync(['nodes/*/*.html', '!nodes/*/ui-*.html'], { onlyFiles: true });
+    del.sync(['dist']);
 
-    return done();
+    done();
 });
 
 // nodemon and browser-sync code modified from
@@ -319,15 +382,15 @@ function restartNodemonAndBrowserSync(done) {
 }
 
 module.exports = {
-    build: series('cleanFiles', 'buildEditorFiles'),
+    build: series('cleanFiles', 'buildAll'),
 
     start: series(
         'cleanFiles',
-        'buildEditorFiles',
+        'buildAll',
         runNodemonAndBrowserSync,
         function watcher(done) {
             watch(
-                ['lib/ui/*', 'nodes/**/ui-*', 'docs/node/*.md'],
+                ['ui/**/*', 'docs/node/*.md'],
                 series(
                     'cleanFiles',
                     'buildEditorFiles',
@@ -335,10 +398,7 @@ module.exports = {
                 )
             );
             // only server side files modified restart node-red only
-            watch(
-                ['nodes/**/*.js', '!nodes/**/ui-*.js', 'lib/**/*.js'],
-                restartNodemon
-            );
+            watch(['src/**/*.js'], series('buildSource', restartNodemon));
             done();
         }
     ),

@@ -1,3 +1,2 @@
 examples
-nodes/**/*.html
-!nodes/**/ui-*.html
+dist
