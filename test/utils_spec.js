@@ -1,5 +1,5 @@
 /* global should */
-const { getLocationData, getZoneData, parseTime } = require('../lib/utils');
+const { getLocationData, getZoneData, parseTime } = require('../src/lib/utils');
 
 describe('utils', function () {
     describe('getLocationData', function () {

@@ -1,6 +1,6 @@
 const helper = require('node-red-node-test-helper');
 
-const currentState = require('../nodes/current-state/current-state.js');
+const currentState = require('../src/index');
 
 helper.init(require.resolve('node-red'));
 

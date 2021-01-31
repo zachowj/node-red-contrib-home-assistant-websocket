@@ -1,6 +1,6 @@
 const helper = require('node-red-node-test-helper');
 
-const callService = require('../nodes/call-service/call-service.js');
+const callService = require('../src/index');
 
 helper.init(require.resolve('node-red'));
 

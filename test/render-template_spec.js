@@ -1,5 +1,6 @@
 const helper = require('node-red-node-test-helper');
-const renderTemplate = require('../nodes/render-template/render-template.js');
+
+const renderTemplate = require('../src/index');
 
 helper.init(require.resolve('node-red'));
 

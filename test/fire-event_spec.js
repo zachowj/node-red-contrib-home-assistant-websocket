@@ -1,6 +1,6 @@
 const helper = require('node-red-node-test-helper');
 
-const fireEvent = require('../nodes/fire-event/fire-event.js');
+const fireEvent = require('../src/index');
 
 helper.init(require.resolve('node-red'));
 

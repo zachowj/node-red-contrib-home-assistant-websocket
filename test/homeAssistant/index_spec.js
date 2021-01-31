@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
 
-const HomeAssistant = require('../../lib/HomeAssistant/HomeAssistant');
+const HomeAssistant = require('../../src/HomeAssistant/HomeAssistant');
 
 describe('HomeAssistant', function () {
     describe('getEntities', function () {
