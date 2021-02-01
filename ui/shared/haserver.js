@@ -23,15 +23,18 @@ const haServer = (function ($, RED) {
 
     function autocomplete(type, callback) {
         // If a server is selected populate drop downs
-        const selectedServer = $server.val();
-        if (node.server || (selectedServer && selectedServer !== '_ADD_')) {
-            serverId = node.server || selectedServer;
+        let selectedServerId = $server.val();
+        if (node.server || (selectedServerId && selectedServerId !== '_ADD_')) {
+            serverId = node.server || selectedServerId;
             getItems(type, callback);
         }
 
-        $server.change(() => {
+        $server.on('change', () => {
             serverId = $server.val();
-            getItems(type, callback);
+            if (serverId !== selectedServerId) {
+                selectedServerId = serverId;
+                getItems(type, callback);
+            }
         });
     }
 
