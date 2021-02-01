@@ -124,7 +124,7 @@ module.exports = class ConfigServer {
             this.node.log(`Connection closed to ${this.node.credentials.host}`);
         }
         this.setOnContext('isConnected', false);
-        this.node.setOnContext('isRunning', false);
+        this.setOnContext('isRunning', false);
     }
 
     onHaEventsRunning() {
