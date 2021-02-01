@@ -1,6 +1,6 @@
 RED.nodes.registerType('ha-get-entities', {
     category: 'home_assistant',
-    color: '#5BCBF7',
+    color: ha.nodeColors.haBlue,
     inputs: 1,
     outputs: 1,
     icon: 'ha-get-entities.svg',

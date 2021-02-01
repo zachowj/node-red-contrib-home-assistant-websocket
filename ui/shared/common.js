@@ -7,6 +7,7 @@ const ha = (function () {
         beta: '#77DD77',
         data: '#5BCBF7',
         event: '#399CDF',
+        haBlue: '#41BDF5',
     };
 
     return {

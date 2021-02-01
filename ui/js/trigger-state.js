@@ -1,6 +1,6 @@
 RED.nodes.registerType('trigger-state', {
     category: 'home_assistant',
-    color: '#399CDF',
+    color: ha.nodeColors.haBlue,
     inputs: 1,
     outputs: 2,
     outputLabels: function (index) {

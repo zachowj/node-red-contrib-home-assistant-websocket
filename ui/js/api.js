@@ -1,6 +1,6 @@
 RED.nodes.registerType('ha-api', {
     category: 'home_assistant',
-    color: '#7CDFFD',
+    color: ha.nodeColors.haBlue,
     inputs: 1,
     outputs: 1,
     icon: 'font-awesome/fa-paper-plane-o',

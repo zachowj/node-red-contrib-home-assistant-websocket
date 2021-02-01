@@ -1,6 +1,6 @@
 RED.nodes.registerType('api-current-state', {
     category: 'home_assistant',
-    color: '#5BCBF7',
+    color: ha.nodeColors.haBlue,
     inputs: 1,
     outputs: 1,
     outputLabels: nodeVersion.ifStateLabels,

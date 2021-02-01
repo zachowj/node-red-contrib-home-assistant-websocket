@@ -10,7 +10,7 @@ function generateId(length) {
 
 RED.nodes.registerType('ha-webhook', {
     category: 'home_assistant',
-    color: '#399CDF',
+    color: ha.nodeColors.haBlue,
     outputs: 1,
     outputLabels: '',
     icon: 'ha-webhook.svg',

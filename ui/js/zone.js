@@ -1,6 +1,6 @@
 RED.nodes.registerType('ha-zone', {
     category: 'home_assistant',
-    color: '#399CDF',
+    color: ha.nodeColors.haBlue,
     outputs: 1,
     icon: 'font-awesome/fa-map-marker',
     paletteLabel: 'zone',

@@ -1,6 +1,6 @@
 RED.nodes.registerType('server-events', {
     category: 'home_assistant',
-    color: '#399CDF',
+    color: ha.nodeColors.haBlue,
     defaults: {
         name: { value: '' },
         server: { value: '', type: 'server', required: true },

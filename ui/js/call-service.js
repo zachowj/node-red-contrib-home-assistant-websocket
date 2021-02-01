@@ -1,6 +1,6 @@
 RED.nodes.registerType('api-call-service', {
     category: 'home_assistant',
-    color: '#46B1EF',
+    color: ha.nodeColors.haBlue,
     inputs: 1,
     outputs: 1,
     icon: 'ha-call-service.svg',
