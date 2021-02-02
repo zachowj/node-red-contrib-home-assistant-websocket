@@ -1,3 +1,4 @@
+/* global RED: false, $: false, exposeNode: false, ha: false, haServer: false, nodeVersion: false */
 function generateId(length) {
     const possible =
         'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

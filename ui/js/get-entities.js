@@ -1,3 +1,4 @@
+/* global RED: false, $: false, ha: false, haServer: false, nodeVersion: false */
 RED.nodes.registerType('ha-get-entities', {
     category: 'home_assistant',
     color: ha.nodeColors.haBlue,

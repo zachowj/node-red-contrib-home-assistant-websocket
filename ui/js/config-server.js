@@ -1,3 +1,4 @@
+/* global RED: false, $: false */
 RED.nodes.registerType('server', {
     category: 'config',
     defaults: {

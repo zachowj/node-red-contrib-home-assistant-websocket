@@ -1,3 +1,4 @@
+/* global RED: false, $: false, ha: false, haServer: false, ifState: false, nodeVersion: false */
 RED.nodes.registerType('api-current-state', {
     category: 'home_assistant',
     color: ha.nodeColors.haBlue,

@@ -1,3 +1,4 @@
+/* global RED: false, $: false, exposeNode: false, ha: false, haServer: false, ifState: false, nodeVersion: false */
 RED.nodes.registerType('server-state-changed', {
     category: 'home_assistant',
     color: ha.nodeColors.haBlue,

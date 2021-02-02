@@ -1,3 +1,4 @@
+/* global RED: false, $: false, ha: false, haServer: false, nodeVersion: false */
 RED.nodes.registerType('ha-fire-event', {
     category: 'home_assistant',
     color: ha.nodeColors.haBlue,

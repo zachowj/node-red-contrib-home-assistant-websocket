@@ -12,14 +12,5 @@ module.exports = {
         'prettier/prettier': ['error'],
         'sort-requires/sort-requires': 2,
     },
-    globals: {
-        RED: 'readonly',
-        $: 'readonly',
-        exposeNode: 'readonly',
-        haServer: 'readonly',
-        ifState: 'readonly',
-        nodeVersion: 'readonly',
-        ha: 'readonly',
-    },
     plugins: ['sort-requires'],
 };
