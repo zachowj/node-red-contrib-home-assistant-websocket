@@ -74,13 +74,12 @@ function createWebsocketConfig(
 }
 
 function getBaseUrl(url) {
-    const baseUrl = url.trim();
-    const errorMessage = validateBaseUrl(baseUrl);
+    const errorMessage = validateBaseUrl(url);
     if (errorMessage) {
         throw new Error(errorMessage);
     }
 
-    return baseUrl;
+    return url.trim();
 }
 
 function validateBaseUrl(baseUrl) {
@@ -90,7 +89,6 @@ function validateBaseUrl(baseUrl) {
 
     let parsedUrl;
     try {
-        // eslint-disable-next-line no-new
         parsedUrl = new url.URL(baseUrl);
     } catch (e) {
         return 'config-server.errors.invalid_base_url';
