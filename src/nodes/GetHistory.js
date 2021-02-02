@@ -65,6 +65,15 @@ module.exports = class GetHistory extends BaseNode {
     }
 
     async onInput({ parsedMessage, message }) {
+        if (!this.homeAssistant) {
+            this.setStatusFailed('No server');
+            this.node.error(
+                'No valid Home Assistant server selected.',
+                message
+            );
+            return;
+        }
+
         let {
             startDate,
             endDate,
@@ -87,11 +96,6 @@ module.exports = class GetHistory extends BaseNode {
         relativeTime = relativeTime.value;
         flatten = flatten.value;
         const useRelativeTime = this.nodeConfig.useRelativeTime;
-
-        if (this.nodeConfig.server === null) {
-            this.node.error('No valid server selected.', message);
-            return;
-        }
 
         if (
             useRelativeTime ||

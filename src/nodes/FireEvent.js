@@ -58,6 +58,15 @@ module.exports = class FireEvent extends BaseNode {
     }
 
     onInput({ message, parsedMessage }) {
+        if (!this.homeAssistant) {
+            this.setStatusFailed('No server');
+            this.node.error(
+                'No valid Home Assistant server selected.',
+                message
+            );
+            return;
+        }
+
         const eventType = RenderTemplate(
             parsedMessage.event.value,
             message,

@@ -63,6 +63,15 @@ module.exports = class RenderTemplateNode extends BaseNode {
     }
 
     onInput({ parsedMessage, message }) {
+        if (!this.homeAssistant) {
+            this.setStatusFailed('No server');
+            this.node.error(
+                'No valid Home Assistant server selected.',
+                message
+            );
+            return;
+        }
+
         const {
             template,
             templateLocation,
@@ -70,11 +79,6 @@ module.exports = class RenderTemplateNode extends BaseNode {
             resultsLocation,
             resultsLocationType,
         } = parsedMessage;
-
-        if (this.nodeConfig.server === null) {
-            this.node.error('No valid server selected.', message);
-            return;
-        }
 
         this.setStatusSending('Requesting');
 
