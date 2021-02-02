@@ -88,7 +88,7 @@ module.exports = class Time extends EventsHaNode {
             if (digits === null) {
                 if (!isValidDate(dateString)) {
                     this.debugToClient(`Invalid date`);
-                    throw new Error(RED._('ha-time.errors.invalid_date'));
+                    throw new Error(this.RED._('ha-time.errors.invalid_date'));
                 }
                 crontab = new Date(dateString);
             } else {
@@ -117,7 +117,7 @@ module.exports = class Time extends EventsHaNode {
             crontab = `${crontab.getSeconds()} ${crontab.getMinutes()} ${crontab.getHours()} * * *`;
         } else if (crontab.getTime() < Date.now()) {
             this.debugToClient(`date in the past`);
-            this.setStatusFailed(RED._('ha-time.status.in_the_past'));
+            this.setStatusFailed(this.RED._('ha-time.status.in_the_past'));
             return;
         }
 
@@ -125,7 +125,7 @@ module.exports = class Time extends EventsHaNode {
 
         const nextTime = this.formatDate(this.cronjob.nextDates().toDate());
         this.setStatus({
-            text: RED._('ha-time.status.next_at', { nextTime }),
+            text: this.RED._('ha-time.status.next_at', { nextTime }),
             fill: STATUS_COLOR_BLUE,
         });
     }
@@ -146,14 +146,14 @@ module.exports = class Time extends EventsHaNode {
             const sentTime = this.formatDate(now);
             const nextTime = this.formatDate(this.cronjob.nextDates().toDate());
             this.setStatus({
-                text: RED._('ha-time.status.sent_and_next', {
+                text: this.RED._('ha-time.status.sent_and_next', {
                     sentTime,
                     nextTime,
                 }),
                 fill: STATUS_COLOR_GREEN,
             });
         } else {
-            this.setStatusSuccess(RED._('ha-time.status.sent'));
+            this.setStatusSuccess(this.RED._('ha-time.status.sent'));
         }
         send(msg);
         done();
@@ -218,7 +218,7 @@ module.exports = class Time extends EventsHaNode {
                 str === 'unavailable'
                     ? 'ha-time.status.unavailable'
                     : 'ha-time.status.invalid_property';
-            throw new Error(RED._(errorMessage));
+            throw new Error(this.RED._(errorMessage));
         }
     }
 
@@ -231,7 +231,7 @@ module.exports = class Time extends EventsHaNode {
                 offset = this.evaluateJSONata(offset);
             } catch (e) {
                 this.node.error(
-                    RED._('ha-time.errors.jsonata_error', {
+                    this.RED._('ha-time.errors.jsonata_error', {
                         message: e.message,
                     })
                 );
@@ -244,8 +244,10 @@ module.exports = class Time extends EventsHaNode {
         );
 
         if (isNaN(offsetMs)) {
-            this.node.error(RED._('ha-time.errors.offset_nan', { offset }));
-            throw new Error(RED._('ha-time.status.error'));
+            this.node.error(
+                this.RED._('ha-time.errors.offset_nan', { offset })
+            );
+            throw new Error(this.RED._('ha-time.status.error'));
         }
 
         return Number(offsetMs);
@@ -281,7 +283,7 @@ module.exports = class Time extends EventsHaNode {
                     value = this.evaluateJSONata(val, {}, this.getEntity());
                 } catch (e) {
                     this.node.error(
-                        RED._('ha-time.errors.invalid_jsonata_payload')
+                        this.RED._('ha-time.errors.invalid_jsonata_payload')
                     );
                     value = this.getEntity().state;
                 }
