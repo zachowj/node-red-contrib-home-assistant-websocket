@@ -3,6 +3,7 @@ const haServer = (function ($, RED) {
     let $server;
     let serverId;
     let node;
+    let limitNotification = false;
 
     function setDefault() {
         let defaultServer;
@@ -46,14 +47,11 @@ const haServer = (function ($, RED) {
             .done((items) => {
                 callback(items);
             })
-            .fail((err) => {
-                const serverConfig = RED.nodes.node($server.val());
-
-                if (serverConfig && serverConfig.dirty === true) {
-                    RED.notify(
-                        `You probably haven't deployed since adding a server. Do that for autocomplete to work.\n${err.responseText}`,
-                        'error'
-                    );
+            .fail((jqxhr) => {
+                if (jqxhr.status === 503 && limitNotification === false) {
+                    limitNotification = true;
+                    RED.notify(node._('config-server.errors.server_deploy'));
+                    setTimeout(() => (limitNotification = false), 2000);
                 }
             });
     }

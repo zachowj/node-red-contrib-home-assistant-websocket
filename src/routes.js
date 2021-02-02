@@ -4,6 +4,7 @@ const selectn = require('selectn');
 const uniq = require('lodash.uniq');
 
 let getNode;
+let errorMessage;
 
 function disableCache(req, res, next) {
     const node = getNode(req.params.id);
@@ -24,7 +25,7 @@ function disableCache(req, res, next) {
 function getEntities(req, res, next) {
     const homeAssistant = getHomeAssistant(req.params.id);
     if (!homeAssistant) {
-        return res.json([]);
+        return res.status(503).send({ error: errorMessage });
     }
 
     const states = homeAssistant.getEntities();
@@ -34,7 +35,7 @@ function getEntities(req, res, next) {
 function getStates(req, res, next) {
     const homeAssistant = getHomeAssistant(req.params.id);
     if (!homeAssistant) {
-        return res.json([]);
+        return res.status(503).send({ error: errorMessage });
     }
 
     const states = homeAssistant.getStates();
@@ -44,7 +45,7 @@ function getStates(req, res, next) {
 function getServices(req, res, next) {
     const homeAssistant = getHomeAssistant(req.params.id);
     if (!homeAssistant) {
-        return res.json([]);
+        return res.status(503).send({ error: errorMessage });
     }
 
     const services = homeAssistant.getServices();
@@ -54,7 +55,7 @@ function getServices(req, res, next) {
 function getProperties(req, res, next) {
     const homeAssistant = getHomeAssistant(req.params.id);
     if (!homeAssistant) {
-        return res.json([]);
+        return res.status(503).send({ error: errorMessage });
     }
 
     let flat = [];
@@ -105,6 +106,7 @@ function getHomeAssistant(nodeId) {
 
 function createRoutes(RED) {
     getNode = RED.nodes.getNode;
+    errorMessage = RED._('config-server.errors.no_server_selected');
 
     const endpoints = {
         entities: getEntities,
