@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.30.2](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.30.1...v0.30.2) (2021-02-04)
+
+
+### Bug Fixes
+
+* Check for valid server before processing input ([a86a9a6](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a86a9a67ae734c3d82af069c9953706015ed22a8))
+* check for valid server config before using it ([d7b322b](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d7b322b8bc970f3504958f85514ab6995960d5c6))
+* destroy bonjour after finished using it ([eb2208f](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/eb2208fc2cb1a840c4aeeb29927c7962ab6c5f12))
+* only trim spaces of server url if it exists ([f9ce69f](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f9ce69fd3efbc841c9593d4ada852ce3a067a09f))
+* request autocomplete results only if server actually changes ([27dc32a](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/27dc32a5513e4719b4145081908a9970736d57d7))
+* **time:** Check jsonata length before attempting to find entity ids ([e3de59e](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/e3de59e804e39bed42539ea46a07a1e873287a5d))
+* use the correct RED ([03bb7a0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/03bb7a0cb44d920ffcf199528aa1b3d67687f776))
+
+
+### Documentation
+
+* **cookbook:** Correct spelling ([28928b4](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/28928b4c8a6571c247b043781db0691000c535ed))
+* **cookbook:** Update starting flow after HA reboot ([388b70a](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/388b70a148f8b1af0413347a6f13c5a1278512b5))
+
 ### [0.30.1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.30.0...v0.30.1) (2021-01-10)
 
 
