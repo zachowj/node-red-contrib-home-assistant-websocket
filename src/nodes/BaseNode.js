@@ -227,11 +227,15 @@ module.exports = class BaseNode {
             case 'bool':
                 return !!value;
             case 'habool': {
-                const haBoolean =
-                    this.nodeConfig.server.nodeConfig.ha_boolean === undefined
+                const booleanConfig = selectn(
+                    'nodeConfig.server.config.ha_boolean',
+                    this
+                );
+                const regex =
+                    booleanConfig === undefined
                         ? `^(y|yes|true|on|home|open)$`
-                        : `^(${this.nodeConfig.server.nodeConfig.ha_boolean})$`;
-                return new RegExp(haBoolean, 'i').test(value);
+                        : `^(${booleanConfig})$`;
+                return new RegExp(regex, 'i').test(value);
             }
             case 're':
                 return new RegExp(value);
