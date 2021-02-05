@@ -1,3 +1,5 @@
+$beta-color: #77dd77;
+
 #version-update {
     padding: 0.5em;
     margin-bottom: 1em;
@@ -83,9 +85,15 @@ li span.property-type {
     float: right;
 }
 
+.ha-beta-box {
+    @extend .ha-alert-box;
+    background-color: $beta-color;
+}
+
 .ha-alert-box {
     padding: 10px;
     margin-bottom: 10px;
+    border-radius: 4px;
 }
 
 .custom-block {

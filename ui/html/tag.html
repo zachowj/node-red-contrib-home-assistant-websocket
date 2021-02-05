@@ -1,0 +1,22 @@
+<div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+</div>
+
+<div class="form-row">
+    <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
+    <input type="text" id="node-input-server" />
+</div>
+
+<div id="no-tags-found" class="ui-state-error ha-alert-box">
+    <i class="fa fa-exclamation-triangle"></i> No tags found in Home Assistant
+</div>
+
+<button id="update-tag-list" class="red-ui-button red-ui-button-small">
+    <i class="fa fa-refresh"></i>
+    Update Tag List
+</button>
+
+<div class="form-row"><ol id="tags"></ol></div>
+
+<div class="form-row"><ol id="devices"></ol></div>

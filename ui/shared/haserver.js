@@ -56,9 +56,20 @@ const haServer = (function ($, RED) {
             });
     }
 
+    function getJSON(callback, type, { params = {} }) {
+        let url = `homeassistant/${type}/${serverId}`;
+        if (!$.isEmptyObject(params)) {
+            url += `?${$.param(params)}`;
+        }
+        $.getJSON(url).done((results) => {
+            callback(results);
+        });
+    }
+
     return {
         init,
         autocomplete,
+        getJSON,
     };
 
     // eslint-disable-next-line no-undef

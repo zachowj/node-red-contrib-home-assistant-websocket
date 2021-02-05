@@ -92,6 +92,26 @@ function getProperties(req, res, next) {
     res.json(uniqArray);
 }
 
+async function getTags(req, res) {
+    const homeAssistant = getHomeAssistant(req.params.id);
+    if (!homeAssistant) {
+        return res.status(503).send({ error: errorMessage });
+    }
+
+    if (req.query.update) {
+        await homeAssistant.updateTags();
+    }
+
+    const tags = homeAssistant.getTags().map((t) => {
+        return {
+            id: t.tag_id,
+            name: t.name,
+        };
+    });
+
+    res.json(tags);
+}
+
 function getIntegrationVersion(req, res, next) {
     const client = getHomeAssistant(req.params.id);
     const data = { version: client ? client.integrationVersion : 0 };
@@ -110,9 +130,10 @@ function createRoutes(RED) {
 
     const endpoints = {
         entities: getEntities,
-        states: getStates,
-        services: getServices,
         properties: getProperties,
+        services: getServices,
+        states: getStates,
+        tags: getTags,
     };
     Object.entries(endpoints).forEach(([key, value]) =>
         RED.httpAdmin.get(
@@ -143,7 +164,7 @@ function createRoutes(RED) {
         // Add a bit of delay for all services to be discovered
         setTimeout(() => {
             res.json(instances);
-            browser.destroy();
+            browser.stop();
         }, 3000);
     });
 }

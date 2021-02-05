@@ -1,6 +1,7 @@
 module.exports = Object.freeze({
     HA_EVENT_INTEGRATION: 'nodered',
     HA_EVENT_STATE_CHANGED: 'state_changed',
+    HA_EVENT_TAG_SCANNED: 'tag_scanned',
     HA_EVENTS: 'ha_events',
     INTEGRATION_EVENT: 'integration',
     INTEGRATION_LOADED: 'loaded',

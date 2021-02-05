@@ -1,3 +1,4 @@
+/* global $: false */
 // eslint-disable-next-line no-unused-vars
 const ha = (function () {
     const nodeColors = {
@@ -10,7 +11,36 @@ const ha = (function () {
         haBlue: '#41BDF5',
     };
 
+    const betaWarning = (id) => {
+        const alert = $.parseHTML(`
+            <div class="ui-state-error ha-beta-box">
+                Beta version: Config should be stable and hopefully not to many bugs.
+                <br />
+                Found an issue? Post it in
+                <a
+                    href="https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues"
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    issues
+                </a>
+                . Have questions or comments? Post them
+                <a
+                    href="https://github.com/zachowj/node-red-contrib-home-assistant-websocket/discussions/${id}"
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    here
+                </a>
+                .
+            </div>
+        `);
+
+        return alert;
+    };
+
     return {
+        betaWarning,
         nodeColors,
     };
 })();

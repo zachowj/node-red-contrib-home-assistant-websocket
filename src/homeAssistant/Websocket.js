@@ -28,6 +28,7 @@ const {
     STATE_ERROR,
     STATE_CONNECTED,
     STATE_CONNECTING,
+    HA_EVENT_TAG_SCANNED,
 } = require('../const');
 
 class Websocket {
@@ -37,6 +38,7 @@ class Websocket {
         this.connectionState = STATE_DISCONNECTED;
         this.states = {};
         this.services = {};
+        this.tags = null;
         this.statesLoaded = false;
         this.client = null;
         this.subscribedEvents = new Set();
@@ -143,10 +145,11 @@ class Websocket {
             (evt) => this.integrationEvent(evt),
             HA_EVENT_INTEGRATION
         );
-
+        await this.updateTagList();
         subscribeConfig(this.client, (config) =>
             this.onClientConfigUpdate(config)
         );
+
         subscribeEntities(this.client, (ent) => this.onClientStates(ent));
         subscribeServices(this.client, (ent) => this.onClientServices(ent));
     }
@@ -208,6 +211,7 @@ class Websocket {
 
         // Always need the state_changed event
         currentEvents.add(HA_EVENT_STATE_CHANGED);
+        currentEvents.add(HA_EVENT_TAG_SCANNED);
 
         const add = new Set(
             [...currentEvents].filter((x) => !this.subscribedEvents.has(x))
@@ -339,6 +343,12 @@ class Websocket {
         if (config.state === undefined || config.state === 'RUNNING') {
             this.onHomeAssistantRunning();
         }
+    }
+
+    async updateTagList() {
+        this.tags = await this.client.sendMessagePromise({
+            type: 'tag/list',
+        });
     }
 
     getIntegrationVersion() {

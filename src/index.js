@@ -10,6 +10,7 @@ const GetEntities = require('./nodes/GetEntities');
 const GetHistory = require('./nodes/GetHistory');
 const PollState = require('./nodes/PollState');
 const RenderTemplate = require('./nodes/RenderTemplate');
+const Tag = require('./nodes/Tag');
 const Time = require('./nodes/Time');
 const TriggerState = require('./nodes/TriggerState');
 const WaitUntil = require('./nodes/WaitUntil');
@@ -105,6 +106,13 @@ module.exports = function (RED) {
         this.controller = new RenderTemplate({ node: this, config, RED });
     }
 
+    function tagNode(config) {
+        RED.nodes.createNode(this, config);
+
+        this.config = config;
+        this.controller = new Tag({ node: this, config, RED });
+    }
+
     function timeNode(config) {
         RED.nodes.createNode(this, config);
 
@@ -146,20 +154,22 @@ module.exports = function (RED) {
             access_token: { type: 'text' },
         },
     });
+
+    RED.nodes.registerType('ha-api', apiNode);
+    RED.nodes.registerType('api-call-service', callServiceNode);
+    RED.nodes.registerType('api-current-state', currentStateNode);
+    RED.nodes.registerType('ha-entity', entityNode);
     RED.nodes.registerType('server-events', eventsAllNode);
     RED.nodes.registerType('server-state-changed', eventsStateNode);
-    RED.nodes.registerType('trigger-state', triggerStateNode);
-    RED.nodes.registerType('poll-state', pollStateNode);
-    RED.nodes.registerType('ha-time', timeNode);
-    RED.nodes.registerType('ha-webhook', webhookNode);
-    RED.nodes.registerType('ha-zone', zoneNode);
-    RED.nodes.registerType('api-call-service', callServiceNode);
-    RED.nodes.registerType('ha-entity', entityNode);
     RED.nodes.registerType('ha-fire-event', fireEventNode);
-    RED.nodes.registerType('api-current-state', currentStateNode);
     RED.nodes.registerType('ha-get-entities', getEntitiesNode);
     RED.nodes.registerType('api-get-history', getHistoryNode);
+    RED.nodes.registerType('poll-state', pollStateNode);
     RED.nodes.registerType('api-render-template', renderTemplateNode);
+    RED.nodes.registerType('trigger-state', triggerStateNode);
+    RED.nodes.registerType('ha-tag', tagNode);
+    RED.nodes.registerType('ha-time', timeNode);
     RED.nodes.registerType('ha-wait-until', waitUntilNode);
-    RED.nodes.registerType('ha-api', apiNode);
+    RED.nodes.registerType('ha-webhook', webhookNode);
+    RED.nodes.registerType('ha-zone', zoneNode);
 };

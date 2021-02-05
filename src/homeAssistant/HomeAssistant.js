@@ -1,4 +1,5 @@
 const debug = require('debug')('home-assistant');
+const selectn = require('selectn');
 
 const { STATE_CONNECTED } = require('../const');
 
@@ -64,6 +65,14 @@ class HomeAssistant {
         const entities = Object.keys(states).sort();
 
         return entities;
+    }
+
+    getTags() {
+        return selectn('websocket.tags', this) || [];
+    }
+
+    async updateTags() {
+        await this.websocket.updateTagList();
     }
 
     subscribeEvents() {
