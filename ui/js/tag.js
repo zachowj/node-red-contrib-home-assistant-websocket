@@ -46,7 +46,6 @@ RED.nodes.registerType('ha-tag', {
         $('#dialog-form').prepend(ha.betaWarning(348));
 
         const tagCountUpdate = () => {
-            window.console.log(tags.length);
             $('#no-tags-found').toggle(tags.length === 0);
         };
 
