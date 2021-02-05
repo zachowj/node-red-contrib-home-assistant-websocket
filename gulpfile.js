@@ -280,7 +280,7 @@ task('buildEditorFiles', (done) => {
         .pipe(dest(editorFilePath + '/'));
 });
 
-task('buildSource', () => {
+task('buildSourceFiles', () => {
     const options = {
         input: 'src/index.js',
         output: {
@@ -330,16 +330,36 @@ task('copyLocales', () => {
         .pipe(dest(`${editorFilePath}/locales/en-US`));
 });
 
-task('copyAssets', parallel(['copyIcons', 'copyLocales']));
+task('copyAssetFiles', parallel(['copyIcons', 'copyLocales']));
 
-task('buildAll', parallel(['buildEditorFiles', 'buildSource', 'copyAssets']));
+task(
+    'buildAll',
+    parallel(['buildEditorFiles', 'buildSourceFiles', 'copyAssetFiles'])
+);
 
 // Clean generated files
-task('cleanFiles', (done) => {
-    del.sync(['dist']);
+task('cleanAssetFiles', (done) => {
+    del.sync(['dist/icons', 'dist/locales']);
 
     done();
 });
+
+task('cleanSourceFiles', (done) => {
+    del.sync(['dist/index.js']);
+
+    done();
+});
+
+task('cleanEditorFiles', (done) => {
+    del.sync(['dist/index.html']);
+
+    done();
+});
+
+task(
+    'cleanAllFiles',
+    parallel(['cleanAssetFiles', 'cleanSourceFiles', 'cleanEditorFiles'])
+);
 
 // nodemon and browser-sync code modified from
 // https://github.com/connio/node-red-contrib-connio/blob/master/gulpfile.js
@@ -382,23 +402,26 @@ function restartNodemonAndBrowserSync(done) {
 }
 
 module.exports = {
-    build: series('cleanFiles', 'buildAll'),
+    build: series('cleanAllFiles', 'buildAll'),
 
     start: series(
-        'cleanFiles',
+        'cleanAllFiles',
         'buildAll',
         runNodemonAndBrowserSync,
         function watcher(done) {
             watch(
                 ['ui/**/*', 'docs/node/*.md'],
                 series(
-                    'cleanFiles',
+                    'cleanEditorFiles',
                     'buildEditorFiles',
                     restartNodemonAndBrowserSync
                 )
             );
             // only server side files modified restart node-red only
-            watch(['src/**/*.js'], series('buildSource', restartNodemon));
+            watch(
+                ['src/**/*.js'],
+                series('cleanSourceFiles', 'buildSourceFiles', restartNodemon)
+            );
             done();
         }
     ),
