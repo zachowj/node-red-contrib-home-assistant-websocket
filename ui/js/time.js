@@ -1,7 +1,7 @@
 /* global RED: false, $: false, exposeNode: false, ha: false, haServer: false, nodeVersion: false */
 RED.nodes.registerType('ha-time', {
     category: 'home_assistant',
-    color: ha.nodeColors.alpha,
+    color: ha.nodeColors.beta,
     outputs: 1,
     icon: 'font-awesome/fa-clock-o',
     paletteLabel: 'time',
@@ -52,7 +52,7 @@ RED.nodes.registerType('ha-time', {
             });
         });
         exposeNode.init(this);
-        $('#dialog-form').prepend(ha.alphaWarning(313));
+        $('#dialog-form').prepend(ha.betaWarning(313));
 
         $('#node-input-offset').typedInput({
             types: ['num', 'jsonata'],
