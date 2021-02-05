@@ -1,4 +1,7 @@
-$beta-color: #77dd77;
+$alpha-background-color: #e78bb9;
+$alpha-text-color: #702323;
+$beta-background-color: #77dd77;
+$beta-text-color: #853e3d;
 
 #version-update {
     padding: 0.5em;
@@ -85,15 +88,22 @@ li span.property-type {
     float: right;
 }
 
-.ha-beta-box {
-    @extend .ha-alert-box;
-    background-color: $beta-color;
-}
-
 .ha-alert-box {
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 4px;
+}
+
+.ha-alpha-box {
+    @extend .ha-alert-box;
+    color: $alpha-text-color;
+    background-color: $alpha-background-color;
+}
+
+.ha-beta-box {
+    @extend .ha-alert-box;
+    color: $beta-text-color;
+    background-color: $beta-background-color;
 }
 
 .custom-block {

@@ -52,6 +52,7 @@ RED.nodes.registerType('ha-time', {
             });
         });
         exposeNode.init(this);
+        $('#dialog-form').prepend(ha.alphaWarning(313));
 
         $('#node-input-offset').typedInput({
             types: ['num', 'jsonata'],

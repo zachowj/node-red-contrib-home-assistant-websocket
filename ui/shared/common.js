@@ -11,6 +11,34 @@ const ha = (function () {
         haBlue: '#41BDF5',
     };
 
+    const alphaWarning = (id) => {
+        const alert = $.parseHTML(`
+            <div class="ui-state-error ha-alpha-box">
+                Alpha version: At this point anything could change or not work.
+                <br />
+                Found an issue? Post it in
+                <a
+                    href="https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues"
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    issues
+                </a>
+                . Have questions or comments? Post them
+                <a
+                    href="https://github.com/zachowj/node-red-contrib-home-assistant-websocket/discussions/${id}"
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    here
+                </a>
+                .
+            </div>
+        `);
+
+        return alert;
+    };
+
     const betaWarning = (id) => {
         const alert = $.parseHTML(`
             <div class="ui-state-error ha-beta-box">
@@ -40,6 +68,7 @@ const ha = (function () {
     };
 
     return {
+        alphaWarning,
         betaWarning,
         nodeColors,
     };
