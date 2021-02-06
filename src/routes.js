@@ -22,49 +22,39 @@ function disableCache(req, res, next) {
     next();
 }
 
-function getEntities(req, res, next) {
-    const homeAssistant = getHomeAssistant(req.params.id);
+function setHomeAssistant(req, res, next) {
+    const homeAssistant = getHomeAssistant(req.params.serverId);
     if (!homeAssistant) {
         return res.status(503).send({ error: errorMessage });
     }
 
-    const states = homeAssistant.getEntities();
+    req.homeAssistant = homeAssistant;
+    next();
+}
+
+function getEntities(req, res) {
+    const states = req.homeAssistant.getEntities();
     res.json(states);
 }
 
-function getStates(req, res, next) {
-    const homeAssistant = getHomeAssistant(req.params.id);
-    if (!homeAssistant) {
-        return res.status(503).send({ error: errorMessage });
-    }
-
-    const states = homeAssistant.getStates();
+function getStates(req, res) {
+    const states = req.homeAssistant.getStates();
     res.json(states);
 }
 
-function getServices(req, res, next) {
-    const homeAssistant = getHomeAssistant(req.params.id);
-    if (!homeAssistant) {
-        return res.status(503).send({ error: errorMessage });
-    }
-
-    const services = homeAssistant.getServices();
+function getServices(req, res) {
+    const services = req.homeAssistant.getServices();
     res.json(services);
 }
 
-function getProperties(req, res, next) {
-    const homeAssistant = getHomeAssistant(req.params.id);
-    if (!homeAssistant) {
-        return res.status(503).send({ error: errorMessage });
-    }
-
+function getProperties(req, res) {
     let flat = [];
     let singleEntity = !!req.query.entityId;
 
-    let states = homeAssistant.getStates(req.query.entityId);
+    let states = req.homeAssistant.getStates(req.query.entityId);
 
     if (!states) {
-        states = homeAssistant.getStates();
+        states = req.homeAssistant.getStates();
         singleEntity = false;
     }
 
@@ -93,16 +83,11 @@ function getProperties(req, res, next) {
 }
 
 async function getTags(req, res) {
-    const homeAssistant = getHomeAssistant(req.params.id);
-    if (!homeAssistant) {
-        return res.status(503).send({ error: errorMessage });
-    }
-
     if (req.query.update) {
-        await homeAssistant.updateTags();
+        await req.homeAssistant.updateTags();
     }
 
-    const tags = homeAssistant.getTags().map((t) => {
+    const tags = req.homeAssistant.getTags().map((t) => {
         return {
             id: t.tag_id,
             name: t.name,
@@ -112,8 +97,8 @@ async function getTags(req, res) {
     res.json(tags);
 }
 
-function getIntegrationVersion(req, res, next) {
-    const client = getHomeAssistant(req.params.id);
+function getIntegrationVersion(req, res) {
+    const client = req.getHomeAssistant(req.params.id);
     const data = { version: client ? client.integrationVersion : 0 };
 
     res.json(data);
@@ -122,6 +107,24 @@ function getIntegrationVersion(req, res, next) {
 function getHomeAssistant(nodeId) {
     const node = getNode(nodeId);
     return selectn('controller.homeAssistant', node);
+}
+
+function findServers(req, res) {
+    const instances = [];
+    const browser = bonjour.find({ type: 'home-assistant' }, (service) => {
+        instances.push({
+            label: service.name
+                ? `${service.name} (${service.txt.base_url})`
+                : service.txt.base_url,
+            value: service.txt.base_url,
+        });
+    });
+
+    // Add a bit of delay for all services to be discovered
+    setTimeout(() => {
+        res.json(instances);
+        browser.stop();
+    }, 3000);
 }
 
 function createRoutes(RED) {
@@ -137,9 +140,10 @@ function createRoutes(RED) {
     };
     Object.entries(endpoints).forEach(([key, value]) =>
         RED.httpAdmin.get(
-            `/homeassistant/${key}/:id?`,
+            `/homeassistant/${key}/:serverId?`,
             RED.auth.needsPermission('server.read'),
             disableCache.bind(this),
+            setHomeAssistant,
             value.bind(this)
         )
     );
@@ -147,26 +151,11 @@ function createRoutes(RED) {
     RED.httpAdmin.get(
         `/homeassistant/version/:id`,
         RED.auth.needsPermission('server.read'),
-        getIntegrationVersion.bind(this)
+        setHomeAssistant,
+        getIntegrationVersion
     );
 
-    RED.httpAdmin.get('/homeassistant/discover', function (req, res) {
-        const instances = [];
-        const browser = bonjour.find({ type: 'home-assistant' }, (service) => {
-            instances.push({
-                label: service.name
-                    ? `${service.name} (${service.txt.base_url})`
-                    : service.txt.base_url,
-                value: service.txt.base_url,
-            });
-        });
-
-        // Add a bit of delay for all services to be discovered
-        setTimeout(() => {
-            res.json(instances);
-            browser.stop();
-        }, 3000);
-    });
+    RED.httpAdmin.get('/homeassistant/discover', findServers);
 }
 
 module.exports = {
