@@ -48,14 +48,11 @@ module.exports = class CallServiceNode extends BaseNode {
         }
     }
 
-    onInput({ message }) {
+    onInput({ message, send, done }) {
         const config = this.nodeConfig;
         if (!this.isConnected) {
             this.setStatusFailed('No Connection');
-            this.node.error(
-                'Call-Service attempted without connection to server.',
-                message
-            );
+            done('Call-Service attempted without connection to server.');
 
             return;
         }
@@ -90,7 +87,7 @@ module.exports = class CallServiceNode extends BaseNode {
                 );
             } catch (e) {
                 this.setStatusFailed('Error');
-                this.node.error(e.message, message);
+                done(e.message);
                 return;
             }
         } else {
@@ -106,11 +103,10 @@ module.exports = class CallServiceNode extends BaseNode {
         const apiData = this.getApiData(payload, configData);
 
         if (!apiDomain || !apiService) {
-            this.node.error(
+            done(
                 `call service node is missing api "${
                     !apiDomain ? 'domain' : 'service'
-                }" property, not found in config or payload`,
-                message
+                }" property, not found in config or payload`
             );
             this.setStatusFailed('Error');
             return;
@@ -170,14 +166,14 @@ module.exports = class CallServiceNode extends BaseNode {
                     config.output_location || 'payload',
                     message
                 );
-                this.send(message);
+                send(message);
+                done();
             })
             .catch((err) => {
-                this.node.error(
+                done(
                     `Call-service API error. ${
                         err.message ? ` Error Message: ${err.message}` : ''
-                    }`,
-                    message
+                    }`
                 );
                 this.setStatusFailed('API Error');
             });

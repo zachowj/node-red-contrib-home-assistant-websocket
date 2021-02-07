@@ -95,16 +95,13 @@ module.exports = class ApiNode extends BaseNode {
         super({ node, config, RED, nodeOptions });
     }
 
-    onInput({ message, parsedMessage }) {
+    onInput({ message, parsedMessage, send, done }) {
         const node = this.node;
         const config = this.nodeConfig;
 
         if (!this.isConnected) {
             this.setStatusFailed('No Connection');
-            node.error(
-                'API call attempted without connection to server.',
-                message
-            );
+            done('API call attempted without connection to server.');
 
             return;
         }
@@ -117,7 +114,7 @@ module.exports = class ApiNode extends BaseNode {
                 );
             } catch (e) {
                 this.setStatusFailed('Error');
-                node.error(e.message, message);
+                done(e.message);
                 return;
             }
         } else {
@@ -143,7 +140,7 @@ module.exports = class ApiNode extends BaseNode {
             ).replace(/^\/(?:api\/)?/, '');
 
             if (!path) {
-                node.error('HTTP request requires a valid path.', message);
+                done('HTTP request requires a valid path.');
                 this.setStatusFailed();
                 return;
             }
@@ -161,12 +158,11 @@ module.exports = class ApiNode extends BaseNode {
                 const json = JSON.parse(data);
 
                 if (!json.type) {
-                    node.error(
-                        `A WebSocket request requires a 'type' property in the data object.`,
-                        message
+                    done(
+                        `A WebSocket request requires a 'type' property in the data object.`
                     );
                     this.setStatusFailed();
-                    return null;
+                    return;
                 }
 
                 this.debugToClient(json);
@@ -176,7 +172,7 @@ module.exports = class ApiNode extends BaseNode {
                     json
                 );
             } catch (e) {
-                node.error(e.message, message);
+                done(e.message);
                 this.setStatusFailed();
                 return;
             }
@@ -195,14 +191,14 @@ module.exports = class ApiNode extends BaseNode {
                     message
                 );
 
-                this.send(message);
+                send(message);
+                done();
             })
             .catch((err) => {
-                node.error(
+                done(
                     'API Error. ' + err.message
                         ? `Error Message: ${err.message}`
-                        : '',
-                    message
+                        : ''
                 );
                 this.setStatusFailed('API Error');
             });

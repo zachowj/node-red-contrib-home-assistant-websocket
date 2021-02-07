@@ -62,13 +62,10 @@ module.exports = class RenderTemplateNode extends BaseNode {
         super({ node, config, RED, nodeOptions });
     }
 
-    onInput({ parsedMessage, message }) {
+    onInput({ parsedMessage, message, send, done }) {
         if (!this.homeAssistant) {
             this.setStatusFailed('No server');
-            this.node.error(
-                'No valid Home Assistant server selected.',
-                message
-            );
+            done('No valid Home Assistant server selected.');
             return;
         }
 
@@ -98,12 +95,13 @@ module.exports = class RenderTemplateNode extends BaseNode {
                     message
                 );
 
-                this.node.send(message);
+                send(message);
                 this.setStatusSuccess();
+                done();
             })
             .catch((err) => {
-                this.error(`Error get-template: ${err.message}`, message);
                 this.setStatusFailed('Error');
+                done(`Error get-template: ${err.message}`);
             });
     }
 };

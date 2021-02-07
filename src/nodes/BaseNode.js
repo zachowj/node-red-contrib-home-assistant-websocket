@@ -56,7 +56,11 @@ module.exports = class BaseNode {
         this.node.send(...arguments);
     }
 
-    sendSplit(message, data) {
+    sendSplit(message, data, send) {
+        if (!send) {
+            send = this.send;
+        }
+
         delete message._msgid;
         message.parts = {
             id: this.RED.util.generateId(),
@@ -70,7 +74,7 @@ module.exports = class BaseNode {
             message.payload = data.slice(pos, pos + 1)[0];
             message.parts.index = i;
             pos += 1;
-            this.send(this.RED.util.cloneMessage(message));
+            send(this.RED.util.cloneMessage(message));
         }
     }
 
@@ -535,14 +539,12 @@ const _eventHandlers = {
                 message
             );
 
-            this.onInput(
-                {
-                    parsedMessage,
-                    message,
-                },
+            this.onInput({
+                parsedMessage,
+                message,
                 send,
-                done
-            );
+                done,
+            });
         } catch (e) {
             if (e && e.isJoi) {
                 this.setStatusFailed('Error');

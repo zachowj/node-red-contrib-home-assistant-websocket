@@ -47,7 +47,7 @@ module.exports = class CurrentStateNode extends BaseNode {
     }
 
     /* eslint-disable camelcase */
-    onInput({ parsedMessage, message }) {
+    onInput({ parsedMessage, message, send, done }) {
         const config = this.nodeConfig;
         const entityId = RenderTemplate(
             config.blockInputOverrides === true
@@ -59,15 +59,14 @@ module.exports = class CurrentStateNode extends BaseNode {
         );
 
         if (config.server === null) {
-            this.node.error('No valid server selected.', message);
+            done('No valid server selected.');
             return;
         }
 
         const entity = this.homeAssistant.getStates(entityId);
         if (!entity) {
-            this.node.error(
-                `Entity could not be found in cache for entity_id: ${entityId}`,
-                message
+            done(
+                `Entity could not be found in cache for entity_id: ${entityId}`
             );
             return;
         }
@@ -113,21 +112,25 @@ module.exports = class CurrentStateNode extends BaseNode {
         if (config.version < 1) {
             if (config.halt_if && isIfState) {
                 this.setStatusFailed(entity.state);
-                this.send([null, message]);
+                send([null, message]);
+                done();
                 return;
             }
             this.setStatusSuccess(entity.state);
-            this.send([message, null]);
+            send([message, null]);
+            done();
             return;
         }
 
         if (config.halt_if && !isIfState) {
             this.setStatusFailed(entity.state);
-            this.send([null, message]);
+            send([null, message]);
+            done();
             return;
         }
 
         this.setStatusSuccess(entity.state);
-        this.send([message, null]);
+        send([message, null]);
+        done();
     }
 };

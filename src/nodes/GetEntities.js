@@ -119,20 +119,18 @@ module.exports = class GetEntities extends BaseNode {
     }
 
     /* eslint-disable camelcase */
-    onInput({ message, parsedMessage }) {
+    onInput({ message, parsedMessage, send, done }) {
         let noPayload = false;
 
         if (this.nodeConfig.server === null) {
-            this.node.error('No valid server selected.', message);
+            done('No valid server selected.');
             return;
         }
 
         const states = this.homeAssistant.getStates();
         if (!states) {
-            this.node.warn('local state cache missing sending empty payload');
-            return {
-                payload: {},
-            };
+            send({ payload: {} });
+            done('local state cache missing sending empty payload');
         }
 
         let entities;
@@ -167,7 +165,7 @@ module.exports = class GetEntities extends BaseNode {
             });
         } catch (e) {
             this.setStatusFailed('Error');
-            this.node.error(e.message, {});
+            done(e.message);
             return;
         }
 
@@ -185,7 +183,8 @@ module.exports = class GetEntities extends BaseNode {
                 }
 
                 this.setStatusSuccess(statusText);
-                this.sendSplit(message, entities);
+                this.sendSplit(message, entities, send);
+                done();
                 return;
             case 'random': {
                 if (entities.length === 0) {
@@ -222,7 +221,8 @@ module.exports = class GetEntities extends BaseNode {
 
         if (noPayload) {
             this.setStatusFailed('No Results');
-            return null;
+            done();
+            return;
         }
 
         this.setStatusSuccess(statusText);
@@ -234,6 +234,7 @@ module.exports = class GetEntities extends BaseNode {
             message
         );
 
-        this.node.send(message);
+        send(message);
+        done();
     }
 };

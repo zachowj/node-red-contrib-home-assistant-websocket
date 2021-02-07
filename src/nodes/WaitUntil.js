@@ -186,6 +186,7 @@ module.exports = class WaitUntilNode extends EventsNode {
             return;
         }
 
+        const { send, done } = this.savedConfig;
         clearTimeout(this.timeoutId);
         this.active = false;
         this.setStatusSuccess('true');
@@ -205,19 +206,21 @@ module.exports = class WaitUntilNode extends EventsNode {
                     this.savedMessage
                 );
             } catch (e) {
-                this.node.error(e, this.savedMessage);
+                done(e, this.savedMessage);
             }
         }
 
-        this.send([this.savedMessage, null]);
+        send([this.savedMessage, null]);
+        done();
     }
 
-    onInput({ message, parsedMessage }) {
+    onInput({ message, parsedMessage, send, done }) {
         clearTimeout(this.timeoutId);
 
         if (Object.prototype.hasOwnProperty.call(message, 'reset')) {
             this.node.status({ text: 'reset' });
             this.active = false;
+            done();
             return;
         }
 
@@ -268,8 +271,8 @@ module.exports = class WaitUntilNode extends EventsNode {
             try {
                 timeout = this.evaluateJSONata(timeout, message);
             } catch (e) {
-                this.node.error(`JSONata Error: ${e.message}`);
                 this.setStatusFailed('Error');
+                done(`JSONata Error: ${e.message}`);
                 return;
             }
             config.timeout = timeout;
@@ -277,8 +280,8 @@ module.exports = class WaitUntilNode extends EventsNode {
 
         // Validate if timeout is a number >= 0
         if (isNaN(timeout) || timeout < 0) {
-            this.node.error(`Invalid value for 'timeout': ${timeout}`);
             this.setStatusFailed('Error');
+            done(`Invalid value for 'timeout': ${timeout}`);
             return;
         }
 
@@ -316,12 +319,15 @@ module.exports = class WaitUntilNode extends EventsNode {
                 );
 
                 this.active = false;
-                this.send([null, message]);
                 this.setStatusFailed('timed out');
+                send([null, message]);
+                done();
             }, timeout);
         }
         this.setStatus({ text: statusText });
         this.savedConfig = config;
+        this.savedConfig.send = send;
+        this.savedConfig.done = done;
 
         // Only check current state when filter type is exact
         if (

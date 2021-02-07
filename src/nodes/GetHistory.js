@@ -64,13 +64,10 @@ module.exports = class GetHistory extends BaseNode {
         super({ node, config, RED, nodeOptions });
     }
 
-    async onInput({ parsedMessage, message }) {
+    async onInput({ parsedMessage, message, send, done }) {
         if (!this.homeAssistant) {
             this.setStatusFailed('No server');
-            this.node.error(
-                'No valid Home Assistant server selected.',
-                message
-            );
+            done('No valid Home Assistant server selected.');
             return;
         }
 
@@ -126,9 +123,8 @@ module.exports = class GetHistory extends BaseNode {
             message.enddate = endDate || null;
             message.entity_id = entityId || null;
         } catch (err) {
-            this.node.error(`Error get-history: ${err.message}`, message);
             this.setStatusFailed('Error');
-
+            done(`Error get-history: ${err.message}`);
             return;
         }
 
@@ -147,7 +143,7 @@ module.exports = class GetHistory extends BaseNode {
                     results = results[0];
                 }
 
-                this.sendSplit(message, results);
+                this.sendSplit(message, results, send);
                 break;
 
             case 'array':
@@ -159,10 +155,11 @@ module.exports = class GetHistory extends BaseNode {
                     message
                 );
 
-                this.node.send(message);
+                send(message);
                 break;
         }
 
         this.setStatusSuccess();
+        done();
     }
 };

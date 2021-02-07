@@ -57,13 +57,10 @@ module.exports = class FireEvent extends BaseNode {
         }
     }
 
-    onInput({ message, parsedMessage }) {
+    onInput({ message, parsedMessage, send, done }) {
         if (!this.homeAssistant) {
             this.setStatusFailed('No server');
-            this.node.error(
-                'No valid Home Assistant server selected.',
-                message
-            );
+            done('No valid Home Assistant server selected.');
             return;
         }
 
@@ -81,7 +78,7 @@ module.exports = class FireEvent extends BaseNode {
                 );
             } catch (e) {
                 this.setStatusFailed('Error');
-                this.node.error(e.message, message);
+                done(e.message);
                 return;
             }
         } else {
@@ -108,14 +105,14 @@ module.exports = class FireEvent extends BaseNode {
             .fireEvent(eventType, eventData)
             .then(() => {
                 this.setStatusSuccess(eventType);
-                this.send(message);
+                send(message);
+                done();
             })
             .catch((err) => {
-                this.node.error(
-                    `Error firing event, home assistant rest api error: ${err.message}`,
-                    message
-                );
                 this.setStatusFailed('API Error');
+                done(
+                    `Error firing event, home assistant rest api error: ${err.message}`
+                );
             });
     }
 };

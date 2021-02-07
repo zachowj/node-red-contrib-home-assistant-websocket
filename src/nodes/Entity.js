@@ -215,30 +215,28 @@ module.exports = class EntityNode extends EventsHaNode {
         }
     }
 
-    onInput({ parsedMessage, message }) {
+    onInput({ parsedMessage, message, send, done }) {
         switch (this.nodeConfig.entityType) {
             case 'binary_sensor':
             case 'sensor':
-                this.handleSensorInput({ parsedMessage, message });
+                this.handleSensorInput({ parsedMessage, message, send, done });
                 break;
             case 'switch':
-                this.handleSwitchInput(message);
+                this.handleSwitchInput({ message, send, done });
                 break;
             default:
                 this.setStatusFailed('Error');
-                this.node.error(
-                    `Invalid entity type: ${this.nodeConfig.entityType}`,
-                    message
-                );
+                done(`Invalid entity type: ${this.nodeConfig.entityType}`);
                 break;
         }
     }
 
-    handleSwitchInput(message) {
+    handleSwitchInput({ message, send, done }) {
         if (typeof message.enable === 'boolean') {
             this.isEnabled = message.enable;
             this.updateHomeAssistant();
             this.updateConnectionStatus();
+            done();
             return;
         }
 
@@ -247,28 +245,24 @@ module.exports = class EntityNode extends EventsHaNode {
         const statusMessage = message.payload || OUTPUT_TYPE_INPUT;
         if (this.isEnabled) {
             this.setStatusSuccess(statusMessage);
-            this.send(output);
+            send(output);
         } else {
             this.setStatusFailed(statusMessage);
-            this.send(output.reverse());
+            send(output.reverse());
         }
     }
 
-    handleSensorInput({ parsedMessage, message }) {
+    handleSensorInput({ parsedMessage, message, send, done }) {
         if (!this.isConnected) {
             this.setStatusFailed('No Connection');
-            this.node.error(
-                'Sensor update attempted without connection to server.',
-                message
-            );
-
+            done('Sensor update attempted without connection to server.');
             return;
         }
 
         if (!this.isIntegrationLoaded) {
-            this.node.error(this.integrationErrorMessage);
             this.setStatusFailed('Error');
-            return false;
+            done(this.integrationErrorMessage);
+            return;
         }
 
         let state = parsedMessage.state.value;
@@ -288,13 +282,13 @@ module.exports = class EntityNode extends EventsHaNode {
             state = this.getTypedInputValue(state, stateType, { message });
         } catch (e) {
             this.setStatusFailed('Error');
-            this.node.error(`State: ${e.message}`, message);
+            done(`State: ${e.message}`);
             return;
         }
 
         if (state === undefined) {
-            this.node.error('State must be defined.');
             this.setStatusFailed('Error');
+            done('State must be defined.');
             return;
         }
 
@@ -315,7 +309,7 @@ module.exports = class EntityNode extends EventsHaNode {
             });
         } catch (e) {
             this.setStatusFailed('Error');
-            this.node.error(`Attribute: ${e.message}`, message);
+            done(`Attribute: ${e.message}`);
             return;
         }
 
@@ -347,16 +341,16 @@ module.exports = class EntityNode extends EventsHaNode {
                     );
                 }
 
-                this.send(message);
+                send(message);
+                done();
             })
             .catch((err) => {
-                this.node.error(
+                this.setStatusFailed('API Error');
+                done(
                     `Entity API error. ${
                         err.message ? ` Error Message: ${err.message}` : ''
-                    }`,
-                    message
+                    }`
                 );
-                this.setStatusFailed('API Error');
             });
     }
 
