@@ -24,6 +24,7 @@ module.exports = class BaseNode {
         this.options = merge({}, DEFAULT_OPTIONS, nodeOptions);
         this._eventHandlers = _eventHandlers;
         this._internals = _internals;
+        this._enabled = true;
 
         this.nodeConfig = Object.entries(this.options.config).reduce(
             (acc, [key, value]) => {
@@ -208,6 +209,14 @@ module.exports = class BaseNode {
 
     get isIntegrationLoaded() {
         return this.isConnected && this.homeAssistant.isIntegrationLoaded;
+    }
+
+    get isEnabled() {
+        return this._enabled;
+    }
+
+    set isEnabled(value) {
+        this._enabled = !!value;
     }
 
     getPrettyDate() {

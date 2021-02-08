@@ -22,7 +22,6 @@ module.exports = class EventsHaNode extends EventsNode {
     constructor({ node, config, RED, nodeOptions = {} }) {
         nodeOptions = merge({}, DEFAULT_NODE_OPTIONS, nodeOptions);
         super({ node, config, RED, nodeOptions });
-        this.isEnabled = true;
         this.storage = new Storage({
             id: this.node.id,
             path: RED.settings.userDir,
