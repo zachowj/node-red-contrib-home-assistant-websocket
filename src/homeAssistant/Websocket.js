@@ -79,8 +79,7 @@ class Websocket {
                 }),
         }).catch((e) => {
             this.connectionState = STATE_ERROR;
-            this.emitEvent('ha_client:close');
-
+            this.emitEvent('ha_client:error');
             // Handle connection errors
             switch (e) {
                 case ERR_CANNOT_CONNECT:
@@ -96,7 +95,6 @@ class Websocket {
                 case ERR_INVALID_HTTPS_TO_HTTP:
                     throw new Error('ERR_INVALID_HTTPS_TO_HTTP');
             }
-
             throw e;
         });
 

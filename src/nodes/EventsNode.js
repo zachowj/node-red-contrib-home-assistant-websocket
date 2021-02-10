@@ -7,6 +7,7 @@ const {
     INTEGRATION_UNLOADED,
     INTEGRATION_NOT_LOADED,
 } = require('../const');
+const { EventsStatus } = require('../services/status');
 
 const DEFAULT_NODE_OPTIONS = {
     debug: false,
@@ -28,21 +29,21 @@ module.exports = class EventsNode extends BaseNode {
         this.registered = false;
         this.integrationErrorMessage =
             'Node-RED custom integration needs to be installed in Home Assistant for this node to function correctly.';
+        this.status = new EventsStatus({
+            node,
+            nodeState: this.isEnabled,
+            homeAssistant: this.homeAssistant,
+        });
 
         // Setup event listeners
         const events = {
             'ha_client:close': this.onHaEventsClose,
-            'ha_client:open': this.onHaEventsOpen,
             'ha_client:error': this.onHaEventsError,
-            'ha_client:connecting': this.onHaEventsConnecting,
-            updateNodeStatus: this.onHaEventsUpdateStatus,
             [INTEGRATION_EVENT]: this.onHaIntegration,
-            'ha_client:running': this.onHaEventsRunning,
         };
         Object.entries(events).forEach(([event, callback]) =>
             this.addEventClientListener(event, callback.bind(this))
         );
-        this.updateConnectionStatus();
     }
 
     addEventClientListener(event, handler) {
@@ -61,32 +62,16 @@ module.exports = class EventsNode extends BaseNode {
     }
 
     async onClose(removed) {
+        super.onClose(removed);
         this.removeEventClientListeners();
     }
 
     onHaEventsClose() {
         this.registered = false;
-        this.updateConnectionStatus();
-    }
-
-    onHaEventsOpen() {
-        this.updateConnectionStatus();
-    }
-
-    onHaEventsConnecting() {
-        this.updateConnectionStatus();
-    }
-
-    onHaEventsUpdateStatus() {
-        this.updateConnectionStatus();
-    }
-
-    onHaEventsRunning() {
-        this.updateConnectionStatus();
     }
 
     onHaEventsError(err) {
-        if (err.message) this.node.error(err.message);
+        if (err && err.message) this.node.error(err.message);
     }
 
     onHaIntegration(type) {
@@ -112,7 +97,7 @@ module.exports = class EventsNode extends BaseNode {
                 this.node.type === 'ha-entity'
             ) {
                 this.node.error(this.integrationErrorMessage);
-                this.setStatusFailed('Error');
+                this.status.setFailed('Error');
             }
             return false;
         }

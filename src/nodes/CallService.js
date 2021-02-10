@@ -36,9 +36,6 @@ module.exports = class CallServiceNode extends BaseNode {
         return v !== null && typeof v === 'object';
     }
 
-    // Disable connection status for api node
-    setConnectionStatus() {}
-
     tryToObject(v) {
         if (!v) return null;
         try {
@@ -51,7 +48,7 @@ module.exports = class CallServiceNode extends BaseNode {
     onInput({ message, send, done }) {
         const config = this.nodeConfig;
         if (!this.isConnected) {
-            this.setStatusFailed('No Connection');
+            this.status.setFailed('No Connection');
             done('Call-Service attempted without connection to server.');
 
             return;
@@ -86,7 +83,7 @@ module.exports = class CallServiceNode extends BaseNode {
                     this.evaluateJSONata(config.data, message)
                 );
             } catch (e) {
-                this.setStatusFailed('Error');
+                this.status.setFailed('Error');
                 done(e.message);
                 return;
             }
@@ -108,7 +105,7 @@ module.exports = class CallServiceNode extends BaseNode {
                     !apiDomain ? 'domain' : 'service'
                 }" property, not found in config or payload`
             );
-            this.setStatusFailed('Error');
+            this.status.setFailed('Error');
             return;
         }
 
@@ -147,7 +144,7 @@ module.exports = class CallServiceNode extends BaseNode {
             data: apiData || null,
         };
 
-        this.setStatusSending();
+        this.status.setSending();
 
         this.debugToClient({
             domain: apiDomain,
@@ -158,7 +155,7 @@ module.exports = class CallServiceNode extends BaseNode {
         return this.homeAssistant
             .callService(apiDomain, apiService, apiData)
             .then(() => {
-                this.setStatusSuccess(`${apiDomain}.${apiService} called`);
+                this.status.setSuccess(`${apiDomain}.${apiService} called`);
 
                 this.setContextValue(
                     msgPayload,
@@ -175,7 +172,7 @@ module.exports = class CallServiceNode extends BaseNode {
                         err.message ? ` Error Message: ${err.message}` : ''
                     }`
                 );
-                this.setStatusFailed('API Error');
+                this.status.setFailed('API Error');
             });
     }
 

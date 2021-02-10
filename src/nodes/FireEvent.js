@@ -45,9 +45,6 @@ module.exports = class FireEvent extends BaseNode {
         super({ node, config, RED, nodeOptions });
     }
 
-    // Disable connection status for api node
-    setConnectionStatus() {}
-
     tryToObject(v) {
         if (!v) return null;
         try {
@@ -59,7 +56,7 @@ module.exports = class FireEvent extends BaseNode {
 
     onInput({ message, parsedMessage, send, done }) {
         if (!this.homeAssistant) {
-            this.setStatusFailed('No server');
+            this.status.setFailed('No server');
             done('No valid Home Assistant server selected.');
             return;
         }
@@ -77,7 +74,7 @@ module.exports = class FireEvent extends BaseNode {
                     this.evaluateJSONata(parsedMessage.data.value, message)
                 );
             } catch (e) {
-                this.setStatusFailed('Error');
+                this.status.setFailed('Error');
                 done(e.message);
                 return;
             }
@@ -99,17 +96,17 @@ module.exports = class FireEvent extends BaseNode {
             data: eventData || null,
         };
 
-        this.setStatusSending();
+        this.status.setSending();
 
         return this.homeAssistant
             .fireEvent(eventType, eventData)
             .then(() => {
-                this.setStatusSuccess(eventType);
+                this.status.setSuccess(eventType);
                 send(message);
                 done();
             })
             .catch((err) => {
-                this.setStatusFailed('API Error');
+                this.status.setFailed('API Error');
                 done(
                     `Error firing event, home assistant rest api error: ${err.message}`
                 );

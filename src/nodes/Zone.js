@@ -33,7 +33,7 @@ module.exports = class Zone extends EventsHaNode {
         const zones = this.getValidZones(event.old_state, event.new_state);
 
         if (!zones.length) {
-            this.setStatusFailed(entityId);
+            this.status.setFailed(entityId);
             return;
         }
 
@@ -49,7 +49,7 @@ module.exports = class Zone extends EventsHaNode {
         const statusMessage = `${entityId} ${this.nodeConfig.event} ${zones
             .map((z) => z.entity_id)
             .join(',')}`;
-        this.setStatusSuccess(statusMessage);
+        this.status.setSuccess(statusMessage);
         this.send(msg);
     }
 

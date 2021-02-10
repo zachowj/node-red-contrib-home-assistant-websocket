@@ -111,25 +111,25 @@ module.exports = class CurrentStateNode extends BaseNode {
         // Handle version 0 'halt if' outputs
         if (config.version < 1) {
             if (config.halt_if && isIfState) {
-                this.setStatusFailed(entity.state);
+                this.status.setFailed(entity.state);
                 send([null, message]);
                 done();
                 return;
             }
-            this.setStatusSuccess(entity.state);
+            this.status.setSuccess(entity.state);
             send([message, null]);
             done();
             return;
         }
 
         if (config.halt_if && !isIfState) {
-            this.setStatusFailed(entity.state);
+            this.status.setFailed(entity.state);
             send([null, message]);
             done();
             return;
         }
 
-        this.setStatusSuccess(entity.state);
+        this.status.setSuccess(entity.state);
         send([message, null]);
         done();
     }

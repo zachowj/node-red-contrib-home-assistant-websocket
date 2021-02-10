@@ -52,14 +52,12 @@ module.exports = class TriggerState extends EventsHaNode {
         if (message === 'enable' || message.payload === 'enable') {
             this.isEnabled = true;
             this.storage.saveData('isEnabled', true);
-            this.updateConnectionStatus();
             this.updateHomeAssistant();
             return;
         }
         if (message === 'disable' || message.payload === 'disable') {
             this.isEnabled = false;
             this.storage.saveData('isEnabled', false);
-            this.updateConnectionStatus();
             this.updateHomeAssistant();
             return;
         }
@@ -142,17 +140,12 @@ module.exports = class TriggerState extends EventsHaNode {
             );
             const statusText = `${eventMessage.event.new_state.state}${
                 eventMessage.event_type === 'triggered' ? ' (triggered)' : ''
-            } at: ${this.getPrettyDate()}`;
+            }`;
 
             let outputs = this.getDefaultMessageOutputs(
                 constraintComparatorResults,
                 eventMessage
             );
-            let status = {
-                fill: 'green',
-                shape: 'dot',
-                text: statusText,
-            };
 
             // If a constraint comparator failed we're done, also if no custom outputs to look at
             if (
@@ -160,18 +153,17 @@ module.exports = class TriggerState extends EventsHaNode {
                 !this.nodeConfig.customoutputs.length
             ) {
                 if (constraintComparatorResults.failed.length) {
-                    status = {
-                        fill: 'red',
-                        shape: 'ring',
-                        text: statusText,
-                    };
+                    this.status.setFailed(statusText);
+                } else {
+                    this.status.setSuccess(statusText);
                 }
                 this.debugToClient(
                     'done processing sending messages: ',
                     outputs
                 );
-                this.node.status(status);
-                return this.send(outputs);
+
+                this.send(outputs);
+                return;
             }
 
             const customOutputsComparatorResults = this.getCustomOutputsComparatorResults(
@@ -184,7 +176,7 @@ module.exports = class TriggerState extends EventsHaNode {
 
             outputs = outputs.concat(customOutputMessages);
             this.debugToClient('done processing sending messages: ', outputs);
-            this.node.status(status);
+            this.status.setSuccess(statusText);
             this.send(outputs);
         } catch (e) {
             this.node.error(e);

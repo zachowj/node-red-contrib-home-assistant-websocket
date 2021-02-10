@@ -189,7 +189,7 @@ module.exports = class WaitUntilNode extends EventsNode {
         const { send, done } = this.savedConfig;
         clearTimeout(this.timeoutId);
         this.active = false;
-        this.setStatusSuccess('true');
+        this.status.setSuccess('true');
 
         if (
             this.savedConfig.entityLocationType !== 'none' &&
@@ -218,7 +218,7 @@ module.exports = class WaitUntilNode extends EventsNode {
         clearTimeout(this.timeoutId);
 
         if (Object.prototype.hasOwnProperty.call(message, 'reset')) {
-            this.node.status({ text: 'reset' });
+            this.status.setText('reset');
             this.active = false;
             done();
             return;
@@ -271,7 +271,7 @@ module.exports = class WaitUntilNode extends EventsNode {
             try {
                 timeout = this.evaluateJSONata(timeout, message);
             } catch (e) {
-                this.setStatusFailed('Error');
+                this.status.setFailed('Error');
                 done(`JSONata Error: ${e.message}`);
                 return;
             }
@@ -280,7 +280,7 @@ module.exports = class WaitUntilNode extends EventsNode {
 
         // Validate if timeout is a number >= 0
         if (isNaN(timeout) || timeout < 0) {
-            this.setStatusFailed('Error');
+            this.status.setFailed('Error');
             done(`Invalid value for 'timeout': ${timeout}`);
             return;
         }
@@ -319,12 +319,12 @@ module.exports = class WaitUntilNode extends EventsNode {
                 );
 
                 this.active = false;
-                this.setStatusFailed('timed out');
+                this.status.setFailed('timed out');
                 send([null, message]);
                 done();
             }, timeout);
         }
-        this.setStatus({ text: statusText });
+        this.status.setText(statusText);
         this.savedConfig = config;
         this.savedConfig.send = send;
         this.savedConfig.done = done;

@@ -6,6 +6,14 @@
       "invalid_protocol": "Home Assistnat base URL needs to begin with http:// or https://",
       "server_deploy": "Deploy a valid server config for autocomplete to show results.",
       "no_server_selected": "No server selected and deployed."
+    },
+    "status": {
+      "connected": "connected",
+      "connecting": "connecting",
+      "disabled": "DISABLED",
+      "disconnected": "disconnected",
+      "error": "error",
+      "running": "running"
     }
   }
 }

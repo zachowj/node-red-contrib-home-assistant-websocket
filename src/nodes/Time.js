@@ -14,9 +14,8 @@ const {
     TYPEDINPUT_JSONATA,
     TYPEDINPUT_NUM,
     TYPEDINPUT_STR,
-    STATUS_COLOR_BLUE,
-    STATUS_COLOR_GREEN,
 } = require('../const');
+const { STATUS_COLOR_GREEN } = require('../services/status');
 
 const DEFAULT_PROPERTY = 'state';
 
@@ -99,7 +98,7 @@ module.exports = class Time extends EventsHaNode {
             }
         } catch (e) {
             this.debugToClient(e.message);
-            this.setStatusFailed(e.message);
+            this.status.setFailed(e.message);
             return;
         }
 
@@ -117,17 +116,14 @@ module.exports = class Time extends EventsHaNode {
             crontab = `${crontab.getSeconds()} ${crontab.getMinutes()} ${crontab.getHours()} * * *`;
         } else if (crontab.getTime() < Date.now()) {
             this.debugToClient(`date in the past`);
-            this.setStatusFailed(this.RED._('ha-time.status.in_the_past'));
+            this.status.setFailed(this.RED._('ha-time.status.in_the_past'));
             return;
         }
 
         this.createCronjob(crontab);
 
         const nextTime = this.formatDate(this.cronjob.nextDates().toDate());
-        this.setStatus({
-            text: this.RED._('ha-time.status.next_at', { nextTime }),
-            fill: STATUS_COLOR_BLUE,
-        });
+        this.status.setText(this.RED._('ha-time.status.next_at', { nextTime }));
     }
 
     onInput(msg, send, done) {
@@ -145,7 +141,7 @@ module.exports = class Time extends EventsHaNode {
         if (this.nodeConfig.repeatDaily) {
             const sentTime = this.formatDate(now);
             const nextTime = this.formatDate(this.cronjob.nextDates().toDate());
-            this.setStatus({
+            this.status.set({
                 text: this.RED._('ha-time.status.sent_and_next', {
                     sentTime,
                     nextTime,
@@ -153,7 +149,7 @@ module.exports = class Time extends EventsHaNode {
                 fill: STATUS_COLOR_GREEN,
             });
         } else {
-            this.setStatusSuccess(this.RED._('ha-time.status.sent'));
+            this.status.setSuccess(this.RED._('ha-time.status.sent'));
         }
         send(msg);
         done();

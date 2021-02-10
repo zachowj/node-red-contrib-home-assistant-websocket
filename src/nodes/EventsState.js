@@ -107,7 +107,7 @@ module.exports = class EventsState extends EventsHaNode {
             timer = this.getTimerValue();
         } catch (e) {
             this.node.error(e.message);
-            this.setStatusFailed('Error');
+            this.status.setFailed('Error');
             return;
         }
         const validTimer = timer > 0;
@@ -143,9 +143,7 @@ module.exports = class EventsState extends EventsHaNode {
         const statusText = getWaitStatusText(timer, this.nodeConfig.forUnits);
         const timeout = getTimeInMilliseconds(timer, this.nodeConfig.forUnits);
 
-        this.node.status({
-            text: statusText,
-        });
+        this.status.setText(statusText);
 
         clearTimeout(this.topics[entityId].id);
         this.topics[entityId].active = true;
@@ -209,22 +207,22 @@ module.exports = class EventsState extends EventsHaNode {
         // ! Deprecated: Remove before 1.0
         if (config.version < 1) {
             if (config.haltIfState && condition) {
-                this.setStatusFailed(statusMessage);
+                this.status.setFailed(statusMessage);
                 this.send([null, msg]);
                 return;
             }
-            this.setStatusSuccess(statusMessage);
+            this.status.setSuccess(statusMessage);
             this.send([msg, null]);
             return;
         }
 
         if (config.haltIfState && !condition) {
-            this.setStatusFailed(statusMessage);
+            this.status.setFailed(statusMessage);
             this.send([null, msg]);
             return;
         }
 
-        this.setStatusSuccess(statusMessage);
+        this.status.setSuccess(statusMessage);
         this.send([msg, null]);
     }
 

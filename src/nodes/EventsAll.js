@@ -52,7 +52,7 @@ module.exports = class EventsAll extends EventsHaNode {
             topic: evt.event_type,
             payload: evt,
         });
-        this.setStatusSuccess(evt.event_type);
+        this.status.setSuccess(evt.event_type);
     }
 
     clientEvent(type, data) {
@@ -70,7 +70,7 @@ module.exports = class EventsAll extends EventsHaNode {
             });
 
             if (type === 'states_loaded' || type === 'services_loaded') {
-                this.setStatusSuccess(type);
+                this.status.setSuccess(type);
             }
         }
     }

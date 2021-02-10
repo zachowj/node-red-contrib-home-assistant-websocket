@@ -53,7 +53,7 @@ module.exports = class Webhook extends EventsNode {
             this.nodeConfig.headersLocation,
             message
         );
-        this.setStatusSuccess('Received');
+        this.status.setSuccess('Received');
         this.send(message);
     }
 
@@ -68,7 +68,7 @@ module.exports = class Webhook extends EventsNode {
             this.node.error(
                 'Node-RED custom integration has been removed from Home Assistant it is needed for this node to function.'
             );
-            this.setStatusFailed('Error');
+            this.status.setFailed('Error');
         }
     }
 
@@ -79,7 +79,7 @@ module.exports = class Webhook extends EventsNode {
 
         if (!this.nodeConfig.webhookId) {
             this.node.error(this.integrationErrorMessage);
-            this.setStatusFailed('Error');
+            this.status.setFailed('Error');
             return;
         }
 
@@ -96,7 +96,7 @@ module.exports = class Webhook extends EventsNode {
                 { resubscribe: false }
             );
         }
-        this.setStatusSuccess('Registered');
+        this.status.setSuccess('Registered');
         this.registered = true;
     }
 

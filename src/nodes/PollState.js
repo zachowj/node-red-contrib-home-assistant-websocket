@@ -86,11 +86,9 @@ module.exports = class PollState extends EventsHaNode {
                 `could not find state with entity_id "${this.nodeConfig.entity_id}"`,
                 {}
             );
-            this.node.status({
-                fill: 'red',
-                shape: 'ring',
-                text: `no state found for ${this.nodeConfig.entity_id}`,
-            });
+            this.status.setText(
+                `no state found for ${this.nodeConfig.entity_id}`
+            );
             return;
         }
 
@@ -126,7 +124,7 @@ module.exports = class PollState extends EventsHaNode {
                 }
             );
         } catch (e) {
-            this.setStatusFailed('Error');
+            this.status.setFailed('Error');
             this.node.error(e.message, {});
             return;
         }
@@ -138,23 +136,23 @@ module.exports = class PollState extends EventsHaNode {
         // Handle version 0 'halt if' outputs
         if (this.nodeConfig.version < 1) {
             if (this.nodeConfig.halt_if && isIfState) {
-                this.setStatusFailed(statusMessage);
+                this.status.setFailed(statusMessage);
                 this.send([null, msg]);
                 return;
             }
-            this.setStatusSuccess(statusMessage);
+            this.status.setSuccess(statusMessage);
             this.send([msg, null]);
             return;
         }
 
         // Check 'if state' and send to correct output
         if (this.nodeConfig.halt_if && !isIfState) {
-            this.setStatusFailed(statusMessage);
+            this.status.setFailed(statusMessage);
             this.send([null, msg]);
             return;
         }
 
-        this.setStatusSuccess(statusMessage);
+        this.status.setSuccess(statusMessage);
         this.send([msg, null]);
     }
 

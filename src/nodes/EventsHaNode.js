@@ -4,6 +4,7 @@ const merge = require('lodash.merge');
 const EventsNode = require('./EventsNode');
 const Storage = require('../lib/Storage');
 const { INTEGRATION_UNLOADED, INTEGRATION_NOT_LOADED } = require('../const');
+const { STATUS_SHAPE_DOT, STATUS_SHAPE_RING } = require('../services/status');
 
 const DEFAULT_NODE_OPTIONS = {
     debug: false,
@@ -81,7 +82,6 @@ module.exports = class EventsHaNode extends EventsNode {
                     this.isEnabled = true;
                 }
                 this.removeSubscription();
-                this.updateConnectionStatus();
                 break;
         }
     }
@@ -93,7 +93,6 @@ module.exports = class EventsHaNode extends EventsNode {
 
         if (data && Object.prototype.hasOwnProperty.call(data, 'isEnabled')) {
             this.isEnabled = data.isEnabled;
-            this.updateConnectionStatus();
         }
     }
 
@@ -126,7 +125,7 @@ module.exports = class EventsHaNode extends EventsNode {
         );
 
         if (status) {
-            this.setStatusSuccess('Registered');
+            this.status.setSuccess('Registered');
         }
         this.registered = true;
     }
@@ -143,7 +142,6 @@ module.exports = class EventsHaNode extends EventsNode {
                     this.isEnabled = evt.state;
                     this.storage.saveData('isEnabled', this.isEnabled);
                     this.updateHomeAssistant();
-                    this.updateConnectionStatus();
                     break;
                 case 'automation_triggered':
                     this.handleTriggerMessage(evt.data);
@@ -183,7 +181,7 @@ module.exports = class EventsHaNode extends EventsNode {
                 );
             }
         } catch (e) {
-            this.setStatusFailed('Error');
+            this.status.setFailed('Error');
             this.node.error(`Trigger Error: ${e.message}`, {});
             return;
         }
@@ -211,12 +209,11 @@ module.exports = class EventsHaNode extends EventsNode {
             data: eventMessage.event,
         };
 
-        this.setStatus({
-            fill: 'blue',
-            shape: conditionalValue ? 'dot' : 'ring',
-            text: `${
+        this.status.set({
+            shape: conditionalValue ? STATUS_SHAPE_DOT : STATUS_SHAPE_RING,
+            text: this.status.appendDateString(
                 eventMessage.event.new_state.state
-            } at: ${this.getPrettyDate()}`,
+            ),
         });
         this.send(conditionalValue ? [msg, null] : [null, msg]);
     }

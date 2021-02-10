@@ -1,7 +1,7 @@
 const merge = require('lodash.merge');
 const selectn = require('selectn');
 
-const { STATE_CONNECTED, STATE_CONNECTING, STATE_ERROR } = require('../const');
+const { Status } = require('../services/status');
 const { toCamelCase } = require('../lib/utils');
 
 const DEFAULT_OPTIONS = {
@@ -25,6 +25,7 @@ module.exports = class BaseNode {
         this._eventHandlers = _eventHandlers;
         this._internals = _internals;
         this._enabled = true;
+        this.status = new Status({ node, nodeState: this.isEnabled });
 
         this.nodeConfig = Object.entries(this.options.config).reduce(
             (acc, [key, value]) => {
@@ -48,8 +49,39 @@ module.exports = class BaseNode {
         this.node.debug(`instantiated node, name: ${name || 'undefined'}`);
     }
 
+    get server() {
+        return selectn('nodeConfig.server.controller', this);
+    }
+
+    get homeAssistant() {
+        return selectn('server.homeAssistant', this);
+    }
+
+    get isConnected() {
+        return this.homeAssistant && this.homeAssistant.isConnected;
+    }
+
+    get isHomeAssistantRunning() {
+        return this.isConnected && this.homeAssistant.isHomeAssistantRunning;
+    }
+
+    get isIntegrationLoaded() {
+        return this.isConnected && this.homeAssistant.isIntegrationLoaded;
+    }
+
+    get isEnabled() {
+        return this._enabled;
+    }
+
+    set isEnabled(value) {
+        this._enabled = !!value;
+        this.status.setNodeState(this._enabled);
+    }
+
     // Subclasses should override these as hooks into common events
-    onClose(removed) {}
+    onClose(removed) {
+        this.status.destroy();
+    }
 
     onInput() {}
 
@@ -79,105 +111,6 @@ module.exports = class BaseNode {
         }
     }
 
-    setStatus(
-        opts = {
-            shape: 'dot',
-            fill: 'blue',
-            text: '',
-        }
-    ) {
-        if (
-            Object.prototype.hasOwnProperty.call(this, 'isEnabled') &&
-            this.isEnabled === false
-        ) {
-            opts = {
-                shape: 'dot',
-                fill: 'grey',
-                text: 'DISABLED',
-            };
-        }
-        this.node.status(opts);
-    }
-
-    setStatusSuccess(text = 'Success') {
-        this.setStatus({
-            fill: 'green',
-            shape: 'dot',
-            text: `${text} at: ${this.getPrettyDate()}`,
-        });
-    }
-
-    setStatusSending(text = 'Sending') {
-        this.setStatus({
-            fill: 'yellow',
-            shape: 'dot',
-            text: `${text} at: ${this.getPrettyDate()}`,
-        });
-    }
-
-    setStatusFailed(text = 'Failed') {
-        this.setStatus({
-            fill: 'red',
-            shape: 'ring',
-            text: `${text} at: ${this.getPrettyDate()}`,
-        });
-    }
-
-    updateConnectionStatus(additionalText) {
-        this.setConnectionStatus(additionalText);
-    }
-
-    getConnectionStatus() {
-        const connectionStatus = {
-            shape: 'ring',
-            fill: 'red',
-            text: 'node-red:common.status.disconnected',
-        };
-
-        if (this.homeAssistant) {
-            if (this.isHomeAssistantRunning) {
-                connectionStatus.fill = 'green';
-                connectionStatus.text = 'running';
-                return connectionStatus;
-            }
-
-            switch (this.homeAssistant.connectionState) {
-                case STATE_CONNECTING:
-                    connectionStatus.fill = 'yellow';
-                    connectionStatus.text = 'node-red:common.status.connecting';
-                    break;
-                case STATE_CONNECTED:
-                    connectionStatus.fill = 'green';
-                    connectionStatus.text = 'node-red:common.status.connected';
-                    break;
-                case STATE_ERROR:
-                    connectionStatus.text = 'node-red:common.status.error';
-                    break;
-            }
-        }
-
-        return connectionStatus;
-    }
-
-    setConnectionStatus(additionalText) {
-        let connectionStatus = this.getConnectionStatus();
-
-        if (
-            Object.prototype.hasOwnProperty.call(this, 'isEnabled') &&
-            this.isEnabled === false
-        ) {
-            connectionStatus = {
-                shape: 'dot',
-                fill: 'grey',
-                text: 'DISABLED',
-            };
-        }
-
-        if (additionalText) connectionStatus.text += ` ${additionalText}`;
-
-        this.setStatus(connectionStatus);
-    }
-
     // Hack to get around the fact that node-red only sends warn / error to the debug tab
     debugToClient(debugMsg) {
         if (!this.nodeConfig.debugenabled) return;
@@ -189,44 +122,6 @@ module.exports = class BaseNode {
             };
             this.RED.comms.publish('debug', debugMsgObj);
         }
-    }
-
-    get server() {
-        return selectn('nodeConfig.server.controller', this);
-    }
-
-    get homeAssistant() {
-        return selectn('server.homeAssistant', this);
-    }
-
-    get isConnected() {
-        return this.homeAssistant && this.homeAssistant.isConnected;
-    }
-
-    get isHomeAssistantRunning() {
-        return this.isConnected && this.homeAssistant.isHomeAssistantRunning;
-    }
-
-    get isIntegrationLoaded() {
-        return this.isConnected && this.homeAssistant.isIntegrationLoaded;
-    }
-
-    get isEnabled() {
-        return this._enabled;
-    }
-
-    set isEnabled(value) {
-        this._enabled = !!value;
-    }
-
-    getPrettyDate() {
-        return new Date().toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            hour12: false,
-            hour: 'numeric',
-            minute: 'numeric',
-        });
     }
 
     getCastValue(datatype, value) {
@@ -556,7 +451,7 @@ const _eventHandlers = {
             });
         } catch (e) {
             if (e && e.isJoi) {
-                this.setStatusFailed('Error');
+                this.status.setFailed('Error');
                 done(e.message);
                 return;
             }

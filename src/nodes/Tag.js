@@ -40,7 +40,7 @@ module.exports = class Tag extends EventsHaNode {
             payload,
         };
 
-        this.setStatusSuccess(`${tagName || tagId} scanned`);
+        this.status.setSuccess(`${tagName || tagId} scanned`);
         this.send(msg);
     }
 

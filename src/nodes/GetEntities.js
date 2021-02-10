@@ -164,7 +164,7 @@ module.exports = class GetEntities extends BaseNode {
                 return true;
             });
         } catch (e) {
-            this.setStatusFailed('Error');
+            this.status.setFailed('Error');
             done(e.message);
             return;
         }
@@ -182,7 +182,7 @@ module.exports = class GetEntities extends BaseNode {
                     break;
                 }
 
-                this.setStatusSuccess(statusText);
+                this.status.setSuccess(statusText);
                 this.sendSplit(message, entities, send);
                 done();
                 return;
@@ -220,12 +220,12 @@ module.exports = class GetEntities extends BaseNode {
         }
 
         if (noPayload) {
-            this.setStatusFailed('No Results');
+            this.status.setFailed('No Results');
             done();
             return;
         }
 
-        this.setStatusSuccess(statusText);
+        this.status.setSuccess(statusText);
 
         this.setContextValue(
             payload,
