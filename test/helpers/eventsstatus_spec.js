@@ -9,7 +9,7 @@ const {
     STATE_ERROR,
     STATE_RUNNING,
 } = require('../../src/const');
-const { EventsStatus } = require('../../src/services/status');
+const { EventsStatus } = require('../../src/helpers/status');
 
 const expect = chai.expect;
 chai.use(sinonChai);

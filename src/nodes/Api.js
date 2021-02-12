@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 const BaseNode = require('./BaseNode');
-const RenderTemplate = require('../lib/mustache-context');
+const RenderTemplate = require('../helpers/mustache-context');
 
 const nodeOptions = {
     config: {

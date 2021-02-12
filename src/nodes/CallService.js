@@ -2,7 +2,7 @@
 const selectn = require('selectn');
 
 const BaseNode = require('./BaseNode');
-const RenderTemplate = require('../lib/mustache-context');
+const RenderTemplate = require('../helpers/mustache-context');
 
 const domainsNeedingArrays = [
     'homeassistant',

@@ -2,7 +2,7 @@ const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 
-const { SwitchEntityStatus } = require('../../src/services/status');
+const { SwitchEntityStatus } = require('../../src/helpers/status');
 
 const expect = chai.expect;
 chai.use(sinonChai);

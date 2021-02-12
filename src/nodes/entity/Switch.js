@@ -3,7 +3,7 @@ const {
     SwitchEntityStatus,
     STATUS_SHAPE_RING,
     STATUS_COLOR_BLUE,
-} = require('../../services/status');
+} = require('../../helpers/status');
 
 const OUTPUT_TYPE_INPUT = 'input';
 const OUTPUT_TYPE_STATE_CHANGE = 'state change';

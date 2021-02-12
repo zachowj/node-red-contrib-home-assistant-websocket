@@ -2,7 +2,7 @@ const merge = require('lodash.merge');
 
 const { createHomeAssistantClient } = require('../homeAssistant');
 const { INTEGRATION_NOT_LOADED } = require('../const');
-const { toCamelCase } = require('../lib/utils');
+const { toCamelCase } = require('../helpers/utils');
 
 const nodeDefaults = {
     name: {},

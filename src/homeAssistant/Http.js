@@ -2,7 +2,7 @@ const axios = require('axios');
 const debug = require('debug')('home-assistant:http');
 const https = require('https');
 
-const { shouldInclude } = require('../lib/utils');
+const { shouldInclude } = require('../helpers/utils');
 
 class Http {
     constructor(config) {

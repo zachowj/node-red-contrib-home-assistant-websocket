@@ -1,8 +1,8 @@
 const merge = require('lodash.merge');
 const selectn = require('selectn');
 
-const { Status } = require('../services/status');
-const { toCamelCase } = require('../lib/utils');
+const { Status } = require('../helpers/status');
+const { toCamelCase } = require('../helpers/utils');
 
 const DEFAULT_NODE_OPTIONS = {
     config: {

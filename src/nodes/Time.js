@@ -7,7 +7,7 @@ const {
     getTimeInMilliseconds,
     parseTime,
     getEntitiesFromJsonata,
-} = require('../lib/utils');
+} = require('../helpers/utils');
 const {
     TYPEDINPUT_BOOL,
     TYPEDINPUT_DATE,
@@ -15,7 +15,7 @@ const {
     TYPEDINPUT_NUM,
     TYPEDINPUT_STR,
 } = require('../const');
-const { STATUS_COLOR_GREEN } = require('../services/status');
+const { STATUS_COLOR_GREEN } = require('../helpers/status');
 
 const DEFAULT_PROPERTY = 'state';
 

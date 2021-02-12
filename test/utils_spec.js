@@ -1,6 +1,10 @@
 const expect = require('chai').expect;
 
-const { getLocationData, getZoneData, parseTime } = require('../src/lib/utils');
+const {
+    getLocationData,
+    getZoneData,
+    parseTime,
+} = require('../src/helpers/utils');
 
 describe('utils', function () {
     describe('getLocationData', function () {

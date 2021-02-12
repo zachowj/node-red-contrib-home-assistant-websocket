@@ -6,7 +6,7 @@ const {
     shouldIncludeEvent,
     getWaitStatusText,
     getTimeInMilliseconds,
-} = require('../lib/utils');
+} = require('../helpers/utils');
 
 const nodeOptions = {
     config: {

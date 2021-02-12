@@ -7,7 +7,7 @@ const {
     INTEGRATION_UNLOADED,
     INTEGRATION_NOT_LOADED,
 } = require('../const');
-const { EventsStatus } = require('../services/status');
+const { EventsStatus } = require('../helpers/status');
 
 const DEFAULT_NODE_OPTIONS = {
     debug: false,

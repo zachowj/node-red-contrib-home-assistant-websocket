@@ -3,8 +3,8 @@ const cloneDeep = require('lodash.clonedeep');
 const selectn = require('selectn');
 
 const EventsHaNode = require('./EventsHaNode');
-const RenderTemplate = require('../lib/mustache-context');
-const { shouldIncludeEvent } = require('../lib/utils');
+const RenderTemplate = require('../helpers/mustache-context');
+const { shouldIncludeEvent } = require('../helpers/utils');
 
 const nodeOptions = {
     debug: true,

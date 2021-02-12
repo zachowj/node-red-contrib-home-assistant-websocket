@@ -2,7 +2,7 @@ const Joi = require('joi');
 const timestring = require('timestring');
 
 const BaseNode = require('./BaseNode');
-const RenderTemplate = require('../lib/mustache-context');
+const RenderTemplate = require('../helpers/mustache-context');
 
 const nodeOptions = {
     debug: true,

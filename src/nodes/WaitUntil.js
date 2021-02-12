@@ -3,12 +3,12 @@ const Joi = require('joi');
 const selectn = require('selectn');
 
 const EventsNode = require('./EventsNode');
-const RenderTemplate = require('../lib/mustache-context');
+const RenderTemplate = require('../helpers/mustache-context');
 const {
     shouldIncludeEvent,
     getWaitStatusText,
     getTimeInMilliseconds,
-} = require('../lib/utils');
+} = require('../helpers/utils');
 
 const nodeOptions = {
     config: {
