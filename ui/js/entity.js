@@ -33,6 +33,7 @@ RED.nodes.registerType('ha-entity', {
                 { property: 'unit_of_measurement', value: '' },
             ],
         },
+        // sensor binary_sensor
         state: { value: 'payload' },
         stateType: { value: 'msg' },
         attributes: { value: [] },
@@ -40,6 +41,7 @@ RED.nodes.registerType('ha-entity', {
         outputLocation: { value: 'payload' },
         outputLocationType: { value: 'none' },
         inputOverride: { value: 'allow' },
+        // switch
         outputOnStateChange: { value: false },
         outputPayload: { value: '$entity().state ? "on": "off"' },
         outputPayloadType: { value: 'jsonata' },

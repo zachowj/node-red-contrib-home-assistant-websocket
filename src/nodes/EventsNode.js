@@ -12,8 +12,6 @@ const { EventsStatus } = require('../services/status');
 const DEFAULT_NODE_OPTIONS = {
     debug: false,
     config: {
-        name: {},
-        server: { isNode: true },
         exposeToHomeAssistant: (nodeDef) =>
             nodeDef.exposeToHomeAssistant === undefined
                 ? false

@@ -1,35 +1,17 @@
 const slugify = require('slugify');
 
-const EventsHaNode = require('./EventsHaNode');
-const {
-    SwitchEntityStatus,
-    STATUS_SHAPE_RING,
-    STATUS_COLOR_BLUE,
-} = require('../services/status');
-const { INTEGRATION_UNLOADED } = require('../const');
-
-const OUTPUT_TYPE_INPUT = 'input';
-const OUTPUT_TYPE_STATE_CHANGE = 'state change';
+const EntityNode = require('../EntityNode');
 
 const nodeOptions = {
     config: {
-        name: {},
-        server: { isNode: true },
-        outputs: 1,
-        entityType: {},
         state: {},
         stateType: {},
         attributes: (nodeConfig) => nodeConfig.attributes || [],
-        config: {},
-        exposeToHomeAssistant: (nodeConfig) => true,
         resend: {},
         outputLocation: {},
         outputLocationType: (nodeConfig) =>
             nodeConfig.outputLocationType || 'none',
         inputOverride: (nodeConfig) => nodeConfig.inputOverride || 'allow',
-        outputOnStateChange: {},
-        outputPayload: {},
-        outputPayloadType: {},
     },
     input: {
         state: {
@@ -50,25 +32,12 @@ const nodeOptions = {
     },
 };
 
-module.exports = class EntityNode extends EventsHaNode {
+module.exports = class Sensor extends EntityNode {
     constructor({ node, config, RED }) {
         super({ node, config, RED, nodeOptions });
-
-        if (this.nodeConfig.entityType === 'switch') {
-            this.status = new SwitchEntityStatus({
-                node,
-                nodeState: this.isEnabled,
-                homeAssistant: this.homeAssistant,
-            });
-        }
     }
 
     async registerEntity() {
-        if (this.nodeConfig.entityType === 'switch') {
-            super.registerEntity();
-            return;
-        }
-
         if (!this.isIntegrationLoaded) {
             this.error(this.integrationErrorMessage);
             this.status.setFailed('Error');
@@ -106,77 +75,10 @@ module.exports = class EntityNode extends EventsHaNode {
         this.registered = true;
     }
 
-    onHaEventMessage(evt) {
-        super.onHaEventMessage(evt);
-        if (
-            evt.type === 'state_changed' &&
-            this.nodeConfig.outputOnStateChange
-        ) {
-            // fake a HA entity
-            const entity = {
-                state: this.isEnabled,
-            };
-            let payload;
-            try {
-                payload = this.getTypedInputValue(
-                    this.nodeConfig.outputPayload,
-                    this.nodeConfig.outputPayloadType,
-                    { entity }
-                );
-            } catch (e) {
-                this.status.setFailed('Error');
-                this.node.error(`JSONata Error: ${e.message}`, {});
-                return;
-            }
-
-            const msg = {
-                payload,
-                outputType: OUTPUT_TYPE_STATE_CHANGE,
-            };
-            const opts = [msg, null];
-            const statusMessage = msg.payload || 'state change';
-            const status = {
-                fill: STATUS_COLOR_BLUE,
-                text: this.status.appendDateString(statusMessage),
-            };
-            if (this.isEnabled) {
-                this.send(opts);
-            } else {
-                status.shape = STATUS_SHAPE_RING;
-                this.send(opts.reverse());
-            }
-            this.status.set(status);
-        }
-    }
-
-    onHaEventsClose() {
-        super.onHaEventsClose();
-
-        if (this.nodeConfig.entityType !== 'switch') {
-            this.registered = false;
-        }
-    }
-
-    onHaIntegration(type) {
-        super.onHaIntegration(type);
-
-        if (type === INTEGRATION_UNLOADED) {
-            this.node.error(
-                'Node-RED custom integration has been removed from Home Assistant it is needed for this node to function.'
-            );
-            this.status.setFailed('Error');
-        }
-    }
-
     onClose(removed) {
         super.onClose(removed);
 
-        if (
-            this.nodeConfig.entityType !== 'switch' &&
-            this.registered &&
-            this.isIntegrationLoaded &&
-            removed
-        ) {
+        if (this.registered && this.isIntegrationLoaded && removed) {
             const payload = {
                 type: 'nodered/discovery',
                 server_id: this.nodeConfig.server.id,
@@ -192,42 +94,6 @@ module.exports = class EntityNode extends EventsHaNode {
     }
 
     onInput({ parsedMessage, message, send, done }) {
-        switch (this.nodeConfig.entityType) {
-            case 'binary_sensor':
-            case 'sensor':
-                this.handleSensorInput({ parsedMessage, message, send, done });
-                break;
-            case 'switch':
-                this.handleSwitchInput({ message, send, done });
-                break;
-            default:
-                this.status.setFailed('Error');
-                done(`Invalid entity type: ${this.nodeConfig.entityType}`);
-                break;
-        }
-    }
-
-    handleSwitchInput({ message, send, done }) {
-        if (typeof message.enable === 'boolean') {
-            this.isEnabled = message.enable;
-            this.updateHomeAssistant();
-            done();
-            return;
-        }
-
-        message.outputType = OUTPUT_TYPE_INPUT;
-        const output = [message, null];
-        const statusMessage = message.payload || OUTPUT_TYPE_INPUT;
-        if (this.isEnabled) {
-            this.status.setSuccess(statusMessage);
-            send(output);
-        } else {
-            this.status.setFailed(statusMessage);
-            send(output.reverse());
-        }
-    }
-
-    handleSensorInput({ parsedMessage, message, send, done }) {
         if (!this.isConnected) {
             this.status.setFailed('No Connection');
             done('Sensor update attempted without connection to server.');
@@ -329,21 +195,6 @@ module.exports = class EntityNode extends EventsHaNode {
             });
     }
 
-    handleTriggerMessage(data = {}) {
-        const msg = {
-            topic: 'triggered',
-            payload: data.payload,
-        };
-
-        if (this.isEnabled) {
-            this.status.setSuccess('triggered');
-            this.send([msg, null]);
-        } else {
-            this.status.setFailed('triggered');
-            this.send([null, msg]);
-        }
-    }
-
     getAttributes(parsedMessage) {
         let attributes = [];
         if (
@@ -372,23 +223,5 @@ module.exports = class EntityNode extends EventsHaNode {
             }
         }
         return attributes;
-    }
-
-    async loadPersistedData() {
-        const data = await this.storage.getData().catch((e) => {
-            this.node.error(e.message, {});
-        });
-
-        if (!data) return;
-
-        if (
-            this.nodeConfig.entityType === 'switch' &&
-            Object.prototype.hasOwnProperty.call(data, 'isEnabled')
-        ) {
-            this.isEnabled = data.isEnabled;
-        }
-        if (Object.prototype.hasOwnProperty.call(data, 'lastPayload')) {
-            this.lastPayload = data.lastPayload;
-        }
     }
 };

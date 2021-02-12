@@ -2,7 +2,6 @@ const Api = require('./nodes/Api');
 const CallService = require('./nodes/CallService');
 const ConfigServer = require('./nodes/ConfigServer');
 const CurrentState = require('./nodes/CurrentState');
-const Entity = require('./nodes/Entity');
 const EventsAll = require('./nodes/EventsAll');
 const EventsState = require('./nodes/EventsState');
 const FireEvent = require('./nodes/FireEvent');
@@ -10,6 +9,8 @@ const GetEntities = require('./nodes/GetEntities');
 const GetHistory = require('./nodes/GetHistory');
 const PollState = require('./nodes/PollState');
 const RenderTemplate = require('./nodes/RenderTemplate');
+const Sensor = require('./nodes/entity/Sensor');
+const Switch = require('./nodes/entity/Switch');
 const Tag = require('./nodes/Tag');
 const Time = require('./nodes/Time');
 const TriggerState = require('./nodes/TriggerState');
@@ -54,7 +55,19 @@ module.exports = function (RED) {
         RED.nodes.createNode(this, config);
 
         this.config = config;
-        this.controller = new Entity({ node: this, config, RED });
+
+        switch (config.entityType) {
+            case 'binary_sensor':
+            case 'sensor':
+                this.controller = new Sensor({ node: this, config, RED });
+                break;
+            case 'switch':
+                this.controller = new Switch({ node: this, config, RED });
+                break;
+            default:
+                this.status({ text: 'Error' });
+                throw new Error(`Invalid entity type: ${config.entityType}`);
+        }
     }
 
     function eventsAllNode(config) {

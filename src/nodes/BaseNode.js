@@ -4,7 +4,7 @@ const selectn = require('selectn');
 const { Status } = require('../services/status');
 const { toCamelCase } = require('../lib/utils');
 
-const DEFAULT_OPTIONS = {
+const DEFAULT_NODE_OPTIONS = {
     config: {
         debugenabled: {},
         name: {},
@@ -21,7 +21,7 @@ module.exports = class BaseNode {
     constructor({ node, config, RED, nodeOptions = {} }) {
         this.node = node;
         this.RED = RED;
-        this.options = merge({}, DEFAULT_OPTIONS, nodeOptions);
+        this.options = merge({}, DEFAULT_NODE_OPTIONS, nodeOptions);
         this._eventHandlers = _eventHandlers;
         this._internals = _internals;
         this._enabled = true;

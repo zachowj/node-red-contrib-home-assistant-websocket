@@ -9,8 +9,6 @@ const { STATUS_SHAPE_DOT, STATUS_SHAPE_RING } = require('../services/status');
 const DEFAULT_NODE_OPTIONS = {
     debug: false,
     config: {
-        name: {},
-        server: { isNode: true },
         haConfig: {},
         exposeToHomeAssistant: (nodeDef) =>
             nodeDef.exposeToHomeAssistant === undefined
@@ -91,8 +89,13 @@ module.exports = class EventsHaNode extends EventsNode {
             this.node.error(e.message);
         });
 
-        if (data && Object.prototype.hasOwnProperty.call(data, 'isEnabled')) {
+        if (!data) return;
+
+        if (Object.prototype.hasOwnProperty.call(data, 'isEnabled')) {
             this.isEnabled = data.isEnabled;
+        }
+        if (Object.prototype.hasOwnProperty.call(data, 'lastPayload')) {
+            this.lastPayload = data.lastPayload;
         }
     }
 
