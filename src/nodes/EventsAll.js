@@ -7,7 +7,7 @@ const nodeOptions = {
     },
 };
 
-module.exports = class EventsAll extends EventsHaNode {
+class EventsAll extends EventsHaNode {
     constructor({ node, config, RED }) {
         super({ node, config, RED, nodeOptions });
 
@@ -124,4 +124,6 @@ module.exports = class EventsAll extends EventsHaNode {
             this.homeAssistant.subscribeEvents();
         }
     }
-};
+}
+
+module.exports = EventsAll;

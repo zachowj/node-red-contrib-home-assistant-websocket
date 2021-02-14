@@ -113,7 +113,7 @@ const nodeOptions = {
     },
 };
 
-module.exports = class GetEntities extends BaseNode {
+class GetEntities extends BaseNode {
     constructor({ node, config, RED }) {
         super({ node, config, RED, nodeOptions });
     }
@@ -237,4 +237,6 @@ module.exports = class GetEntities extends BaseNode {
         send(message);
         done();
     }
-};
+}
+
+module.exports = GetEntities;

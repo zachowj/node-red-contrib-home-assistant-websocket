@@ -15,7 +15,7 @@ const nodeDefaults = {
     cacheJson: {},
 };
 
-module.exports = class ConfigServer {
+class ConfigServer {
     constructor({ node, config, RED }) {
         this.node = node;
         this.RED = RED;
@@ -162,4 +162,6 @@ module.exports = class ConfigServer {
     registerEvents() {
         this.homeAssistant.subscribeEvents();
     }
-};
+}
+
+module.exports = ConfigServer;

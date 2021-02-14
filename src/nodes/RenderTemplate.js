@@ -57,7 +57,7 @@ const nodeOptions = {
     },
 };
 
-module.exports = class RenderTemplateNode extends BaseNode {
+class RenderTemplate extends BaseNode {
     constructor({ node, config, RED }) {
         super({ node, config, RED, nodeOptions });
     }
@@ -104,4 +104,6 @@ module.exports = class RenderTemplateNode extends BaseNode {
                 done(`Error get-template: ${err.message}`);
             });
     }
-};
+}
+
+module.exports = RenderTemplate;

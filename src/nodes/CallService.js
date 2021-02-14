@@ -27,7 +27,7 @@ const nodeOptions = {
     },
 };
 
-module.exports = class CallServiceNode extends BaseNode {
+class CallService extends BaseNode {
     constructor({ node, config, RED }) {
         super({ node, config, RED, nodeOptions });
     }
@@ -196,4 +196,6 @@ module.exports = class CallServiceNode extends BaseNode {
 
         return { ...configData, ...contextData, ...payloadData };
     }
-};
+}
+
+module.exports = CallService;

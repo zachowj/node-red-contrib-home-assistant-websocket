@@ -19,7 +19,7 @@ const nodeOptions = {
     },
 };
 
-module.exports = class PollState extends EventsHaNode {
+class PollState extends EventsHaNode {
     constructor({ node, config, RED }) {
         super({ node, config, RED, nodeOptions });
 
@@ -168,4 +168,6 @@ module.exports = class PollState extends EventsHaNode {
         const entityLastChanged = entityState.last_changed;
         return new Date(entityLastChanged);
     }
-};
+}
+
+module.exports = PollState;

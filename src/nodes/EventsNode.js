@@ -19,7 +19,7 @@ const DEFAULT_NODE_OPTIONS = {
     },
 };
 
-module.exports = class EventsNode extends BaseNode {
+class EventsNode extends BaseNode {
     constructor({ node, config, RED, nodeOptions = {} }) {
         nodeOptions = merge({}, DEFAULT_NODE_OPTIONS, nodeOptions);
         super({ node, config, RED, nodeOptions });
@@ -104,4 +104,6 @@ module.exports = class EventsNode extends BaseNode {
             return false;
         }
     }
-};
+}
+
+module.exports = EventsNode;

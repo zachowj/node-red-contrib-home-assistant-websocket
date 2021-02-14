@@ -146,7 +146,7 @@ const nodeOptions = {
     },
 };
 
-module.exports = class WaitUntilNode extends EventsNode {
+class WaitUntil extends EventsNode {
     constructor({ node, config, RED }) {
         super({ node, config, RED, nodeOptions });
         this.active = false;
@@ -344,4 +344,6 @@ module.exports = class WaitUntilNode extends EventsNode {
             });
         }
     }
-};
+}
+
+module.exports = WaitUntil;

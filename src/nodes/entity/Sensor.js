@@ -32,7 +32,7 @@ const nodeOptions = {
     },
 };
 
-module.exports = class Sensor extends EntityNode {
+class Sensor extends EntityNode {
     constructor({ node, config, RED }) {
         super({ node, config, RED, nodeOptions });
     }
@@ -224,4 +224,6 @@ module.exports = class Sensor extends EntityNode {
         }
         return attributes;
     }
-};
+}
+
+module.exports = Sensor;

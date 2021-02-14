@@ -12,7 +12,7 @@ const DEFAULT_NODE_OPTIONS = {
     },
 };
 
-module.exports = class Entity extends EventsHaNode {
+class EntityNode extends EventsHaNode {
     constructor({ node, config, RED, nodeOptions = {} }) {
         nodeOptions = merge({}, DEFAULT_NODE_OPTIONS, nodeOptions);
         super({ node, config, RED, nodeOptions });
@@ -28,4 +28,6 @@ module.exports = class Entity extends EventsHaNode {
             this.status.setFailed('Error');
         }
     }
-};
+}
+
+module.exports = EntityNode;

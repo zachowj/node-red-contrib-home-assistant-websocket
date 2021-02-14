@@ -1,9 +1,7 @@
 const geolib = require('geolib');
 const selectn = require('selectn');
 
-const utils = (module.exports = {});
-
-utils.shouldInclude = (targetString, includeRegex, excludeRegex) => {
+function shouldInclude(targetString, includeRegex, excludeRegex) {
     if (!targetString || (!includeRegex && !excludeRegex)) {
         return true;
     }
@@ -21,9 +19,9 @@ utils.shouldInclude = (targetString, includeRegex, excludeRegex) => {
     }
 
     return shouldIncludeTest && !shouldExcludeTest;
-};
+}
 
-utils.shouldIncludeEvent = (eventId, filter, filterType) => {
+function shouldIncludeEvent(eventId, filter, filterType) {
     if (!filter) return true;
 
     if (filterType === 'substring') {
@@ -39,43 +37,43 @@ utils.shouldIncludeEvent = (eventId, filter, filterType) => {
     }
 
     return filter === eventId;
-};
+}
 
-utils.toCamelCase = (str) => {
+function toCamelCase(str) {
     return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) => {
         if (+match === 0) return '';
         return index === 0 ? match.toLowerCase() : match.toUpperCase();
     });
-};
+}
 
-utils.inZone = (location, zone) => {
+function inZone(location, zone) {
     const { radius, ...zoneLatLog } = zone;
     const inZone = geolib.isPointWithinRadius(location, zoneLatLog, radius);
 
     return inZone;
-};
+}
 
-utils.getLocationData = (entity) => {
+function getLocationData(entity) {
     const coord = {
         latitude: entity.attributes.latitude,
         longitude: entity.attributes.longitude,
     };
 
     return geolib.isValidCoordinate(coord) ? coord : false;
-};
+}
 
-utils.getZoneData = (zone) => {
-    const data = utils.getLocationData(zone);
+function getZoneData(zone) {
+    const data = getLocationData(zone);
     if (data === false || selectn('attributes.radius', zone) === undefined)
         return false;
 
     data.radius = zone.attributes.radius;
 
     return data;
-};
+}
 
-utils.getWaitStatusText = (timeout, timeoutUnits) => {
-    const timeoutMs = utils.getTimeInMilliseconds(timeout, timeoutUnits);
+function getWaitStatusText(timeout, timeoutUnits) {
+    const timeoutMs = getTimeInMilliseconds(timeout, timeoutUnits);
     switch (timeoutUnits) {
         case 'milliseconds':
             return `waiting for ${timeout} milliseconds`;
@@ -88,9 +86,9 @@ utils.getWaitStatusText = (timeout, timeoutUnits) => {
                 timeoutMs
             )}`;
     }
-};
+}
 
-utils.getTimeInMilliseconds = (value, valueUnits) => {
+function getTimeInMilliseconds(value, valueUnits) {
     switch (valueUnits) {
         case 'milliseconds':
             return value;
@@ -103,9 +101,9 @@ utils.getTimeInMilliseconds = (value, valueUnits) => {
         default:
             return value * 1000;
     }
-};
+}
 
-const timeoutStatus = (milliseconds = 0) => {
+function timeoutStatus(milliseconds = 0) {
     const timeout = Date.now() + milliseconds;
     const timeoutStr = new Date(timeout).toLocaleDateString('en-US', {
         month: 'short',
@@ -117,14 +115,14 @@ const timeoutStatus = (milliseconds = 0) => {
     });
 
     return timeoutStr;
-};
+}
 
-utils.isValidDate = (val) => {
+function isValidDate(val) {
     const d = new Date(val);
     return d instanceof Date && !isNaN(d);
-};
+}
 
-utils.parseTime = (time) => {
+function parseTime(time) {
     const regex = /^(0?\d|1\d|2[0-3]):([0-5]\d)(?::([0-5]\d))?$/;
     const matches = time.match(regex);
 
@@ -137,11 +135,25 @@ utils.parseTime = (time) => {
         minutes: Number(minutes),
         seconds: Number(seconds),
     };
-};
+}
 
-utils.getEntitiesFromJsonata = (jsonata) => {
+function getEntitiesFromJsonata(jsonata) {
     const regex = /\$entities\("([a-z_]+\.[a-z0-9_]+)"\)/g;
     const matches = jsonata.matchAll(regex);
 
     return new Set(Array.from(matches, (m) => m[1]));
+}
+
+module.exports = {
+    shouldInclude,
+    shouldIncludeEvent,
+    toCamelCase,
+    inZone,
+    getLocationData,
+    getZoneData,
+    getWaitStatusText,
+    getTimeInMilliseconds,
+    isValidDate,
+    parseTime,
+    getEntitiesFromJsonata,
 };

@@ -12,7 +12,7 @@ const nodeOptions = {
     },
 };
 
-module.exports = class Zone extends EventsHaNode {
+class Zone extends EventsHaNode {
     constructor({ node, config, RED }) {
         super({ node, config, RED, nodeOptions });
 
@@ -87,4 +87,6 @@ module.exports = class Zone extends EventsHaNode {
 
         return zones;
     }
-};
+}
+
+module.exports = Zone;

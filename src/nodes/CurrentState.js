@@ -41,7 +41,7 @@ const nodeOptions = {
     },
 };
 
-module.exports = class CurrentStateNode extends BaseNode {
+class CurrentState extends BaseNode {
     constructor({ node, config, RED }) {
         super({ node, config, RED, nodeOptions });
     }
@@ -133,4 +133,6 @@ module.exports = class CurrentStateNode extends BaseNode {
         send([message, null]);
         done();
     }
-};
+}
+
+module.exports = CurrentState;

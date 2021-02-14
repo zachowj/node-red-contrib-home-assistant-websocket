@@ -10,7 +10,7 @@ const {
 /*
  * Pretty much a copy from https://github.com/home-assistant/home-assistant-js-websocket
  */
-module.exports = function createSocket({
+function createSocket({
     auth,
     connectionDelay,
     eventBus,
@@ -91,4 +91,6 @@ module.exports = function createSocket({
             connectionDelay !== false ? 5000 : 0
         );
     });
-};
+}
+
+module.exports = createSocket;

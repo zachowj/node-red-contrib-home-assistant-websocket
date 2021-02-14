@@ -17,7 +17,7 @@ const DEFAULT_NODE_OPTIONS = {
     },
 };
 
-module.exports = class BaseNode {
+class BaseNode {
     constructor({ node, config, RED, nodeOptions = {} }) {
         this.node = node;
         this.RED = RED;
@@ -364,7 +364,7 @@ module.exports = class BaseNode {
         }
         return val;
     }
-};
+}
 
 const _internals = {
     parseInputMessage(inputOptions, msg) {
@@ -473,3 +473,5 @@ const _eventHandlers = {
         }
     },
 };
+
+module.exports = BaseNode;

@@ -59,7 +59,7 @@ const nodeOptions = {
     },
 };
 
-module.exports = class GetHistory extends BaseNode {
+class GetHistory extends BaseNode {
     constructor({ node, config, RED }) {
         super({ node, config, RED, nodeOptions });
     }
@@ -162,4 +162,6 @@ module.exports = class GetHistory extends BaseNode {
         this.status.setSuccess();
         done();
     }
-};
+}
+
+module.exports = GetHistory;

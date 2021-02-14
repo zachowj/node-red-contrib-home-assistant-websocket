@@ -90,7 +90,7 @@ const nodeOptions = {
     },
 };
 
-module.exports = class ApiNode extends BaseNode {
+class Api extends BaseNode {
     constructor({ node, config, RED }) {
         super({ node, config, RED, nodeOptions });
     }
@@ -205,4 +205,6 @@ module.exports = class ApiNode extends BaseNode {
                 this.status.setFailed('API Error');
             });
     }
-};
+}
+
+module.exports = Api;

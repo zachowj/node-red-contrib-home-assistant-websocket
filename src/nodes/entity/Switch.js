@@ -16,7 +16,7 @@ const nodeOptions = {
     },
 };
 
-module.exports = class Switch extends EntityNode {
+class Switch extends EntityNode {
     constructor({ node, config, RED }) {
         super({ node, config, RED, nodeOptions });
 
@@ -104,4 +104,6 @@ module.exports = class Switch extends EntityNode {
             this.send([null, msg]);
         }
     }
-};
+}
+
+module.exports = Switch;

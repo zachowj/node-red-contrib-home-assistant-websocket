@@ -30,7 +30,7 @@ const nodeOptions = {
     },
 };
 
-module.exports = class EventsState extends EventsHaNode {
+class EventsState extends EventsHaNode {
     constructor({ node, config, RED }) {
         super({ node, config, RED, nodeOptions });
         let eventTopic = 'ha_events:state_changed';
@@ -282,4 +282,6 @@ module.exports = class EventsState extends EventsHaNode {
 
         return true;
     }
-};
+}
+
+module.exports = EventsState;

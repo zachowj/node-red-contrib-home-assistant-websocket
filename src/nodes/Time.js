@@ -33,7 +33,7 @@ const nodeOptions = {
     },
 };
 
-module.exports = class Time extends EventsHaNode {
+class Time extends EventsHaNode {
     constructor({ node, config, RED }) {
         super({ node, config, RED, nodeOptions });
         this.cronjob = null;
@@ -297,4 +297,6 @@ module.exports = class Time extends EventsHaNode {
     getEntity() {
         return this.homeAssistant.getStates(this.nodeConfig.entityId);
     }
-};
+}
+
+module.exports = Time;

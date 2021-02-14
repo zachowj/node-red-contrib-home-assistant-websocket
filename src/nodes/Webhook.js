@@ -19,7 +19,7 @@ const nodeOptions = {
     },
 };
 
-module.exports = class Webhook extends EventsNode {
+class Webhook extends EventsNode {
     constructor({ node, config, RED }) {
         super({ node, config, RED, nodeOptions });
 
@@ -108,4 +108,6 @@ module.exports = class Webhook extends EventsNode {
             this.removeWebhook().catch(() => {});
         }
     }
-};
+}
+
+module.exports = Webhook;

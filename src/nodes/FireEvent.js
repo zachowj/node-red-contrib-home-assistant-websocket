@@ -40,7 +40,7 @@ const nodeOptions = {
     },
 };
 
-module.exports = class FireEvent extends BaseNode {
+class FireEvent extends BaseNode {
     constructor({ node, RED, config }) {
         super({ node, config, RED, nodeOptions });
     }
@@ -112,4 +112,6 @@ module.exports = class FireEvent extends BaseNode {
                 );
             });
     }
-};
+}
+
+module.exports = FireEvent;

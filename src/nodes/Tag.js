@@ -10,7 +10,7 @@ const nodeOptions = {
     },
 };
 
-module.exports = class Tag extends EventsHaNode {
+class Tag extends EventsHaNode {
     constructor({ node, config, RED }) {
         super({ node, config, RED, nodeOptions });
 
@@ -57,4 +57,6 @@ module.exports = class Tag extends EventsHaNode {
         return this.homeAssistant.getTags().find((tag) => tag.tag_id === tagId)
             .name;
     }
-};
+}
+
+module.exports = Tag;

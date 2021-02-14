@@ -18,7 +18,7 @@ const nodeOptions = {
     },
 };
 
-module.exports = class TriggerState extends EventsHaNode {
+class TriggerState extends EventsHaNode {
     constructor({ node, config, RED }) {
         super({ node, config, RED, nodeOptions });
 
@@ -386,4 +386,6 @@ module.exports = class TriggerState extends EventsHaNode {
             data: eventMessage,
         };
     }
-};
+}
+
+module.exports = TriggerState;
