@@ -126,7 +126,7 @@ class Time extends EventsHaNode {
         this.status.setText(this.RED._('ha-time.status.next_at', { nextTime }));
     }
 
-    onInput(msg, send, done) {
+    onInput({ msg, send, done }) {
         const now = new Date();
         const entity = this.getEntity();
         msg = {
