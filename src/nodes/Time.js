@@ -187,7 +187,7 @@ class Time extends EventsHaNode {
     }
 
     createCronjob(crontab) {
-        const node = this;
+        const node = this.node;
         this.cronjob = new CronJob({
             cronTime: crontab,
             onTick: () => {
