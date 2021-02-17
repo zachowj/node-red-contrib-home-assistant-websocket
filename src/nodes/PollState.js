@@ -82,7 +82,7 @@ class PollState extends EventsHaNode {
             this.nodeConfig.entity_id
         );
         if (!pollState) {
-            this.error(
+            this.node.error(
                 `could not find state with entity_id "${this.nodeConfig.entity_id}"`,
                 {}
             );
