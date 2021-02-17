@@ -52,6 +52,11 @@ class HomeAssistant {
         return this.websocket.connectionState;
     }
 
+    get version() {
+        const client = selectn('weboscket.client', this);
+        return client && client.haVersion;
+    }
+
     exposeMethods(cls, methods) {
         methods.forEach((method) => {
             if (typeof cls[method] === 'function') {
