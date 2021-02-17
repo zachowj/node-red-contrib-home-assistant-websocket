@@ -14,7 +14,7 @@
     "lint": "eslint . && prettier --check {docs,src,test,ui}/**/*.{css,js,md,html}",
     "lint:fix": "eslint . --fix && prettier --write {docs,src,test,ui}/**/*.{css,js,md,html}",
     "prepublish": "gulp build",
-    "test": "mocha test/**/*_spec.js",
+    "test": "mocha test/**/*.test.js",
     "test:watch": "mocha --watch --recursive"
   },
   "repository": {
