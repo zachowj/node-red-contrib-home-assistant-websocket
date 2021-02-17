@@ -374,40 +374,27 @@ class Websocket {
         this.connectionState = STATE_DISCONNECTED;
         this.emitEvent('ha_client:close');
 
-        this.closeClient(
-            null,
-            'events connection closed, cleaning up connection'
-        );
+        debug('events connection closed, cleaning up connection');
+        this.resetClient();
     }
 
     onClientError(data) {
-        this.closeClient(
-            data,
-            'events connection error, cleaning up connection'
-        );
+        debug('events connection error, cleaning up connection');
+        debug(data);
+        this.emitEvent('ha_client:error', data);
+        this.resetClient();
     }
 
     onClientConnecting() {
         this.connectionState = STATE_CONNECTING;
     }
 
-    closeClient(err, logMsg) {
-        if (logMsg) {
-            debug(logMsg);
-        }
-        if (err) {
-            debug(err);
-            this.emitEvent('ha_client:error', err);
-        }
-
+    resetClient() {
+        console.log('reset client');
         this.servicesLoaded = false;
         this.statesLoaded = false;
-
-        if (this.client) {
-            this.client.close();
-            this.connectionState = STATE_DISCONNECTED;
-            this.emitEvent('ha_client:close');
-        }
+        this.connectionState = STATE_DISCONNECTED;
+        this.emitEvent('ha_client:close');
     }
 
     getStates(entityId) {

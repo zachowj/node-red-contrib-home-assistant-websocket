@@ -85,7 +85,10 @@ class HomeAssistant {
     }
 
     close() {
-        this.websocket.closeClient();
+        const client = selectn('websocket.client', this);
+        if (client) {
+            client.close();
+        }
     }
 
     addListener(event, handler, options = { once: false }) {

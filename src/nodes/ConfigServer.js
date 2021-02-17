@@ -140,11 +140,13 @@ class ConfigServer {
 
     // Close WebSocket client on redeploy or node-RED shutdown
     onClose(removed, done) {
-        if (this.HomeAssistant) {
+        if (this.homeAssistant) {
             this.node.log(
                 `Closing connection to ${this.node.credentials.host}`
             );
-            this.HomeAssistant.close();
+            if (removed) {
+                this.homeAssistant.close();
+            }
         }
         done();
     }
