@@ -87,7 +87,7 @@ class Time extends EventsHaNode {
             if (digits === null) {
                 if (!isValidDate(dateString)) {
                     this.debugToClient(`Invalid date`);
-                    throw new Error(this.RED._('ha-time.errors.invalid_date'));
+                    throw new Error(this.RED._('ha-time.status.invalid_date'));
                 }
                 crontab = new Date(dateString);
             } else {
