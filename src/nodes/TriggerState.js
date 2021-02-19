@@ -4,6 +4,7 @@ const selectn = require('selectn');
 
 const EventsHaNode = require('./EventsHaNode');
 const RenderTemplate = require('../helpers/mustache-context');
+const { INTEGRATION_UNLOADED, INTEGRATION_NOT_LOADED } = require('../const');
 const { shouldIncludeEvent } = require('../helpers/utils');
 
 const nodeOptions = {
@@ -180,6 +181,17 @@ class TriggerState extends EventsHaNode {
             this.send(outputs);
         } catch (e) {
             this.node.error(e);
+        }
+    }
+
+    onHaIntegration(type) {
+        super.onHaIntegration(type);
+
+        switch (type) {
+            case INTEGRATION_UNLOADED:
+            case INTEGRATION_NOT_LOADED:
+                this.isEnabled = true;
+                break;
         }
     }
 

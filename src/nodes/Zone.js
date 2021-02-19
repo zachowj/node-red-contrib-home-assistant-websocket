@@ -87,6 +87,9 @@ class Zone extends EventsHaNode {
 
         return zones;
     }
+
+    // Do nothing for zone node
+    handleTriggerMessage() {}
 }
 
 module.exports = Zone;

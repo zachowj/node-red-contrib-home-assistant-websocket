@@ -76,9 +76,6 @@ class EventsHaNode extends EventsNode {
         switch (type) {
             case INTEGRATION_UNLOADED:
             case INTEGRATION_NOT_LOADED:
-                if (this.node.type !== 'trigger-state') {
-                    this.isEnabled = true;
-                }
                 this.removeSubscription();
                 break;
         }
@@ -154,7 +151,7 @@ class EventsHaNode extends EventsNode {
     }
 
     async handleTriggerMessage(data = {}) {
-        if (this.isEnabled === false || this.node.type === 'ha-zone') {
+        if (this.isEnabled === false) {
             return;
         }
 
