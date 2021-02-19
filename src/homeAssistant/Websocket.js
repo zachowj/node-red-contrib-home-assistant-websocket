@@ -390,7 +390,6 @@ class Websocket {
     }
 
     resetClient() {
-        console.log('reset client');
         this.servicesLoaded = false;
         this.statesLoaded = false;
         this.connectionState = STATE_DISCONNECTED;
