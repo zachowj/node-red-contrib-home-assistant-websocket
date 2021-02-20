@@ -295,6 +295,8 @@ task('buildSourceFiles', () => {
             'joi',
             'lodash.merge',
             'lodash.clonedeep',
+            'lodash.random',
+            'lodash.samplesize',
             'slugify',
             'lodash',
             'timestring',

@@ -1,8 +1,9 @@
 const merge = require('lodash.merge');
+const random = require('lodash.random');
+const sampleSize = require('lodash.samplesize');
 const selectn = require('selectn');
 
 const { Status } = require('../helpers/status');
-const { toCamelCase } = require('../helpers/utils');
 
 const DEFAULT_NODE_OPTIONS = {
     config: {
@@ -305,16 +306,13 @@ class BaseNode {
             expression,
             this.node
         );
-        const serverName = toCamelCase(this.nodeConfig.server.name);
 
         expr.assign('entity', () => entity);
         expr.assign('prevEntity', () => prevEntity);
+        expr.assign('sampleSize', sampleSize);
+        expr.assign('randomNumber', random);
         expr.assign('entities', (val) => {
-            const homeAssistant = this.node
-                .context()
-                .global.get('homeassistant')[serverName];
-            if (homeAssistant === undefined) return undefined;
-            return val ? homeAssistant.states[val] : homeAssistant.states;
+            return this.homeAssistant && this.homeAssistant.getStates(val);
         });
 
         return this.RED.util.evaluateJSONataExpression(expr, message);
