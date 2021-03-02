@@ -40,7 +40,7 @@ const nodeVersion = (function ($, RED, haMigrations) {
         node.changed = true;
         const $upgradeHaNode = $('#upgrade-ha-node');
         if ($upgradeHaNode.is(':visible') && getOldNodeCount() === 0) {
-            $upgradeHaNode.parent().remove();
+            $upgradeHaNode.hide();
         }
     }
 
@@ -50,10 +50,7 @@ const nodeVersion = (function ($, RED, haMigrations) {
                 migrate(node);
             }
         });
-
-        $('#upgradeHaNode').parent().remove();
         RED.nodes.dirty(true);
-
         RED.notify(ha.i18n('home-assistant.ui.migrations.all_nodes_updated'));
         RED.view.redraw();
     }

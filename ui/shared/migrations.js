@@ -5,7 +5,8 @@
     $(() => {
         createElements();
         $upgradeHaNode = $('#upgrade-ha-node');
-        $upgradeHaNode.on('click', nodeVersion.migrateAllNodesConfirm).hide();
+        $upgradeHaNode.hide();
+        $upgradeHaNode.on('click', nodeVersion.migrateAllNodesConfirm);
     });
 
     RED.events.on('nodes:add', (node) => {
