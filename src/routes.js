@@ -1,7 +1,6 @@
 const bonjour = require('bonjour')();
 const flatten = require('flat');
 const selectn = require('selectn');
-const uniq = require('lodash.uniq');
 
 let getNode;
 let errorMessage;
@@ -68,18 +67,17 @@ function getProperties(req, res) {
         );
     }
 
-    const uniqArray = uniq(
-        [].concat(...flat).sort((a, b) => {
-            if (!a.includes('.') && b.includes('.')) return -1;
-            if (a.includes('.') && !b.includes('.')) return 1;
-            if (a < b) return -1;
-            if (a > b) return 1;
+    const uniqProperties = [...new Set(flat)];
+    const sortedProperties = uniqProperties.sort((a, b) => {
+        if (!a.includes('.') && b.includes('.')) return -1;
+        if (a.includes('.') && !b.includes('.')) return 1;
+        if (a < b) return -1;
+        if (a > b) return 1;
 
-            return 0;
-        })
-    );
+        return 0;
+    });
 
-    res.json(uniqArray);
+    res.json(sortedProperties);
 }
 
 async function getTags(req, res) {
