@@ -18,6 +18,8 @@ const WaitUntil = require('./nodes/WaitUntil');
 const Webhook = require('./nodes/Webhook');
 const Zone = require('./nodes/Zone');
 const { createRoutes } = require('./routes');
+const { getExposedSettings } = require('./helpers/exposed-settings');
+const { migrate } = require('./migrations');
 
 module.exports = function (RED) {
     createRoutes(RED);
@@ -25,44 +27,64 @@ module.exports = function (RED) {
     function apiNode(config) {
         RED.nodes.createNode(this, config);
 
-        this.config = config;
-        this.controller = new Api({ node: this, config, RED });
+        this.config = migrate(config);
+        this.controller = new Api({ node: this, config: this.config, RED });
     }
 
     function callServiceNode(config) {
         RED.nodes.createNode(this, config);
 
-        this.config = config;
-        this.controller = new CallService({ node: this, config, RED });
+        this.config = migrate(config);
+        this.controller = new CallService({
+            node: this,
+            config: this.config,
+            RED,
+        });
     }
 
     function configServerNode(config) {
         RED.nodes.createNode(this, config);
 
-        this.config = config;
-        this.controller = new ConfigServer({ node: this, config, RED });
+        this.config = migrate(config);
+        this.controller = new ConfigServer({
+            node: this,
+            config: this.config,
+            RED,
+        });
         this.controller.init();
     }
 
     function currentStateNode(config) {
         RED.nodes.createNode(this, config);
 
-        this.config = config;
-        this.controller = new CurrentState({ node: this, config, RED });
+        this.config = migrate(config);
+        this.controller = new CurrentState({
+            node: this,
+            config: this.config,
+            RED,
+        });
     }
 
     function entityNode(config) {
         RED.nodes.createNode(this, config);
 
-        this.config = config;
+        this.config = migrate(config);
 
         switch (config.entityType) {
             case 'binary_sensor':
             case 'sensor':
-                this.controller = new Sensor({ node: this, config, RED });
+                this.controller = new Sensor({
+                    node: this,
+                    config: this.config,
+                    RED,
+                });
                 break;
             case 'switch':
-                this.controller = new Switch({ node: this, config, RED });
+                this.controller = new Switch({
+                    node: this,
+                    config: this.config,
+                    RED,
+                });
                 break;
             default:
                 this.status({ text: 'Error' });
@@ -73,116 +95,152 @@ module.exports = function (RED) {
     function eventsAllNode(config) {
         RED.nodes.createNode(this, config);
 
-        this.config = config;
-        this.controller = new EventsAll({ node: this, config, RED });
+        this.config = migrate(config);
+        this.controller = new EventsAll({
+            node: this,
+            config: this.config,
+            RED,
+        });
     }
 
     function eventsStateNode(config) {
         RED.nodes.createNode(this, config);
 
-        this.config = config;
-        this.controller = new EventsState({ node: this, config, RED });
+        this.config = migrate(config);
+        this.controller = new EventsState({
+            node: this,
+            config: this.config,
+            RED,
+        });
     }
 
     function fireEventNode(config) {
         RED.nodes.createNode(this, config);
 
-        this.config = config;
-        this.controller = new FireEvent({ node: this, config, RED });
+        this.config = migrate(config);
+        this.controller = new FireEvent({
+            node: this,
+            config: this.config,
+            RED,
+        });
     }
 
     function getEntitiesNode(config) {
         RED.nodes.createNode(this, config);
 
-        this.config = config;
-        this.controller = new GetEntities({ node: this, config, RED });
+        this.config = migrate(config);
+        this.controller = new GetEntities({
+            node: this,
+            config: this.config,
+            RED,
+        });
     }
 
     function getHistoryNode(config) {
         RED.nodes.createNode(this, config);
 
-        this.config = config;
-        this.controller = new GetHistory({ node: this, config, RED });
+        this.config = migrate(config);
+        this.controller = new GetHistory({
+            node: this,
+            config: this.config,
+            RED,
+        });
     }
 
     function pollStateNode(config) {
         RED.nodes.createNode(this, config);
 
-        this.config = config;
-        this.controller = new PollState({ node: this, config, RED });
+        this.config = migrate(config);
+        this.controller = new PollState({
+            node: this,
+            config: this.config,
+            RED,
+        });
     }
 
     function renderTemplateNode(config) {
         RED.nodes.createNode(this, config);
 
-        this.config = config;
-        this.controller = new RenderTemplate({ node: this, config, RED });
+        this.config = migrate(config);
+        this.controller = new RenderTemplate({
+            node: this,
+            config: this.config,
+            RED,
+        });
     }
 
     function tagNode(config) {
         RED.nodes.createNode(this, config);
 
-        this.config = config;
-        this.controller = new Tag({ node: this, config, RED });
+        this.config = migrate(config);
+        this.controller = new Tag({ node: this, config: this.config, RED });
     }
 
     function timeNode(config) {
         RED.nodes.createNode(this, config);
 
-        this.config = config;
-        this.controller = new Time({ node: this, config, RED });
+        this.config = migrate(config);
+        this.controller = new Time({ node: this, config: this.config, RED });
     }
 
     function triggerStateNode(config) {
         RED.nodes.createNode(this, config);
 
-        this.config = config;
-        this.controller = new TriggerState({ node: this, config, RED });
+        this.config = migrate(config);
+        this.controller = new TriggerState({
+            node: this,
+            config: this.config,
+            RED,
+        });
     }
 
     function waitUntilNode(config) {
         RED.nodes.createNode(this, config);
 
-        this.config = config;
-        this.controller = new WaitUntil({ node: this, config, RED });
+        this.config = migrate(config);
+        this.controller = new WaitUntil({
+            node: this,
+            config: this.config,
+            RED,
+        });
     }
 
     function webhookNode(config) {
         RED.nodes.createNode(this, config);
 
-        this.config = config;
-        this.controller = new Webhook({ node: this, config, RED });
+        this.config = migrate(config);
+        this.controller = new Webhook({ node: this, config: this.config, RED });
     }
 
     function zoneNode(config) {
         RED.nodes.createNode(this, config);
 
-        this.config = config;
-        this.controller = new Zone({ node: this, config, RED });
+        this.config = migrate(config);
+        this.controller = new Zone({ node: this, config: this.config, RED });
     }
 
-    RED.nodes.registerType('server', configServerNode, {
-        credentials: {
-            host: { type: 'text' },
-            access_token: { type: 'text' },
-        },
-    });
+    const nodes = {
+        'ha-api': apiNode,
+        'api-call-service': callServiceNode,
+        server: configServerNode,
+        'api-current-state': currentStateNode,
+        'ha-entity': entityNode,
+        'server-events': eventsAllNode,
+        'server-state-changed': eventsStateNode,
+        'ha-fire-event': fireEventNode,
+        'ha-get-entities': getEntitiesNode,
+        'api-get-history': getHistoryNode,
+        'poll-state': pollStateNode,
+        'api-render-template': renderTemplateNode,
+        'trigger-state': triggerStateNode,
+        'ha-tag': tagNode,
+        'ha-time': timeNode,
+        'ha-wait-until': waitUntilNode,
+        'ha-webhook': webhookNode,
+        'ha-zone': zoneNode,
+    };
 
-    RED.nodes.registerType('ha-api', apiNode);
-    RED.nodes.registerType('api-call-service', callServiceNode);
-    RED.nodes.registerType('api-current-state', currentStateNode);
-    RED.nodes.registerType('ha-entity', entityNode);
-    RED.nodes.registerType('server-events', eventsAllNode);
-    RED.nodes.registerType('server-state-changed', eventsStateNode);
-    RED.nodes.registerType('ha-fire-event', fireEventNode);
-    RED.nodes.registerType('ha-get-entities', getEntitiesNode);
-    RED.nodes.registerType('api-get-history', getHistoryNode);
-    RED.nodes.registerType('poll-state', pollStateNode);
-    RED.nodes.registerType('api-render-template', renderTemplateNode);
-    RED.nodes.registerType('trigger-state', triggerStateNode);
-    RED.nodes.registerType('ha-tag', tagNode);
-    RED.nodes.registerType('ha-time', timeNode);
-    RED.nodes.registerType('ha-wait-until', waitUntilNode);
-    RED.nodes.registerType('ha-webhook', webhookNode);
-    RED.nodes.registerType('ha-zone', zoneNode);
+    for (const type in nodes) {
+        RED.nodes.registerType(type, nodes[type], getExposedSettings(type));
+    }
 };

@@ -13,10 +13,11 @@ RED.nodes.registerType('ha-time', {
                 : 'time')
         );
     },
-    labelStyle: nodeVersion.labelStyle,
+    labelStyle: ha.labelStyle,
     defaults: {
-        server: { value: '', type: 'server', required: true },
         name: { value: '' },
+        server: { value: '', type: 'server', required: true },
+        version: { value: RED.settings.haTimeVersion },
         exposeToHomeAssistant: { value: false },
         haConfig: {
             value: [
@@ -36,6 +37,7 @@ RED.nodes.registerType('ha-time', {
         debugenabled: { value: true },
     },
     oneditprepare: function () {
+        nodeVersion.check(this);
         const node = this;
 
         haServer.init(node, '#node-input-server');

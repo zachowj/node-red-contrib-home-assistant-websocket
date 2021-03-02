@@ -4,17 +4,17 @@ RED.nodes.registerType('poll-state', {
     color: ha.nodeColors.haBlue,
     inputs: 0,
     outputs: 1,
-    outputLabels: nodeVersion.ifStateLabels,
+    outputLabels: ["'If State' is true", "'If State' is false"],
     icon: 'ha-poll-state.svg',
     paletteLabel: 'poll state',
     label: function () {
         return this.name || `poll state: ${this.entity_id}`;
     },
-    labelStyle: nodeVersion.labelStyle,
+    labelStyle: ha.labelStyle,
     defaults: {
         name: { value: '' },
         server: { value: '', type: 'server', required: true },
-        version: { value: 1 },
+        version: { value: RED.settings.pollStateVersion },
         exposeToHomeAssistant: { value: false },
         haConfig: {
             value: [
@@ -35,14 +35,12 @@ RED.nodes.registerType('poll-state', {
     },
     oneditprepare: function () {
         nodeVersion.check(this);
-        const $entityIdField = $('#entity_id');
-        $entityIdField.val(this.entity_id);
-
         const node = this;
 
         haServer.init(node, '#node-input-server');
         haServer.autocomplete('entities', (entities) => {
             node.availableEntities = entities;
+            const $entityIdField = $('#node-input-entity_id');
 
             $entityIdField.autocomplete({
                 source: node.availableEntities,
@@ -70,30 +68,12 @@ RED.nodes.registerType('poll-state', {
 
         $('#node-input-updateinterval').spinner({ min: 1 });
 
-        if (this.state_type === undefined) {
-            $('#node-input-state_type').val('str');
-        }
-
-        if (this.halt_if_compare === undefined) {
-            $('#node-input-halt_if_compare').val('is');
-        }
-
-        if (this.updateIntervalUnits === undefined) {
-            $('#node-input-updateIntervalUnits').val('seconds');
-        }
-
         ifState.init('#node-input-halt_if', '#node-input-halt_if_compare');
         exposeNode.init(node);
     },
     oneditsave: function () {
-        this.entity_id = $('#entity_id').val().trim();
-        let outputs = $('#node-input-halt_if').val() ? 2 : 1;
-        // Swap inputs for the new 'if state' location
-        if (this.version === 0 && outputs === 2) {
-            outputs = JSON.stringify({ 0: 1, 1: 0 });
-        }
+        const outputs = $('#node-input-halt_if').val() ? 2 : 1;
         $('#node-input-outputs').val(outputs);
-        nodeVersion.update(this);
         this.haConfig = exposeNode.getValues();
     },
 });

@@ -9,9 +9,8 @@ const nodeOptions = {
         attributes: (nodeConfig) => nodeConfig.attributes || [],
         resend: {},
         outputLocation: {},
-        outputLocationType: (nodeConfig) =>
-            nodeConfig.outputLocationType || 'none',
-        inputOverride: (nodeConfig) => nodeConfig.inputOverride || 'allow',
+        outputLocationType: {},
+        inputOverride: {},
     },
     input: {
         state: {

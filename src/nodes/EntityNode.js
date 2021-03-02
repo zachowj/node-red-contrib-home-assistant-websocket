@@ -8,7 +8,7 @@ const DEFAULT_NODE_OPTIONS = {
         outputs: 1,
         entityType: {},
         config: {},
-        exposeToHomeAssistant: (nodeConfig) => true,
+        exposeToHomeAssistant: () => true,
     },
 };
 

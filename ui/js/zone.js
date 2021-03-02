@@ -8,10 +8,11 @@ RED.nodes.registerType('ha-zone', {
     label: function () {
         return this.name || 'zone';
     },
-    labelStyle: nodeVersion.labelStyle,
+    labelStyle: ha.labelStyle,
     defaults: {
-        server: { value: '', type: 'server', required: true },
         name: { value: '' },
+        server: { value: '', type: 'server', required: true },
+        version: { value: RED.settings.haZoneVersion },
         exposeToHomeAssistant: { value: false },
         haConfig: {
             value: [
@@ -36,6 +37,7 @@ RED.nodes.registerType('ha-zone', {
         },
     },
     oneditprepare: function () {
+        nodeVersion.check(this);
         const $entities = $('#entities');
         const $zones = $('#zones');
         let zones = [];

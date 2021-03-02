@@ -6,36 +6,26 @@ const RenderTemplate = require('../helpers/mustache-context');
 const nodeOptions = {
     config: {
         halt_if: {},
-        halt_if_type: (nodeDef) => nodeDef.halt_if_type || 'str',
-        halt_if_compare: (nodeDef) => nodeDef.halt_if_compare || 'is',
+        halt_if_type: {},
+        halt_if_compare: {},
         override_topic: {},
-        entity_id: {},
-        state_type: (nodeDef) => nodeDef.state_type || 'str',
-        state_location: (nodeDef) => nodeDef.state_location || 'payload',
+        entityId: {},
+        state_type: {},
+        state_location: {},
         // state location type
-        override_payload: (nodeDef) => {
-            if (nodeDef.state_location === undefined) {
-                return nodeDef.override_payload !== false ? 'msg' : 'none';
-            }
-            return nodeDef.override_payload;
-        },
-        entity_location: (nodeDef) => nodeDef.entity_location || 'data',
+        override_payload: {},
+        entity_location: {},
         // entity location type
-        override_data: (nodeDef) => {
-            if (nodeDef.entity_location === undefined) {
-                return nodeDef.override_data !== false ? 'msg' : 'none';
-            }
-            return nodeDef.override_data;
-        },
+        override_data: {},
         blockInputOverrides: {},
     },
     input: {
-        entity_id: {
-            messageProp: 'payload.entity_id',
-            configProp: 'entity_id',
+        entityId: {
+            messageProp: 'payload.entityId',
+            configProp: 'entityId',
             validation: {
                 haltOnFail: true,
-                schema: Joi.string().label('entity_id'),
+                schema: Joi.string().label('entityId'),
             },
         },
     },
@@ -51,8 +41,8 @@ class CurrentState extends BaseNode {
         const config = this.nodeConfig;
         const entityId = RenderTemplate(
             config.blockInputOverrides === true
-                ? config.entity_id
-                : parsedMessage.entity_id.value,
+                ? config.entityId
+                : parsedMessage.entityId.value,
             message,
             this.node.context(),
             config.server.name
@@ -66,7 +56,7 @@ class CurrentState extends BaseNode {
         const entity = this.homeAssistant.getStates(entityId);
         if (!entity) {
             done(
-                `Entity could not be found in cache for entity_id: ${entityId}`
+                `Entity could not be found in cache for entityId: ${entityId}`
             );
             return;
         }
@@ -107,20 +97,6 @@ class CurrentState extends BaseNode {
             config.entity_location,
             message
         );
-
-        // Handle version 0 'halt if' outputs
-        if (config.version < 1) {
-            if (config.halt_if && isIfState) {
-                this.status.setFailed(entity.state);
-                send([null, message]);
-                done();
-                return;
-            }
-            this.status.setSuccess(entity.state);
-            send([message, null]);
-            done();
-            return;
-        }
 
         if (config.halt_if && !isIfState) {
             this.status.setFailed(entity.state);

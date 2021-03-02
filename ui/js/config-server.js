@@ -1,8 +1,9 @@
-/* global RED: false, $: false */
+/* global RED: false, $: false, nodeVersion: false */
 RED.nodes.registerType('server', {
     category: 'config',
     defaults: {
         name: { value: 'Home Assistant', required: false },
+        version: { value: RED.settings.serverVersion },
         legacy: { value: false },
         addon: { value: false },
         rejectUnauthorizedCerts: { value: true },
@@ -19,24 +20,10 @@ RED.nodes.registerType('server', {
         return this.name || this.url;
     },
     oneditprepare: function () {
+        nodeVersion.check(this);
         const $addon = $('#node-config-input-addon');
         const $host = $('#node-config-input-host');
         const $legacy = $('#node-config-input-legacy');
-
-        if (this.ha_boolean === undefined) {
-            $('#node-config-input-ha_boolean').val('y|yes|true|on|home|open');
-        }
-
-        // Backwards compatibility
-        if (this.rejectUnauthorizedCerts === false) {
-            $('#accept_unauthorized_certs').prop('checked', true);
-        }
-        if (this.connectionDelay === undefined) {
-            $('#node-config-input-connectionDelay').prop('checked', true);
-        }
-        if (this.cacheJson === undefined) {
-            $('#node-config-input-cacheJson').prop('checked', true);
-        }
 
         // Still need to check if host is hassio url for backward compatibility
         const addonBaseUrls = [

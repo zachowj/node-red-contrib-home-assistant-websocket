@@ -11,7 +11,7 @@ const nodeOptions = {
         server: { isNode: true },
         startdate: {},
         enddate: {},
-        entityid: {},
+        entityid: (nodeDef) => (nodeDef.entityid || '').trim(),
         entityidtype: {},
         useRelativeTime: {},
         relativeTime: {},
@@ -126,11 +126,6 @@ class GetHistory extends BaseNode {
             this.status.setFailed('Error');
             done(`Error get-history: ${err.message}`);
             return;
-        }
-
-        if (this.nodeConfig.output_location === undefined) {
-            this.nodeConfig.output_location = 'payload';
-            this.nodeConfig.output_location_type = 'msg';
         }
 
         switch (this.nodeConfig.output_type) {

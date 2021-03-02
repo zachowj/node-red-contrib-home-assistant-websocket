@@ -9,10 +9,11 @@ RED.nodes.registerType('api-render-template', {
     label: function () {
         return this.name || `template: ${this.template || ''}`;
     },
-    labelStyle: nodeVersion.labelStyle,
+    labelStyle: ha.labelStyle,
     defaults: {
         name: { value: '' },
         server: { value: '', type: 'server', required: true },
+        version: { value: RED.settings.apiRenderTemplateVersion },
         template: { value: '' },
         resultsLocation: { value: 'payload' },
         resultsLocationType: { value: 'msg' },
@@ -20,6 +21,7 @@ RED.nodes.registerType('api-render-template', {
         templateLocationType: { value: 'msg' },
     },
     oneditprepare: function () {
+        nodeVersion.check(this);
         const $server = $('#node-input-server');
         const utils = {
             setDefaultServerSelection: function () {
@@ -38,12 +40,6 @@ RED.nodes.registerType('api-render-template', {
 
         const $inputTemplate = $('#node-input-template');
 
-        if (this.templateLocation === undefined) {
-            $('#node-input-templateLocation').val('template');
-        }
-        if (this.resultsLocation === undefined) {
-            $('#node-input-resultsLocation').val('payload');
-        }
         $('#node-input-templateLocation').typedInput({
             types: [
                 'msg',

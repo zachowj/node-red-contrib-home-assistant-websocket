@@ -4,7 +4,7 @@ RED.nodes.registerType('server-state-changed', {
     color: ha.nodeColors.haBlue,
     inputs: 0,
     outputs: 1,
-    outputLabels: nodeVersion.ifStateLabels,
+    outputLabels: ["'If State' is true", "'If State' is false"],
     icon: 'ha-events-state-changed.svg',
     paletteLabel: 'events: state',
     label: function () {
@@ -13,11 +13,11 @@ RED.nodes.registerType('server-state-changed', {
             `state_changed: ${this.entityidfilter || 'all entities'}`
         );
     },
-    labelStyle: nodeVersion.labelStyle,
+    labelStyle: ha.labelStyle,
     defaults: {
         name: { value: '' },
         server: { value: '', type: 'server', required: true },
-        version: { value: 1 },
+        version: { value: RED.settings.serverStateChangedVersion },
         exposeToHomeAssistant: { value: false },
         haConfig: {
             value: [
@@ -30,8 +30,8 @@ RED.nodes.registerType('server-state-changed', {
         outputinitially: { value: false },
         state_type: { value: 'str' },
         haltifstate: { value: '' },
-        halt_if_type: {},
-        halt_if_compare: {},
+        halt_if_type: { value: 'str' },
+        halt_if_compare: { value: 'is' },
         outputs: { value: 1 },
         output_only_on_state_change: { value: true },
         for: { value: 0 },
@@ -44,17 +44,12 @@ RED.nodes.registerType('server-state-changed', {
         ignoreCurrentStateUnavailable: { value: false },
     },
     oneditprepare: function () {
+        nodeVersion.check(this);
         const $entityidfilter = $('#node-input-entityidfilter');
-        const $entityidfiltertype = $('#node-input-entityidfiltertype');
         const node = this;
 
-        nodeVersion.check(this);
         haServer.init(node, '#node-input-server');
         exposeNode.init(node);
-
-        $entityidfilter.val(this.entityidfilter);
-        this.entityidfiltertype = this.entityidfiltertype || 'substring';
-        $entityidfiltertype.val(this.entityidfiltertype);
 
         haServer.autocomplete('entities', (entities) => {
             node.availableEntities = entities;
@@ -63,18 +58,6 @@ RED.nodes.registerType('server-state-changed', {
                 minLength: 0,
             });
         });
-
-        if (this.state_type === undefined) {
-            $('#node-input-state_type').val('str');
-        }
-
-        if (this.halt_if_compare === undefined) {
-            $('#node-input-halt_if_compare').val('is');
-        }
-
-        if (this.forUnits === undefined) {
-            $('#node-input-forUnits').val('minutes');
-        }
 
         ifState.init('#node-input-haltifstate', '#node-input-halt_if_compare');
 
@@ -85,17 +68,8 @@ RED.nodes.registerType('server-state-changed', {
         });
     },
     oneditsave: function () {
-        this.entityidfilter = $('#node-input-entityidfilter').val();
-        let outputs = $('#node-input-haltifstate').val() ? 2 : 1;
-        // Swap inputs for the new 'if state' location
-        if (this.version === 0 && outputs === 2) {
-            outputs = JSON.stringify({
-                0: 1,
-                1: 0,
-            });
-        }
+        const outputs = $('#node-input-haltifstate').val() ? 2 : 1;
         $('#node-input-outputs').val(outputs);
-        nodeVersion.update(this);
         this.haConfig = exposeNode.getValues();
     },
 });

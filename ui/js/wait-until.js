@@ -10,10 +10,11 @@ RED.nodes.registerType('ha-wait-until', {
     label: function () {
         return this.name || `wait until`;
     },
-    labelStyle: nodeVersion.labelStyle,
+    labelStyle: ha.labelStyle,
     defaults: {
         name: { value: '' },
         server: { value: '', type: 'server', required: true },
+        version: { value: RED.settings.haWaitUntilVersion },
         outputs: { value: 1 },
         entityId: { value: '' },
         entityIdFilterType: { value: 'exact' },
@@ -30,6 +31,7 @@ RED.nodes.registerType('ha-wait-until', {
         blockInputOverrides: { value: true },
     },
     oneditprepare: function () {
+        nodeVersion.check(this);
         const node = this;
 
         haServer.init(node, '#node-input-server');
@@ -49,10 +51,6 @@ RED.nodes.registerType('ha-wait-until', {
                 minLength: 0,
             });
         });
-
-        if (node.checkCurrentState === undefined) {
-            $('#node-input-checkCurrentState').prop('checked', false);
-        }
 
         const entityType = { value: 'entity', label: 'entity.' };
         const defaultTypes = [
@@ -130,12 +128,7 @@ RED.nodes.registerType('ha-wait-until', {
             typeField: '#node-input-entityLocationType',
         });
 
-        // Set defaults if undefined
-        if (node.blockInputOverrides === undefined) {
-            $('#node-input-blockInputOverrides').prop('checked', true);
-        }
         const $filterType = $('#node-input-entityIdFilterType');
-        $filterType.val(node.entityIdFilterType || 'exact');
         $filterType.on('change', function () {
             $('.exact-only').toggle($filterType.val() === 'exact');
         });

@@ -5,6 +5,7 @@ RED.nodes.registerType('server-events', {
     defaults: {
         name: { value: '' },
         server: { value: '', type: 'server', required: true },
+        version: { value: RED.settings.serverEventsVersion },
         event_type: { value: '', required: false },
         exposeToHomeAssistant: { value: false },
         haConfig: {
@@ -22,14 +23,11 @@ RED.nodes.registerType('server-events', {
     label: function () {
         return this.name || `events: ${this.event_type || 'all'}`;
     },
-    labelStyle: nodeVersion.labelStyle,
+    labelStyle: ha.labelStyle,
     oneditprepare: function () {
+        nodeVersion.check(this);
         haServer.init(this, '#node-input-server');
         exposeNode.init(this);
-
-        if (this.waitForRunning === undefined) {
-            $('#node-input-waitForRunning').prop('checked', true);
-        }
 
         $('#node-input-event_type')
             .on('change keyup', function () {

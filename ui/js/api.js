@@ -1,4 +1,4 @@
-/* global RED: false, $: false, ha: false, nodeVersion: false */
+/* global RED: false, $: false, ha: false, haServer: false, nodeVersion: false */
 RED.nodes.registerType('ha-api', {
     category: 'home_assistant',
     color: ha.nodeColors.haBlue,
@@ -9,10 +9,11 @@ RED.nodes.registerType('ha-api', {
     label: function () {
         return this.name || 'API';
     },
-    labelStyle: nodeVersion.labelStyle,
+    labelStyle: ha.labelStyle,
     defaults: {
         name: { value: '' },
         server: { value: '', type: 'server', required: true },
+        version: { value: RED.settings.haApiVersion },
         debugenabled: { value: false },
         protocol: { value: 'websocket' },
         method: { value: 'get' },
@@ -24,22 +25,8 @@ RED.nodes.registerType('ha-api', {
         responseType: { value: 'json' },
     },
     oneditprepare: function () {
-        const node = this;
-        const $server = $('#node-input-server');
-        const utils = {
-            setDefaultServerSelection: function () {
-                let defaultServer;
-                RED.nodes.eachConfig((n) => {
-                    if (n.type === 'server' && !defaultServer)
-                        defaultServer = n.id;
-                });
-                if (defaultServer) $server.val(defaultServer);
-            },
-        };
-
-        if (!node.server) {
-            utils.setDefaultServerSelection();
-        }
+        nodeVersion.check(this);
+        haServer.init(this, '#node-input-server');
 
         $('#node-input-data').typedInput({
             types: ['json', 'jsonata'],

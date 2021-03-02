@@ -8,10 +8,11 @@ RED.nodes.registerType('ha-tag', {
     label: function () {
         return this.name || 'tag';
     },
-    labelStyle: nodeVersion.labelStyle,
+    labelStyle: ha.labelStyle,
     defaults: {
-        server: { value: '', type: 'server', required: true },
         name: { value: '' },
+        server: { value: '', type: 'server', required: true },
+        version: { value: RED.settings.haTagVersion },
         exposeToHomeAssistant: { value: false },
         haConfig: {
             value: [
@@ -31,6 +32,7 @@ RED.nodes.registerType('ha-tag', {
         },
     },
     oneditprepare: function () {
+        nodeVersion.check(this);
         const $tags = $('#tags');
         const $devices = $('#devices');
         let tags = [];

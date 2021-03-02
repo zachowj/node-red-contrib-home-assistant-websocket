@@ -17,11 +17,11 @@ RED.nodes.registerType('ha-entity', {
     label: function () {
         return this.name || `type: ${this.entityType}`;
     },
-    labelStyle: nodeVersion.labelStyle,
+    labelStyle: ha.labelStyle,
     defaults: {
         name: { value: '' },
         server: { value: '', type: 'server', required: true },
-        version: { value: 1 },
+        version: { value: RED.settings.haEntityVersion },
         debugenabled: { value: false },
         outputs: { value: 1 },
         entityType: { value: 'sensor' },
@@ -251,7 +251,6 @@ RED.nodes.registerType('ha-entity', {
         const node = this;
         node.attributes = [];
         node.config = [];
-        nodeVersion.update(this);
 
         $('#attributes')
             .editableList('items')

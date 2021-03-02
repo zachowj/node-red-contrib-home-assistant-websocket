@@ -18,10 +18,11 @@ RED.nodes.registerType('api-get-history', {
         }
         return 'get history';
     },
-    labelStyle: nodeVersion.labelStyle,
+    labelStyle: ha.labelStyle,
     defaults: {
         name: { value: '' },
         server: { value: '', type: 'server', required: true },
+        version: { value: RED.settings.apiGetHistoryVersion },
         startdate: { value: '' },
         enddate: { value: '' },
         entityid: { value: '' },
@@ -34,6 +35,7 @@ RED.nodes.registerType('api-get-history', {
         output_location: { value: 'payload' },
     },
     oneditprepare: function () {
+        nodeVersion.check(this);
         const NODE = this;
         const $entityIdField = $('#entity_id');
         $entityIdField.val(this.entityid);
@@ -61,13 +63,6 @@ RED.nodes.registerType('api-get-history', {
             }
         });
 
-        if (this.output_location === undefined) {
-            $('#node-input-output_location').val('payload');
-        }
-        if (this.output_type === undefined) {
-            $('#node-input-output_type').val('array');
-        }
-
         $('#node-input-output_location').typedInput({
             types: ['msg', 'flow', 'global'],
             typeField: '#node-input-output_location_type',
@@ -78,8 +73,5 @@ RED.nodes.registerType('api-get-history', {
                 $('.output-option').toggle(e.target.value === 'array')
             )
             .trigger('change');
-    },
-    oneditsave: function () {
-        this.entityid = $('#entity_id').val().trim();
     },
 });

@@ -13,6 +13,8 @@ const browserSync = require('browser-sync');
 const nodemon = require('nodemon');
 
 // Source
+const buffer = require('gulp-buffer');
+const rollupPluginCommon = require('@rollup/plugin-commonjs')();
 const rollupStream = require('@rollup/stream');
 const source = require('vinyl-source-stream');
 
@@ -42,9 +44,9 @@ const editorFilePath = 'dist';
 const uiCssWrap = '<style><%= contents %></style>';
 const uiJsWrap = '<script type="text/javascript"><%= contents %></script>';
 const uiFormWrap =
-    '<script type="text/x-red" data-template-name="<%= data.type %>"><%= data.contents %></script>';
+    '<script type="text/html" data-template-name="<%= data.type %>"><%= data.contents %></script>';
 const uiHelpWrap =
-    '<script type="text/x-red" data-help-name="<%= data.type %>"><%= data.contents %></script>';
+    '<script type="text/html" data-help-name="<%= data.type %>"><%= data.contents %></script>';
 
 const nodeMap = {
     api: { doc: 'API', type: 'ha-api' },
@@ -249,6 +251,20 @@ const buildHelp = lazypipe()
 task('buildEditorFiles', (done) => {
     const css = src(['ui/css/*.scss']).pipe(buildSass());
 
+    const migrations = rollupStream({
+        input: 'src/migrations/index.js',
+        output: {
+            dir: editorFilePath,
+            format: 'iife',
+            name: 'haMigrations',
+        },
+        plugins: [rollupPluginCommon],
+        external: [],
+    })
+        .pipe(source('migrations.js'))
+        .pipe(buffer())
+        .pipe(buildJs());
+
     const js = src(['ui/shared/*.js', 'ui/js/*.js'])
         .pipe(concat('all.js'))
         .pipe(buildJs());
@@ -276,7 +292,7 @@ task('buildEditorFiles', (done) => {
         })
     );
 
-    return merge([css, js, html])
+    return merge([css, js, html, migrations])
         .pipe(concat('index.html'))
         .pipe(dest(editorFilePath + '/'));
 });
@@ -289,7 +305,7 @@ task('buildSourceFiles', () => {
             format: 'cjs',
             exports: 'default',
         },
-        plugins: [require('@rollup/plugin-commonjs')()],
+        plugins: [rollupPluginCommon],
         external: [
             'selectn',
             'joi',
@@ -413,7 +429,12 @@ module.exports = {
         runNodemonAndBrowserSync,
         function watcher(done) {
             watch(
-                ['ui/**/*', 'docs/node/*.md'],
+                [
+                    'docs/node/*.md',
+                    'locales/**/*',
+                    'src/migrations/**/*',
+                    'ui/**/*',
+                ],
                 series(
                     'cleanEditorFiles',
                     'buildEditorFiles',

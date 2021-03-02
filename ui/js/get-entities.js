@@ -9,10 +9,11 @@ RED.nodes.registerType('ha-get-entities', {
     label: function () {
         return this.name || 'get entities';
     },
-    labelStyle: nodeVersion.labelStyle,
+    labelStyle: ha.labelStyle,
     defaults: {
-        server: { value: '', type: 'server', required: true },
         name: { value: '' },
+        server: { value: '', type: 'server', required: true },
+        version: { value: RED.settings.haGetEntitiesVersion },
         rules: {
             value: [{ property: '', logic: 'is', value: '', valueType: 'str' }],
         },
@@ -31,6 +32,7 @@ RED.nodes.registerType('ha-get-entities', {
         },
     },
     oneditprepare: function () {
+        nodeVersion.check(this);
         const NODE = this;
         const operators = [
             { value: 'is', text: 'is' },

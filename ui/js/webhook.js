@@ -19,10 +19,11 @@ RED.nodes.registerType('ha-webhook', {
     label: function () {
         return this.name || `webhook`;
     },
-    labelStyle: nodeVersion.labelStyle,
+    labelStyle: ha.labelStyle,
     defaults: {
         name: { value: '' },
         server: { value: '', type: 'server', required: true },
+        version: { value: RED.settings.haWebhookVersion },
         outputs: { value: 1 },
         webhookId: { value: generateId(32), required: true },
         payloadLocation: { value: 'payload' },
@@ -31,6 +32,7 @@ RED.nodes.registerType('ha-webhook', {
         headersLocationType: { value: 'none' },
     },
     oneditprepare: function () {
+        nodeVersion.check(this);
         const node = this;
         haServer.init(node, '#node-input-server');
         const $webhookId = $('#node-input-webhookId');

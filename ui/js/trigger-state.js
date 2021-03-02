@@ -28,10 +28,11 @@ RED.nodes.registerType('trigger-state', {
     label: function () {
         return this.name || `trigger-state: ${this.entityid}`;
     },
-    labelStyle: nodeVersion.labelStyle,
+    labelStyle: ha.labelStyle,
     defaults: {
         name: { value: '' },
         server: { value: '', type: 'server', required: true },
+        version: { value: RED.settings.triggerStateVersion },
         exposeToHomeAssistant: { value: false },
         haConfig: {
             value: [
@@ -61,6 +62,7 @@ RED.nodes.registerType('trigger-state', {
         state_type: { value: 'str' },
     },
     oneditprepare: function () {
+        nodeVersion.check(this);
         const node = this;
         const $constraintList = $('#constraint-list');
         const $outputList = $('#output-list');

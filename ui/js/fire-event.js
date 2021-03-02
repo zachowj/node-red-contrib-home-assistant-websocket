@@ -10,15 +10,17 @@ RED.nodes.registerType('ha-fire-event', {
     label: function () {
         return this.name || `Event: ${this.event}`;
     },
-    labelStyle: nodeVersion.labelStyle,
+    labelStyle: ha.labelStyle,
     defaults: {
         name: { value: '' },
         server: { value: '', type: 'server', required: true },
+        version: { value: RED.settings.haFireEventVersion },
         event: { value: '' },
         data: { value: '' },
         dataType: { value: 'jsonata' },
     },
     oneditprepare: function () {
+        nodeVersion.check(this);
         const node = this;
         haServer.init(node, '#node-input-server');
 

@@ -10,18 +10,18 @@ const {
 
 const nodeOptions = {
     config: {
-        entityidfilter: {},
+        entityidfilter: (nodeDef) => (nodeDef.entityidfilter || '').trim(),
         entityidfiltertype: {},
         haltIfState: (nodeDef) =>
             nodeDef.haltifstate ? nodeDef.haltifstate.trim() : null,
-        halt_if_type: (nodeDef) => nodeDef.halt_if_type || 'str',
-        halt_if_compare: (nodeDef) => nodeDef.halt_if_compare || 'is',
+        halt_if_type: {},
+        halt_if_compare: {},
         outputinitially: {},
-        state_type: (nodeDef) => nodeDef.state_type || 'str',
+        state_type: {},
         output_only_on_state_change: {},
-        for: (nodeDef) => nodeDef.for || '0',
-        forType: (nodeDef) => nodeDef.forType || 'num',
-        forUnits: (nodeDef) => nodeDef.forUnits || 'minutes',
+        for: {},
+        forType: {},
+        forUnits: {},
         ignorePrevStateNull: {},
         ignorePrevStateUnknown: {},
         ignorePrevStateUnavailable: {},
@@ -201,20 +201,6 @@ class EventsState extends EventsHaNode {
         }`;
 
         clearTimeout(this.topics[eventMessage.entity_id].id);
-
-        // Handle version 0 'halt if' outputs. The output were reversed true
-        // was sent to the second output and false was the first output
-        // ! Deprecated: Remove before 1.0
-        if (config.version < 1) {
-            if (config.haltIfState && condition) {
-                this.status.setFailed(statusMessage);
-                this.send([null, msg]);
-                return;
-            }
-            this.status.setSuccess(statusMessage);
-            this.send([msg, null]);
-            return;
-        }
 
         if (config.haltIfState && !condition) {
             this.status.setFailed(statusMessage);

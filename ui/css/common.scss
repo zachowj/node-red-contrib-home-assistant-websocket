@@ -2,6 +2,7 @@ $alpha-background-color: #e78bb9;
 $alpha-text-color: #702323;
 $beta-background-color: #77dd77;
 $beta-text-color: #853e3d;
+$home-assistant-color: #41bdf5;
 
 #version-update {
     padding: 0.5em;
@@ -48,6 +49,10 @@ $beta-text-color: #853e3d;
             width: auto;
             margin-right: 20px;
         }
+    }
+
+    &.add-spacer {
+        border-bottom: 1px solid #c6c6c6;
     }
 }
 
@@ -208,4 +213,16 @@ li span.property-type {
     & + & {
         margin-left: 5px;
     }
+}
+
+#upgrade-ha-node {
+    padding: 4px 12px;
+    background: $home-assistant-color;
+    color: #eee;
+    display: inline-block;
+    line-height: 22px;
+    font-size: 14px;
+    text-decoration: none;
+    margin: 0;
+    border: 0;
 }

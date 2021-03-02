@@ -12,10 +12,10 @@ const nodeOptions = {
         updateIntervalUnits: {},
         outputinitially: {},
         outputonchanged: {},
-        state_type: (nodeDef) => nodeDef.state_type || 'str',
+        state_type: {},
         halt_if: {},
-        halt_if_type: (nodeDef) => nodeDef.halt_if_type || 'str',
-        halt_if_compare: (nodeDef) => nodeDef.halt_if_compare || 'is',
+        halt_if_type: {},
+        halt_if_compare: {},
     },
 };
 
@@ -132,18 +132,6 @@ class PollState extends EventsHaNode {
         const statusMessage = `${pollState.state}${
             triggered === true ? ` (triggered)` : ''
         }`;
-
-        // Handle version 0 'halt if' outputs
-        if (this.nodeConfig.version < 1) {
-            if (this.nodeConfig.halt_if && isIfState) {
-                this.status.setFailed(statusMessage);
-                this.send([null, msg]);
-                return;
-            }
-            this.status.setSuccess(statusMessage);
-            this.send([msg, null]);
-            return;
-        }
 
         // Check 'if state' and send to correct output
         if (this.nodeConfig.halt_if && !isIfState) {

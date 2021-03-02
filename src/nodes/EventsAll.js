@@ -2,8 +2,8 @@ const EventsHaNode = require('./EventsHaNode');
 
 const nodeOptions = {
     config: {
-        event_type: {},
-        waitForRunning: (nodeDef) => nodeDef.waitForRunning || true,
+        event_type: (nodeDef) => (nodeDef.event_type || '').trim(),
+        waitForRunning: {},
     },
 };
 

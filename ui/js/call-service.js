@@ -10,11 +10,11 @@ RED.nodes.registerType('api-call-service', {
     label: function () {
         return this.name || `svc: ${this.service_domain}:${this.service}`;
     },
-    labelStyle: nodeVersion.labelStyle,
+    labelStyle: ha.labelStyle,
     defaults: {
         name: { value: '' },
         server: { value: '', type: 'server', required: true },
-        version: { value: 1 },
+        version: { value: RED.settings.apiCallServiceVersion },
         debugenabled: { value: false },
         service_domain: { value: '' },
         service: { value: '' },
@@ -45,20 +45,6 @@ RED.nodes.registerType('api-call-service', {
 
         $domainField.val(node.service_domain);
         $serviceField.val(node.service);
-
-        if (!node.version) {
-            // Extract entity_id from data and fill in the entity_id input
-            try {
-                const data = JSON.parse(node.data);
-                if (data.entity_id) {
-                    $entityIdField.val(data.entity_id);
-                    delete data.entity_id;
-                    $data.val(
-                        !Object.keys(data).length ? '' : JSON.stringify(data)
-                    );
-                }
-            } catch (e) {}
-        }
 
         $data.typedInput({
             types: ['json', 'jsonata'],
@@ -265,9 +251,6 @@ RED.nodes.registerType('api-call-service', {
                 });
         }
 
-        if (!this.output_location) {
-            $('#node-input-output_location').val('payload');
-        }
         $('#node-input-output_location').typedInput({
             types: [
                 'msg',
@@ -312,15 +295,14 @@ RED.nodes.registerType('api-call-service', {
         });
     },
     oneditsave: function () {
-        const entityId = $('#node-input-entityId').val();
+        const $entityId = $('#node-input-entityId');
+        const entityId = $entityId.val();
         this.service_domain = $('#service_domain').val();
         this.service = $('#service').val();
 
         if (entityId.length) {
             // remove trailing comma
-            $('#node-input-entityId').val(entityId.replace(/\s*,\s*$/, ''));
+            $entityId.val(entityId.replace(/\s*,\s*$/, ''));
         }
-
-        nodeVersion.update(this);
     },
 });

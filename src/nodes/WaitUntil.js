@@ -18,21 +18,18 @@ const nodeOptions = {
         },
         outputs: 1,
         entityId: {},
-        entityIdFilterType: (nodeDef) => nodeDef.entityIdFilterType || 'exact',
+        entityIdFilterType: {},
         property: {},
         comparator: {},
         value: {},
         valueType: {},
         timeout: {},
-        timeoutType: (nodeDef) => nodeDef.timeoutType || 'num',
+        timeoutType: {},
         timeoutUnits: {},
         entityLocation: {},
         entityLocationType: {},
         checkCurrentState: {},
-        blockInputOverrides: (nodeDef) =>
-            nodeDef.blockInputOverrides === undefined
-                ? true
-                : nodeDef.blockInputOverrides,
+        blockInputOverrides: {},
     },
     input: {
         entityId: {

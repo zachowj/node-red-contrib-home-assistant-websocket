@@ -4,17 +4,22 @@ RED.nodes.registerType('api-current-state', {
     color: ha.nodeColors.haBlue,
     inputs: 1,
     outputs: 1,
-    outputLabels: nodeVersion.ifStateLabels,
+    outputLabels: function (index) {
+        if (this.halt_if || this.haltifstate) {
+            if (index === 0) return "'If State' is true";
+            if (index === 1) return "'If State' is false";
+        }
+    },
     icon: 'ha-current-state.svg',
     paletteLabel: 'current state',
     label: function () {
         return this.name || `current_state: ${this.entity_id}`;
     },
-    labelStyle: nodeVersion.labelStyle,
+    labelStyle: ha.labelStyle,
     defaults: {
         name: { value: '' },
         server: { value: '', type: 'server', required: true },
-        version: { value: 1 },
+        version: { value: RED.settings.apiCurrentStateVersion },
         outputs: { value: 1 },
         halt_if: { value: '' },
         halt_if_type: { value: 'str' },
@@ -30,8 +35,7 @@ RED.nodes.registerType('api-current-state', {
     },
     oneditprepare: function () {
         nodeVersion.check(this);
-
-        const $entityIdField = $('#entity_id');
+        const $entityIdField = $('#node-input-entity_id');
         const $stateLocation = $('#node-input-state_location');
         const $entityLocation = $('#node-input-entity_location');
 
@@ -47,22 +51,6 @@ RED.nodes.registerType('api-current-state', {
             });
         });
 
-        $entityIdField.val(node.entity_id);
-
-        // Handle backwards compatibility
-        if (node.state_location === undefined) {
-            $stateLocation.val('payload');
-            $('#node-input-override_payload').val(
-                node.override_payload === false ? 'none' : 'msg'
-            );
-        }
-        if (node.entity_location === undefined) {
-            $entityLocation.val('data');
-            $('#node-input-override_data').val(
-                node.override_data === false ? 'none' : 'msg'
-            );
-        }
-
         const NoneType = { value: 'none', label: 'None', hasValue: false };
         $stateLocation.typedInput({
             types: ['msg', 'flow', 'global', NoneType],
@@ -73,14 +61,6 @@ RED.nodes.registerType('api-current-state', {
             typeField: '#node-input-override_data',
         });
 
-        if (node.state_type === undefined) {
-            $('#node-input-state_type').val('str');
-        }
-
-        if (node.halt_if_compare === undefined) {
-            $('#node-input-halt_if_compare').val('is');
-        }
-
         ifState.init(
             '#node-input-halt_if',
             '#node-input-halt_if_compare',
@@ -88,13 +68,7 @@ RED.nodes.registerType('api-current-state', {
         );
     },
     oneditsave: function () {
-        this.entity_id = $('#entity_id').val();
-        let outputs = $('#node-input-halt_if').val() ? 2 : 1;
-        // Swap inputs for the new 'if state' location
-        if (this.version === 0 && outputs === 2) {
-            outputs = JSON.stringify({ 0: 1, 1: 0 });
-        }
+        const outputs = $('#node-input-halt_if').val() ? 2 : 1;
         $('#node-input-outputs').val(outputs);
-        nodeVersion.update(this);
     },
 });
