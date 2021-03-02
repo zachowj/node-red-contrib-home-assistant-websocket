@@ -28,14 +28,25 @@ const migrations = [
             const newSchema = {
                 ...schema,
                 version: 1,
-                for: '0',
-                forType: 'num',
-                forUnits: 'minutes',
                 ignorePrevStateNull: false,
                 ignorePrevStateUnknown: false,
                 ignorePrevStateUnavailable: false,
                 ignoreCurrentStateUnknown: false,
                 ignoreCurrentStateUnavailable: false,
+            };
+
+            return newSchema;
+        },
+    },
+    {
+        version: 2,
+        up: (schema) => {
+            const newSchema = {
+                ...schema,
+                version: 2,
+                for: '0',
+                forType: 'num',
+                forUnits: 'minutes',
             };
 
             return newSchema;

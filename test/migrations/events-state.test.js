@@ -25,14 +25,18 @@ const VERSION_0 = {
 const VERSION_1 = {
     ...VERSION_0,
     version: 1,
-    for: '0',
-    forType: 'num',
-    forUnits: 'minutes',
     ignorePrevStateNull: false,
     ignorePrevStateUnknown: false,
     ignorePrevStateUnavailable: false,
     ignoreCurrentStateUnknown: false,
     ignoreCurrentStateUnavailable: false,
+};
+const VERSION_2 = {
+    ...VERSION_1,
+    version: 2,
+    for: '0',
+    forType: 'num',
+    forUnits: 'minutes',
 };
 
 describe('Migrations - Events: State Node', function () {
@@ -70,8 +74,16 @@ describe('Migrations - Events: State Node', function () {
             expect(migratedSchema).to.eql(VERSION_1);
         });
     });
+    describe('Version 2', function () {
+        it('should update version 1 to version 2', function () {
+            const migrate = migrations.find((m) => m.version === 2);
+            const migratedSchema = migrate.up(VERSION_1);
+
+            expect(migratedSchema).to.eql(VERSION_2);
+        });
+    });
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_1);
+        expect(migratedSchema).to.eql(VERSION_2);
     });
 });
