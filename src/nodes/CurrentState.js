@@ -9,7 +9,7 @@ const nodeOptions = {
         halt_if_type: {},
         halt_if_compare: {},
         override_topic: {},
-        entityId: {},
+        entity_id: {},
         state_type: {},
         state_location: {},
         // state location type
@@ -20,12 +20,12 @@ const nodeOptions = {
         blockInputOverrides: {},
     },
     input: {
-        entityId: {
-            messageProp: 'payload.entityId',
-            configProp: 'entityId',
+        entity_id: {
+            messageProp: 'payload.entity_id',
+            configProp: 'entity_id',
             validation: {
                 haltOnFail: true,
-                schema: Joi.string().label('entityId'),
+                schema: Joi.string().label('entity_id'),
             },
         },
     },
@@ -41,8 +41,8 @@ class CurrentState extends BaseNode {
         const config = this.nodeConfig;
         const entityId = RenderTemplate(
             config.blockInputOverrides === true
-                ? config.entityId
-                : parsedMessage.entityId.value,
+                ? config.entity_id
+                : parsedMessage.entity_id.value,
             message,
             this.node.context(),
             config.server.name
@@ -56,7 +56,7 @@ class CurrentState extends BaseNode {
         const entity = this.homeAssistant.getStates(entityId);
         if (!entity) {
             done(
-                `Entity could not be found in cache for entityId: ${entityId}`
+                `Entity could not be found in cache for entity_id: ${entityId}`
             );
             return;
         }
