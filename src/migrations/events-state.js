@@ -44,7 +44,7 @@ const migrations = [
             const newSchema = {
                 ...schema,
                 version: 2,
-                for: schema.for !== undefined ? '0' : schema.for,
+                for: schema.for !== undefined ? schema.for : '0',
                 forType: schema.forType || 'num',
                 forUnits: schema.forUnits || 'minutes',
             };
