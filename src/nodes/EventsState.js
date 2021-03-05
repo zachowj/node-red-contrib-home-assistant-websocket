@@ -175,7 +175,10 @@ class EventsState extends EventsHaNode {
                 val = this.getContextValue(valueType, value, null);
                 break;
             case 'jsonata':
-                val = this.evaluateJSONata(value, null, oldEntity, newEntity);
+                val = this.evaluateJSONata(value, {
+                    prevEntity: oldEntity,
+                    entity: newEntity,
+                });
                 break;
             case 'num':
             default:

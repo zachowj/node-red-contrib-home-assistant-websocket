@@ -276,7 +276,9 @@ class Time extends EventsHaNode {
                     break;
                 }
                 try {
-                    value = this.evaluateJSONata(val, {}, this.getEntity());
+                    value = this.evaluateJSONata(val, {
+                        entity: this.getEntity(),
+                    });
                 } catch (e) {
                     this.node.error(
                         this.RED._('ha-time.errors.invalid_jsonata_payload')

@@ -221,12 +221,11 @@ class BaseNode {
             comparatorValue
         ) {
             try {
-                cValue = this.evaluateJSONata(
-                    comparatorValue,
+                cValue = this.evaluateJSONata(comparatorValue, {
                     message,
                     entity,
-                    prevEntity
-                );
+                    prevEntity,
+                });
             } catch (e) {
                 throw new Error(`JSONata Error: ${e.message}`);
             }
@@ -288,12 +287,11 @@ class BaseNode {
 
                 try {
                     return (
-                        this.evaluateJSONata(
-                            cValue,
+                        this.evaluateJSONata(cValue, {
                             message,
                             entity,
-                            prevEntity
-                        ) === true
+                            prevEntity,
+                        }) === true
                     );
                 } catch (e) {
                     throw new Error(`JSONata Error: ${e.message}`);
@@ -301,7 +299,7 @@ class BaseNode {
         }
     }
 
-    evaluateJSONata(expression, message, entity, prevEntity) {
+    evaluateJSONata(expression, { message, entity, prevEntity, results } = {}) {
         const expr = this.RED.util.prepareJSONataExpression(
             expression,
             this.node
@@ -311,6 +309,7 @@ class BaseNode {
         expr.assign('prevEntity', () => prevEntity);
         expr.assign('sampleSize', sampleSize);
         expr.assign('randomNumber', random);
+        expr.assign('results', () => results);
         expr.assign('entities', (val) => {
             return this.homeAssistant && this.homeAssistant.getStates(val);
         });
@@ -318,7 +317,11 @@ class BaseNode {
         return this.RED.util.evaluateJSONataExpression(expr, message);
     }
 
-    getTypedInputValue(value, valueType, { message, entity }) {
+    getTypedInputValue(
+        value,
+        valueType,
+        { entity, entityId, message, prevEntity, results } = {}
+    ) {
         let val;
         switch (valueType) {
             case 'msg':
@@ -346,7 +349,13 @@ class BaseNode {
                     break;
                 }
                 try {
-                    val = this.evaluateJSONata(value, message, entity);
+                    val = this.evaluateJSONata(value, {
+                        entity,
+                        entityId,
+                        message,
+                        prevEntity,
+                        results,
+                    });
                 } catch (e) {
                     throw new Error(`JSONata Error: ${e.message}`);
                 }

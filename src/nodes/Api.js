@@ -110,7 +110,7 @@ class Api extends BaseNode {
         if (parsedMessage.dataType.value === 'jsonata') {
             try {
                 data = JSON.stringify(
-                    this.evaluateJSONata(parsedMessage.data.value, message)
+                    this.evaluateJSONata(parsedMessage.data.value, { message })
                 );
             } catch (e) {
                 this.status.setFailed('Error');

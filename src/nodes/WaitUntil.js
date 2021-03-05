@@ -266,7 +266,7 @@ class WaitUntil extends EventsNode {
             this.nodeConfig.timeoutType === 'jsonata'
         ) {
             try {
-                timeout = this.evaluateJSONata(timeout, message);
+                timeout = this.evaluateJSONata(timeout, { message });
             } catch (e) {
                 this.status.setFailed('Error');
                 done(`JSONata Error: ${e.message}`);

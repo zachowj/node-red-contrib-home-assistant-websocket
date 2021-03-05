@@ -80,7 +80,7 @@ class CallService extends BaseNode {
         if (config.dataType === 'jsonata' && config.data) {
             try {
                 configData = JSON.stringify(
-                    this.evaluateJSONata(config.data, message)
+                    this.evaluateJSONata(config.data, { message })
                 );
             } catch (e) {
                 this.status.setFailed('Error');
