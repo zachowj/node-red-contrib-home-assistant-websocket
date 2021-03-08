@@ -1,4 +1,4 @@
-/* global RED: false, $: false, ha: false, haServer: false, nodeVersion: false */
+/* global RED: false, $: false, ha: false, haServer: false, nodeVersion: false, haOutputs: false */
 RED.nodes.registerType('ha-api', {
     category: 'home_assistant',
     color: ha.nodeColors.haBlue,
@@ -20,9 +20,21 @@ RED.nodes.registerType('ha-api', {
         path: { value: '' },
         data: { value: '' },
         dataType: { value: 'jsonata' },
-        location: { value: 'payload' },
-        locationType: { value: 'msg' },
         responseType: { value: 'json' },
+        outputProperties: {
+            value: [
+                {
+                    property: 'payload',
+                    propertyType: 'msg',
+                    value: '',
+                    valueType: 'results',
+                },
+            ],
+            validate: haOutputs.validate,
+        },
+        // deprecated but still needed for imports of old flows
+        location: { value: undefined },
+        locationType: { value: undefined },
     },
     oneditprepare: function () {
         nodeVersion.check(this);
@@ -59,5 +71,12 @@ RED.nodes.registerType('ha-api', {
             ],
             typeField: '#node-input-locationType',
         });
+
+        haOutputs.createOutputs(this.outputProperties, {
+            extraTypes: ['results'],
+        });
+    },
+    oneditsave: function () {
+        this.outputProperties = haOutputs.getOutputs();
     },
 });

@@ -90,7 +90,9 @@ Overrides or sets the results type property of the config.
 
 ## Output
 
-Will output the results received from the API call to the location defined in the config.
+Value types:
+
+- `results`: results of the API request
 
 ## References
 

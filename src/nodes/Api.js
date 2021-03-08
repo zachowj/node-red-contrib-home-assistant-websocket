@@ -12,9 +12,8 @@ const nodeOptions = {
         path: {},
         data: {},
         dataType: (nodeDef) => nodeDef.dataType || 'json',
-        location: {},
-        locationType: {},
         responseType: {},
+        outputProperties: {},
     },
     input: {
         protocol: {
@@ -87,6 +86,10 @@ const nodeOptions = {
                     .label('responseType'),
             },
         },
+        outputProperties: {
+            messageProp: 'payload.outputProperties',
+            configProp: 'outputProperties',
+        },
     },
 };
 
@@ -95,7 +98,7 @@ class Api extends BaseNode {
         super({ node, config, RED, nodeOptions });
     }
 
-    onInput({ message, parsedMessage, send, done }) {
+    async onInput({ message, parsedMessage, send, done }) {
         const node = this.node;
         const config = this.nodeConfig;
 
@@ -180,30 +183,23 @@ class Api extends BaseNode {
 
         this.status.setSending();
 
-        return apiCall()
-            .then((results) => {
-                this.status.setSuccess(
-                    `${parsedMessage.protocol.value} called`
-                );
+        const results = await apiCall().catch((err) => {
+            done(
+                'API Error. ' + err.message
+                    ? `Error Message: ${err.message}`
+                    : ''
+            );
+            this.status.setFailed('API Error');
+        });
 
-                this.setContextValue(
-                    results,
-                    parsedMessage.locationType.value,
-                    parsedMessage.location.value,
-                    message
-                );
+        this.status.setSuccess(`${parsedMessage.protocol.value} called`);
 
-                send(message);
-                done();
-            })
-            .catch((err) => {
-                done(
-                    'API Error. ' + err.message
-                        ? `Error Message: ${err.message}`
-                        : ''
-                );
-                this.status.setFailed('API Error');
-            });
+        this.setCustomOutputs(parsedMessage.outputProperties.value, message, {
+            results,
+        });
+
+        send(message);
+        done();
     }
 }
 

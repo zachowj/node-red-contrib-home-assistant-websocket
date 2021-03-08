@@ -366,10 +366,32 @@ class BaseNode {
             case 'none':
                 val = undefined;
                 break;
+            case 'entity':
+            case 'entityId':
+            case 'prevEntity':
+            case 'results':
+                val = arguments['2'] ? arguments['2'][valueType] : undefined;
+                break;
             default:
                 val = value;
         }
         return val;
+    }
+
+    setCustomOutputs(properties, message, extras) {
+        properties.forEach((item) => {
+            const value = this.getTypedInputValue(item.value, item.valueType, {
+                message,
+                ...extras,
+            });
+
+            this.setContextValue(
+                value,
+                item.propertyType,
+                item.property,
+                message
+            );
+        });
     }
 }
 
