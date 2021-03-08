@@ -11,7 +11,19 @@ const nodeVersion = (function ($, RED, haMigrations) {
 
     function migrate(node) {
         const data = { type: node.type };
-        const ignoreProperties = ['x', 'y'];
+        const ignoreProperties = [
+            'x',
+            'y',
+            'z',
+            'd',
+            'g',
+            'l',
+            'id',
+            'type',
+            'wires',
+            'inputs',
+            'outputs',
+        ];
         for (const property in node._config) {
             if (
                 !ignoreProperties.includes(property) &&
