@@ -385,12 +385,18 @@ class BaseNode {
                 ...extras,
             });
 
-            this.setContextValue(
-                value,
-                item.propertyType,
-                item.property,
-                message
-            );
+            try {
+                this.setContextValue(
+                    value,
+                    item.propertyType,
+                    item.property,
+                    message
+                );
+            } catch (e) {
+                this.node.warn(
+                    `Custom Ouput Error (${item.propertyType}:${item.property}): ${e.message}`
+                );
+            }
         });
     }
 }
