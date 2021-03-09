@@ -62,6 +62,11 @@ const nodeVersion = (function ($, RED, haMigrations) {
                 migrate(node);
             }
         });
+        RED.nodes.eachConfig((node) => {
+            if (isHomeAssistantNode(node) && !isCurrentVersion(node)) {
+                migrate(node);
+            }
+        });
         RED.nodes.dirty(true);
         RED.notify(ha.i18n('home-assistant.ui.migrations.all_nodes_updated'));
         RED.view.redraw();
@@ -119,6 +124,11 @@ const nodeVersion = (function ($, RED, haMigrations) {
     function getOldNodeCount() {
         let count = 0;
         RED.nodes.eachNode((n) => {
+            if (isHomeAssistantNode(n) && !isCurrentVersion(n)) {
+                count++;
+            }
+        });
+        RED.nodes.eachConfig((n) => {
             if (isHomeAssistantNode(n) && !isCurrentVersion(n)) {
                 count++;
             }

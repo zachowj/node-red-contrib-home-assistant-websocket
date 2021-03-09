@@ -7,8 +7,8 @@
       "migrations": {
         "node_schema_updated": "Node schema has been updated",
         "all_nodes_updated": "Home Assistant nodes have been updated. Deploy to save changes.",
-        "message": "This will update all Home Assistant nodes to the current schema. It is not required for the nodes to function.\nNodes with yellow labels need to be updated before they can be edited. This can be done by either opening each node individually in the Node-RED editor or running this command.",
-        "warning": "It is recommended to backup your flows.json file before doing an update of all Home Assistant nodes.",
+        "message": "This will update all Home Assistant nodes to the current schema. This is not required for the nodes to function.\nNodes with yellow labels need to be updated before they can be edited. This can be done by either opening each node individually in the Node-RED editor or running this command.",
+        "warning": "It is recommended to back up your flows before doing an update of all Home Assistant nodes.",
         "title": "Update Home Assistant Nodes",
         "button_label": "Update Home Assistant Nodes",
         "button_ok": "Update Nodes",
