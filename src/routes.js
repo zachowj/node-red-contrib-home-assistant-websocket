@@ -96,7 +96,7 @@ async function getTags(req, res) {
 }
 
 function getIntegrationVersion(req, res) {
-    const client = req.getHomeAssistant(req.params.id);
+    const client = req.homeAssistant;
     const data = { version: client ? client.integrationVersion : 0 };
 
     res.json(data);
@@ -147,7 +147,7 @@ function createRoutes(RED) {
     );
 
     RED.httpAdmin.get(
-        `/homeassistant/version/:id`,
+        `/homeassistant/version/:serverId`,
         RED.auth.needsPermission('server.read'),
         setHomeAssistant,
         getIntegrationVersion
