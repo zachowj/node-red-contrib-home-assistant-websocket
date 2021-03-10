@@ -97,11 +97,9 @@ const nodeVersion = (function ($, RED, haMigrations) {
         migrate(node);
         RED.nodes.dirty(true);
 
-        $('#dialog-form').one('remove', () => {
-            // need to wait for editor to reset otherwise loads old data
-            setTimeout(() => {
-                RED.editor.edit(node);
-            }, 50);
+        RED.events.on('editor:close', function reopen() {
+            RED.events.off('editor:close', reopen);
+            RED.editor.edit(node);
         });
 
         RED.tray.close();
