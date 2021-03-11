@@ -44,7 +44,8 @@ function migrate(schema) {
         return schema;
     }
 
-    const currentMigration = findMigration(schema.type, schema.version).up;
+    const currentMigration = findMigration(schema.type, Number(schema.version))
+        .up;
     const newSchema = currentMigration(schema);
 
     return migrate(newSchema);
