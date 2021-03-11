@@ -133,8 +133,9 @@ const haOutputs = (function ($) {
 
     function validate(value) {
         return (
-            Array.isArray(value) &&
-            !value.some((output) => output.property.length === 0)
+            value === undefined ||
+            (Array.isArray(value) &&
+                !value.some((output) => output.property.length === 0))
         );
     }
 
