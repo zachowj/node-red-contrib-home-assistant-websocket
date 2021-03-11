@@ -93,6 +93,7 @@ Overrides or sets the results type property of the config.
 Value types:
 
 - `results`: results of the API request
+- `config`: config properties of the node
 
 ## References
 

@@ -192,11 +192,22 @@ class Api extends BaseNode {
             this.status.setFailed('API Error');
         });
 
-        this.status.setSuccess(`${parsedMessage.protocol.value} called`);
+        try {
+            this.setCustomOutputs(
+                parsedMessage.outputProperties.value,
+                message,
+                {
+                    results,
+                    config: this.nodeConfig,
+                }
+            );
+        } catch (e) {
+            this.status.setFailed('error');
+            done(e.message);
+            return;
+        }
 
-        this.setCustomOutputs(parsedMessage.outputProperties.value, message, {
-            results,
-        });
+        this.status.setSuccess(`${parsedMessage.protocol.value} called`);
 
         send(message);
         done();
