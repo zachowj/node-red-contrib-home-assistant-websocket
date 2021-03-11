@@ -21,9 +21,8 @@ const nodeOptions = {
         mergecontext: {},
         name: {},
         server: { isNode: true },
-        output_location: {},
-        output_location_type: {},
         mustacheAltTags: {},
+        outputProperties: {},
     },
 };
 
@@ -45,7 +44,7 @@ class CallService extends BaseNode {
         }
     }
 
-    onInput({ message, send, done }) {
+    async onInput({ message, parsedMessage, send, done }) {
         const config = this.nodeConfig;
         if (!this.isConnected) {
             this.status.setFailed('No Connection');
@@ -152,28 +151,37 @@ class CallService extends BaseNode {
             data: apiData,
         });
 
-        return this.homeAssistant
-            .callService(apiDomain, apiService, apiData)
-            .then(() => {
-                this.status.setSuccess(`${apiDomain}.${apiService} called`);
+        try {
+            await this.homeAssistant.callService(
+                apiDomain,
+                apiService,
+                apiData
+            );
+        } catch (err) {
+            done(
+                `Call-service API error. ${
+                    err.message ? ` Error Message: ${err.message}` : ''
+                }`
+            );
+            this.status.setFailed('API Error');
+            return;
+        }
 
-                this.setContextValue(
-                    msgPayload,
-                    config.output_location_type || 'msg',
-                    config.output_location || 'payload',
-                    message
-                );
-                send(message);
-                done();
-            })
-            .catch((err) => {
-                done(
-                    `Call-service API error. ${
-                        err.message ? ` Error Message: ${err.message}` : ''
-                    }`
-                );
-                this.status.setFailed('API Error');
+        this.status.setSuccess(`${apiDomain}.${apiService} called`);
+
+        try {
+            this.setCustomOutputs(this.nodeConfig.outputProperties, message, {
+                config: this.nodeConfig,
+                data: msgPayload,
             });
+        } catch (e) {
+            this.status.setFailed('error');
+            done(e.message);
+            return;
+        }
+
+        send(message);
+        done();
     }
 
     getApiData(payload, data) {

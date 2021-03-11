@@ -299,35 +299,37 @@ class BaseNode {
         }
     }
 
-    evaluateJSONata(expression, { message, entity, prevEntity, results } = {}) {
+    evaluateJSONata(
+        expression,
+        { data, entity, eventData, message, prevEntity, results } = {}
+    ) {
         const expr = this.RED.util.prepareJSONataExpression(
             expression,
             this.node
         );
 
+        expr.assign('data', () => data);
         expr.assign('entity', () => entity);
+        expr.assign('eventData', () => eventData);
+        expr.assign(
+            'entities',
+            (val) => this.homeAssistant && this.homeAssistant.getStates(val)
+        );
         expr.assign('prevEntity', () => prevEntity);
-        expr.assign('sampleSize', sampleSize);
         expr.assign('randomNumber', random);
         expr.assign('results', () => results);
-        expr.assign('entities', (val) => {
-            return this.homeAssistant && this.homeAssistant.getStates(val);
-        });
+        expr.assign('sampleSize', sampleSize);
 
         return this.RED.util.evaluateJSONataExpression(expr, message);
     }
 
-    getTypedInputValue(
-        value,
-        valueType,
-        { entity, entityId, message, prevEntity, results } = {}
-    ) {
+    getTypedInputValue(value, valueType, props = {}) {
         let val;
         switch (valueType) {
             case 'msg':
             case 'flow':
             case 'global':
-                val = this.getContextValue(valueType, value, message);
+                val = this.getContextValue(valueType, value, props.message);
                 break;
             case 'bool':
                 val = value === 'true';
@@ -350,11 +352,12 @@ class BaseNode {
                 }
                 try {
                     val = this.evaluateJSONata(value, {
-                        entity,
-                        entityId,
-                        message,
-                        prevEntity,
-                        results,
+                        data: props.data,
+                        entity: props.entity,
+                        entityId: props.entityId,
+                        message: props.message,
+                        prevEntity: props.prevEntity,
+                        results: props.results,
                     });
                 } catch (e) {
                     throw new Error(`JSONata Error: ${e.message}`);
@@ -366,11 +369,25 @@ class BaseNode {
             case 'none':
                 val = undefined;
                 break;
+            case 'config': {
+                const config = {
+                    ...this.nodeConfig,
+                    server: this.nodeConfig.server.id,
+                };
+                val = value.length ? selectn(value, config) : config;
+                break;
+            }
+            case 'timeSinceChangedMs':
+                val = props.entity
+                    ? Date.now() - new Date(props.entity.last_changed).getTime()
+                    : undefined;
+                break;
+            case 'data':
             case 'entity':
-            case 'entityId':
+            case 'triggerId':
             case 'prevEntity':
             case 'results':
-                val = arguments['2'] ? arguments['2'][valueType] : undefined;
+                val = props[valueType];
                 break;
             default:
                 val = value;
@@ -490,6 +507,7 @@ const _eventHandlers = {
                 done(e.message);
                 return;
             }
+
             throw e;
         }
     },

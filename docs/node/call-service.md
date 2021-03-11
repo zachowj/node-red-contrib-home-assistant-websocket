@@ -52,13 +52,6 @@ If defined will attempt to merge the global and flow context variable into the c
 
 Will change the tags used for mustache template to `<%` and `%>`
 
-### Output Location
-
-- Type: `string`
-- Default: `None`
-
-Customizable location for the output of the node.
-
 ## Input
 
 All properties need to be under `msg.payload`.
@@ -98,44 +91,7 @@ Service data to send with API call
 
 ## Output
 
-All properties will be under what is defined in `Output Location` in the config.
+Value types:
 
-### domain
-
-- Type: `string`
-
-Service `domain` service was called with
-
-### service
-
-- Type: `string`
-
-Service `service` was called with
-
-### data
-
-- Type: `Object`
-
-Service `data` used in a call, if one was used
-
-#### Example of output:
-
-```json
-{
-  "domain": "light",
-  "service": "turn_on",
-  "data": {
-    "entity_id": "light.kitchen"
-  }
-}
-```
-
-## Changelog
-
-#### Version 1
-
-- Entity ids are no longer merged with the data property on the front end
-- The data field does not have to be valid JSON until after templates are rendered. This change will allow you to assign numbers to properties as an actual number and not a `string` using templates.
-- `entity_id` in the data property will supersede the entity id field
-- Flows exported from version 0.14.0 will lose the entity id when imported into
-  a previous version
+- `sent data`: data sent to Home Assistant
+- `config`: config properties of the node

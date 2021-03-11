@@ -1,4 +1,4 @@
-/* global RED: false, $: false, ha: false, haServer: false, nodeVersion: false */
+/* global RED: false, $: false, ha: false, haServer: false, nodeVersion: false, haOutputs: false */
 RED.nodes.registerType('api-call-service', {
     category: 'home_assistant',
     color: ha.nodeColors.haBlue,
@@ -22,9 +22,14 @@ RED.nodes.registerType('api-call-service', {
         data: { value: '' },
         dataType: { value: 'jsonata' },
         mergecontext: { value: null },
-        output_location: { value: 'payload' },
-        output_location_type: { value: 'none' },
         mustacheAltTags: { value: false },
+        outputProperties: {
+            value: [],
+            validate: haOutputs.validate,
+        },
+        // deprecated
+        output_location: { value: undefined },
+        output_location_type: { value: undefined },
     },
     oneditprepare: function () {
         nodeVersion.check(this);
@@ -47,7 +52,8 @@ RED.nodes.registerType('api-call-service', {
         $serviceField.val(node.service);
 
         $data.typedInput({
-            types: ['json', 'jsonata'],
+            default: 'jsonata',
+            types: ['jsonata', 'json'],
             typeField: '#node-input-dataType',
         });
 
@@ -251,20 +257,6 @@ RED.nodes.registerType('api-call-service', {
                 });
         }
 
-        $('#node-input-output_location').typedInput({
-            types: [
-                'msg',
-                'flow',
-                'global',
-                {
-                    value: 'none',
-                    label: 'None',
-                    hasValue: false,
-                },
-            ],
-            typeField: '#node-input-output_location_type',
-        });
-
         $loadExampleData.on('click', () => {
             const fields = node.selectedService.fields;
             const exampleData = Object.keys(fields).reduce((acc, key) => {
@@ -293,6 +285,10 @@ RED.nodes.registerType('api-call-service', {
                 $data.typedInput('value', JSON.stringify(exampleData));
             }
         });
+
+        haOutputs.createOutputs(this.outputProperties, {
+            extraTypes: ['sentData', 'msg'],
+        });
     },
     oneditsave: function () {
         const $entityId = $('#node-input-entityId');
@@ -304,5 +300,6 @@ RED.nodes.registerType('api-call-service', {
             // remove trailing comma
             $entityId.val(entityId.replace(/\s*,\s*$/, ''));
         }
+        this.outputProperties = haOutputs.getOutputs();
     },
 });

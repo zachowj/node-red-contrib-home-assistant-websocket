@@ -5,24 +5,35 @@ const haOutputs = (function ($) {
     let $outputs;
 
     const customTypes = {
+        config: { value: 'config', label: 'config.', hasValue: true },
         entity: { value: 'entity', label: 'entity', hasValue: false },
-        entityId: { value: 'entityId', label: 'entity id', hasValue: false },
-        event: { value: 'event', label: 'event', hasValue: false },
+        entityState: {
+            value: 'entityState',
+            label: 'entity state',
+            hasValue: false,
+        },
+        eventData: { value: 'eventData', label: 'event data', hasValue: false },
         prevEntity: {
             value: 'prevEntity',
             label: 'previous entity',
             hasValue: false,
         },
         results: { value: 'results', label: 'results', hasValue: false },
-        sentData: { value: 'sentData', label: 'sent data', hasValue: false },
-        state: { value: 'state', label: 'state', hasValue: false },
+        receivedData: {
+            value: 'data',
+            label: 'received data',
+            hasValue: false,
+        },
+        sentData: { value: 'data', label: 'sent data', hasValue: false },
         timeSinceChangedMs: {
             value: 'timeSinceChangedMs',
             label: 'timeSinceChangedMs',
             hasValue: false,
         },
+        triggerId: { value: 'triggerId', label: 'trigger id', hasValue: false },
     };
     const defaultTypes = [
+        customTypes.config,
         'flow',
         'global',
         'str',
@@ -33,7 +44,7 @@ const haOutputs = (function ($) {
     ];
 
     function createOutputs(
-        properties,
+        properties = [],
         { element = customOutputElement, extraTypes = [] } = {}
     ) {
         $outputs = $(element);
@@ -90,10 +101,11 @@ const haOutputs = (function ($) {
             return acc;
         }, []);
 
-        if (extraTypes.includes('msg')) {
-            valueTypes.push('msg');
-        }
         valueTypes = [...valueTypes, ...defaultTypes];
+        if (extraTypes.includes('msg')) {
+            const index = valueTypes.indexOf('flow');
+            valueTypes.splice(index, 0, 'msg');
+        }
 
         return valueTypes;
     }
@@ -120,7 +132,10 @@ const haOutputs = (function ($) {
     }
 
     function validate(value) {
-        return !value.some((output) => output.property.length === 0);
+        return (
+            Array.isArray(value) &&
+            !value.some((output) => output.property.length === 0)
+        );
     }
 
     return {

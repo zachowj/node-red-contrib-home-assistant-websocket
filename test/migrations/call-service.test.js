@@ -23,13 +23,25 @@ const VERSION_0 = {
     ...VERSION_UNDEFINED,
     version: 0,
 };
-const VERSION_1_SCHEMA = {
+const VERSION_1 = {
     ...VERSION_0,
     version: 1,
     entityId: 'entity.id1, entity.id2',
     data: JSON.stringify({
         message: 'extra_data',
     }),
+};
+const VERSION_2 = {
+    ...VERSION_1,
+    version: 2,
+    outputProperties: [
+        {
+            property: 'payload',
+            propertyType: 'msg',
+            value: '',
+            valueType: 'data',
+        },
+    ],
 };
 
 describe('Migrations - Call Service Node', function () {
@@ -46,7 +58,7 @@ describe('Migrations - Call Service Node', function () {
             const migrate = migrations.find((m) => m.version === 1);
             const migratedSchema = migrate.up(VERSION_0);
 
-            expect(migratedSchema).to.eql(VERSION_1_SCHEMA);
+            expect(migratedSchema).to.eql(VERSION_1);
         });
 
         it('extract entity_id out of data and move it to entityId', function () {
@@ -55,7 +67,7 @@ describe('Migrations - Call Service Node', function () {
                 data: JSON.stringify({ entity_id: 'hello' }),
             };
             const expectedSchema = {
-                ...VERSION_1_SCHEMA,
+                ...VERSION_1,
                 entityId: 'hello',
                 data: '',
             };
@@ -74,7 +86,7 @@ describe('Migrations - Call Service Node', function () {
                 }),
             };
             const expectedSchema = {
-                ...VERSION_1_SCHEMA,
+                ...VERSION_1,
                 entityId: 'hello',
                 data: JSON.stringify({ brightness: 100, text: 'string' }),
             };
@@ -92,7 +104,7 @@ describe('Migrations - Call Service Node', function () {
                 }),
             };
             const expectedSchema = {
-                ...VERSION_1_SCHEMA,
+                ...VERSION_1,
                 entityId: '',
                 data: JSON.stringify({ brightness: 100, text: 'string' }),
             };
@@ -102,8 +114,26 @@ describe('Migrations - Call Service Node', function () {
             expect(migratedSchema).to.eql(expectedSchema);
         });
     });
+    describe('Version 2', function () {
+        it('should update version 1 to version 2', function () {
+            const migrate = migrations.find((m) => m.version === 2);
+            const migratedSchema = migrate.up(VERSION_1);
+
+            expect(migratedSchema).to.eql(VERSION_2);
+        });
+        it('should have empty outputProperties when locationType is none', function () {
+            const schema = {
+                ...VERSION_1,
+                output_location_type: 'none',
+            };
+            const migrate = migrations.find((m) => m.version === 2);
+            const migratedSchema = migrate.up(schema);
+
+            expect(migratedSchema.outputProperties).to.eql([]);
+        });
+    });
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_1_SCHEMA);
+        expect(migratedSchema).to.eql(VERSION_2);
     });
 });
