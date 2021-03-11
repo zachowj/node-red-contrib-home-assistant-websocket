@@ -44,8 +44,7 @@ function migrate(schema) {
         return schema;
     }
 
-    const currentMigration = findMigration(schema.type, Number(schema.version))
-        .up;
+    const currentMigration = findMigration(schema.type, schema.version).up;
     const newSchema = currentMigration(schema);
 
     return migrate(newSchema);
@@ -53,7 +52,7 @@ function migrate(schema) {
 
 function findMigration(nodeType, version = -1) {
     const migrations = getMigrationsByType(nodeType);
-    const migration = migrations.find((m) => m.version === version + 1);
+    const migration = migrations.find((m) => m.version === Number(version) + 1);
 
     return migration;
 }
