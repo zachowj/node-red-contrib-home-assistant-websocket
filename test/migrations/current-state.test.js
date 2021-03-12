@@ -26,6 +26,35 @@ const VERSION_1 = {
     state_type: 'str',
     blockInputOverrides: false,
 };
+const VERSION_2 = {
+    ...VERSION_1,
+    version: 2,
+    outputProperties: [
+        {
+            property: 'payload',
+            propertyType: 'msg',
+            value: '',
+            valueType: 'entityState',
+        },
+        {
+            property: 'data',
+            propertyType: 'msg',
+            value: '',
+            valueType: 'entity',
+        },
+        {
+            property: 'topic',
+            propertyType: 'msg',
+            value: '',
+            valueType: 'triggerId',
+        },
+    ],
+    override_topic: undefined,
+    entity_location: undefined,
+    override_data: undefined,
+    override_payload: undefined,
+    state_location: undefined,
+};
 
 describe('Migrations - Current State Node', function () {
     describe('version 0', function () {
@@ -60,9 +89,33 @@ describe('Migrations - Current State Node', function () {
             expect(migratedSchema).to.eql(expectedSchema);
         });
     });
+    describe('Version 2', function () {
+        it('should update version 1 to version 2', function () {
+            const migrate = migrations.find((m) => m.version === 2);
+            const migratedSchema = migrate.up(VERSION_1);
+
+            expect(migratedSchema).to.eql(VERSION_2);
+        });
+        it('should set outputProperties to emtpy array', function () {
+            const schema = {
+                ...VERSION_1,
+                override_data: 'none',
+                override_payload: 'none',
+                override_topic: false,
+            };
+            const expectedSchema = {
+                ...VERSION_2,
+                outputProperties: [],
+            };
+            const migrate = migrations.find((m) => m.version === 2);
+            const migratedSchema = migrate.up(schema);
+
+            expect(migratedSchema).to.eql(expectedSchema);
+        });
+    });
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
 
-        expect(migratedSchema).to.eql(VERSION_1);
+        expect(migratedSchema).to.eql(VERSION_2);
     });
 });

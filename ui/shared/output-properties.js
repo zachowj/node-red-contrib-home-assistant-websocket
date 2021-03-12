@@ -7,6 +7,7 @@ const haOutputs = (function ($) {
     const customTypes = {
         config: { value: 'config', label: 'config.', hasValue: true },
         entity: { value: 'entity', label: 'entity', hasValue: false },
+        entityId: { value: 'triggerId', label: 'entity id', hasValue: false },
         entityState: {
             value: 'entityState',
             label: 'entity state',
@@ -54,7 +55,7 @@ const haOutputs = (function ($) {
             removable: true,
             sortable: true,
             height: 'auto',
-            header: $('<div>').append('Outputs'),
+            header: $('<div>').append('Output Properties'),
             addItem: function (container, _, data) {
                 container.css({
                     overflow: 'hidden',

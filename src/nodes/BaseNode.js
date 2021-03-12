@@ -377,13 +377,9 @@ class BaseNode {
                 val = value.length ? selectn(value, config) : config;
                 break;
             }
-            case 'timeSinceChangedMs':
-                val = props.entity
-                    ? Date.now() - new Date(props.entity.last_changed).getTime()
-                    : undefined;
-                break;
             case 'data':
             case 'entity':
+            case 'entityState':
             case 'triggerId':
             case 'prevEntity':
             case 'results':

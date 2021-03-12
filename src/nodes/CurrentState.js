@@ -10,14 +10,14 @@ const nodeOptions = {
         halt_if_compare: {},
         override_topic: {},
         entity_id: {},
+        outputProperties: {},
+        blockInputOverrides: {},
+        // deprecated
         state_type: {},
         state_location: {},
-        // state location type
         override_payload: {},
         entity_location: {},
-        // entity location type
         override_data: {},
-        blockInputOverrides: {},
     },
     input: {
         entity_id: {
@@ -78,25 +78,18 @@ class CurrentState extends BaseNode {
             }
         );
 
-        // default switch to true if undefined (backward compatibility)
-        message.topic =
-            config.override_topic !== false ? entityId : message.topic;
-
-        // Set 'State Location'
-        this.setContextValue(
-            entity.state,
-            config.override_payload,
-            config.state_location,
-            message
-        );
-
-        // Set 'Entity Location'
-        this.setContextValue(
-            entity,
-            config.override_data,
-            config.entity_location,
-            message
-        );
+        try {
+            this.setCustomOutputs(this.nodeConfig.outputProperties, message, {
+                config: this.nodeConfig,
+                entity,
+                entityState: entity.state,
+                triggerId: entityId,
+            });
+        } catch (e) {
+            this.status.setFailed('error');
+            done(e.message);
+            return;
+        }
 
         if (config.halt_if && !isIfState) {
             this.status.setFailed(entity.state);

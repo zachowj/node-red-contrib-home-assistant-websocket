@@ -32,6 +32,47 @@ const migrations = [
             return newSchema;
         },
     },
+    {
+        version: 2,
+        up: (schema) => {
+            const newSchema = {
+                ...schema,
+                version: 2,
+                outputProperties: [],
+                state_location: undefined,
+                override_payload: undefined,
+                entity_location: undefined,
+                override_data: undefined,
+                override_topic: undefined,
+            };
+
+            if (schema.override_payload !== 'none') {
+                newSchema.outputProperties.push({
+                    property: schema.state_location,
+                    propertyType: schema.override_payload,
+                    value: '',
+                    valueType: 'entityState',
+                });
+            }
+            if (schema.override_data !== 'none') {
+                newSchema.outputProperties.push({
+                    property: schema.entity_location,
+                    propertyType: schema.override_data,
+                    value: '',
+                    valueType: 'entity',
+                });
+            }
+            if (schema.override_topic === true) {
+                newSchema.outputProperties.push({
+                    property: 'topic',
+                    propertyType: 'msg',
+                    value: '',
+                    valueType: 'triggerId',
+                });
+            }
+            return newSchema;
+        },
+    },
 ];
 
 module.exports = migrations;
