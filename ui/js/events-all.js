@@ -1,4 +1,4 @@
-/* global RED: false, $: false, exposeNode: false, ha: false, haServer: false, nodeVersion: false */
+/* global RED: false, $: false, exposeNode: false, ha: false, haServer: false, nodeVersion: false, haOutputs: false */
 RED.nodes.registerType('server-events', {
     category: 'home_assistant',
     color: ha.nodeColors.haBlue,
@@ -15,6 +15,23 @@ RED.nodes.registerType('server-events', {
             ],
         },
         waitForRunning: { value: true },
+        outputProperties: {
+            value: [
+                {
+                    property: 'payload',
+                    propertyType: 'msg',
+                    value: '',
+                    valueType: 'eventData',
+                },
+                {
+                    property: 'topic',
+                    propertyType: 'msg',
+                    value: '$eventData().event_type',
+                    valueType: 'jsonata',
+                },
+            ],
+            validate: haOutputs.validate,
+        },
     },
     inputs: 0,
     outputs: 1,
@@ -29,13 +46,16 @@ RED.nodes.registerType('server-events', {
         haServer.init(this, '#node-input-server');
         exposeNode.init(this);
 
-        $('#node-input-event_type')
-            .on('change keyup', function () {
-                $('#eventAlert').toggle($(this).val().length === 0);
-            })
-            .trigger('change');
+        $('#node-input-event_type').on('change keyup', function () {
+            $('#eventAlert').toggle($(this).val().length === 0);
+        });
+
+        haOutputs.createOutputs(this.outputProperties, {
+            extraTypes: ['eventData'],
+        });
     },
     oneditsave: function () {
         this.haConfig = exposeNode.getValues();
+        this.outputProperties = haOutputs.getOutputs();
     },
 });

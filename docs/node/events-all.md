@@ -40,35 +40,10 @@ to be installed in Home Assistant
 
 ## Outputs
 
-### topic
+Value types:
 
-- Type: `string`
-
-Will contain the event type.
-
-### event_type
-
-- Type: `string`
-
-Event type of the event.
-
-### payload
-
-- Type: `object`
-
-original event object
-
-### origin
-
-- Type: `string`
-
-### time_fired
-
-- Type: `DateTime`
-
-### context
-
-- Type: `object`
+- `event data`: event received from Home Assistant
+- `config`: config properties of the node
 
 ## Client Events
 

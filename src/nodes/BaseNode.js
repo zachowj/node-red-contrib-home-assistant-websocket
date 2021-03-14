@@ -355,6 +355,7 @@ class BaseNode {
                         data: props.data,
                         entity: props.entity,
                         entityId: props.entityId,
+                        eventData: props.eventData,
                         message: props.message,
                         prevEntity: props.prevEntity,
                         results: props.results,
@@ -380,6 +381,7 @@ class BaseNode {
             case 'data':
             case 'entity':
             case 'entityState':
+            case 'eventData':
             case 'triggerId':
             case 'prevEntity':
             case 'results':

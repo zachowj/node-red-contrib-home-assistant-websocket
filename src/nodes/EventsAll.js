@@ -4,6 +4,7 @@ const nodeOptions = {
     config: {
         event_type: (nodeDef) => (nodeDef.event_type || '').trim(),
         waitForRunning: {},
+        outputProperties: {},
     },
 };
 
@@ -51,12 +52,19 @@ class EventsAll extends EventsHaNode {
             return;
         }
 
-        this.send({
-            event_type: evt.event_type,
-            topic: evt.event_type,
-            payload: evt,
-        });
+        const message = {};
+        try {
+            this.setCustomOutputs(this.nodeConfig.outputProperties, message, {
+                config: this.nodeConfig,
+                eventData: evt,
+            });
+        } catch (e) {
+            this.status.setFailed('error');
+            return;
+        }
+
         this.status.setSuccess(evt.event_type);
+        this.send(message);
     }
 
     clientEvent(type, data) {
