@@ -67,7 +67,7 @@ function getProperties(req, res) {
         );
     }
 
-    const uniqProperties = [...new Set(flat)];
+    const uniqProperties = [...new Set(...flat)];
     const sortedProperties = uniqProperties.sort((a, b) => {
         if (!a.includes('.') && b.includes('.')) return -1;
         if (a.includes('.') && !b.includes('.')) return 1;
