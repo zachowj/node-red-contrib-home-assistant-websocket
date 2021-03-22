@@ -106,7 +106,10 @@ class EventsStatus extends Status {
         super({ node, nodeState });
         this.connectionState = STATE_DISCONNECTED;
         this.eventListeners = [];
-        this.enableConnectionStatus(homeAssistant);
+
+        if (homeAssistant) {
+            this.enableConnectionStatus(homeAssistant);
+        }
     }
 
     enableConnectionStatus(homeAssistant) {
