@@ -299,25 +299,34 @@ class BaseNode {
         }
     }
 
-    evaluateJSONata(
-        expression,
-        { data, entity, eventData, message, prevEntity, results } = {}
-    ) {
+    evaluateJSONata(expression, objs = {}) {
         const expr = this.RED.util.prepareJSONataExpression(
             expression,
             this.node
         );
+        const { entity, message, prevEntity } = objs;
 
-        expr.assign('data', () => data);
         expr.assign('entity', () => entity);
-        expr.assign('eventData', () => eventData);
         expr.assign(
             'entities',
             (val) => this.homeAssistant && this.homeAssistant.getStates(val)
         );
+        expr.assign('outputData', (obj) => {
+            if (!obj) {
+                const filtered = Object.keys(objs).reduce((acc, key) => {
+                    // ignore message as it already accessable
+                    if (key !== 'message' && objs[key] !== undefined) {
+                        acc[key] = objs[key];
+                    }
+                    return acc;
+                }, {});
+                return filtered;
+            }
+
+            return objs[obj];
+        });
         expr.assign('prevEntity', () => prevEntity);
         expr.assign('randomNumber', random);
-        expr.assign('results', () => results);
         expr.assign('sampleSize', sampleSize);
 
         return this.RED.util.evaluateJSONataExpression(expr, message);

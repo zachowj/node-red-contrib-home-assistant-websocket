@@ -26,7 +26,7 @@ RED.nodes.registerType('server-events', {
                 {
                     property: 'topic',
                     propertyType: 'msg',
-                    value: '$eventData().event_type',
+                    value: '$outputData("eventData").event_type',
                     valueType: 'jsonata',
                 },
             ],

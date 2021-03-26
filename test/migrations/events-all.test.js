@@ -28,13 +28,13 @@ const VERSION_1 = {
         {
             property: 'topic',
             propertyType: 'msg',
-            value: '$eventData().event_type',
+            value: '$outputData("eventData").event_type',
             valueType: 'jsonata',
         },
         {
             property: 'event_type',
             propertyType: 'msg',
-            value: '$eventData().event_type',
+            value: '$outputData("eventData").event_type',
             valueType: 'jsonata',
         },
     ],
