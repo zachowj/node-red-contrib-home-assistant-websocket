@@ -38,6 +38,30 @@ const VERSION_2 = {
     forType: 'num',
     forUnits: 'minutes',
 };
+const VERSION_3 = {
+    ...VERSION_2,
+    version: 3,
+    outputProperties: [
+        {
+            property: 'payload',
+            propertyType: 'msg',
+            value: '',
+            valueType: 'entityState',
+        },
+        {
+            property: 'data',
+            propertyType: 'msg',
+            value: '',
+            valueType: 'eventData',
+        },
+        {
+            property: 'topic',
+            propertyType: 'msg',
+            value: '',
+            valueType: 'triggerId',
+        },
+    ],
+};
 
 describe('Migrations - Events: State Node', function () {
     describe('Version 0', function () {
@@ -84,6 +108,6 @@ describe('Migrations - Events: State Node', function () {
     });
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_2);
+        expect(migratedSchema).to.eql(VERSION_3);
     });
 });

@@ -52,6 +52,37 @@ const migrations = [
             return newSchema;
         },
     },
+    {
+        version: 3,
+        up: (schema) => {
+            const newSchema = {
+                ...schema,
+                version: 3,
+                outputProperties: [
+                    {
+                        property: 'payload',
+                        propertyType: 'msg',
+                        value: '',
+                        valueType: 'entityState',
+                    },
+                    {
+                        property: 'data',
+                        propertyType: 'msg',
+                        value: '',
+                        valueType: 'eventData',
+                    },
+                    {
+                        property: 'topic',
+                        propertyType: 'msg',
+                        value: '',
+                        valueType: 'triggerId',
+                    },
+                ],
+            };
+
+            return newSchema;
+        },
+    },
 ];
 
 module.exports = migrations;

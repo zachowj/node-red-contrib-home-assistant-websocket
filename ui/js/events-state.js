@@ -1,4 +1,4 @@
-/* global RED: false, $: false, exposeNode: false, ha: false, haServer: false, ifState: false, nodeVersion: false */
+/* global RED: false, $: false, exposeNode: false, ha: false, haServer: false, ifState: false, nodeVersion: false, haOutputs: false */
 RED.nodes.registerType('server-state-changed', {
     category: 'home_assistant',
     color: ha.nodeColors.haBlue,
@@ -42,6 +42,29 @@ RED.nodes.registerType('server-state-changed', {
         ignorePrevStateUnavailable: { value: false },
         ignoreCurrentStateUnknown: { value: false },
         ignoreCurrentStateUnavailable: { value: false },
+        outputProperties: {
+            value: [
+                {
+                    property: 'payload',
+                    propertyType: 'msg',
+                    value: '',
+                    valueType: 'entityState',
+                },
+                {
+                    property: 'data',
+                    propertyType: 'msg',
+                    value: '',
+                    valueType: 'eventData',
+                },
+                {
+                    property: 'topic',
+                    propertyType: 'msg',
+                    value: '',
+                    valueType: 'triggerId',
+                },
+            ],
+            validate: haOutputs.validate,
+        },
     },
     oneditprepare: function () {
         nodeVersion.check(this);
@@ -66,10 +89,15 @@ RED.nodes.registerType('server-state-changed', {
             types: ['num', 'jsonata', 'flow', 'global'],
             typeField: '#node-input-forType',
         });
+
+        haOutputs.createOutputs(this.outputProperties, {
+            extraTypes: ['eventData', 'entityId', 'entityState'],
+        });
     },
     oneditsave: function () {
         const outputs = $('#node-input-haltifstate').val() ? 2 : 1;
         $('#node-input-outputs').val(outputs);
         this.haConfig = exposeNode.getValues();
+        this.outputProperties = haOutputs.getOutputs();
     },
 });
