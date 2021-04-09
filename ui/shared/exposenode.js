@@ -1,6 +1,13 @@
 // eslint-disable-next-line no-unused-vars
-const exposeNode = (function ($) {
+const exposeNode = (function ($, RED) {
     let node;
+    const version = {};
+
+    RED.comms.subscribe('homeassistant/integration/#', (topic, msg) => {
+        const parts = topic.split('/');
+        const serverId = parts[2];
+        version[serverId] = msg.version;
+    });
 
     function getServerId() {
         const selectedServer = $('#node-input-server').val();
@@ -12,28 +19,31 @@ const exposeNode = (function ($) {
         return selectedServer;
     }
 
-    function getVersion(callback) {
-        if (!getServerId()) {
-            callback(node);
-            return;
+    function isIntegrationLoaded() {
+        const serverId = getServerId();
+
+        if (version[serverId] && version[serverId] !== 0) {
+            return true;
         }
 
-        $.getJSON(
-            `homeassistant/version/${getServerId()}?_=${Date.now()}`
-        ).done((data) => {
-            node.integrationVersion = data.version;
-            if (callback) {
-                callback(node);
-            }
-        });
+        return false;
     }
 
     function init(n) {
         node = n;
         render();
-        const callback = getCallback();
 
-        $('#node-input-server').on('change', () => getVersion(callback));
+        $('#node-input-server').on('change', () => {
+            switch (node.type) {
+                case 'ha-webhook':
+                case 'ha-entity':
+                    renderAlert();
+                    break;
+                default:
+                    toggleExpose();
+                    break;
+            }
+        });
     }
 
     function render() {
@@ -47,15 +57,6 @@ const exposeNode = (function ($) {
         }
     }
 
-    function getCallback() {
-        switch (node.type) {
-            case 'ha-webhook':
-            case 'ha-entity':
-                return renderAlert;
-            default:
-                return toggleExpose;
-        }
-    }
     function renderEventNode() {
         const $row = $('<div />', {
             id: 'exposeToHa',
@@ -143,21 +144,22 @@ const exposeNode = (function ($) {
                 '<div id="integrationAlert" class="ui-state-error ha-alert-box"><strong>Attention:</strong> This node requires <a href="https://github.com/zachowj/hass-node-red" target="_blank">Node-RED custom integration <i class="fa fa-external-link external-link"></i></a> to be installed in Home Assistant for it to function.</strong></div>';
             $('#dialog-form').prepend(alertText);
         }
-        $('#integrationAlert').toggle(node.integrationVersion === 0);
+        $('#integrationAlert').toggle(!isIntegrationLoaded());
     }
 
     function toggleExpose() {
-        if (node.integrationVersion === 0) {
+        if (!isIntegrationLoaded()) {
             $('#node-input-exposeToHomeAssistant')
                 .prop('checked', false)
                 .trigger('change');
         }
-        $('#exposeToHa').toggle(node.integrationVersion !== 0);
+        $('#exposeToHa').toggle(isIntegrationLoaded());
     }
 
     return {
-        init,
         getValues,
+        init,
+        isIntegrationLoaded,
     };
     // eslint-disable-next-line no-undef
-})(jQuery);
+})(jQuery, RED);

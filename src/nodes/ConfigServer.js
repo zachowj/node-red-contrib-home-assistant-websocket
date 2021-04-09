@@ -152,6 +152,15 @@ class ConfigServer {
     }
 
     onIntegrationEvent(eventType) {
+        this.RED.comms.publish(
+            `homeassistant/integration/${this.config.id}`,
+            {
+                event: eventType,
+                version: this.homeAssistant.integrationVersion,
+            },
+            true
+        );
+
         if (
             eventType === INTEGRATION_NOT_LOADED &&
             !this.isHomeAssistantRunning
