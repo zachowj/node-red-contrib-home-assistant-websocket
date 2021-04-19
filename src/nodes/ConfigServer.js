@@ -1,6 +1,6 @@
 const merge = require('lodash.merge');
 
-const Comms = require('../helpers/comms');
+const Comms = require('../helpers/Comms');
 const { createHomeAssistantClient } = require('../homeAssistant');
 const { INTEGRATION_NOT_LOADED } = require('../const');
 const { toCamelCase } = require('../helpers/utils');
