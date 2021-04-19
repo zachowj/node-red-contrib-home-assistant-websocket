@@ -1,0 +1,15 @@
+{
+  "ha-device": {
+    "label": {
+      "name": "Name",
+      "server": "Server",
+      "type": "Type",
+      "trigger": "Trigger",
+      "action": "Action",
+      "device": "Device",
+      "seconds": "seconds",
+      "minutes": "minutes",
+      "hours": "hours"
+    }
+  }
+}

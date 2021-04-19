@@ -53,6 +53,7 @@ const nodeMap = {
     'call-service': { doc: 'call-service', type: 'api-call-service' },
     'config-server': { doc: 'config-server', type: 'server' },
     'current-state': { doc: 'current-state', type: 'api-current-state' },
+    device: { doc: 'device', type: 'ha-device' },
     entity: { doc: 'entity', type: 'ha-entity' },
     'events-all': { doc: 'events-all', type: 'server-events' },
     'events-state': {
@@ -249,7 +250,9 @@ const buildHelp = lazypipe()
     );
 
 task('buildEditorFiles', (done) => {
-    const css = src(['ui/css/*.scss']).pipe(buildSass());
+    const css = src(['ui/css/**/*.scss', 'ui/css/**/*.css', '!_*.scss']).pipe(
+        buildSass()
+    );
 
     const migrations = rollupStream({
         input: 'src/migrations/index.js',
@@ -265,8 +268,12 @@ task('buildEditorFiles', (done) => {
         .pipe(buffer())
         .pipe(buildJs());
 
-    const js = src(['ui/shared/*.js', 'ui/js/*.js'])
+    const js = src(['ui/shared/**/*.js', 'ui/js/*.js'])
         .pipe(concat('all.js'))
+        .pipe(buildJs());
+
+    const jsLibs = src(['ui/js/lib/*.js'])
+        .pipe(concat('lib.js'))
         .pipe(buildJs());
 
     const html = src([
@@ -292,7 +299,7 @@ task('buildEditorFiles', (done) => {
         })
     );
 
-    return merge([css, js, html, migrations])
+    return merge([css, js, html, migrations, jsLibs])
         .pipe(concat('index.html'))
         .pipe(dest(editorFilePath + '/'));
 });
@@ -431,13 +438,13 @@ module.exports = {
             watch(
                 [
                     'docs/node/*.md',
-                    'locales/**/*',
+                    'locales/**/*.json',
                     'src/migrations/**/*',
                     'ui/**/*',
                 ],
                 series(
                     'cleanEditorFiles',
-                    'buildEditorFiles',
+                    parallel(['buildEditorFiles', 'copyLocales']),
                     restartNodemonAndBrowserSync
                 )
             );

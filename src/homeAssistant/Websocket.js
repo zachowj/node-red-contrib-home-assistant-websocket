@@ -2,12 +2,12 @@ const cloneDeep = require('lodash.clonedeep');
 const debug = require('debug')('home-assistant:ws');
 const selectn = require('selectn');
 const {
+    callService,
     createConnection,
+    getUser,
     subscribeConfig,
     subscribeEntities,
     subscribeServices,
-    getUser,
-    callService,
     ERR_CANNOT_CONNECT,
     ERR_CONNECTION_LOST,
     ERR_HASS_HOST_REQUIRED,
@@ -17,6 +17,7 @@ const {
 
 const createSocket = require('./createSocket');
 const {
+    HA_EVENT_DEVICE_REGISTRY_UPDATED,
     HA_EVENT_INTEGRATION,
     HA_EVENT_STATE_CHANGED,
     HA_EVENTS,
@@ -30,6 +31,7 @@ const {
     STATE_CONNECTING,
     HA_EVENT_TAG_SCANNED,
 } = require('../const');
+const { subscribeDeviceRegistry } = require('./collections');
 
 class Websocket {
     constructor(config, eventBus) {
@@ -38,6 +40,7 @@ class Websocket {
         this.connectionState = STATE_DISCONNECTED;
         this.states = {};
         this.services = {};
+        this.devices = [];
         this.tags = null;
         this.statesLoaded = false;
         this.client = null;
@@ -150,6 +153,10 @@ class Websocket {
 
         subscribeEntities(this.client, (ent) => this.onClientStates(ent));
         subscribeServices(this.client, (ent) => this.onClientServices(ent));
+        subscribeDeviceRegistry(this.client, (devices) => {
+            this.emitEvent(HA_EVENT_DEVICE_REGISTRY_UPDATED, devices);
+            this.devices = devices;
+        });
     }
 
     onHomeAssistantRunning() {
@@ -240,7 +247,11 @@ class Websocket {
     }
 
     subscribeMessage(callback, subscribeMessage, options) {
-        this.client.subscribeMessage(callback, subscribeMessage, options);
+        return this.client.subscribeMessage(
+            callback,
+            subscribeMessage,
+            options
+        );
     }
 
     onClientStates(msg) {
@@ -396,6 +407,46 @@ class Websocket {
         this.emitEvent('ha_client:close');
     }
 
+    getDevices() {
+        return this.devices;
+    }
+
+    getDeviceActions(deviceId) {
+        if (!deviceId) return [];
+
+        return this.client.sendMessagePromise({
+            type: 'device_automation/action/list',
+            device_id: deviceId,
+        });
+    }
+
+    getDeviceActionCapabilities(action) {
+        if (!action) return [];
+
+        return this.client.sendMessagePromise({
+            type: 'device_automation/action/capabilities',
+            action,
+        });
+    }
+
+    getDeviceTriggers(deviceId) {
+        if (!deviceId) return [];
+
+        return this.client.sendMessagePromise({
+            type: 'device_automation/trigger/list',
+            device_id: deviceId,
+        });
+    }
+
+    getDeviceTriggerCapabilities(trigger) {
+        if (!trigger) return [];
+
+        return this.client.sendMessagePromise({
+            type: 'device_automation/trigger/capabilities',
+            trigger,
+        });
+    }
+
     getStates(entityId) {
         if (entityId) {
             return this.states[entityId]
@@ -408,6 +459,16 @@ class Websocket {
 
     getServices() {
         return cloneDeep(this.services);
+    }
+
+    getTranslations(category, language) {
+        if (!category) return [];
+
+        return this.client.sendMessagePromise({
+            type: 'frontend/get_translations',
+            language,
+            category,
+        });
     }
 
     callService(domain, service, data) {

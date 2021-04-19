@@ -1,11 +1,13 @@
-/* global jQuery: false */
+/* global jQuery: false, ha: false */
 // eslint-disable-next-line no-unused-vars
 const haOutputs = (function ($) {
     const customOutputElement = '#custom-outputs';
     let $outputs;
+    let _extraTypes = [];
 
     const customTypes = {
         config: { value: 'config', label: 'config.', hasValue: true },
+        deviceId: { value: 'triggerId', label: 'device id', hasValue: false },
         entity: { value: 'entity', label: 'entity', hasValue: false },
         entityId: { value: 'triggerId', label: 'entity id', hasValue: false },
         entityState: {
@@ -49,13 +51,16 @@ const haOutputs = (function ($) {
         { element = customOutputElement, extraTypes = [] } = {}
     ) {
         $outputs = $(element);
+        _extraTypes = extraTypes;
 
         $outputs.editableList({
             addButton: true,
             removable: true,
             sortable: true,
             height: 'auto',
-            header: $('<div>').append('Output Properties'),
+            header: $('<div>').append(
+                ha.i18n('home-assistant.label.output_properties')
+            ),
             addItem: function (container, _, data) {
                 container.css({
                     overflow: 'hidden',
@@ -82,7 +87,7 @@ const haOutputs = (function ($) {
                     .appendTo($row)
                     .typedInput({
                         default: 'str',
-                        types: getTypes(extraTypes),
+                        types: getTypes(),
                     });
 
                 propertyName.typedInput('value', data.property);
@@ -95,15 +100,15 @@ const haOutputs = (function ($) {
         $outputs.editableList('addItems', properties);
     }
 
-    function getTypes(extraTypes = []) {
-        let valueTypes = extraTypes.reduce((acc, type) => {
+    function getTypes() {
+        let valueTypes = _extraTypes.reduce((acc, type) => {
             if (type in customTypes) return [...acc, customTypes[type]];
 
             return acc;
         }, []);
 
         valueTypes = [...valueTypes, ...defaultTypes];
-        if (extraTypes.includes('msg')) {
+        if (_extraTypes.includes('msg')) {
             const index = valueTypes.indexOf('flow');
             valueTypes.splice(index, 0, 'msg');
         }
@@ -132,6 +137,18 @@ const haOutputs = (function ($) {
         return outputs;
     }
 
+    function empty() {
+        $outputs.empty();
+    }
+
+    function loadData(data) {
+        $outputs.editableList('empty').editableList('addItems', data);
+    }
+
+    function setTypes(types) {
+        _extraTypes = types;
+    }
+
     function validate(value) {
         return (
             value === undefined ||
@@ -141,8 +158,11 @@ const haOutputs = (function ($) {
     }
 
     return {
+        empty,
         createOutputs,
         getOutputs,
+        loadData,
+        setTypes,
         validate,
     };
 })(jQuery);

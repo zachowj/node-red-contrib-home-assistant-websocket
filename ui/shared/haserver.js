@@ -57,7 +57,7 @@ const haServer = (function ($, RED) {
     }
 
     function getJSON(callback, type, { params = {} }) {
-        let url = `homeassistant/${type}/${serverId}`;
+        let url = `homeassistant/${type}/${$server.val()}`;
         if (!$.isEmptyObject(params)) {
             url += `?${$.param(params)}`;
         }
@@ -66,10 +66,23 @@ const haServer = (function ($, RED) {
         });
     }
 
+    function fetch(type, params = {}) {
+        let url = `homeassistant/${type}/${$server.val()}`;
+        if (!$.isEmptyObject(params)) {
+            url += `?${$.param(params)}`;
+        }
+        return new Promise((resolve, reject) => {
+            $.getJSON(url)
+                .done((results) => resolve(results))
+                .fail((err) => reject(err));
+        });
+    }
+
     return {
-        init,
         autocomplete,
+        fetch,
         getJSON,
+        init,
     };
 
     // eslint-disable-next-line no-undef

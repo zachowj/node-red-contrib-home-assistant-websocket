@@ -96,6 +96,17 @@ class EventsHaNode extends EventsNode {
         }
     }
 
+    getDiscoveryPayload(config) {
+        return {
+            type: 'nodered/discovery',
+            server_id: this.nodeConfig.server.id,
+            node_id: this.node.id,
+            component: 'switch',
+            state: this.isEnabled,
+            config,
+        };
+    }
+
     async registerEntity(status = true) {
         if (super.registerEntity() === false) {
             return;
@@ -108,15 +119,7 @@ class EventsHaNode extends EventsNode {
             .filter((c) => c.value.length)
             .forEach((e) => (haConfig[e.property] = e.value));
 
-        const payload = {
-            type: 'nodered/discovery',
-            server_id: this.nodeConfig.server.id,
-            node_id: this.node.id,
-            component: 'switch',
-            state: this.isEnabled,
-            config: haConfig,
-        };
-
+        const payload = this.getDiscoveryPayload(haConfig);
         this.node.debug(`Registering with HA`);
         this.subscription = await this.homeAssistant.subscribeMessage(
             this.onHaEventMessage.bind(this),
@@ -135,7 +138,6 @@ class EventsHaNode extends EventsNode {
             // Need to set type prior to 0.20.0
             evt.type = 'state_changed';
         }
-
         if (evt.type) {
             switch (evt.type) {
                 case 'state_changed':

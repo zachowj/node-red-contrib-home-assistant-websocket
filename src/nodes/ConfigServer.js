@@ -1,5 +1,6 @@
 const merge = require('lodash.merge');
 
+const Comms = require('../helpers/comms');
 const { createHomeAssistantClient } = require('../homeAssistant');
 const { INTEGRATION_NOT_LOADED } = require('../const');
 const { toCamelCase } = require('../helpers/utils');
@@ -37,6 +38,7 @@ class ConfigServer {
             );
 
             this.startListeners();
+            this.comms = new Comms(this.RED, this.homeAssistant, this.node.id);
 
             await this.homeAssistant.connect();
         } catch (e) {
@@ -152,15 +154,6 @@ class ConfigServer {
     }
 
     onIntegrationEvent(eventType) {
-        this.RED.comms.publish(
-            `homeassistant/integration/${this.config.id}`,
-            {
-                event: eventType,
-                version: this.homeAssistant.integrationVersion,
-            },
-            true
-        );
-
         if (
             eventType === INTEGRATION_NOT_LOADED &&
             !this.isHomeAssistantRunning

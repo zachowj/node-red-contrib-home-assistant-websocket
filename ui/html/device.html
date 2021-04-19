@@ -1,0 +1,37 @@
+<input type="hidden" id="node-input-version" />
+
+<div class="form-row">
+    <label for="node-input-name" data-i18n="ha-device.label.name">
+        <i class="fa fa-tag"></i>
+    </label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+</div>
+
+<div class="form-row">
+    <label for="node-input-server" data-i18n="ha-device.label.server">
+        <i class="fa fa-server"></i>
+    </label>
+    <input type="text" id="node-input-server" />
+</div>
+
+<div class="form-row">
+    <label for="node-input-deviceType">
+        <span data-i18n="ha-device.label.type"></span>
+    </label>
+    <select id="node-input-deviceType" style="width: 70%">
+        <option value="trigger" data-i18n="ha-device.label.trigger"></option>
+        <option value="action" data-i18n="ha-device.label.action"></option>
+    </select>
+</div>
+
+<div class="form-row">
+    <label for="node-input-device" data-i18n="ha-device.label.device"></label>
+    <select id="node-input-device" style="width: 70%"></select>
+</div>
+
+<div class="form-row">
+    <label for="event" data-i18n="ha-device.label.trigger"></label>
+    <select id="event" style="width: 70%" disabled></select>
+</div>
+
+<div class="form-row"><ol id="custom-outputs"></ol></div>

@@ -2,6 +2,8 @@ const Api = require('./nodes/Api');
 const CallService = require('./nodes/CallService');
 const ConfigServer = require('./nodes/ConfigServer');
 const CurrentState = require('./nodes/CurrentState');
+const DeviceAction = require('./nodes/device/DeviceAction');
+const DeviceTrigger = require('./nodes/device/DeviceTrigger');
 const EventsAll = require('./nodes/EventsAll');
 const EventsState = require('./nodes/EventsState');
 const FireEvent = require('./nodes/FireEvent');
@@ -63,6 +65,28 @@ module.exports = function (RED) {
             config: this.config,
             RED,
         });
+    }
+
+    function deviceNode(config) {
+        RED.nodes.createNode(this, config);
+
+        this.config = migrate(config);
+        const params = {
+            node: this,
+            config: this.config,
+            RED,
+        };
+        switch (config.deviceType) {
+            case 'action':
+                this.controller = new DeviceAction(params);
+                break;
+            case 'trigger':
+                this.controller = new DeviceTrigger(params);
+                break;
+            default:
+                this.status({ text: 'Error' });
+                throw new Error(`Invalid entity type: ${config.deviceType}`);
+        }
     }
 
     function entityNode(config) {
@@ -224,6 +248,7 @@ module.exports = function (RED) {
         'api-call-service': callServiceNode,
         server: configServerNode,
         'api-current-state': currentStateNode,
+        'ha-device': deviceNode,
         'ha-entity': entityNode,
         'server-events': eventsAllNode,
         'server-state-changed': eventsStateNode,

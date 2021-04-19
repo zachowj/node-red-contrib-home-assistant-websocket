@@ -2,6 +2,7 @@ const api = require('./api');
 const callService = require('./call-service');
 const configServer = require('./config-server');
 const currentState = require('./current-state');
+const device = require('./device');
 const entity = require('./entity');
 const eventsAll = require('./events-all');
 const eventsState = require('./events-state');
@@ -22,6 +23,7 @@ const nodeTypeTranslation = {
     'api-call-service': callService,
     server: configServer,
     'api-current-state': currentState,
+    'ha-device': device,
     'ha-entity': entity,
     'server-events': eventsAll,
     'server-state-changed': eventsState,

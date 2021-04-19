@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-const exposeNode = (function ($, RED) {
+const exposeNode = (function ($, RED, ha) {
     let node;
     const version = {};
 
@@ -17,6 +17,16 @@ const exposeNode = (function ($, RED) {
         }
 
         return selectedServer;
+    }
+
+    function getIntegrationVersion() {
+        const serverId = getServerId();
+
+        if (version[serverId] && version[serverId] !== 0) {
+            return version[serverId];
+        }
+
+        return '0';
     }
 
     function isIntegrationLoaded() {
@@ -38,6 +48,9 @@ const exposeNode = (function ($, RED) {
                 case 'ha-webhook':
                 case 'ha-entity':
                     renderAlert();
+                    break;
+                case 'ha-device':
+                    renderAlert('0.5.0');
                     break;
                 default:
                     toggleExpose();
@@ -138,13 +151,22 @@ const exposeNode = (function ($, RED) {
         return arr;
     }
 
-    function renderAlert() {
+    function renderAlert(minVersion) {
+        const satisfiesVersion =
+            minVersion === undefined ||
+            ha.compareVersion(minVersion, getIntegrationVersion());
+        const integartionValid = isIntegrationLoaded() && satisfiesVersion;
         if (!$('#integrationAlert').length) {
-            const alertText =
-                '<div id="integrationAlert" class="ui-state-error ha-alert-box"><strong>Attention:</strong> This node requires <a href="https://github.com/zachowj/hass-node-red" target="_blank">Node-RED custom integration <i class="fa fa-external-link external-link"></i></a> to be installed in Home Assistant for it to function.</strong></div>';
+            const alertText = `
+            <div id="integrationAlert" class="ui-state-error ha-alert-box">
+                <strong>Attention:</strong> 
+                This node requires <a href="https://github.com/zachowj/hass-node-red" target="_blank">Node-RED custom integration ${
+                    satisfiesVersion ? '' : `version ${minVersion}+`
+                } <i class="fa fa-external-link external-link"></i></a> to be installed in Home Assistant for it to function.
+            </div>`;
             $('#dialog-form').prepend(alertText);
         }
-        $('#integrationAlert').toggle(!isIntegrationLoaded());
+        $('#integrationAlert').toggle(!integartionValid);
     }
 
     function toggleExpose() {
@@ -162,4 +184,4 @@ const exposeNode = (function ($, RED) {
         isIntegrationLoaded,
     };
     // eslint-disable-next-line no-undef
-})(jQuery, RED);
+})(jQuery, RED, ha);

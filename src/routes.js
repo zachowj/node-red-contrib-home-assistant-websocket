@@ -31,13 +31,42 @@ function setHomeAssistant(req, res, next) {
     next();
 }
 
+async function getDeviceActions(req, res) {
+    const deviceId = req.query.deviceId;
+    const actions = await req.homeAssistant.getDeviceActions(deviceId);
+    res.json(actions);
+}
+
+async function getDeviceActionCapabilities(req, res) {
+    const action = req.query.action;
+    const capabilities = await req.homeAssistant.getDeviceActionCapabilities(
+        action
+    );
+    res.json(capabilities);
+}
+
+async function getDeviceTriggers(req, res) {
+    const deviceId = req.query.deviceId;
+    const triggers = await req.homeAssistant.getDeviceTriggers(deviceId);
+    res.json(triggers);
+}
+
+async function getDeviceTriggerCapabilities(req, res) {
+    const trigger = req.query.trigger;
+    const capabilities = await req.homeAssistant.getDeviceTriggerCapabilities(
+        trigger
+    );
+    res.json(capabilities);
+}
+
 function getEntities(req, res) {
     const states = req.homeAssistant.getEntities();
     res.json(states);
 }
 
 function getStates(req, res) {
-    const states = req.homeAssistant.getStates();
+    const entityId = req.query.entityId;
+    const states = req.homeAssistant.getStates(entityId);
     res.json(states);
 }
 
@@ -66,8 +95,7 @@ function getProperties(req, res) {
             Object.keys(flatten(entity))
         );
     }
-
-    const uniqProperties = [...new Set(...flat)];
+    const uniqProperties = [...new Set([].concat(...flat))];
     const sortedProperties = uniqProperties.sort((a, b) => {
         if (!a.includes('.') && b.includes('.')) return -1;
         if (a.includes('.') && !b.includes('.')) return 1;
@@ -93,6 +121,13 @@ async function getTags(req, res) {
     });
 
     res.json(tags);
+}
+
+async function getTranslations(req, res) {
+    const category = req.query.cat;
+    const language = req.query.lang;
+    const devices = await req.homeAssistant.getTranslations(category, language);
+    res.json(devices.resources);
 }
 
 function getIntegrationVersion(req, res) {
@@ -130,11 +165,16 @@ function createRoutes(RED) {
     errorMessage = RED._('config-server.errors.no_server_selected');
 
     const endpoints = {
+        deviceActions: getDeviceActions,
+        deviceActionCapabilities: getDeviceActionCapabilities,
+        deviceTriggers: getDeviceTriggers,
+        deviceTriggerCapabilities: getDeviceTriggerCapabilities,
         entities: getEntities,
         properties: getProperties,
         services: getServices,
         states: getStates,
         tags: getTags,
+        translations: getTranslations,
     };
     Object.entries(endpoints).forEach(([key, value]) =>
         RED.httpAdmin.get(
