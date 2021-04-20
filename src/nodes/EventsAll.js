@@ -32,6 +32,10 @@ class EventsAll extends EventsHaNode {
                 'ha_client:running',
                 this.onHaEventsRunning.bind(this)
             );
+            this.addEventClientListener(
+                'ha_client:ready',
+                this.onHaEventsReady.bind(this)
+            );
         }
 
         // Registering only needed event types
@@ -113,6 +117,10 @@ class EventsAll extends EventsHaNode {
 
     onHaEventsRunning() {
         this.clientEvent('running');
+    }
+
+    onHaEventsReady() {
+        this.clientEvent('ready');
     }
 
     onHaEventsError(err) {

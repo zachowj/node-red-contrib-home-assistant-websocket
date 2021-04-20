@@ -53,7 +53,7 @@ class Websocket {
             'ha_client:connecting',
             this.onClientConnecting.bind(this)
         );
-        this.onStatesLoadedAndRunning();
+        this.onStatesLoadedAndRunning('initial_connection_ready');
     }
 
     emitEvent(event, data) {
@@ -108,7 +108,6 @@ class Websocket {
         // emit connected for only the first connection to the server
         // so we can setup certain things only once like registerEvents
         this.emitEvent('ha_client:connected');
-
         this.clientEvents();
         this.haEvents();
     }
@@ -280,7 +279,7 @@ class Websocket {
         }
     }
 
-    onStatesLoadedAndRunning() {
+    onStatesLoadedAndRunning(event = 'ready') {
         const statesLoaded = new Promise((resolve, reject) => {
             this.eventBus.once('ha_client:states_loaded', resolve);
         });
@@ -288,7 +287,7 @@ class Websocket {
             this.eventBus.once('ha_client:running', resolve);
         });
         Promise.all([statesLoaded, homeAssinstantRunning]).then(([states]) => {
-            this.eventBus.emit('ha_client:initial_connection_ready', states);
+            this.eventBus.emit(`ha_client:${event}`, states);
         });
     }
 
@@ -373,6 +372,7 @@ class Websocket {
     }
 
     onClientOpen() {
+        this.onStatesLoadedAndRunning();
         this.integrationVersion = 0;
         this.isHomeAssistantRunning = false;
         this.connectionState = STATE_CONNECTED;
