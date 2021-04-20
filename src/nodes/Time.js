@@ -40,12 +40,12 @@ class Time extends EventsHaNode {
 
         if (this.isHomeAssistantRunning) {
             this.onStateChanged();
-        } else {
-            this.addEventClientListener(
-                'ha_client:running',
-                this.onStateChanged.bind(this)
-            );
         }
+        this.addEventClientListener(
+            'ha_client:ready',
+            this.onStateChanged.bind(this)
+        );
+
         this.addEventClientListener(
             `ha_events:state_changed:${this.nodeConfig.entityId}`,
             this.onStateChanged.bind(this)
@@ -66,7 +66,7 @@ class Time extends EventsHaNode {
     }
 
     onStateChanged() {
-        if (this.isEnabled === false || !this.isHomeAssistantRunning) {
+        if (this.isEnabled === false) {
             return;
         }
         const property = this.nodeConfig.property || DEFAULT_PROPERTY;
