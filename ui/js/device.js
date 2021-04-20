@@ -214,7 +214,7 @@ RED.nodes.registerType('ha-device', {
     color: ha.nodeColors.alpha,
     inputs: 0,
     outputs: 1,
-    icon: 'font-awesome/fa-tablet',
+    icon: 'font-awesome/fa-cube',
     paletteLabel: 'device',
     label: function () {
         return this.name || `device ${this.deviceType}`;
