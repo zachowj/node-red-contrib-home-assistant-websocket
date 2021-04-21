@@ -1,4 +1,4 @@
-/* global RED: false, $: false, exposeNode: false, ha: false, haServer: false, nodeVersion: false */
+/* global RED: false, $: false, exposeNode: false, ha: false, haServer:false, nodeVersion: false, haData: false */
 RED.nodes.registerType('ha-time', {
     category: 'home_assistant',
     color: ha.nodeColors.beta,
@@ -38,21 +38,32 @@ RED.nodes.registerType('ha-time', {
     },
     oneditprepare: function () {
         nodeVersion.check(this);
-        const node = this;
+        const $server = $('#node-input-server');
+        const $entityId = $('#node-input-entityId');
 
-        haServer.init(node, '#node-input-server');
-        haServer.autocomplete('entities', (entities) => {
-            $('#node-input-entityId').autocomplete({
-                source: entities,
-                minLength: 2,
-            });
+        haServer.init(this, '#node-input-server');
+        $entityId.autocomplete({
+            source: (request, response) => {
+                const entities = haData.getAutocomplete(
+                    $server.val(),
+                    'entities'
+                );
+                response($.ui.autocomplete.filter(entities, request.term));
+            },
+            minLength: 0,
         });
-        haServer.autocomplete('properties', (properties) => {
-            $('#node-input-property').autocomplete({
-                source: properties,
-                minLength: 2,
-            });
+
+        $('#node-input-property').autocomplete({
+            source: (request, response) => {
+                const properties = haData.getProperties(
+                    $server.val(),
+                    $entityId.val()
+                );
+                response($.ui.autocomplete.filter(properties, request.term));
+            },
+            minLength: 0,
         });
+
         exposeNode.init(this);
         $('#dialog-form').prepend(ha.betaWarning(313));
 
