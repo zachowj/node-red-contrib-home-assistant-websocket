@@ -15,10 +15,10 @@ const migrations = [
             const newSchema = {
                 ...schema,
                 version: 1,
-                ha_boolean: 'y|yes|true|on|home|open',
-                rejectUnauthorizedCerts: true,
-                connectionDelay: true,
-                cacheJson: true,
+                ha_boolean: schema.ha_boolean || 'y|yes|true|on|home|open',
+                rejectUnauthorizedCerts: schema.rejectUnauthorizedCerts || true,
+                connectionDelay: schema.connectionDelay || true,
+                cacheJson: schema.cacheJson || true,
             };
             return newSchema;
         },
