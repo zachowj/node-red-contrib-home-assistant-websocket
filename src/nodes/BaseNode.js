@@ -391,6 +391,8 @@ class BaseNode {
             case 'entity':
             case 'entityState':
             case 'eventData':
+            case 'headers':
+            case 'params':
             case 'triggerId':
             case 'prevEntity':
             case 'results':
@@ -402,7 +404,7 @@ class BaseNode {
         return val;
     }
 
-    setCustomOutputs(properties, message, extras) {
+    setCustomOutputs(properties = [], message, extras) {
         properties.forEach((item) => {
             const value = this.getTypedInputValue(item.value, item.valueType, {
                 message,

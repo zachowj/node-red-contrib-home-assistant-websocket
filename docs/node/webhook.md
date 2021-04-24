@@ -29,16 +29,10 @@ Customizable location for the webhook request headers.
 
 ## Outputs
 
-### topic
+Value types:
 
-- Type: `string`
-
-webhook ID
-
-### payload
-
-- Type: `object | number | string`
-
-The parsed body from the webhook request.
-
-<!-- TODO: add headers info -->
+- `received data`: The parsed body from the webhook request
+- `trigger id`: webhook id
+- `headers`: entity state of the triggered entity
+- `params`: Query string parameters
+- `config`: config properties of the node

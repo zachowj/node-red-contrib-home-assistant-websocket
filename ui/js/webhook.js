@@ -1,4 +1,4 @@
-/* global RED: false, $: false, exposeNode: false, ha: false, haServer: false, nodeVersion: false */
+/* global RED: false, $: false, exposeNode: false, ha: false, haServer: false, nodeVersion: false, haOutputs: false */
 function generateId(length) {
     const possible =
         'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -26,10 +26,28 @@ RED.nodes.registerType('ha-webhook', {
         version: { value: RED.settings.haWebhookVersion },
         outputs: { value: 1 },
         webhookId: { value: generateId(32), required: true },
-        payloadLocation: { value: 'payload' },
-        payloadLocationType: { value: 'msg' },
-        headersLocation: { value: 'headers' },
-        headersLocationType: { value: 'none' },
+        outputProperties: {
+            value: [
+                {
+                    property: 'topic',
+                    propertyType: 'msg',
+                    value: '',
+                    valueType: 'triggerId',
+                },
+                {
+                    property: 'payload',
+                    propertyType: 'msg',
+                    value: '',
+                    valueType: 'data',
+                },
+            ],
+            validate: haOutputs.validate,
+        },
+        // deprecated but needed for imports
+        payloadLocation: {},
+        payloadLocationType: {},
+        headersLocation: {},
+        headersLocationType: {},
     },
     oneditprepare: function () {
         nodeVersion.check(this);
@@ -55,14 +73,11 @@ RED.nodes.registerType('ha-webhook', {
             $webhookId.val(generateId(32));
         });
 
-        const NoneType = { value: 'none', label: 'None', hasValue: false };
-        $('#node-input-payloadLocation').typedInput({
-            types: ['msg', 'flow', 'global', NoneType],
-            typeField: '#node-input-payloadLocationType',
+        haOutputs.createOutputs(this.outputProperties, {
+            extraTypes: ['receivedData', 'headers', 'params', 'triggerId'],
         });
-        $('#node-input-headersLocation').typedInput({
-            types: ['msg', 'flow', 'global', NoneType],
-            typeField: '#node-input-headersLocationType',
-        });
+    },
+    oneditsave: function () {
+        this.outputProperties = haOutputs.getOutputs();
     },
 });

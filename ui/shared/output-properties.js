@@ -16,6 +16,8 @@ const haOutputs = (function ($) {
             hasValue: false,
         },
         eventData: { value: 'eventData', label: 'event data', hasValue: false },
+        headers: { value: 'headers', label: 'headers', hasValue: false },
+        params: { value: 'params', label: 'params', hasValue: false },
         prevEntity: {
             value: 'prevEntity',
             label: 'previous entity',

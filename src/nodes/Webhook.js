@@ -8,14 +8,8 @@ const nodeOptions = {
         server: { isNode: true },
         outputs: 1,
         webhookId: {},
-        exposeToHomeAssistant: (nodeConfig) => true,
-        payloadLocation: (nodeConfig) =>
-            nodeConfig.payloadLocation || 'payload',
-        payloadLocationType: (nodeConfig) =>
-            nodeConfig.payloadLocationType || 'msg',
-        headersLocation: {},
-        headersLocationType: (nodeConfig) =>
-            nodeConfig.headersLocationType || 'none',
+        exposeToHomeAssistant: () => true,
+        outputProperties: {},
     },
 };
 
@@ -35,24 +29,20 @@ class Webhook extends EventsNode {
     }
 
     onEvent(evt) {
-        const message = {
-            topic: this.nodeConfig.webhookId,
-        };
+        const message = {};
+        try {
+            this.setCustomOutputs(this.nodeConfig.outputProperties, message, {
+                config: this.nodeConfig,
+                data: evt.data.payload,
+                headers: evt.data.headers,
+                params: evt.data.params,
+            });
+        } catch (e) {
+            this.node.error(e);
+            this.status.setFailed('error');
+            return;
+        }
 
-        // Set Payload Location
-        this.setContextValue(
-            evt.data.payload,
-            this.nodeConfig.payloadLocationType,
-            this.nodeConfig.payloadLocation,
-            message
-        );
-        // Set Headers Location
-        this.setContextValue(
-            evt.data.headers,
-            this.nodeConfig.headersLocationType,
-            this.nodeConfig.headersLocation,
-            message
-        );
         this.status.setSuccess('Received');
         this.send(message);
     }
