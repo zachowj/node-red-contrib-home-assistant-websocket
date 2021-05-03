@@ -16,6 +16,10 @@ Home Assistant connection configuration
 
 Fetches the last known state for any entity on input
 
+## [Device](./device.md)
+
+Creates device automations and calls device actions
+
 ## [Entity](./entity.md)
 
 Creates an entity in Home Assistant which can be manipulated from this node
@@ -49,13 +53,17 @@ and every time the entity changes if desired
 
 Allows rendering of templates on input
 
+## [Tag](./tag.md)
+
+Outputs when Home Assistant receives a tag scanned event for a configured tag id
+
 ## [Time](./time.md)
 
-A node that can be scheduled to trigger at a future date and time from a Home Assistant entity.
+A node that can be scheduled to trigger at a future date and time from a Home Assistant entity
 
 ## [Trigger: state](./trigger-state.md)
 
-Much like the `State Changed Node` however, provides some advanced functionality around common automation use cases.
+Much like the `State Changed Node` however, provides some advanced functionality around common automation use cases
 
 ## [Wait Until](./wait-until.md)
 
