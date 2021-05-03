@@ -10,6 +10,9 @@
       "seconds": "seconds",
       "minutes": "minutes",
       "hours": "hours"
+    },
+    "error": {
+      "invalid_device_config": "Invalid config for device trigger"
     }
   }
 }

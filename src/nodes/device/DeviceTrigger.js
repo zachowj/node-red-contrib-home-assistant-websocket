@@ -27,7 +27,11 @@ class DeviceTrigger extends EventsHaNode {
     }
 
     getTriggerData() {
-        if (!this.nodeConfig.event) return;
+        if (!this.nodeConfig.event) {
+            throw new Error(
+                this.RED._('ha-device.error.invalid_device_config')
+            );
+        }
 
         const trigger = { ...this.nodeConfig.event };
         if (

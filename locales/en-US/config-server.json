@@ -13,6 +13,7 @@
       "disabled": "DISABLED",
       "disconnected": "disconnected",
       "error": "error",
+      "registered": "registered",
       "triggered": "triggered",
       "running": "running"
     }

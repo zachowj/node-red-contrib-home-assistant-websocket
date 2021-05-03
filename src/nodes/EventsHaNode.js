@@ -119,16 +119,24 @@ class EventsHaNode extends EventsNode {
             .filter((c) => c.value.length)
             .forEach((e) => (haConfig[e.property] = e.value));
 
-        const payload = this.getDiscoveryPayload(haConfig);
-        this.node.debug(`Registering with HA`);
-        this.subscription = await this.homeAssistant.subscribeMessage(
-            this.onHaEventMessage.bind(this),
-            payload,
-            { resubscribe: false }
-        );
+        try {
+            const payload = this.getDiscoveryPayload(haConfig);
+            this.node.debug(`Registering with Home Assistant`);
+            this.subscription = await this.homeAssistant.subscribeMessage(
+                this.onHaEventMessage.bind(this),
+                payload,
+                { resubscribe: false }
+            );
+        } catch (e) {
+            this.status.setFailed(this.RED._('config-server.status.error'));
+            this.node.error(e.message);
+            return;
+        }
 
         if (status) {
-            this.status.setSuccess('Registered');
+            this.status.setSuccess(
+                this.RED._('config-server.status.registered')
+            );
         }
         this.registered = true;
     }

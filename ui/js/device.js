@@ -297,17 +297,19 @@ RED.nodes.registerType('ha-device', {
                     cat: 'device_automation',
                     lang,
                 })
-                .catch((err) => {
+                .catch(() => {
                     RED.notify('Error retrieving translations.', 'error');
-                    this.error(err);
                 });
         };
 
         const populateDevices = (deviceId) => {
             const serverId = $server.val();
             if (serverId === SERVER_ADD) return;
-            const options = haData
-                .getDevices(serverId)
+
+            const devices = haData.getDevices(serverId);
+            if (!devices) return;
+
+            const options = devices
                 .map((d) => {
                     return { id: d.id, name: d.name };
                 })
@@ -422,7 +424,7 @@ RED.nodes.registerType('ha-device', {
             const translateKey = (type = 'type') =>
                 `component.${event.domain}.device_automation.${eventType}_${type}.${event[type]}`;
             let desc =
-                translations[translateKey()] ||
+                (translations && translations[translateKey()]) ||
                 (event.subtype
                     ? `"${event.subtype}" ${event.type}`
                     : event.type);
@@ -477,7 +479,7 @@ RED.nodes.registerType('ha-device', {
         const $event = $('#event');
         const eventType = $event.val();
         this.inputs = event.inputCount;
-        if (event && event !== '__NONE__') {
+        if (eventType !== '__NONE__') {
             const events = $event.data('events');
             const capabilities = $event.data('capabilities');
             this.event = events[eventType];
