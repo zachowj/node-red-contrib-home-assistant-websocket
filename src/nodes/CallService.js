@@ -1,14 +1,19 @@
 /* eslint-disable camelcase */
 const selectn = require('selectn');
 
-const BaseNode = require('./BaseNode');
+const EventsNode = require('./EventsNode');
 const RenderTemplate = require('../helpers/mustache-context');
+const { HA_CLIENT_READY } = require('../const');
 
 const domainsNeedingArrays = [
     'homeassistant',
     'input_datetime',
     'input_number',
 ];
+const QUEUE_NONE = 'none';
+const QUEUE_FIRST = 'first';
+const QUEUE_ALL = 'all';
+const QUEUE_LAST = 'last';
 
 const nodeOptions = {
     debug: true,
@@ -23,12 +28,21 @@ const nodeOptions = {
         server: { isNode: true },
         mustacheAltTags: {},
         outputProperties: {},
+        queue: {},
     },
 };
 
-class CallService extends BaseNode {
+class CallService extends EventsNode {
     constructor({ node, config, RED }) {
         super({ node, config, RED, nodeOptions });
+
+        if (this.nodeConfig.queue !== QUEUE_NONE) {
+            this.queue = [];
+            this.addEventClientListener(
+                HA_CLIENT_READY,
+                this.onClientReady.bind(this)
+            );
+        }
     }
 
     isObjectLike(v) {
@@ -44,9 +58,9 @@ class CallService extends BaseNode {
         }
     }
 
-    async onInput({ message, parsedMessage, send, done }) {
+    onInput({ message, parsedMessage, send, done }) {
         const config = this.nodeConfig;
-        if (!this.isConnected) {
+        if (!this.isConnected && config.queue === QUEUE_NONE) {
             this.status.setFailed('No Connection');
             done('Call-Service attempted without connection to server.');
 
@@ -137,51 +151,40 @@ class CallService extends BaseNode {
             }
         }
 
-        const msgPayload = {
-            domain: apiDomain,
-            service: apiService,
-            data: apiData || null,
+        const obj = {
+            apiDomain,
+            apiService,
+            apiData,
+            message,
+            done,
+            send,
         };
 
-        this.status.setSending();
-
-        this.debugToClient({
-            domain: apiDomain,
-            service: apiService,
-            data: apiData,
-        });
-
-        try {
-            await this.homeAssistant.callService(
-                apiDomain,
-                apiService,
-                apiData
-            );
-        } catch (err) {
-            done(
-                `Call-service API error. ${
-                    err.message ? ` Error Message: ${err.message}` : ''
-                }`
-            );
-            this.status.setFailed('API Error');
+        if (!this.isConnected) {
+            switch (this.nodeConfig.queue) {
+                case QUEUE_FIRST:
+                    if (this.queue.length === 0) {
+                        this.queue = [obj];
+                    }
+                    break;
+                case QUEUE_ALL:
+                    this.queue.push(obj);
+                    break;
+                case QUEUE_LAST:
+                    this.queue = [obj];
+                    break;
+            }
+            this.status.setText(`${this.queue.length} queued`);
             return;
         }
 
-        this.status.setSuccess(`${apiDomain}.${apiService} called`);
+        this.processInput(obj);
+    }
 
-        try {
-            this.setCustomOutputs(this.nodeConfig.outputProperties, message, {
-                config: this.nodeConfig,
-                data: msgPayload,
-            });
-        } catch (e) {
-            this.status.setFailed('error');
-            done(e.message);
-            return;
+    onClientReady() {
+        while (this.queue.length) {
+            this.processInput(this.queue.pop());
         }
-
-        send(message);
-        done();
     }
 
     getApiData(payload, data) {
@@ -203,6 +206,61 @@ class CallService extends BaseNode {
         }
 
         return { ...configData, ...contextData, ...payloadData };
+    }
+
+    async processInput({
+        apiDomain,
+        apiService,
+        apiData,
+        message,
+        done,
+        send,
+    }) {
+        this.status.setSending();
+
+        this.debugToClient({
+            domain: apiDomain,
+            service: apiService,
+            data: apiData,
+        });
+
+        try {
+            await this.homeAssistant.callService(
+                apiDomain,
+                apiService,
+                apiData
+            );
+        } catch (err) {
+            // ignore 'connection lost' error on homeassistant.restart
+            if (
+                apiDomain !== 'homeassistant' &&
+                apiService !== 'restart' &&
+                selectn('error.code', err) !== 3
+            ) {
+                done(`Call-service error. ${err.message ? err.message : ''}`);
+                this.status.setFailed('API Error');
+                return;
+            }
+        }
+
+        this.status.setSuccess(`${apiDomain}.${apiService} called`);
+        try {
+            this.setCustomOutputs(this.nodeConfig.outputProperties, message, {
+                config: this.nodeConfig,
+                data: {
+                    domain: apiDomain,
+                    service: apiService,
+                    data: apiData || null,
+                },
+            });
+        } catch (e) {
+            this.status.setFailed('error');
+            done(e.message);
+            return;
+        }
+
+        send(message);
+        done();
     }
 }
 

@@ -1,6 +1,7 @@
 module.exports = Object.freeze({
     ENTITY_SWITCH: 'switch',
     ENTITY_DEVICE_TRIGGER: 'device_trigger',
+    HA_CLIENT_READY: 'ha_client:ready',
     HA_EVENT_DEVICE_REGISTRY_UPDATED: 'devices_updated',
     HA_EVENT_INTEGRATION: 'nodered',
     HA_EVENT_STATE_CHANGED: 'state_changed',

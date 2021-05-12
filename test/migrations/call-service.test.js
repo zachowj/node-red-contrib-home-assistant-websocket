@@ -43,6 +43,11 @@ const VERSION_2 = {
         },
     ],
 };
+const VERSION_3 = {
+    ...VERSION_2,
+    version: 3,
+    queue: 'none',
+};
 
 describe('Migrations - Call Service Node', function () {
     describe('Version 0', function () {
@@ -132,8 +137,16 @@ describe('Migrations - Call Service Node', function () {
             expect(migratedSchema.outputProperties).to.eql([]);
         });
     });
+    describe('Version 3', function () {
+        it('should update version 2 to version 3', function () {
+            const migrate = migrations.find((m) => m.version === 3);
+            const migratedSchema = migrate.up(VERSION_2);
+
+            expect(migratedSchema).to.eql(VERSION_3);
+        });
+    });
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_2);
+        expect(migratedSchema).to.eql(VERSION_3);
     });
 });

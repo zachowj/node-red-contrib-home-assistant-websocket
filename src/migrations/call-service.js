@@ -56,6 +56,18 @@ const migrations = [
             return newSchema;
         },
     },
+    {
+        version: 3,
+        up: (schema) => {
+            const newSchema = {
+                ...schema,
+                version: 3,
+                queue: 'none',
+            };
+
+            return newSchema;
+        },
+    },
 ];
 
 module.exports = migrations;

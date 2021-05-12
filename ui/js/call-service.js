@@ -27,6 +27,7 @@ RED.nodes.registerType('api-call-service', {
             value: [],
             validate: haOutputs.validate,
         },
+        queue: { value: 'none' },
         // deprecated
         output_location: { value: undefined },
         output_location_type: { value: undefined },

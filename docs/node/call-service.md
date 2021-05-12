@@ -52,6 +52,12 @@ If defined will attempt to merge the global and flow context variable into the c
 
 Will change the tags used for mustache template to `<%` and `%>`
 
+### Queue
+
+- Type: `none | first | all | last`
+
+Will store the first, last or all messages received while disconnected from Home Assistant and send them once connected again
+
 ## Input
 
 All properties need to be under `msg.payload`.

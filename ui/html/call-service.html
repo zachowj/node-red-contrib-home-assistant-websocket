@@ -53,6 +53,36 @@
 
 <div class="form-row"><ol id="custom-outputs"></ol></div>
 
+<div class="form-row">
+    <label for="node-input-queue">
+        <i class="fa fa-stack-exchange"></i>
+        <span data-i18n="api-call-service.label.queue"></span>
+    </label>
+    <select type="text" id="node-input-queue" style="width: auto">
+        <option
+            value="none"
+            data-i18n="api-call-service.label.queue_none"
+        ></option>
+        <option
+            value="first"
+            data-i18n="api-call-service.label.queue_first"
+        ></option>
+        <option
+            value="all"
+            data-i18n="api-call-service.label.queue_all"
+        ></option>
+        <option
+            value="last"
+            data-i18n="api-call-service.label.queue_last"
+        ></option>
+    </select>
+</div>
+
+<div class="form-row checkbox-option">
+    <input type="checkbox" id="node-input-debugenabled" />
+    <label for="node-input-debugenabled"> Show Debug Information </label>
+</div>
+
 <div id="service-data-desc" class="form-row">
     <button
         id="example-data"
@@ -76,9 +106,4 @@
             <tbody></tbody>
         </table>
     </div>
-</div>
-
-<div class="form-row checkbox-option">
-    <input type="checkbox" id="node-input-debugenabled" />
-    <label for="node-input-debugenabled"> Show Debug Information </label>
 </div>

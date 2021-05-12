@@ -1,0 +1,11 @@
+{
+  "api-call-service": {
+    "label": {
+      "queue": "queue",
+      "queue_none": "Don't Queue Messages",
+      "queue_first": "First Message Only",
+      "queue_all": "All Messages",
+      "queue_last": "Last Message Only"
+    }
+  }
+}
