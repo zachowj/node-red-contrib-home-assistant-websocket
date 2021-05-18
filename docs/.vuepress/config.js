@@ -24,6 +24,11 @@ module.exports = {
             { text: 'FAQ', link: '/FAQ.md' },
             { text: 'Cookbook', link: '/cookbook/' },
             { text: 'Scrubber', link: '/scrubber/' },
+            {
+                text: 'Forums',
+                link:
+                    'https://github.com/zachowj/node-red-contrib-home-assistant-websocket/discussions',
+            },
         ],
         sidebar: {
             '/cookbook/': [
