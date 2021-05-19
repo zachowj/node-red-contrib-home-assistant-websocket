@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.31.1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.31.0...v0.31.1) (2021-05-19)
+
+
+### Bug Fixes
+
+* Fix status search and replace error ([c228278](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/c228278af6e2d944b150cd6c18893fe937c678db))
+
 ## [0.31.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.30.1...v0.31.0) (2021-05-19)
 
 
