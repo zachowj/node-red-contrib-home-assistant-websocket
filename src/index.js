@@ -103,7 +103,7 @@ module.exports = function (RED) {
                 break;
             }
             default:
-                this({ text: 'Error' });
+                this.status({ text: 'Error' });
                 throw new Error(`Invalid entity type: ${config.deviceType}`);
         }
     }
