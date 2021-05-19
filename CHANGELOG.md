@@ -2,6 +2,61 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.31.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.30.1...v0.31.0) (2021-05-19)
+
+
+### Features
+
+* Add $randomNumber and $sampleSize as JSONata helper functions ([b5b65bf](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/b5b65bf13c4b0c47a1821e23f7f504133c75c13c))
+* Add device node ([b08fcbe](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/b08fcbe4031f0a12b785b63b114a28bd79915409))
+* **api:** Add custom outputs ([da0187f](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/da0187fb796d5fc8c8ffaa4dedbcedfd2f3e6fc0))
+* **call-service:** Add message queue ([58df3a0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/58df3a056d87fd7b666650e9902908ce0a116742))
+* **current-state:** Add custom ouputs ([f4ecbb8](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f4ecbb8fd88c76ca277cc2e08dc15e914ce276ec))
+* **events-all:** Add custom outputs ([0a3fc23](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/0a3fc236e07307511ed2ff9ca0eda17725135b67))
+* **events-state:** Add custom outputs ([aa07fb4](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/aa07fb4cbbcb07cc547655c19bbbab59929ab0e9))
+* Make use of NR v1.0 async send and done ([d5b69f4](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d5b69f4a52c87cc610e45f33740e625acdac62db))
+* **migrations:** Add config nodes to mass update ([5d23126](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/5d231264e8c2330b4d45577a1a6b274388ab2e3d))
+* **tag:** Add tag node ([17585bb](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/17585bbcdd32b247aac774d773cb46b84e4bb650))
+* **time:** Move time node to beta release ([27caacc](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/27caacc3ceacfe3d400a4c528ecaedbb20f45d1e))
+* **webhook:** Add custom outputs ([5dff14b](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/5dff14bb98a2ec376b968a584550602334df277a))
+
+
+### Bug Fixes
+
+* **api:** add try catch for setCustomOutputs ([ee5189d](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ee5189dbc28198e0f4474750e0a9bf36265026b4))
+* Check for valid property for custom outputs ([f971856](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f9718564605143674d0918c82ffc224d1d5b29aa))
+* Check for valid server before processing input ([a86a9a6](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a86a9a67ae734c3d82af069c9953706015ed22a8))
+* check for valid server config before using it ([d7b322b](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d7b322b8bc970f3504958f85514ab6995960d5c6))
+* **ci:** Don't lint included external libs ([8cd6735](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/8cd6735de37c43efbca7f512aadf3e3401fb3589))
+* destroy bonjour after finished using it ([eb2208f](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/eb2208fc2cb1a840c4aeeb29927c7962ab6c5f12))
+* **entity-switch:** Remove unused declaration ([e6b15a0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/e6b15a0335c7a236c6c3ab6c609ad65bae787e8c))
+* Fix Comms import ([8c51877](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/8c5187732bd2b80178767eb0f3c26d9d7b9311f1))
+* **migration:** Move event-state for properties to a newer version ([de68154](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/de68154200e807a04c8eb51cafa66f8c12e0efec))
+* **migrations:** make sure schema version is a number ([e1bc0f8](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/e1bc0f80c64c43b77a5ab479d3804a87e30ffadc))
+* **migrations:** swap conditional for default value ([996b9ef](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/996b9ef2f91a9217dc7e9019ce2ea0f5fe1e7b97))
+* only trim spaces of server url if it exists ([f9ce69f](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f9ce69fd3efbc841c9593d4ada852ce3a067a09f))
+* **poll-state:** call correct error method ([5f7b1a8](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/5f7b1a8501e56068571da6a5d24dde5315819c8d))
+* **poll-state:** Use correct element id for entity_id input ([0c2fe30](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/0c2fe305afcac9e86d8e7a7e32281173c2a1930a))
+* request autocomplete results only if server actually changes ([27dc32a](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/27dc32a5513e4719b4145081908a9970736d57d7))
+* **routes:** fix server id for getting integration version ([fc6c808](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/fc6c808921fc0f7b0d2a6f206d76b570d58ace88))
+* **routes:** flatten out properties array ([45df3f1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/45df3f1cd09d2da72d3426fb3134003aad1434a5))
+* **status:** check for valid homeAssistant before adding listeners ([c1d29ec](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/c1d29ec4d50e659e7cd08fc01692d914ae619191))
+* **time:** Check jsonata length before attempting to find entity ids ([e3de59e](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/e3de59e804e39bed42539ea46a07a1e873287a5d))
+* **time:** use correct i18n errror message ([be3db24](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/be3db24e535d01be3f740ee7b9c97ad17bcba602))
+* Use correct element id for update all button ([6bcf9a8](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/6bcf9a8dade2c92fe89199e04cbf1edf08191538))
+* use the correct RED ([03bb7a0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/03bb7a0cb44d920ffcf199528aa1b3d67687f776))
+
+
+### Documentation
+
+* Add github discussions link to header ([dfa74a7](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/dfa74a795d5dc622eb83959e424b0fbc349d8533))
+* Add new nodes to index ([7b305d0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/7b305d0f8ca6ca7400392eeadf8919897fba263a))
+* Add new nodes to TOC ([9a73e86](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/9a73e865aee26acb754e869d12c423cea941281f))
+* **cookbook:** Correct spelling ([28928b4](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/28928b4c8a6571c247b043781db0691000c535ed))
+* **cookbook:** Update starting flow after HA reboot ([388b70a](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/388b70a148f8b1af0413347a6f13c5a1278512b5))
+* **current-state:** add information about custom outputs ([e9fcb91](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/e9fcb9113eb853eb6f29383eea3c05da70bcd6dc))
+* **events-state:** Add custom output information ([e2a11a9](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/e2a11a9e27b78b67a1c4f14bb272664599f184a2))
+
 ### [0.30.1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.30.0...v0.30.1) (2021-01-10)
 
 
