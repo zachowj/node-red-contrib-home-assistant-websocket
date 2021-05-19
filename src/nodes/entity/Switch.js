@@ -1,6 +1,5 @@
 const EntityNode = require('../EntityNode');
 const {
-    SwitchEntityStatus,
     STATUS_SHAPE_RING,
     STATUS_COLOR_BLUE,
 } = require('../../helpers/status');
