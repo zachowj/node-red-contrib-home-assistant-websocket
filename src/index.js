@@ -19,6 +19,11 @@ const TriggerState = require('./nodes/TriggerState');
 const WaitUntil = require('./nodes/WaitUntil');
 const Webhook = require('./nodes/Webhook');
 const Zone = require('./nodes/Zone');
+const {
+    Status,
+    EventsStatus,
+    SwitchEntityStatus,
+} = require('./helpers/status');
 const { createRoutes } = require('./routes');
 const { getExposedSettings } = require('./helpers/exposed-settings');
 const { migrate } = require('./migrations');
@@ -30,17 +35,25 @@ module.exports = function (RED) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
-        this.controller = new Api({ node: this, config: this.config, RED });
+        const status = new Status(this);
+        this.controller = new Api({
+            node: this,
+            config: this.config,
+            RED,
+            status,
+        });
     }
 
     function callServiceNode(config) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
+        const status = new Status(this);
         this.controller = new CallService({
             node: this,
             config: this.config,
             RED,
+            status,
         });
     }
 
@@ -60,10 +73,12 @@ module.exports = function (RED) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
+        const status = new Status(this);
         this.controller = new CurrentState({
             node: this,
             config: this.config,
             RED,
+            status,
         });
     }
 
@@ -77,14 +92,18 @@ module.exports = function (RED) {
             RED,
         };
         switch (config.deviceType) {
-            case 'action':
-                this.controller = new DeviceAction(params);
+            case 'action': {
+                const status = new Status(this);
+                this.controller = new DeviceAction({ ...params, status });
                 break;
-            case 'trigger':
-                this.controller = new DeviceTrigger(params);
+            }
+            case 'trigger': {
+                const status = new EventsStatus(this);
+                this.controller = new DeviceTrigger({ ...params, status });
                 break;
+            }
             default:
-                this.status({ text: 'Error' });
+                this({ text: 'Error' });
                 throw new Error(`Invalid entity type: ${config.deviceType}`);
         }
     }
@@ -96,22 +115,29 @@ module.exports = function (RED) {
 
         switch (config.entityType) {
             case 'binary_sensor':
-            case 'sensor':
+            case 'sensor': {
+                const status = new Status(this);
                 this.controller = new Sensor({
                     node: this,
                     config: this.config,
                     RED,
+                    status,
                 });
+
                 break;
-            case 'switch':
+            }
+            case 'switch': {
+                const status = new SwitchEntityStatus(this);
                 this.controller = new Switch({
                     node: this,
                     config: this.config,
                     RED,
+                    status,
                 });
                 break;
+            }
             default:
-                this.status({ text: 'Error' });
+                this({ text: 'Error' });
                 throw new Error(`Invalid entity type: ${config.entityType}`);
         }
     }
@@ -120,10 +146,12 @@ module.exports = function (RED) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
+        const status = new EventsStatus(this);
         this.controller = new EventsAll({
             node: this,
             config: this.config,
             RED,
+            status,
         });
     }
 
@@ -131,10 +159,12 @@ module.exports = function (RED) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
+        const status = new EventsStatus(this);
         this.controller = new EventsState({
             node: this,
             config: this.config,
             RED,
+            status,
         });
     }
 
@@ -142,10 +172,12 @@ module.exports = function (RED) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
+        const status = new Status(this);
         this.controller = new FireEvent({
             node: this,
             config: this.config,
             RED,
+            status,
         });
     }
 
@@ -153,10 +185,12 @@ module.exports = function (RED) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
+        const status = new Status(this);
         this.controller = new GetEntities({
             node: this,
             config: this.config,
             RED,
+            status,
         });
     }
 
@@ -164,10 +198,12 @@ module.exports = function (RED) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
+        const status = new Status(this);
         this.controller = new GetHistory({
             node: this,
             config: this.config,
             RED,
+            status,
         });
     }
 
@@ -175,10 +211,12 @@ module.exports = function (RED) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
+        const status = new EventsStatus(this);
         this.controller = new PollState({
             node: this,
             config: this.config,
             RED,
+            status,
         });
     }
 
@@ -186,10 +224,12 @@ module.exports = function (RED) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
+        const status = new Status(this);
         this.controller = new RenderTemplate({
             node: this,
             config: this.config,
             RED,
+            status,
         });
     }
 
@@ -197,24 +237,38 @@ module.exports = function (RED) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
-        this.controller = new Tag({ node: this, config: this.config, RED });
+        const status = new EventsStatus(this);
+        this.controller = new Tag({
+            node: this,
+            config: this.config,
+            RED,
+            status,
+        });
     }
 
     function timeNode(config) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
-        this.controller = new Time({ node: this, config: this.config, RED });
+        const status = new EventsStatus(this);
+        this.controller = new Time({
+            node: this,
+            config: this.config,
+            RED,
+            status,
+        });
     }
 
     function triggerStateNode(config) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
+        const status = new EventsStatus(this);
         this.controller = new TriggerState({
             node: this,
             config: this.config,
             RED,
+            status,
         });
     }
 
@@ -222,10 +276,12 @@ module.exports = function (RED) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
+        const status = new Status(this);
         this.controller = new WaitUntil({
             node: this,
             config: this.config,
             RED,
+            status,
         });
     }
 
@@ -233,14 +289,26 @@ module.exports = function (RED) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
-        this.controller = new Webhook({ node: this, config: this.config, RED });
+        const status = new EventsStatus(this);
+        this.controller = new Webhook({
+            node: this,
+            config: this.config,
+            RED,
+            status,
+        });
     }
 
     function zoneNode(config) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
-        this.controller = new Zone({ node: this, config: this.config, RED });
+        const status = new EventsStatus(this);
+        this.controller = new Zone({
+            node: this,
+            config: this.config,
+            RED,
+            status,
+        });
     }
 
     const nodes = {

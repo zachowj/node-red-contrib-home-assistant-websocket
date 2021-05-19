@@ -20,8 +20,8 @@ const nodeOptions = {
 };
 
 class PollState extends EventsHaNode {
-    constructor({ node, config, RED }) {
-        super({ node, config, RED, nodeOptions });
+    constructor({ node, config, RED, status }) {
+        super({ node, config, RED, status, nodeOptions });
 
         if (!this.nodeConfig.entity_id) {
             throw new Error('Entity Id is required');

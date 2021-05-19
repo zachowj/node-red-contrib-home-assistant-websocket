@@ -17,11 +17,10 @@ const nodeOptions = {
 };
 
 class Switch extends EntityNode {
-    constructor({ node, config, RED }) {
-        super({ node, config, RED, nodeOptions });
+    constructor({ node, config, RED, status }) {
+        super({ node, config, RED, status, nodeOptions });
 
-        this.status = new SwitchEntityStatus({
-            node,
+        this.status.init({
             nodeState: this.isEnabled,
             homeAssistant: this.homeAssistant,
         });

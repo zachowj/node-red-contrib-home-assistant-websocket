@@ -94,8 +94,8 @@ const nodeOptions = {
 };
 
 class Api extends BaseNode {
-    constructor({ node, config, RED }) {
-        super({ node, config, RED, nodeOptions });
+    constructor({ node, config, RED, status }) {
+        super({ node, config, RED, status, nodeOptions });
     }
 
     async onInput({ message, parsedMessage, send, done }) {

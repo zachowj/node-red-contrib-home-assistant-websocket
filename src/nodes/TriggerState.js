@@ -20,8 +20,8 @@ const nodeOptions = {
 };
 
 class TriggerState extends EventsHaNode {
-    constructor({ node, config, RED }) {
-        super({ node, config, RED, nodeOptions });
+    constructor({ node, config, RED, status }) {
+        super({ node, config, RED, status, nodeOptions });
 
         let eventTopic = 'ha_events:state_changed';
 

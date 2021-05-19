@@ -7,7 +7,6 @@ const {
     INTEGRATION_UNLOADED,
     INTEGRATION_NOT_LOADED,
 } = require('../const');
-const { EventsStatus } = require('../helpers/status');
 
 const DEFAULT_NODE_OPTIONS = {
     debug: false,
@@ -20,15 +19,15 @@ const DEFAULT_NODE_OPTIONS = {
 };
 
 class EventsNode extends BaseNode {
-    constructor({ node, config, RED, nodeOptions = {} }) {
+    constructor({ node, config, RED, status, nodeOptions = {} }) {
         nodeOptions = merge({}, DEFAULT_NODE_OPTIONS, nodeOptions);
-        super({ node, config, RED, nodeOptions });
+        super({ node, config, RED, status, nodeOptions });
         this.listeners = {};
         this.registered = false;
         this.integrationErrorMessage =
             'Node-RED custom integration needs to be installed in Home Assistant for this node to function correctly.';
-        this.status = new EventsStatus({
-            node,
+        this.status = status;
+        this.status.init({
             nodeState: this.isEnabled,
             homeAssistant: this.homeAssistant,
         });

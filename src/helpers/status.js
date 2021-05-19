@@ -15,11 +15,13 @@ const STATUS_SHAPE_DOT = 'dot';
 const STATUS_SHAPE_RING = 'ring';
 
 class Status {
-    constructor({ node, nodeState = true }) {
+    constructor(node) {
         this.node = node;
-        this.isNodeDisabled = !nodeState;
+        this.isNodeDisabled = false;
         this.lastStatus = {};
     }
+
+    init() {}
 
     setNodeState(value) {
         if (this.isNodeDisabled === value) {
@@ -102,10 +104,16 @@ class Status {
 }
 
 class EventsStatus extends Status {
-    constructor({ node, nodeState, homeAssistant }) {
-        super({ node, nodeState });
+    constructor(node) {
+        super(node);
         this.connectionState = STATE_DISCONNECTED;
         this.eventListeners = [];
+    }
+
+    init({ nodeState, homeAssistant }) {
+        if (nodeState !== undefined) {
+            this.isNodeDisabled = !nodeState;
+        }
 
         if (homeAssistant) {
             this.enableConnectionStatus(homeAssistant);
@@ -194,10 +202,6 @@ class EventsStatus extends Status {
 }
 
 class SwitchEntityStatus extends Status {
-    constructor({ node, nodeState }) {
-        super({ node, nodeState });
-    }
-
     set({
         fill = STATUS_COLOR_YELLOW,
         shape = STATUS_SHAPE_DOT,

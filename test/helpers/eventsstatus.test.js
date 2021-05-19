@@ -34,11 +34,8 @@ describe('EventsStatus', function () {
 
     describe('set', function () {
         it('should initialize with defaults', function () {
-            const status = new EventsStatus({
-                node: fakeNode,
-                nodeState: true,
-                homeAssistant: fakeHA,
-            });
+            const status = new EventsStatus(fakeNode);
+            status.init({ nodeState: true, homeAssistant: fakeHA });
             expect(status.isNodeDisabled).to.be.false;
             expect(status.connectionState).to.be.equal(STATE_DISCONNECTED);
             expect(fakeHA.addListener).to.have.callCount(5);
@@ -47,8 +44,8 @@ describe('EventsStatus', function () {
     describe('Event Listeners', function () {
         describe('onClientClose', function () {
             it('should set connection state to disconnected and call updateConnectionStatus once', function () {
-                const status = new EventsStatus({
-                    node: fakeNode,
+                const status = new EventsStatus(fakeNode);
+                status.init({
                     nodeState: true,
                     homeAssistant: fakeHA,
                 });
@@ -61,8 +58,8 @@ describe('EventsStatus', function () {
         });
         describe('onClientConnection', function () {
             it('should set connection state to connecting and call updateConnectionStatus once', function () {
-                const status = new EventsStatus({
-                    node: fakeNode,
+                const status = new EventsStatus(fakeNode);
+                status.init({
                     nodeState: true,
                     homeAssistant: fakeHA,
                 });
@@ -75,8 +72,8 @@ describe('EventsStatus', function () {
         });
         describe('onClientOpen', function () {
             it('should set connection state to connected and call updateConnectionStatus once', function () {
-                const status = new EventsStatus({
-                    node: fakeNode,
+                const status = new EventsStatus(fakeNode);
+                status.init({
                     nodeState: true,
                     homeAssistant: fakeHA,
                 });
@@ -89,8 +86,8 @@ describe('EventsStatus', function () {
         });
         describe('onClientRunning', function () {
             it('should set connection state to running and call updateConnectionStatus once', function () {
-                const status = new EventsStatus({
-                    node: fakeNode,
+                const status = new EventsStatus(fakeNode);
+                status.init({
                     nodeState: true,
                     homeAssistant: fakeHA,
                 });
@@ -104,8 +101,8 @@ describe('EventsStatus', function () {
     });
     describe('getConnectionStatus', function () {
         it('should return disconnected status object', function () {
-            const status = new EventsStatus({
-                node: fakeNode,
+            const status = new EventsStatus(fakeNode);
+            status.init({
                 nodeState: true,
                 homeAssistant: fakeHA,
             });
@@ -120,8 +117,8 @@ describe('EventsStatus', function () {
             expect(result).to.be.eql(expectedStatus);
         });
         it('should return connected status object', function () {
-            const status = new EventsStatus({
-                node: fakeNode,
+            const status = new EventsStatus(fakeNode);
+            status.init({
                 nodeState: true,
                 homeAssistant: fakeHA,
             });
@@ -136,8 +133,8 @@ describe('EventsStatus', function () {
             expect(result).to.be.eql(expectedStatus);
         });
         it('should return connecting status object', function () {
-            const status = new EventsStatus({
-                node: fakeNode,
+            const status = new EventsStatus(fakeNode);
+            status.init({
                 nodeState: true,
                 homeAssistant: fakeHA,
             });
@@ -152,8 +149,8 @@ describe('EventsStatus', function () {
             expect(result).to.be.eql(expectedStatus);
         });
         it('should return error status object', function () {
-            const status = new EventsStatus({
-                node: fakeNode,
+            const status = new EventsStatus(fakeNode);
+            status.init({
                 nodeState: true,
                 homeAssistant: fakeHA,
             });
@@ -168,8 +165,8 @@ describe('EventsStatus', function () {
             expect(result).to.be.eql(expectedStatus);
         });
         it('should return running status object', function () {
-            const status = new EventsStatus({
-                node: fakeNode,
+            const status = new EventsStatus(fakeNode);
+            status.init({
                 nodeState: true,
                 homeAssistant: fakeHA,
             });
@@ -186,8 +183,8 @@ describe('EventsStatus', function () {
     });
     describe('destroy', function () {
         it('should remove 5 events', function () {
-            const status = new EventsStatus({
-                node: fakeNode,
+            const status = new EventsStatus(fakeNode);
+            status.init({
                 nodeState: true,
                 homeAssistant: fakeHA,
             });

@@ -20,33 +20,22 @@ describe('Status', function () {
         sinon.restore();
     });
 
-    it('should initialize with isNodeDisabled false with empty constructor', function () {
-        const status = new Status({});
-        expect(status.isNodeDisabled).to.be.false;
-    });
-    it('should initialize with isNodeDisabled true', function () {
-        const status = new Status({ node: fakeNode, nodeState: false });
-        expect(status.isNodeDisabled).to.be.true;
-    });
-    it('should initialize with isNodeDisabled false', function () {
-        const status = new Status({ node: fakeNode, nodeState: true });
-        expect(status.isNodeDisabled).to.be.false;
-    });
     describe('setNodeState', function () {
         it('should inverse the passed in value', function () {
-            const status = new Status({ nodeState: true });
+            const status = new Status();
+            status.init({ nodeState: true });
             status.setNodeState(true);
             expect(status.isNodeDisabled).to.be.false;
         });
         it('should call updateStatus after changing the state', function () {
-            const status = new Status({ node: fakeNode, nodeState: true });
+            const status = new Status(fakeNode);
             const spy = sinon.spy(status, 'updateStatus');
             status.setNodeState(false);
             expect(spy).to.have.been.calledOnce;
             expect(fakeNode.status).to.have.been.calledOnce;
         });
         it('should not call updateStatus if the passed in value does not change the state', function () {
-            const status = new Status({ node: fakeNode, nodeState: true });
+            const status = new Status(fakeNode);
             const spy = sinon.spy(status, 'updateStatus');
             status.setNodeState(true);
             expect(spy).to.not.have.been.called;
@@ -55,7 +44,7 @@ describe('Status', function () {
     });
     describe('set', function () {
         it('should call updateStatus with defaults and set lastStatus', function () {
-            const status = new Status({ node: fakeNode, nodeState: true });
+            const status = new Status(fakeNode);
             const expectedStatus = {
                 fill: 'blue',
                 shape: 'dot',
@@ -68,10 +57,8 @@ describe('Status', function () {
             expect(status.lastStatus).to.eql(expectedStatus);
         });
         it('should not set lastStatus when node is disabled', function () {
-            const status = new Status({
-                node: fakeNode,
-                nodeState: false,
-            });
+            const status = new Status(fakeNode);
+            status.isNodeDisabled = true;
             status.set();
 
             expect(status.lastStatus).to.eql({});
@@ -79,10 +66,7 @@ describe('Status', function () {
     });
     describe('setText', function () {
         it('status should only contain the text property', function () {
-            const status = new Status({
-                node: fakeNode,
-                nodeState: true,
-            });
+            const status = new Status(fakeNode);
             const expectedStatus = {
                 fill: null,
                 shape: null,
@@ -96,10 +80,8 @@ describe('Status', function () {
     });
     describe('updateStatus', function () {
         it('should replace status with disabled status', function () {
-            const status = new Status({
-                node: fakeNode,
-                nodeState: false,
-            });
+            const status = new Status(fakeNode);
+            status.isNodeDisabled = true;
             const sentStatus = {
                 fill: 'blue',
                 shape: 'ring',
@@ -120,10 +102,7 @@ describe('Status', function () {
     describe('appendDateString', function () {
         it('should add datestring to end of text', function () {
             sinon.useFakeTimers(fakeNow.getTime());
-            const status = new Status({
-                node: fakeNode,
-                nodeState: false,
-            });
+            const status = new Status(fakeNode);
             const result = status.appendDateString('hello');
             expect(result).to.equal('hello at: Jan 12, 12:12');
         });

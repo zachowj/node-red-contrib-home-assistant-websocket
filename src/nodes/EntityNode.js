@@ -13,9 +13,9 @@ const DEFAULT_NODE_OPTIONS = {
 };
 
 class EntityNode extends EventsHaNode {
-    constructor({ node, config, RED, nodeOptions = {} }) {
+    constructor({ node, config, RED, status, nodeOptions = {} }) {
         nodeOptions = merge({}, DEFAULT_NODE_OPTIONS, nodeOptions);
-        super({ node, config, RED, nodeOptions });
+        super({ node, config, RED, status, nodeOptions });
     }
 
     onHaIntegration(type) {

@@ -9,8 +9,8 @@ const nodeOptions = {
 };
 
 class EventsAll extends EventsHaNode {
-    constructor({ node, config, RED }) {
-        super({ node, config, RED, nodeOptions });
+    constructor({ node, config, RED, status }) {
+        super({ node, config, RED, status, nodeOptions });
 
         this.addEventClientListener(
             'ha_events:' + (this.nodeConfig.event_type || 'all'),

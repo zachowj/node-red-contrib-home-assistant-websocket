@@ -144,8 +144,8 @@ const nodeOptions = {
 };
 
 class WaitUntil extends EventsNode {
-    constructor({ node, config, RED }) {
-        super({ node, config, RED, nodeOptions });
+    constructor({ node, config, RED, status }) {
+        super({ node, config, RED, status, nodeOptions });
         this.active = false;
         this.savedMessage = {};
         this.timeoutId = -1;

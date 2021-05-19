@@ -33,8 +33,8 @@ const nodeOptions = {
 };
 
 class CallService extends EventsNode {
-    constructor({ node, config, RED }) {
-        super({ node, config, RED, nodeOptions });
+    constructor({ node, config, RED, status }) {
+        super({ node, config, RED, status, nodeOptions });
 
         if (this.nodeConfig.queue !== QUEUE_NONE) {
             this.queue = [];

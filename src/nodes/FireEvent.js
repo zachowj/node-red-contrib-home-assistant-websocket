@@ -41,8 +41,8 @@ const nodeOptions = {
 };
 
 class FireEvent extends BaseNode {
-    constructor({ node, RED, config }) {
-        super({ node, config, RED, nodeOptions });
+    constructor({ node, RED, status, config }) {
+        super({ node, config, RED, status, nodeOptions });
     }
 
     tryToObject(v) {

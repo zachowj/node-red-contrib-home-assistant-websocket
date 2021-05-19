@@ -58,8 +58,8 @@ const nodeOptions = {
 };
 
 class RenderTemplate extends BaseNode {
-    constructor({ node, config, RED }) {
-        super({ node, config, RED, nodeOptions });
+    constructor({ node, config, RED, status }) {
+        super({ node, config, RED, status, nodeOptions });
     }
 
     onInput({ parsedMessage, message, send, done }) {

@@ -22,8 +22,8 @@ describe('SwitchEntityStatus', function () {
 
     describe('set', function () {
         it('default should be yellow dot', function () {
-            const status = new SwitchEntityStatus({
-                node: fakeNode,
+            const status = new SwitchEntityStatus(fakeNode);
+            status.init({
                 nodeState: true,
             });
             const expectedStatus = {
@@ -43,8 +43,8 @@ describe('SwitchEntityStatus', function () {
         });
 
         it('should have shape dot and text on when node is enabled', function () {
-            const status = new SwitchEntityStatus({
-                node: fakeNode,
+            const status = new SwitchEntityStatus(fakeNode);
+            status.init({
                 nodeState: true,
             });
             const expectedStatus = {
@@ -58,8 +58,8 @@ describe('SwitchEntityStatus', function () {
             expect(spy).to.have.been.calledOnceWithExactly(expectedStatus);
         });
         it('should have shape ring and text off when node is disabled', function () {
-            const status = new SwitchEntityStatus({
-                node: fakeNode,
+            const status = new SwitchEntityStatus(fakeNode);
+            status.init({
                 nodeState: true,
             });
             const expectedStatus = {
@@ -75,10 +75,8 @@ describe('SwitchEntityStatus', function () {
     });
     describe('updateStatus', function () {
         it('should call node status', function () {
-            const status = new SwitchEntityStatus({
-                node: fakeNode,
-                nodeState: true,
-            });
+            const status = new SwitchEntityStatus(fakeNode);
+            status.init({ nodeState: true });
             status.updateStatus();
             expect(fakeNode.status).to.have.been.calledOnce;
         });

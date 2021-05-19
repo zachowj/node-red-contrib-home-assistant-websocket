@@ -18,9 +18,9 @@ const DEFAULT_NODE_OPTIONS = {
 };
 
 class EventsHaNode extends EventsNode {
-    constructor({ node, config, RED, nodeOptions = {} }) {
+    constructor({ node, config, RED, status, nodeOptions = {} }) {
         nodeOptions = merge({}, DEFAULT_NODE_OPTIONS, nodeOptions);
-        super({ node, config, RED, nodeOptions });
+        super({ node, config, RED, status, nodeOptions });
         this.storage = new Storage({
             id: this.node.id,
             path: RED.settings.userDir,
