@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.31.2](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.31.1...v0.31.2) (2021-05-20)
+
+
+### Bug Fixes
+
+* **config-server:** Fix loading of  Unauthorized SSL Certificates ([517cf39](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/517cf394687d1b28d54062eaa23c58076efa6bef))
+* fix migrations for config-server not loading correct values when schema was false ([517cf39](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/517cf394687d1b28d54062eaa23c58076efa6bef))
+
 ### [0.31.1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.31.0...v0.31.1) (2021-05-19)
 
 
