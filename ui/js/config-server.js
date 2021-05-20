@@ -25,6 +25,10 @@ RED.nodes.registerType('server', {
         const $host = $('#node-config-input-host');
         const $legacy = $('#node-config-input-legacy');
 
+        if (this.rejectUnauthorizedCerts === false) {
+            $('#accept_unauthorized_certs').prop('checked', true);
+        }
+
         // Still need to check if host is hassio url for backward compatibility
         const addonBaseUrls = [
             'http://hassio/homeassistant',
@@ -115,6 +119,7 @@ RED.nodes.registerType('server', {
             this.rejectUnauthorizedCerts = !$(
                 '#accept_unauthorized_certs'
             ).prop('checked');
+            window.console.log(this.rejectUnauthorizedCerts);
             this.connectionDelay = false;
         }
     },
