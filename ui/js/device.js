@@ -278,11 +278,12 @@ RED.nodes.registerType('ha-device', {
         });
 
         const sortDevices = (a, b) => {
-            const lowerA = a.name.toLowerCase();
-            const lowerB = b.name.toLowerCase();
-            if (lowerA < lowerB) return -1;
-            if (lowerA > lowerB) return 1;
-            return 0;
+            const aName = haUtils.deepFind('name', a);
+            const bName = haUtils.deepFind('name', b);
+            if (aName === bName) return 0;
+            if (typeof aName !== 'string') return 1;
+
+            return aName.localeCompare(bName);
         };
 
         const resetElements = () => {
