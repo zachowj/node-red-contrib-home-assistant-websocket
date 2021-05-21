@@ -268,7 +268,7 @@ task('buildEditorFiles', (done) => {
         .pipe(buffer())
         .pipe(buildJs());
 
-    const js = src(['ui/shared/**/*.js', 'ui/js/*.js'])
+    const js = src(['ui/js/common/**/*.js', 'ui/js/*.js'])
         .pipe(concat('all.js'))
         .pipe(buildJs());
 
