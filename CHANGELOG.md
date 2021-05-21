@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.31.3](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.31.2...v0.31.3) (2021-05-21)
+
+
+### Bug Fixes
+
+* **ui-device:** Make sortDevices more robust ([46f8973](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/46f897351fae47e878b01dc73f58050e8a924465)), closes [#396](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/396)
+
 ### [0.31.2](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.31.1...v0.31.2) (2021-05-20)
 
 
