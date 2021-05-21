@@ -1,4 +1,4 @@
-/* global RED: false, jQuery: false, $: false, exposeNode: false, ha: false, haServer: false, nodeVersion: false, haOutputs: false, haData: false */
+/* global RED: false, jQuery: false, $: false, exposeNode: false, ha: false, haServer: false, nodeVersion: false, haOutputs: false, haData: false, haUtils: false */
 const haDeviceTrigger = (function () {
     const inputCount = 0;
     const getCapabilitiesList = async (trigger) =>
@@ -399,7 +399,7 @@ RED.nodes.registerType('ha-device', {
                 $event.append(options);
 
                 selectedIndex = data.findIndex((item) =>
-                    ha.compareObjects(selected, item)
+                    haUtils.compareObjects(selected, item)
                 );
                 selectedIndex = selectedIndex === -1 ? 0 : selectedIndex;
                 updateCapabilities(data[selectedIndex], capabilities);

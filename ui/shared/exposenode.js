@@ -1,3 +1,4 @@
+/* globals haUtils: false */
 // eslint-disable-next-line no-unused-vars
 const exposeNode = (function ($, RED, ha) {
     let node;
@@ -154,7 +155,7 @@ const exposeNode = (function ($, RED, ha) {
     function renderAlert(minVersion) {
         const satisfiesVersion =
             minVersion === undefined ||
-            ha.compareVersion(minVersion, getIntegrationVersion());
+            haUtils.compareVersion(minVersion, getIntegrationVersion());
         const integartionValid = isIntegrationLoaded() && satisfiesVersion;
         if (!$('#integrationAlert').length) {
             const alertText = `
@@ -184,4 +185,4 @@ const exposeNode = (function ($, RED, ha) {
         isIntegrationLoaded,
     };
     // eslint-disable-next-line no-undef
-})(jQuery, RED, ha);
+})(jQuery, RED);
