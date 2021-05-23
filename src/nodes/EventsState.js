@@ -174,9 +174,11 @@ class EventsState extends EventsHaNode {
         try {
             this.setCustomOutputs(config.outputProperties, message, {
                 config,
+                entity: eventMessage.event.new_state,
+                entityState: eventMessage.event.new_state.state,
                 eventData: eventMessage.event,
+                prevEntity: eventMessage.event.old_state,
                 triggerId: eventMessage.entity_id,
-                entityState: selectn('event.new_state.state', eventMessage),
             });
         } catch (e) {
             this.status.setFailed('error');
