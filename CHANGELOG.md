@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.31.4](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.31.3...v0.31.4) (2021-05-23)
+
+
+### Bug Fixes
+
+* **events-state:** Add output properties backend code ([a25c565](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a25c5658b01dfcdfa777fadff89ea6e9b2b13a3a)), closes [#398](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/398)
+
 ### [0.31.3](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.31.2...v0.31.3) (2021-05-21)
 
 
