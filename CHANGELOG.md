@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.31.5](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.31.4...v0.31.5) (2021-05-23)
+
+
+### Bug Fixes
+
+* **event-state:** Add missing data for JSONata outputs ([d4d4307](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d4d4307285827a5c26dcd9e8780417550f15a668))
+
 ### [0.31.4](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.31.3...v0.31.4) (2021-05-23)
 
 
