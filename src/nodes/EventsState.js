@@ -27,6 +27,7 @@ const nodeOptions = {
         ignorePrevStateUnavailable: {},
         ignoreCurrentStateUnknown: {},
         ignoreCurrentStateUnavailable: {},
+        outputProperties: {},
     },
 };
 
@@ -167,33 +168,20 @@ class EventsState extends EventsHaNode {
         return timer;
     }
 
-    getTypedInputValue(value, valueType, oldEntity, newEntity) {
-        let val;
-        switch (valueType) {
-            case 'flow':
-            case 'global':
-                val = this.getContextValue(valueType, value, null);
-                break;
-            case 'jsonata':
-                val = this.evaluateJSONata(value, {
-                    prevEntity: oldEntity,
-                    entity: newEntity,
-                });
-                break;
-            case 'num':
-            default:
-                val = Number(value);
-        }
-        return val;
-    }
-
     output(eventMessage, condition) {
         const config = this.nodeConfig;
-        const msg = {
-            topic: eventMessage.entity_id,
-            payload: eventMessage.event.new_state.state,
-            data: eventMessage.event,
-        };
+        const message = {};
+        try {
+            this.setCustomOutputs(config.outputProperties, message, {
+                config,
+                eventData: eventMessage.event,
+                triggerId: eventMessage.entity_id,
+                entityState: selectn('event.new_state.state', eventMessage),
+            });
+        } catch (e) {
+            this.status.setFailed('error');
+            return;
+        }
 
         eventMessage.event.new_state.timeSinceChangedMs =
             Date.now() -
@@ -207,12 +195,12 @@ class EventsState extends EventsHaNode {
 
         if (config.haltIfState && !condition) {
             this.status.setFailed(statusMessage);
-            this.send([null, msg]);
+            this.send([null, message]);
             return;
         }
 
         this.status.setSuccess(statusMessage);
-        this.send([msg, null]);
+        this.send([message, null]);
     }
 
     getNodeEntityId() {
