@@ -66,8 +66,8 @@ class Websocket {
 
         const auth = {
             type: 'auth',
-            [this.config.legacy ? 'api_password' : 'access_token']: this.config
-                .apiPass,
+            [this.config.legacy ? 'api_password' : 'access_token']:
+                this.config.apiPass,
         };
 
         this.client = await createConnection({
@@ -76,8 +76,8 @@ class Websocket {
                     auth,
                     connectionDelay: this.config.connectionDelay,
                     eventBus: this.eventBus,
-                    rejectUnauthorizedCerts: this.config
-                        .rejectUnauthorizedCerts,
+                    rejectUnauthorizedCerts:
+                        this.config.rejectUnauthorizedCerts,
                     url,
                 }),
         }).catch((e) => {
@@ -354,9 +354,11 @@ class Websocket {
     }
 
     async updateTagList() {
-        this.tags = await this.client.sendMessagePromise({
-            type: 'tag/list',
-        });
+        try {
+            this.tags = await this.send({
+                type: 'tag/list',
+            });
+        } catch (e) {}
     }
 
     getIntegrationVersion() {
