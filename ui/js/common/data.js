@@ -1,3 +1,4 @@
+/* global haUtils: false */
 // eslint-disable-next-line no-unused-vars
 const haData = ((RED) => {
     const entities = {};
@@ -31,6 +32,34 @@ const haData = ((RED) => {
                 if (!(serverId in entities)) return [];
                 list = Object.keys(entities[serverId]).sort();
                 break;
+        }
+
+        return list;
+    }
+
+    function getAutocompleteData(serverId, type) {
+        let list = [];
+        switch (type) {
+            case 'entities': {
+                if (!(serverId in entities)) return [];
+                const path = 'attributes.friendly_name';
+                list = Object.values(entities[serverId])
+                    .map((item) => {
+                        return {
+                            value: item.entity_id,
+                            label:
+                                haUtils.deepFind(path, item) || item.entity_id,
+                        };
+                    })
+                    .sort((a, b) => {
+                        const aName = a.label;
+                        const bName = b.label;
+                        if (aName === bName) return 0;
+
+                        return aName.localeCompare(bName);
+                    });
+                break;
+            }
         }
 
         return list;
@@ -86,6 +115,7 @@ const haData = ((RED) => {
 
     return {
         getAutocomplete,
+        getAutocompleteData,
         getDevices,
         getEntity,
         getProperties,
