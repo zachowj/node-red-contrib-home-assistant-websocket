@@ -239,9 +239,9 @@ class WaitUntil extends EventsNode {
         if (this.nodeConfig.blockInputOverrides === true) {
             Object.keys(config).forEach(
                 (key) =>
-                    (config[key] = (key in this.nodeConfig
-                        ? this.nodeConfig
-                        : config)[key])
+                    (config[key] = (
+                        key in this.nodeConfig ? this.nodeConfig : config
+                    )[key])
             );
         }
 

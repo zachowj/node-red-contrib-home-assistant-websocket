@@ -34,9 +34,8 @@ class EventsHaNode extends EventsNode {
                 this.server.exposedNodes[this.id] === true
             );
             // Save expose state so we can check if it needs to removed when it's not exposed anymore
-            this.server.exposedNodes[
-                this.node.id
-            ] = this.nodeConfig.exposeToHomeAssistant;
+            this.server.exposedNodes[this.node.id] =
+                this.nodeConfig.exposeToHomeAssistant;
         }
         this.init();
     }

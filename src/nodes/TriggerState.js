@@ -26,7 +26,8 @@ class TriggerState extends EventsHaNode {
         let eventTopic = 'ha_events:state_changed';
 
         if (this.nodeConfig.entityidfiltertype === 'exact') {
-            eventTopic = this.eventTopic = `ha_events:state_changed:${this.nodeConfig.entityid}`;
+            eventTopic =
+                this.eventTopic = `ha_events:state_changed:${this.nodeConfig.entityid}`;
         }
 
         this.addEventClientListener(
@@ -135,10 +136,11 @@ class TriggerState extends EventsHaNode {
                 Date.now() -
                 new Date(eventMessage.event.new_state.last_changed).getTime();
 
-            const constraintComparatorResults = this.getConstraintComparatorResults(
-                this.nodeConfig.constraints,
-                eventMessage
-            );
+            const constraintComparatorResults =
+                this.getConstraintComparatorResults(
+                    this.nodeConfig.constraints,
+                    eventMessage
+                );
             const statusText = `${eventMessage.event.new_state.state}${
                 eventMessage.event_type === 'triggered' ? ' (triggered)' : ''
             }`;
@@ -167,10 +169,11 @@ class TriggerState extends EventsHaNode {
                 return;
             }
 
-            const customOutputsComparatorResults = this.getCustomOutputsComparatorResults(
-                this.nodeConfig.customoutputs,
-                eventMessage
-            );
+            const customOutputsComparatorResults =
+                this.getCustomOutputsComparatorResults(
+                    this.nodeConfig.customoutputs,
+                    eventMessage
+                );
             const customOutputMessages = customOutputsComparatorResults.map(
                 (r) => r.message
             );

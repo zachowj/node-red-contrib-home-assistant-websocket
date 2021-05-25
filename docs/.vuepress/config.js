@@ -26,8 +26,7 @@ module.exports = {
             { text: 'Scrubber', link: '/scrubber/' },
             {
                 text: 'Forums',
-                link:
-                    'https://github.com/zachowj/node-red-contrib-home-assistant-websocket/discussions',
+                link: 'https://github.com/zachowj/node-red-contrib-home-assistant-websocket/discussions',
             },
         ],
         sidebar: {

@@ -203,9 +203,9 @@ class Sensor extends EntityNode {
             attributes = this.nodeConfig.attributes;
         } else {
             if (this.nodeConfig.inputOverride === 'merge') {
-                const keys = Object.keys(
-                    parsedMessage.attributes.value
-                ).map((e) => e.toLowerCase());
+                const keys = Object.keys(parsedMessage.attributes.value).map(
+                    (e) => e.toLowerCase()
+                );
                 this.nodeConfig.attributes.forEach((ele) => {
                     if (!keys.includes(ele.property.toLowerCase())) {
                         attributes.push(ele);

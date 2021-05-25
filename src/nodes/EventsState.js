@@ -38,7 +38,8 @@ class EventsState extends EventsHaNode {
         this.topics = [];
 
         if (this.nodeConfig.entityidfiltertype === 'exact') {
-            eventTopic = this.eventTopic = `ha_events:state_changed:${this.nodeConfig.entityidfilter}`;
+            eventTopic =
+                this.eventTopic = `ha_events:state_changed:${this.nodeConfig.entityidfilter}`;
         }
 
         this.addEventClientListener(
