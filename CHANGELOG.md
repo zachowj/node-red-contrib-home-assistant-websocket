@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.31.6](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.31.5...v0.31.6) (2021-05-25)
+
+
+### Bug Fixes
+
+* Handle promise rejection when user doesn't have tags component enabled in HA ([12f37dd](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/12f37ddbe5a77cffcf97d044d59cf2a3a4b44c1b))
+
 ### [0.31.5](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.31.4...v0.31.5) (2021-05-23)
 
 
