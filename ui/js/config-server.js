@@ -119,7 +119,6 @@ RED.nodes.registerType('server', {
             this.rejectUnauthorizedCerts = !$(
                 '#accept_unauthorized_certs'
             ).prop('checked');
-            window.console.log(this.rejectUnauthorizedCerts);
             this.connectionDelay = false;
         }
     },
