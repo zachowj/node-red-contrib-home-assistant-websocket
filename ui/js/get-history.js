@@ -36,22 +36,11 @@ RED.nodes.registerType('api-get-history', {
     },
     oneditprepare: function () {
         nodeVersion.check(this);
-        const NODE = this;
-        const $entityIdField = $('#entity_id');
-        $entityIdField.val(this.entityid);
-        NODE.entityidtype = NODE.entityidtype || 'is';
-        $('#node-input-entityidtype').val(NODE.entityidtype);
+        this.entityidtype = this.entityidtype || 'is';
+        $('#node-input-entityidtype').val(this.entityidtype);
 
-        haServer.init(NODE, '#node-input-server');
-        let availableEntities = [];
-        haServer.autocomplete('entities', (entities) => {
-            availableEntities = entities;
-
-            $entityIdField.autocomplete({
-                source: availableEntities,
-                minLength: 0,
-            });
-        });
+        haServer.init(this, '#node-input-server');
+        $('#node-input-entityid').haAutocomplete();
 
         $('#node-input-useRelativeTime').on('change', function () {
             if (this.checked) {
