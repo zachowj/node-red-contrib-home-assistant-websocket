@@ -51,18 +51,66 @@ const haData = ((RED) => {
                                 haUtils.deepFind(path, item) || item.entity_id,
                         };
                     })
-                    .sort((a, b) => {
-                        const aName = a.label;
-                        const bName = b.label;
-                        if (aName === bName) return 0;
-
-                        return aName.localeCompare(bName);
-                    });
+                    .sort(sortFriendlyName);
+                break;
+            }
+            case 'properties': {
+                if (!(serverId in entities)) return [];
+                list = Object.values(entities[serverId])
+                    .map((item) => {
+                        return {
+                            value: item.entity_id,
+                            label: item.state,
+                        };
+                    })
+                    .sort(sortFriendlyName);
+                break;
+            }
+            case 'trackers': {
+                if (!(serverId in entities)) return [];
+                const path = 'attributes.friendly_name';
+                list = Object.values(entities[serverId])
+                    .filter(
+                        (item) =>
+                            item.entity_id.startsWith('person.') ||
+                            item.entity_id.startsWith('device_tracker.')
+                    )
+                    .map((item) => {
+                        return {
+                            value: item.entity_id,
+                            label:
+                                haUtils.deepFind(path, item) || item.entity_id,
+                        };
+                    })
+                    .sort(sortFriendlyName);
+                break;
+            }
+            case 'zones': {
+                if (!(serverId in entities)) return [];
+                const path = 'attributes.friendly_name';
+                list = Object.values(entities[serverId])
+                    .filter((item) => item.entity_id.startsWith('zone.'))
+                    .map((item) => {
+                        return {
+                            value: item.entity_id,
+                            label:
+                                haUtils.deepFind(path, item) || item.entity_id,
+                        };
+                    })
+                    .sort(sortFriendlyName);
                 break;
             }
         }
 
         return list;
+    }
+
+    function sortFriendlyName(a, b) {
+        const aName = a.label;
+        const bName = b.label;
+        if (aName === bName) return 0;
+
+        return aName.localeCompare(bName);
     }
 
     function getDevices(serverId) {

@@ -42,17 +42,7 @@ RED.nodes.registerType('ha-time', {
         const $entityId = $('#node-input-entityId');
 
         haServer.init(this, '#node-input-server');
-        $entityId.autocomplete({
-            source: (request, response) => {
-                const entities = haData.getAutocomplete(
-                    $server.val(),
-                    'entities'
-                );
-                response($.ui.autocomplete.filter(entities, request.term));
-            },
-            minLength: 0,
-        });
-
+        $entityId.haAutocomplete();
         $('#node-input-property').autocomplete({
             source: (request, response) => {
                 const properties = haData.getProperties(
