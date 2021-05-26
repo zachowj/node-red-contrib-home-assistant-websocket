@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.32.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.31.6...v0.32.0) (2021-05-26)
+
+
+### Features
+
+* Add friendly names to autocomplete for entities ([#408](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/408)) ([77d2e5e](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/77d2e5e73fb99440b664447221425c93ef636c3f))
+
 ### [0.31.6](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.31.5...v0.31.6) (2021-05-25)
 
 
