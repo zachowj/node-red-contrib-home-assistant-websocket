@@ -312,7 +312,7 @@ RED.nodes.registerType('ha-device', {
 
             const options = devices
                 .map((d) => {
-                    return { id: d.id, name: d.name };
+                    return { id: d.id, name: d.name_by_user || d.name };
                 })
                 .sort(sortDevices)
                 .reduce((acc, item) => {
