@@ -16,7 +16,7 @@
                     $element
                         .autocomplete({
                             source: (request, response) => {
-                                const term = request.term;
+                                const term = request.term.toLowerCase();
                                 const data = haData
                                     .getAutocompleteData(
                                         $(serverId).val(),
@@ -24,7 +24,9 @@
                                     )
                                     .filter((item) => {
                                         return (
-                                            item.value.includes(term) ||
+                                            item.value
+                                                .toLowerCase()
+                                                .includes(term) ||
                                             item.label
                                                 .toLowerCase()
                                                 .includes(term)
