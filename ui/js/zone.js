@@ -40,20 +40,8 @@ RED.nodes.registerType('ha-zone', {
         nodeVersion.check(this);
         const $entities = $('#entities');
         const $zones = $('#zones');
-        let zones = [];
-        let devices = [];
 
         haServer.init(this, '#node-input-server');
-        haServer.autocomplete('entities', (entities) => {
-            devices = entities.filter(
-                (entities) =>
-                    entities.startsWith('person.') ||
-                    entities.startsWith('device_tracker.')
-            );
-            zones = entities.filter((entities) => entities.startsWith('zone.'));
-            $entities.find('input').autocomplete('option', 'source', devices);
-            $zones.find('input').autocomplete('option', 'source', zones);
-        });
         exposeNode.init(this);
 
         $entities.editableList({
@@ -71,7 +59,7 @@ RED.nodes.registerType('ha-zone', {
                 $('<input />', { type: 'text', class: 'input-entity' })
                     .appendTo($row)
                     .val(value)
-                    .autocomplete({ source: devices, minLength: 0 });
+                    .haAutocomplete({ type: 'trackers' });
             },
         });
         $entities.editableList('addItems', this.entities);
@@ -90,7 +78,7 @@ RED.nodes.registerType('ha-zone', {
                 $('<input />', { type: 'text', class: 'input-zone' })
                     .appendTo($row)
                     .val(value)
-                    .autocomplete({ source: zones, minLength: 0 });
+                    .haAutocomplete({ type: 'zones' });
             },
         });
         $zones.editableList('addItems', this.zones);

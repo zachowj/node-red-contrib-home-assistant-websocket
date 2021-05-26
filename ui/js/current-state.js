@@ -57,14 +57,7 @@ RED.nodes.registerType('api-current-state', {
         const $entityIdField = $('#node-input-entity_id');
 
         haServer.init(this, '#node-input-server');
-        haServer.autocomplete('entities', (entities) => {
-            this.availableEntities = entities;
-
-            $entityIdField.autocomplete({
-                source: this.availableEntities,
-                minLength: 0,
-            });
-        });
+        $entityIdField.haAutocomplete();
 
         ifState.init(
             '#node-input-halt_if',

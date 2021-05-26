@@ -38,34 +38,7 @@ RED.nodes.registerType('poll-state', {
         const node = this;
 
         haServer.init(node, '#node-input-server');
-        haServer.autocomplete('entities', (entities) => {
-            node.availableEntities = entities;
-            const $entityIdField = $('#node-input-entity_id');
-
-            $entityIdField.autocomplete({
-                source: node.availableEntities,
-                minLength: 0,
-                change: (evt, ui) => {
-                    const validSelection =
-                        node.availableEntities.indexOf($(evt.target).val()) >
-                        -1;
-                    if (validSelection) {
-                        $(evt.target).removeClass('input-error');
-                    } else {
-                        $(evt.target).addClass('input-error');
-                    }
-                },
-            });
-
-            const validSelection =
-                node.availableEntities.indexOf(node.entity_id) > -1;
-            if (validSelection) {
-                $entityIdField.removeClass('input-error');
-            } else {
-                $entityIdField.addClass('input-error');
-            }
-        });
-
+        $('#node-input-entity_id').haAutocomplete();
         $('#node-input-updateinterval').spinner({ min: 1 });
 
         ifState.init('#node-input-halt_if', '#node-input-halt_if_compare');
