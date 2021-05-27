@@ -145,7 +145,6 @@ class Websocket {
             (evt) => this.integrationEvent(evt),
             HA_EVENT_INTEGRATION
         );
-        await this.updateTagList();
         subscribeConfig(this.client, (config) =>
             this.onClientConfigUpdate(config)
         );
@@ -347,6 +346,10 @@ class Websocket {
             } catch (e) {}
         }
 
+        if (!this.tags && config.components.includes('tag')) {
+            await this.updateTagList();
+        }
+
         // Prior to HA 0.111.0 state didn't exist
         if (config.state === undefined || config.state === 'RUNNING') {
             this.onHomeAssistantRunning();
@@ -358,7 +361,9 @@ class Websocket {
             this.tags = await this.send({
                 type: 'tag/list',
             });
-        } catch (e) {}
+        } catch (e) {
+            debug(`Error fetching tag list: ${e}`);
+        }
     }
 
     getIntegrationVersion() {
