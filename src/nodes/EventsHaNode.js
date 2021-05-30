@@ -76,6 +76,9 @@ class EventsHaNode extends EventsNode {
             case INTEGRATION_UNLOADED:
             case INTEGRATION_NOT_LOADED:
                 this.removeSubscription();
+                if (this.node.type !== 'trigger-state') {
+                    this.isEnabled = true;
+                }
                 break;
         }
     }
