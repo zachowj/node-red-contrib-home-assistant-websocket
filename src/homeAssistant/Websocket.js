@@ -161,7 +161,7 @@ class Websocket {
         if (!this.isHomeAssistantRunning) {
             this.isHomeAssistantRunning = true;
             this.emitEvent('ha_client:running');
-            if (!this.isIntegrationLoaded) {
+            if (this.integrationVersion === 0) {
                 this.createIntegrationEvent(INTEGRATION_NOT_LOADED);
             }
         }
