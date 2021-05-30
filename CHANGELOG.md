@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.33.1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.33.0...v0.33.1) (2021-05-30)
+
+
+### Bug Fixes
+
+* On integration event only enable node if it's not the trigger-state node ([0f2f18a](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/0f2f18a50dd84d18d4c40ba3a020b7666606f14e)), closes [#417](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/417)
+* Only fire integration not loaded event when then integration is not loaded ([5cdc4ca](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/5cdc4cab219639e9641b12ee0740cb50e0ae8421)), closes [#404](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/404)
+
 ## [0.33.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.32.1...v0.33.0) (2021-05-26)
 
 
