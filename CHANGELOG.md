@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.33.2](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.33.1...v0.33.2) (2021-05-31)
+
+
+### Documentation
+
+* **cookbook:** Update using date and time to show examples for the time node ([a07ad4d](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a07ad4dbb58332c2b9c6e35382a65b6295b014b5))
+
 ### [0.33.1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.33.0...v0.33.1) (2021-05-30)
 
 
