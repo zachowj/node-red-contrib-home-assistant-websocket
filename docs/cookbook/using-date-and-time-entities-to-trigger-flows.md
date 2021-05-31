@@ -1,5 +1,21 @@
 # Using Date and Time entities to trigger flows
 
+There is now a [time](../node/time.md) node that simplifies the example flows below into one node.
+
+## Using the time node
+
+- Home Assistant Companion app next alarm sensor
+
+  <<< @/examples/cookbook/using-date-and-time-entities-to-trigger-flows/example1a_using_time_node.json
+
+- Adding an offset and on/off switch by exposing the node the Home Assistant using the [custom component](https://github.com/zachowj/hass-node-red).
+
+  <<< @/examples/cookbook/using-date-and-time-entities-to-trigger-flows/example1b_using_time_node.json
+
+- Daily alarm using Datetime Entity
+
+  <<< @/examples/cookbook/using-date-and-time-entities-to-trigger-flows/example2_using_time_node.json
+
 ## Home Assistant Companion app next alarm sensor
 
 Here's a basic example of using the Home Assistant Companion app next alarm sensor.
