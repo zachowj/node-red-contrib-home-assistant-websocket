@@ -1,6 +1,9 @@
 const selectn = require('selectn');
 
-const { HA_EVENT_DEVICE_REGISTRY_UPDATED } = require('../const');
+const {
+    HA_EVENT_AREA_REGISTRY_UPDATED,
+    HA_EVENT_DEVICE_REGISTRY_UPDATED,
+} = require('../const');
 
 class Comms {
     constructor(RED, homeAssistant, serverId) {
@@ -18,6 +21,7 @@ class Comms {
             'ha_client:states_loaded': this.onStatesLoaded,
             'ha_events:state_changed': this.onStateChanged,
             integration: this.onIntegrationEvent,
+            [HA_EVENT_AREA_REGISTRY_UPDATED]: this.onAreasUpdated,
             [HA_EVENT_DEVICE_REGISTRY_UPDATED]: this.onDevicesUpdated,
         };
         Object.entries(events).forEach(([event, callback]) =>
@@ -31,6 +35,10 @@ class Comms {
             data,
             retain
         );
+    }
+
+    onAreasUpdated(areas) {
+        this.publish('areas', areas);
     }
 
     onDevicesUpdated(devices) {

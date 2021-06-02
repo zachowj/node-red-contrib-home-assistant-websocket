@@ -1,8 +1,14 @@
 /* global haUtils: false */
 // eslint-disable-next-line no-unused-vars
 const haData = ((RED) => {
-    const entities = {};
+    const areas = {};
     const devices = {};
+    const entities = {};
+
+    RED.comms.subscribe('homeassistant/areas/#', (topic, data) => {
+        const serverId = parseServerId(topic);
+        areas[serverId] = data;
+    });
 
     RED.comms.subscribe('homeassistant/devices/#', (topic, data) => {
         const serverId = parseServerId(topic);
@@ -113,6 +119,10 @@ const haData = ((RED) => {
         return aName.localeCompare(bName);
     }
 
+    function getAreas(serverId) {
+        return areas[serverId];
+    }
+
     function getDevices(serverId) {
         return devices[serverId];
     }
@@ -162,6 +172,7 @@ const haData = ((RED) => {
     }
 
     return {
+        getAreas,
         getAutocomplete,
         getAutocompleteData,
         getDevices,

@@ -17,6 +17,7 @@ const {
 
 const createSocket = require('./createSocket');
 const {
+    HA_EVENT_AREA_REGISTRY_UPDATED,
     HA_EVENT_DEVICE_REGISTRY_UPDATED,
     HA_EVENT_INTEGRATION,
     HA_EVENT_STATE_CHANGED,
@@ -31,7 +32,10 @@ const {
     STATE_CONNECTING,
     HA_EVENT_TAG_SCANNED,
 } = require('../const');
-const { subscribeDeviceRegistry } = require('./collections');
+const {
+    subscribeAreaRegistry,
+    subscribeDeviceRegistry,
+} = require('./collections');
 
 class Websocket {
     constructor(config, eventBus) {
@@ -40,6 +44,7 @@ class Websocket {
         this.connectionState = STATE_DISCONNECTED;
         this.states = {};
         this.services = {};
+        this.areas = [];
         this.devices = [];
         this.tags = null;
         this.statesLoaded = false;
@@ -151,6 +156,11 @@ class Websocket {
 
         subscribeEntities(this.client, (ent) => this.onClientStates(ent));
         subscribeServices(this.client, (ent) => this.onClientServices(ent));
+
+        subscribeAreaRegistry(this.client, (areas) => {
+            this.emitEvent(HA_EVENT_AREA_REGISTRY_UPDATED, areas);
+            this.areas = areas;
+        });
         subscribeDeviceRegistry(this.client, (devices) => {
             this.emitEvent(HA_EVENT_DEVICE_REGISTRY_UPDATED, devices);
             this.devices = devices;

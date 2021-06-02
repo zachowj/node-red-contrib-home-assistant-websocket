@@ -267,9 +267,8 @@ RED.nodes.registerType('ha-device', {
         let event = haDevice.getDevice($type.val());
         let translations;
 
-        $device
-            .select2({ theme: 'nodered' })
-            .on('select2:select', (e) => updateEvents(e.target.value));
+        $device.on('select2:select', (e) => updateEvents(e.target.value));
+
         $event.on('change', function (e) {
             const value = e.target.value;
             if (value === '__NONE__') return;
@@ -278,8 +277,8 @@ RED.nodes.registerType('ha-device', {
         });
 
         const sortDevices = (a, b) => {
-            const aName = haUtils.deepFind('name', a);
-            const bName = haUtils.deepFind('name', b);
+            const aName = haUtils.deepFind('text', a);
+            const bName = haUtils.deepFind('text', b);
             if (aName === bName) return 0;
             if (typeof aName !== 'string') return 1;
 
@@ -303,6 +302,17 @@ RED.nodes.registerType('ha-device', {
                 });
         };
 
+        const getAreaName = (areas, areaId) => {
+            if (areaId && areas && areas.length) {
+                const area = areas.find((a) => a.area_id === areaId);
+                if (area) {
+                    return area.name;
+                }
+            }
+
+            return ha.i18n('ha-device.ui.no_area');
+        };
+
         const populateDevices = (deviceId) => {
             const serverId = $server.val();
             if (serverId === SERVER_ADD) return;
@@ -310,19 +320,45 @@ RED.nodes.registerType('ha-device', {
             const devices = haData.getDevices(serverId);
             if (!devices) return;
 
-            const options = devices
-                .map((d) => {
-                    return { id: d.id, name: d.name_by_user || d.name };
-                })
-                .sort(sortDevices)
-                .reduce((acc, item) => {
-                    const selected = item.id === deviceId;
-                    acc.push(
-                        new Option(item.name, item.id, selected, selected)
+            const areas = haData.getAreas(serverId);
+
+            $device.empty().select2({
+                theme: 'nodered',
+                templateResult: (item) => {
+                    return $(
+                        `<div>${item.text}<p class="sublabel">${item.area}</p></div>`
                     );
-                    return acc;
-                }, []);
-            $device.empty().append(options);
+                },
+                matcher: (params, data) => {
+                    if (!params.term || params.term.trim() === '') {
+                        return data;
+                    }
+                    const term = params.term.toLowerCase().trim();
+
+                    if (typeof data.text === 'undefined') {
+                        return null;
+                    }
+
+                    if (
+                        data.text.toLowerCase().indexOf(term) > -1 ||
+                        data.area.toLowerCase().indexOf(term) > -1
+                    ) {
+                        return data;
+                    }
+
+                    return null;
+                },
+                data: devices
+                    .map((d) => {
+                        return {
+                            id: d.id,
+                            text: d.name_by_user || d.name,
+                            selected: d.id === deviceId,
+                            area: getAreaName(areas, d.area_id),
+                        };
+                    })
+                    .sort(sortDevices),
+            });
         };
 
         const onServerChange = async () => {

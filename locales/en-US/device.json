@@ -13,6 +13,9 @@
     },
     "error": {
       "invalid_device_config": "Invalid config for device trigger"
+    },
+    "ui": {
+      "no_area": "No Area"
     }
   }
 }
