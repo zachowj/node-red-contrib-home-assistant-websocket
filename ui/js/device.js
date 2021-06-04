@@ -423,6 +423,9 @@ RED.nodes.registerType('ha-device', {
                 clearDeviceExtras();
                 selectedIndex = 0;
             } else {
+                // ignore if selected device has already changed
+                if (data[0].device_id !== $device.val()) return;
+
                 const deviceType = $type.val();
                 $event.data('events', data).empty().prop('disabled', false);
                 const options = [];
