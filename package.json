@@ -14,8 +14,8 @@
     "lint": "eslint . && prettier --check {docs,src,test,ui}/**/*.{css,js,md,html}",
     "lint:fix": "eslint . --fix && prettier --write {docs,src,test,ui}/**/*.{css,js,md,html}",
     "prepublish": "gulp build",
-    "test": "mocha test/**/*.test.js",
-    "test:watch": "mocha --watch --recursive"
+    "test": "mocha -r ts-node/register test/**/*.test.js",
+    "test:watch": "mocha -r ts-node/register --watch --recursive"
   },
   "repository": {
     "type": "git",
@@ -120,6 +120,7 @@
     "prettier": "^2.3.0",
     "rollup": "^2.50.6",
     "sinon-chai": "^3.7.0",
+    "ts-node": "^10.0.0",
     "typescript": "^4.3.2",
     "vinyl-source-stream": "^2.0.0",
     "vuepress": "^1.8.2",
