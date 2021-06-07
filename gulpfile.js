@@ -1,5 +1,8 @@
 const del = require('del');
 
+const ts = require('gulp-typescript');
+const tsProject = ts.createProject('tsconfig.json');
+
 // General
 const concat = require('gulp-concat');
 const flatmap = require('gulp-flatmap');
@@ -309,45 +312,7 @@ task('buildEditorFiles', (done) => {
 });
 
 task('buildSourceFiles', () => {
-    const options = {
-        input: 'src/index.js',
-        output: {
-            dir: editorFilePath,
-            format: 'cjs',
-            exports: 'default',
-        },
-        plugins: [rollupPluginCommon],
-        external: [
-            'selectn',
-            'joi',
-            'lodash.merge',
-            'lodash.clonedeep',
-            'lodash.random',
-            'lodash.samplesize',
-            'slugify',
-            'lodash',
-            'timestring',
-            'time-ago',
-            'cron',
-            'bonjour',
-            'flat',
-            'lodash.uniq',
-            'mustache',
-            'geolib',
-            'url',
-            'events',
-            'lowdb/adapters/FileAsync',
-            'lowdb',
-            'axios',
-            'debug',
-            'https',
-            'home-assistant-js-websocket',
-            'ws',
-        ],
-    };
-    return rollupStream(options)
-        .pipe(source('index.js'))
-        .pipe(dest(editorFilePath));
+    return tsProject.src().pipe(tsProject()).js.pipe(dest(editorFilePath));
 });
 
 task('copyIcons', () => {
@@ -375,7 +340,13 @@ task('cleanAssetFiles', (done) => {
 });
 
 task('cleanSourceFiles', (done) => {
-    del.sync(['dist/index.js']);
+    del.sync([
+        'dist/controllers',
+        'dist/helpers',
+        'dist/homeAssistant',
+        'dist/migrations',
+        'dist/*.js',
+    ]);
 
     done();
 });
@@ -454,7 +425,7 @@ module.exports = {
             );
             // only server side files modified restart node-red only
             watch(
-                ['src/**/*.js'],
+                ['src/**/*.js', 'src/**/*.ts'],
                 series('cleanSourceFiles', 'buildSourceFiles', restartNodemon)
             );
             done();

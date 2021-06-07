@@ -1,7 +1,10 @@
-const geolib = require('geolib');
-const selectn = require('selectn');
+import * as matchAll from 'string.prototype.matchall';
 
-function shouldInclude(targetString, includeRegex, excludeRegex) {
+export function shouldInclude(
+    targetString: string,
+    includeRegex: RegExp,
+    excludeRegex: RegExp
+): boolean {
     if (!targetString || (!includeRegex && !excludeRegex)) {
         return true;
     }
@@ -21,7 +24,11 @@ function shouldInclude(targetString, includeRegex, excludeRegex) {
     return shouldIncludeTest && !shouldExcludeTest;
 }
 
-function shouldIncludeEvent(eventId, filter, filterType) {
+export function shouldIncludeEvent(
+    eventId: string,
+    filter: string,
+    filterType: string
+): boolean {
     if (!filter) return true;
 
     if (filterType === 'substring') {
@@ -39,40 +46,17 @@ function shouldIncludeEvent(eventId, filter, filterType) {
     return filter === eventId;
 }
 
-function toCamelCase(str) {
+export function toCamelCase(str: string): string {
     return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) => {
         if (+match === 0) return '';
         return index === 0 ? match.toLowerCase() : match.toUpperCase();
     });
 }
 
-function inZone(location, zone) {
-    const { radius, ...zoneLatLog } = zone;
-    const inZone = geolib.isPointWithinRadius(location, zoneLatLog, radius);
-
-    return inZone;
-}
-
-function getLocationData(entity) {
-    const coord = {
-        latitude: entity.attributes.latitude,
-        longitude: entity.attributes.longitude,
-    };
-
-    return geolib.isValidCoordinate(coord) ? coord : false;
-}
-
-function getZoneData(zone) {
-    const data = getLocationData(zone);
-    if (data === false || selectn('attributes.radius', zone) === undefined)
-        return false;
-
-    data.radius = zone.attributes.radius;
-
-    return data;
-}
-
-function getWaitStatusText(timeout, timeoutUnits) {
+export function getWaitStatusText(
+    timeout: number,
+    timeoutUnits: string
+): string {
     const timeoutMs = getTimeInMilliseconds(timeout, timeoutUnits);
     switch (timeoutUnits) {
         case 'milliseconds':
@@ -88,7 +72,10 @@ function getWaitStatusText(timeout, timeoutUnits) {
     }
 }
 
-function getTimeInMilliseconds(value, valueUnits) {
+export function getTimeInMilliseconds(
+    value: number,
+    valueUnits: string
+): number {
     switch (valueUnits) {
         case 'milliseconds':
             return value;
@@ -103,7 +90,7 @@ function getTimeInMilliseconds(value, valueUnits) {
     }
 }
 
-function timeoutStatus(milliseconds = 0) {
+function timeoutStatus(milliseconds = 0): string {
     const timeout = Date.now() + milliseconds;
     const timeoutStr = new Date(timeout).toLocaleDateString('en-US', {
         month: 'short',
@@ -117,12 +104,12 @@ function timeoutStatus(milliseconds = 0) {
     return timeoutStr;
 }
 
-function isValidDate(val) {
+export function isValidDate(val: string | number): boolean {
     const d = new Date(val);
-    return d instanceof Date && !isNaN(d);
+    return d instanceof Date && !isNaN(d.getTime());
 }
 
-function parseTime(time) {
+export function parseTime(time: string) {
     const regex = /^(0?\d|1\d|2[0-3]):([0-5]\d)(?::([0-5]\d))?$/;
     const matches = time.match(regex);
 
@@ -137,23 +124,9 @@ function parseTime(time) {
     };
 }
 
-function getEntitiesFromJsonata(jsonata) {
+export function getEntitiesFromJsonata(jsonata: string): Set<string> {
     const regex = /\$entities\("([a-z_]+\.[a-z0-9_]+)"\)/g;
-    const matches = jsonata.matchAll(regex);
+    const matches = matchAll(jsonata, regex);
 
-    return new Set(Array.from(matches, (m) => m[1]));
+    return new Set(Array.from(matches, (m) => m[1] as string));
 }
-
-module.exports = {
-    shouldInclude,
-    shouldIncludeEvent,
-    toCamelCase,
-    inZone,
-    getLocationData,
-    getZoneData,
-    getWaitStatusText,
-    getTimeInMilliseconds,
-    isValidDate,
-    parseTime,
-    getEntitiesFromJsonata,
-};

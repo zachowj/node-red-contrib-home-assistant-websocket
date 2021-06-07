@@ -1,37 +1,37 @@
-const Api = require('./nodes/Api');
-const CallService = require('./nodes/CallService');
-const ConfigServer = require('./nodes/ConfigServer');
-const CurrentState = require('./nodes/CurrentState');
-const DeviceAction = require('./nodes/device/DeviceAction');
-const DeviceTrigger = require('./nodes/device/DeviceTrigger');
-const EventsAll = require('./nodes/EventsAll');
-const EventsState = require('./nodes/EventsState');
-const FireEvent = require('./nodes/FireEvent');
-const GetEntities = require('./nodes/GetEntities');
-const GetHistory = require('./nodes/GetHistory');
-const PollState = require('./nodes/PollState');
-const RenderTemplate = require('./nodes/RenderTemplate');
-const Sensor = require('./nodes/entity/Sensor');
-const Switch = require('./nodes/entity/Switch');
-const Tag = require('./nodes/Tag');
-const Time = require('./nodes/Time');
-const TriggerState = require('./nodes/TriggerState');
-const WaitUntil = require('./nodes/WaitUntil');
-const Webhook = require('./nodes/Webhook');
-const Zone = require('./nodes/Zone');
-const {
-    Status,
-    EventsStatus,
-    SwitchEntityStatus,
-} = require('./helpers/status');
-const { createRoutes } = require('./routes');
-const { getExposedSettings } = require('./helpers/exposed-settings');
-const { migrate } = require('./migrations');
+import Api = require('./controllers/Api');
+import CallService = require('./controllers/CallService');
+import ConfigServer = require('./controllers/ConfigServer');
+import CurrentState = require('./controllers/CurrentState');
+import DeviceAction = require('./controllers/device/DeviceAction');
+import DeviceTrigger = require('./controllers/device/DeviceTrigger');
+import EventsAll = require('./controllers/EventsAll');
+import EventsState = require('./controllers/EventsState');
+import FireEvent = require('./controllers/FireEvent');
+import GetEntities = require('./controllers/GetEntities');
+import GetHistory = require('./controllers/GetHistory');
+import PollState = require('./controllers/PollState');
+import RenderTemplate = require('./controllers/RenderTemplate');
+import Sensor = require('./controllers/entity/Sensor');
+import Switch = require('./controllers/entity/Switch');
+import Tag = require('./controllers/Tag');
+import Time = require('./controllers/Time');
+import TriggerState = require('./controllers/TriggerState');
+import WaitUntil = require('./controllers/WaitUntil');
+import Webhook = require('./controllers/Webhook');
+import Zone = require('./controllers/Zone');
+import { Status, EventsStatus, SwitchEntityStatus } from './helpers/status';
+import { createRoutes } from './routes';
+import { getExposedSettings } from './helpers/exposed-settings';
+import { migrate } from './migrations';
+import { setRED } from './globals';
+import { NodeAPI, NodeDef } from 'node-red';
+import { BaseNode, ConfigNode, DeviceNode, EntityNode } from './types/nodes';
 
-module.exports = function (RED) {
-    createRoutes(RED);
+module.exports = function (RED: NodeAPI) {
+    setRED(RED);
+    createRoutes();
 
-    function apiNode(config) {
+    function apiNode(this: BaseNode, config: NodeDef) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
@@ -44,7 +44,7 @@ module.exports = function (RED) {
         });
     }
 
-    function callServiceNode(config) {
+    function callServiceNode(this: BaseNode, config: NodeDef) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
@@ -57,7 +57,7 @@ module.exports = function (RED) {
         });
     }
 
-    function configServerNode(config) {
+    function configServerNode(this: ConfigNode, config: NodeDef) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
@@ -69,7 +69,7 @@ module.exports = function (RED) {
         this.controller.init();
     }
 
-    function currentStateNode(config) {
+    function currentStateNode(this: BaseNode, config: NodeDef) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
@@ -82,7 +82,7 @@ module.exports = function (RED) {
         });
     }
 
-    function deviceNode(config) {
+    function deviceNode(this: DeviceNode, config: NodeDef) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
@@ -91,7 +91,7 @@ module.exports = function (RED) {
             config: this.config,
             RED,
         };
-        switch (config.deviceType) {
+        switch (this.config.deviceType) {
             case 'action': {
                 const status = new Status(this);
                 this.controller = new DeviceAction({ ...params, status });
@@ -104,16 +104,18 @@ module.exports = function (RED) {
             }
             default:
                 this.status({ text: 'Error' });
-                throw new Error(`Invalid entity type: ${config.deviceType}`);
+                throw new Error(
+                    `Invalid entity type: ${this.config.deviceType}`
+                );
         }
     }
 
-    function entityNode(config) {
+    function entityNode(this: EntityNode, config: NodeDef) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
 
-        switch (config.entityType) {
+        switch (this.config.entityType) {
             case 'binary_sensor':
             case 'sensor': {
                 const status = new Status(this);
@@ -137,12 +139,14 @@ module.exports = function (RED) {
                 break;
             }
             default:
-                this({ text: 'Error' });
-                throw new Error(`Invalid entity type: ${config.entityType}`);
+                this.status({ text: 'Error' });
+                throw new Error(
+                    `Invalid entity type: ${this.config.entityType}`
+                );
         }
     }
 
-    function eventsAllNode(config) {
+    function eventsAllNode(this: BaseNode, config: NodeDef) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
@@ -155,7 +159,7 @@ module.exports = function (RED) {
         });
     }
 
-    function eventsStateNode(config) {
+    function eventsStateNode(this: BaseNode, config: NodeDef) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
@@ -168,7 +172,7 @@ module.exports = function (RED) {
         });
     }
 
-    function fireEventNode(config) {
+    function fireEventNode(this: BaseNode, config: NodeDef) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
@@ -181,7 +185,7 @@ module.exports = function (RED) {
         });
     }
 
-    function getEntitiesNode(config) {
+    function getEntitiesNode(this: BaseNode, config: NodeDef) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
@@ -194,7 +198,7 @@ module.exports = function (RED) {
         });
     }
 
-    function getHistoryNode(config) {
+    function getHistoryNode(this: BaseNode, config: NodeDef) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
@@ -207,7 +211,7 @@ module.exports = function (RED) {
         });
     }
 
-    function pollStateNode(config) {
+    function pollStateNode(this: BaseNode, config: NodeDef) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
@@ -220,7 +224,7 @@ module.exports = function (RED) {
         });
     }
 
-    function renderTemplateNode(config) {
+    function renderTemplateNode(this: BaseNode, config: NodeDef) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
@@ -233,7 +237,7 @@ module.exports = function (RED) {
         });
     }
 
-    function tagNode(config) {
+    function tagNode(this: BaseNode, config: NodeDef) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
@@ -246,7 +250,7 @@ module.exports = function (RED) {
         });
     }
 
-    function timeNode(config) {
+    function timeNode(this: BaseNode, config: NodeDef) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
@@ -259,7 +263,7 @@ module.exports = function (RED) {
         });
     }
 
-    function triggerStateNode(config) {
+    function triggerStateNode(this: BaseNode, config: NodeDef) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
@@ -272,7 +276,7 @@ module.exports = function (RED) {
         });
     }
 
-    function waitUntilNode(config) {
+    function waitUntilNode(this: BaseNode, config: NodeDef) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
@@ -285,7 +289,7 @@ module.exports = function (RED) {
         });
     }
 
-    function webhookNode(config) {
+    function webhookNode(this: BaseNode, config: NodeDef) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
@@ -298,7 +302,7 @@ module.exports = function (RED) {
         });
     }
 
-    function zoneNode(config) {
+    function zoneNode(this: BaseNode, config: NodeDef) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
@@ -334,6 +338,7 @@ module.exports = function (RED) {
     };
 
     for (const type in nodes) {
+        // @ts-ignore
         RED.nodes.registerType(type, nodes[type], getExposedSettings(type));
     }
 };

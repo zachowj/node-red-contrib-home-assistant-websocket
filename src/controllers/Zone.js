@@ -1,7 +1,7 @@
 const cloneDeep = require('lodash.clonedeep');
 
 const EventsHaNode = require('./EventsHaNode');
-const { getLocationData, getZoneData, inZone } = require('../helpers/utils');
+const { getLocationData, getZoneData, inZone } = require('../helpers/location');
 const { ZONE_ENTER, ZONE_LEAVE, ZONE_ENTER_OR_LEAVE } = require('../const');
 
 const nodeOptions = {
