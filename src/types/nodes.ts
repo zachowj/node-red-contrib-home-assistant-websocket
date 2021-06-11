@@ -1,39 +1,41 @@
 import { Node } from 'node-red';
 
-export interface ConfigNode extends Node {
-    config: {
-        name: string;
-        version: number;
-        legacy: boolean;
-        addon: boolean;
-        rejectUnauthorizedCerts: boolean;
-        ha_boolean: string;
-        connectionDelay: boolean;
-        cacheJson: boolean;
-    };
+export interface ServerNodeConfig {
+    name: string;
+    version: number;
+    addon: boolean;
+    rejectUnauthorizedCerts: boolean;
+    // eslint-disable-next-line camelcase
+    ha_boolean: string;
+    connectionDelay: boolean;
+    cacheJson: boolean;
+}
+
+export interface ServerNode extends Node {
+    config: ServerNodeConfig;
     controller: any;
+}
+
+export interface BaseNodeConfig {
+    debugenabled: boolean;
+    name: string;
+    server?: ServerNode;
+    version: number;
 }
 
 export interface BaseNode extends Node {
-    config: {
-        debugenabled: {};
-        name: string;
-        server: ConfigNode;
-        version: number;
-    };
+    config: BaseNodeConfig;
     controller: any;
 }
 
-export interface DeviceNode extends Node {
-    config: {
+export interface DeviceNode extends BaseNode {
+    config: BaseNodeConfig & {
         deviceType: string;
     };
-    controller: any;
 }
 
-export interface EntityNode extends Node {
-    config: {
+export interface EntityNode extends BaseNode {
+    config: BaseNodeConfig & {
         entityType: string;
     };
-    controller: any;
 }

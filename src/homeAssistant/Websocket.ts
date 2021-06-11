@@ -1,59 +1,94 @@
-const cloneDeep = require('lodash.clonedeep');
-const debug = require('debug')('home-assistant:ws');
-const selectn = require('selectn');
-const {
+import Debug from 'debug';
+import { EventEmitter } from 'events';
+import {
     callService,
+    Connection,
     createConnection,
-    getUser,
-    subscribeConfig,
-    subscribeEntities,
-    subscribeServices,
     ERR_CANNOT_CONNECT,
     ERR_CONNECTION_LOST,
     ERR_HASS_HOST_REQUIRED,
     ERR_INVALID_AUTH,
     ERR_INVALID_HTTPS_TO_HTTP,
-} = require('home-assistant-js-websocket');
+    getUser,
+    HassConfig,
+    HassEntities,
+    HassEntity,
+    HassEvent,
+    HassServices,
+    MessageBase,
+    subscribeConfig,
+    subscribeEntities,
+    subscribeServices,
+} from 'home-assistant-js-websocket';
+import { cloneDeep } from 'lodash';
 
-const createSocket = require('./createSocket');
-const {
+import {
     HA_EVENT_AREA_REGISTRY_UPDATED,
     HA_EVENT_DEVICE_REGISTRY_UPDATED,
     HA_EVENT_INTEGRATION,
     HA_EVENT_STATE_CHANGED,
+    HA_EVENT_TAG_SCANNED,
     HA_EVENTS,
     INTEGRATION_EVENT,
-    INTEGRATION_NOT_LOADED,
     INTEGRATION_LOADED,
+    INTEGRATION_NOT_LOADED,
     INTEGRATION_UNLOADED,
-    STATE_DISCONNECTED,
-    STATE_ERROR,
     STATE_CONNECTED,
     STATE_CONNECTING,
-    HA_EVENT_TAG_SCANNED,
-} = require('../const');
-const {
-    subscribeAreaRegistry,
-    subscribeDeviceRegistry,
-} = require('./collections');
+    STATE_DISCONNECTED,
+    STATE_ERROR,
+} from '../const';
+import {
+    HassAreas,
+    HassDeviceActions,
+    HassDeviceCapabilities,
+    HassDevices,
+    HassDeviceTriggers,
+    HassTags,
+    HassTranslations,
+    HassUser,
+    SubscriptionUnsubscribe,
+} from '../types/home-assistant';
+import { Credentials } from './';
+import { subscribeAreaRegistry, subscribeDeviceRegistry } from './collections';
+import createSocket from './createSocket';
 
-class Websocket {
-    constructor(config, eventBus) {
-        this.eventBus = eventBus;
-        this.config = config;
-        this.connectionState = STATE_DISCONNECTED;
-        this.states = {};
-        this.services = {};
-        this.areas = [];
-        this.devices = [];
-        this.tags = null;
-        this.statesLoaded = false;
-        this.client = null;
-        this.subscribedEvents = new Set();
-        this.unsubCallback = {};
-        this.integrationVersion = 0;
-        this.isHomeAssistantRunning = false;
+const debug = Debug('home-assistant:ws');
 
+export type WebsocketConfig = Credentials & {
+    rejectUnauthorizedCerts: boolean;
+    connectionDelay: boolean;
+};
+
+type HassTranslationsResponse = {
+    resources: HassTranslations;
+};
+
+type HassDeviceCapabilitiesResponse = {
+    // eslint-disable-next-line camelcase
+    extra_fields: HassDeviceCapabilities;
+};
+
+export default class Websocket {
+    private servicesLoaded = false;
+    private statesLoaded = false;
+    private subscribedEvents = new Set<string>();
+    private unsubCallback: { [id: string]: () => void } = {};
+
+    areas: HassAreas = [];
+    client!: Connection;
+    devices: HassDevices = [];
+    connectionState = STATE_DISCONNECTED;
+    integrationVersion: string | number = 0;
+    isHomeAssistantRunning = false;
+    states: HassEntities = {};
+    services: HassServices = {};
+    tags: HassTags | null = null;
+
+    constructor(
+        private config: WebsocketConfig,
+        private eventBus: EventEmitter
+    ) {
         this.eventBus.on(
             'ha_client:connecting',
             this.onClientConnecting.bind(this)
@@ -61,18 +96,17 @@ class Websocket {
         this.onStatesLoadedAndRunning('initial_connection_ready');
     }
 
-    emitEvent(event, data) {
+    private emitEvent(event: string, data?: any) {
         return this.eventBus.emit(event, data);
     }
 
-    async connect() {
+    async connect(): Promise<void> {
         // Convert from http:// -> ws://, https:// -> wss://
-        const url = `ws${this.config.baseUrl.substr(4)}/api/websocket`;
+        const url = `ws${this.config.host.substr(4)}/api/websocket`;
 
         const auth = {
             type: 'auth',
-            [this.config.legacy ? 'api_password' : 'access_token']:
-                this.config.apiPass,
+            access_token: this.config.access_token,
         };
 
         this.client = await createConnection({
@@ -117,8 +151,8 @@ class Websocket {
         this.haEvents();
     }
 
-    async checkUserType() {
-        const user = await this.getUser();
+    private async checkUserType() {
+        const user = (await this.getUser()) as HassUser;
         if (user.is_admin === false) {
             this.connectionState = STATE_ERROR;
             this.client.close();
@@ -128,25 +162,26 @@ class Websocket {
         }
     }
 
-    getUser() {
-        return getUser(this.client);
+    getUser(): Promise<HassUser> {
+        return getUser(this.client) as Promise<HassUser>;
     }
 
-    clientEvents() {
+    private clientEvents() {
         // Client events
-        const events = {
-            ready: this.onClientOpen,
-            disconnected: this.onClientClose,
-            'reconnect-error': this.onClientError,
-        };
-        Object.entries(events).forEach(([event, callback]) =>
-            this.client.addEventListener(event, callback.bind(this))
+        this.client.addEventListener('ready', this.onClientOpen.bind(this));
+        this.client.addEventListener(
+            'disconnected',
+            this.onClientClose.bind(this)
+        );
+        this.client.addEventListener(
+            'reconnect-error',
+            this.onClientError.bind(this)
         );
     }
 
-    async haEvents() {
+    private async haEvents() {
         // Home Assistant Events
-        await this.client.subscribeEvents(
+        await this.client.subscribeEvents<HassEvent>(
             (evt) => this.integrationEvent(evt),
             HA_EVENT_INTEGRATION
         );
@@ -154,8 +189,8 @@ class Websocket {
             this.onClientConfigUpdate(config)
         );
 
-        subscribeEntities(this.client, (ent) => this.onClientStates(ent));
-        subscribeServices(this.client, (ent) => this.onClientServices(ent));
+        subscribeEntities(this.client, this.onClientStates.bind(this));
+        subscribeServices(this.client, this.onClientServices.bind(this));
 
         subscribeAreaRegistry(this.client, (areas) => {
             this.emitEvent(HA_EVENT_AREA_REGISTRY_UPDATED, areas);
@@ -167,7 +202,7 @@ class Websocket {
         });
     }
 
-    onHomeAssistantRunning() {
+    private onHomeAssistantRunning() {
         if (!this.isHomeAssistantRunning) {
             this.isHomeAssistantRunning = true;
             this.emitEvent('ha_client:running');
@@ -177,9 +212,9 @@ class Websocket {
         }
     }
 
-    integrationEvent(evt) {
+    private integrationEvent(evt: Partial<HassEvent>) {
         const oldVersion = this.integrationVersion;
-        switch (evt.data.type) {
+        switch (evt?.data?.type) {
             case INTEGRATION_LOADED:
                 this.integrationVersion = evt.data.version;
                 break;
@@ -191,11 +226,11 @@ class Websocket {
                 return;
         }
         if (oldVersion !== this.integrationVersion) {
-            this.emitEvent(INTEGRATION_EVENT, evt.data.type);
+            this.emitEvent(INTEGRATION_EVENT, evt?.data?.type);
         }
     }
 
-    async subscribeEvents(events) {
+    async subscribeEvents(events: { [nodeId: string]: string }): Promise<void> {
         const currentEvents = new Set(Object.values(events));
 
         // If events contains '__ALL__' register all events and skip individual ones
@@ -214,9 +249,10 @@ class Websocket {
             });
 
             // subscribe to all event and save unsubscribe callback
-            this.unsubCallback.__ALL__ = await this.client.subscribeEvents(
-                (ent) => this.onClientEvents(ent)
-            );
+            this.unsubCallback.__ALL__ =
+                await this.client.subscribeEvents<HassEvent>((ent) =>
+                    this.onClientEvents(ent)
+                );
 
             this.subscribedEvents.add('__ALL__');
             return;
@@ -247,14 +283,19 @@ class Websocket {
 
         // Subscribe to each event type and save each unsubscribe callback
         for (const type of add) {
-            this.unsubCallback[type] = await this.client.subscribeEvents(
-                (ent) => this.onClientEvents(ent),
-                type
-            );
+            this.unsubCallback[type] =
+                await this.client.subscribeEvents<HassEvent>(
+                    (ent) => this.onClientEvents(ent),
+                    type
+                );
         }
     }
 
-    subscribeMessage(callback, subscribeMessage, options) {
+    subscribeMessage<Result>(
+        callback: (result: Result) => void,
+        subscribeMessage: MessageBase,
+        options: { resubscribe?: boolean }
+    ): Promise<SubscriptionUnsubscribe> {
         return this.client.subscribeMessage(
             callback,
             subscribeMessage,
@@ -262,12 +303,12 @@ class Websocket {
         );
     }
 
-    onClientStates(msg) {
-        if (!msg || Object.keys(msg).length === 0) {
+    onClientStates(entities: HassEntities): void {
+        if (!entities || Object.keys(entities).length === 0) {
             return;
         }
 
-        this.states = msg;
+        this.states = entities;
 
         if (!this.statesLoaded) {
             this.statesLoaded = true;
@@ -275,12 +316,12 @@ class Websocket {
         }
     }
 
-    onClientServices(msg) {
-        if (!msg || Object.keys(msg).length === 0) {
+    onClientServices(services: HassServices): void {
+        if (!services || Object.keys(services).length === 0) {
             return;
         }
 
-        this.services = msg;
+        this.services = services;
 
         if (!this.servicesLoaded) {
             this.servicesLoaded = true;
@@ -288,11 +329,11 @@ class Websocket {
         }
     }
 
-    onStatesLoadedAndRunning(event = 'ready') {
-        const statesLoaded = new Promise((resolve, reject) => {
+    onStatesLoadedAndRunning(event = 'ready'): void {
+        const statesLoaded = new Promise((resolve) => {
             this.eventBus.once('ha_client:states_loaded', resolve);
         });
-        const homeAssinstantRunning = new Promise((resolve, reject) => {
+        const homeAssinstantRunning = new Promise((resolve) => {
             this.eventBus.once('ha_client:running', resolve);
         });
         Promise.all([statesLoaded, homeAssinstantRunning]).then(([states]) => {
@@ -300,24 +341,24 @@ class Websocket {
         });
     }
 
-    onClientEvents(msg) {
-        if (!msg || !msg.data || msg.data === 'ping') {
+    onClientEvents(hassEvent: HassEvent): void {
+        if (!hassEvent || !hassEvent.data) {
             return;
         }
 
-        const eventType = msg.event_type;
-        const entityId = selectn('data.entity_id', msg);
+        const eventType = hassEvent.event_type;
+        const entityId = hassEvent?.data?.entity_id;
         const event = {
             event_type: eventType,
             entity_id: entityId,
-            event: msg.data,
-            origin: msg.origin,
-            time_fired: msg.time_fired,
-            context: msg.context,
+            event: hassEvent.data,
+            origin: hassEvent.origin,
+            time_fired: hassEvent.time_fired,
+            context: hassEvent.context,
         };
 
         if (eventType === HA_EVENT_STATE_CHANGED) {
-            const state = selectn('event.new_state', event);
+            const state = event?.event?.new_state;
             // Validate a minimum state_changed event
             if (state && entityId) {
                 this.states[entityId] = state;
@@ -345,7 +386,7 @@ class Websocket {
         this.emitEvent(`${HA_EVENTS}:all`, event);
     }
 
-    async onClientConfigUpdate(config) {
+    async onClientConfigUpdate(config: HassConfig): Promise<void> {
         if (
             config.components.includes('nodered') &&
             this.integrationVersion === 0
@@ -366,29 +407,31 @@ class Websocket {
         }
     }
 
-    async updateTagList() {
+    async updateTagList(): Promise<HassTags> {
         try {
-            this.tags = await this.send({
+            this.tags = await this.send<HassTags>({
                 type: 'tag/list',
             });
         } catch (e) {
             debug(`Error fetching tag list: ${e}`);
         }
+
+        return this.tags ?? [];
     }
 
-    getIntegrationVersion() {
-        return this.send({
+    getIntegrationVersion(): Promise<string> {
+        return this.send<string>({
             type: 'nodered/version',
         });
     }
 
-    createIntegrationEvent(type, version) {
+    createIntegrationEvent(type: string, version?: string): void {
         this.integrationEvent({
             data: { type, version },
         });
     }
 
-    onClientOpen() {
+    onClientOpen(): void {
         this.onStatesLoadedAndRunning();
         this.integrationVersion = 0;
         this.isHomeAssistantRunning = false;
@@ -396,7 +439,7 @@ class Websocket {
         this.emitEvent('ha_client:open');
     }
 
-    onClientClose() {
+    onClientClose(): void {
         this.integrationVersion = 0;
         this.isHomeAssistantRunning = false;
         this.connectionState = STATE_DISCONNECTED;
@@ -406,65 +449,73 @@ class Websocket {
         this.resetClient();
     }
 
-    onClientError(data) {
+    onClientError(data: unknown): void {
         debug('events connection error, cleaning up connection');
         debug(data);
         this.emitEvent('ha_client:error', data);
         this.resetClient();
     }
 
-    onClientConnecting() {
+    onClientConnecting(): void {
         this.connectionState = STATE_CONNECTING;
     }
 
-    resetClient() {
+    resetClient(): void {
         this.servicesLoaded = false;
         this.statesLoaded = false;
         this.connectionState = STATE_DISCONNECTED;
         this.emitEvent('ha_client:close');
     }
 
-    getDevices() {
+    getDevices(): HassDevices {
         return this.devices;
     }
 
-    getDeviceActions(deviceId) {
+    async getDeviceActions(deviceId?: string): Promise<HassDeviceActions> {
         if (!deviceId) return [];
 
-        return this.client.sendMessagePromise({
+        return this.send<HassDeviceActions>({
             type: 'device_automation/action/list',
             device_id: deviceId,
         });
     }
 
-    getDeviceActionCapabilities(action) {
+    async getDeviceActionCapabilities(action: {
+        [key: string]: any;
+    }): Promise<HassDeviceCapabilities> {
         if (!action) return [];
 
-        return this.client.sendMessagePromise({
+        const results = await this.send<HassDeviceCapabilitiesResponse>({
             type: 'device_automation/action/capabilities',
             action,
         });
+
+        return results.extra_fields;
     }
 
-    getDeviceTriggers(deviceId) {
+    async getDeviceTriggers(deviceId?: string): Promise<HassDeviceTriggers> {
         if (!deviceId) return [];
 
-        return this.client.sendMessagePromise({
+        return this.send<HassDeviceTriggers>({
             type: 'device_automation/trigger/list',
             device_id: deviceId,
         });
     }
 
-    getDeviceTriggerCapabilities(trigger) {
+    async getDeviceTriggerCapabilities(trigger: {
+        [key: string]: any;
+    }): Promise<HassDeviceCapabilities> {
         if (!trigger) return [];
 
-        return this.client.sendMessagePromise({
+        const results = await this.send<HassDeviceCapabilitiesResponse>({
             type: 'device_automation/trigger/capabilities',
             trigger,
         });
+
+        return results.extra_fields;
     }
 
-    getStates(entityId) {
+    getStates(entityId?: string): HassEntity | HassEntities | null {
         if (entityId) {
             return this.states[entityId]
                 ? cloneDeep(this.states[entityId])
@@ -474,29 +525,36 @@ class Websocket {
         return cloneDeep(this.states);
     }
 
-    getServices() {
+    getServices(): HassServices {
         return cloneDeep(this.services);
     }
 
-    getTranslations(category, language) {
+    async getTranslations(
+        category: string,
+        language: string
+    ): Promise<HassTranslations> {
         if (!category) return [];
 
-        return this.client.sendMessagePromise({
+        const results = await this.send<HassTranslationsResponse>({
             type: 'frontend/get_translations',
             language,
             category,
         });
+
+        return results.resources;
     }
 
-    callService(domain, service, data) {
+    callService(
+        domain: string,
+        service: string,
+        data?: { [key: string]: any }
+    ): Promise<unknown> {
         debug(`Call-Service: ${domain}.${service} ${JSON.stringify(data)}`);
         return callService(this.client, domain, service, data);
     }
 
-    send(data) {
+    send<Results>(data: MessageBase): Promise<Results> {
         debug(`Send: ${JSON.stringify(data)}`);
         return this.client.sendMessagePromise(data);
     }
 }
-
-module.exports = Websocket;

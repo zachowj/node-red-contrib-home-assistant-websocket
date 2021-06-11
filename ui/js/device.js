@@ -450,10 +450,10 @@ RED.nodes.registerType('ha-device', {
         const updateCapabilities = async (action, capabilities) => {
             clearDeviceExtras();
             const data = await event.getCapabilitiesList(action);
-            if (data.extra_fields && data.extra_fields.length) {
-                $event.data('capabilities', data.extra_fields);
+            if (data?.length) {
+                $event.data('capabilities', data);
                 const html = haDeviceUI.createDeviceExtraFields(
-                    data.extra_fields,
+                    data,
                     capabilities
                 );
                 $event.parent().after(html);

@@ -5,10 +5,12 @@
     "target": "es2018",
     "outDir": "./dist",
 
-    "strict": true,
+    "allowJs": true,
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true,
-    "allowJs": true
+    "strict": true,
+    "moduleResolution": "node"
   },
   "include": ["./src/**/*.js", "./src/**/*.ts"]
 }

@@ -23,7 +23,7 @@ export function getLocationData(entity: HassEntity): locationData | false {
     return isValidCoordinate(coord) ? coord : false;
 }
 
-export function getZoneData(zone: HassEntity) {
+export function getZoneData(zone: HassEntity): locationData | boolean {
     const data = getLocationData(zone);
     if (data === false || zone?.attributes?.radius === undefined) return false;
 

@@ -1,12 +1,18 @@
-const { getCollection } = require('home-assistant-js-websocket');
+import { Connection, getCollection } from 'home-assistant-js-websocket';
+import { Store } from 'home-assistant-js-websocket/dist/store';
 
-function subscribeAreaRegistry(conn, cb) {
-    const fetchAreaRegistry = (conn) =>
-        conn.sendMessagePromise({
+import { HassAreas, HassDevices } from '../types/home-assistant';
+
+export function subscribeAreaRegistry(
+    conn: Connection,
+    cb: (state: HassAreas) => void
+): void {
+    const fetchAreaRegistry = (conn: Connection) =>
+        conn.sendMessagePromise<HassAreas>({
             type: 'config/area_registry/list',
         });
 
-    const subscribeUpdates = (conn, store) =>
+    const subscribeUpdates = (conn: Connection, store: Store<HassAreas>) =>
         conn.subscribeEvents(async () => {
             const areas = await fetchAreaRegistry(conn);
             store.setState(areas, true);
@@ -21,13 +27,16 @@ function subscribeAreaRegistry(conn, cb) {
     collection.subscribe(cb);
 }
 
-function subscribeDeviceRegistry(conn, cb) {
-    const fetchDeviceRegistry = (conn) =>
-        conn.sendMessagePromise({
+export function subscribeDeviceRegistry(
+    conn: Connection,
+    cb: (state: HassDevices) => void
+): void {
+    const fetchDeviceRegistry = (conn: Connection) =>
+        conn.sendMessagePromise<HassDevices>({
             type: 'config/device_registry/list',
         });
 
-    const subscribeUpdates = (conn, store) =>
+    const subscribeUpdates = (conn: Connection, store: Store<HassDevices>) =>
         conn.subscribeEvents(async () => {
             const devices = await fetchDeviceRegistry(conn);
             store.setState(devices, true);
@@ -41,5 +50,3 @@ function subscribeDeviceRegistry(conn, cb) {
     );
     collection.subscribe(cb);
 }
-
-module.exports = { subscribeAreaRegistry, subscribeDeviceRegistry };

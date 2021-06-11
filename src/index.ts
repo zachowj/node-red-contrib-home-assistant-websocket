@@ -1,31 +1,32 @@
-import Api = require('./controllers/Api');
-import CallService = require('./controllers/CallService');
-import ConfigServer = require('./controllers/ConfigServer');
-import CurrentState = require('./controllers/CurrentState');
-import DeviceAction = require('./controllers/device/DeviceAction');
-import DeviceTrigger = require('./controllers/device/DeviceTrigger');
-import EventsAll = require('./controllers/EventsAll');
-import EventsState = require('./controllers/EventsState');
-import FireEvent = require('./controllers/FireEvent');
-import GetEntities = require('./controllers/GetEntities');
-import GetHistory = require('./controllers/GetHistory');
-import PollState = require('./controllers/PollState');
-import RenderTemplate = require('./controllers/RenderTemplate');
-import Sensor = require('./controllers/entity/Sensor');
-import Switch = require('./controllers/entity/Switch');
-import Tag = require('./controllers/Tag');
-import Time = require('./controllers/Time');
-import TriggerState = require('./controllers/TriggerState');
-import WaitUntil = require('./controllers/WaitUntil');
-import Webhook = require('./controllers/Webhook');
-import Zone = require('./controllers/Zone');
-import { Status, EventsStatus, SwitchEntityStatus } from './helpers/status';
-import { createRoutes } from './routes';
-import { getExposedSettings } from './helpers/exposed-settings';
-import { migrate } from './migrations';
-import { setRED } from './globals';
 import { NodeAPI, NodeDef } from 'node-red';
-import { BaseNode, ConfigNode, DeviceNode, EntityNode } from './types/nodes';
+
+import Api from './controllers/Api';
+import CallService from './controllers/CallService';
+import ConfigServer from './controllers/ConfigServer';
+import CurrentState from './controllers/CurrentState';
+import DeviceAction from './controllers/device/DeviceAction';
+import DeviceTrigger from './controllers/device/DeviceTrigger';
+import Sensor from './controllers/entity/Sensor';
+import Switch from './controllers/entity/Switch';
+import EventsAll from './controllers/EventsAll';
+import EventsState from './controllers/EventsState';
+import FireEvent from './controllers/FireEvent';
+import GetEntities from './controllers/GetEntities';
+import GetHistory from './controllers/GetHistory';
+import PollState from './controllers/PollState';
+import RenderTemplate from './controllers/RenderTemplate';
+import Tag from './controllers/Tag';
+import Time from './controllers/Time';
+import TriggerState from './controllers/TriggerState';
+import WaitUntil from './controllers/WaitUntil';
+import Webhook from './controllers/Webhook';
+import Zone from './controllers/Zone';
+import { setRED } from './globals';
+import { getExposedSettings } from './helpers/exposed-settings';
+import { EventsStatus, Status, SwitchEntityStatus } from './helpers/status';
+import { migrate } from './migrations';
+import { createRoutes } from './routes';
+import { BaseNode, DeviceNode, EntityNode, ServerNode } from './types/nodes';
 
 module.exports = function (RED: NodeAPI) {
     setRED(RED);
@@ -57,7 +58,7 @@ module.exports = function (RED: NodeAPI) {
         });
     }
 
-    function configServerNode(this: ConfigNode, config: NodeDef) {
+    function configServerNode(this: ServerNode, config: NodeDef) {
         RED.nodes.createNode(this, config);
 
         this.config = migrate(config);
@@ -338,7 +339,7 @@ module.exports = function (RED: NodeAPI) {
     };
 
     for (const type in nodes) {
-        // @ts-ignore
+        // @ts-ignore: TODO: make this not register as an error
         RED.nodes.registerType(type, nodes[type], getExposedSettings(type));
     }
 };

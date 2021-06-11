@@ -8,7 +8,6 @@ const { toCamelCase } = require('../helpers/utils');
 const nodeDefaults = {
     name: {},
     version: (nodeDef) => nodeDef.version || 0,
-    legacy: {},
     addon: {},
     rejectUnauthorizedCerts: {},
     ha_boolean: {},
@@ -40,7 +39,7 @@ class ConfigServer {
             this.startListeners();
             this.comms = new Comms(this.RED, this.homeAssistant, this.node.id);
 
-            await this.homeAssistant.connect();
+            await this.homeAssistant.websocket.connect();
         } catch (e) {
             this.node.error(
                 this.RED._(e.message, { base_url: this.node.credentials.host })

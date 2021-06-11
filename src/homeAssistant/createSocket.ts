@@ -1,25 +1,45 @@
-const debug = require('debug')('home-assistant:socket');
-const WebSocket = require('ws');
-const {
+import Debug from 'debug';
+import { EventEmitter } from 'events';
+import {
     ERR_INVALID_AUTH,
+    Error,
     MSG_TYPE_AUTH_INVALID,
     MSG_TYPE_AUTH_OK,
     MSG_TYPE_AUTH_REQUIRED,
-} = require('home-assistant-js-websocket');
+} from 'home-assistant-js-websocket';
+import WebSocket from 'ws';
+
+const debug = Debug('home-assistant:socket');
+
+type ConnectionOptions = {
+    auth: {
+        // eslint-disable-next-line camelcase
+        access_token: string;
+        type: string;
+    };
+    connectionDelay: boolean;
+    eventBus: EventEmitter;
+    rejectUnauthorizedCerts: boolean;
+    url: string;
+};
 
 /*
  * Pretty much a copy from https://github.com/home-assistant/home-assistant-js-websocket
  */
-function createSocket({
+export default function createSocket({
     auth,
     connectionDelay,
     eventBus,
     rejectUnauthorizedCerts,
     url,
-}) {
+}: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+ConnectionOptions): Promise<any> {
     debug('[Auth Phase] Initializing', url);
 
-    function connect(promResolve, promReject) {
+    function connect(
+        promResolve: (socket: WebSocket) => void,
+        promReject: (err: Error) => void
+    ) {
         debug('[Auth Phase] New connection', url);
         eventBus.emit('ha_client:connecting');
 
@@ -30,7 +50,7 @@ function createSocket({
         // If invalid auth, we will not try to reconnect.
         let invalidAuth = false;
 
-        const onOpen = async (event) => {
+        const onOpen = async () => {
             try {
                 socket.send(JSON.stringify(auth));
             } catch (err) {
@@ -39,7 +59,7 @@ function createSocket({
             }
         };
 
-        const onMessage = async (event) => {
+        const onMessage = (event: { data: string }) => {
             const message = JSON.parse(event.data);
 
             debug('[Auth Phase] Received', message);
@@ -83,7 +103,7 @@ function createSocket({
         socket.addEventListener('error', onClose);
     }
 
-    return new Promise((resolve, reject) => {
+    return new Promise<WebSocket>((resolve, reject) => {
         // if hass.io, do a 5 second delay so it doesn't spam the hass.io proxy
         // https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/76
         setTimeout(
@@ -92,5 +112,3 @@ function createSocket({
         );
     });
 }
-
-module.exports = createSocket;

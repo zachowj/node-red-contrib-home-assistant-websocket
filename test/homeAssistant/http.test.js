@@ -21,23 +21,6 @@ describe('HTTP API', function () {
                 `${CREDS.baseUrl}/api`
             );
         });
-
-        it('should initialize correctly as legacy', function () {
-            const config = {
-                baseUrl: 'http://homeassistant',
-                legacy: true,
-                apiPass: '123abc',
-            };
-            const api = new HttpAPI(config);
-
-            expect(config).to.equal(api.config);
-            expect(api.client.defaults.headers['x-ha-access']).to.equal(
-                config.apiPass
-            );
-            expect(api.client.defaults.baseURL).to.equal(
-                `${config.baseUrl}/api`
-            );
-        });
     });
 
     describe('get', function () {
@@ -47,23 +30,6 @@ describe('HTTP API', function () {
 
             nock(CREDS.baseUrl)
                 .matchHeader('authorization', `Bearer ${CREDS.apiPass}`)
-                .get(`/api${path}`)
-                .reply(200, true);
-            const response = await httpApi.get(path);
-
-            expect(response).to.be.true;
-        });
-        it('should use the correct authentication header when legacy is true', async function () {
-            const config = {
-                apiPass: '123',
-                baseUrl: 'http://homeassistant.local',
-                legacy: true,
-            };
-            const path = '/config';
-            const httpApi = new HttpAPI(config);
-
-            nock(config.baseUrl)
-                .matchHeader('x-ha-access', config.apiPass)
                 .get(`/api${path}`)
                 .reply(200, true);
             const response = await httpApi.get(path);

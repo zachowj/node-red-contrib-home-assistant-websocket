@@ -1,9 +1,9 @@
-import * as matchAll from 'string.prototype.matchall';
+import matchAll from 'string.prototype.matchall';
 
 export function shouldInclude(
     targetString: string,
-    includeRegex: RegExp,
-    excludeRegex: RegExp
+    includeRegex: RegExp | undefined,
+    excludeRegex: RegExp | undefined
 ): boolean {
     if (!targetString || (!includeRegex && !excludeRegex)) {
         return true;
@@ -109,7 +109,11 @@ export function isValidDate(val: string | number): boolean {
     return d instanceof Date && !isNaN(d.getTime());
 }
 
-export function parseTime(time: string) {
+export function parseTime(time: string): {
+    hour: number;
+    minutes: number;
+    seconds: number;
+} | null {
     const regex = /^(0?\d|1\d|2[0-3]):([0-5]\d)(?::([0-5]\d))?$/;
     const matches = time.match(regex);
 

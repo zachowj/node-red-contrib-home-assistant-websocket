@@ -4,7 +4,6 @@ RED.nodes.registerType('server', {
     defaults: {
         name: { value: 'Home Assistant', required: false },
         version: { value: RED.settings.serverVersion },
-        legacy: { value: false },
         addon: { value: false },
         rejectUnauthorizedCerts: { value: true },
         ha_boolean: { value: 'y|yes|true|on|home|open' },
@@ -23,7 +22,6 @@ RED.nodes.registerType('server', {
         nodeVersion.check(this);
         const $addon = $('#node-config-input-addon');
         const $host = $('#node-config-input-host');
-        const $legacy = $('#node-config-input-legacy');
 
         if (this.rejectUnauthorizedCerts === false) {
             $('#accept_unauthorized_certs').prop('checked', true);
@@ -45,24 +43,6 @@ RED.nodes.registerType('server', {
         updateAddon();
         $addon.on('click', function () {
             updateAddon();
-        });
-
-        function updateLegacy() {
-            const tokenName = $legacy.prop('checked')
-                ? 'Password'
-                : 'Access Token';
-
-            $('#access-token-label').html(
-                '<i class="fa fa-user-secret"></i> ' + tokenName
-            );
-            $('#node-config-input-access_token').attr(
-                'placeholder',
-                tokenName.toLowerCase()
-            );
-        }
-        updateLegacy();
-        $legacy.on('click', function () {
-            updateLegacy();
         });
 
         try {
@@ -105,7 +85,6 @@ RED.nodes.registerType('server', {
 
         if (addon) {
             this.addon = true;
-            this.legacy = false;
             this.rejectUnauthorizedCerts = true;
         } else {
             const parser = document.createElement('a');

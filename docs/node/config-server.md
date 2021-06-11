@@ -22,17 +22,11 @@ If you're running Node-RED as a Hass.io Add-on check this. No other information 
 
 The base URL and port the home assistant instance can be reached at, for example: `http://192.168.0.100:8123` or `https://homeassistant.mysite.com`
 
-### Access Token / Password
+### Access Token
 
 - Type: `string`
 
-Long-lived Access Token or Password used to contact the API
-
-### Legacy Password
-
-- Type: `boolean`
-
-If you're using the legacy password to log into Home Assistant check this and enter your password in the password text box.
+Long-lived Access Token used to contact the API
 
 ### Unauthorized SSL Certificates
 
