@@ -61,6 +61,9 @@ class EventsNode extends BaseNode {
     async onClose(removed) {
         super.onClose(removed);
         this.removeEventClientListeners();
+        if (typeof this.status.destroy === 'function') {
+            this.status.destroy();
+        }
     }
 
     onHaEventsClose() {

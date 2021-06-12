@@ -1,5 +1,9 @@
 /* eslint-disable camelcase */
-import { HassUser as HomeAssistantUser } from 'home-assistant-js-websocket';
+import {
+    HassEntity,
+    HassEventBase,
+    HassUser as HomeAssistantUser,
+} from 'home-assistant-js-websocket';
 
 export type HassArea = {
     area_id: string;
@@ -77,3 +81,17 @@ export type HassDeviceAction = {
 };
 
 export type HassDeviceActions = HassDeviceAction[];
+
+export type HassData = {
+    [key: string]: any;
+};
+
+export type HassStateChangedEvent = HassEventBase & {
+    event_type: string;
+    entity_id: string;
+    event: {
+        entity_id: string;
+        new_state: HassEntity | null;
+        old_state: HassEntity | null;
+    };
+};

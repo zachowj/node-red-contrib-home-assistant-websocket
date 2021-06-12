@@ -1,29 +1,33 @@
-const {
+import { Node, NodeStatus } from 'node-red';
+
+import {
     STATE_CONNECTED,
     STATE_CONNECTING,
     STATE_DISCONNECTED,
     STATE_ERROR,
     STATE_RUNNING,
-} = require('../const');
+} from '../const';
+import HomeAssistant from '../homeAssistant/HomeAssistant';
 
-const STATUS_COLOR_BLUE = 'blue';
-const STATUS_COLOR_GREEN = 'green';
-const STATUS_COLOR_GREY = 'grey';
-const STATUS_COLOR_RED = 'red';
-const STATUS_COLOR_YELLOW = 'yellow';
-const STATUS_SHAPE_DOT = 'dot';
-const STATUS_SHAPE_RING = 'ring';
+export const STATUS_COLOR_BLUE = 'blue';
+export const STATUS_COLOR_GREEN = 'green';
+export const STATUS_COLOR_GREY = 'grey';
+export const STATUS_COLOR_RED = 'red';
+export const STATUS_COLOR_YELLOW = 'yellow';
+export const STATUS_SHAPE_DOT = 'dot';
+export const STATUS_SHAPE_RING = 'ring';
 
-class Status {
-    constructor(node) {
-        this.node = node;
-        this.isNodeDisabled = false;
-        this.lastStatus = {};
-    }
+export class Status {
+    protected isNodeDisabled = false;
+    private lastStatus: NodeStatus = {};
 
-    init() {}
+    // eslint-disable-next-line no-useless-constructor
+    constructor(readonly node: Node) {}
 
-    setNodeState(value) {
+    // eslint-disable-next-line no-empty-pattern, @typescript-eslint/no-empty-function
+    init({} = {}): void {}
+
+    setNodeState(value: boolean): void {
         if (this.isNodeDisabled === value) {
             this.isNodeDisabled = !value;
             this.updateStatus(this.lastStatus);
@@ -34,7 +38,7 @@ class Status {
         fill = STATUS_COLOR_BLUE,
         shape = STATUS_SHAPE_DOT,
         text = '',
-    } = {}) {
+    }: NodeStatus = {}): void {
         const status = {
             fill,
             shape,
@@ -46,11 +50,11 @@ class Status {
         this.updateStatus(status);
     }
 
-    setText(text = '') {
-        this.set({ fill: null, shape: null, text });
+    setText(text = ''): void {
+        this.set({ fill: undefined, shape: undefined, text });
     }
 
-    setSuccess(text = 'Success') {
+    setSuccess(text = 'Success'): void {
         this.set({
             fill: STATUS_COLOR_GREEN,
             shape: STATUS_SHAPE_DOT,
@@ -58,7 +62,7 @@ class Status {
         });
     }
 
-    setSending(text = 'Sending') {
+    setSending(text = 'Sending'): void {
         this.set({
             fill: STATUS_COLOR_YELLOW,
             shape: STATUS_SHAPE_DOT,
@@ -66,7 +70,7 @@ class Status {
         });
     }
 
-    setFailed(text = 'Failed') {
+    setFailed(text = 'Failed'): void {
         this.set({
             fill: STATUS_COLOR_RED,
             shape: STATUS_SHAPE_RING,
@@ -74,7 +78,7 @@ class Status {
         });
     }
 
-    updateStatus(status) {
+    updateStatus(status: NodeStatus): void {
         if (this.isNodeDisabled) {
             status = {
                 fill: STATUS_COLOR_GREY,
@@ -86,13 +90,11 @@ class Status {
         this.node.status(status);
     }
 
-    appendDateString(text) {
+    appendDateString(text: string): string {
         return `${text} at: ${this.getPrettyDate()}`;
     }
 
-    destroy() {}
-
-    getPrettyDate() {
+    getPrettyDate(): string {
         return new Date().toLocaleDateString('en-US', {
             month: 'short',
             day: 'numeric',
@@ -103,14 +105,17 @@ class Status {
     }
 }
 
-class EventsStatus extends Status {
-    constructor(node) {
-        super(node);
-        this.connectionState = STATE_DISCONNECTED;
-        this.eventListeners = [];
-    }
+export class EventsStatus extends Status {
+    private connectionState = STATE_DISCONNECTED;
+    private eventListeners: { (): void }[] = [];
 
-    init({ nodeState, homeAssistant }) {
+    init({
+        nodeState,
+        homeAssistant,
+    }: {
+        nodeState: boolean;
+        homeAssistant: HomeAssistant;
+    }): void {
         if (nodeState !== undefined) {
             this.isNodeDisabled = !nodeState;
         }
@@ -120,7 +125,7 @@ class EventsStatus extends Status {
         }
     }
 
-    enableConnectionStatus(homeAssistant) {
+    enableConnectionStatus(homeAssistant: HomeAssistant): void {
         // Setup event listeners
         const events = {
             'ha_client:close': this.onClientClose,
@@ -138,38 +143,38 @@ class EventsStatus extends Status {
         });
     }
 
-    onClientClose() {
+    onClientClose(): void {
         this.connectionState = STATE_DISCONNECTED;
         this.updateConnectionStatus();
     }
 
-    onClientConnecting() {
+    onClientConnecting(): void {
         this.connectionState = STATE_CONNECTING;
         this.updateConnectionStatus();
     }
 
-    onClientError() {
+    onClientError(): void {
         this.connectionState = STATE_ERROR;
         this.updateConnectionStatus();
     }
 
-    onClientOpen() {
+    onClientOpen(): void {
         this.connectionState = STATE_CONNECTED;
         this.updateConnectionStatus();
     }
 
-    onClientRunning() {
+    onClientRunning(): void {
         this.connectionState = STATE_RUNNING;
         this.updateConnectionStatus();
     }
 
-    updateConnectionStatus() {
+    updateConnectionStatus(): void {
         const status = this.getConnectionStatus();
         this.updateStatus(status);
     }
 
-    getConnectionStatus() {
-        const status = {
+    getConnectionStatus(): NodeStatus {
+        const status: NodeStatus = {
             fill: STATUS_COLOR_RED,
             shape: STATUS_SHAPE_RING,
             text: 'config-server.status.disconnected',
@@ -196,17 +201,17 @@ class EventsStatus extends Status {
         return status;
     }
 
-    destroy() {
+    destroy(): void {
         this.eventListeners.forEach((callback) => callback());
     }
 }
 
-class SwitchEntityStatus extends Status {
+export class SwitchEntityStatus extends Status {
     set({
         fill = STATUS_COLOR_YELLOW,
         shape = STATUS_SHAPE_DOT,
         text = '',
-    } = {}) {
+    }: NodeStatus = {}): void {
         const status = {
             fill,
             shape,
@@ -215,10 +220,10 @@ class SwitchEntityStatus extends Status {
         super.set(status);
     }
 
-    setNodeState(value) {
+    setNodeState(value: boolean): void {
         this.isNodeDisabled = !value;
 
-        const status = {
+        const status: NodeStatus = {
             fill: STATUS_COLOR_YELLOW,
             shape: value ? STATUS_SHAPE_DOT : STATUS_SHAPE_RING,
             text: this.appendDateString(value ? 'on' : 'off'),
@@ -227,20 +232,7 @@ class SwitchEntityStatus extends Status {
         this.updateStatus(status);
     }
 
-    updateStatus(status) {
+    updateStatus(status: NodeStatus | string): void {
         this.node.status(status);
     }
 }
-
-module.exports = {
-    EventsStatus,
-    Status,
-    SwitchEntityStatus,
-    STATUS_COLOR_BLUE,
-    STATUS_COLOR_GREEN,
-    STATUS_COLOR_GREY,
-    STATUS_COLOR_RED,
-    STATUS_COLOR_YELLOW,
-    STATUS_SHAPE_DOT,
-    STATUS_SHAPE_RING,
-};

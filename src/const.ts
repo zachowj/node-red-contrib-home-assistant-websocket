@@ -15,6 +15,7 @@ export const STATE_CONNECTING = 0;
 export const STATE_CONNECTED = 1;
 export const STATE_DISCONNECTED = 2;
 export const STATE_ERROR = 3;
+export const STATE_RUNNING = 4;
 export const TYPEDINPUT_MSG = 'msg';
 export const TYPEDINPUT_FLOW = 'flow';
 export const TYPEDINPUT_GLOBAL = 'global';

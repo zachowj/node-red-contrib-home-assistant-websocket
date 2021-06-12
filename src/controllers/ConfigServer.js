@@ -1,6 +1,6 @@
 const merge = require('lodash.merge');
 
-const Comms = require('../helpers/Comms');
+const Comms = require('../helpers/Comms').default;
 const { createHomeAssistantClient } = require('../homeAssistant');
 const { INTEGRATION_NOT_LOADED } = require('../const');
 const { toCamelCase } = require('../helpers/utils');
@@ -37,7 +37,7 @@ class ConfigServer {
             );
 
             this.startListeners();
-            this.comms = new Comms(this.RED, this.homeAssistant, this.node.id);
+            this.comms = new Comms(this.homeAssistant, this.node.id);
 
             await this.homeAssistant.websocket.connect();
         } catch (e) {

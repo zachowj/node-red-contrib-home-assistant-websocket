@@ -78,9 +78,7 @@ class BaseNode {
     }
 
     // Subclasses should override these as hooks into common events
-    onClose(removed) {
-        this.status.destroy();
-    }
+    onClose(removed) {}
 
     onInput() {}
 

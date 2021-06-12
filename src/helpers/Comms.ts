@@ -1,22 +1,28 @@
-const selectn = require('selectn');
+import { HassEntities, HassServices } from 'home-assistant-js-websocket';
 
-const {
+import {
     HA_EVENT_AREA_REGISTRY_UPDATED,
     HA_EVENT_DEVICE_REGISTRY_UPDATED,
-} = require('../const');
+} from '../const';
+import { RED } from '../globals';
+import HomeAssistant from '../homeAssistant/HomeAssistant';
+import {
+    HassAreas,
+    HassDevices,
+    HassStateChangedEvent,
+} from '../types/home-assistant';
 
-class Comms {
-    constructor(RED, homeAssistant, serverId) {
-        this.RED = RED;
-        this.homeAssistant = homeAssistant;
-        this.serverId = serverId;
-
+export default class Comms {
+    constructor(
+        private readonly homeAssistant: HomeAssistant,
+        private readonly serverId: string
+    ) {
         this.startListeners();
     }
 
-    startListeners() {
+    startListeners(): void {
         // Setup event listeners
-        const events = {
+        const events: { [key: string]: (data?: any) => void } = {
             'ha_client:services_loaded': this.onServicesLoaded,
             'ha_client:states_loaded': this.onStatesLoaded,
             'ha_events:state_changed': this.onStateChanged,
@@ -29,41 +35,41 @@ class Comms {
         );
     }
 
-    publish(type, data, retain = true) {
-        this.RED.comms.publish(
+    publish(type: string, data: { [key: string]: any }, retain = true): void {
+        RED.comms.publish(
             `homeassistant/${type}/${this.serverId}`,
             data,
             retain
         );
     }
 
-    onAreasUpdated(areas) {
+    onAreasUpdated(areas: HassAreas): void {
         this.publish('areas', areas);
     }
 
-    onDevicesUpdated(devices) {
+    onDevicesUpdated(devices: HassDevices): void {
         this.publish('devices', devices);
     }
 
-    onIntegrationEvent(eventType) {
+    onIntegrationEvent(eventType: string): void {
         this.publish('integration', {
             event: eventType,
             version: this.homeAssistant.integrationVersion,
         });
     }
 
-    onServicesLoaded(services) {}
+    // TODO: load services via WS
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
+    onServicesLoaded(services: HassServices): void {}
 
-    onStateChanged(event) {
-        const entity = selectn('event.new_state', event);
+    onStateChanged(event: HassStateChangedEvent): void {
+        const entity = event.event.new_state;
         if (entity) {
             this.publish('entity', entity);
         }
     }
 
-    onStatesLoaded(entities) {
+    onStatesLoaded(entities: HassEntities): void {
         this.publish('entities', entities);
     }
 }
-
-module.exports = Comms;
