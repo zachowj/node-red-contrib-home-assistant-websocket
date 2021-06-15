@@ -2,7 +2,7 @@ const Joi = require('joi');
 const timestring = require('timestring');
 
 const BaseNode = require('./BaseNode');
-const RenderTemplate = require('../helpers/mustache-context');
+const { renderTemplate } = require('../helpers/renderTemplate');
 
 const nodeOptions = {
     debug: true,
@@ -84,11 +84,11 @@ class GetHistory extends BaseNode {
         entityId =
             parsedMessage.entityId.source === 'message'
                 ? entityId.value
-                : RenderTemplate(
+                : renderTemplate(
                       entityId.value,
                       message,
                       this.node.context(),
-                      this.nodeConfig.server.name
+                      this.homeAssistant.getStates()
                   );
         relativeTime = relativeTime.value;
         flatten = flatten.value;

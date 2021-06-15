@@ -3,12 +3,12 @@ const Joi = require('joi');
 const selectn = require('selectn');
 
 const EventsNode = require('./EventsNode');
-const RenderTemplate = require('../helpers/mustache-context');
 const {
     shouldIncludeEvent,
     getWaitStatusText,
     getTimeInMilliseconds,
 } = require('../helpers/utils');
+const { renderTemplate } = require('../helpers/renderTemplate');
 
 const nodeOptions = {
     config: {
@@ -250,11 +250,11 @@ class WaitUntil extends EventsNode {
             parsedMessage.entityId.source === 'config' &&
             config.entityIdFilterType === 'exact'
         ) {
-            config.entityId = RenderTemplate(
+            config.entityId = renderTemplate(
                 parsedMessage.entityId.value,
                 message,
                 this.node.context(),
-                this.nodeConfig.server.name
+                this.homeAssistant.getStates()
             );
         }
 

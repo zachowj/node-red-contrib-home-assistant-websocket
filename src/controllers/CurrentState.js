@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 const BaseNode = require('./BaseNode');
-const RenderTemplate = require('../helpers/mustache-context');
+const { renderTemplate } = require('../helpers/renderTemplate');
 
 const nodeOptions = {
     config: {
@@ -39,13 +39,13 @@ class CurrentState extends BaseNode {
     /* eslint-disable camelcase */
     onInput({ parsedMessage, message, send, done }) {
         const config = this.nodeConfig;
-        const entityId = RenderTemplate(
+        const entityId = renderTemplate(
             config.blockInputOverrides === true
                 ? config.entity_id
                 : parsedMessage.entity_id.value,
             message,
             this.node.context(),
-            config.server.name
+            this.homeAssistant.getStates()
         );
 
         if (config.server === null) {

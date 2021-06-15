@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 const BaseNode = require('./BaseNode');
-const RenderTemplate = require('../helpers/mustache-context');
+const { renderTemplate } = require('../helpers/renderTemplate');
 
 const nodeOptions = {
     config: {
@@ -61,11 +61,11 @@ class FireEvent extends BaseNode {
             return;
         }
 
-        const eventType = RenderTemplate(
+        const eventType = renderTemplate(
             parsedMessage.event.value,
             message,
             this.node.context(),
-            this.nodeConfig.server.name
+            this.homeAssistant.getStates()
         );
         let eventData;
         if (parsedMessage.dataType.value === 'jsonata') {
@@ -79,13 +79,13 @@ class FireEvent extends BaseNode {
                 return;
             }
         } else {
-            eventData = RenderTemplate(
+            eventData = renderTemplate(
                 typeof parsedMessage.data.value === 'object'
                     ? JSON.stringify(parsedMessage.data.value)
                     : parsedMessage.data.value,
                 message,
                 this.node.context(),
-                this.nodeConfig.server.name
+                this.homeAssistant.getStates()
             );
         }
 

@@ -3,7 +3,7 @@ const cloneDeep = require('lodash.clonedeep');
 const selectn = require('selectn');
 
 const EventsHaNode = require('./EventsHaNode');
-const RenderTemplate = require('../helpers/mustache-context');
+const { renderTemplate } = require('../helpers/renderTemplate');
 const { shouldIncludeEvent } = require('../helpers/utils');
 
 const nodeOptions = {
@@ -354,11 +354,11 @@ class TriggerState extends EventsHaNode {
             output.messageType === 'payload'
         ) {
             // Render Template Variables
-            payload = RenderTemplate(
+            payload = renderTemplate(
                 output.messageValue,
                 eventMessage.event,
                 this.node.context(),
-                this.nodeConfig.server.name
+                this.homeAssistant.getStates()
             );
 
             switch (output.messageValueType) {

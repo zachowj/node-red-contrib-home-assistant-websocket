@@ -2,8 +2,8 @@
 const selectn = require('selectn');
 
 const EventsNode = require('./EventsNode');
-const RenderTemplate = require('../helpers/mustache-context');
 const { HA_CLIENT_READY } = require('../const');
+const { renderTemplate } = require('../helpers/renderTemplate');
 
 const domainsNeedingArrays = [
     'homeassistant',
@@ -77,17 +77,17 @@ class CallService extends EventsNode {
         const configDomain = config.service_domain;
         const configService = config.service;
         const context = this.node.context();
-        const apiDomain = RenderTemplate(
+        const apiDomain = renderTemplate(
             payloadDomain || configDomain,
             message,
             context,
-            config.server.name
+            this.homeAssistant.getStates()
         );
-        const apiService = RenderTemplate(
+        const apiService = renderTemplate(
             payloadService || configService,
             message,
             context,
-            config.server.name
+            this.homeAssistant.getStates()
         );
         let configData;
         if (config.dataType === 'jsonata' && config.data) {
@@ -101,11 +101,11 @@ class CallService extends EventsNode {
                 return;
             }
         } else {
-            configData = RenderTemplate(
+            configData = renderTemplate(
                 config.data,
                 message,
                 context,
-                config.server.name,
+                this.homeAssistant.getStates(),
                 config.mustacheAltTags
             );
         }
@@ -133,11 +133,11 @@ class CallService extends EventsNode {
             config.entityId &&
             !Object.prototype.hasOwnProperty.call(apiData, 'entity_id')
         ) {
-            const entityId = RenderTemplate(
+            const entityId = renderTemplate(
                 config.entityId,
                 message,
                 context,
-                config.server.name,
+                this.homeAssistant.getStates(),
                 config.mustacheAltTags
             );
             // homeassistant domain requires entity_id to be an array for multiple ids

@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 const BaseNode = require('./BaseNode');
-const RenderTemplate = require('../helpers/mustache-context');
+const { renderTemplate } = require('../helpers/renderTemplate');
 
 const nodeOptions = {
     config: {
@@ -121,13 +121,13 @@ class Api extends BaseNode {
                 return;
             }
         } else {
-            data = RenderTemplate(
+            data = renderTemplate(
                 typeof parsedMessage.data.value === 'object'
                     ? JSON.stringify(parsedMessage.data.value)
                     : parsedMessage.data.value,
                 message,
                 node.context(),
-                config.server.name
+                this.homeAssistant.getStates()
             );
         }
 
@@ -135,11 +135,11 @@ class Api extends BaseNode {
         let apiCall;
 
         if (parsedMessage.protocol.value === 'http') {
-            const path = RenderTemplate(
+            const path = renderTemplate(
                 parsedMessage.path.value,
                 message,
                 node.context(),
-                config.server.name
+                this.homeAssistant.getStates()
             ).replace(/^\/(?:api\/)?/, '');
 
             if (!path) {
