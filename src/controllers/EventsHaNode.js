@@ -2,7 +2,7 @@ const Joi = require('joi');
 const merge = require('lodash.merge');
 
 const EventsNode = require('./EventsNode');
-const Storage = require('../helpers/Storage');
+const Storage = require('../helpers/Storage').default;
 const { INTEGRATION_UNLOADED, INTEGRATION_NOT_LOADED } = require('../const');
 const { STATUS_SHAPE_DOT, STATUS_SHAPE_RING } = require('../helpers/status');
 
