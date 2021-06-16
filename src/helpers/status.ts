@@ -34,16 +34,7 @@ export class Status {
         }
     }
 
-    set({
-        fill = STATUS_COLOR_BLUE,
-        shape = STATUS_SHAPE_DOT,
-        text = '',
-    }: NodeStatus = {}): void {
-        const status = {
-            fill,
-            shape,
-            text,
-        };
+    set(status: NodeStatus = {}): void {
         if (this.isNodeDisabled === false) {
             this.lastStatus = status;
         }
@@ -51,7 +42,7 @@ export class Status {
     }
 
     setText(text = ''): void {
-        this.set({ fill: undefined, shape: undefined, text });
+        this.set({ text });
     }
 
     setSuccess(text = 'Success'): void {

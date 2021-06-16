@@ -1,35 +1,21 @@
 const expect = require('chai').expect;
 const nock = require('nock');
 
-const HttpAPI = require('../../src/homeAssistant/Http');
+const HttpAPI = require('../../src/homeAssistant/Http').default;
 
 describe('HTTP API', function () {
     const CREDS = {
-        apiPass: '123',
-        baseUrl: 'http://homeassistant',
+        access_token: '123',
+        host: 'http://homeassistant',
     };
-
-    describe('instantiation', function () {
-        it('should initialize correctly', function () {
-            const api = new HttpAPI(CREDS);
-
-            expect(CREDS).to.equal(api.config);
-            expect(api.client.defaults.headers.Authorization).to.equal(
-                `Bearer ${CREDS.apiPass}`
-            );
-            expect(api.client.defaults.baseURL).to.equal(
-                `${CREDS.baseUrl}/api`
-            );
-        });
-    });
 
     describe('get', function () {
         it('should use the correct authentication header', async function () {
             const path = '/config';
             const httpApi = new HttpAPI(CREDS);
 
-            nock(CREDS.baseUrl)
-                .matchHeader('authorization', `Bearer ${CREDS.apiPass}`)
+            nock(CREDS.host)
+                .matchHeader('authorization', `Bearer ${CREDS.access_token}`)
                 .get(`/api${path}`)
                 .reply(200, true);
             const response = await httpApi.get(path);
@@ -42,7 +28,7 @@ describe('HTTP API', function () {
             const event = 'test';
             const httpApi = new HttpAPI(CREDS);
 
-            nock(CREDS.baseUrl).post(`/api/events/${event}`).reply(200, true);
+            nock(CREDS.host).post(`/api/events/${event}`).reply(200, true);
             const response = await httpApi.fireEvent(event);
 
             expect(response).to.be.true;
@@ -52,7 +38,7 @@ describe('HTTP API', function () {
             const eventData = { abc: 1234 };
             const httpApi = new HttpAPI(CREDS);
 
-            nock(CREDS.baseUrl)
+            nock(CREDS.host)
                 .post(`/api/events/${event}`, JSON.stringify(eventData))
                 .reply(200, true);
             const response = await httpApi.fireEvent(event, eventData);
@@ -65,7 +51,7 @@ describe('HTTP API', function () {
         it('should use the correct endpoint with no data', async function () {
             const httpApi = new HttpAPI(CREDS);
 
-            nock(CREDS.baseUrl).get('/api/history/period').reply(200, true);
+            nock(CREDS.host).get('/api/history/period').reply(200, true);
             const response = await httpApi.getHistory();
 
             expect(response).to.be.true;
@@ -78,7 +64,7 @@ describe('HTTP API', function () {
             };
             const httpApi = new HttpAPI(CREDS);
 
-            nock(CREDS.baseUrl)
+            nock(CREDS.host)
                 .get(
                     `/api/history/period/${data.timestamp}?filter_entity_id=${data.filterEntityId}`
                 )
@@ -97,7 +83,7 @@ describe('HTTP API', function () {
             };
             const httpApi = new HttpAPI(CREDS);
 
-            nock(CREDS.baseUrl)
+            nock(CREDS.host)
                 .get(`/api/history/period?end_time=${data.endTimestamp}`)
                 .reply(200, true);
             const response = await httpApi.getHistory(
@@ -128,7 +114,7 @@ describe('HTTP API', function () {
             ];
             const httpApi = new HttpAPI(CREDS);
 
-            nock(CREDS.baseUrl).get('/api/history/period').reply(200, arr);
+            nock(CREDS.host).get('/api/history/period').reply(200, arr);
             const response = await httpApi.getHistory(null, null, null, {
                 flatten: true,
             });
@@ -142,7 +128,7 @@ describe('HTTP API', function () {
             const str = 'Hello!';
             const httpApi = new HttpAPI(CREDS);
 
-            nock(CREDS.baseUrl)
+            nock(CREDS.host)
                 .post(`/api/template`, { template: str })
                 .reply(200, str);
             const response = await httpApi.renderTemplate(str);

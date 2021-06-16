@@ -45,11 +45,7 @@ describe('Status', function () {
     describe('set', function () {
         it('should call updateStatus with defaults and set lastStatus', function () {
             const status = new Status(fakeNode);
-            const expectedStatus = {
-                fill: 'blue',
-                shape: 'dot',
-                text: '',
-            };
+            const expectedStatus = {};
             const spy = sinon.spy(status, 'updateStatus');
             status.set();
 
@@ -67,11 +63,7 @@ describe('Status', function () {
     describe('setText', function () {
         it('status should only contain the text property', function () {
             const status = new Status(fakeNode);
-            const expectedStatus = {
-                fill: null,
-                shape: null,
-                text: 'hello',
-            };
+            const expectedStatus = { text: 'hello' };
             const spy = sinon.spy(status, 'updateStatus');
             status.setText(expectedStatus.text);
 
