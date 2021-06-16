@@ -99,9 +99,6 @@ class Api extends BaseNode {
     }
 
     async onInput({ message, parsedMessage, send, done }) {
-        const node = this.node;
-        const config = this.nodeConfig;
-
         if (!this.isConnected) {
             this.status.setFailed('No Connection');
             done('API call attempted without connection to server.');
@@ -126,7 +123,7 @@ class Api extends BaseNode {
                     ? JSON.stringify(parsedMessage.data.value)
                     : parsedMessage.data.value,
                 message,
-                node.context(),
+                this.node.context(),
                 this.homeAssistant.getStates()
             );
         }
@@ -138,7 +135,7 @@ class Api extends BaseNode {
             const path = renderTemplate(
                 parsedMessage.path.value,
                 message,
-                node.context(),
+                this.node.context(),
                 this.homeAssistant.getStates()
             ).replace(/^\/(?:api\/)?/, '');
 
