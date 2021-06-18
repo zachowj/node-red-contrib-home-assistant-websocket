@@ -28,7 +28,7 @@ import { migrate } from './migrations';
 import { createRoutes } from './routes';
 import { BaseNode, DeviceNode, EntityNode, ServerNode } from './types/nodes';
 
-module.exports = function (RED: NodeAPI) {
+export = (RED: NodeAPI): void => {
     setRED(RED);
     createRoutes();
 
