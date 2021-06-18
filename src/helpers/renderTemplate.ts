@@ -4,14 +4,14 @@
 
 import { HassEntities } from 'home-assistant-js-websocket';
 import { Context, render } from 'mustache';
-import { NodeContext as NodeRedNodeContext, NodeMessage } from 'node-red';
+import { NodeContext, NodeMessage } from 'node-red';
 import selectn from 'selectn';
 
 function parseContext(key: string) {
     const match = /^(flow|global)(\[(\w+)\])?\.(.+)/.exec(key);
     if (match) {
         const parts = {
-            type: match[1],
+            type: match[1] as 'flow' | 'global',
             store: match[3] === '' ? 'default' : match[3],
             field: match[4],
         };
@@ -30,8 +30,8 @@ class CustomContext extends Context {
     constructor(
         view: any,
         parentContext: CustomContext | undefined,
-        private entities: HassEntities,
-        private nodeRedContext?: NodeRedNodeContext
+        private nodeContext: NodeContext,
+        private entities: HassEntities
     ) {
         super(view, parentContext);
     }
@@ -40,17 +40,14 @@ class CustomContext extends Context {
         // try message first:
         let value = super.lookup(name);
         if (value === undefined) {
-            if (this.nodeRedContext) {
+            if (this.nodeContext) {
                 // try flow/global context:
                 const context = parseContext(name);
                 if (context) {
-                    const type = context.type as 'flow' | 'global';
-                    const store = context.store;
-                    const field = context.field;
-                    const target = this.nodeRedContext[type];
+                    const target = this.nodeContext[context.type];
                     if (target) {
                         try {
-                            value = target.get(field, store) as string;
+                            value = target.get(context.field, context.store);
                         } catch (err) {}
                     }
                 }
@@ -74,19 +71,14 @@ class CustomContext extends Context {
     }
 
     push(view: any) {
-        return new CustomContext(
-            view,
-            this,
-            this.entities,
-            this.nodeRedContext
-        );
+        return new CustomContext(view, this, this.nodeContext, this.entities);
     }
 }
 
 export function renderTemplate(
     str: string,
     message: NodeMessage,
-    nodeRedContext: NodeRedNodeContext,
+    nodeContext: NodeContext,
     entities: HassEntities,
     altTags = false
 ): string {
@@ -97,7 +89,7 @@ export function renderTemplate(
     ) {
         return render(
             str,
-            new CustomContext(message, undefined, entities, nodeRedContext),
+            new CustomContext(message, undefined, nodeContext, entities),
             undefined,
             altTags === true ? ['<%', '%>'] : undefined
         );
