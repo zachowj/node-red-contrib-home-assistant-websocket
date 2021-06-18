@@ -13,6 +13,7 @@
     "docs:lint": "prettier --write docs/{.vuepress/**,**}/*.{js,md,html}",
     "lint": "eslint . && prettier --check {docs,src,test,ui}/**/*.{css,js,md,html}",
     "lint:fix": "eslint . --fix && prettier --write {docs,src,test,ui}/**/*.{css,js,md,html}",
+    "prepare": "husky install",
     "prepublish": "gulp build",
     "test": "mocha -r ts-node/register test/**/*.test.js",
     "test:watch": "mocha -r ts-node/register --watch --recursive"
@@ -142,7 +143,7 @@
     }
   },
   "lint-staged": {
-    "**/*.{js.ts}": [
+    "*.{js,ts}": [
       "eslint -c .eslintrc.js --fix",
       "git add"
     ],
