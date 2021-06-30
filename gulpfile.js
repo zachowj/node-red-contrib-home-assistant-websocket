@@ -31,7 +31,7 @@ const terser = require('gulp-terser');
 const minify = require('cssnano');
 const postcss = require('gulp-postcss');
 const prefix = require('autoprefixer');
-const sass = require('gulp-sass');
+const sass = require('gulp-sass')(require('node-sass'));
 
 // Markdown-It
 const cheerio = require('gulp-cheerio');
