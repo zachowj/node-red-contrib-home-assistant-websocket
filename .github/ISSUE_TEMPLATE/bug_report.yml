@@ -41,9 +41,9 @@ body:
     attributes:
       label: Example Flow
       description: If applicable, add an example of exported json of a flow exhibiting the issue to aid in reproduction.
+      render: json
     validations:
       required: false
-    render: json
   - type: input
     attributes:
       label: This package version
@@ -54,8 +54,8 @@ body:
     attributes:
       label: "Is Node-RED running in Docker?"
       options:
-        - Yes
-        - No
+        - "Yes"
+        - "No"
         - "Home Assistant add-on"
     validations:
       required: true
