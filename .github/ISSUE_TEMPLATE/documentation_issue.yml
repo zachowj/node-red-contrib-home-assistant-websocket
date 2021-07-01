@@ -1,0 +1,13 @@
+name: Documentation bug report
+description: Report incorrect/missing information or other issues with the documentation
+body:
+  - type: input
+    attributes:
+      label: Documentation URL
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: The problem
+    validations:
+      required: true
