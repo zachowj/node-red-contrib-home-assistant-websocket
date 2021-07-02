@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.34.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.33.1...v0.34.0) (2021-06-30)
+
+
+### Features
+
+* **device:** Add area name to device selector ([c7c6f26](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/c7c6f263cb6f3748eaf25b259d5fbb2858ea630c))
+
+
+### Bug Fixes
+
+* **device:** Only load the latest device data ([f88d21f](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f88d21f3d5e4d363de474b6526a8ed59b9d2dfc4))
+
+
+### Documentation
+
+* **cookbook:** Update using date and time to show examples for the time node ([a07ad4d](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a07ad4dbb58332c2b9c6e35382a65b6295b014b5))
+
 ### [0.33.1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.33.0...v0.33.1) (2021-05-30)
 
 
