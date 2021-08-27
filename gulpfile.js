@@ -187,6 +187,11 @@ const buildHelp = lazypipe()
 
             return item;
         });
+        $('docs-only').remove();
+        $('info-panel-only').each((i, item) => {
+            item.tagName = 'div';
+            return item;
+        });
 
         // Remove H1 title
         $('h1').remove();
