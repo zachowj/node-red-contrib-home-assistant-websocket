@@ -42,7 +42,7 @@ const ha = (function () {
     const betaWarning = (id) => {
         const alert = $.parseHTML(`
             <div class="ui-state-error ha-beta-box">
-                Beta version: Config should be stable and hopefully not to many bugs.
+                Beta version: Config should be stable and hopefully not too many bugs.
                 <br />
                 Found an issue? Post it in
                 <a
