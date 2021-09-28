@@ -79,7 +79,7 @@ RED.nodes.registerType('ha-tag', {
             tags.forEach((tag) => {
                 $('<option>')
                     .attr({ value: tag.id, selected: tag.id === data })
-                    .text(tag.name)
+                    .text(tag.name || tag.id)
                     .appendTo($select);
             });
         };
