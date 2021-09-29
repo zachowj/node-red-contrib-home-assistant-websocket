@@ -36,7 +36,7 @@
     }
   },
   "dependencies": {
-    "axios": "0.21.1",
+    "axios": "0.21.2",
     "bonjour": "3.5.0",
     "cron": "1.8.2",
     "debug": "4.3.2",
