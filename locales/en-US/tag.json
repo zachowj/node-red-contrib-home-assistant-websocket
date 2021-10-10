@@ -1,0 +1,15 @@
+{
+  "ha-tag": {
+    "errors": {
+      "no_tags_found": "No tags found in Home Assistant"
+    },
+    "label": {
+      "all_tags": "ALL TAGS",
+      "device_id": "Device ID",
+      "devices": "Devices",
+      "tag": "Tag",
+      "tags": "Tags",
+      "update_tag_list": "update tag list"
+    }
+  }
+}

@@ -1,23 +1,30 @@
 <input type="hidden" id="node-input-version" />
 
 <div class="form-row">
-    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-    <input type="text" id="node-input-name" placeholder="Name" />
+    <label for="node-input-name" data-i18n="home-assistant.label.name">
+        <i class="fa fa-tag"></i>
+    </label>
+    <input
+        type="text"
+        id="node-input-name"
+        data-i18n="[placeholder]home-assistant.label.name"
+    />
 </div>
 
 <div class="form-row">
-    <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
+    <label for="node-input-server" data-i18n="home-assistant.label.server">
+        <i class="fa fa-server"></i>
+    </label>
     <input type="text" id="node-input-server" />
 </div>
 
-<div id="no-tags-found" class="ui-state-error ha-alert-box">
-    <i class="fa fa-exclamation-triangle"></i> No tags found in Home Assistant
+<div
+    id="no-tags-found"
+    class="ui-state-error ha-alert-box"
+    data-i18n="ha-tag.errors.no_tags_found"
+>
+    <i class="fa fa-exclamation-triangle"></i>
 </div>
-
-<button id="update-tag-list" class="red-ui-button red-ui-button-small">
-    <i class="fa fa-refresh"></i>
-    Update Tag List
-</button>
 
 <div class="form-row"><ol id="tags"></ol></div>
 

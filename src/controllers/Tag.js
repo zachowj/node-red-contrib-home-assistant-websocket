@@ -45,7 +45,10 @@ class Tag extends EventsHaNode {
     }
 
     isValidTag(tag) {
-        return this.nodeConfig.tags.includes(tag);
+        return (
+            this.nodeConfig.tags.includes('__ALL_TAGS__') ||
+            this.nodeConfig.tags.includes(tag)
+        );
     }
 
     isValidDevice(deviceId) {

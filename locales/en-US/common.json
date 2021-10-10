@@ -16,7 +16,9 @@
       }
     },
     "label": {
-      "output_properties": "Output Properties"
+      "output_properties": "Output Properties",
+      "server": "Server",
+      "name": "Name"
     }
   }
 }
