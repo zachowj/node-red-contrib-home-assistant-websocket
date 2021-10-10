@@ -31,7 +31,7 @@ Mustache templates are also accepted in the data field when their type is set to
 - [Mustache Templates](./mustache-templates.md)
 
 ::: tip
-We recommend using the JSONata expression, `J: Expression`, for the data field as it has several advantages over JSON.
+It's recommend using the JSONata expression, `J: Expression`, for the data field as it has several advantages over JSON.
 
 - Handles quotes based on the type of variable
 - Allows the insertion of more complex variables such as arrays and object
