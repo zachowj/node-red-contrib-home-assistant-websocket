@@ -1,7 +1,7 @@
 /* global RED: false, $: false, exposeNode: false, ha: false, haServer: false, nodeVersion: false */
 RED.nodes.registerType('ha-tag', {
     category: 'home_assistant',
-    color: ha.nodeColors.beta,
+    color: ha.nodeColors.haBlue,
     outputs: 1,
     icon: 'font-awesome/fa-tag',
     paletteLabel: 'tag',
@@ -126,8 +126,6 @@ RED.nodes.registerType('ha-tag', {
             updateTagList(data);
         });
         exposeNode.init(this);
-
-        $('#dialog-form').prepend(ha.betaWarning(348));
 
         $('#update-tag-list').on('click', () => {
             haServer.getJSON(updateTagList, 'tags', {
