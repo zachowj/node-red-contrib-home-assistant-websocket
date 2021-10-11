@@ -19,18 +19,19 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10, 12, 14]
+        node-version: [12, 14, 16]
 
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
+          cache: npm
       - name: npm install
         run: npm ci
-      - name: Run Lint
-        uses: stefanoeb/eslint-action@1.0.0
+      - name: npm lint
+        run: npm run lint
       - name: npm test
         run: npm test
         env:
@@ -50,9 +51,10 @@ jobs:
           changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"docs","section":"Documentation","hidden":false}]'
           bump-minor-pre-major: true
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
-          node-version: 12
+          node-version: 14
+          cache: npm
       - run: npm ci
       - id: publish
         uses: JS-DevTools/npm-publish@v1

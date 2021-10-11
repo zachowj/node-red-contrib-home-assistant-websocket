@@ -19,20 +19,10 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v2
         with:
-          node-version: 12
-
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
+          node-version: 14
+          cache: npm
       - run: npm ci
-
       - run: npm run docs:build
-
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
