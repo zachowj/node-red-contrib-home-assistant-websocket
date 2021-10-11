@@ -7,18 +7,11 @@
             </label>
             <span v-if="replaceServerId">
                 with
-                <input
-                    type="text"
-                    v-model="serverId"
-                    placeholder="xxxxxxxx.xxxxx"
-                />
+                <input type="text" v-model="serverId" placeholder="xxxxxxxx.xxxxx" />
             </span>
         </p>
 
-        <textarea
-            v-model="before"
-            placeholder="paste exported Node-RED flow here"
-        ></textarea>
+        <textarea v-model="before" placeholder="paste exported Node-RED flow here"></textarea>
 
         <button v-on:click="scrub">Scrub</button>
         <transition name="fade">
@@ -110,14 +103,12 @@ export default {
         },
     },
     mounted() {
-        console.log(localStorage.serverId);
         if (localStorage.serverId) {
             this.serverId = localStorage.serverId;
         }
     },
     watch: {
         serverId(newId) {
-            console.log(newId);
             localStorage.serverId = newId;
         },
     },
