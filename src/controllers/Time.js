@@ -28,6 +28,13 @@ const nodeOptions = {
         offsetUnits: {},
         randomOffset: {},
         repeatDaily: {},
+        sunday: {},
+        monday: {},
+        tuesday: {},
+        wednesday: {},
+        thursday: {},
+        friday: {},
+        saturday: {},
         payload: {},
         payloadType: {},
     },
@@ -113,7 +120,14 @@ class Time extends EventsHaNode {
 
         // Create repeating crontab string
         if (this.nodeConfig.repeatDaily) {
-            crontab = `${crontab.getSeconds()} ${crontab.getMinutes()} ${crontab.getHours()} * * *`;
+            const days = this.getDays();
+            if (!days) {
+                this.status.setFailed(
+                    this.RED._('ha-time.status.no_days_selected')
+                );
+                return;
+            }
+            crontab = `${crontab.getSeconds()} ${crontab.getMinutes()} ${crontab.getHours()} * * ${days}`;
         } else if (crontab.getTime() < Date.now()) {
             this.debugToClient(`date in the past`);
             this.status.setFailed(this.RED._('ha-time.status.in_the_past'));
@@ -298,6 +312,27 @@ class Time extends EventsHaNode {
 
     getEntity() {
         return this.homeAssistant.getStates(this.nodeConfig.entityId);
+    }
+
+    getDays() {
+        const days = {
+            sunday: 0,
+            monday: 1,
+            tuesday: 2,
+            wednesday: 3,
+            thursday: 4,
+            friday: 5,
+            saturday: 6,
+        };
+
+        const selectedDays = Object.keys(days).reduce((acc, day) => {
+            if (this.nodeConfig[day]) {
+                acc.push(days[day]);
+            }
+            return acc;
+        }, []);
+
+        return selectedDays.length === 7 ? '*' : selectedDays.join(',');
     }
 }
 

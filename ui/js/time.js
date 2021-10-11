@@ -1,7 +1,7 @@
 /* global RED: false, $: false, exposeNode: false, ha: false, haServer:false, nodeVersion: false, haData: false */
 RED.nodes.registerType('ha-time', {
     category: 'home_assistant',
-    color: ha.nodeColors.beta,
+    color: ha.nodeColors.haBlue,
     outputs: 1,
     icon: 'font-awesome/fa-clock-o',
     paletteLabel: 'time',
@@ -34,6 +34,13 @@ RED.nodes.registerType('ha-time', {
         repeatDaily: { value: false },
         payload: { value: '$entity().state' },
         payloadType: { value: 'jsonata' },
+        sunday: { value: true },
+        monday: { value: true },
+        tuesday: { value: true },
+        wednesday: { value: true },
+        thursday: { value: true },
+        friday: { value: true },
+        saturday: { value: true },
         debugenabled: { value: false },
     },
     oneditprepare: function () {
@@ -55,7 +62,6 @@ RED.nodes.registerType('ha-time', {
         });
 
         exposeNode.init(this);
-        $('#dialog-form').prepend(ha.betaWarning(380));
 
         $('#node-input-offset').typedInput({
             types: ['num', 'jsonata'],
@@ -66,6 +72,12 @@ RED.nodes.registerType('ha-time', {
             types: ['str', 'num', 'bool', 'jsonata', 'date'],
             typeField: '#node-input-payloadType',
         });
+
+        $('#node-input-repeatDaily')
+            .on('change', function () {
+                $('#days-of-the-week').toggle($(this).is(':checked'));
+            })
+            .trigger('change');
     },
     oneditsave: function () {
         this.haConfig = exposeNode.getValues();
