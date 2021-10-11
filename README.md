@@ -116,7 +116,7 @@ Outputs when one of the configured entities enter or leaves one of the defined z
 
 [List of all contributors](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/graphs/contributors)
 
-[buildstatus-shield]: https://img.shields.io/github/workflow/status/zachowj/node-red-contrib-home-assistant-websocket/CI/dev?label=dev%20build&style=for-the-badge
+[buildstatus-shield]: https://img.shields.io/github/workflow/status/zachowj/node-red-contrib-home-assistant-websocket/CI/main?label=main%20build&style=for-the-badge
 [buildstatus-link]: https://github.com/zachowj/node-red-contrib-home-assistant-websocket/actions
 [license-shield]: https://img.shields.io/github/license/zachowj/node-red-contrib-home-assistant-websocket.svg?style=for-the-badge
 [release-link]: https://github.com/zachowj/node-red-contrib-home-assistant-websocket/releases
