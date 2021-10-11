@@ -44,9 +44,9 @@ describe('Migrations - Tag Node', function () {
     });
     describe('Version 1', function () {
         it('should update version 0 to version 1', function () {
-            const migrate = migrations.find((m) => m.version === 0);
+            const migrate = migrations.find((m) => m.version === 1);
             const migratedSchema = migrate.up(VERSION_UNDEFINED);
-            expect(migratedSchema).to.eql(VERSION_0);
+            expect(migratedSchema).to.eql(VERSION_1);
         });
     });
     it('should update an undefined version to current version', function () {
