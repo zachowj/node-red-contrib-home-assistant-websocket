@@ -1,4 +1,4 @@
-/* global RED: false, $: false, exposeNode: false, ha: false, haServer: false, nodeVersion: false */
+/* global RED: false, $: false, exposeNode: false, ha: false, haServer: false, nodeVersion: false, haOutputs: false */
 RED.nodes.registerType('ha-tag', {
     category: 'home_assistant',
     color: ha.nodeColors.haBlue,
@@ -29,6 +29,23 @@ RED.nodes.registerType('ha-tag', {
         },
         devices: {
             value: [],
+        },
+        outputProperties: {
+            value: [
+                {
+                    property: 'payload',
+                    propertyType: 'msg',
+                    value: '',
+                    valueType: 'eventData',
+                },
+                {
+                    property: 'topic',
+                    propertyType: 'msg',
+                    value: '',
+                    valueType: 'triggerId',
+                },
+            ],
+            validate: haOutputs.validate,
         },
     },
     oneditprepare: function () {
@@ -151,6 +168,10 @@ RED.nodes.registerType('ha-tag', {
             },
         });
         $devices.editableList('addItems', this.devices);
+
+        haOutputs.createOutputs(this.outputProperties, {
+            extraTypes: ['eventData', 'tagId'],
+        });
     },
     oneditsave: function () {
         const tagList = $('#tags').editableList('items');
@@ -169,6 +190,7 @@ RED.nodes.registerType('ha-tag', {
         });
         this.tags = Array.from(tags);
         this.devices = Array.from(devices);
+        this.outputProperties = haOutputs.getOutputs();
         this.haConfig = exposeNode.getValues();
     },
 });

@@ -18,13 +18,13 @@ An array of device ids to check when a configured tag is scanned.
 
 ## Outputs
 
-### topic
+Value types:
 
-- Type: `string`
+- `event data`: full event object
+- `tag id`: tag id of the tag that was scanned.
+- `config`: config properties of the node
 
-The tag id of the tag that was scanned.
-
-### payload
+### event object
 
 - Type: `object`
 

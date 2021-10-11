@@ -30,6 +30,7 @@ const haOutputs = (function ($) {
             hasValue: false,
         },
         sentData: { value: 'data', label: 'sent data', hasValue: false },
+        tagId: { value: 'triggerId', label: 'tag id', hasValue: false },
         timeSinceChangedMs: {
             value: 'timeSinceChangedMs',
             label: 'timeSinceChangedMs',

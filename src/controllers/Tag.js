@@ -7,6 +7,7 @@ const nodeOptions = {
         entities: {},
         tags: {},
         devices: {},
+        outputProperties: {},
     },
 };
 
@@ -29,16 +30,24 @@ class Tag extends EventsHaNode {
         if (!this.isValidTag(tagId) || !this.isValidDevice(deviceId)) return;
 
         const tagName = this.getTagName(tagId);
-        const payload = {
+        const eventData = {
             tag_name: tagName,
             user_id: evt.context.user_id,
             ...event,
         };
 
-        const msg = {
-            topic: tagId,
-            payload,
-        };
+        const msg = {};
+        try {
+            this.setCustomOutputs(this.nodeConfig.outputProperties, msg, {
+                config: this.nodeConfig,
+                eventData,
+                triggerId: tagId,
+            });
+        } catch (e) {
+            this.status.setFailed('error');
+            this.node.error(e.message);
+            return;
+        }
 
         this.status.setSuccess(`${tagName || tagId} scanned`);
         this.send(msg);
