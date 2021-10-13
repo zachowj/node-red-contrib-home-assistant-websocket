@@ -1,4 +1,4 @@
-/* global RED: false, $: false, exposeNode: false, ha: false, haServer:false, nodeVersion: false, haData: false */
+/* global RED: false, $: false, exposeNode: false, ha: false, haServer:false, nodeVersion: false, haData: false, haOutputs: false */
 RED.nodes.registerType('ha-time', {
     category: 'home_assistant',
     color: ha.nodeColors.haBlue,
@@ -32,8 +32,29 @@ RED.nodes.registerType('ha-time', {
         offsetUnits: { value: 'minutes' },
         randomOffset: { value: false },
         repeatDaily: { value: false },
-        payload: { value: '$entity().state' },
-        payloadType: { value: 'jsonata' },
+        outputProperties: {
+            value: [
+                {
+                    property: 'payload',
+                    propertyType: 'msg',
+                    value: '',
+                    valueType: 'entityState',
+                },
+                {
+                    property: 'data',
+                    propertyType: 'msg',
+                    value: '',
+                    valueType: 'entity',
+                },
+                {
+                    property: 'topic',
+                    propertyType: 'msg',
+                    value: '',
+                    valueType: 'triggerId',
+                },
+            ],
+            validate: haOutputs.validate,
+        },
         sunday: { value: true },
         monday: { value: true },
         tuesday: { value: true },
@@ -42,6 +63,9 @@ RED.nodes.registerType('ha-time', {
         friday: { value: true },
         saturday: { value: true },
         debugenabled: { value: false },
+        // deprecated but still needed for imports of old flows
+        payload: { value: undefined },
+        payloadType: { value: undefined },
     },
     oneditprepare: function () {
         nodeVersion.check(this);
@@ -78,8 +102,13 @@ RED.nodes.registerType('ha-time', {
                 $('#days-of-the-week').toggle($(this).is(':checked'));
             })
             .trigger('change');
+
+        haOutputs.createOutputs(this.outputProperties, {
+            extraTypes: ['entityState', 'entityId', 'entity'],
+        });
     },
     oneditsave: function () {
         this.haConfig = exposeNode.getValues();
+        this.outputProperties = haOutputs.getOutputs();
     },
 });

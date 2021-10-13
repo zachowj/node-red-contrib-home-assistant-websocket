@@ -8,14 +8,8 @@ const {
     parseTime,
     getEntitiesFromJsonata,
 } = require('../helpers/utils');
-const {
-    TYPEDINPUT_BOOL,
-    TYPEDINPUT_DATE,
-    TYPEDINPUT_JSONATA,
-    TYPEDINPUT_NUM,
-    TYPEDINPUT_STR,
-} = require('../const');
 const { STATUS_COLOR_GREEN } = require('../helpers/status');
+const { TYPEDINPUT_JSONATA } = require('../const');
 
 const DEFAULT_PROPERTY = 'state';
 
@@ -35,8 +29,7 @@ const nodeOptions = {
         thursday: {},
         friday: {},
         saturday: {},
-        payload: {},
-        payloadType: {},
+        outputProperties: {},
     },
 };
 
@@ -140,17 +133,23 @@ class Time extends EventsHaNode {
         this.status.setText(this.RED._('ha-time.status.next_at', { nextTime }));
     }
 
-    onInput({ msg, send, done }) {
+    onInput({ send, done }) {
         const now = new Date();
         const entity = this.getEntity();
-        msg = {
-            topic: this.nodeConfig.entityId,
-            payload: this.getPayloadValue(
-                this.nodeConfig.payloadType,
-                this.nodeConfig.payload
-            ),
-            data: entity,
-        };
+
+        const msg = {};
+        try {
+            this.setCustomOutputs(this.nodeConfig.outputProperties, msg, {
+                config: this.nodeConfig,
+                entity,
+                entityState: entity.state,
+                triggerId: entity.entity_id,
+            });
+        } catch (e) {
+            this.status.setFailed('error');
+            this.node.error(e.message);
+            return;
+        }
 
         if (this.nodeConfig.repeatDaily) {
             const sentTime = this.formatDate(now);
@@ -273,41 +272,6 @@ class Time extends EventsHaNode {
         }
 
         return offset * Math.random();
-    }
-
-    getPayloadValue(type, val) {
-        let value = val;
-        switch (type) {
-            case TYPEDINPUT_BOOL:
-                value = val === 'true';
-                break;
-            case TYPEDINPUT_DATE:
-                value = Date.now();
-                break;
-            case TYPEDINPUT_JSONATA: {
-                if (!val.length) {
-                    value = '';
-                    break;
-                }
-                try {
-                    value = this.evaluateJSONata(val, {
-                        entity: this.getEntity(),
-                    });
-                } catch (e) {
-                    this.node.error(
-                        this.RED._('ha-time.errors.invalid_jsonata_payload')
-                    );
-                    value = this.getEntity().state;
-                }
-                break;
-            }
-            case TYPEDINPUT_NUM:
-            case TYPEDINPUT_STR:
-            default:
-                value = this.getCastValue(type, val);
-                break;
-        }
-        return value;
     }
 
     getEntity() {

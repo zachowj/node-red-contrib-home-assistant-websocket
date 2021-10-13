@@ -26,6 +26,43 @@ const migrations = [
             return newSchema;
         },
     },
+    {
+        version: 2,
+        up: (schema) => {
+            const isDefaultPayload =
+                schema.payloadType === 'jsonata' &&
+                schema.payload === '$entity().state';
+            const newSchema = {
+                ...schema,
+                version: 2,
+                outputProperties: [
+                    {
+                        property: 'payload',
+                        propertyType: 'msg',
+                        value: isDefaultPayload ? '' : schema.payload,
+                        valueType: isDefaultPayload
+                            ? 'entityState'
+                            : schema.payloadType,
+                    },
+                    {
+                        property: 'data',
+                        propertyType: 'msg',
+                        value: '',
+                        valueType: 'entity',
+                    },
+                    {
+                        property: 'topic',
+                        propertyType: 'msg',
+                        value: '',
+                        valueType: 'triggerId',
+                    },
+                ],
+                payload: undefined,
+                payloadType: undefined,
+            };
+            return newSchema;
+        },
+    },
 ];
 
 module.exports = migrations;

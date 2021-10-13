@@ -1,3 +1,4 @@
+const merge = require('lodash.merge');
 const { expect } = require('chai');
 
 const migrations = require('../../src/migrations/time');
@@ -34,6 +35,32 @@ const VERSION_1 = {
     friday: true,
     saturday: true,
 };
+const VERSION_2 = {
+    ...VERSION_1,
+    version: 2,
+    payload: undefined,
+    payloadType: undefined,
+    outputProperties: [
+        {
+            property: 'payload',
+            propertyType: 'msg',
+            value: '',
+            valueType: 'entityState',
+        },
+        {
+            property: 'data',
+            propertyType: 'msg',
+            value: '',
+            valueType: 'entity',
+        },
+        {
+            property: 'topic',
+            propertyType: 'msg',
+            value: '',
+            valueType: 'triggerId',
+        },
+    ],
+};
 
 describe('Migrations - Time Node', function () {
     describe('Version 0', function () {
@@ -50,8 +77,55 @@ describe('Migrations - Time Node', function () {
             expect(migratedSchema).to.eql(VERSION_1);
         });
     });
+    describe('Version 2', function () {
+        it('should update version 1 to version 2', function () {
+            const migrate = migrations.find((m) => m.version === 2);
+            const migratedSchema = migrate.up(VERSION_1);
+            expect(migratedSchema).to.eql(VERSION_2);
+        });
+        it('payload value should update to same value in outputProperties', function () {
+            const migrate = migrations.find((m) => m.version === 2);
+            const schema = {
+                ...VERSION_1,
+                payload: 'abc',
+                payloadType: 'jsonata',
+            };
+            const expectedSchema = merge({}, VERSION_2, {
+                outputProperties: [
+                    {
+                        property: 'payload',
+                        propertyType: 'msg',
+                        value: 'abc',
+                        valueType: 'jsonata',
+                    },
+                ],
+            });
+            const migratedSchema = migrate.up(schema);
+            expect(migratedSchema).to.eql(expectedSchema);
+        });
+        it('payload number type should update to number type in outputProperties', function () {
+            const migrate = migrations.find((m) => m.version === 2);
+            const schema = {
+                ...VERSION_1,
+                payload: '123',
+                payloadType: 'num',
+            };
+            const expectedSchema = merge({}, VERSION_2, {
+                outputProperties: [
+                    {
+                        property: 'payload',
+                        propertyType: 'msg',
+                        value: '123',
+                        valueType: 'num',
+                    },
+                ],
+            });
+            const migratedSchema = migrate.up(schema);
+            expect(migratedSchema).to.eql(expectedSchema);
+        });
+    });
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_1);
+        expect(migratedSchema).to.eql(VERSION_2);
     });
 });
