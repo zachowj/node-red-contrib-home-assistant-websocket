@@ -266,6 +266,9 @@ RED.nodes.registerType('api-call-service', {
                     $entityIdField.val(val);
                     return acc;
                 }
+                if (val === undefined) {
+                    return acc;
+                }
 
                 if (val[0] === '[' && val[val.length - 1] === ']') {
                     try {
