@@ -12,7 +12,9 @@
       "hours": "hours"
     },
     "error": {
-      "invalid_device_config": "Invalid config for device trigger"
+      "invalid_device_config": "Invalid config for device trigger",
+      "unknown_field_type": "Unknown field type: __type__",
+      "report": "Report"
     },
     "ui": {
       "no_area": "No Area"

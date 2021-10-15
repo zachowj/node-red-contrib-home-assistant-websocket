@@ -67,9 +67,9 @@ const ha = (function () {
         return alert;
     };
 
-    const i18n = (id) => {
+    const i18n = (id, args) => {
         const namespace = 'node-red-contrib-home-assistant-websocket/all';
-        let text = RED._(`${namespace}:${id}`);
+        let text = RED._(`${namespace}:${id}`, args);
         if (text.indexOf('\n') !== -1) {
             text = text
                 .split('\n')

@@ -95,6 +95,12 @@ const haDeviceUI = (function ($) {
                 case 'string':
                     element = createDeviceString(field, selectedCapabilities);
                     break;
+                default: {
+                    const text = ha.i18n('ha-device.error.unknown_field_type', {
+                        type: field.type,
+                    });
+                    element = createDeviceError(text, { type: field.type });
+                }
             }
             if (element) elements += element;
         });
@@ -161,6 +167,13 @@ const haDeviceUI = (function ($) {
     }
 
     function createOption(opts) {}
+
+    function createDeviceError(text, opts = {}) {
+        const html = `<label class="error"><i class="fa fa-exclamation-triangle"></i> Error</label>${text} -- <a href="https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/new?title=[Device Node] Unknown extra type: ${
+            opts.type
+        }" target="_blank"> ${ha.i18n('ha-device.error.report')}</a>`;
+        return wrapWithRow(html, ['deviceExtra']);
+    }
 
     function wrapWithRow(ele, cls = []) {
         return `<div class="form-row ${cls.join(' ')}">${ele}</div>`;
