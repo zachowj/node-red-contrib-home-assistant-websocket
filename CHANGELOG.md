@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.35.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.34.0...v0.35.0) (2021-10-13)
+
+
+### Features
+
+* **tag:** Add ability to listen for all tags ([eac5921](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/eac5921e070c2e26ef950837fffd6c7ddbdb96fa))
+* **tag:** Add output properties ([421b77c](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/421b77ca62f0ea4302c2890c2b54a833b48e4e32))
+* **tag:** Remove beta status from tag node ([f5f8a82](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f5f8a828d7f20fd5c097f165096737030291361c))
+* **time:** Add custom outputs ([5d60ad6](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/5d60ad6d5df4877ed01260a7880dfc4a38eb6641))
+* **time:** Add the ability to select which days of week to trigger on ([73ed3b0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/73ed3b05222f4c3487a4666d6cbb175ab63d9cd4))
+
+
+### Bug Fixes
+
+* **call-service:** Check for example before trying to load it ([bd54acf](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/bd54acfcd645c497663c968f5d28ba66c39f1b78))
+
+
+### Documentation
+
+* **call-service:** Wording change ([5feff91](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/5feff91106bc8c87b4b08a24d7f43fcdd5737469))
+* **README:** Change build branch to main ([645317c](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/645317c688840bc15dc9c543d8a0fbe92437e74e))
+* **Scrubber:** Remove console logs ([8adf96e](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/8adf96ecaae17670c9ba2bb1958b0b372108f5fa))
+
 ## [0.34.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.33.1...v0.34.0) (2021-09-30)
 
 
