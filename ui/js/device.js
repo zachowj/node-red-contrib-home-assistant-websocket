@@ -79,11 +79,12 @@ const haDevice = (function (action, trigger) {
 })(haDeviceAction, haDeviceTrigger);
 
 const haDeviceUI = (function ($) {
-    function createDeviceExtraFields(fields = [], capabilities) {
+    function createDeviceExtraFields(fields = [], capabilities = []) {
         let elements = '';
         fields.forEach((field) => {
-            const selectedCapabilities =
-                capabilities && capabilities.find((i) => i.name === field.name);
+            const selectedCapabilities = capabilities.find(
+                (i) => i.name === field.name
+            );
             let element;
             switch (field.type) {
                 case 'float':
@@ -92,6 +93,10 @@ const haDeviceUI = (function ($) {
                 case 'positive_time_period_dict':
                     element = createDeviceDuration(field, selectedCapabilities);
                     break;
+                case 'select': {
+                    element = createDeviceSelect(field, selectedCapabilities);
+                    break;
+                }
                 case 'string':
                     element = createDeviceString(field, selectedCapabilities);
                     break;
@@ -156,6 +161,23 @@ const haDeviceUI = (function ($) {
         return wrapWithRow(html, ['deviceExtra']);
     }
 
+    function createDeviceSelect(field, store = {}) {
+        const id = `deviceExtra-${field.name}`;
+        const options = field.options.reduce((acc, [val, str]) => {
+            const selected = store.value === val ? 'selected' : '';
+            acc.push(`<option value="${val}" ${selected}>${str}</option>`);
+            return acc;
+        }, []);
+
+        const html = `
+        <label for="${id}">${field.name}</label>
+        <select id="${id}" style="width: 70%">
+        ${options.join('')}
+        </select>        
+        `;
+        return wrapWithRow(html, ['deviceExtra']);
+    }
+
     function createDeviceString(field, store) {
         const id = `deviceExtra-${field.name}`;
         const value = store ? store.value : '';
@@ -165,8 +187,6 @@ const haDeviceUI = (function ($) {
         `;
         return wrapWithRow(html, ['deviceExtra']);
     }
-
-    function createOption(opts) {}
 
     function createDeviceError(text, opts = {}) {
         const html = `<label class="error"><i class="fa fa-exclamation-triangle"></i> Error</label>${text} -- <a href="https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/new?title=[Device Node] Unknown extra type: ${
@@ -198,6 +218,15 @@ const haDeviceUI = (function ($) {
                         acc.push(cap);
                     }
                     break;
+                case 'select':
+                    if (value && value.length) {
+                        acc.push({
+                            name: item.name,
+                            type: item.type,
+                            value,
+                        });
+                    }
+                    break;
                 case 'string':
                     if (value.length) {
                         acc.push({
@@ -217,7 +246,6 @@ const haDeviceUI = (function ($) {
 
     return {
         createDeviceExtraFields,
-        createOption,
         getCapabilities,
     };
 })(jQuery);
