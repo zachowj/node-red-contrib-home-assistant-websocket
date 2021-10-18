@@ -17,9 +17,13 @@ class DeviceAction extends EventsHaNode {
     }
 
     async onInput({ message, send, done }) {
+        const capabilities = this.nodeConfig.capabilities.reduce((acc, cap) => {
+            acc[cap.name] = cap.value;
+            return acc;
+        }, {});
         const payload = {
             type: 'nodered/device_action',
-            action: this.nodeConfig.event,
+            action: { ...this.nodeConfig.event, ...capabilities },
         };
         await this.homeAssistant.send({ ...payload });
 
