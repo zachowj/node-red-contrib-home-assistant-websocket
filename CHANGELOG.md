@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.36.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.35.0...v0.36.0) (2021-10-18)
+
+
+### Features
+
+* **device:** Add select type for capabilities ([ea3339a](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ea3339ab11a2a9a92b04b0bb783233fe27707c5b))
+
+
+### Bug Fixes
+
+* **device:** Send capabilities along with other action values ([ef8e1ae](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ef8e1aed7abda37ed3747931785e9952963839a1))
+
 ## [0.35.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.34.0...v0.35.0) (2021-10-13)
 
 
