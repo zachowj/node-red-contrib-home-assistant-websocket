@@ -100,6 +100,10 @@ Creating a separate Home Assistant user for Node-RED and using their access toke
 ability to track which entities were changed by Node-RED.
 :::
 
+::: tip
+Once you've configured the WebSocket connection using the `Events: all` node, this node should be removed for optimal NodeRed performance. Instead, prefer using the other node types provided by this package (`Events: state`, `Trigger: state` etc), or add an event type filter to the `Events: all` node to avoid overloading the websocket message queue.
+:::
+
 ## Migrating
 
 Coming from a different version, e.g. [node-red-contrib-home-assistant](https://github.com/AYapejian/node-red-contrib-home-assistant) or [node-red-contrib-home-assistant-llat](https://github.com/Spartan-II-117/node-red-contrib-home-assistant-llat)?
