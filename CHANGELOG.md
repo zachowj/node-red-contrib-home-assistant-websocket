@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.36.1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.36.0...v0.36.1) (2021-10-22)
+
+
+### Bug Fixes
+
+* Close old connection when config changes ([180e916](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/180e9167477b119a175ea4e9ca61436ff59fec18))
+* Use correct hostname in logs ([180e916](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/180e9167477b119a175ea4e9ca61436ff59fec18)), closes [#447](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/447) [#430](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/430)
+
+
+### Documentation
+
+* Recommend removing Events: all node. ([#490](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/490)) ([5cf7af0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/5cf7af0491f41bb15862505a1eda39b8d447eaa6))
+
 ## [0.36.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.35.0...v0.36.0) (2021-10-18)
 
 
