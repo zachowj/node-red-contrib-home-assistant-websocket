@@ -3,6 +3,7 @@ const merge = require('lodash.merge');
 const Comms = require('../helpers/Comms').default;
 const { createHomeAssistantClient } = require('../homeAssistant');
 const { INTEGRATION_NOT_LOADED } = require('../const');
+const { SUPERVISOR_URL } = require('../homeAssistant');
 const { toCamelCase } = require('../helpers/utils');
 
 const nodeDefaults = {
@@ -29,6 +30,10 @@ class ConfigServer {
         node.on('close', this.onClose.bind(this));
     }
 
+    get hostname() {
+        return this.config.addon ? SUPERVISOR_URL : this.node.credentials.host;
+    }
+
     async init() {
         try {
             this.homeAssistant = createHomeAssistantClient(
@@ -41,9 +46,7 @@ class ConfigServer {
 
             await this.homeAssistant.websocket.connect();
         } catch (e) {
-            this.node.error(
-                this.RED._(e.message, { base_url: this.node.credentials.host })
-            );
+            this.node.error(this.RED._(e.message, { base_url: this.hostname }));
         }
     }
 
@@ -93,7 +96,7 @@ class ConfigServer {
     onHaEventsOpen() {
         this.setOnContext('isConnected', true);
 
-        this.node.log(`Connected to ${this.node.credentials.host}`);
+        this.node.log(`Connected to ${this.hostname}`);
     }
 
     onHaStateChanged(changedEntity) {
@@ -117,12 +120,12 @@ class ConfigServer {
     onHaEventsConnecting() {
         this.setOnContext('isConnected', false);
         this.setOnContext('isRunning', false);
-        this.node.log(`Connecting to ${this.node.credentials.host}`);
+        this.node.log(`Connecting to ${this.hostname}`);
     }
 
     onHaEventsClose() {
         if (this.getFromContext('isConnected')) {
-            this.node.log(`Connection closed to ${this.node.credentials.host}`);
+            this.node.log(`Connection closed to ${this.hostname}`);
         }
         this.setOnContext('isConnected', false);
         this.setOnContext('isRunning', false);
@@ -142,12 +145,8 @@ class ConfigServer {
     // Close WebSocket client on redeploy or node-RED shutdown
     onClose(removed, done) {
         if (this.homeAssistant) {
-            this.node.log(
-                `Closing connection to ${this.node.credentials.host}`
-            );
-            if (removed) {
-                this.homeAssistant.close();
-            }
+            this.node.log(`Closing connection to ${this.hostname}`);
+            this.homeAssistant.close();
         }
         done();
     }
