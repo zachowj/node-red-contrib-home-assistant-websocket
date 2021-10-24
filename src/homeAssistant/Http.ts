@@ -119,7 +119,9 @@ export default class Http {
             throw err;
         });
 
-        return response.data ?? '';
+        return responseType === 'json'
+            ? response.data ?? ''
+            : (response.data as any);
     }
 
     async get<T>(
@@ -138,6 +140,8 @@ export default class Http {
                 throw err;
             });
 
-        return response.data ?? '';
+        return responseType === 'json'
+            ? response.data ?? ''
+            : (response.data as any);
     }
 }
