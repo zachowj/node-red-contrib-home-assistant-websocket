@@ -1,37 +1,63 @@
 <input type="hidden" id="node-input-version" />
+<input type="hidden" id="node-input-inputs" />
+<input type="hidden" id="node-input-outputs" />
 
 <!-- Name -->
 <div class="form-row">
-    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-    <input type="text" id="node-input-name" placeholder="Name" />
-    <input type="hidden" id="node-input-outputs" />
+    <label for="node-input-name" data-i18n="home-assistant.label.label"></label>
+    <input type="text" id="node-input-name" />
 </div>
 
 <!-- Server -->
 <div class="form-row">
-    <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
+    <label
+        for="node-input-server"
+        data-i18n="home-assistant.label.server"
+    ></label>
     <input type="text" id="node-input-server" />
 </div>
 
 <!-- Entity ID Filter and Filter Type -->
 <div class="form-row">
-    <label for="node-input-entityid"><i class="fa fa-tag"></i> Entity ID</label>
+    <label
+        for="node-input-entityid"
+        data-i18n="home-assistant.label.entity_id"
+    ></label>
     <input type="text" id="node-input-entityid" style="width: 50%" />
     <select type="text" id="node-input-entityidfiltertype" style="width: 20%">
-        <option value="exact">Exact</option>
-        <option value="substring">Substring</option>
-        <option value="regex">Regex</option>
+        <option
+            value="exact"
+            data-i18n="home-assistant.label.select_option.exact"
+        ></option>
+        <option
+            value="substring"
+            data-i18n="home-assistant.label.select_option.substring"
+        ></option>
+        <option
+            value="regex"
+            data-i18n="home-assistant.label.select_option.regex"
+        ></option>
     </select>
 </div>
 
 <div class="form-row">
-    <label for="node-input-state_type">
-        <i class="fa fa-tint"></i> State Type
-    </label>
+    <label
+        for="node-input-state_type"
+        data-i18n="home-assistant.label.state_type"
+    ></label>
     <select type="text" id="node-input-state_type" style="width: auto">
-        <option value="str">String</option>
-        <option value="num">Number</option>
-        <option value="habool">Boolean</option>
+        <option
+            value="str"
+            data-i18n="home-assistant.label.select_option.string"
+        ></option>
+        <option
+            value="num"
+            data-i18n="home-assistant.label.select_option.number"
+        ></option>
+        <option
+            value="habool"
+            data-i18n="home-assistant.label.select_option.boolean"
+        ></option>
     </select>
 </div>
 
@@ -47,12 +73,26 @@
 
 <div class="form-row checkbox-option-left">
     <input type="checkbox" id="node-input-outputinitially" />
-    <label for="node-input-outputinitially">Output on Connect</label>
+    <label
+        for="node-input-outputinitially"
+        data-i18n="home-assistant.label.output_on_connect"
+    ></label>
+</div>
+
+<div class="form-row checkbox-option-left">
+    <input type="checkbox" id="node-input-enableInput" />
+    <label
+        for="node-input-enableInput"
+        data-i18n="trigger-state.label.enable_input"
+    ></label>
 </div>
 
 <div class="form-row checkbox-option-left">
     <input type="checkbox" id="node-input-debugenabled" />
-    <label for="node-input-debugenabled">Show Debug Information</label>
+    <label
+        for="node-input-debugenabled"
+        data-i18n="home-assistant.label.output_debug"
+    ></label>
 </div>
 
 <div id="constraint-template" style="display: none">
@@ -60,8 +100,14 @@
     <div class="editable-list-row">
         <!-- Type -->
         <select type="text" class="target-type" style="width: 140px">
-            <option value="this_entity">This Entity</option>
-            <option value="entity_id">Entity ID</option>
+            <option
+                value="this_entity"
+                data-i18n="trigger-state.label.this_entity"
+            ></option>
+            <option
+                value="entity_id"
+                data-i18n="home-assistant.label.entity_id"
+            ></option>
         </select>
 
         <!-- Value -->
@@ -71,9 +117,18 @@
     <div class="editable-list-row">
         <!-- Type -->
         <select type="text" class="property-type" style="width: 140px">
-            <option value="current_state">Current State</option>
-            <option value="previous_state">Previous State</option>
-            <option value="property">Property</option>
+            <option
+                value="current_state"
+                data-i18n="trigger-state.label.select_option.current_state"
+            ></option>
+            <option
+                value="previous_state"
+                data-i18n="trigger-state.label.select_option.previous_state"
+            ></option>
+            <option
+                value="property"
+                data-i18n="trigger-state.label.select_option.property"
+            ></option>
         </select>
 
         <!-- Value -->
@@ -84,16 +139,40 @@
     <div class="editable-list-row">
         <!-- Type -->
         <select type="text" class="comparator-type" style="width: 140px">
-            <option value="is">is</option>
-            <option value="is_not">is not</option>
+            <option
+                value="is"
+                data-i18n="home-assistant.label.select_option.is"
+            ></option>
+            <option
+                value="is_not"
+                data-i18n="home-assistant.label.select_option.is_not"
+            ></option>
 
-            <option value=">">&gt;</option>
-            <option value=">=">&gt;=</option>
-            <option value="<">&lt;</option>
-            <option value="<=">&lt;=</option>
+            <option
+                value=">"
+                data-i18n="home-assistant.label.select_option.greater_than"
+            ></option>
+            <option
+                value=">="
+                data-i18n="home-assistant.label.select_option.greater_than_equal"
+            ></option>
+            <option
+                value="<"
+                data-i18n="home-assistant.label.select_option.less_than"
+            ></option>
+            <option
+                value="<="
+                data-i18n="home-assistant.label.select_option.less_than_equal"
+            ></option>
 
-            <option value="includes">in</option>
-            <option value="does_not_include">not in</option>
+            <option
+                value="includes"
+                data-i18n="home-assistant.label.select_option.in"
+            ></option>
+            <option
+                value="does_not_include"
+                data-i18n="home-assistant.label.select_option.not_in"
+            ></option>
         </select>
 
         <!-- Value -->

@@ -31,6 +31,12 @@ const VERSION_0 = {
     ...VERSION_UNDEFINED,
     version: 0,
 };
+const VERSION_1 = {
+    ...VERSION_0,
+    version: 1,
+    inputs: 1,
+    enableInput: true,
+};
 
 describe('Migrations - Trigger State Node', function () {
     describe('Version 0', function () {
@@ -40,8 +46,15 @@ describe('Migrations - Trigger State Node', function () {
             expect(migratedSchema).to.eql(VERSION_0);
         });
     });
+    describe('Version 1', function () {
+        it('should add property inputs equal to 1 and enabledInput equal to true', function () {
+            const migrate = migrations.find((m) => m.version === 1);
+            const migratedSchema = migrate.up(VERSION_0);
+            expect(migratedSchema).to.eql(VERSION_1);
+        });
+    });
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_0);
+        expect(migratedSchema).to.eql(VERSION_1);
     });
 });

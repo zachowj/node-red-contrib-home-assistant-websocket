@@ -2,7 +2,7 @@
 RED.nodes.registerType('trigger-state', {
     category: 'home_assistant',
     color: ha.nodeColors.haBlue,
-    inputs: 1,
+    inputs: 0,
     outputs: 2,
     outputLabels: function (index) {
         const NUM_DEFAULT_OUTPUTS = 2;
@@ -56,10 +56,12 @@ RED.nodes.registerType('trigger-state', {
                 },
             ],
         },
+        inputs: { value: 0 },
         outputs: { value: 2 },
         customoutputs: { value: [] },
         outputinitially: { value: false },
         state_type: { value: 'str' },
+        enableInput: { value: false },
     },
     oneditprepare: function () {
         nodeVersion.check(this);
@@ -480,6 +482,10 @@ RED.nodes.registerType('trigger-state', {
 
             outputs.push(output);
         });
+
+        $('#node-input-inputs').val(
+            $('#node-input-enableInput').is(':checked') ? 1 : 0
+        );
 
         this.constraints = constraints;
         this.customoutputs = outputs;

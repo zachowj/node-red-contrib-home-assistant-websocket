@@ -28,6 +28,8 @@ on whether or not to be sent.
 
 ## Input
 
+Input is disabled by defualt it can be enabled using the `Enable Input` option.
+
 ### Enable / Disable
 
 - Type: `string`

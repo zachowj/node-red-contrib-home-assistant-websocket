@@ -1,0 +1,14 @@
+{
+  "trigger-state": {
+    "label": {
+      "select_option": {
+        "current_state": "Current State",
+        "previous_state": "Previous State",
+        "property": "Property"
+      },
+      "enable_input": "Enable input",
+      "output_on_connect": "Output on connect",
+      "this_entity": "This Entity"
+    }
+  }
+}

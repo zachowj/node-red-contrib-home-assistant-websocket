@@ -16,9 +16,30 @@
       }
     },
     "label": {
-      "output_properties": "Output Properties",
+      "select_option": {
+        "boolean": "boolean",
+        "exact": "exact",
+        "greater_than": ">",
+        "greater_than_equal": ">=",
+        "in": "in",
+        "is": "is",
+        "is_not": "is not",
+        "less_than": "<",
+        "less_than_equal": "<=",
+        "not_in": "not in",
+        "number": "number",
+        "regex": "regex",
+        "string": "string",
+        "substring": "substring"
+      },
+      "entity_id": "Entity ID",
+      "label": "Label",
+      "name": "Name",
+      "output_on_connect": "Output on connect",
+      "output_properties": "Output properties",
       "server": "Server",
-      "name": "Name"
+      "state_type": "State Type",
+      "output_debug": "Output debug information"
     }
   }
 }
