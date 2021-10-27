@@ -79,12 +79,18 @@ function createWebsocketConfig(
         credentials.host !== SUPERVISOR_URL
             ? false
             : config.connectionDelay ?? false;
+    const heartbeatInterval = Number(config.heartbeatInterval) ?? 0;
+    const heartbeat =
+        config.heartbeat && Number.isInteger(heartbeatInterval)
+            ? heartbeatInterval
+            : 0;
 
     return {
         access_token: credentials.access_token,
         host: credentials.host,
         rejectUnauthorizedCerts: config.rejectUnauthorizedCerts ?? true,
         connectionDelay,
+        heartbeatInterval: heartbeat,
     };
 }
 

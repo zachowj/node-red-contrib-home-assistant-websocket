@@ -30,6 +30,18 @@ const migrations = [
             return newSchema;
         },
     },
+    {
+        version: 2,
+        up: (schema) => {
+            const newSchema = {
+                ...schema,
+                version: 2,
+                heartbeat: false,
+                heartbeatInterval: 30,
+            };
+            return newSchema;
+        },
+    },
 ];
 
 module.exports = migrations;

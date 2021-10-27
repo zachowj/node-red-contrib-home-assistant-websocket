@@ -168,30 +168,6 @@ li span.property-type {
     }
 }
 
-.button-box {
-    div.text-box {
-        display: inline-block;
-        position: relative;
-        width: 70%;
-        height: 20px;
-
-        div {
-            position: absolute;
-            left: 0px;
-            right: 40px;
-
-            input {
-                width: 100%;
-            }
-        }
-        a {
-            position: absolute;
-            right: 0px;
-            top: 0px;
-        }
-    }
-}
-
 .badge {
     display: inline-block;
     font-size: 12px;

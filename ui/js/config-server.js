@@ -9,6 +9,16 @@ RED.nodes.registerType('server', {
         ha_boolean: { value: 'y|yes|true|on|home|open' },
         connectionDelay: { value: true },
         cacheJson: { value: true },
+        heartbeat: { value: false },
+        heartbeatInterval: {
+            value: '30',
+            validate: function (v) {
+                return (
+                    !$('#node-config-input-heartbeat').is(':checked') ||
+                    (RED.validators.number()(v) && v >= 10)
+                );
+            },
+        },
     },
     credentials: {
         host: { value: '', required: true },
@@ -76,6 +86,10 @@ RED.nodes.registerType('server', {
                     },
                 })
                 .autocomplete('search', '');
+        });
+
+        $('#node-config-input-heartbeat').on('change', function () {
+            $('#heartbeatIntervalRow').toggle(this.checked);
         });
     },
     oneditsave: function () {

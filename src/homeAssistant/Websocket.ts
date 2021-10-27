@@ -52,12 +52,14 @@ import {
 import { Credentials } from './';
 import { subscribeAreaRegistry, subscribeDeviceRegistry } from './collections';
 import createSocket from './createSocket';
+import { startHeartbeat, StopHeartbeat } from './heartbeat';
 
 const debug = Debug('home-assistant:ws');
 
 export type WebsocketConfig = Credentials & {
     rejectUnauthorizedCerts: boolean;
     connectionDelay: boolean;
+    heartbeatInterval: number;
 };
 
 type HassTranslationsResponse = {
@@ -74,6 +76,7 @@ export default class Websocket {
     private statesLoaded = false;
     private subscribedEvents = new Set<string>();
     private unsubCallback: { [id: string]: () => void } = {};
+    private stopHeartbeat?: StopHeartbeat;
 
     areas: HassAreas = [];
     client!: Connection;
@@ -436,6 +439,13 @@ export default class Websocket {
         this.integrationVersion = 0;
         this.isHomeAssistantRunning = false;
         this.connectionState = STATE_CONNECTED;
+        if (this.config.heartbeatInterval) {
+            this.stopHeartbeat = startHeartbeat(
+                this.client,
+                this.config.heartbeatInterval,
+                this.config.host
+            );
+        }
         this.emitEvent('ha_client:open');
     }
 
@@ -443,10 +453,9 @@ export default class Websocket {
         this.integrationVersion = 0;
         this.isHomeAssistantRunning = false;
         this.connectionState = STATE_DISCONNECTED;
-        this.emitEvent('ha_client:close');
-
-        debug('events connection closed, cleaning up connection');
         this.resetClient();
+        debug('events connection closed, cleaning up connection');
+        this.emitEvent('ha_client:close');
     }
 
     onClientError(data: unknown): void {
@@ -458,6 +467,11 @@ export default class Websocket {
 
     onClientConnecting(): void {
         this.connectionState = STATE_CONNECTING;
+    }
+
+    close(): void {
+        typeof this.stopHeartbeat === 'function' && this.stopHeartbeat();
+        this?.client?.close();
     }
 
     resetClient(): void {

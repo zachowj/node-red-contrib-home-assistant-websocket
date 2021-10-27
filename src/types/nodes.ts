@@ -9,6 +9,8 @@ export interface ServerNodeConfig {
     ha_boolean: string;
     connectionDelay: boolean;
     cacheJson: boolean;
+    heartbeat: boolean;
+    heartbeatInterval: number;
 }
 
 export interface ServerNode extends Node {

@@ -110,10 +110,7 @@ export default class HomeAssistant {
     }
 
     close(): void {
-        const client = this?.websocket?.client;
-        if (client) {
-            client.close();
-        }
+        this?.websocket?.close();
     }
 
     addListener(

@@ -14,6 +14,8 @@ const nodeDefaults = {
     ha_boolean: {},
     connectionDelay: {},
     cacheJson: {},
+    heartbeat: {},
+    heartbeatInterval: {},
 };
 
 class ConfigServer {

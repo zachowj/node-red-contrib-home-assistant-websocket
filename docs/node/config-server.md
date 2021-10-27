@@ -44,6 +44,14 @@ A list of strings, not case sensitive, delimited by vertical pipe, |, that will 
 
 Enables the caching of the JSON autocomplete requests. Enabling or disabling this may require a restart of Node-RED for it to take effect.
 
+### Enable Heartbeat
+
+Heartbeat will send a ping message using the websocket connection to Home Assistant every X seconds. If a pong response is not received within a 5 seconds Node-RED will attempt to reconnect to Home Assistant.
+
+### Heartbeat Interval
+
+The interval at which the ping message is sent to Home Assistant. The mininum value is 10 seconds.
+
 ## Details
 
 Every node requires a configuration attached to define how to contact Home Assistant, which is this config node's main purpose.
