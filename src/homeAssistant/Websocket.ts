@@ -470,7 +470,7 @@ export default class Websocket {
     }
 
     close(): void {
-        typeof this.stopHeartbeat === 'function' && this.stopHeartbeat();
+        if (typeof this.stopHeartbeat === 'function') this.stopHeartbeat();
         this?.client?.close();
     }
 

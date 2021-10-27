@@ -1,5 +1,4 @@
 import Debug from 'debug';
-
 import { Connection } from 'home-assistant-js-websocket';
 
 const debug = Debug('home-assistant:ws:heartbeat');
@@ -14,10 +13,9 @@ export const startHeartbeat = (
     interval: number,
     host: string
 ): StopHeartbeat => {
-    let heartbeatIntervalId: NodeJS.Timer;
     let beatTimeoutId: NodeJS.Timeout;
 
-    heartbeatIntervalId = setInterval(
+    const heartbeatIntervalId = setInterval(
         async () => {
             beatTimeoutId = setTimeout(() => {
                 debug(`No pong received from ${host} attempting to reconnect`);
