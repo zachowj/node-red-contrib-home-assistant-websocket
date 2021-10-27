@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.37.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.36.1...v0.37.0) (2021-10-27)
+
+
+### Features
+
+* Add heartbeat tracker to websocket connection ([090e8bf](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/090e8bfb2336cbb6ab7c8f3611bb5d7ad47c567d)), closes [#488](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/488)
+
+
+### Bug Fixes
+
+* Fix linting errors ([3bb743d](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/3bb743de49c76517e9dd51a422804d1a5031f6cb))
+
 ### [0.36.1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.36.0...v0.36.1) (2021-10-22)
 
 
