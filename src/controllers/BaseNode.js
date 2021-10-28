@@ -271,7 +271,7 @@ class BaseNode {
             case 'lte':
                 return actualValue <= cValue;
             case 'starts_with':
-                return actualValue.startsWith(cValue);
+                return actualValue && actualValue.startsWith(cValue);
             case 'in_group': {
                 const ent = this.homeAssistant.getStates(cValue);
                 const groupEntities =
