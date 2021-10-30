@@ -22,7 +22,8 @@ RED.nodes.registerType('poll-state', {
                 { property: 'icon', value: '' },
             ],
         },
-        updateinterval: { value: '60', validate: (v) => !isNaN(v) },
+        updateinterval: { value: '60' },
+        updateIntervalType: { value: 'num' },
         updateIntervalUnits: { value: 'seconds' },
         outputinitially: { value: false },
         outputonchanged: { value: false },
@@ -39,7 +40,10 @@ RED.nodes.registerType('poll-state', {
 
         haServer.init(node, '#node-input-server');
         $('#node-input-entity_id').haAutocomplete();
-        $('#node-input-updateinterval').spinner({ min: 1 });
+        $('#node-input-updateinterval').typedInput({
+            types: ['num', 'jsonata'],
+            typeField: '#node-input-updateIntervalType',
+        });
 
         ifState.init('#node-input-halt_if', '#node-input-halt_if_compare');
         exposeNode.init(node);

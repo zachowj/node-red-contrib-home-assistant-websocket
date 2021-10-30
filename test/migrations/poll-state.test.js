@@ -31,6 +31,11 @@ const VERSION_1 = {
     halt_if_compare: 'is',
     updateIntervalUnits: 'seconds',
 };
+const VERSION_2 = {
+    ...VERSION_1,
+    version: 2,
+    updateIntervalType: 'num',
+};
 
 describe('Migrations - Poll State Node', function () {
     describe('Version 0', function () {
@@ -47,8 +52,15 @@ describe('Migrations - Poll State Node', function () {
             expect(migratedSchema).to.eql(VERSION_1);
         });
     });
+    describe('Version 2', function () {
+        it('should update version 1 to version 2 setting new defaults', function () {
+            const migrate = migrations.find((m) => m.version === 2);
+            const migratedSchema = migrate.up(VERSION_1);
+            expect(migratedSchema).to.eql(VERSION_2);
+        });
+    });
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_1);
+        expect(migratedSchema).to.eql(VERSION_2);
     });
 });

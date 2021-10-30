@@ -23,6 +23,17 @@ const migrations = [
             return newSchema;
         },
     },
+    {
+        version: 2,
+        up: (schema) => {
+            const newSchema = {
+                ...schema,
+                version: 2,
+                updateIntervalType: 'num',
+            };
+            return newSchema;
+        },
+    },
 ];
 
 module.exports = migrations;

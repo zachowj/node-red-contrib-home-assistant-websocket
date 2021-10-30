@@ -1,14 +1,17 @@
 const ta = require('time-ago');
 
 const EventsHaNode = require('./EventsHaNode');
+const {
+    getTimeInMilliseconds,
+    getEntitiesFromJsonata,
+} = require('../helpers/utils');
+const { TYPEDINPUT_JSONATA } = require('../const');
 
 const nodeOptions = {
     config: {
         entity_id: (nodeDef) => (nodeDef.entity_id || '').trim(),
-        updateinterval: (nodeDef) =>
-            !isNaN(nodeDef.updateinterval)
-                ? Number(nodeDef.updateinterval)
-                : 60,
+        updateinterval: {},
+        updateIntervalType: {},
         updateIntervalUnits: {},
         outputinitially: {},
         outputonchanged: {},
@@ -27,25 +30,6 @@ class PollState extends EventsHaNode {
             throw new Error('Entity Id is required');
         }
 
-        if (!this.timer) {
-            const interval = this.nodeConfig.updateinterval;
-
-            switch (this.nodeConfig.updateIntervalUnits) {
-                case 'minutes':
-                    this.updateInterval = interval * (60 * 1000);
-                    break;
-                case 'hours':
-                    this.updateInterval = interval * (60 * 60 * 1000);
-                    break;
-                default:
-                    this.updateInterval = interval * 1000;
-            }
-            this.timer = setInterval(
-                this.onTimer.bind(this),
-                this.updateInterval
-            );
-        }
-
         if (this.nodeConfig.outputonchanged) {
             this.addEventClientListener(
                 `ha_events:state_changed:${this.nodeConfig.entity_id}`,
@@ -62,6 +46,26 @@ class PollState extends EventsHaNode {
                     this.onTimer.bind(this)
                 );
             }
+        }
+
+        if (this.isHomeAssistantRunning) {
+            this.onIntervalUpdate();
+        }
+        this.addEventClientListener(
+            'ha_client:ready',
+            this.onIntervalUpdate.bind(this)
+        );
+        if (
+            this.nodeConfig.updateIntervalType === TYPEDINPUT_JSONATA &&
+            this.nodeConfig.updateinterval.length > 12
+        ) {
+            const ids = getEntitiesFromJsonata(this.nodeConfig.updateinterval);
+            ids.forEach((id) => {
+                this.addEventClientListener(
+                    `ha_events:state_changed:${id}`,
+                    this.onIntervalUpdate.bind(this)
+                );
+            });
         }
     }
 
@@ -155,6 +159,48 @@ class PollState extends EventsHaNode {
     calculateTimeSinceChanged(entityState) {
         const entityLastChanged = entityState.last_changed;
         return new Date(entityLastChanged);
+    }
+
+    getInterval() {
+        let interval = this.nodeConfig.updateinterval || '0';
+        if (this.nodeConfig.updateIntervalType === TYPEDINPUT_JSONATA) {
+            try {
+                interval = this.evaluateJSONata(interval);
+            } catch (e) {
+                this.node.error(
+                    this.RED._('poll-state.errors.jsonata_error', {
+                        message: e.message,
+                    })
+                );
+                throw new Error('error');
+            }
+        }
+
+        const intervalMs = getTimeInMilliseconds(
+            interval,
+            this.nodeConfig.updateIntervalUnits
+        );
+        if (isNaN(intervalMs)) {
+            this.node.error(
+                this.RED._('poll-state.errors.offset_nan', { interval })
+            );
+            throw new Error(this.RED._('poll-state.status.error'));
+        }
+
+        return Number(intervalMs);
+    }
+
+    onIntervalUpdate() {
+        const interval = this.getInterval();
+        // create new timer if interval changed
+        if (interval !== this.updateinterval) {
+            clearInterval(this.timer);
+            this.updateinterval = interval;
+            this.timer = setInterval(
+                this.onTimer.bind(this),
+                this.updateinterval
+            );
+        }
     }
 }
 

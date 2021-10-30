@@ -1,0 +1,8 @@
+{
+  "poll-state": {
+    "errors": {
+      "jsonata_error": "JSONata Error: __message__",
+      "interval_nan": "Offset is not a number: __offset__"
+    }
+  }
+}
