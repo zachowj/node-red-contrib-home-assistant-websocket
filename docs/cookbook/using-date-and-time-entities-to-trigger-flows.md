@@ -19,7 +19,7 @@ There is now a [time](../node/time.md) node that simplifies the example flows be
 ## Home Assistant Companion app next alarm sensor
 
 ::: warning
-Home Assistant Companion app set entities name based on it's selected language. Eg. `next_alarm` must be changed in `prossimo_allarme` if the app is usend in Italian (and vice versa)
+Home Assistant Companion app sets the entity's name based on its selected language. Eg. `next_alarm` must be changed in `prossimo_allarme` if the app is used in Italian (and vice versa)
 :::
 
 Here's a basic example of using the Home Assistant Companion app next alarm sensor.
