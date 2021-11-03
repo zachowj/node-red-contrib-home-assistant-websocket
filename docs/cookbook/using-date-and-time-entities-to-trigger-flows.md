@@ -46,11 +46,11 @@ Delay nodes can have a max timeout of around 24.8 days greater than that and wei
 
 ### Managing alarm from multiple phones
 
-If more than on phone in the house has the app installed and you want to be triggered by all of them alarms this is the way to go and is't working perfectly even with just one phone.
+If more than one phone in the house has the app installed and you want it to be triggered from any of the alarms this is the way to go and it's working perfectly even with just one phone.
 
-It needs the same couple of helper for each phone and the same consideration made above for the `input_boolen` is still valid.
+It needs the same couple of helpers for each phone and the same consideration made above for the `input_boolen` is still valid.
 
-This flow was developed and tested with a Pixel 2 XL and the companion app in Italian so you have to change all the references to the phone and to the entities.
+This flow was developed and tested with a Pixel 2 XL and the companion app in Italian so you'll have to change all the references to the phone and the entities.
 
 ![screenshot](./images/using-date-and-time-entities-to-trigger-flows_04.png)
 
