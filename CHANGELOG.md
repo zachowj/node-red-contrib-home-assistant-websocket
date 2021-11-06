@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.38.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.37.0...v0.38.0) (2021-11-06)
+
+
+### Features
+
+* **poll-state:** Enable dynamic interval  length ([f6904c4](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f6904c4e1a2d3eaaeaf04de8a6efb2399c131b1f))
+
+
+### Bug Fixes
+
+* **entity:** Only save payload to disk if resend is enabled ([f847e11](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f847e113b154495b20143a5c4964cd97020a4289))
+* **get-entities:** Check if property exists before seeing if it starts with something ([8a5be79](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/8a5be79ed2a672e57168a9d10a4bbf2c8583c213)), closes [#453](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/453)
+
+
+### Documentation
+
+* Add another example flow in the cookbook ([#504](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/504)) ([76c5987](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/76c5987a3710c40efc85722b2992bf4909d70c43))
+* Fix cookbook entry HA restart ([3696c44](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/3696c44c9160deae4edb2f51b8d484f0267ebc7c)), closes [#505](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/505)
+
 ## [0.37.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.36.1...v0.37.0) (2021-10-27)
 
 
