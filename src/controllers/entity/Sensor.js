@@ -160,11 +160,13 @@ class Sensor extends EntityNode {
             state: state,
             attributes: attr,
         };
-        this.lastPayload = {
-            state: state,
-            attributes: attr,
-        };
-        this.storage.saveData('lastPayload', this.lastPayload);
+        if (this.nodeConfig.resend) {
+            this.lastPayload = {
+                state: state,
+                attributes: attr,
+            };
+            this.storage.saveData('lastPayload', this.lastPayload);
+        }
         this.debugToClient(payload);
 
         this.homeAssistant
