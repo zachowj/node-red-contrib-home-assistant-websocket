@@ -69,9 +69,18 @@ class Sensor extends EntityNode {
         this.debugToClient(payload);
 
         this.node.debug(`Registering ${this.nodeConfig.entityType} with HA`);
-        await this.homeAssistant.send(payload);
-        this.status.setSuccess('Registered');
-        this.registered = true;
+        try {
+            await this.homeAssistant.send(payload);
+            this.status.setSuccess('Registered');
+            this.registered = true;
+        } catch (err) {
+            this.status.setFailed('Error registering');
+            this.node.error(
+                `Error registering entity. ${
+                    err.message ? ` Error Message: ${err.message}` : ''
+                }`
+            );
+        }
     }
 
     onClose(removed) {
