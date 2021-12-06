@@ -10,14 +10,25 @@ The holiday lights turn on each day at sunset and then off at midnight. It uses 
 
 ![screenshot of flow](./images/holiday-lights-scheduler-and-demo-mode-for-wled_01.png)
 
-<<< @/examples/cookbook/holiday-lights-scheduler-and-demo-mode-for-wled/holiday-lights-scheduler-and-demo-mode-for-wled.json
+### Version 1
 
-## Requirements
+<<< @/examples/cookbook/holiday-lights-scheduler-and-demo-mode-for-wled/holiday-lights-scheduler-and-demo-mode-for-wled_v1.json
+
+</code-block>
+
+::: details version 0
 
 - [Home Assistant](https://home-assistant.io) v0.118+
 - [WLED](https://github.com/Aircoookie/WLED) v0.11+
 
-[Home Assistant](https://home-assistant.io) v0.118 is required for the WLED preset service. The Home Assistant nodes to control WLED could be replaced with WLED nodes to sidestep these requirements.
+<<< @/examples/cookbook/holiday-lights-scheduler-and-demo-mode-for-wled/holiday-lights-scheduler-and-demo-mode-for-wled_v0.json
+
+:::
+
+## Requirements
+
+- [Home Assistant](https://home-assistant.io) v2021.7+
+- [WLED](https://github.com/Aircoookie/WLED) v0.11+
 
 ### Integrations
 
@@ -36,7 +47,7 @@ The two entity nodes will require the Node-RED custom integration but the flow w
 
 The flow has been modified so that it should run pretty much out of the box after changing the entity id for the light and IP for the WLED controller.
 
-1. [Setting up WLED variables](#wled-variable)
+1. [Setting up WLED variables](#wled-variables)
 1. [Modifing holiday date ranges](#setting-date-ranges-up)
 1. [Creating Home Assistant entities](#home-assistant-entities)
 
@@ -44,7 +55,7 @@ The flow has been modified so that it should run pretty much out of the box afte
 
 ![screenshot of a node that needs to be editted](./images/holiday-lights-scheduler-and-demo-mode-for-wled_03.png)
 
-Edit the inject node, **Setup**, to edit the Home Assistant entity id of the holiday lights and IP address of the WLED controller. The entity of your WLED light needs to be changed in two places.
+Edit the change node, **set entity ids here**, to edit the Home Assistant entity id of the holiday lights and the select entity for presets. The entity of your WLED light needs to be changed in two places.
 
 ### Setting date ranges up
 
@@ -153,23 +164,6 @@ input_select:
 
 ![screenshot of lovelace ui](./images/holiday-lights-scheduler-and-demo-mode-for-wled_06.png)
 
-#### input_select.holiday_lights_presets
-
-```yaml
-input_select:
-  holiday_lights_presets:
-    name: Presets
-    options:
-      - none
-    icon: "mdi:animation"
-```
-
-::: tip
-This one can have any values as the options as they will get overwritten each time the WLED presets are edited in Node-RED.
-:::
-
-![screenshot of lovelace ui](./images/holiday-lights-scheduler-and-demo-mode-for-wled_07.png)
-
 ## Lovelace UI
 
 ![screenshot of lovelace ui](./images/holiday-lights-scheduler-and-demo-mode-for-wled_02.png)
@@ -178,18 +172,8 @@ This one can have any values as the options as they will get overwritten each ti
 title: Holiday Lights
 type: entities
 entities:
-  - type: conditional
-    conditions:
-      - entity: sensor.holiday_lights_current_preset
-        state_not: none
-      - entity: sensor.holiday_lights_current_preset
-        state_not: "off"
-      - entity: input_select.holiday_lights_demo_mode
-        state: "off"
-    row:
-      entity: sensor.holiday_lights_current_preset
   - entity: light.holiday_lights
-  - entity: input_select.holiday_lights_presets
+  - entity: select.holiday_lights_presets
   - type: section
     label: Demo Mode
   - type: conditional
