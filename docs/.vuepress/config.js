@@ -35,7 +35,6 @@ module.exports = {
                     title: 'Cookbook',
                     collapsable: false,
                     children: [
-                        'get-entities',
                         'jsonata',
                         'motion-triggered-light',
                         'saving-and-restoring-states',
