@@ -187,8 +187,8 @@ const buildHelp = lazypipe()
 
             return item;
         });
-        $('docs-only').remove();
-        $('info-panel-only').each((i, item) => {
+        $('docs-only, docsonly').remove();
+        $('info-panel-only, infopanelonly').each((i, item) => {
             item.tagName = 'div';
             return item;
         });

@@ -83,7 +83,7 @@ module.exports = {
                 {
                     title: 'Nodes',
                     collapsable: false,
-                    sidebarDepth: 2,
+                    sidebarDepth: 1,
                     children: [
                         'API',
                         'call-service',
