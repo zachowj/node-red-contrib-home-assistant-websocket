@@ -87,9 +87,9 @@ export class Status {
 
     getPrettyDate(): string {
         return new Date().toLocaleDateString('en-US', {
+            hourCycle: 'h23',
             month: 'short',
             day: 'numeric',
-            hour12: false,
             hour: 'numeric',
             minute: 'numeric',
         });
