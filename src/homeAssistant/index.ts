@@ -53,6 +53,7 @@ function createCredentials(
 
     return {
         host,
+        // eslint-disable-next-line camelcase
         access_token,
     };
 }
