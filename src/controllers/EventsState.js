@@ -241,6 +241,8 @@ class EventsState extends EventsHaNode {
     }
 
     isEventValid(evt) {
+        const oldState = selectn('event.old_state.state', evt);
+        const newState = selectn('event.new_state.state', evt);
         if (
             !shouldIncludeEvent(
                 evt.entity_id,
@@ -249,13 +251,13 @@ class EventsState extends EventsHaNode {
             ) ||
             (this.nodeConfig.ignorePrevStateNull && !evt.event.old_state) ||
             (this.nodeConfig.ignorePrevStateUnknown &&
-                evt.event.old_state.state === 'unknown') ||
+                oldState === 'unknown') ||
             (this.nodeConfig.ignorePrevStateUnavailable &&
-                evt.event.old_state.state === 'unavailable') ||
+                oldState === 'unavailable') ||
             (this.nodeConfig.ignoreCurrentStateUnknown &&
-                evt.event.new_state.state === 'unknown') ||
+                newState === 'unknown') ||
             (this.nodeConfig.ignoreCurrentStateUnavailable &&
-                evt.event.new_state.state === 'unavailable')
+                newState === 'unavailable')
         ) {
             return false;
         }
