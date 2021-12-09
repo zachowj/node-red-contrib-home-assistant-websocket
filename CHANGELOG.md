@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.38.2](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.38.1...v0.38.2) (2021-12-09)
+
+
+### Bug Fixes
+
+* Change the status date string to use h23. Fixes the quirk with en-US showing 24:xx instead of 00:xx. ([8efe502](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/8efe50234b29f12a2c1f2e05b4acc42459cd2de5)), closes [#524](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/524)
+* **events-state:** Check if state property exists before accessing it ([1e38d7f](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/1e38d7f3a44b50de11fab44b985c2741eb5d4a6b)), closes [#525](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/525)
+
+
+### Documentation
+
+* **cookbook:** Update Holiday Lights example ([73b1bf5](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/73b1bf5a13bf34a94e574ed4c5e554007f67cafa))
+* **get-entities:** Move get-entities cookbook examples to the node page ([a9390c2](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a9390c242a002fb408ae35dc271107faaa8d396f))
+* **get-entities:** Remove link from cookbook and fix example links ([faec40f](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/faec40f1567e3a6cd7f160238f9abcf36cedfd23))
+
 ### [0.38.1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.38.0...v0.38.1) (2021-12-06)
 
 
