@@ -2,6 +2,7 @@ const Joi = require('joi');
 
 const BaseNode = require('./BaseNode');
 const { renderTemplate } = require('../helpers/renderTemplate');
+const { getTimeInMilliseconds } = require('../helpers/utils');
 
 const nodeOptions = {
     config: {
@@ -12,6 +13,9 @@ const nodeOptions = {
         entity_id: {},
         outputProperties: {},
         blockInputOverrides: {},
+        for: {},
+        forType: {},
+        forUnits: {},
         // deprecated
         state_type: {},
         state_location: {},
@@ -67,7 +71,7 @@ class CurrentState extends BaseNode {
         // Convert and save original state if needed
         this.castState(entity, config.state_type);
 
-        const isIfState = this.getComparatorResult(
+        let isIfState = this.getComparatorResult(
             config.halt_if_compare,
             config.halt_if,
             entity.state,
@@ -77,6 +81,19 @@ class CurrentState extends BaseNode {
                 entity,
             }
         );
+
+        if (this.checkForDuration(isIfState)) {
+            try {
+                const forDurationMs = this.getForDurationMs();
+                if (forDurationMs > 0) {
+                    isIfState = entity.timeSinceChangedMs > forDurationMs;
+                }
+            } catch (e) {
+                this.node.error(e.message);
+                this.status.setFailed('Error');
+                return;
+            }
+        }
 
         try {
             this.setCustomOutputs(this.nodeConfig.outputProperties, message, {
@@ -101,6 +118,30 @@ class CurrentState extends BaseNode {
         this.status.setSuccess(entity.state);
         send([message, null]);
         done();
+    }
+
+    checkForDuration(isIfState) {
+        return (
+            isIfState &&
+            this.nodeConfig.halt_if.length > 0 &&
+            ['is', 'is_not', 'includes', 'does_not_include'].includes(
+                this.nodeConfig.halt_if_compare
+            )
+        );
+    }
+
+    getForDurationMs() {
+        if (this.nodeConfig.for === '') return 0;
+        const value = this.getTypedInputValue(
+            this.nodeConfig.for,
+            this.nodeConfig.forType
+        );
+
+        if (isNaN(value) || value < 0) {
+            throw new Error(`Invalid for value: ${value}`);
+        }
+
+        return getTimeInMilliseconds(value, this.nodeConfig.forUnits);
     }
 }
 

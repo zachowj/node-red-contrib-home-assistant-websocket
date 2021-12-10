@@ -55,6 +55,13 @@ const VERSION_2 = {
     override_payload: undefined,
     state_location: undefined,
 };
+const VERSION_3 = {
+    ...VERSION_2,
+    version: 3,
+    for: 0,
+    forType: 'num',
+    forUnits: 'minutes',
+};
 
 describe('Migrations - Current State Node', function () {
     describe('version 0', function () {
@@ -113,9 +120,17 @@ describe('Migrations - Current State Node', function () {
             expect(migratedSchema).to.eql(expectedSchema);
         });
     });
+    describe('Version 3', function () {
+        it('should update version 2 to version 3', function () {
+            const migrate = migrations.find((m) => m.version === 3);
+            const migratedSchema = migrate.up(VERSION_2);
+
+            expect(migratedSchema).to.eql(VERSION_3);
+        });
+    });
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
 
-        expect(migratedSchema).to.eql(VERSION_2);
+        expect(migratedSchema).to.eql(VERSION_3);
     });
 });

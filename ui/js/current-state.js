@@ -44,6 +44,9 @@ RED.nodes.registerType('api-current-state', {
             ],
             validate: haOutputs.validate,
         },
+        for: { value: 0 },
+        forType: { value: 'num' },
+        forUnits: { value: 'minutes' },
 
         // deprecated but needed in config for old imports to work
         override_topic: { value: false },
@@ -64,6 +67,22 @@ RED.nodes.registerType('api-current-state', {
             '#node-input-halt_if_compare',
             'currentState'
         );
+
+        $('#node-input-halt_if_compare').on('change', function () {
+            const show = [
+                'is',
+                'is_not',
+                'includes',
+                'does_not_include',
+            ].includes(this.value);
+            $('#for-row').toggle(show);
+        });
+
+        $('#node-input-for').typedInput({
+            default: 'num',
+            types: ['num', 'jsonata', 'msg', 'flow', 'global'],
+            typeField: '#node-input-forType',
+        });
 
         haOutputs.createOutputs(this.outputProperties, {
             extraTypes: ['entity', 'entityId', 'entityState'],

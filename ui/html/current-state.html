@@ -37,6 +37,19 @@
     <input type="hidden" id="node-input-halt_if_type" />
 </div>
 
+<div class="form-row" id="for-row">
+    <label for="node-input-for"><i class="fa fa-clock-o"></i> For</label>
+    <input type="text" id="node-input-for" style="width: 45%" />
+    <input type="hidden" id="node-input-forType" />
+    <select id="node-input-forUnits" style="width: 25%">
+        <option value="milliseconds">milliseconds</option>
+        <option value="seconds">seconds</option>
+        <option value="minutes">minutes</option>
+        <option value="hours">hours</option>
+        <option value="days">days</option>
+    </select>
+</div>
+
 <div class="form-row">
     <label for="node-input-state_type">
         <i class="fa fa-tint"></i> State Type

@@ -73,6 +73,19 @@ const migrations = [
             return newSchema;
         },
     },
+    {
+        version: 3,
+        up: (schema) => {
+            const newSchema = {
+                ...schema,
+                version: 3,
+                for: 0,
+                forType: 'num',
+                forUnits: 'minutes',
+            };
+            return newSchema;
+        },
+    },
 ];
 
 module.exports = migrations;
