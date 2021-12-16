@@ -14,7 +14,7 @@ module.exports = {
         repo: 'zachowj/node-red-contrib-home-assistant-websocket',
         repoLabel: 'Github',
         docsDir: 'docs',
-        docsBranch: 'dev',
+        docsBranch: 'main',
         editLinks: true,
         editLinkText: 'Help us improve this page!',
         lastUpdated: 'Last Updated',
