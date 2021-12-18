@@ -36,6 +36,19 @@ const VERSION_1 = {
     version: 1,
     inputOverride: 'allow',
 };
+const VERSION_2 = {
+    ...VERSION_1,
+    version: 2,
+    inputOverride: 'allow',
+    config: [
+        { property: 'name', value: '' },
+        { property: 'device_class', value: '' },
+        { property: 'icon', value: '' },
+        { property: 'unit_of_measurement', value: '' },
+        { property: 'state_class', value: '' },
+        { property: 'last_reset', value: '' },
+    ],
+};
 
 describe('Migrations - Entity Node', function () {
     describe('Version 0', function () {
@@ -54,8 +67,16 @@ describe('Migrations - Entity Node', function () {
             expect(migratedSchema).to.eql(VERSION_1);
         });
     });
+    describe('Version 2', function () {
+        it('should update version 1 to version 2', function () {
+            const migrate = migrations.find((m) => m.version === 1);
+            const migratedSchema = migrate.up(VERSION_0);
+
+            expect(migratedSchema).to.eql(VERSION_1);
+        });
+    });
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_1);
+        expect(migratedSchema).to.eql(VERSION_2);
     });
 });

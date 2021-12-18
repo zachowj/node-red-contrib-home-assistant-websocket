@@ -31,6 +31,8 @@ RED.nodes.registerType('ha-entity', {
                 { property: 'device_class', value: '' },
                 { property: 'icon', value: '' },
                 { property: 'unit_of_measurement', value: '' },
+                { property: 'state_class', value: '' },
+                { property: 'last_reset', value: '' },
             ],
         },
         // sensor binary_sensor
@@ -78,7 +80,14 @@ RED.nodes.registerType('ha-entity', {
                 'icon',
                 'unit_of_measurement',
             ],
-            sensor: ['name', 'device_class', 'icon', 'unit_of_measurement'],
+            sensor: [
+                'name',
+                'device_class',
+                'icon',
+                'unit_of_measurement',
+                'state_class',
+                'last_reset',
+            ],
             switch: ['name', 'icon'],
         };
         const attributeTypes = [
@@ -153,28 +162,31 @@ RED.nodes.registerType('ha-entity', {
             })
             .editableList('addItems', node.attributes);
 
-        $('#config')
+        $('#haConfig')
             .editableList({
                 addButton: false,
                 header: $('<div>Home Assistant Config (optional)</div>'),
                 addItem: function (container, index, data) {
                     const $row = $('<div />').appendTo(container);
+                    const $label = $('<label>').appendTo($row);
+
+                    $('<span>')
+                        .text(data.property.replace(/_/g, ' '))
+                        .appendTo($label);
+
                     $('<input />', {
-                        type: 'text',
+                        type: 'hidden',
                         name: 'property',
                         value: data.property,
-                        style: 'width: 40%;',
-                        readonly: true,
-                    }).appendTo($row);
+                    }).appendTo($label);
 
                     $('<input />', {
                         type: 'text',
                         name: 'value',
                         value: data.value,
-                        style: 'margin-left: 10px;width: 55%;',
                     })
                         .attr('autocomplete', 'disable')
-                        .appendTo($row);
+                        .appendTo($label);
                 },
             })
             .editableList('addItems', node.config);
@@ -212,20 +224,19 @@ RED.nodes.registerType('ha-entity', {
                     }
                 });
 
+                // Filter config options
+                $('#haConfig').editableList('filter', (data) =>
+                    haConfigOptions[value].includes(data.property)
+                );
+
                 switch (value) {
                     case 'switch':
                         node.outputs = 2;
-                        // filter config options
-                        $('#config').editableList('filter', (data) =>
-                            haConfigOptions[value].includes(data.property)
-                        );
                         break;
                     case 'binary_sensor':
                     case 'sensor':
                     default:
                         node.outputs = 1;
-                        // Show all config items
-                        $('#config').editableList('filter', null);
                         $('#node-input-outputOnStateChange')
                             .prop('checked', false)
                             .trigger('change');
@@ -265,7 +276,7 @@ RED.nodes.registerType('ha-entity', {
                 });
             });
 
-        $('#config')
+        $('#haConfig')
             .editableList('items')
             .each(function (i) {
                 const $row = $(this);

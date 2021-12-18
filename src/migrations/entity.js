@@ -21,6 +21,20 @@ const migrations = [
             return newSchema;
         },
     },
+    {
+        version: 2,
+        up: (schema) => {
+            const newSchema = {
+                ...schema,
+                version: 2,
+            };
+
+            newSchema.config.push({ property: 'state_class', value: '' });
+            newSchema.config.push({ property: 'last_reset', value: '' });
+
+            return newSchema;
+        },
+    },
 ];
 
 module.exports = migrations;

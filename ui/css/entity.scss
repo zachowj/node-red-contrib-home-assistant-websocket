@@ -1,0 +1,18 @@
+#haConfig {
+    label {
+        margin-bottom: 0;
+        text-transform: none;
+        width: 100%;
+    }
+
+    span {
+        width: 40%;
+        margin-right: 5px;
+        display: inline-block;
+    }
+
+    input[type='text'] {
+        margin-left: 10px;
+        width: 55%;
+    }
+}
