@@ -113,22 +113,24 @@ const exposeNode = (function ($, RED, ha) {
                 header: $('<div>Home Assistant Config (optional)</div>'),
                 addItem: function (container, index, data) {
                     const $row = $('<div />').appendTo(container);
+                    const $label = $('<label>').appendTo($row);
+                    $('<span>')
+                        .text(data.property.replace(/_/g, ' '))
+                        .appendTo($label);
+
                     $('<input />', {
-                        type: 'text',
+                        type: 'hidden',
                         name: 'property',
                         value: data.property,
-                        style: 'width: 40%;',
-                        readonly: true,
-                    }).appendTo($row);
+                    }).appendTo($label);
 
                     $('<input />', {
                         type: 'text',
                         name: 'value',
                         value: data.value,
-                        style: 'margin-left: 10px;width: 55%;',
                     })
                         .attr('autocomplete', 'disable')
-                        .appendTo($row);
+                        .appendTo($label);
                 },
             })
             .editableList('addItems', haConfig);
