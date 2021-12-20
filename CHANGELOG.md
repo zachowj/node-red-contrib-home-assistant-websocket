@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.40.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.39.0...v0.40.0) (2021-12-19)
+
+
+### Features
+
+* **entity:** Add state_class and last_reset to the sensor entity node ([156f4ad](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/156f4ad24a3fd506bfa9b028dbd0fecbc19f4567))
+
+
+### Documentation
+
+* Fix github branch reference ([335ad8a](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/335ad8aa96f9ce6a7cb1955c3848be5e77dd60b0))
+
 ## [0.39.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.38.2...v0.39.0) (2021-12-10)
 
 
