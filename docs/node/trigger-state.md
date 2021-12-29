@@ -28,7 +28,7 @@ on whether or not to be sent.
 
 ## Input
 
-Input is disabled by defualt it can be enabled using the `Enable Input` option.
+Input is disabled by default. It can be enabled using the `Enable Input` option.
 
 ### Enable / Disable
 
