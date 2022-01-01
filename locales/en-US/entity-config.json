@@ -1,0 +1,18 @@
+{
+  "ha-entity-config": {
+    "label": {
+      "type": "type",
+      "name": "friendly name",
+      "icon": "icon",
+      "device_class": "device class",
+      "unit_of_measurement": "unit of measurement",
+      "state_class": "state class",
+      "last_reset": "last reset",
+      "button": "button",
+      "select_option": {
+        "restart": "restart",
+        "update": "update"
+      }
+    }
+  }
+}

@@ -10,8 +10,16 @@ const exposeNode = (function ($, RED, ha) {
         version[serverId] = msg.version;
     });
 
+    function isEntityNode() {
+        return node.type === 'ha-button';
+    }
+
     function getServerId() {
-        const selectedServer = $('#node-input-server').val();
+        let selectedServer = $('#node-input-server').val();
+        if (isEntityNode()) {
+            const entity = RED.nodes.node($('#node-input-entityConfig').val());
+            selectedServer = entity && entity.server;
+        }
 
         if (!selectedServer || selectedServer === '_ADD_') {
             return;
@@ -44,11 +52,14 @@ const exposeNode = (function ($, RED, ha) {
         node = n;
         render();
 
-        $('#node-input-server').on('change', () => {
+        $('#node-input-server, #node-input-entityConfig').on('change', () => {
             switch (node.type) {
                 case 'ha-webhook':
                 case 'ha-entity':
                     renderAlert();
+                    break;
+                case 'ha-button':
+                    renderAlert('1.0.4');
                     break;
                 case 'ha-device':
                     renderAlert('0.5.0');
@@ -65,6 +76,9 @@ const exposeNode = (function ($, RED, ha) {
             case 'ha-webhook':
             case 'ha-entity':
                 renderAlert();
+                break;
+            case 'ha-button':
+                renderAlert('1.0.4');
                 break;
             default:
                 renderEventNode();

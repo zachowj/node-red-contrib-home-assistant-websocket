@@ -1,3 +1,4 @@
+const clonedeep = require('lodash.clonedeep');
 const merge = require('lodash.merge');
 const random = require('lodash.random');
 const sampleSize = require('lodash.samplesize');
@@ -376,11 +377,11 @@ class BaseNode {
                 val = undefined;
                 break;
             case 'config': {
-                const config = {
-                    ...this.nodeConfig,
-                    server: this.nodeConfig.server.id,
-                };
-                val = value.length ? selectn(value, config) : config;
+                val = clonedeep(
+                    value.length
+                        ? selectn(value, this.nodeConfig)
+                        : this.nodeConfig
+                );
                 break;
             }
             case 'data':

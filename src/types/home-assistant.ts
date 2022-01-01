@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import {
-    HassEntity,
+    HassEntity as HomeAssistantEntity,
     HassEventBase,
     HassUser as HomeAssistantUser,
 } from 'home-assistant-js-websocket';
@@ -94,4 +94,9 @@ export type HassStateChangedEvent = HassEventBase & {
         new_state: HassEntity | null;
         old_state: HassEntity | null;
     };
+};
+
+export type HassEntity = Omit<HomeAssistantEntity, 'state'> & {
+    original_state: string;
+    state: string | number | boolean | RegExp | string[];
 };

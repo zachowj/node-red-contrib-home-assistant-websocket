@@ -53,11 +53,13 @@ const uiHelpWrap =
 
 const nodeMap = {
     api: { doc: 'API', type: 'ha-api' },
+    button: { doc: 'button', type: 'ha-button' },
     'call-service': { doc: 'call-service', type: 'api-call-service' },
     'config-server': { doc: 'config-server', type: 'server' },
     'current-state': { doc: 'current-state', type: 'api-current-state' },
     device: { doc: 'device', type: 'ha-device' },
     entity: { doc: 'entity', type: 'ha-entity' },
+    'entity-config': { doc: 'entity-config', type: 'ha-entity-config' },
     'events-all': { doc: 'events-all', type: 'server-events' },
     'events-state': {
         doc: 'events-state',

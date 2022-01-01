@@ -27,6 +27,8 @@ import { EventsStatus, Status, SwitchEntityStatus } from './helpers/status';
 import { migrate } from './migrations';
 import { createRoutes } from './routes';
 import { BaseNode, DeviceNode, EntityNode, ServerNode } from './types/nodes';
+import buttonNode from './nodes/button';
+import entityConfigNode from './nodes/entity-config';
 
 export = (RED: NodeAPI): void => {
     setRED(RED);
@@ -318,11 +320,13 @@ export = (RED: NodeAPI): void => {
 
     const nodes = {
         'ha-api': apiNode,
+        'ha-button': buttonNode,
         'api-call-service': callServiceNode,
         server: configServerNode,
         'api-current-state': currentStateNode,
         'ha-device': deviceNode,
         'ha-entity': entityNode,
+        'ha-entity-config': entityConfigNode,
         'server-events': eventsAllNode,
         'server-state-changed': eventsStateNode,
         'ha-fire-event': fireEventNode,

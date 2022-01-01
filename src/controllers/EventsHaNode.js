@@ -258,13 +258,7 @@ class EventsHaNode extends EventsNode {
             return;
         }
 
-        const payload = {
-            type: 'nodered/discovery',
-            server_id: this.nodeConfig.server.id,
-            node_id: this.node.id,
-            component: 'switch',
-            remove: true,
-        };
+        const payload = { ...this.getDiscoveryPayload(), remove: true };
 
         this.homeAssistant.send(payload);
         this.removeFromHA = false;

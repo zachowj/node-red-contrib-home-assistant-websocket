@@ -85,11 +85,13 @@ module.exports = {
                     sidebarDepth: 1,
                     children: [
                         'API',
+                        'button',
                         'call-service',
                         'config-server',
                         'current-state',
                         'device',
                         'entity',
+                        'entity-config',
                         'events-all',
                         'events-state',
                         'fire-event',
