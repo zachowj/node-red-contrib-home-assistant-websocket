@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.41.1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.41.0...v0.41.1) (2022-01-01)
+
+
+### Bug Fixes
+
+* **button:** Ignore unknown subscription ([4faad95](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/4faad95db7ac23041ba15ae28cdc1c94cc4221b5))
+
 ## [0.41.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.40.0...v0.41.0) (2022-01-01)
 
 
