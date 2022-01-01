@@ -25,10 +25,10 @@ import { setRED } from './globals';
 import { getExposedSettings } from './helpers/exposed-settings';
 import { EventsStatus, Status, SwitchEntityStatus } from './helpers/status';
 import { migrate } from './migrations';
-import { createRoutes } from './routes';
-import { BaseNode, DeviceNode, EntityNode, ServerNode } from './types/nodes';
 import buttonNode from './nodes/button';
 import entityConfigNode from './nodes/entity-config';
+import { createRoutes } from './routes';
+import { BaseNode, DeviceNode, EntityNode, ServerNode } from './types/nodes';
 
 export = (RED: NodeAPI): void => {
     setRED(RED);

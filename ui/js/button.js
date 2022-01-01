@@ -1,4 +1,4 @@
-/* global RED: false, $: false, exposeNode: false, ha: false, haServer: false, nodeVersion: false */
+/* global RED: false, $: false, exposeNode: false, ha: false, nodeVersion: false, haOutputs: false */
 RED.nodes.registerType('ha-button', {
     category: 'home_assistant_entities',
     color: ha.nodeColors.beta,

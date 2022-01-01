@@ -1,15 +1,15 @@
-import { Node } from 'node-red';
-import merge from 'lodash.merge';
 import EventEmitter from 'events';
+import merge from 'lodash.merge';
+import { Node } from 'node-red';
 
 import {
     INTEGRATION_EVENT,
+    INTEGRATION_LOADED,
     INTEGRATION_NOT_LOADED,
     INTEGRATION_UNLOADED,
 } from '../../const';
-import { SubscriptionUnsubscribe } from '../../types/home-assistant';
-import { INTEGRATION_LOADED } from '../../const';
 import { RED } from '../../globals';
+import { SubscriptionUnsubscribe } from '../../types/home-assistant';
 import { ServerNode } from '../../types/nodes';
 
 const nodeDefaults = {
@@ -67,7 +67,7 @@ export default class EntityConfigController extends EventEmitter {
         }
     }
 
-    async onClose(removed: Boolean, done: () => void) {
+    async onClose(removed: boolean, done: () => void) {
         if (removed && this.server?.homeAssistant.isIntegrationLoaded) {
             this.removeFromHomeAssistant();
         }
@@ -100,7 +100,7 @@ export default class EntityConfigController extends EventEmitter {
         }
     }
 
-    getDiscoveryPayload(config?: {}) {
+    getDiscoveryPayload(config: Record<string, any> = {}) {
         return {
             type: 'nodered/discovery',
             server_id: this.server.node.id,
@@ -159,7 +159,7 @@ export default class EntityConfigController extends EventEmitter {
     async removeSubscription() {
         if (this.subscription) {
             this.node.debug('Unregistering from HA');
-            await this.subscription().catch(() => {});
+            await this.subscription().catch();
         }
         this.subscription = undefined;
     }

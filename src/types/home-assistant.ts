@@ -86,6 +86,11 @@ export type HassData = {
     [key: string]: any;
 };
 
+export type HassEntity = Omit<HomeAssistantEntity, 'state'> & {
+    original_state: string;
+    state: string | number | boolean | RegExp | string[];
+};
+
 export type HassStateChangedEvent = HassEventBase & {
     event_type: string;
     entity_id: string;
@@ -94,9 +99,4 @@ export type HassStateChangedEvent = HassEventBase & {
         new_state: HassEntity | null;
         old_state: HassEntity | null;
     };
-};
-
-export type HassEntity = Omit<HomeAssistantEntity, 'state'> & {
-    original_state: string;
-    state: string | number | boolean | RegExp | string[];
 };
