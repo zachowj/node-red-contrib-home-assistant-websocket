@@ -35,6 +35,11 @@ type IntegrationEvent =
     | typeof INTEGRATION_NOT_LOADED
     | typeof INTEGRATION_UNLOADED;
 
+process.on('unhandledRejection', (reason, p) => {
+    console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+    // application specific logging, throwing an error, or other logic here
+});
+
 export default class EntityConfigController extends EventEmitter {
     private node: Node;
     private nodeConfig;
@@ -159,7 +164,7 @@ export default class EntityConfigController extends EventEmitter {
     async removeSubscription() {
         if (this.subscription) {
             this.node.debug('Unregistering from HA');
-            await this.subscription().catch();
+            await this.subscription().catch(() => {}); // eslint-disable-line @typescript-eslint/no-empty-function
         }
         this.subscription = undefined;
     }
