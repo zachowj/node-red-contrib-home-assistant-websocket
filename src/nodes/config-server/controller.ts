@@ -36,8 +36,10 @@ const nodeDefaults = {
     heartbeatInterval: {},
 };
 
+type HomeAssistantStatesContext = { [entity_id: string]: HomeAssistantEntity };
+
 type HomeAssistantServerContext = {
-    states: { [entity_id: string]: HomeAssistantEntity };
+    states: HomeAssistantStatesContext;
     services: HassServices;
     isConnected: boolean;
     isRunning: boolean;
@@ -47,13 +49,17 @@ type HomeAssistantGlobalContext = {
     [serverName: string]: HomeAssistantServerContext;
 };
 
+type ExposedNodes = {
+    [nodeId: string]: boolean;
+};
+
 export default class ConfigServer {
     node: Node<Credentials>;
     config: ServerNodeConfig;
     events: EventsList = {};
     homeAssistant?: HomeAssistant;
     comms?: Comms;
-    exposedNodes = [];
+    exposedNodes: ExposedNodes = {};
     isHomeAssistantRunning = false;
 
     constructor({
@@ -157,11 +163,9 @@ export default class ConfigServer {
     };
 
     onHaStateChanged = (changedEntity: HassStateChangedEvent) => {
-        const states = this.getFromContext('states') as
-            | {
-                  [entity_id: string]: HomeAssistantEntity;
-              }
-            | undefined;
+        const states = this.getFromContext(
+            'states'
+        ) as HomeAssistantStatesContext;
         if (states) {
             states[changedEntity.entity_id] = changedEntity.event
                 .new_state as HomeAssistantEntity;
