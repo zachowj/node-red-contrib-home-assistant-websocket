@@ -140,8 +140,10 @@ export type EventsList = { [key: string]: (...args: any[]) => void };
 
 export function addEventListeners(
     eventListeners: EventsList,
-    emitter: EventEmitter
+    emitter?: EventEmitter
 ): void {
+    if (!emitter) return;
+
     Object.keys(eventListeners).forEach((event) => {
         emitter.on(event, eventListeners[event]);
     });
@@ -149,8 +151,10 @@ export function addEventListeners(
 
 export function removeEventListeners(
     eventListeners: EventsList,
-    emitter: EventEmitter
+    emitter?: EventEmitter
 ): void {
+    if (!emitter) return;
+
     Object.keys(eventListeners).forEach((event) => {
         emitter.off(event, eventListeners[event]);
     });

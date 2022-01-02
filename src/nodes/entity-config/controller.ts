@@ -11,9 +11,11 @@ import {
 import { RED } from '../../globals';
 import {
     addEventListeners,
-    removeEventListeners,
     EventsList,
+    removeEventListeners,
 } from '../../helpers/utils';
+import { Credentials } from '../../homeAssistant';
+import { IntegrationEvent } from '../../types';
 import { SubscriptionUnsubscribe } from '../../types/home-assistant';
 import { ServerNode } from '../../types/nodes';
 
@@ -35,11 +37,6 @@ type Event = {
     data: Record<string, any>;
 };
 
-type IntegrationEvent =
-    | typeof INTEGRATION_LOADED
-    | typeof INTEGRATION_NOT_LOADED
-    | typeof INTEGRATION_UNLOADED;
-
 export default class EntityConfigController extends EventEmitter {
     private node: Node;
     private nodeConfig;
@@ -54,7 +51,7 @@ export default class EntityConfigController extends EventEmitter {
         this.nodeConfig = merge({}, nodeDefaults, config);
         const serverNode = RED.nodes.getNode(
             this.nodeConfig.server
-        ) as ServerNode;
+        ) as ServerNode<Credentials>;
         this.server = serverNode.controller;
 
         // Setup event listeners
@@ -64,7 +61,7 @@ export default class EntityConfigController extends EventEmitter {
             'ha_client:error': this.onHaEventsError,
             [INTEGRATION_EVENT]: this.onHaIntegration,
         };
-        addEventListeners(this.events, this.server?.homeAssistant.eventBus);
+        addEventListeners(this.events, this.server?.homeAssistant?.eventBus);
 
         if (this.server?.homeAssistant?.isIntegrationLoaded) {
             this.registerEntity();
@@ -73,8 +70,8 @@ export default class EntityConfigController extends EventEmitter {
 
     async onClose(removed: boolean, done: () => void) {
         // Remove event listeners
-        removeEventListeners(this.events, this.server?.homeAssistant.eventBus);
-        if (removed && this.server?.homeAssistant.isIntegrationLoaded) {
+        removeEventListeners(this.events, this.server?.homeAssistant?.eventBus);
+        if (removed && this.server?.homeAssistant?.isIntegrationLoaded) {
             this.removeFromHomeAssistant();
         }
         this.removeSubscription();
@@ -127,7 +124,7 @@ export default class EntityConfigController extends EventEmitter {
             const payload = this.getDiscoveryPayload(haConfig);
             this.node.debug(`Registering with Home Assistant`);
             this.subscription =
-                await this.server.homeAssistant.subscribeMessage(
+                await this.server?.homeAssistant?.websocket.subscribeMessage(
                     this.onHaEventMessage.bind(this),
                     payload,
                     { resubscribe: false }
@@ -154,7 +151,7 @@ export default class EntityConfigController extends EventEmitter {
     removeFromHomeAssistant() {
         const payload = { ...this.getDiscoveryPayload(), remove: true };
 
-        this.server?.homeAssistant?.send(payload);
+        this.server?.homeAssistant?.websocket.send(payload);
         this.removeSubscription();
     }
 

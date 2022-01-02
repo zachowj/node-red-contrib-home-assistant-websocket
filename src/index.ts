@@ -2,7 +2,6 @@ import { NodeAPI, NodeDef } from 'node-red';
 
 import Api from './controllers/Api';
 import CallService from './controllers/CallService';
-import ConfigServer from './controllers/ConfigServer';
 import CurrentState from './controllers/CurrentState';
 import DeviceAction from './controllers/device/DeviceAction';
 import DeviceTrigger from './controllers/device/DeviceTrigger';
@@ -26,9 +25,17 @@ import { getExposedSettings } from './helpers/exposed-settings';
 import { EventsStatus, Status, SwitchEntityStatus } from './helpers/status';
 import { migrate } from './migrations';
 import buttonNode from './nodes/button';
+import configServerNode from './nodes/config-server';
 import entityConfigNode from './nodes/entity-config';
 import { createRoutes } from './routes';
-import { BaseNode, DeviceNode, EntityNode, ServerNode } from './types/nodes';
+import { BaseNode, BaseNodeConfig, DeviceNode } from './types/nodes';
+
+// interface for entity js nodes
+interface EntityNode extends BaseNode {
+    config: BaseNodeConfig & {
+        entityType: string;
+    };
+}
 
 export = (RED: NodeAPI): void => {
     setRED(RED);
@@ -58,18 +65,6 @@ export = (RED: NodeAPI): void => {
             RED,
             status,
         });
-    }
-
-    function configServerNode(this: ServerNode, config: NodeDef) {
-        RED.nodes.createNode(this, config);
-
-        this.config = migrate(config);
-        this.controller = new ConfigServer({
-            node: this,
-            config: this.config,
-            RED,
-        });
-        this.controller.init();
     }
 
     function currentStateNode(this: BaseNode, config: NodeDef) {

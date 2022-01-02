@@ -1,6 +1,10 @@
-import { Node } from 'node-red';
+import { Node, NodeDef } from 'node-red';
 
-export interface ServerNodeConfig {
+import { Credentials } from '../homeAssistant';
+import ConfigServer from '../nodes/config-server/controller';
+import EntityConfigController from '../nodes/entity-config/controller';
+
+export interface ServerNodeConfig extends NodeDef {
     name: string;
     version: number;
     addon: boolean;
@@ -13,15 +17,15 @@ export interface ServerNodeConfig {
     heartbeatInterval: number;
 }
 
-export interface ServerNode extends Node {
+export interface ServerNode<T> extends Node<T> {
     config: ServerNodeConfig;
-    controller: any;
+    controller: ConfigServer;
 }
 
 export interface BaseNodeConfig {
     debugenabled: boolean;
     name: string;
-    server?: ServerNode;
+    server?: ServerNode<Credentials>;
     version: number;
 }
 
@@ -36,8 +40,22 @@ export interface DeviceNode extends BaseNode {
     };
 }
 
-export interface EntityNode extends BaseNode {
-    config: BaseNodeConfig & {
-        entityType: string;
+type OutputProperty = {
+    property: string;
+    propertyType: string;
+    value: string;
+    valueType: string;
+};
+
+export interface EntityNodeDef extends NodeDef {
+    entityType: string;
+    entityConfig: {
+        controller: EntityConfigController;
     };
+    outputProperties: OutputProperty[];
+}
+
+export interface EntityNode extends Node {
+    config: EntityNodeDef;
+    controller: any;
 }

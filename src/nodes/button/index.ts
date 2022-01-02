@@ -1,12 +1,10 @@
-import { NodeDef } from 'node-red';
-
 import { RED } from '../../globals';
 import { Status } from '../../helpers/status';
 import { migrate } from '../../migrations';
-import { BaseNode } from '../../types/nodes';
+import { EntityNode, EntityNodeDef } from '../../types/nodes';
 import ButtonController from './controller';
 
-export default function buttonNode(this: BaseNode, config: NodeDef) {
+export default function buttonNode(this: EntityNode, config: EntityNodeDef) {
     RED.nodes.createNode(this, config);
 
     this.config = migrate(config);
@@ -14,7 +12,6 @@ export default function buttonNode(this: BaseNode, config: NodeDef) {
     this.controller = new ButtonController({
         node: this,
         config: this.config,
-        RED,
         status,
     });
 }
