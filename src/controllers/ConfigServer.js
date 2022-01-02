@@ -4,7 +4,11 @@ const Comms = require('../helpers/Comms').default;
 const { createHomeAssistantClient } = require('../homeAssistant');
 const { INTEGRATION_NOT_LOADED } = require('../const');
 const { SUPERVISOR_URL } = require('../homeAssistant');
-const { toCamelCase } = require('../helpers/utils');
+const {
+    toCamelCase,
+    removeEventListeners,
+    addEventListeners,
+} = require('../helpers/utils');
 
 const nodeDefaults = {
     name: {},
@@ -24,6 +28,7 @@ class ConfigServer {
         this.RED = RED;
         this.config = merge({}, nodeDefaults, config);
         this.exposedNodes = [];
+        this.events = {};
 
         this.setOnContext('states', []);
         this.setOnContext('services', []);
@@ -54,7 +59,7 @@ class ConfigServer {
 
     startListeners() {
         // Setup event listeners
-        const events = {
+        this.events = {
             'ha_client:close': this.onHaEventsClose,
             'ha_client:open': this.onHaEventsOpen,
             'ha_client:connecting': this.onHaEventsConnecting,
@@ -65,12 +70,10 @@ class ConfigServer {
             'ha_events:state_changed': this.onHaStateChanged,
             integration: this.onIntegrationEvent,
         };
-        Object.entries(events).forEach(([event, callback]) =>
-            this.homeAssistant.addListener(event, callback.bind(this))
-        );
+        addEventListeners(this.events, this.homeAssistant.eventBus);
         this.homeAssistant.addListener(
             'ha_client:connected',
-            this.registerEvents.bind(this),
+            this.registerEvents,
             { once: true }
         );
     }
@@ -95,65 +98,67 @@ class ConfigServer {
             : null;
     }
 
-    onHaEventsOpen() {
+    onHaEventsOpen = () => {
         this.setOnContext('isConnected', true);
 
         this.node.log(`Connected to ${this.hostname}`);
-    }
+    };
 
-    onHaStateChanged(changedEntity) {
+    onHaStateChanged = (changedEntity) => {
         const states = this.getFromContext('states');
         if (states) {
             states[changedEntity.entity_id] = changedEntity.event.new_state;
             this.setOnContext('states', states);
         }
-    }
+    };
 
-    onHaStatesLoaded(states) {
+    onHaStatesLoaded = (states) => {
         this.setOnContext('states', states);
         this.node.debug('States Loaded');
-    }
+    };
 
-    onHaServicesLoaded(services) {
+    onHaServicesLoaded = (services) => {
         this.setOnContext('services', services);
         this.node.debug('Services Loaded');
-    }
+    };
 
-    onHaEventsConnecting() {
+    onHaEventsConnecting = () => {
         this.setOnContext('isConnected', false);
         this.setOnContext('isRunning', false);
         this.node.log(`Connecting to ${this.hostname}`);
-    }
+    };
 
-    onHaEventsClose() {
+    onHaEventsClose = () => {
         if (this.getFromContext('isConnected')) {
             this.node.log(`Connection closed to ${this.hostname}`);
         }
         this.setOnContext('isConnected', false);
         this.setOnContext('isRunning', false);
-    }
+    };
 
-    onHaEventsRunning() {
+    onHaEventsRunning = () => {
         this.setOnContext('isRunning', true);
         this.node.debug(`HA State: running`);
-    }
+    };
 
-    onHaEventsError(err) {
+    onHaEventsError = (err) => {
         this.setOnContext('isConnected', false);
         this.setOnContext('isRunning', false);
         this.node.debug(err);
-    }
+    };
 
     // Close WebSocket client on redeploy or node-RED shutdown
     onClose(removed, done) {
         if (this.homeAssistant) {
+            // Remove event listeners
+            removeEventListeners(this.events, this.homeAssistant.eventBus);
             this.node.log(`Closing connection to ${this.hostname}`);
             this.homeAssistant.close();
         }
         done();
     }
 
-    onIntegrationEvent(eventType) {
+    onIntegrationEvent = (eventType) => {
         if (
             eventType === INTEGRATION_NOT_LOADED &&
             !this.isHomeAssistantRunning
@@ -161,11 +166,11 @@ class ConfigServer {
             return;
         }
         this.node.debug(`Integration: ${eventType}`);
-    }
+    };
 
-    registerEvents() {
+    registerEvents = () => {
         this.homeAssistant.subscribeEvents();
-    }
+    };
 }
 
 module.exports = ConfigServer;
