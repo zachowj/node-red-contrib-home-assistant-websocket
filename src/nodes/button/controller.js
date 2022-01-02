@@ -1,6 +1,10 @@
 const selectn = require('selectn');
 
 const BaseNode = require('../../controllers/BaseNode');
+const {
+    addEventListeners,
+    removeEventListeners,
+} = require('../../helpers/utils');
 
 const nodeDefaults = {
     config: {
@@ -14,11 +18,16 @@ const nodeDefaults = {
 class ButtonController extends BaseNode {
     constructor({ node, config, RED, status }) {
         super({ node, config, RED, status, nodeOptions: nodeDefaults });
-        this.listeners = {};
-        this.addEventListener('triggered', this.onTrigger.bind(this));
+
+        if (selectn('nodeConfig.entityConfig.controller', this)) {
+            addEventListeners(
+                { triggered: this.onTrigger },
+                this.nodeConfig.entityConfig.controller
+            );
+        }
     }
 
-    onTrigger(data) {
+    onTrigger = (data) => {
         this.status.setSuccess('pressed');
         const message = {};
         this.setCustomOutputs(this.nodeConfig.outputProperties, message, {
@@ -28,27 +37,18 @@ class ButtonController extends BaseNode {
             triggerId: data.entity.entity_id,
         });
         this.send(message);
-    }
+    };
 
     onClose() {
         this.removeEventListeners();
     }
 
-    addEventListener(event, handler) {
-        if (selectn('nodeConfig.entityConfig.controller', this)) {
-            this.listeners[event] = handler;
-            this.nodeConfig.entityConfig.controller.addListener(event, handler);
-        }
-    }
-
     removeEventListeners() {
         if (selectn('nodeConfig.entityConfig.controller', this)) {
-            Object.entries(this.listeners).forEach(([event, handler]) => {
-                this.nodeConfig.entityConfig.controller.removeListener(
-                    event,
-                    handler
-                );
-            });
+            removeEventListeners(
+                { triggered: this.onTrigger },
+                this.nodeConfig.entityConfig.controller
+            );
         }
     }
 }
