@@ -9,6 +9,11 @@ import {
     INTEGRATION_UNLOADED,
 } from '../../const';
 import { RED } from '../../globals';
+import {
+    addEventListeners,
+    removeEventListeners,
+    EventsList,
+} from '../../helpers/utils';
 import { SubscriptionUnsubscribe } from '../../types/home-assistant';
 import { ServerNode } from '../../types/nodes';
 
@@ -41,6 +46,7 @@ export default class EntityConfigController extends EventEmitter {
     private server;
     private subscription?: SubscriptionUnsubscribe;
     private registered = false;
+    private events: EventsList;
 
     constructor({ node, config }: { node: Node; config: any }) {
         super();
@@ -53,14 +59,12 @@ export default class EntityConfigController extends EventEmitter {
 
         // Setup event listeners
         node.on('close', this.onClose.bind(this));
-        const events = {
+        this.events = {
             'ha_client:close': this.onHaEventsClose,
             'ha_client:error': this.onHaEventsError,
             [INTEGRATION_EVENT]: this.onHaIntegration,
         };
-        Object.entries(events).forEach(([event, callback]) =>
-            this.server?.homeAssistant?.addListener(event, callback.bind(this))
-        );
+        addEventListeners(this.events, this.server?.homeAssistant.eventBus);
 
         if (this.server?.homeAssistant?.isIntegrationLoaded) {
             this.registerEntity();
@@ -68,6 +72,8 @@ export default class EntityConfigController extends EventEmitter {
     }
 
     async onClose(removed: boolean, done: () => void) {
+        // Remove event listeners
+        removeEventListeners(this.events, this.server?.homeAssistant.eventBus);
         if (removed && this.server?.homeAssistant.isIntegrationLoaded) {
             this.removeFromHomeAssistant();
         }
@@ -75,19 +81,15 @@ export default class EntityConfigController extends EventEmitter {
         done();
     }
 
-    onHaEventsOpen() {
-        this.subscription = undefined;
-    }
-
-    onHaEventsClose() {
+    onHaEventsClose = () => {
         this.registered = false;
-    }
+    };
 
-    onHaEventsError(err: Error) {
+    onHaEventsError = (err: Error) => {
         this.node.error(err.message ?? err);
-    }
+    };
 
-    onHaIntegration(type: IntegrationEvent) {
+    onHaIntegration = (type: IntegrationEvent) => {
         switch (type) {
             case INTEGRATION_LOADED:
                 this.registerEntity();
@@ -98,7 +100,7 @@ export default class EntityConfigController extends EventEmitter {
                 this.registered = false;
                 break;
         }
-    }
+    };
 
     getDiscoveryPayload(config: Record<string, any> = {}) {
         return {

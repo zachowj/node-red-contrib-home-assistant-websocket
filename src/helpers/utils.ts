@@ -1,3 +1,4 @@
+import EventEmitter from 'events';
 import matchAll from 'string.prototype.matchall';
 
 export function shouldInclude(
@@ -133,4 +134,24 @@ export function getEntitiesFromJsonata(jsonata: string): Set<string> {
     const matches = matchAll(jsonata, regex);
 
     return new Set(Array.from(matches, (m) => m[1] as string));
+}
+
+export type EventsList = { [key: string]: (...args: any[]) => void };
+
+export function addEventListeners(
+    eventListeners: EventsList,
+    emitter: EventEmitter
+): void {
+    Object.keys(eventListeners).forEach((event) => {
+        emitter.on(event, eventListeners[event]);
+    });
+}
+
+export function removeEventListeners(
+    eventListeners: EventsList,
+    emitter: EventEmitter
+): void {
+    Object.keys(eventListeners).forEach((event) => {
+        emitter.off(event, eventListeners[event]);
+    });
 }
