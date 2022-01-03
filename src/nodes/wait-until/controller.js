@@ -2,13 +2,13 @@ const cloneDeep = require('lodash.clonedeep');
 const Joi = require('joi');
 const selectn = require('selectn');
 
-const EventsNode = require('./EventsNode');
+const EventsNode = require('../EventsNode');
 const {
     shouldIncludeEvent,
     getWaitStatusText,
     getTimeInMilliseconds,
-} = require('../helpers/utils');
-const { renderTemplate } = require('../helpers/renderTemplate');
+} = require('../../helpers/utils');
+const { renderTemplate } = require('../../helpers/renderTemplate');
 
 const nodeOptions = {
     config: {

@@ -1,6 +1,5 @@
-const EventsNode = require('./EventsNode');
-
-const { INTEGRATION_UNLOADED } = require('../const');
+const EventsNode = require('../EventsNode');
+const { INTEGRATION_UNLOADED } = require('../../const');
 
 const nodeOptions = {
     config: {

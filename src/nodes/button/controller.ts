@@ -1,9 +1,9 @@
-import BaseNode from '../../controllers/BaseNode';
 import { RED } from '../../globals';
 import { Status } from '../../helpers/status';
 import { addEventListeners, removeEventListeners } from '../../helpers/utils';
 import { HassEntity } from '../../types/home-assistant';
 import { EntityNode, EntityNodeDef } from '../../types/nodes';
+import BaseNode from '../BaseNode';
 
 const nodeDefaults = {
     config: {

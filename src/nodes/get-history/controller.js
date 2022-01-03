@@ -1,8 +1,8 @@
 const Joi = require('joi');
 const timestring = require('timestring');
 
-const BaseNode = require('./BaseNode');
-const { renderTemplate } = require('../helpers/renderTemplate');
+const BaseNode = require('../BaseNode');
+const { renderTemplate } = require('../../helpers/renderTemplate');
 
 const nodeOptions = {
     debug: true,

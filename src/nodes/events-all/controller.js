@@ -1,4 +1,4 @@
-const EventsHaNode = require('./EventsHaNode');
+const EventsHaNode = require('../EventsHaNode');
 
 const nodeOptions = {
     config: {

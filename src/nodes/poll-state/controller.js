@@ -1,11 +1,11 @@
 const ta = require('time-ago');
 
-const EventsHaNode = require('./EventsHaNode');
+const EventsHaNode = require('../EventsHaNode');
 const {
     getTimeInMilliseconds,
     getEntitiesFromJsonata,
-} = require('../helpers/utils');
-const { TYPEDINPUT_JSONATA } = require('../const');
+} = require('../../helpers/utils');
+const { TYPEDINPUT_JSONATA } = require('../../const');
 
 const nodeOptions = {
     config: {

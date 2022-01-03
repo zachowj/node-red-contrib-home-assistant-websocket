@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
 const selectn = require('selectn');
 
-const EventsNode = require('./EventsNode');
-const { HA_CLIENT_READY } = require('../const');
-const { renderTemplate } = require('../helpers/renderTemplate');
+const EventsNode = require('../EventsNode');
+const { HA_CLIENT_READY } = require('../../const');
+const { renderTemplate } = require('../../helpers/renderTemplate');
 
 const domainsNeedingArrays = [
     'homeassistant',

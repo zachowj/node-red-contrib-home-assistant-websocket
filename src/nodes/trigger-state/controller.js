@@ -2,9 +2,9 @@
 const cloneDeep = require('lodash.clonedeep');
 const selectn = require('selectn');
 
-const EventsHaNode = require('./EventsHaNode');
-const { renderTemplate } = require('../helpers/renderTemplate');
-const { shouldIncludeEvent } = require('../helpers/utils');
+const EventsHaNode = require('../EventsHaNode');
+const { renderTemplate } = require('../../helpers/renderTemplate');
+const { shouldIncludeEvent } = require('../../helpers/utils');
 
 const nodeOptions = {
     debug: true,

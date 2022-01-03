@@ -1,12 +1,12 @@
 const cloneDeep = require('lodash.clonedeep');
 const selectn = require('selectn');
 
-const EventsHaNode = require('./EventsHaNode');
+const EventsHaNode = require('../EventsHaNode');
 const {
     shouldIncludeEvent,
     getWaitStatusText,
     getTimeInMilliseconds,
-} = require('../helpers/utils');
+} = require('../../helpers/utils');
 
 const nodeOptions = {
     config: {

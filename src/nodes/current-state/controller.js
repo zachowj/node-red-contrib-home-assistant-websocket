@@ -1,8 +1,8 @@
 const Joi = require('joi');
 
-const BaseNode = require('./BaseNode');
-const { getTimeInMilliseconds } = require('../helpers/utils');
-const { renderTemplate } = require('../helpers/renderTemplate');
+const BaseNode = require('../BaseNode');
+const { getTimeInMilliseconds } = require('../../helpers/utils');
+const { renderTemplate } = require('../../helpers/renderTemplate');
 
 const nodeOptions = {
     config: {

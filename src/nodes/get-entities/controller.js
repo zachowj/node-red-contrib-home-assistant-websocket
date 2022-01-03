@@ -2,7 +2,7 @@ const Joi = require('joi');
 const selectn = require('selectn');
 const { shuffle } = require('lodash');
 
-const BaseNode = require('./BaseNode');
+const BaseNode = require('../BaseNode');
 
 const nodeOptions = {
     debug: true,
