@@ -291,7 +291,7 @@ task('buildEditorFiles', (done) => {
         .pipe(buildJs());
 
     const html = src([
-        'ui/html/*.html',
+        'src/nodes/**/*.html',
         `docs/node/*.md`,
         `!docs/node/README.md`,
     ]).pipe(
@@ -305,7 +305,10 @@ task('buildEditorFiles', (done) => {
                 currentFilename = key;
                 return stream.pipe(buildHelp());
             } else if (ext === 'html') {
-                currentFilename = filename;
+                const [, node] = file.path.match(
+                    /[\\/]src[\\/]nodes[\\/]([^\\/]+)[\\/]editor\.html/
+                );
+                currentFilename = node;
                 return stream.pipe(buildForm());
             }
 
