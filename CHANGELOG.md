@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.41.3](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.41.2...v0.41.3) (2022-01-03)
+
+
+### Bug Fixes
+
+* **button:** Fix removal of event listeners ([a52acdb](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a52acdbe46cd3a6c0cf34a990ecad44605fceb1e))
+* **config-service:** Fix removal of event listeners ([7aabccb](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/7aabccb2d3ffecf81b8df9e03029fb86a9aa10d2))
+* **entity-config:** Fix removal of event listeners ([79bdcb9](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/79bdcb953befc90d2c7615c7b6cbdbb8c4b83088))
+
 ### [0.41.2](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.41.1...v0.41.2) (2022-01-01)
 
 
