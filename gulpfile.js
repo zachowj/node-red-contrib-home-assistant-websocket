@@ -260,9 +260,12 @@ const buildHelp = lazypipe()
     );
 
 task('buildEditorFiles', (done) => {
-    const css = src(['ui/css/**/*.scss', 'ui/css/**/*.css', '!_*.scss']).pipe(
-        buildSass()
-    );
+    const css = src([
+        'src/nodes/**/*.scss',
+        'css/**/*.scss',
+        'css/**/*.css',
+        '!_*.scss',
+    ]).pipe(buildSass());
 
     const migrations = rollupStream({
         input: 'src/migrations/index.js',
