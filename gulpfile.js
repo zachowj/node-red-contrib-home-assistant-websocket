@@ -354,10 +354,10 @@ task('cleanAssetFiles', (done) => {
 
 task('cleanSourceFiles', (done) => {
     del.sync([
-        'dist/controllers',
         'dist/helpers',
         'dist/homeAssistant',
         'dist/migrations',
+        'dist/nodes',
         'dist/*.js',
     ]);
 
@@ -428,7 +428,7 @@ module.exports = {
                     'docs/node/*.md',
                     'locales/**/*.json',
                     'src/migrations/**/*',
-                    'ui/**/*',
+                    'src/nodes/**/editor.*',
                 ],
                 series(
                     'cleanEditorFiles',
@@ -438,7 +438,7 @@ module.exports = {
             );
             // only server side files modified restart node-red only
             watch(
-                ['src/**/*.js', 'src/**/*.ts'],
+                ['src/**/*.js', 'src/**/*.ts', '!src/nodes/**/editor.*'],
                 series('cleanSourceFiles', 'buildSourceFiles', restartNodemon)
             );
             done();
