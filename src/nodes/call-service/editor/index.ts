@@ -1,8 +1,8 @@
-import { HassServices } from 'home-assistant-js-websocket';
+import { HassEntity, HassServices } from 'home-assistant-js-websocket';
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
 import { SERVER_ADD } from '../../../const';
-import * as haData from '../../../editor/data';
+import { getServices as getHassServices } from '../../../editor/data';
 import * as ha from '../../../editor/ha';
 import * as haServer from '../../../editor/haserver';
 import * as nodeVersion from '../../../editor/nodeversion';
@@ -10,6 +10,7 @@ import * as haOutputs from '../../../editor/output-properties';
 import { OutputProperty } from '../../../editor/types';
 import { loadExampleData, updateServiceSelection } from './service-table';
 import { populateEntities } from './targets';
+import { autocompleteSetup, getNormalizedDomainServices } from './utils';
 
 declare const RED: EditorRED;
 
@@ -33,6 +34,31 @@ interface CallServiceEditorNodeProperties extends EditorNodeProperties {
     service_domain?: string;
     mergecontext?: string;
 }
+
+type ServiceTarget = {
+    entity?: {
+        domain?: string;
+    };
+};
+
+export type FilterEntities = (
+    value: HassEntity,
+    index: number,
+    array: HassEntity[]
+) => boolean;
+
+const byServiceTarget = (
+    services: HassServices
+): FilterEntities | undefined => {
+    const [domain, service] = getNormalizedDomainServices();
+    const filterDomain = (
+        services?.[domain]?.[service]?.target as ServiceTarget
+    )?.entity?.domain;
+
+    return filterDomain
+        ? (value) => value.entity_id.startsWith(`${filterDomain}.`)
+        : undefined;
+};
 
 const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
     category: 'home_assistant',
@@ -79,37 +105,18 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
         haServer.init(this, '#node-input-server');
         const $domainField = $('#node-input-domain');
         const $serviceField = $('#node-input-service');
-        const $entityIdField = $('#node-input-entityId');
         const $data = $('#node-input-data');
         const $dataType = $('#node-input-dataType');
         const $loadExampleData = $('#example-data');
 
         // Load domaina and service list into autocomplete
         const populateDomainAndServices = (serverId: string) => {
-            const services: HassServices = haData.getServices(serverId);
-            // Helper function to create a autocomplete list
-            const autocompleteSetup = (
-                ele: JQuery,
-                source: string[],
-                cb: () => void
-            ) => {
-                ele.autocomplete({
-                    source: source,
-                    minLength: 0,
-                    change: cb,
-                }).on('focus', function () {
-                    // Show search if text field is empty
-                    const $this = $(this);
-                    if (($this.val() as string).length === 0) {
-                        $this.autocomplete('search');
-                    }
-                });
-            };
+            const services = getHassServices(serverId);
             const updateDomainServices = () => {
                 const domainNormalized = (
                     $domainField.val() as string
                 ).toLowerCase();
-                // Use all services if domain is not found in list
+                // Use all services if domain is not found in the list
                 const domainSerivces =
                     domainNormalized in services
                         ? Object.keys(services[domainNormalized] ?? [])
@@ -121,11 +128,12 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
                               )
                           );
 
-                autocompleteSetup(
-                    $serviceField,
-                    domainSerivces.sort(),
-                    updateServiceSelection
-                );
+                autocompleteSetup($serviceField, domainSerivces.sort(), () => {
+                    updateServiceSelection();
+                    populateEntities(serverId, {
+                        filter: byServiceTarget(services),
+                    });
+                });
             };
             autocompleteSetup(
                 $domainField,
@@ -141,6 +149,9 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
                     if (!source.includes($serviceField.val() as string)) {
                         $serviceField.val('');
                     }
+                    populateEntities(serverId, {
+                        filter: byServiceTarget(services),
+                    });
                 }
             );
             updateDomainServices();
@@ -151,7 +162,10 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
             const serverId = $('#node-input-server').val() as string;
             if (serverId === SERVER_ADD) return;
             populateDomainAndServices(serverId);
-            populateEntities(serverId, $entityIdField, this.entityId);
+            populateEntities(serverId, {
+                selectedIds: this.entityId,
+                filter: byServiceTarget(getHassServices(serverId)),
+            });
         });
         $loadExampleData.on('click', loadExampleData);
 

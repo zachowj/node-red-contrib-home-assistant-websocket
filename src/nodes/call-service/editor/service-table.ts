@@ -1,11 +1,5 @@
 import * as haData from '../../../editor/data';
-
-const getNormalizedDomainServices = () => {
-    const domain = $('#node-input-domain').val() as string;
-    const service = $('#node-input-service').val() as string;
-
-    return [domain.toLowerCase(), service.toLowerCase()];
-};
+import { getNormalizedDomainServices } from './utils';
 
 // Populate service table
 export const updateServiceSelection = () => {
@@ -79,6 +73,7 @@ export const loadExampleData = () => {
         const serviceData = services?.[domain]?.[service];
         if (serviceData) {
             const fields = serviceData.fields;
+            // TODO: rework to use fields data and not have to guess at parsing the example data
             const exampleData = Object.keys(fields).reduce((acc, key) => {
                 const val = fields[key].example;
                 if (key === 'entity_id') {
