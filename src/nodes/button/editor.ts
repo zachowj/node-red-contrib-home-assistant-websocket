@@ -1,8 +1,7 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
 import * as exposeNode from '../../editor/exposenode';
-import * as ha from '../../editor/ha';
-import * as nodeVersion from '../../editor/nodeversion';
+import ha from '../../editor/ha';
 import * as haOutputs from '../../editor/output-properties';
 import { OutputProperty } from '../../editor/types';
 
@@ -64,7 +63,7 @@ const ButtonEditor: EditorNodeDef<ButtonEditorNodeProperties> = {
         },
     },
     oneditprepare: function () {
-        nodeVersion.check(this);
+        ha.setup(this);
         exposeNode.init(this);
         $('#dialog-form').prepend(ha.betaWarning(546));
 

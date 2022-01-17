@@ -1,8 +1,7 @@
 import { EditorNodeDef, EditorNodeInstance, EditorRED } from 'node-red';
 
-import * as ha from '../../editor/ha';
+import ha from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
-import * as nodeVersion from '../../editor/nodeversion';
 import * as haOutputs from '../../editor/output-properties';
 import { HassNodeProperties, OutputProperty } from '../../editor/types';
 
@@ -63,7 +62,7 @@ const ApiEditor: EditorNodeDef<ApiEditorNodeProperties> = {
     oneditprepare: function (
         this: EditorNodeInstance<ApiEditorNodeProperties>
     ) {
-        nodeVersion.check(this);
+        ha.setup(this);
         haServer.init(this, '#node-input-server');
 
         $('#node-input-data').typedInput({

@@ -1,11 +1,10 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
 import * as exposeNode from '../../editor/exposenode';
-import * as ha from '../../editor/ha';
+import ha from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import { hassAutocomplete } from '../../editor/hassAutocomplete';
 import * as ifState from '../../editor/ifstate';
-import * as nodeVersion from '../../editor/nodeversion';
 import { HassExposedConfig, StateType } from '../../editor/types';
 
 declare const RED: EditorRED;
@@ -63,7 +62,7 @@ const PollStateEditor: EditorNodeDef<PollStateEditorNodeProperties> = {
         outputs: { value: 1 },
     },
     oneditprepare: function () {
-        nodeVersion.check(this);
+        ha.setup(this);
         haServer.init(this, '#node-input-server');
         exposeNode.init(this);
         hassAutocomplete({ root: '#node-input-entity_id' });

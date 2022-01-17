@@ -1,8 +1,7 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
-import * as ha from '../../editor/ha';
+import ha from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
-import * as nodeVersion from '../../editor/nodeversion';
 import { HATypedInputTypeOptions } from '../../editor/types';
 
 declare const RED: EditorRED;
@@ -57,7 +56,7 @@ const WaitUntilEditor: EditorNodeDef<WaitUntilEditorNodeProperties> = {
         blockInputOverrides: { value: true },
     },
     oneditprepare: function () {
-        nodeVersion.check(this);
+        ha.setup(this);
         haServer.init(this, '#node-input-server');
 
         let availableEntities = [];

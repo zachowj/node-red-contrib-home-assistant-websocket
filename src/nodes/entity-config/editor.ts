@@ -1,6 +1,6 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
-import * as nodeVersion from '../../editor/nodeversion';
+import ha from '../../editor/ha';
 
 declare const RED: EditorRED;
 
@@ -32,7 +32,7 @@ const EntityConfigEditor: EditorNodeDef<EntityConfigEditorNodeProperties> = {
         return this.name || `${this.entityType} ${this.id}`;
     },
     oneditprepare: function () {
-        nodeVersion.check(this);
+        ha.setup(this);
 
         const haConfigOptions = {
             button: [

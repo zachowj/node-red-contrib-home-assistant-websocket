@@ -1,9 +1,8 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
 import * as exposeNode from '../../editor/exposenode';
-import * as ha from '../../editor/ha';
+import ha from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
-import * as nodeVersion from '../../editor/nodeversion';
 import * as haOutputs from '../../editor/output-properties';
 import {
     EditorWidgetEditableListOptions,
@@ -74,7 +73,7 @@ const TagEditor: EditorNodeDef<TagEditorNodeProperties> = {
         },
     },
     oneditprepare: function () {
-        nodeVersion.check(this);
+        ha.setup(this);
         exposeNode.init(this);
         const ALL_TAGS = '__ALL_TAGS__';
         const $tags = $('#tags');

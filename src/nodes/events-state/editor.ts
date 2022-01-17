@@ -1,10 +1,9 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
 import * as exposeNode from '../../editor/exposenode';
-import * as ha from '../../editor/ha';
+import ha from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import * as ifState from '../../editor/ifstate';
-import * as nodeVersion from '../../editor/nodeversion';
 import * as haOutputs from '../../editor/output-properties';
 import { HassExposedConfig, OutputProperty } from '../../editor/types';
 
@@ -102,7 +101,7 @@ const EventsStateEditor: EditorNodeDef<EventsStateEditorNodeProperties> = {
         },
     },
     oneditprepare: function () {
-        nodeVersion.check(this);
+        ha.setup(this);
         const $entityidfilter = $('#node-input-entityidfilter');
         let availableEntities: string[] = [];
 

@@ -155,7 +155,7 @@ const buildHelp = lazypipe()
                             }
 
                             // opening tag
-                            return `<div class="custom-block ${
+                            return `<div class="home-assistant-custom-block ${
                                 m[1]
                             }">\n<p class="custom-block-title">${md.utils.escapeHtml(
                                 m[2] || title
@@ -188,7 +188,7 @@ const buildHelp = lazypipe()
         $('badge').each((i, item) => {
             item.tagName = 'span';
             const $item = $(item)
-                .addClass('badge')
+                .addClass('home-assistant-badge')
                 .text(item.attribs.text || item.attribs.type);
             if (item.attribs.type) {
                 $item.addClass(item.attribs.type);

@@ -1,9 +1,9 @@
 import { EditorNodeInstance } from 'node-red';
 
-import { isCurrentVersion } from './nodeversion';
 import { HassNodeProperties } from './types';
+import { isCurrentVersion, versionCheck } from './version';
 
-export const nodeColors = {
+const nodeColors = {
     action: '#46B1EF',
     alpha: '#E78BB9',
     api: '#7CDFFD',
@@ -13,7 +13,12 @@ export const nodeColors = {
     haBlue: '#41BDF5',
 };
 
-export const alphaWarning = (id: number) => {
+const setup = (node: EditorNodeInstance<HassNodeProperties>) => {
+    versionCheck(node);
+    $('#dialog-form').addClass('home-assistant');
+};
+
+const alphaWarning = (id: number) => {
     const alert = $.parseHTML(`
             <div class="ui-state-error ha-alpha-box">
                 Alpha version: At this point anything could change or not work.
@@ -41,7 +46,7 @@ export const alphaWarning = (id: number) => {
     return alert;
 };
 
-export const betaWarning = (id: number) => {
+const betaWarning = (id: number) => {
     const alert = $.parseHTML(`
             <div class="ui-state-error ha-beta-box">
                 Beta version: Config should be stable and hopefully not too many bugs.
@@ -69,7 +74,7 @@ export const betaWarning = (id: number) => {
     return alert;
 };
 
-export function labelStyle(this: EditorNodeInstance<HassNodeProperties>) {
+function labelStyle(this: EditorNodeInstance<HassNodeProperties>) {
     const classes: string[] = [];
 
     if (!isCurrentVersion(this)) {
@@ -79,3 +84,11 @@ export function labelStyle(this: EditorNodeInstance<HassNodeProperties>) {
 
     return classes.join(' ');
 }
+
+export default {
+    alphaWarning,
+    betaWarning,
+    labelStyle,
+    nodeColors,
+    setup,
+};

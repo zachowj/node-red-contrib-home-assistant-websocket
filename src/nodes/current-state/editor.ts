@@ -1,10 +1,9 @@
 import { EditorNodeDef, EditorRED } from 'node-red';
 
-import * as ha from '../../editor/ha';
+import ha from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import { hassAutocomplete } from '../../editor/hassAutocomplete';
 import * as ifState from '../../editor/ifstate';
-import * as nodeVersion from '../../editor/nodeversion';
 import * as haOutputs from '../../editor/output-properties';
 import { HassNodeProperties, OutputProperty } from '../../editor/types';
 
@@ -87,7 +86,7 @@ const CurrentStateEditor: EditorNodeDef<CurrentStateEditorNodeProperties> = {
         override_data: { value: 'msg' }, // entity location types
     },
     oneditprepare: function () {
-        nodeVersion.check(this);
+        ha.setup(this);
         haServer.init(this, '#node-input-server');
         hassAutocomplete({ root: '#node-input-entity_id' });
 

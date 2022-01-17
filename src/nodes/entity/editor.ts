@@ -1,9 +1,8 @@
 import { EditorNodeDef, EditorRED, EditorWidgetTypedInputType } from 'node-red';
 
 import * as exposeNode from '../../editor/exposenode';
-import * as ha from '../../editor/ha';
+import ha from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
-import * as nodeVersion from '../../editor/nodeversion';
 import { HassExposedConfig, HassNodeProperties } from '../../editor/types';
 
 declare const RED: EditorRED;
@@ -131,7 +130,7 @@ const EntityEditor: EditorNodeDef<EntityEditorNodeProperties> = {
         outputPayloadType: { value: null },
     },
     oneditprepare: function () {
-        nodeVersion.check(this);
+        ha.setup(this);
         haServer.init(this, '#node-input-server');
         exposeNode.init(this);
         const $inputState = $('#node-input-state');

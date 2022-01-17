@@ -22,46 +22,82 @@ $home-assistant-color: #41bdf5;
     }
 }
 
-.form-row {
-    &.checkbox-option {
-        input {
-            margin-left: 105px;
-            margin-right: 5px;
-            display: inline-block;
-            width: auto;
-            vertical-align: top;
+.home-assistant {
+    .form-row {
+        &.checkbox-option {
+            input {
+                margin-left: 105px;
+                margin-right: 5px;
+                display: inline-block;
+                width: auto;
+                vertical-align: top;
+            }
+
+            label {
+                width: auto;
+            }
+        }
+
+        &.checkbox-option-left {
+            input {
+                display: inline-block;
+                margin-right: 5px;
+                width: auto;
+                vertical-align: top;
+            }
+
+            label {
+                width: auto;
+                margin-right: 20px;
+            }
+        }
+
+        &.add-spacer {
+            border-bottom: 1px solid #c6c6c6;
         }
 
         label {
-            width: auto;
+            text-transform: capitalize;
         }
     }
 
-    &.checkbox-option-left {
-        input {
-            display: inline-block;
-            margin-right: 5px;
-            width: auto;
-            vertical-align: top;
+    .editable-list-row {
+        margin-bottom: 4px;
+    }
+
+    li span.property-type {
+        font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        color: #666;
+        font-style: italic;
+        font-size: 11px;
+        float: right;
+    }
+
+    .ha-alert-box {
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+    }
+
+    .ha-alpha-box {
+        @extend .ha-alert-box;
+        color: $alpha-text-color;
+        background-color: $alpha-background-color;
+    }
+
+    .ha-beta-box {
+        @extend .ha-alert-box;
+        color: $beta-text-color;
+        background-color: $beta-background-color;
+    }
+
+    .ui-menu-item-wrapper {
+        .sublabel {
+            color: #9c9c9c;
+            font-size: smaller;
+            margin: 4px 0;
         }
-
-        label {
-            width: auto;
-            margin-right: 20px;
-        }
     }
-
-    &.add-spacer {
-        border-bottom: 1px solid #c6c6c6;
-    }
-
-    label {
-        text-transform: capitalize;
-    }
-}
-
-.editable-list-row {
-    margin-bottom: 4px;
 }
 
 #constraint-list {
@@ -89,33 +125,7 @@ $home-assistant-color: #41bdf5;
     user-select: none;
 }
 
-li span.property-type {
-    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
-    color: #666;
-    font-style: italic;
-    font-size: 11px;
-    float: right;
-}
-
-.ha-alert-box {
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 4px;
-}
-
-.ha-alpha-box {
-    @extend .ha-alert-box;
-    color: $alpha-text-color;
-    background-color: $alpha-background-color;
-}
-
-.ha-beta-box {
-    @extend .ha-alert-box;
-    color: $beta-text-color;
-    background-color: $beta-background-color;
-}
-
-.custom-block {
+.home-assistant-custom-block {
     .custom-block-title {
         font-weight: 600;
     }
@@ -168,7 +178,7 @@ li span.property-type {
     }
 }
 
-.badge {
+.home-assisant-badge {
     display: inline-block;
     font-size: 12px;
     height: 16px;
@@ -205,12 +215,4 @@ li span.property-type {
     text-decoration: none;
     margin: 0;
     border: 0;
-}
-
-.ui-menu-item-wrapper {
-    .sublabel {
-        color: #9c9c9c;
-        font-size: smaller;
-        margin: 4px 0;
-    }
 }

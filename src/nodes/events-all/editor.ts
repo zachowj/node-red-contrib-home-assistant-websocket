@@ -1,9 +1,8 @@
 import { EditorNodeDef, EditorRED } from 'node-red';
 
 import * as exposeNode from '../../editor/exposenode';
-import * as ha from '../../editor/ha';
+import ha from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
-import * as nodeVersion from '../../editor/nodeversion';
 import * as haOutputs from '../../editor/output-properties';
 import {
     HassExposedConfig,
@@ -66,7 +65,7 @@ const EventsAllEditor: EditorNodeDef<EventsAllEditorNodeProperties> = {
     },
     labelStyle: ha.labelStyle,
     oneditprepare: function () {
-        nodeVersion.check(this);
+        ha.setup(this);
         haServer.init(this, '#node-input-server');
         exposeNode.init(this);
 

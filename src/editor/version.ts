@@ -7,7 +7,7 @@ import { HassNodeProperties } from './types';
 declare const RED: EditorRED;
 let $upgradeHaNode: JQuery<HTMLElement>;
 
-export function check(node: EditorNodeInstance<HassNodeProperties>) {
+export function versionCheck(node: EditorNodeInstance<HassNodeProperties>) {
     if (isCurrentVersion(node)) {
         return;
     }

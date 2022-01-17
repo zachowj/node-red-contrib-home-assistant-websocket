@@ -1,9 +1,8 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
-import * as ha from '../../editor/ha';
+import ha from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import { hassAutocomplete } from '../../editor/hassAutocomplete';
-import * as nodeVersion from '../../editor/nodeversion';
 
 declare const RED: EditorRED;
 
@@ -58,7 +57,7 @@ const GetHistoryEditor: EditorNodeDef<GetHistoryEditorNodeProperties> = {
         output_location: { value: 'payload' },
     },
     oneditprepare: function () {
-        nodeVersion.check(this);
+        ha.setup(this);
         this.entityidtype = this.entityidtype || 'is';
         $('#node-input-entityidtype').val(this.entityidtype);
 

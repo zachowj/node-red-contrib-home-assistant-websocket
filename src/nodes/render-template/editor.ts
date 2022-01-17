@@ -1,8 +1,7 @@
 import { EditorNodeDef, EditorRED } from 'node-red';
 
-import * as ha from '../../editor/ha';
+import ha from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
-import * as nodeVersion from '../../editor/nodeversion';
 import { HassNodeProperties } from '../../editor/types';
 
 declare const RED: EditorRED;
@@ -42,8 +41,8 @@ const RenderTemplateEditor: EditorNodeDef<RenderTemplateEditorNodeProperties> =
             templateLocationType: { value: 'msg' },
         },
         oneditprepare: function () {
+            ha.setup(this);
             haServer.init(this, '#node-input-server');
-            nodeVersion.check(this);
 
             const $inputTemplate = $('#node-input-template');
 

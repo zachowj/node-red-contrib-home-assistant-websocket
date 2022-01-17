@@ -1,6 +1,6 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
-import * as nodeVersion from '../../editor/nodeversion';
+import ha from '../../editor/ha';
 import { Credentials } from '../../homeAssistant/index';
 
 declare const RED: EditorRED;
@@ -49,7 +49,7 @@ const ConfigServerEditor: EditorNodeDef<
         return this.name || 'Home Assistant';
     },
     oneditprepare: function () {
-        nodeVersion.check(this);
+        ha.setup(this);
         const $addon = $('#node-config-input-addon');
         const $host = $('#node-config-input-host');
 

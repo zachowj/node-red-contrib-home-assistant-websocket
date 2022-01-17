@@ -5,9 +5,8 @@ import {
     EditorWidgetTypedInputType,
 } from 'node-red';
 
-import * as ha from '../../editor/ha';
+import ha from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
-import * as nodeVersion from '../../editor/nodeversion';
 import { HATypedInputTypeOptions } from '../../editor/types';
 
 declare const RED: EditorRED;
@@ -63,7 +62,7 @@ const GetEntitiesEditor: EditorNodeDef<GetEntitiesEditorNodeProperties> = {
         },
     },
     oneditprepare: function () {
-        nodeVersion.check(this);
+        ha.setup(this);
         const operators = [
             { value: 'is', text: 'is' },
             { value: 'is_not', text: 'is not' },

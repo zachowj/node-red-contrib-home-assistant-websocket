@@ -1,8 +1,7 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
-import * as ha from '../../editor/ha';
+import ha from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
-import * as nodeVersion from '../../editor/nodeversion';
 
 declare const RED: EditorRED;
 
@@ -35,7 +34,7 @@ const FireEventEditor: EditorNodeDef<FireEventEditorNodeProperties> = {
         dataType: { value: 'jsonata' },
     },
     oneditprepare: function () {
-        nodeVersion.check(this);
+        ha.setup(this);
         haServer.init(this, '#node-input-server');
 
         $('#node-input-data').typedInput({

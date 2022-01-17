@@ -2,10 +2,9 @@ import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
 import * as haData from '../../editor/data';
 import * as exposeNode from '../../editor/exposenode';
-import * as ha from '../../editor/ha';
+import ha from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import { hassAutocomplete } from '../../editor/hassAutocomplete';
-import * as nodeVersion from '../../editor/nodeversion';
 import * as haOutputs from '../../editor/output-properties';
 import { HassExposedConfig, OutputProperty } from '../../editor/types';
 
@@ -106,7 +105,7 @@ const TimeEditor: EditorNodeDef<TimeEditorNodeProperties> = {
         payloadType: { value: undefined },
     },
     oneditprepare: function () {
-        nodeVersion.check(this);
+        ha.setup(this);
         const $server = $('#node-input-server');
         const $entityId = $('#node-input-entityId');
 

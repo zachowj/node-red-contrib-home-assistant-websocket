@@ -1,9 +1,8 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
 import * as exposeNode from '../../editor/exposenode';
-import * as ha from '../../editor/ha';
+import ha from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
-import * as nodeVersion from '../../editor/nodeversion';
 import { HassExposedConfig } from '../../editor/types';
 
 declare const RED: EditorRED;
@@ -110,7 +109,7 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
         enableInput: { value: false },
     },
     oneditprepare: function () {
-        nodeVersion.check(this);
+        ha.setup(this);
         const $constraintList = $('#constraint-list');
         const $outputList = $('#output-list');
 

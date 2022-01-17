@@ -3,9 +3,8 @@ import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
 import { SERVER_ADD } from '../../../const';
 import { getServices as getHassServices } from '../../../editor/data';
-import * as ha from '../../../editor/ha';
+import ha from '../../../editor/ha';
 import * as haServer from '../../../editor/haserver';
-import * as nodeVersion from '../../../editor/nodeversion';
 import * as haOutputs from '../../../editor/output-properties';
 import { OutputProperty } from '../../../editor/types';
 import { loadExampleData, updateServiceSelection } from './service-table';
@@ -101,7 +100,7 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
         mergecontext: { value: undefined },
     },
     oneditprepare: function () {
-        nodeVersion.check(this);
+        ha.setup(this);
         haServer.init(this, '#node-input-server');
         const $domainField = $('#node-input-domain');
         const $serviceField = $('#node-input-service');

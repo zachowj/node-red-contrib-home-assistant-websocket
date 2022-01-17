@@ -2,10 +2,9 @@ import { EditorNodeDef, EditorRED } from 'node-red';
 
 import * as haData from '../../../editor/data';
 import * as exposeNode from '../../../editor/exposenode';
-import * as ha from '../../../editor/ha';
+import ha from '../../../editor/ha';
 import * as haServer from '../../../editor/haserver';
 import { i18n } from '../../../editor/i18n';
-import * as nodeVersion from '../../../editor/nodeversion';
 import * as haOutputs from '../../../editor/output-properties';
 import { select2DefaultOptions } from '../../../editor/select2';
 import {
@@ -115,7 +114,7 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
         },
     },
     oneditprepare: function () {
-        nodeVersion.check(this);
+        ha.setup(this);
         haServer.init(this, '#node-input-server');
         exposeNode.init(this);
         const SERVER_ADD = '_ADD_';

@@ -8,11 +8,7 @@ import {
     updateServices,
 } from './editor/data';
 import { updateIntegration } from './editor/exposenode';
-import {
-    onNodesAdd,
-    onNodesRemove,
-    setupMigrations,
-} from './editor/nodeversion';
+import { onNodesAdd, onNodesRemove, setupMigrations } from './editor/version';
 import ApiEditor from './nodes/api/editor';
 import ButtonEditor from './nodes/button/editor';
 import CallServiceEditor from './nodes/call-service/editor';
