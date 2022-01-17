@@ -6,7 +6,8 @@
     "moduleResolution": "node",
     "lib": ["es2016", "dom", "es6"],
     "allowSyntheticDefaultImports": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "forceConsistentCasingInFileNames": true
   },
   "files": ["src/editor.ts"]
 }
