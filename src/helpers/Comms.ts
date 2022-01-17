@@ -58,9 +58,9 @@ export default class Comms {
         });
     }
 
-    // TODO: load services via WS
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-    onServicesLoaded(services: HassServices): void {}
+    onServicesLoaded(services: HassServices): void {
+        this.publish('services', services);
+    }
 
     onStateChanged(event: HassStateChangedEvent): void {
         const entity = event.event.new_state;

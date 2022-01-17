@@ -1,7 +1,7 @@
 import { NodeDef } from 'node-red';
 
 import { RED } from '../../globals';
-import { migrate } from '../../migrations';
+import { migrate } from '../../helpers/migrate';
 import EntityConfig from '../../nodes/entity-config/controller';
 import { BaseNode } from '../../types/nodes';
 

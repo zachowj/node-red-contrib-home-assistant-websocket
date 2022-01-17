@@ -1,13 +1,11 @@
-import { NodeDef } from 'node-red';
-
 import { RED } from '../../globals';
+import { migrate } from '../../helpers/migrate';
 import { EventsStatus, Status } from '../../helpers/status';
-import { migrate } from '../../migrations';
-import { DeviceNode } from '../../types/nodes';
+import { BaseNodeDef, DeviceNode } from '../../types/nodes';
 import DeviceAction from './action-controller';
 import DeviceTrigger from './trigger-controller';
 
-export default function deviceNode(this: DeviceNode, config: NodeDef) {
+export default function deviceNode(this: DeviceNode, config: BaseNodeDef) {
     RED.nodes.createNode(this, config);
 
     this.config = migrate(config);

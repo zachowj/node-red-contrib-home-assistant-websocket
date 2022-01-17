@@ -110,15 +110,17 @@ export function isValidDate(val: string | number): boolean {
     return d instanceof Date && !isNaN(d.getTime());
 }
 
-export function parseTime(time: string): {
-    hour: number;
-    minutes: number;
-    seconds: number;
-} | null {
+export function parseTime(time: string):
+    | {
+          hour: number;
+          minutes: number;
+          seconds: number;
+      }
+    | undefined {
     const regex = /^(0?\d|1\d|2[0-3]):([0-5]\d)(?::([0-5]\d))?$/;
     const matches = time.match(regex);
 
-    if (!matches) return matches;
+    if (!matches) return;
 
     const [, hour, minutes, seconds = 0] = matches;
 
@@ -159,3 +161,8 @@ export function removeEventListeners(
         emitter.off(event, eventListeners[event]);
     });
 }
+
+// export function containsMustache(str: string): boolean {
+//     const regex = /\{\{(?:(?!}}).)+\}\}/g;
+//     return regex.test(str);
+// }

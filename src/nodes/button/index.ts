@@ -1,6 +1,6 @@
 import { RED } from '../../globals';
+import { migrate } from '../../helpers/migrate';
 import { Status } from '../../helpers/status';
-import { migrate } from '../../migrations';
 import { EntityNode, EntityNodeDef } from '../../types/nodes';
 import ButtonController from './controller';
 

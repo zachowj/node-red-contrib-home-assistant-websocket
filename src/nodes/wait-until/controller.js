@@ -8,7 +8,7 @@ const {
     getWaitStatusText,
     getTimeInMilliseconds,
 } = require('../../helpers/utils');
-const { renderTemplate } = require('../../helpers/renderTemplate');
+const { renderTemplate } = require('../../helpers/mustache');
 
 const nodeOptions = {
     config: {

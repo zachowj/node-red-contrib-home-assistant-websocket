@@ -36,6 +36,7 @@ module.exports = {
                         'ts-ignore': 'allow-with-description',
                     },
                 ],
+                'no-prototype-builtins': 'off',
             },
             plugins: ['simple-import-sort', '@typescript-eslint'],
         },

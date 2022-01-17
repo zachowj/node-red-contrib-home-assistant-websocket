@@ -1,15 +1,9 @@
-/* eslint-disable camelcase */
 const selectn = require('selectn');
 
 const EventsNode = require('../EventsNode');
 const { HA_CLIENT_READY } = require('../../const');
-const { renderTemplate } = require('../../helpers/renderTemplate');
+const { renderTemplate } = require('../../helpers/mustache');
 
-const domainsNeedingArrays = [
-    'homeassistant',
-    'input_datetime',
-    'input_number',
-];
 const QUEUE_NONE = 'none';
 const QUEUE_FIRST = 'first';
 const QUEUE_ALL = 'all';
@@ -18,12 +12,12 @@ const QUEUE_LAST = 'last';
 const nodeOptions = {
     debug: true,
     config: {
-        service_domain: {},
+        domain: {},
         service: {},
         entityId: {},
         data: {},
         dataType: (nodeDef) => nodeDef.dataType || 'json',
-        mergecontext: {},
+        mergeContext: {},
         name: {},
         server: { isNode: true },
         mustacheAltTags: {},
@@ -74,7 +68,7 @@ class CallService extends EventsNode {
             payloadDomain = selectn('domain', payload);
             payloadService = selectn('service', payload);
         }
-        const configDomain = config.service_domain;
+        const configDomain = config.domain;
         const configService = config.service;
         const context = this.node.context();
         const apiDomain = renderTemplate(
@@ -130,25 +124,18 @@ class CallService extends EventsNode {
 
         // Merge entity id field into data property if it doesn't exist
         if (
-            config.entityId &&
+            config.entityId.length &&
             !Object.prototype.hasOwnProperty.call(apiData, 'entity_id')
         ) {
-            const entityId = renderTemplate(
-                config.entityId,
-                message,
-                context,
-                this.homeAssistant.getStates(),
-                config.mustacheAltTags
+            apiData.entity_id = config.entityId.map((e) =>
+                renderTemplate(
+                    e,
+                    message,
+                    context,
+                    this.homeAssistant.getStates(),
+                    config.mustacheAltTags
+                )
             );
-            // homeassistant domain requires entity_id to be an array for multiple ids
-            if (
-                domainsNeedingArrays.includes(apiDomain) &&
-                entityId.indexOf(',') !== -1
-            ) {
-                apiData.entity_id = entityId.split(',').map((e) => e.trim());
-            } else {
-                apiData.entity_id = entityId;
-            }
         }
 
         const obj = {
@@ -196,10 +183,10 @@ class CallService extends EventsNode {
         configData = configData || {};
 
         // Calculate payload to send end priority ends up being 'Config, Global Ctx, Flow Ctx, Payload' with right most winning
-        if (this.nodeConfig.mergecontext) {
+        if (this.nodeConfig.mergeContext) {
             const ctx = this.node.context();
-            let flowVal = ctx.flow.get(this.nodeConfig.mergecontext);
-            let globalVal = ctx.global.get(this.nodeConfig.mergecontext);
+            let flowVal = ctx.flow.get(this.nodeConfig.mergeContext);
+            let globalVal = ctx.global.get(this.nodeConfig.mergeContext);
             flowVal = flowVal || {};
             globalVal = globalVal || {};
             contextData = { ...globalVal, ...flowVal };
@@ -244,6 +231,7 @@ class CallService extends EventsNode {
         }
 
         this.status.setSuccess(`${apiDomain}.${apiService} called`);
+
         try {
             this.setCustomOutputs(this.nodeConfig.outputProperties, message, {
                 config: this.nodeConfig,

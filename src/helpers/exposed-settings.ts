@@ -1,7 +1,7 @@
 import { NodeCredentials } from 'node-red';
 
 import { Credentials } from '../homeAssistant';
-import { getCurrentVersion } from '../migrations';
+import { getCurrentVersion } from './migrate';
 import { toCamelCase } from './utils';
 
 type Options = {

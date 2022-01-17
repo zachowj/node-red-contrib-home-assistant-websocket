@@ -13,12 +13,13 @@ const wrap = require('gulp-wrap');
 const { src, dest, series, task, watch, parallel } = require('gulp');
 
 const browserSync = require('browser-sync');
+const footer = require('gulp-footer');
 const nodemon = require('nodemon');
 
 // Source
 const buffer = require('gulp-buffer');
-const rollupPluginCommon = require('@rollup/plugin-commonjs')();
 const rollupStream = require('@rollup/stream');
+const rollupTypescript = require('@rollup/plugin-typescript');
 const source = require('vinyl-source-stream');
 
 // HTML
@@ -50,6 +51,12 @@ const uiFormWrap =
     '<script type="text/html" data-template-name="<%= data.type %>"><%= data.contents %></script>';
 const uiHelpWrap =
     '<script type="text/html" data-help-name="<%= data.type %>"><%= data.contents %></script>';
+const resourcePath = 'resources/node-red-contrib-home-assistant-websocket';
+const resourceFiles = [
+    `<script src="${resourcePath}/select2.full.min.js?v=4.1.0-rc.0"></script>`,
+    `<link rel="stylesheet" href="${resourcePath}/select2.min.css?v=4.1.0-rc.0">`,
+    `<script src="${resourcePath}/maximize-select2-height.min.js?v=1.0.4"></script>`,
+];
 
 const nodeMap = {
     api: { doc: 'API', type: 'ha-api' },
@@ -267,30 +274,21 @@ task('buildEditorFiles', (done) => {
         '!_*.scss',
     ]).pipe(buildSass());
 
-    const migrations = rollupStream({
-        input: 'src/migrations/index.js',
+    const js = rollupStream({
+        input: 'src/editor.ts',
         output: {
             dir: editorFilePath,
             format: 'iife',
-            name: 'haMigrations',
         },
-        plugins: [rollupPluginCommon],
+        plugins: [
+            rollupTypescript({
+                tsconfig: 'tsconfig.editor.json',
+            }),
+        ],
         external: [],
     })
-        .pipe(source('migrations.js'))
+        .pipe(source('editor.ts'))
         .pipe(buffer())
-        .pipe(buildJs());
-
-    const js = src([
-        'ui/js/plugins/**/*.js',
-        'ui/js/common/**/*.js',
-        'ui/js/*.js',
-    ])
-        .pipe(concat('all.js'))
-        .pipe(buildJs());
-
-    const jsLibs = src(['ui/js/lib/*.js'])
-        .pipe(concat('lib.js'))
         .pipe(buildJs());
 
     const html = src([
@@ -319,8 +317,9 @@ task('buildEditorFiles', (done) => {
         })
     );
 
-    return merge([css, js, html, migrations, jsLibs])
+    return merge([css, js, html])
         .pipe(concat('index.html'))
+        .pipe(footer(resourceFiles.join('')))
         .pipe(dest(editorFilePath + '/'));
 });
 
@@ -338,7 +337,14 @@ task('copyLocales', () => {
         .pipe(dest(`${editorFilePath}/locales/en-US`));
 });
 
-task('copyAssetFiles', parallel(['copyIcons', 'copyLocales']));
+task('copyResourceFiles', () => {
+    return src('resources/*').pipe(dest(`${editorFilePath}/resources`));
+});
+
+task(
+    'copyAssetFiles',
+    parallel(['copyIcons', 'copyLocales', 'copyResourceFiles'])
+);
 
 task(
     'buildAll',
@@ -347,19 +353,13 @@ task(
 
 // Clean generated files
 task('cleanAssetFiles', (done) => {
-    del.sync(['dist/icons', 'dist/locales']);
+    del.sync(['dist/icons', 'dist/locales', 'dist/resources']);
 
     done();
 });
 
 task('cleanSourceFiles', (done) => {
-    del.sync([
-        'dist/helpers',
-        'dist/homeAssistant',
-        'dist/migrations',
-        'dist/nodes',
-        'dist/*.js',
-    ]);
+    del.sync(['dist/helpers', 'dist/homeAssistant', 'dist/nodes', 'dist/*.js']);
 
     done();
 });
@@ -395,7 +395,7 @@ function runNodemonAndBrowserSync(done) {
                 },
                 ghostMode: false,
                 open: false,
-                reloadDelay: 3000,
+                reloadDelay: 4000,
             });
         })
         .on('quit', () => process.exit(0));
@@ -427,8 +427,11 @@ module.exports = {
                 [
                     'docs/node/*.md',
                     'locales/**/*.json',
-                    'src/migrations/**/*',
+                    'src/nodes/**/editor/*',
                     'src/nodes/**/editor.*',
+                    'src/nodes/**/migrations.ts',
+                    'src/editor/**/*',
+                    'src/editor.ts',
                 ],
                 series(
                     'cleanEditorFiles',
@@ -438,7 +441,13 @@ module.exports = {
             );
             // only server side files modified restart node-red only
             watch(
-                ['src/**/*.js', 'src/**/*.ts', '!src/nodes/**/editor.*'],
+                [
+                    'src/**/*.js',
+                    'src/**/*.ts',
+                    '!src/nodes/**/editor.*',
+                    '!src/nodes/**/editor/*',
+                    '!src/editor.ts',
+                ],
                 series('cleanSourceFiles', 'buildSourceFiles', restartNodemon)
             );
             done();

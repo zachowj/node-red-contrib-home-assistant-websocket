@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 
-const migrations = require('../../src/migrations/zone');
-const { migrate } = require('../../src/migrations');
+const migrations = require('../../src/nodes/zone/migrations').default;
+const { migrate } = require('../../src/helpers/migrate');
 
 const VERSION_UNDEFINED = {
     id: 'node.id',

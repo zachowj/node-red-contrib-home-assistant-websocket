@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 
-const migrations = require('../../src/migrations/current-state');
-const { migrate } = require('../../src/migrations');
+const migrations = require('../../src/nodes/current-state/migrations').default;
+const { migrate } = require('../../src/helpers/migrate');
 
 const VERSION_UNDEFINED = {
     type: 'api-current-state',

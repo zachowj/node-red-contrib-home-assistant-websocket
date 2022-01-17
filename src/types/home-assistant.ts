@@ -8,6 +8,7 @@ import {
 export type HassArea = {
     area_id: string;
     name: string;
+    picture?: string;
 };
 
 export type HassAreas = HassArea[];

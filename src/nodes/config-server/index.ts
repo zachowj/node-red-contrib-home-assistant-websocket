@@ -1,6 +1,6 @@
 import { RED } from '../../globals';
+import { migrate } from '../../helpers/migrate';
 import { Credentials } from '../../homeAssistant';
-import { migrate } from '../../migrations';
 import { ServerNode, ServerNodeConfig } from '../../types/nodes';
 import ConfigServer from './controller';
 

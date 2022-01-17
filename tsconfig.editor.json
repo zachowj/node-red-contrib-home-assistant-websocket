@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "target": "es6",
+    "module": "es2015",
+    "moduleResolution": "node",
+    "lib": ["es2016", "dom", "es6"],
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "."
+  },
+  "files": ["src/editor.ts"]
+}

@@ -1,12 +1,23 @@
 import { Node, NodeDef } from 'node-red';
 
+import { HassExposedConfig } from '../editor/types';
 import { Credentials } from '../homeAssistant';
 import ConfigServer from '../nodes/config-server/controller';
 import EntityConfigController from '../nodes/entity-config/controller';
 
-export interface ServerNodeConfig extends NodeDef {
-    name: string;
+export interface BaseNodeDef extends NodeDef {
     version: number;
+    debugenabled?: boolean;
+    server?: string;
+    entityConfigNode?: string;
+    exposeToHomeAssistant?: boolean;
+    outputs?: number;
+    haConfig?: HassExposedConfig[];
+}
+
+export interface ServerNodeConfig extends NodeDef {
+    version: number;
+    debugenabled?: boolean;
     addon: boolean;
     rejectUnauthorizedCerts: boolean;
     // eslint-disable-next-line camelcase
@@ -17,13 +28,30 @@ export interface ServerNodeConfig extends NodeDef {
     heartbeatInterval: number;
 }
 
+type OutputProperty = {
+    property: string;
+    propertyType: string;
+    value: string;
+    valueType: string;
+};
+
+export interface EntityNodeDef extends NodeDef {
+    version: number;
+    debugenabled?: boolean;
+    entityType: string;
+    entityConfig: {
+        controller: EntityConfigController;
+    };
+    outputProperties: OutputProperty[];
+}
+
 export interface ServerNode<T> extends Node<T> {
     config: ServerNodeConfig;
     controller: ConfigServer;
 }
 
 export interface BaseNodeConfig {
-    debugenabled: boolean;
+    debugenabled?: boolean;
     name: string;
     server?: ServerNode<Credentials>;
     version: number;
@@ -38,21 +66,6 @@ export interface DeviceNode extends BaseNode {
     config: BaseNodeConfig & {
         deviceType: string;
     };
-}
-
-type OutputProperty = {
-    property: string;
-    propertyType: string;
-    value: string;
-    valueType: string;
-};
-
-export interface EntityNodeDef extends NodeDef {
-    entityType: string;
-    entityConfig: {
-        controller: EntityConfigController;
-    };
-    outputProperties: OutputProperty[];
 }
 
 export interface EntityNode extends Node {

@@ -2,7 +2,7 @@ const Joi = require('joi');
 const timestring = require('timestring');
 
 const BaseNode = require('../BaseNode');
-const { renderTemplate } = require('../../helpers/renderTemplate');
+const { renderTemplate } = require('../../helpers/mustache');
 
 const nodeOptions = {
     debug: true,

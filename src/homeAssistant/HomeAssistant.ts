@@ -87,7 +87,7 @@ export default class HomeAssistant {
     exposeMethods(cls: any, methods: string[]): void {
         methods.forEach((method) => {
             if (typeof cls[method] === 'function') {
-                // @ts-ignore
+                // @ts-ignore - needs to remove in the future
                 this[method] = cls[method].bind(cls);
             }
         });

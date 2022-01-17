@@ -1,8 +1,8 @@
 import { NodeDef } from 'node-red';
 
 import { RED } from '../../globals';
+import { migrate } from '../../helpers/migrate';
 import { Status, SwitchEntityStatus } from '../../helpers/status';
-import { migrate } from '../../migrations';
 import { BaseNode, BaseNodeConfig } from '../../types/nodes';
 import Sensor from './sensor-controller';
 import Switch from './switch-controller';

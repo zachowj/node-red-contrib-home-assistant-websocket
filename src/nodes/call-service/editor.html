@@ -1,36 +1,36 @@
 <input type="hidden" id="node-input-version" />
 
 <div class="form-row">
-    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <label for="node-input-name">Name</label>
     <input type="text" id="node-input-name" placeholder="Name" />
 </div>
 
 <div class="form-row">
-    <label for="node-input-server">
-        <i class="fa fa-dot-circle-o"></i> Server
-    </label>
+    <label for="node-input-server">Server</label>
     <input type="text" id="node-input-server" />
 </div>
 
 <div class="form-row">
-    <label for="service_domain"><i class="fa fa-cube"></i> Domain</label>
-    <input type="text" id="service_domain" />
+    <label for="node-input-domain">Domain</label>
+    <input type="text" id="node-input-domain" />
 </div>
 
 <div class="form-row">
-    <label for="service"><i class="fa fa-cube"></i> Service</label>
-    <input type="text" id="service" />
+    <label for="node-input-service">Service</label>
+    <input type="text" id="node-input-service" />
 </div>
 
 <div class="form-row">
-    <label for="node-input-entityId">
-        <i class="fa fa-cube"></i> Entity Id
-    </label>
-    <input type="text" id="node-input-entityId" />
+    <label for="node-input-entityId">Entity</label>
+    <select
+        id="node-input-entityId"
+        multiple="multiple"
+        style="width: 70%"
+    ></select>
 </div>
 
 <div class="form-row">
-    <label for="node-input-data"><i class="fa fa-dot-circle-o"></i> Data</label>
+    <label for="node-input-data">Data</label>
     <input type="text" id="node-input-data" style="width: 70%" />
     <input type="hidden" id="node-input-dataType" />
 </div>
@@ -43,10 +43,10 @@
 </div>
 
 <div class="form-row">
-    <label for="node-input-mergecontext">Merge Context</label>
+    <label for="node-input-mergeContext">Merge Context</label>
     <input
         type="text"
-        id="node-input-mergecontext"
+        id="node-input-mergeContext"
         placeholder="lightOptions"
     />
 </div>
@@ -55,7 +55,6 @@
 
 <div class="form-row">
     <label for="node-input-queue">
-        <i class="fa fa-stack-exchange"></i>
         <span data-i18n="api-call-service.label.queue"></span>
     </label>
     <select type="text" id="node-input-queue" style="width: auto">
@@ -92,7 +91,7 @@
         Load Example Data
     </button>
     <h4>Service: <span class="title"></span></h4>
-    <div class="unknown-service">Unknown Service</div>
+    <div class="unknown-service">Unknown domain or service</div>
     <div class="known-service">
         <p class="service-description"></p>
         <table id="service-data-table" class="red-ui-info-table">

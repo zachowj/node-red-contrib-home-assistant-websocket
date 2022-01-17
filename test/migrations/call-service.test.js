@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 
-const migrations = require('../../src/migrations/call-service');
-const { migrate } = require('../../src/migrations');
+const migrations = require('../../src/nodes/call-service/migrations').default;
+const { migrate } = require('../../src/helpers/migrate');
 
 const VERSION_UNDEFINED = {
     type: 'api-call-service',
@@ -47,6 +47,15 @@ const VERSION_3 = {
     ...VERSION_2,
     version: 3,
     queue: 'none',
+};
+const VERSION_4 = {
+    ...VERSION_3,
+    version: 4,
+    domain: 'service_domain',
+    entityId: ['entity.id1', 'entity.id2'],
+    mergeContext: 'flowvalue',
+    service_domain: undefined,
+    mergecontext: undefined,
 };
 
 describe('Migrations - Call Service Node', function () {
@@ -145,8 +154,16 @@ describe('Migrations - Call Service Node', function () {
             expect(migratedSchema).to.eql(VERSION_3);
         });
     });
+    describe('Version 4', function () {
+        it('should update version 3 to version 4', function () {
+            const migrate = migrations.find((m) => m.version === 4);
+            const migratedSchema = migrate.up(VERSION_3);
+
+            expect(migratedSchema).to.eql(VERSION_4);
+        });
+    });
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_3);
+        expect(migratedSchema).to.eql(VERSION_4);
     });
 });

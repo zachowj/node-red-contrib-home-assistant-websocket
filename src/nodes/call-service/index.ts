@@ -1,8 +1,8 @@
 import { NodeDef } from 'node-red';
 
 import { RED } from '../../globals';
+import { migrate } from '../../helpers/migrate';
 import { Status } from '../../helpers/status';
-import { migrate } from '../../migrations';
 import { BaseNode } from '../../types/nodes';
 import CallService from './controller';
 

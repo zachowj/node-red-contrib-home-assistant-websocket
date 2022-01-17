@@ -133,7 +133,12 @@ export default class ConfigServer {
             (this.node.context().global.get('homeassistant') as
                 | HomeAssistantGlobalContext
                 | undefined) ?? {};
-        haCtx[this.nameAsCamelcase] = haCtx[this.nameAsCamelcase] ?? {};
+        haCtx[this.nameAsCamelcase] ??= {
+            states: {} as HomeAssistantStatesContext,
+            services: {} as HassServices,
+            isConnected: false,
+            isRunning: false,
+        };
         haCtx[this.nameAsCamelcase][key] = value;
         this.node.context().global.set('homeassistant', haCtx);
     }

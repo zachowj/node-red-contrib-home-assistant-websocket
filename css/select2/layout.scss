@@ -107,6 +107,10 @@
     .select2-results__option--highlighted.select2-results__option--selectable {
         background-color: #5897fb;
         color: white;
+
+        .sublabel {
+            color: #d3d3d3;
+        }
     }
 
     .select2-results__group {
