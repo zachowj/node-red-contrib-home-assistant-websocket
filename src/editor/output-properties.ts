@@ -1,6 +1,6 @@
 import { EditorWidgetTypedInputTypeDefinition } from 'node-red';
 
-import { i18n } from './ha';
+import { i18n } from './i18n';
 import { HATypedInputTypeOptions, OutputProperty } from './types';
 
 const customOutputElement = '#custom-outputs';

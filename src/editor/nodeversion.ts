@@ -1,8 +1,7 @@
 import { EditorNodeInstance, EditorRED } from 'node-red';
 
 import { migrate as m } from '../helpers/migrate';
-import { i18n } from './ha';
-import * as nodeVersion from './nodeversion';
+import { i18n } from './i18n';
 import { HassNodeProperties } from './types';
 
 declare const RED: EditorRED;
@@ -154,14 +153,11 @@ export function setupMigrations() {
     createElements();
     $upgradeHaNode = $('#upgrade-ha-node');
     $upgradeHaNode.hide();
-    $upgradeHaNode.on('click', nodeVersion.migrateAllNodesConfirm);
+    $upgradeHaNode.on('click', migrateAllNodesConfirm);
 }
 
 export function onNodesAdd(node: EditorNodeInstance<HassNodeProperties>) {
-    if (
-        nodeVersion.isHomeAssistantNode(node) &&
-        !nodeVersion.isCurrentVersion(node)
-    ) {
+    if (isHomeAssistantNode(node) && !isCurrentVersion(node)) {
         $upgradeHaNode.show();
     }
 }
@@ -169,8 +165,8 @@ export function onNodesAdd(node: EditorNodeInstance<HassNodeProperties>) {
 export function onNodesRemove(node: EditorNodeInstance) {
     if (
         $upgradeHaNode.is(':visible') &&
-        nodeVersion.isHomeAssistantNode(node) &&
-        nodeVersion.getOldNodeCount() === 0
+        isHomeAssistantNode(node) &&
+        getOldNodeCount() === 0
     ) {
         $upgradeHaNode.hide();
     }

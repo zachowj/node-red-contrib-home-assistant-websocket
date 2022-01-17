@@ -4,6 +4,7 @@ import * as haData from '../../../editor/data';
 import * as exposeNode from '../../../editor/exposenode';
 import * as ha from '../../../editor/ha';
 import * as haServer from '../../../editor/haserver';
+import { i18n } from '../../../editor/i18n';
 import * as nodeVersion from '../../../editor/nodeversion';
 import * as haOutputs from '../../../editor/output-properties';
 import { select2DefaultOptions } from '../../../editor/select2';
@@ -170,7 +171,7 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
                 }
             }
 
-            return ha.i18n('ha-device.ui.no_area');
+            return i18n('ha-device.ui.no_area');
         };
 
         const populateDevices = (deviceId?: string) => {

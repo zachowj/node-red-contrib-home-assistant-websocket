@@ -1,4 +1,4 @@
-import * as ha from '../../../editor/ha';
+import { i18n as haI18n } from '../../../editor/i18n';
 
 export function createDeviceExtraFields(
     fields: any[] = [],
@@ -25,7 +25,7 @@ export function createDeviceExtraFields(
                 element = createDeviceString(field, selectedCapabilities);
                 break;
             default: {
-                const text = ha.i18n('ha-device.error.unknown_field_type', {
+                const text = haI18n('ha-device.error.unknown_field_type', {
                     type: field.type,
                 });
                 element = createDeviceError(text, { type: field.type });
@@ -64,9 +64,9 @@ function createDeviceDuration(field: Record<string, any>, store: any) {
         store && unit === store.unit ? 'selected' : '';
     const namespace = 'ha-device.label';
     const i18n = {
-        seconds: ha.i18n(`${namespace}.seconds`),
-        minutes: ha.i18n(`${namespace}.minutes`),
-        hours: ha.i18n(`${namespace}.hours`),
+        seconds: haI18n(`${namespace}.seconds`),
+        minutes: haI18n(`${namespace}.minutes`),
+        hours: haI18n(`${namespace}.hours`),
     };
     const html = `
         <label for="${id}">
@@ -124,7 +124,7 @@ function createDeviceString(
 function createDeviceError(text: string, opts: any = {}) {
     const html = `<label class="error"><i class="fa fa-exclamation-triangle"></i> Error</label>${text} -- <a href="https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/new?title=[Device Node] Unknown extra type: ${
         opts.type
-    }" target="_blank"> ${ha.i18n('ha-device.error.report')}</a>`;
+    }" target="_blank"> ${haI18n('ha-device.error.report')}</a>`;
     return wrapWithRow(html, ['deviceExtra']);
 }
 
