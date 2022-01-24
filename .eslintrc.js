@@ -11,6 +11,7 @@ module.exports = {
     rules: {
         'prettier/prettier': ['error'],
         'sort-requires/sort-requires': 2,
+        'no-prototype-builtins': 'off',
     },
     plugins: ['sort-requires'],
 
