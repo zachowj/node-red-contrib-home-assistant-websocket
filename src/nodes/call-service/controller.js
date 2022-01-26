@@ -132,6 +132,15 @@ class CallService extends EventsNode {
         }
     }
 
+    tryToObject(v) {
+        if (!v) return null;
+        try {
+            return JSON.parse(v);
+        } catch (e) {
+            return v;
+        }
+    }
+
     getApiData(payload = {}, config = {}) {
         let contextData = {};
 
@@ -145,7 +154,7 @@ class CallService extends EventsNode {
             contextData = { ...globalVal, ...flowVal };
         }
 
-        return { ...config, ...contextData, ...payload };
+        return { ...this.tryToObject(config), ...contextData, ...payload };
     }
 
     getTargetData(payload, message) {
