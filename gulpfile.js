@@ -337,14 +337,7 @@ task('copyLocales', () => {
         .pipe(dest(`${editorFilePath}/locales/en-US`));
 });
 
-task('copyResourceFiles', () => {
-    return src('resources/*').pipe(dest(`${editorFilePath}/resources`));
-});
-
-task(
-    'copyAssetFiles',
-    parallel(['copyIcons', 'copyLocales', 'copyResourceFiles'])
-);
+task('copyAssetFiles', parallel(['copyIcons', 'copyLocales']));
 
 task(
     'buildAll',
@@ -353,7 +346,7 @@ task(
 
 // Clean generated files
 task('cleanAssetFiles', (done) => {
-    del.sync(['dist/icons', 'dist/locales', 'dist/resources']);
+    del.sync(['dist/icons', 'dist/locales']);
 
     done();
 });
