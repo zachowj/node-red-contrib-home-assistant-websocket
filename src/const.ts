@@ -3,6 +3,7 @@ export const ENTITY_DEVICE_TRIGGER = 'device_trigger';
 export const HA_CLIENT_READY = 'ha_client:ready';
 export const HA_EVENT_AREA_REGISTRY_UPDATED = 'areas_updated';
 export const HA_EVENT_DEVICE_REGISTRY_UPDATED = 'devices_updated';
+export const HA_EVENT_REGISTRY_UPDATED = 'registry_updated';
 export const HA_EVENT_INTEGRATION = 'nodered';
 export const HA_EVENT_STATE_CHANGED = 'state_changed';
 export const HA_EVENT_TAG_SCANNED = 'tag_scanned';

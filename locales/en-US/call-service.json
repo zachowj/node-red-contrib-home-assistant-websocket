@@ -1,11 +1,21 @@
 {
   "api-call-service": {
     "label": {
-      "queue": "queue",
-      "queue_none": "Don't Queue Messages",
-      "queue_first": "First Message Only",
-      "queue_all": "All Messages",
-      "queue_last": "Last Message Only"
+      "alternate_tags": "Use alternate template tags for the data field",
+      "area": "Area",
+      "data": "Data",
+      "device": "Device",
+      "domain": "Domain",
+      "entity": "Entity",
+      "load_example_data": "Load example data",
+      "merge_context": "Merge context",
+      "queue": "Queue",
+      "queue_all": "all messages",
+      "queue_first": "first message only",
+      "queue_last": "last message only",
+      "queue_none": "don't queue messages",
+      "service": "Service",
+      "show_debug": "Show debug information"
     }
   }
 }

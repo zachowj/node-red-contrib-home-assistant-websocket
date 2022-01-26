@@ -101,3 +101,15 @@ export type HassStateChangedEvent = HassEventBase & {
         old_state: HassEntity | null;
     };
 };
+
+export interface HassEntityRegistryEntry {
+    entity_id: string;
+    name: string | null;
+    icon: string | null;
+    platform: string;
+    config_entry_id: string | null;
+    device_id: string | null;
+    area_id: string | null;
+    disabled_by: string | null;
+    entity_category: 'config' | 'diagnostic' | null;
+}

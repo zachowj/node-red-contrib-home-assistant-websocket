@@ -162,7 +162,9 @@ export function removeEventListeners(
     });
 }
 
-// export function containsMustache(str: string): boolean {
-//     const regex = /\{\{(?:(?!}}).)+\}\}/g;
-//     return regex.test(str);
-// }
+// https://github.com/home-assistant/core/blob/77ee72cbb9fed55779b0ee58443c3f41e5b35f5a/homeassistant/core.py#L125
+export function validEntityId(entityId: string): boolean {
+    return /^(?!.+__)(?!_)[\da-z_]+(?<!_)\.(?!_)[\da-z_]+(?<!_)$/.test(
+        entityId
+    );
+}

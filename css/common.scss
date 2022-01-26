@@ -56,8 +56,8 @@ $home-assistant-color: #41bdf5;
             border-bottom: 1px solid #c6c6c6;
         }
 
-        label {
-            text-transform: capitalize;
+        > select {
+            width: 70%;
         }
     }
 
@@ -89,14 +89,6 @@ $home-assistant-color: #41bdf5;
         @extend .ha-alert-box;
         color: $beta-text-color;
         background-color: $beta-background-color;
-    }
-
-    .ui-menu-item-wrapper {
-        .sublabel {
-            color: #9c9c9c;
-            font-size: smaller;
-            margin: 4px 0;
-        }
     }
 }
 
@@ -215,4 +207,14 @@ $home-assistant-color: #41bdf5;
     text-decoration: none;
     margin: 0;
     border: 0;
+}
+
+.ui-autocomplete {
+    .ui-menu-item-wrapper {
+        .sublabel {
+            color: #9c9c9c;
+            font-size: smaller;
+            margin: 4px 0;
+        }
+    }
 }

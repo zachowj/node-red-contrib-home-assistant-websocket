@@ -44,3 +44,8 @@ export interface HassNodeProperties
     outputs?: number | undefined;
     haConfig?: HassExposedConfig[];
 }
+
+export interface HassTargetDomains {
+    areas: { [area_id: string]: string[] };
+    devices: { [id: string]: string[] };
+}

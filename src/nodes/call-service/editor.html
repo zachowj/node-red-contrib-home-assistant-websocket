@@ -1,49 +1,66 @@
 <input type="hidden" id="node-input-version" />
 
 <div class="form-row">
-    <label for="node-input-name">Name</label>
-    <input type="text" id="node-input-name" placeholder="Name" />
+    <label for="node-input-name" data-i18n="home-assistant.label.name"></label>
+    <input type="text" id="node-input-name" />
 </div>
 
 <div class="form-row">
-    <label for="node-input-server">Server</label>
+    <label
+        for="node-input-server"
+        data-i18n="home-assistant.label.server"
+    ></label>
     <input type="text" id="node-input-server" />
 </div>
 
 <div class="form-row">
-    <label for="node-input-domain">Domain</label>
-    <input type="text" id="node-input-domain" />
+    <label for="domain" data-i18n="api-call-service.label.domain"></label>
+    <select id="domain" style="width: 70%"></select>
 </div>
 
 <div class="form-row">
-    <label for="node-input-service">Service</label>
-    <input type="text" id="node-input-service" />
+    <label for="service" data-i18n="api-call-service.label.service"></label>
+    <select id="service" style="width: 70%"></select>
 </div>
 
 <div class="form-row">
-    <label for="node-input-entityId">Entity</label>
-    <select
-        id="node-input-entityId"
-        multiple="multiple"
-        style="width: 70%"
-    ></select>
+    <label for="areaId" data-i18n="api-call-service.label.area"></label>
+    <select id="areaId" multiple="multiple" style="width: 70%"></select>
 </div>
 
 <div class="form-row">
-    <label for="node-input-data">Data</label>
+    <label for="deviceId" data-i18n="api-call-service.label.device"></label>
+    <select id="deviceId" multiple="multiple" style="width: 70%"></select>
+</div>
+
+<div class="form-row">
+    <label for="entityId" data-i18n="api-call-service.label.entity"></label>
+    <select id="entityId" multiple="multiple" style="width: 70%"></select>
+</div>
+
+<div class="form-row">
+    <label
+        for="node-input-data"
+        data-i18n="api-call-service.label.data"
+    ></label>
     <input type="text" id="node-input-data" style="width: 70%" />
     <input type="hidden" id="node-input-dataType" />
 </div>
 
 <div class="form-row checkbox-option" id="mustacheAltTags">
     <input type="checkbox" id="node-input-mustacheAltTags" />&nbsp;
-    <label for="node-input-mustacheAltTags">
-        Use alternative template tags for the Data field
+    <label
+        for="node-input-mustacheAltTags"
+        data-i18n="api-call-service.label.alternate_tags"
+    >
     </label>
 </div>
 
 <div class="form-row">
-    <label for="node-input-mergeContext">Merge Context</label>
+    <label
+        for="node-input-mergeContext"
+        data-i18n="api-call-service.label.merge_context"
+    ></label>
     <input
         type="text"
         id="node-input-mergeContext"
@@ -51,13 +68,10 @@
     />
 </div>
 
-<div class="form-row"><ol id="custom-outputs"></ol></div>
-
 <div class="form-row">
-    <label for="node-input-queue">
-        <span data-i18n="api-call-service.label.queue"></span>
+    <label for="node-input-queue" data-i18n="api-call-service.label.queue">
     </label>
-    <select type="text" id="node-input-queue" style="width: auto">
+    <select type="text" id="node-input-queue">
         <option
             value="none"
             data-i18n="api-call-service.label.queue_none"
@@ -77,19 +91,15 @@
     </select>
 </div>
 
-<div class="form-row checkbox-option">
-    <input type="checkbox" id="node-input-debugenabled" />
-    <label for="node-input-debugenabled"> Show Debug Information </label>
-</div>
+<div class="form-row"><ol id="custom-outputs"></ol></div>
 
 <div id="service-data-desc" class="form-row">
     <button
         id="example-data"
         style="float: right"
         class="red-ui-button red-ui-button-small"
-    >
-        Load Example Data
-    </button>
+        data-i18n="api-call-service.label.load_example_data"
+    ></button>
     <h4>Service: <span class="title"></span></h4>
     <div class="unknown-service">Unknown domain or service</div>
     <div class="known-service">
@@ -105,4 +115,12 @@
             <tbody></tbody>
         </table>
     </div>
+</div>
+
+<div class="form-row checkbox-option">
+    <input type="checkbox" id="node-input-debugenabled" />
+    <label
+        for="node-input-debugenabled"
+        data-i18n="api-call-service.label.show_debug"
+    ></label>
 </div>

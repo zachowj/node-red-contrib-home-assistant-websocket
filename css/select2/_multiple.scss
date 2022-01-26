@@ -32,13 +32,11 @@
     }
 
     .select2-selection__choice {
-        background-color: #e4e4e4;
-        border: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
         box-sizing: border-box;
 
         display: inline-block;
-        margin: 0 0 5px;
-        padding: 2px 0 2px 24px;
+        padding: 4px 24px 4px 4px;
 
         position: relative;
 
@@ -60,7 +58,7 @@
     .select2-selection__choice__remove {
         background-color: transparent;
         border: none;
-        border-right: 1px solid #ccc;
+        border-left: 1px solid #ccc;
 
         color: #999;
         cursor: pointer;
@@ -68,10 +66,10 @@
         font-size: 1.5em;
         font-weight: bold;
 
-        padding: 3px 4px;
+        padding: 4px;
 
         position: absolute;
-        left: 0;
+        right: 0;
         top: 0;
 
         &:hover,

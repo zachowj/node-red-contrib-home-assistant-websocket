@@ -1,17 +1,26 @@
-import { HassEntity, HassServices } from 'home-assistant-js-websocket';
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
-import { SERVER_ADD } from '../../../const';
-import { getServices as getHassServices } from '../../../editor/data';
 import ha from '../../../editor/ha';
 import * as haServer from '../../../editor/haserver';
 import * as haOutputs from '../../../editor/output-properties';
+import {
+    createCustomIdListByProperty,
+    createSelect2Options,
+    Select2Data,
+} from '../../../editor/select2';
 import { OutputProperty } from '../../../editor/types';
+import { containsMustache } from '../../../helpers/mustache';
+import { byPropertiesOf } from '../../../helpers/sort';
 import { loadExampleData, updateServiceSelection } from './service-table';
-import { populateEntities } from './targets';
-import { autocompleteSetup, getNormalizedDomainServices } from './utils';
+import { displayValidTargets, getTarget, populateTargets } from './targets';
 
 declare const RED: EditorRED;
+
+interface Target {
+    areaId?: string[];
+    deviceId?: string[];
+    entityId?: string[];
+}
 
 interface CallServiceEditorNodeProperties extends EditorNodeProperties {
     server: any;
@@ -20,44 +29,20 @@ interface CallServiceEditorNodeProperties extends EditorNodeProperties {
     name: string;
     domain: string;
     service: string;
-    entityId: string[];
     data: string;
     dataType: string;
+    target: Target;
     mergeContext: string;
     mustacheAltTags: boolean;
     queue: string;
     outputProperties: OutputProperty[];
     // deprecated
+    entityId?: string;
     output_location?: string;
     output_location_type?: string;
     service_domain?: string;
     mergecontext?: string;
 }
-
-type ServiceTarget = {
-    entity?: {
-        domain?: string;
-    };
-};
-
-export type FilterEntities = (
-    value: HassEntity,
-    index: number,
-    array: HassEntity[]
-) => boolean;
-
-const byServiceTarget = (
-    services: HassServices
-): FilterEntities | undefined => {
-    const [domain, service] = getNormalizedDomainServices();
-    const filterDomain = (
-        services?.[domain]?.[service]?.target as ServiceTarget
-    )?.entity?.domain;
-
-    return filterDomain
-        ? (value) => value.entity_id.startsWith(`${filterDomain}.`)
-        : undefined;
-};
 
 const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
     category: 'home_assistant',
@@ -83,7 +68,13 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
         debugenabled: { value: false },
         domain: { value: '' },
         service: { value: '' },
-        entityId: { value: [] },
+        target: {
+            value: {
+                areaId: [],
+                deviceId: [],
+                entityId: [],
+            },
+        },
         data: { value: '' },
         dataType: { value: 'jsonata' },
         mergeContext: { value: '' },
@@ -94,6 +85,7 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
         },
         queue: { value: 'none' },
         // deprecated
+        entityId: { value: undefined },
         output_location: { value: undefined },
         output_location_type: { value: undefined },
         service_domain: { value: undefined },
@@ -102,69 +94,107 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
     oneditprepare: function () {
         ha.setup(this);
         haServer.init(this, '#node-input-server');
-        const $domainField = $('#node-input-domain');
-        const $serviceField = $('#node-input-service');
+        const $domainField = $('#domain');
+        const $serviceField = $('#service');
         const $data = $('#node-input-data');
         const $dataType = $('#node-input-dataType');
         const $loadExampleData = $('#example-data');
 
         // Load domaina and service list into autocomplete
-        const populateDomainAndServices = (serverId: string) => {
-            const services = getHassServices(serverId);
-            const updateDomainServices = () => {
-                const domainNormalized = (
-                    $domainField.val() as string
-                ).toLowerCase();
-                // Use all services if domain is not found in the list
-                const domainSerivces =
-                    domainNormalized in services
-                        ? Object.keys(services[domainNormalized] ?? [])
-                        : Array.from(
-                              new Set(
-                                  Object.values(services)
-                                      .map((service) => Object.keys(service))
-                                      .flat()
-                              )
-                          );
-
-                autocompleteSetup($serviceField, domainSerivces.sort(), () => {
-                    updateServiceSelection();
-                    populateEntities(serverId, {
-                        filter: byServiceTarget(services),
-                    });
-                });
-            };
-            autocompleteSetup(
-                $domainField,
-                Object.keys(services).sort(),
-                () => {
-                    updateServiceSelection();
-                    updateDomainServices();
-                    // Clear service if it doesn't exist in the new domain
-                    const source = $serviceField.autocomplete(
-                        'option',
-                        'source'
-                    ) as string[];
-                    if (!source.includes($serviceField.val() as string)) {
-                        $serviceField.val('');
-                    }
-                    populateEntities(serverId, {
-                        filter: byServiceTarget(services),
-                    });
-                }
-            );
-            updateDomainServices();
+        const populateDomains = (domain?: string) => {
+            const services = haServer.getServices();
+            const selectedId = domain ?? ($domainField.val() as string);
+            const domains = Object.keys(services)
+                .map((d) => ({
+                    id: d,
+                    text: d,
+                    selected: d === selectedId,
+                }))
+                .sort(byPropertiesOf<Select2Data>(['text']))
+                .concat(
+                    createCustomIdListByProperty<string>(
+                        selectedId,
+                        Object.keys(services)
+                    )
+                );
+            $domainField
+                .empty()
+                .select2(
+                    createSelect2Options({
+                        tags: true,
+                        data: domains,
+                    })
+                )
+                .maximizeSelect2Height();
+            if (!selectedId) {
+                $domainField.val(null).trigger('change');
+            }
         };
-        updateServiceSelection();
+        const populateServices = (service?: string) => {
+            const services = haServer.getServices();
+            const domainNormalized = (
+                $domainField.val() as string
+            )?.toLowerCase();
+            const selectedId = service ?? ($serviceField.val() as string);
+            const showAll =
+                !services?.[domainNormalized] ||
+                containsMustache(domainNormalized);
+            // If domain is a mustache template, show all services otherwise show only services for the domain
+            const filteredServices = showAll
+                ? Array.from(
+                      new Set(
+                          Object.values(services)
+                              .map((service) => Object.keys(service))
+                              .flat()
+                      )
+                  )
+                : Object.keys(services[domainNormalized]);
+            const domainServices = filteredServices
+                .map((d) => ({
+                    id: d,
+                    text: d,
+                    selected: d === selectedId,
+                }))
+                .sort(byPropertiesOf<Select2Data>(['text']))
+                .concat(
+                    createCustomIdListByProperty<string>(
+                        selectedId,
+                        filteredServices
+                    )
+                );
 
+            $serviceField
+                .empty()
+                .select2(
+                    createSelect2Options({ data: domainServices, tags: true })
+                )
+                .maximizeSelect2Height();
+            if (!selectedId) {
+                $serviceField.val(null).trigger('change');
+            }
+        };
+
+        $domainField.on('select2:select', () => {
+            populateServices();
+            populateTargets();
+            displayValidTargets();
+            updateServiceSelection();
+        });
+        $serviceField.on('select2:select', () => {
+            populateTargets();
+            displayValidTargets();
+            updateServiceSelection();
+        });
         $('#node-input-server').on('change', () => {
-            const serverId = $('#node-input-server').val() as string;
-            if (serverId === SERVER_ADD) return;
-            populateDomainAndServices(serverId);
-            populateEntities(serverId, {
-                selectedIds: this.entityId,
-                filter: byServiceTarget(getHassServices(serverId)),
+            populateDomains(this.domain);
+            populateServices(this.service);
+            populateTargets({
+                entityId: this.target.entityId,
+                areaId: this.target.areaId,
+                deviceId: this.target.deviceId,
             });
+            displayValidTargets();
+            updateServiceSelection();
         });
         $loadExampleData.on('click', loadExampleData);
 
@@ -173,9 +203,10 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
             types: ['jsonata', 'json'],
             typeField: '#node-input-dataType',
         });
-        $data.on('change', (event, type, value) => {
+        $data.on('change', () => {
             // hack to hide error border when data field is empty
-            if (value.length === 0) {
+            const val = $data.val() as string;
+            if (val.length === 0) {
                 $data.next().removeClass('input-error');
             }
             $('#mustacheAltTags').toggle($dataType.val() === 'json');
@@ -187,6 +218,9 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
     },
     oneditsave: function () {
         this.outputProperties = haOutputs.getOutputs();
+        this.domain = $('#domain').select2('data')?.[0]?.id;
+        this.service = $('#service').select2('data')?.[0]?.id;
+        this.target = getTarget();
     },
 };
 

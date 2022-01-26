@@ -1,9 +1,9 @@
-import { HassEntity } from 'home-assistant-js-websocket';
+import { HassEntity, HassServices } from 'home-assistant-js-websocket';
 import { EditorNodeInstance, EditorRED } from 'node-red';
 
-import { HassArea } from '../types/home-assistant';
+import { HassArea, HassAreas, HassDevices } from '../types/home-assistant';
 import * as haData from './data';
-import { HassNodeProperties } from './types';
+import { HassNodeProperties, HassTargetDomains } from './types';
 
 declare const RED: EditorRED;
 
@@ -32,6 +32,10 @@ export function init(
     if (!node.server) {
         setDefault();
     }
+    serverId = $server.val() as string;
+    $server.on('change', () => {
+        serverId = $server.val() as string;
+    });
 }
 
 export function autocomplete(type: string, callback: (items: any) => void) {
@@ -101,6 +105,26 @@ export const getAreaById = (areaId: string): HassArea | undefined => {
     }
 };
 
+export const getAreaNameById = (areaId: string): string => {
+    return haData.getAreaNameById(serverId, areaId);
+};
+
 export const getEntities = (): HassEntity[] => {
     return Object.values(haData.getEntities(serverId));
+};
+
+export const getAreas = (): HassAreas => {
+    return haData.getAreas(serverId);
+};
+
+export const getDevices = (): HassDevices => {
+    return haData.getDevices(serverId);
+};
+
+export const getServices = (): HassServices => {
+    return haData.getServices(serverId);
+};
+
+export const getTargetDomains = (): HassTargetDomains => {
+    return haData.getTargetDomains(serverId);
 };

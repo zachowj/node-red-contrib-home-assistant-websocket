@@ -74,11 +74,17 @@ export default [
             const newSchema = {
                 ...schema,
                 version: 4,
-                entityId:
-                    schema?.entityId?.split(',').map((e: string) => e.trim()) ??
-                    [],
+                target: {
+                    entityId:
+                        schema?.entityId
+                            ?.split(',')
+                            .map((e: string) => e.trim()) ?? [],
+                    areaId: [],
+                    deviceId: [],
+                },
                 domain: schema.service_domain,
                 mergeContext: schema.mergecontext,
+                entityId: undefined,
                 service_domain: undefined,
                 mergecontext: undefined,
             };

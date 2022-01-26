@@ -5,12 +5,15 @@ import {
 } from 'home-assistant-js-websocket';
 
 import { HassArea, HassDevice } from '../types/home-assistant';
+import { i18n } from './i18n';
+import { HassTargetDomains } from './types';
 import { deepFind } from './utils';
 
 const areas: { [serverId: string]: HassArea[] } = {};
 const devices: { [serverId: string]: HassDevice[] } = {};
 const entities: { [serverId: string]: HassEntities } = {};
 const services: { [serverId: string]: HassServices } = {};
+const targetDomains: { [serverId: string]: HassTargetDomains } = {};
 
 export function updateAreas(topic: string, data: HassArea[]): void {
     const serverId = parseServerId(topic);
@@ -36,6 +39,14 @@ export function updateEntities(topic: string, data: HassEntities): void {
 export function updateServices(topic: string, data: HassServices): void {
     const serverId = parseServerId(topic);
     services[serverId] = data;
+}
+
+export function updateTargetDomains(
+    topic: string,
+    data: HassTargetDomains
+): void {
+    const serverId = parseServerId(topic);
+    targetDomains[serverId] = data;
 }
 
 function parseServerId(topic: string) {
@@ -129,12 +140,24 @@ function sortFriendlyName(a: Record<string, any>, b: Record<string, any>) {
     return aName.localeCompare(bName);
 }
 
+export function getAreaNameById($serverId: string, areaId: string) {
+    const areas = getAreas($serverId);
+    if (areaId && areas?.length) {
+        const area = areas.find((a) => a.area_id === areaId);
+        if (area) {
+            return area.name;
+        }
+    }
+
+    return i18n('ha-device.ui.no_area');
+}
+
 export function getAreas(serverId: string): HassArea[] {
-    return areas[serverId];
+    return areas[serverId] ?? [];
 }
 
 export function getDevices(serverId: string): HassDevice[] {
-    return devices[serverId];
+    return devices[serverId] ?? [];
 }
 
 export function getEntity(serverId: string, entityId: string): HassEntity {
@@ -142,7 +165,7 @@ export function getEntity(serverId: string, entityId: string): HassEntity {
 }
 
 export function getEntities(serverId: string): HassEntities {
-    return entities[serverId];
+    return entities[serverId] ?? {};
 }
 
 export function getProperties(serverId: string, entityId: string): string[] {
@@ -170,7 +193,11 @@ export function getProperties(serverId: string, entityId: string): string[] {
 }
 
 export function getServices(serverId: string): HassServices {
-    return services[serverId];
+    return services[serverId] ?? {};
+}
+
+export function getTargetDomains(serverId: string): HassTargetDomains {
+    return targetDomains[serverId] ?? { areas: {}, devices: {} };
 }
 
 function flatten(object: any, path?: string, separator = '.'): any {

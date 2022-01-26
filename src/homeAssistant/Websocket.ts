@@ -15,6 +15,7 @@ import {
     HassEntity,
     HassEvent,
     HassServices,
+    HassServiceTarget,
     MessageBase,
     subscribeConfig,
     subscribeEntities,
@@ -26,6 +27,7 @@ import {
     HA_EVENT_AREA_REGISTRY_UPDATED,
     HA_EVENT_DEVICE_REGISTRY_UPDATED,
     HA_EVENT_INTEGRATION,
+    HA_EVENT_REGISTRY_UPDATED,
     HA_EVENT_STATE_CHANGED,
     HA_EVENT_TAG_SCANNED,
     HA_EVENTS,
@@ -44,13 +46,18 @@ import {
     HassDeviceCapabilities,
     HassDevices,
     HassDeviceTriggers,
+    HassEntityRegistryEntry,
     HassTags,
     HassTranslations,
     HassUser,
     SubscriptionUnsubscribe,
 } from '../types/home-assistant';
 import { Credentials } from './';
-import { subscribeAreaRegistry, subscribeDeviceRegistry } from './collections';
+import {
+    subscribeAreaRegistry,
+    subscribeDeviceRegistry,
+    subscribeEntityRegistry,
+} from './collections';
 import createSocket from './createSocket';
 import { startHeartbeat, StopHeartbeat } from './heartbeat';
 
@@ -81,6 +88,7 @@ export default class Websocket {
     areas: HassAreas = [];
     client!: Connection;
     devices: HassDevices = [];
+    entities: HassEntityRegistryEntry[] = [];
     connectionState = STATE_DISCONNECTED;
     integrationVersion: string | number = 0;
     isHomeAssistantRunning = false;
@@ -202,6 +210,17 @@ export default class Websocket {
         subscribeDeviceRegistry(this.client, (devices) => {
             this.emitEvent(HA_EVENT_DEVICE_REGISTRY_UPDATED, devices);
             this.devices = devices;
+            this.emitEvent(HA_EVENT_REGISTRY_UPDATED, {
+                devices: this.devices,
+                entities: this.entities,
+            });
+        });
+        subscribeEntityRegistry(this.client, (entities) => {
+            this.entities = entities;
+            this.emitEvent(HA_EVENT_REGISTRY_UPDATED, {
+                devices: this.devices,
+                entities: this.entities,
+            });
         });
     }
 
@@ -561,10 +580,11 @@ export default class Websocket {
     callService(
         domain: string,
         service: string,
-        data?: { [key: string]: any }
+        data?: { [key: string]: any },
+        target?: HassServiceTarget
     ): Promise<unknown> {
         debug(`Call-Service: ${domain}.${service} ${JSON.stringify(data)}`);
-        return callService(this.client, domain, service, data);
+        return callService(this.client, domain, service, data, target);
     }
 
     send<Results>(data: MessageBase): Promise<Results> {

@@ -1,4 +1,6 @@
-import { Options } from 'select2';
+import { Options, SearchOptions } from 'select2';
+
+import { containsMustache } from '../helpers/mustache';
 
 export interface Select2Data {
     id: string;
@@ -36,4 +38,63 @@ export const select2DefaultOptions: Options = {
 
         return null;
     },
+};
+
+export const createSelect2Options = ({
+    multiple = false,
+    tags = false,
+    data,
+}: {
+    multiple?: boolean;
+    tags?: boolean;
+    data?: Select2Data[];
+}) => {
+    const opts = {
+        ...select2DefaultOptions,
+        data: data,
+        multiple: multiple,
+    };
+
+    if (tags) {
+        opts.tags = true;
+        // Only allow custom entities if they contain mustache tags
+        opts.createTag = (params: SearchOptions) => {
+            // Check for valid mustache tags
+            if (!containsMustache(params.term)) {
+                return;
+            }
+
+            return {
+                id: params.term,
+                text: params.term,
+            };
+        };
+    }
+
+    return opts;
+};
+
+// Create select2 data list of ids that don't exist in the current list
+export const createCustomIdListByProperty = <T>(
+    ids: string | string[],
+    list: T[],
+    property?: string
+) => {
+    return (Array.isArray(ids) ? ids : [ids]).reduce(
+        (acc: Select2Data[], id: string) => {
+            const propertyId = (item: T) => (property ? item[property] : item);
+            if (
+                containsMustache(id) &&
+                !list.find((item) => propertyId(item) === id)
+            ) {
+                acc.push({
+                    id: id,
+                    text: id,
+                    selected: true,
+                });
+            }
+            return acc;
+        },
+        []
+    );
 };

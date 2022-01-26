@@ -107,3 +107,12 @@ export function renderTemplate(
 
     return str ?? '';
 }
+
+export function generateRenderTemplate(
+    message: NodeMessage,
+    context: NodeContext,
+    states: HassEntities
+) {
+    return (template: string, altTags = false) =>
+        renderTemplate(template, message, context, states, altTags);
+}

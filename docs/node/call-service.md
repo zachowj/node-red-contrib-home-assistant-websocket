@@ -22,16 +22,20 @@ Service domain to call
 
 Service service to call
 
-### Entity Id
+### Area
 
-- Type: `string`
-- Accepts [Mustache Templates](/guide/mustache-templates.md)
+- Type: `an array of area ids`
+- Accepts [Mustache Templates](/guide/mustache-templates.md) for ids
 
-A comma-delimited list of entity ids.
+### Device
 
-::: tip NOTICE
-If `entity_id` exists in the data property it will have precedence over this value.
-:::
+- Type: `an array of device ids`
+- Accepts [Mustache Templates](/guide/mustache-templates.md) for ids
+
+### Entity
+
+- Type: `an array of entity ids`
+- Accepts [Mustache Templates](/guide/mustache-templates.md) for ids
 
 ### Data
 
@@ -62,6 +66,23 @@ Will store the first, last or all messages received while disconnected from Home
 
 All properties need to be under `msg.payload`.
 
+Sample input
+
+```JSON
+{
+    "domain": "homeassistant",
+    "service": "turn_on",
+    "target": {
+        "area_id": ["kitchen"],
+        "device_id": ["8932894082930482903"],
+        "entity_id": ["light.kitchen", "switch.garage_light"]
+    }
+    "data": {
+        "brightness_pct": 50
+    }
+}
+```
+
 #### Merging
 
 If the incoming message has a `payload` property with `domain`, `service` set it will override any config values if set.
@@ -91,9 +112,15 @@ Service service to call
 
 ### data
 
-- Type: `Object`
+- Type: `JSON Object`
 
 Service data to send with API call
+
+### target
+
+- Type: `JSON Object with area_id, device_id, and entity_id as array properties`
+
+Targets of the service call
 
 ## Output
 
@@ -101,3 +128,11 @@ Value types:
 
 - `sent data`: data sent to Home Assistant
 - `config`: config properties of the node
+
+## References
+
+<info-panel-only>
+
+[External Docs](/node/call-service.md)
+
+</info-panel-only>

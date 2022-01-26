@@ -1,7 +1,11 @@
 import { Connection, getCollection } from 'home-assistant-js-websocket';
 import { Store } from 'home-assistant-js-websocket/dist/store';
 
-import { HassAreas, HassDevices } from '../types/home-assistant';
+import {
+    HassAreas,
+    HassDevices,
+    HassEntityRegistryEntry,
+} from '../types/home-assistant';
 
 export function subscribeAreaRegistry(
     conn: Connection,
@@ -46,6 +50,33 @@ export function subscribeDeviceRegistry(
         conn,
         '_devices',
         fetchDeviceRegistry,
+        subscribeUpdates
+    );
+    collection.subscribe(cb);
+}
+
+export function subscribeEntityRegistry(
+    conn: Connection,
+    cb: (state: HassEntityRegistryEntry[]) => void
+): void {
+    const fetchEntityRegistry = (conn: Connection) =>
+        conn.sendMessagePromise<HassEntityRegistryEntry[]>({
+            type: 'config/entity_registry/list',
+        });
+
+    const subscribeUpdates = (
+        conn: Connection,
+        store: Store<HassEntityRegistryEntry[]>
+    ) =>
+        conn.subscribeEvents(async () => {
+            const devices = await fetchEntityRegistry(conn);
+            store.setState(devices, true);
+        }, 'entity_registry_updated');
+
+    const collection = getCollection(
+        conn,
+        '_entity',
+        fetchEntityRegistry,
         subscribeUpdates
     );
     collection.subscribe(cb);

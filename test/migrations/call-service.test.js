@@ -52,8 +52,13 @@ const VERSION_4 = {
     ...VERSION_3,
     version: 4,
     domain: 'service_domain',
-    entityId: ['entity.id1', 'entity.id2'],
     mergeContext: 'flowvalue',
+    target: {
+        areaId: [],
+        deviceId: [],
+        entityId: ['entity.id1', 'entity.id2'],
+    },
+    entityId: undefined,
     service_domain: undefined,
     mergecontext: undefined,
 };

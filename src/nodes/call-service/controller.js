@@ -1,8 +1,9 @@
 const selectn = require('selectn');
 
 const EventsNode = require('../EventsNode');
+const merge = require('lodash.merge');
+const { generateRenderTemplate } = require('../../helpers/mustache');
 const { HA_CLIENT_READY } = require('../../const');
-const { renderTemplate } = require('../../helpers/mustache');
 
 const QUEUE_NONE = 'none';
 const QUEUE_FIRST = 'first';
@@ -14,7 +15,7 @@ const nodeOptions = {
     config: {
         domain: {},
         service: {},
-        entityId: {},
+        target: {},
         data: {},
         dataType: (nodeDef) => nodeDef.dataType || 'json',
         mergeContext: {},
@@ -39,20 +40,7 @@ class CallService extends EventsNode {
         }
     }
 
-    isObjectLike(v) {
-        return v !== null && typeof v === 'object';
-    }
-
-    tryToObject(v) {
-        if (!v) return null;
-        try {
-            return JSON.parse(v);
-        } catch (e) {
-            return v;
-        }
-    }
-
-    onInput({ message, parsedMessage, send, done }) {
+    onInput({ message, send, done }) {
         const config = this.nodeConfig;
         if (!this.isConnected && config.queue === QUEUE_NONE) {
             this.status.setFailed('No Connection');
@@ -61,28 +49,17 @@ class CallService extends EventsNode {
             return;
         }
 
-        let payload, payloadDomain, payloadService;
-
-        if (message && message.payload) {
-            payload = this.tryToObject(message.payload);
-            payloadDomain = selectn('domain', payload);
-            payloadService = selectn('service', payload);
-        }
-        const configDomain = config.domain;
-        const configService = config.service;
         const context = this.node.context();
-        const apiDomain = renderTemplate(
-            payloadDomain || configDomain,
-            message,
-            context,
-            this.homeAssistant.getStates()
-        );
-        const apiService = renderTemplate(
-            payloadService || configService,
-            message,
-            context,
-            this.homeAssistant.getStates()
-        );
+        const states = this.homeAssistant.getStates();
+
+        const payloadDomain = selectn('payload.domain', message);
+        const payloadService = selectn('payload.service', message);
+        const payloadTarget = selectn('payload.target', message);
+        const payloadData = selectn('payload.data', message);
+        const render = generateRenderTemplate(message, context, states);
+        const apiDomain = render(payloadDomain || config.domain);
+        const apiService = render(payloadService || config.service);
+        const apiTarget = this.getTargetData(payloadTarget, message);
         let configData;
         if (config.dataType === 'jsonata' && config.data) {
             try {
@@ -95,16 +72,9 @@ class CallService extends EventsNode {
                 return;
             }
         } else {
-            configData = renderTemplate(
-                config.data,
-                message,
-                context,
-                this.homeAssistant.getStates(),
-                config.mustacheAltTags
-            );
+            configData = render(config.data, config.mustacheAltTags);
         }
-
-        const apiData = this.getApiData(payload, configData);
+        const apiData = this.getApiData(payloadData, configData);
 
         if (!apiDomain || !apiService) {
             done(
@@ -117,31 +87,19 @@ class CallService extends EventsNode {
         }
 
         this.node.debug(
-            `Calling Service: ${apiDomain}:${apiService} -- ${JSON.stringify(
-                apiData || {}
-            )}`
+            `Calling Service: ${JSON.stringify({
+                domain: apiDomain,
+                service: apiService,
+                target: apiTarget,
+                data: apiData,
+            })}`
         );
-
-        // Merge entity id field into data property if it doesn't exist
-        if (
-            config.entityId.length &&
-            !Object.prototype.hasOwnProperty.call(apiData, 'entity_id')
-        ) {
-            apiData.entity_id = config.entityId.map((e) =>
-                renderTemplate(
-                    e,
-                    message,
-                    context,
-                    this.homeAssistant.getStates(),
-                    config.mustacheAltTags
-                )
-            );
-        }
 
         const obj = {
             apiDomain,
             apiService,
-            apiData,
+            apiData: Object.keys(apiData).length ? apiData : undefined,
+            apiTarget: Object.keys(apiTarget).length ? apiTarget : undefined,
             message,
             done,
             send,
@@ -174,13 +132,8 @@ class CallService extends EventsNode {
         }
     }
 
-    getApiData(payload, data) {
+    getApiData(payload = {}, config = {}) {
         let contextData = {};
-
-        let payloadData = selectn('data', payload);
-        let configData = this.tryToObject(data);
-        payloadData = payloadData || {};
-        configData = configData || {};
 
         // Calculate payload to send end priority ends up being 'Config, Global Ctx, Flow Ctx, Payload' with right most winning
         if (this.nodeConfig.mergeContext) {
@@ -192,30 +145,68 @@ class CallService extends EventsNode {
             contextData = { ...globalVal, ...flowVal };
         }
 
-        return { ...configData, ...contextData, ...payloadData };
+        return { ...config, ...contextData, ...payload };
+    }
+
+    getTargetData(payload, message) {
+        const context = this.node.context();
+        const states = this.homeAssistant.getStates();
+        const render = generateRenderTemplate(message, context, states);
+
+        const map = {
+            areaId: 'area_id',
+            deviceId: 'device_id',
+            entityId: 'entity_id',
+        };
+        const configTarget = {};
+
+        Object.keys(this.nodeConfig?.target).forEach((key) => {
+            const prop = map[key];
+            configTarget[prop] = this.nodeConfig.target[key]
+                ? [...this.nodeConfig.target[key]]
+                : undefined;
+            if (Array.isArray(configTarget[prop])) {
+                // If length is 0 set it to undefined so the target can be overridden from the data field
+                if (configTarget[prop].length === 0) {
+                    configTarget[prop] = undefined;
+                } else {
+                    configTarget[prop].forEach((target, index) => {
+                        configTarget[prop][index] = render(target);
+                    });
+                }
+            } else if (configTarget[prop] !== undefined) {
+                configTarget[prop] = [render(configTarget[prop])];
+            }
+        });
+
+        return merge(configTarget, payload);
     }
 
     async processInput({
         apiDomain,
         apiService,
         apiData,
+        apiTarget,
         message,
         done,
         send,
     }) {
         this.status.setSending();
 
-        this.debugToClient({
+        const data = {
             domain: apiDomain,
             service: apiService,
+            target: apiTarget,
             data: apiData,
-        });
+        };
+        this.debugToClient(data);
 
         try {
             await this.homeAssistant.callService(
                 apiDomain,
                 apiService,
-                apiData
+                apiData,
+                apiTarget
             );
         } catch (err) {
             // ignore 'connection lost' error on homeassistant.restart
@@ -235,11 +226,7 @@ class CallService extends EventsNode {
         try {
             this.setCustomOutputs(this.nodeConfig.outputProperties, message, {
                 config: this.nodeConfig,
-                data: {
-                    domain: apiDomain,
-                    service: apiService,
-                    data: apiData || null,
-                },
+                data: data,
             });
         } catch (e) {
             this.status.setFailed('error');

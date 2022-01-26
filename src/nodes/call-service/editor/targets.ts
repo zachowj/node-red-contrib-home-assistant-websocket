@@ -1,9 +1,14 @@
-import { SearchOptions } from 'select2';
+import { HassEntity } from 'home-assistant-js-websocket';
 
-import * as haData from '../../../editor/data';
-import { Select2Data, select2DefaultOptions } from '../../../editor/select2';
+import * as haServer from '../../../editor/haserver';
+import {
+    createCustomIdListByProperty,
+    createSelect2Options,
+    Select2Data,
+} from '../../../editor/select2';
 import { byPropertiesOf } from '../../../helpers/sort';
-import { FilterEntities } from '.';
+import { HassArea, HassDevice } from '../../../types/home-assistant';
+import { getNormalizedDomainServices } from './utils';
 
 declare global {
     interface JQuery {
@@ -11,60 +16,39 @@ declare global {
     }
 }
 
-const createSelect2Options = (data) => {
-    return {
-        ...select2DefaultOptions,
-        ...{
-            multiple: true,
-            tags: true,
-            data: data,
-            // Only allow custom entities if they contain mustache tags
-            createTag: (params: SearchOptions) => {
-                // Check for valid mustache tags
-                if (!/\{\{(?:(?!}}).+)\}\}/g.test(params.term)) {
-                    return null;
-                }
-
-                return {
-                    id: params.term,
-                    text: params.term,
-                };
-            },
-        },
+type ServiceTarget = {
+    entity?: {
+        domain?: string;
     };
 };
 
-// Create select2 data list of ids that don't exist in the current list
-const createCustomIdList = (ids, list) => {
-    return ids.reduce((acc: Select2Data[], entityId: string) => {
-        if (!(entityId in list)) {
-            acc.push({
-                id: entityId,
-                text: entityId,
-                selected: true,
-            });
-        }
-        return acc;
-    }, []);
-};
+export type Filter<T> = (value: T, index: number, array: T[]) => boolean;
+
+const areaIdSelector = '#areaId';
+const deviceIdSelector = '#deviceId';
+const entityIdSelector = '#entityId';
+
+const ValidTargetNone = 'none';
+const ValidTargetAll = 'all';
+const ValidTargetEntityOnly = 'entity_only';
+export type ValidTargets =
+    | typeof ValidTargetNone
+    | typeof ValidTargetAll
+    | typeof ValidTargetEntityOnly;
 
 // Load entity list into select2
-export const populateEntities = (
-    serverId: string,
-    {
-        selectedIds,
-        filter,
-    }: {
-        selectedIds?: string[];
-        filter?: FilterEntities;
-    }
-) => {
-    const $entityIdField = $('#node-input-entityId');
-    const entities = haData.getEntities(serverId);
-    const entitiesValues = Object.values(entities);
+const populateEntities = ({
+    selectedIds,
+    filter,
+}: {
+    selectedIds?: string[];
+    filter?: Filter<HassEntity>;
+}) => {
+    const $entityIdField = $(entityIdSelector);
+    const entities = Object.values(haServer.getEntities());
     const entityIds = selectedIds ?? ($entityIdField.val() as string[]);
     $entityIdField.empty();
-    const data = (filter ? entitiesValues.filter(filter) : entitiesValues)
+    const data = (filter ? entities.filter(filter) : entities)
         .map((e): Select2Data => {
             return {
                 id: e.entity_id,
@@ -74,6 +58,209 @@ export const populateEntities = (
             };
         })
         .sort(byPropertiesOf<Select2Data>(['text']))
-        .concat(createCustomIdList(entityIds, entities));
-    $entityIdField.select2(createSelect2Options(data)).maximizeSelect2Height();
+        .concat(
+            createCustomIdListByProperty<HassEntity>(
+                entityIds,
+                entities,
+                'entity_id'
+            )
+        );
+    $entityIdField
+        .select2(
+            createSelect2Options({ data: data, multiple: true, tags: true })
+        )
+        .maximizeSelect2Height();
+};
+
+const populateAreas = ({
+    selectedIds,
+    filter,
+}: {
+    selectedIds?: string[];
+    filter?: Filter<HassArea>;
+}) => {
+    const $areaId = $(areaIdSelector);
+    const areas = haServer.getAreas();
+    const areaIds = selectedIds ?? ($areaId.val() as string[]);
+    $areaId.empty();
+    const data = (filter ? areas.filter(filter) : areas)
+        .map((a): Select2Data => {
+            return {
+                id: a.area_id,
+                text: a.name,
+                selected: areaIds.includes(a.area_id),
+            };
+        })
+        .sort(byPropertiesOf<Select2Data>(['text']))
+        .concat(
+            createCustomIdListByProperty<HassArea>(areaIds, areas, 'area_id')
+        );
+    $areaId
+        .select2(
+            createSelect2Options({ data: data, multiple: true, tags: true })
+        )
+        .maximizeSelect2Height();
+};
+
+const populateDevices = ({
+    selectedIds,
+    filter,
+}: {
+    selectedIds?: string[];
+    filter?: Filter<HassDevice>;
+}) => {
+    const $deviceId = $(deviceIdSelector);
+    const devices = haServer.getDevices();
+    const deviceIds = selectedIds ?? ($deviceId.val() as string[]);
+    $deviceId.empty();
+    const data = (filter ? devices.filter(filter) : devices)
+        .map((d): Select2Data => {
+            return {
+                id: d.id,
+                text: d.name_by_user ?? d.name,
+                selected: deviceIds.includes(d.id),
+                title: haServer.getAreaNameById(d.area_id),
+            };
+        })
+        .sort(byPropertiesOf<Select2Data>(['text']))
+        .concat(
+            createCustomIdListByProperty<HassDevice>(deviceIds, devices, 'id')
+        );
+    $deviceId
+        .select2(
+            createSelect2Options({ data: data, multiple: true, tags: true })
+        )
+        .maximizeSelect2Height();
+};
+
+/*
+ https://developers.home-assistant.io/docs/dev_101_services
+ If the service accepts entity IDs, target allows the user to specify entities by 
+ entity, device, or area. If `target` is specified, `entity_id` should not be defined 
+ in the `fields` map. By default it shows only targets matching entities from the same 
+ domain as the service, but if further customization is required, target supports the 
+ entity, device, and area selectors (https://www.home-assistant.io/docs/blueprint/selectors/). 
+ Entity selector parameters will automatically be applied to device and area, and 
+ device selector parameters will automatically be applied to area.
+ */
+export const getValidTargets = (): ValidTargets => {
+    const services = haServer.getServices();
+    const [domain, service] = getNormalizedDomainServices();
+    if (
+        Object.keys(services).length === 0 ||
+        !services?.[domain]?.[service] ||
+        services?.[domain]?.[service]?.target !== undefined
+    )
+        return ValidTargetAll;
+
+    if (services[domain]?.[service]?.fields.entity_id !== undefined)
+        return ValidTargetEntityOnly;
+
+    return ValidTargetNone;
+};
+
+// TODO: Check integration and device_class
+const entitiesByServiceTarget = (): Filter<HassEntity> | undefined => {
+    const services = haServer.getServices();
+    const [domain, service] = getNormalizedDomainServices();
+    const filterDomain = (
+        services?.[domain]?.[service]?.target as ServiceTarget
+    )?.entity?.domain;
+
+    return filterDomain
+        ? (value) => value.entity_id.startsWith(`${filterDomain}.`)
+        : undefined;
+};
+
+// TODO: for devices check integration, manufacturer, model
+const ByServiceTarget = (
+    target: 'areas' | 'devices',
+    targetId: 'id' | 'area_id'
+) => {
+    const targets = haServer.getTargetDomains()[target];
+    const services = haServer.getServices();
+    const [domain, service] = getNormalizedDomainServices();
+    const filterDomain = (
+        services?.[domain]?.[service]?.target as ServiceTarget
+    )?.entity?.domain;
+
+    return filterDomain
+        ? (target) => {
+              return targets[target[targetId]]?.includes(filterDomain);
+          }
+        : undefined;
+};
+
+export const displayValidTargets = () => {
+    const validTargets = getValidTargets();
+    const $ids = $(
+        `${areaIdSelector}, ${deviceIdSelector}, ${entityIdSelector}`
+    );
+    if (validTargets === ValidTargetNone) {
+        $ids.parent().hide();
+    } else {
+        if (validTargets === ValidTargetEntityOnly) {
+            $ids.parent().hide();
+            $(entityIdSelector).parent().show();
+        } else {
+            $ids.parent().show();
+        }
+    }
+};
+
+export const populateTargets = ({
+    areaId,
+    deviceId,
+    entityId,
+}: {
+    areaId?: string[];
+    deviceId?: string[];
+    entityId?: string[];
+} = {}) => {
+    const validTargets = getValidTargets();
+    if (
+        validTargets === ValidTargetAll ||
+        validTargets === ValidTargetEntityOnly
+    ) {
+        if (validTargets === ValidTargetAll) {
+            populateAreas({
+                selectedIds: areaId,
+                filter: ByServiceTarget('areas', 'area_id'),
+            });
+            populateDevices({
+                selectedIds: deviceId,
+                filter: ByServiceTarget('devices', 'id'),
+            });
+        } else {
+            $(`${areaIdSelector}, ${deviceIdSelector}`)
+                .val(null)
+                .trigger('change');
+        }
+        populateEntities({
+            selectedIds: entityId,
+            filter: entitiesByServiceTarget(),
+        });
+    } else {
+        // Clear all
+        $(`${areaIdSelector}, ${deviceIdSelector}, ${entityIdSelector}`)
+            .val(null)
+            .trigger('change');
+    }
+};
+
+export const getTarget = () => {
+    return {
+        areaId:
+            $(areaIdSelector)
+                .select2('data')
+                ?.map((d) => d.id) ?? [],
+        deviceId:
+            $(deviceIdSelector)
+                .select2('data')
+                ?.map((d) => d.id) ?? [],
+        entityId:
+            $(entityIdSelector)
+                .select2('data')
+                ?.map((d) => d.id) ?? [],
+    };
 };

@@ -1,4 +1,4 @@
-import * as haData from '../../../editor/data';
+import * as haServer from '../../../editor/haserver';
 import { getNormalizedDomainServices } from './utils';
 
 // Populate service table
@@ -11,8 +11,7 @@ export const updateServiceSelection = () => {
     const $loadExampleData = $('#example-data');
 
     const [domain, service] = getNormalizedDomainServices();
-    const server = $('#node-input-server').val() as string;
-    const services = haData.getServices(server);
+    const services = haServer.getServices();
     const serviceData = services?.[domain]?.[service];
     // If a known  domain and service
     if (serviceData) {
@@ -69,7 +68,7 @@ export const loadExampleData = () => {
     const [domain, service] = getNormalizedDomainServices();
     const server = $('#node-input-server').val() as string;
     if (domain && service && server) {
-        const services = haData.getServices(server);
+        const services = haServer.getServices();
         const serviceData = services?.[domain]?.[service];
         if (serviceData) {
             const fields = serviceData.fields;
@@ -77,7 +76,9 @@ export const loadExampleData = () => {
             const exampleData = Object.keys(fields).reduce((acc, key) => {
                 const val = fields[key].example;
                 if (key === 'entity_id') {
-                    $entityIdField.val(val.toString());
+                    if (val?.toString()) {
+                        $entityIdField.val();
+                    }
                     return acc;
                 }
                 if (val === undefined) {

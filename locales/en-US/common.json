@@ -1,21 +1,13 @@
 {
   "home-assistant": {
-    "ui": {
-      "notifications": {
-        "attention": "Attention"
-      },
-      "migrations": {
-        "node_schema_updated": "Node schema has been updated",
-        "all_nodes_updated": "Home Assistant nodes have been updated. Deploy to save changes.",
-        "message": "This will update all Home Assistant nodes to the current schema. This is not required for the nodes to function.\nNodes with yellow labels need to be updated before they can be edited. This can be done by either opening each node individually in the Node-RED editor or running this command.",
-        "warning": "It is recommended to back up your flows before doing an update of all Home Assistant nodes.",
-        "title": "Update Home Assistant Nodes",
-        "button_label": "Update Home Assistant Nodes",
-        "button_ok": "Update Nodes",
-        "button_cancel": "Cancel"
-      }
-    },
     "label": {
+      "entity_config": "Entity Config",
+      "entity_id": "Entity ID",
+      "label": "Label",
+      "name": "Name",
+      "output_debug": "Output debug information",
+      "output_on_connect": "Output on connect",
+      "output_properties": "Output properties",
       "select_option": {
         "boolean": "boolean",
         "exact": "exact",
@@ -32,15 +24,23 @@
         "string": "string",
         "substring": "substring"
       },
-      "entity_config": "Entity Config",
-      "entity_id": "Entity ID",
-      "label": "Label",
-      "name": "Name",
-      "output_on_connect": "Output on connect",
-      "output_properties": "Output properties",
       "server": "Server",
-      "state_type": "State Type",
-      "output_debug": "Output debug information"
+      "state_type": "State Type"
+    },
+    "ui": {
+      "migrations": {
+        "all_nodes_updated": "Home Assistant nodes have been updated. Deploy to save changes.",
+        "button_cancel": "Cancel",
+        "button_label": "Update Home Assistant Nodes",
+        "button_ok": "Update Nodes",
+        "message": "This will update all Home Assistant nodes to the current schema. This is not required for the nodes to function.\nNodes with yellow labels need to be updated before they can be edited. This can be done by either opening each node individually in the Node-RED editor or running this command.",
+        "node_schema_updated": "Node schema has been updated",
+        "title": "Update Home Assistant Nodes",
+        "warning": "It is recommended to back up your flows before doing an update of all Home Assistant nodes."
+      },
+      "notifications": {
+        "attention": "Attention"
+      }
     }
   }
 }
