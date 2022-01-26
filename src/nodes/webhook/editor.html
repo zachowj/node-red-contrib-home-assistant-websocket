@@ -1,41 +1,26 @@
 <input type="hidden" id="node-input-version" />
 
 <div class="form-row">
-    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <label for="node-input-name">Name</label>
     <input type="text" id="node-input-name" placeholder="Name" />
     <input type="hidden" id="node-input-outputs" />
 </div>
 
 <div class="form-row">
-    <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
+    <label for="node-input-server">Server</label>
     <input type="text" id="node-input-server" />
 </div>
 
 <div class="form-row">
-    <label for="node-input-webhookId"><i class="fa fa-cube"></i> ID</label>
-    <div
-        style="
-            display: inline-block;
-            position: relative;
-            width: 70%;
-            height: 20px;
-        "
-    >
-        <div style="position: absolute; left: 0px; right: 80px">
-            <input type="text" id="node-input-webhookId" style="width: 100%" />
-        </div>
-        <a
-            id="copyId"
-            class="editor-button"
-            style="position: absolute; right: 0px; top: 0px"
-            ><i class="fa fa-copy"></i
-        ></a>
-        <a
-            id="refresh"
-            class="editor-button"
-            style="position: absolute; right: 40px; top: 0px"
-            ><i class="fa fa-refresh"></i
-        ></a>
+    <label for="node-input-webhookId">ID</label>&nbsp;
+    <div style="display: inline-flex; width: 70%">
+        <input type="text" id="node-input-webhookId" style="flex-grow: 1" />
+        <a id="copyId" class="editor-button" style="margin-left: 10px">
+            <i class="fa fa-copy"></i>
+        </a>
+        <a id="refresh" class="editor-button" style="margin-left: 10px">
+            <i class="fa fa-refresh"></i>
+        </a>
     </div>
 </div>
 
