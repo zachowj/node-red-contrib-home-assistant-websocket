@@ -22,7 +22,7 @@ function migrate(node: any) {
     for (const key in migratedData) {
         if (migratedData[key] === undefined) {
             // remove deprecated properties
-            delete migratedData[key];
+            delete node[key];
         } else {
             node[key] = migratedData[key];
         }
