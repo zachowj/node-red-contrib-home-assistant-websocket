@@ -15,7 +15,7 @@ const nodeColors = {
 
 const setup = (node: EditorNodeInstance<HassNodeProperties>) => {
     versionCheck(node);
-    $('#dialog-form').addClass('home-assistant');
+    $('#dialog-form, #node-config-dialog-edit-form').addClass('home-assistant');
 };
 
 const alphaWarning = (id: number) => {
