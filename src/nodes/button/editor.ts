@@ -16,7 +16,7 @@ interface ButtonEditorNodeProperties extends EditorNodeProperties {
 
 const ButtonEditor: EditorNodeDef<ButtonEditorNodeProperties> = {
     category: 'home_assistant_entities',
-    color: ha.nodeColors.beta,
+    color: ha.nodeColors.haBlue,
     inputs: 0,
     outputs: 1,
     icon: 'font-awesome/fa-hand-o-up',
@@ -65,7 +65,6 @@ const ButtonEditor: EditorNodeDef<ButtonEditorNodeProperties> = {
     oneditprepare: function () {
         ha.setup(this);
         exposeNode.init(this);
-        $('#dialog-form').prepend(ha.betaWarning(546));
 
         haOutputs.createOutputs(this.outputProperties, {
             extraTypes: ['entity', 'entityState', 'entityId'],
