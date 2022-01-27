@@ -75,10 +75,11 @@ export default [
                 ...schema,
                 version: 4,
                 target: {
-                    entityId:
-                        schema?.entityId
-                            ?.split(',')
-                            .map((e: string) => e.trim()) ?? [],
+                    entityId: schema?.entityId
+                        ? schema.entityId
+                              .split(',')
+                              .map((e: string) => e.trim())
+                        : [],
                     areaId: [],
                     deviceId: [],
                 },

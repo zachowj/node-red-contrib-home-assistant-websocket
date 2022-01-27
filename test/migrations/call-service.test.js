@@ -166,6 +166,38 @@ describe('Migrations - Call Service Node', function () {
 
             expect(migratedSchema).to.eql(VERSION_4);
         });
+        describe('entity id property', function () {
+            it("should set the target entity to an empty array when the entity id doesn't have a length", function () {
+                const schema = {
+                    ...VERSION_4,
+                    entityId: '',
+                };
+                const migrate = migrations.find((m) => m.version === 4);
+                const migratedSchema = migrate.up(schema);
+
+                expect(migratedSchema.target.entityId).to.eql([]);
+            });
+            it('should set the target entity to an empty array when the entity id is undefined', function () {
+                const schema = {
+                    ...VERSION_4,
+                    entityId: undefined,
+                };
+                const migrate = migrations.find((m) => m.version === 4);
+                const migratedSchema = migrate.up(schema);
+
+                expect(migratedSchema.target.entityId).to.eql([]);
+            });
+            it('should set the target entity to an array of length 1 when the entity id is a single entity', function () {
+                const schema = {
+                    ...VERSION_4,
+                    entityId: 'sun.sun',
+                };
+                const migrate = migrations.find((m) => m.version === 4);
+                const migratedSchema = migrate.up(schema);
+
+                expect(migratedSchema.target.entityId).to.have.a.lengthOf(1);
+            });
+        });
     });
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
