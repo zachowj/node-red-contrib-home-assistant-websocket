@@ -23,6 +23,12 @@ output.
 
 - [Conditionals](/guide/conditionals.md)
 
+### For
+
+- Type: `number`
+
+The amount of time the entity state needs to constant for the "If state" to be `true`
+
 ### State Type
 
 - Type: `string`
@@ -30,27 +36,6 @@ output.
 - Default: `string`
 
 Convert the state of the entity to the selected type. Boolean will be converted to true based on if the string is equal by default to (`y|yes|true|on|home|open`). Original value stored in `msg.data.original_state`
-
-### State Location
-
-- Type : `string`
-- Default: `msg.payload`
-
-Customizable location for the entity’s state.
-
-### Entity Location
-
-- Type : `string`
-- Default: `msg.data`
-
-Customizable location for the entity object. Defaults to
-
-### Override Topic
-
-- Type: `boolean`
-- Default: `false`
-
-Write entity id to msg.topic
 
 ### Block Input Overrides
 
