@@ -26,11 +26,10 @@ class Switch extends EntityNode {
     }
 
     onHaEventMessage(evt) {
+        const stateChanged =
+            evt.type === 'state_changed' && evt.state !== this.isEnabled;
         super.onHaEventMessage(evt);
-        if (
-            evt.type === 'state_changed' &&
-            this.nodeConfig.outputOnStateChange
-        ) {
+        if (stateChanged && this.nodeConfig.outputOnStateChange) {
             // fake a HA entity
             const entity = {
                 state: this.isEnabled,
