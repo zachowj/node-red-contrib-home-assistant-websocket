@@ -187,6 +187,17 @@ class CallService extends EventsNode {
                 configTarget[prop] = [render(configTarget[prop])];
             }
         });
+        // Convert possible comma delimited list to array
+        configTarget['entity_id'] = configTarget['entity_id']?.reduce(
+            (acc, curr) => {
+                return acc.concat(
+                    curr.indexOf(',')
+                        ? curr.split(',').map((e) => e.trim())
+                        : curr
+                );
+            },
+            []
+        );
 
         return merge(configTarget, payload);
     }
