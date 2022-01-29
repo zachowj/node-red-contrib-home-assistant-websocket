@@ -188,14 +188,13 @@ class CallService extends EventsNode {
             }
         });
         // Convert possible comma delimited list to array
-        configTarget['entity_id'] = configTarget['entity_id']?.reduce(
-            (acc, curr) => {
-                return acc.concat(
+        configTarget.entity_id = configTarget.entity_id?.reduce(
+            (acc, curr) =>
+                acc.concat(
                     curr.indexOf(',')
                         ? curr.split(',').map((e) => e.trim())
                         : curr
-                );
-            },
+                ),
             []
         );
 
