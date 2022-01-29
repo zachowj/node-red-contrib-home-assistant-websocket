@@ -115,6 +115,7 @@ class BaseNode {
         for (const msg of arguments) {
             const debugMsgObj = {
                 id: this.node.id,
+                path: `${this.node.z}/${this.node.id}`,
                 name: this.node.name || '',
                 msg,
             };
