@@ -78,13 +78,17 @@ export const createSelect2Options = ({
 export const createCustomIdListByProperty = <T>(
     ids: string | string[],
     list: T[],
-    property?: string
+    opts?: {
+        property?: string;
+        includeUnknownIds?: boolean;
+    }
 ) => {
     return (Array.isArray(ids) ? ids : [ids]).reduce(
         (acc: Select2Data[], id: string) => {
-            const propertyId = (item: T) => (property ? item[property] : item);
+            const propertyId = (item: T) =>
+                opts?.property ? item[opts?.property] : item;
             if (
-                containsMustache(id) &&
+                (opts?.includeUnknownIds || containsMustache(id)) &&
                 !list.find((item) => propertyId(item) === id)
             ) {
                 acc.push({

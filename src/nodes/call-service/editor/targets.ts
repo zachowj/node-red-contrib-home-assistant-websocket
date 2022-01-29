@@ -59,11 +59,10 @@ const populateEntities = ({
         })
         .sort(byPropertiesOf<Select2Data>(['text']))
         .concat(
-            createCustomIdListByProperty<HassEntity>(
-                entityIds,
-                entities,
-                'entity_id'
-            )
+            createCustomIdListByProperty<HassEntity>(entityIds, entities, {
+                property: 'entity_id',
+                includeUnknownIds: true,
+            })
         );
     $entityIdField
         .select2(
@@ -93,7 +92,10 @@ const populateAreas = ({
         })
         .sort(byPropertiesOf<Select2Data>(['text']))
         .concat(
-            createCustomIdListByProperty<HassArea>(areaIds, areas, 'area_id')
+            createCustomIdListByProperty<HassArea>(areaIds, areas, {
+                property: 'area_id',
+                includeUnknownIds: true,
+            })
         );
     $areaId
         .select2(
@@ -124,7 +126,10 @@ const populateDevices = ({
         })
         .sort(byPropertiesOf<Select2Data>(['text']))
         .concat(
-            createCustomIdListByProperty<HassDevice>(deviceIds, devices, 'id')
+            createCustomIdListByProperty<HassDevice>(deviceIds, devices, {
+                property: 'id',
+                includeUnknownIds: true,
+            })
         );
     $deviceId
         .select2(
@@ -185,9 +190,7 @@ const ByServiceTarget = (
     )?.entity?.domain;
 
     return filterDomain
-        ? (target) => {
-              return targets[target[targetId]]?.includes(filterDomain);
-          }
+        ? (target) => targets[target[targetId]]?.includes(filterDomain)
         : undefined;
 };
 
