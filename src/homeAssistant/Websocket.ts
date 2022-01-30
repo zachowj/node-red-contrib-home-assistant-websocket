@@ -28,6 +28,7 @@ import {
     HA_EVENT_DEVICE_REGISTRY_UPDATED,
     HA_EVENT_INTEGRATION,
     HA_EVENT_REGISTRY_UPDATED,
+    HA_EVENT_SERVICES_UPDATED,
     HA_EVENT_STATE_CHANGED,
     HA_EVENT_TAG_SCANNED,
     HA_EVENTS,
@@ -344,10 +345,10 @@ export default class Websocket {
         }
 
         this.services = services;
-
+        this.emitEvent(HA_EVENT_SERVICES_UPDATED, this.services);
         if (!this.servicesLoaded) {
             this.servicesLoaded = true;
-            this.emitEvent('ha_client:services_loaded', this.services);
+            this.emitEvent('ha_client:services_loaded');
         }
     }
 

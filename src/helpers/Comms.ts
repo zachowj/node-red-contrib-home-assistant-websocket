@@ -4,6 +4,7 @@ import {
     HA_EVENT_AREA_REGISTRY_UPDATED,
     HA_EVENT_DEVICE_REGISTRY_UPDATED,
     HA_EVENT_REGISTRY_UPDATED,
+    HA_EVENT_SERVICES_UPDATED,
 } from '../const';
 import { RED } from '../globals';
 import HomeAssistant from '../homeAssistant/HomeAssistant';
@@ -33,7 +34,7 @@ export default class Comms {
     startListeners(): void {
         // Setup event listeners
         const events: { [key: string]: (data?: any) => void } = {
-            'ha_client:services_loaded': this.onServicesLoaded,
+            [HA_EVENT_SERVICES_UPDATED]: this.onServicesUpdated,
             'ha_client:states_loaded': this.onStatesLoaded,
             'ha_events:state_changed': this.onStateChanged,
             integration: this.onIntegrationEvent,
@@ -114,7 +115,7 @@ export default class Comms {
         });
     }
 
-    onServicesLoaded(services: HassServices): void {
+    onServicesUpdated(services: HassServices): void {
         this.publish('services', services);
     }
 

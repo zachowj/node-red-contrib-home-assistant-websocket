@@ -5,7 +5,7 @@ import {
 import merge from 'lodash.merge';
 import { Node } from 'node-red';
 
-import { INTEGRATION_NOT_LOADED } from '../../const';
+import { HA_EVENT_SERVICES_UPDATED, INTEGRATION_NOT_LOADED } from '../../const';
 import { RED } from '../../globals';
 import Comms from '../../helpers/Comms';
 import {
@@ -113,6 +113,7 @@ export default class ConfigServer {
             'ha_client:running': this.onHaEventsRunning,
             'ha_client:states_loaded': this.onHaStatesLoaded,
             'ha_client:services_loaded': this.onHaServicesLoaded,
+            [HA_EVENT_SERVICES_UPDATED]: this.onHaServicesUpdated,
             'ha_events:state_changed': this.onHaStateChanged,
             integration: this.onIntegrationEvent,
         };
@@ -183,9 +184,12 @@ export default class ConfigServer {
         this.node.debug('States Loaded');
     };
 
-    onHaServicesLoaded = (services: HassServices) => {
-        this.setOnContext('services', services);
+    onHaServicesLoaded = () => {
         this.node.debug('Services Loaded');
+    };
+
+    onHaServicesUpdated = (services: HassServices) => {
+        this.setOnContext('services', services);
     };
 
     onHaEventsConnecting = () => {
