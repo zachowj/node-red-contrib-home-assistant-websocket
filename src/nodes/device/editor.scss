@@ -1,0 +1,29 @@
+.deviceExtra {
+    > label {
+        text-transform: capitalize;
+    }
+
+    > input[type='checkbox'] {
+        width: auto;
+    }
+
+    .range-row {
+        display: inline-flex;
+        align-items: center;
+        width: 70%;
+
+        input[type='checkbox'] {
+            width: auto;
+        }
+
+        input[type='range'] {
+            flex-grow: 1;
+            margin: 0 10px;
+        }
+
+        input[type='text'] {
+            width: calc(3ch + 14px);
+            text-align: center;
+        }
+    }
+}
