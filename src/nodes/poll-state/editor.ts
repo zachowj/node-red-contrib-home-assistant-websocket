@@ -1,10 +1,10 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
+import { hassAutocomplete } from '../../editor/components/hassAutocomplete';
+import * as ifState from '../../editor/components/ifstate';
 import * as exposeNode from '../../editor/exposenode';
 import ha from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
-import { hassAutocomplete } from '../../editor/hassAutocomplete';
-import * as ifState from '../../editor/ifstate';
 import { HassExposedConfig, StateType } from '../../editor/types';
 
 declare const RED: EditorRED;

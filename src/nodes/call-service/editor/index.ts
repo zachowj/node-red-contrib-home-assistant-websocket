@@ -1,13 +1,13 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
-import ha from '../../../editor/ha';
-import * as haServer from '../../../editor/haserver';
-import * as haOutputs from '../../../editor/output-properties';
+import * as haOutputs from '../../../editor/components/output-properties';
 import {
     createCustomIdListByProperty,
     createSelect2Options,
     Select2Data,
-} from '../../../editor/select2';
+} from '../../../editor/components/select2';
+import ha from '../../../editor/ha';
+import * as haServer from '../../../editor/haserver';
 import { OutputProperty } from '../../../editor/types';
 import { containsMustache } from '../../../helpers/mustache';
 import { byPropertiesOf } from '../../../helpers/sort';

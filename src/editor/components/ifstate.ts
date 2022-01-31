@@ -1,4 +1,4 @@
-import { HATypedInputTypeOptions } from './types';
+import { HATypedInputTypeOptions } from '../types';
 
 export const init = function (
     input: string,

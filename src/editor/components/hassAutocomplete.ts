@@ -1,5 +1,5 @@
-import * as haData from './data';
-import { isjQuery } from './utils';
+import * as haData from '../data';
+import { isjQuery } from '../utils';
 
 interface HassAutocompleteOptions {
     serverId: string;

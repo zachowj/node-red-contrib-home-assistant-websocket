@@ -1,10 +1,10 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
+import * as ifState from '../../editor/components/ifstate';
+import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
 import ha from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
-import * as ifState from '../../editor/ifstate';
-import * as haOutputs from '../../editor/output-properties';
 import { HassExposedConfig, OutputProperty } from '../../editor/types';
 
 declare const RED: EditorRED;

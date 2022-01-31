@@ -1,8 +1,8 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
+import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
 import ha from '../../editor/ha';
-import * as haOutputs from '../../editor/output-properties';
 import { OutputProperty } from '../../editor/types';
 
 declare const RED: EditorRED;

@@ -1,9 +1,9 @@
 import { EditorNodeDef, EditorRED } from 'node-red';
 
+import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
 import ha from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
-import * as haOutputs from '../../editor/output-properties';
 import {
     HassExposedConfig,
     HassNodeProperties,

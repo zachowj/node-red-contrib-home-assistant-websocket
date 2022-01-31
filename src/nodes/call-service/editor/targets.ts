@@ -1,11 +1,11 @@
 import { HassEntity } from 'home-assistant-js-websocket';
 
-import * as haServer from '../../../editor/haserver';
 import {
     createCustomIdListByProperty,
     createSelect2Options,
     Select2Data,
-} from '../../../editor/select2';
+} from '../../../editor/components/select2';
+import * as haServer from '../../../editor/haserver';
 import { byPropertiesOf } from '../../../helpers/sort';
 import { HassArea, HassDevice } from '../../../types/home-assistant';
 import { getNormalizedDomainServices } from './utils';

@@ -1,6 +1,6 @@
 import { Options, SearchOptions } from 'select2';
 
-import { containsMustache } from '../helpers/mustache';
+import { containsMustache } from '../../helpers/mustache';
 
 export interface Select2Data {
     id: string;

@@ -1,12 +1,12 @@
 import { EditorNodeDef, EditorRED } from 'node-red';
 
+import * as haOutputs from '../../../editor/components/output-properties';
+import { select2DefaultOptions } from '../../../editor/components/select2';
 import * as haData from '../../../editor/data';
 import * as exposeNode from '../../../editor/exposenode';
 import ha from '../../../editor/ha';
 import * as haServer from '../../../editor/haserver';
 import { i18n } from '../../../editor/i18n';
-import * as haOutputs from '../../../editor/output-properties';
-import { select2DefaultOptions } from '../../../editor/select2';
 import {
     HassExposedConfig,
     HassNodeProperties,
