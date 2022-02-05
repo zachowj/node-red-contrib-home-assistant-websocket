@@ -1,6 +1,7 @@
 import { Options, SearchOptions } from 'select2';
 
 import { containsMustache } from '../../helpers/mustache';
+import { isjQuery } from '../utils';
 
 export interface Select2Data {
     id: string;
@@ -53,6 +54,7 @@ export const createSelect2Options = ({
         ...select2DefaultOptions,
         data: data,
         multiple: multiple,
+        dropdownAutoWidth: true,
     };
 
     if (tags) {
@@ -102,3 +104,18 @@ export const createCustomIdListByProperty = <T>(
         []
     );
 };
+
+export const isInitialized = (
+    selector: JQuery<HTMLElement> | string
+): boolean => {
+    const $selector = (
+        isjQuery(selector) ? selector : $(selector as string)
+    ) as JQuery;
+    return $selector.hasClass('select2-hidden-accessible');
+};
+
+declare global {
+    interface JQuery {
+        maximizeSelect2Height: () => void;
+    }
+}

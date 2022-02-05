@@ -1,0 +1,68 @@
+.ha-entity-selector {
+    display: inline-flex;
+    width: 70%;
+    align-items: flex-end;
+    gap: 10px;
+
+    > input[type='text'] {
+        flex: 1;
+    }
+
+    .select2-container {
+        flex: 1;
+        width: auto;
+
+        .select2-search--inline {
+            .select2-search__field {
+                height: 22px;
+            }
+        }
+    }
+}
+
+#node-input-entityIdFilterType {
+    width: auto;
+}
+
+.ha-entity-search-dialog {
+    .ha-entity-filter-bar {
+        display: flex;
+        align-items: baseline;
+        margin-bottom: 10px;
+
+        input {
+            border: 1px solid var(--red-ui-form-input-border-color);
+            box-sizing: border-box;
+            display: inline-block;
+            height: 34px;
+            padding: 6px 6px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            line-height: 20px;
+            color: var(--red-ui-primary-text-color);
+            vertical-align: middle;
+            border-radius: 4px;
+            flex: 1;
+            margin-left: 10px;
+        }
+        input:focus {
+            border-color: var(--red-ui-form-input-border-color-focus);
+            outline: 0;
+        }
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+        overflow-y: auto;
+        height: 400px;
+    }
+
+    .ui-dialog-buttonset {
+        button {
+            line-height: 20px;
+        }
+    }
+}

@@ -27,6 +27,10 @@ const VERSION_0 = {
     checkCurrentState: false,
     blockInputOverrides: true,
 };
+const VERSION_1 = {
+    ...VERSION_0,
+    version: 1,
+};
 
 describe('Migrations - Wait Until Node', function () {
     describe('Version 0', function () {
@@ -36,8 +40,40 @@ describe('Migrations - Wait Until Node', function () {
             expect(migratedSchema).to.eql(VERSION_0);
         });
     });
+    describe('Version 1', function () {
+        it('should add version 1 to version 0', function () {
+            const migrate = migrations.find((m) => m.version === 1);
+            const migratedSchema = migrate.up(VERSION_0);
+            expect(migratedSchema).to.eql(VERSION_1);
+        });
+        it('should convert comma delimited entity list to array and change type to list', function () {
+            const schema = {
+                ...VERSION_0,
+                entityId: 'entity.id,entity2.id, entity3.id',
+                entityIdFilterType: 'substring',
+            };
+            const migrate = migrations.find((m) => m.version === 1);
+            const migratedSchema = migrate.up(schema);
+            expect(migratedSchema.entityId).to.eql([
+                'entity.id',
+                'entity2.id',
+                'entity3.id',
+            ]);
+            expect(migratedSchema.entityIdFilterType).to.eql('list');
+        });
+        it('should only contain one entity if there is a trailing comma', function () {
+            const schema = {
+                ...VERSION_0,
+                entityId: 'entity.id,',
+                entityIdFilterType: 'substring',
+            };
+            const migrate = migrations.find((m) => m.version === 1);
+            const migratedSchema = migrate.up(schema);
+            expect(migratedSchema.entityId).to.have.lengthOf(1);
+        });
+    });
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_0);
+        expect(migratedSchema).to.eql(VERSION_1);
     });
 });

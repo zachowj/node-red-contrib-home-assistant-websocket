@@ -13,7 +13,7 @@ const wrap = require('gulp-wrap');
 const { src, dest, series, task, watch, parallel } = require('gulp');
 
 const browserSync = require('browser-sync');
-const footer = require('gulp-footer');
+const header = require('gulp-header');
 const nodemon = require('nodemon');
 
 // Source
@@ -318,7 +318,7 @@ task('buildEditorFiles', (done) => {
 
     return merge([css, js, html])
         .pipe(concat('index.html'))
-        .pipe(footer(resourceFiles.join('')))
+        .pipe(header(resourceFiles.join('')))
         .pipe(dest(editorFilePath + '/'));
 });
 

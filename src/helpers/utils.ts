@@ -27,24 +27,25 @@ export function shouldInclude(
 
 export function shouldIncludeEvent(
     eventId: string,
-    filter: string,
+    filter: string | string[],
     filterType: string
 ): boolean {
     if (!filter) return true;
 
-    if (filterType === 'substring') {
-        const found = filter
-            .split(',')
-            .map((f) => f.trim())
-            .filter((filterStr) => eventId.indexOf(filterStr) >= 0);
-        return found.length > 0;
+    if (typeof filter === 'string') {
+        if (filterType === 'substring') {
+            return eventId.includes(filter);
+        }
+        if (filterType === 'regex') {
+            return new RegExp(filter).test(eventId);
+        }
     }
 
-    if (filterType === 'regex') {
-        return new RegExp(filter).test(eventId);
+    if (Array.isArray(filter)) {
+        return filter.includes(eventId);
     }
 
-    return filter === eventId;
+    return eventId === filter;
 }
 
 export function toCamelCase(str: string): string {

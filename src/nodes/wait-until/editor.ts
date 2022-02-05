@@ -1,5 +1,6 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
+import EntitySelector from '../../editor/components/EntitySelector';
 import ha from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import { HATypedInputTypeOptions } from '../../editor/types';
@@ -9,7 +10,7 @@ declare const RED: EditorRED;
 interface WaitUntilEditorNodeProperties extends EditorNodeProperties {
     server: string;
     version: number;
-    entityId: string;
+    entityId: string | string[];
     entityIdFilterType: string;
     property: string;
     comparator: string;
@@ -57,17 +58,16 @@ const WaitUntilEditor: EditorNodeDef<WaitUntilEditorNodeProperties> = {
     },
     oneditprepare: function () {
         ha.setup(this);
-        haServer.init(this, '#node-input-server');
-
-        let availableEntities = [];
-        let availableProperties = [];
-        haServer.autocomplete('entities', (entities: string[]) => {
-            availableEntities = entities;
-            $('#node-input-entityId').autocomplete({
-                source: availableEntities,
-                minLength: 0,
-            });
+        haServer.init(this, '#node-input-server', () => {
+            entitySelector.serverChanged();
         });
+        const entitySelector = new EntitySelector({
+            filterTypeSelector: '#node-input-entityIdFilterType',
+            entityId: this.entityId,
+        });
+        $('#dialog-form').data('entitySelector', entitySelector);
+
+        let availableProperties = [];
         haServer.autocomplete('properties', (properties: string[]) => {
             availableProperties = properties;
             $('#node-input-property').autocomplete({
@@ -155,6 +155,19 @@ const WaitUntilEditor: EditorNodeDef<WaitUntilEditorNodeProperties> = {
         $filterType.on('change', function () {
             $('.exact-only').toggle($filterType.val() === 'exact');
         });
+    },
+    oneditsave: function () {
+        const entitySelector = $('#dialog-form').data(
+            'entitySelector'
+        ) as EntitySelector;
+        this.entityId = entitySelector.entityId;
+        entitySelector.destroy();
+    },
+    oneditcancel: function () {
+        const entitySelector = $('#dialog-form').data(
+            'entitySelector'
+        ) as EntitySelector;
+        entitySelector.destroy();
     },
 };
 export default WaitUntilEditor;

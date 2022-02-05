@@ -1,8 +1,40 @@
 const expect = require('chai').expect;
 
-const { parseTime } = require('../../src/helpers/utils');
+const { shouldIncludeEvent, parseTime } = require('../../src/helpers/utils');
 
 describe('utils', function () {
+    describe('shouldIncludeEvent', function () {
+        it('should return true when filter is empty', function () {
+            expect(shouldIncludeEvent('test', '', 'exact')).to.be.true;
+        });
+        it('should match a substring', function () {
+            expect(shouldIncludeEvent('test', 'es', 'substring')).to.be.true;
+        });
+        it('should match regex', function () {
+            expect(shouldIncludeEvent('test', 't[ea]st', 'regex')).to.be.true;
+        });
+        it('should match exactly', function () {
+            expect(shouldIncludeEvent('test', 'test', 'exact')).to.be.true;
+        });
+        it('should match a string in a array', function () {
+            expect(shouldIncludeEvent('test', ['test', 'test2'], 'list')).to.be
+                .true;
+        });
+        it('should not match a substring', function () {
+            expect(shouldIncludeEvent('test', 'abc', 'substring')).to.be.false;
+        });
+        it('should not match regex', function () {
+            expect(shouldIncludeEvent('test', 'a[b]c', 'regex')).to.be.false;
+        });
+        it('should not match exactly', function () {
+            expect(shouldIncludeEvent('test', 'abc', 'exact')).to.be.false;
+        });
+        it('should not match a string in a array', function () {
+            expect(shouldIncludeEvent('test', ['abc', 'test2'], 'list')).to.be
+                .false;
+        });
+    });
+
     describe('timeRegex', function () {
         it('should match hour and minutes', function () {
             const str = '21:28';

@@ -109,7 +109,7 @@
     "gulp-cli": "^2.3.0",
     "gulp-concat": "^2.6.1",
     "gulp-flatmap": "^1.0.2",
-    "gulp-footer": "^2.1.0",
+    "gulp-header": "^2.0.9",
     "gulp-htmlmin": "^5.0.1",
     "gulp-if": "^3.0.0",
     "gulp-markdownit": "^1.0.3",

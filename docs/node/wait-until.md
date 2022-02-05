@@ -16,10 +16,8 @@ The id of an entity to use for the comparison.
 ### Entity ID Filter Types <Badge text="required"/>
 
 - Type: `string`
-- Values: `exact|substring|regex`
+- Values: `exact|list|substring|regex`
 - Default: `exact`
-
-Substring can be a comma-delimited list.
 
 ### Wait Until <Badge text="required"/>
 

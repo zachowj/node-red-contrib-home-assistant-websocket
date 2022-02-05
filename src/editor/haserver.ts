@@ -24,7 +24,8 @@ function setDefault() {
 
 export function init(
     n: EditorNodeInstance<HassNodeProperties>,
-    server: string
+    server: string,
+    onChange?: () => void
 ) {
     $server = $(server);
     node = n;
@@ -33,9 +34,13 @@ export function init(
         setDefault();
     }
     serverId = $server.val() as string;
-    $server.on('change', () => {
-        serverId = $server.val() as string;
-    });
+    // Delay the listener so only get one event on load
+    setTimeout(() => {
+        $server.on('change', () => {
+            serverId = $server.val() as string;
+            onChange?.();
+        });
+    }, 500);
 }
 
 export function autocomplete(type: string, callback: (items: any) => void) {

@@ -1,0 +1,11 @@
+{
+  "ha-wait-until": {
+    "label": {
+      "block_input_overrides": "Block input overrides",
+      "check_current_state": "Check against current state",
+      "entity_location": "Entity location",
+      "timeout": "Timeout",
+      "wait_until": "Wait until"
+    }
+  }
+}

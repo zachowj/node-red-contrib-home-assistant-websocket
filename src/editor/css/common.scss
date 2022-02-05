@@ -59,6 +59,21 @@ $home-assistant-color: #41bdf5;
         > select {
             width: 70%;
         }
+
+        .ha-multi-item-row {
+            display: inline-flex;
+            gap: 10px;
+            width: 70%;
+
+            select {
+                width: auto;
+            }
+
+            .red-ui-typedInput-container {
+                flex: 1;
+                width: auto;
+            }
+        }
     }
 
     .editable-list-row {
