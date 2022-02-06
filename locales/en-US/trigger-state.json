@@ -1,14 +1,22 @@
 {
   "trigger-state": {
     "label": {
-      "select_option": {
-        "current_state": "Current State",
-        "previous_state": "Previous State",
-        "property": "Property"
-      },
       "enable_input": "Enable input",
       "output_on_connect": "Output on connect",
-      "this_entity": "This Entity"
+      "select_option": {
+        "always": "send always",
+        "current_state": "current state",
+        "custom_message": "custom message",
+        "custom_payload": "custom payload",
+        "default_message": "default message",
+        "entity_id": "entity id",
+        "if_prev_state": "If previous state",
+        "if_property": "If property",
+        "if_state": "If state",
+        "previous_state": "previous state",
+        "property": "property",
+        "this_entity": "this entity"
+      }
     }
   }
 }

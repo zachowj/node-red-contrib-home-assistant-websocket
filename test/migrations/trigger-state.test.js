@@ -37,6 +37,10 @@ const VERSION_1 = {
     inputs: 1,
     enableInput: true,
 };
+const VERSION_2 = {
+    ...VERSION_1,
+    version: 2,
+};
 
 describe('Migrations - Trigger State Node', function () {
     describe('Version 0', function () {
@@ -53,8 +57,40 @@ describe('Migrations - Trigger State Node', function () {
             expect(migratedSchema).to.eql(VERSION_1);
         });
     });
+    describe('Version 2', function () {
+        it('should add version 1 to version 2', function () {
+            const migrate = migrations.find((m) => m.version === 2);
+            const migratedSchema = migrate.up(VERSION_1);
+            expect(migratedSchema).to.eql(VERSION_2);
+        });
+        it('should convert comma delimited entity list to array and change type to list', function () {
+            const schema = {
+                ...VERSION_1,
+                entityid: 'entity.id,entity2.id, entity3.id',
+                entityidfiltertype: 'substring',
+            };
+            const migrate = migrations.find((m) => m.version === 2);
+            const migratedSchema = migrate.up(schema);
+            expect(migratedSchema.entityid).to.eql([
+                'entity.id',
+                'entity2.id',
+                'entity3.id',
+            ]);
+            expect(migratedSchema.entityidfiltertype).to.eql('list');
+        });
+        it('should only contain one entity if there is a trailing comma', function () {
+            const schema = {
+                ...VERSION_1,
+                entityid: 'entity.id,',
+                entityidfiltertype: 'substring',
+            };
+            const migrate = migrations.find((m) => m.version === 2);
+            const migratedSchema = migrate.up(schema);
+            expect(migratedSchema.entityid).to.have.lengthOf(1);
+        });
+    });
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_1);
+        expect(migratedSchema).to.eql(VERSION_2);
     });
 });

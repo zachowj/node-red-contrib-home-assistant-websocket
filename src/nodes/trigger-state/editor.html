@@ -21,21 +21,24 @@
 <div class="form-row">
     <label
         for="node-input-entityid"
-        data-i18n="home-assistant.label.entity_id"
+        data-i18n="home-assistant.label.entity"
     ></label>
-    <input type="text" id="node-input-entityid" style="width: 50%" />
-    <select type="text" id="node-input-entityidfiltertype" style="width: 20%">
+    <select type="text" id="node-input-entityidfiltertype">
         <option
             value="exact"
             data-i18n="home-assistant.label.select_option.exact"
         ></option>
         <option
-            value="substring"
-            data-i18n="home-assistant.label.select_option.substring"
+            value="list"
+            data-i18n="home-assistant.label.select_option.list"
         ></option>
         <option
             value="regex"
             data-i18n="home-assistant.label.select_option.regex"
+        ></option>
+        <option
+            value="substring"
+            data-i18n="home-assistant.label.select_option.substring"
         ></option>
     </select>
 </div>
@@ -45,7 +48,7 @@
         for="node-input-state_type"
         data-i18n="home-assistant.label.state_type"
     ></label>
-    <select type="text" id="node-input-state_type" style="width: auto">
+    <select type="text" id="node-input-state_type">
         <option
             value="str"
             data-i18n="home-assistant.label.select_option.string"
@@ -102,11 +105,11 @@
         <select type="text" class="target-type" style="width: 140px">
             <option
                 value="this_entity"
-                data-i18n="trigger-state.label.this_entity"
+                data-i18n="trigger-state.label.select_option.this_entity"
             ></option>
             <option
                 value="entity_id"
-                data-i18n="home-assistant.label.entity_id"
+                data-i18n="trigger-state.label.select_option.entity_id"
             ></option>
         </select>
 
@@ -184,9 +187,18 @@
     <div class="editable-list-row">
         <!-- Type -->
         <select type="text" class="message-type" style="width: 140px">
-            <option value="default">Default Msg</option>
-            <option value="custom">Custom Msg</option>
-            <option value="payload">Custom Payload</option>
+            <option
+                value="default"
+                data-i18n="trigger-state.label.select_option.default_message"
+            ></option>
+            <option
+                value="custom"
+                data-i18n="trigger-state.label.select_option.custom_message"
+            ></option>
+            <option
+                value="payload"
+                data-i18n="trigger-state.label.select_option.custom_payload"
+            ></option>
         </select>
 
         <input type="text" class="message-value" style="width: 62%" />
@@ -199,10 +211,22 @@
             class="comparator-property-type"
             style="width: 140px"
         >
-            <option value="always">Send Always</option>
-            <option value="current_state">If State</option>
-            <option value="previous_state">If Prev State</option>
-            <option value="property">If Property</option>
+            <option
+                value="always"
+                data-i18n="trigger-state.label.select_option.awalys"
+            ></option>
+            <option
+                value="current_state"
+                data-i18n="trigger-state.label.select_option.if_state"
+            ></option>
+            <option
+                value="previous_state"
+                data-i18n="trigger-state.label.select_option.if_prev_state"
+            ></option>
+            <option
+                value="property"
+                data-i18n="trigger-state.label.select_option.if_property"
+            ></option>
         </select>
 
         <input type="text" class="comparator-property-value" disabled />
@@ -216,16 +240,40 @@
             style="width: 140px"
             disabled
         >
-            <option value="is">is</option>
-            <option value="is_not">is not</option>
+            <option
+                value="is"
+                data-i18n="home-assistant.label.select_option.is"
+            ></option>
+            <option
+                value="is_not"
+                data-i18n="home-assistant.label.select_option.is_not"
+            ></option>
 
-            <option value=">">&gt;</option>
-            <option value=">=">&gt;=</option>
-            <option value="<">&lt;</option>
-            <option value="<=">&lt;=</option>
+            <option
+                value=">"
+                data-i18n="home-assistant.label.select_option.less_than"
+            ></option>
+            <option
+                value=">="
+                data-i18n="home-assistant.label.select_option.less_than_equal"
+            ></option>
+            <option
+                value="<"
+                data-i18n="home-assistant.label.select_option.greater_than"
+            ></option>
+            <option
+                value="<="
+                data-i18n="home-assistant.label.select_option.greater_than_equal"
+            ></option>
 
-            <option value="includes">in</option>
-            <option value="does_not_include">not in</option>
+            <option
+                value="includes"
+                data-i18n="home-assistant.label.select_option.in"
+            ></option>
+            <option
+                value="does_not_include"
+                data-i18n="home-assistant.label.select_option.not_in"
+            ></option>
         </select>
 
         <input type="text" class="comparator-value" style="width: 62%" />

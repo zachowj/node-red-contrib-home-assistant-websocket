@@ -1,5 +1,6 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
+import EntitySelector from '../../editor/components/EntitySelector';
 import * as exposeNode from '../../editor/exposenode';
 import ha from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
@@ -33,7 +34,7 @@ interface TriggerStateEditorNodeProperties extends EditorNodeProperties {
     version: number;
     exposeToHomeAssistant: boolean;
     haConfig: HassExposedConfig[];
-    entityid: string;
+    entityid: string | string[];
     entityidfiltertype: string;
     debugenabled: boolean;
     constraints: Constraint[];
@@ -116,14 +117,16 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
         let availableEntities: string[] = [];
         let availableProperties: string[] = [];
         let availablePropertiesPrefixed: string[] = [];
-
-        haServer.init(this, '#node-input-server');
+        const entitySelector = new EntitySelector({
+            filterTypeSelector: '#node-input-entityidfiltertype',
+            entityId: this.entityid,
+        });
+        $('#dialog-form').data('entitySelector', entitySelector);
+        haServer.init(this, '#node-input-server', () => {
+            entitySelector.serverChanged();
+        });
         haServer.autocomplete('entities', (entities: string[]) => {
             availableEntities = entities;
-            $('#node-input-entityid').autocomplete({
-                source: entities,
-                minLength: 0,
-            });
         });
         haServer.autocomplete('properties', (properties: string[]) => {
             availableProperties = properties;
@@ -535,6 +538,17 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
         this.constraints = constraints;
         this.customoutputs = outputs;
         this.haConfig = exposeNode.getValues();
+        const entitySelector = $('#dialog-form').data(
+            'entitySelector'
+        ) as EntitySelector;
+        this.entityid = entitySelector.entityId;
+        entitySelector.destroy();
+    },
+    oneditcancel: function () {
+        const entitySelector = $('#dialog-form').data(
+            'entitySelector'
+        ) as EntitySelector;
+        entitySelector.destroy();
     },
 };
 
