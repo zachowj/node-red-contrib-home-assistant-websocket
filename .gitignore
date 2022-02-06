@@ -10,4 +10,3 @@ _scratchpad_flows
 coverage
 .nyc_output
 dist/
-.husky
