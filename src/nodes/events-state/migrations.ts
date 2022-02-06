@@ -83,4 +83,33 @@ export default [
             return newSchema;
         },
     },
+    {
+        version: 4,
+        up: (schema: {
+            version: number;
+            entityidfilter: string;
+            entityidfiltertype: 'exact' | 'substring' | 'regex';
+        }) => {
+            const newSchema: {
+                version: number;
+                entityidfilter: string | string[];
+                entityidfiltertype: 'exact' | 'substring' | 'regex' | 'list';
+            } = {
+                ...schema,
+                version: 4,
+            };
+
+            if (
+                schema.entityidfiltertype === 'substring' &&
+                schema.entityidfilter?.includes(',')
+            ) {
+                newSchema.entityidfiltertype = 'list';
+                newSchema.entityidfilter = schema.entityidfilter
+                    .split(',')
+                    .map((e) => e.trim())
+                    .filter((e) => e.length > 0);
+            }
+            return newSchema;
+        },
+    },
 ];

@@ -1,0 +1,19 @@
+.home-assistant {
+    ul.ha-ignore-state {
+        list-style: none;
+        margin-left: 105px;
+
+        li {
+            input {
+                margin-right: 5px;
+                display: inline-block;
+                width: auto;
+                vertical-align: top;
+            }
+
+            label {
+                width: auto;
+            }
+        }
+    }
+}

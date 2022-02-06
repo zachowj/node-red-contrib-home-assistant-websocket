@@ -62,6 +62,10 @@ const VERSION_3 = {
         },
     ],
 };
+const VERSION_4 = {
+    ...VERSION_3,
+    version: 4,
+};
 
 describe('Migrations - Events: State Node', function () {
     describe('Version 0', function () {
@@ -106,8 +110,48 @@ describe('Migrations - Events: State Node', function () {
             expect(migratedSchema).to.eql(VERSION_2);
         });
     });
+    describe('Version 3', function () {
+        it('should update version 2 to version 3', function () {
+            const migrate = migrations.find((m) => m.version === 3);
+            const migratedSchema = migrate.up(VERSION_2);
+
+            expect(migratedSchema).to.eql(VERSION_3);
+        });
+    });
+    describe('Version 4', function () {
+        it('should add version 3 to version 4', function () {
+            const migrate = migrations.find((m) => m.version === 4);
+            const migratedSchema = migrate.up(VERSION_3);
+            expect(migratedSchema).to.eql(VERSION_4);
+        });
+        it('should convert comma delimited entity list to array and change type to list', function () {
+            const schema = {
+                ...VERSION_3,
+                entityidfilter: 'entity.id,entity2.id, entity3.id',
+                entityidfiltertype: 'substring',
+            };
+            const migrate = migrations.find((m) => m.version === 4);
+            const migratedSchema = migrate.up(schema);
+            expect(migratedSchema.entityidfilter).to.eql([
+                'entity.id',
+                'entity2.id',
+                'entity3.id',
+            ]);
+            expect(migratedSchema.entityidfiltertype).to.eql('list');
+        });
+        it('should only contain one entity if there is a trailing comma', function () {
+            const schema = {
+                ...VERSION_3,
+                entityidfilter: 'entity.id,',
+                entityidfiltertype: 'substring',
+            };
+            const migrate = migrations.find((m) => m.version === 4);
+            const migratedSchema = migrate.up(schema);
+            expect(migratedSchema.entityidfilter).to.have.lengthOf(1);
+        });
+    });
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_3);
+        expect(migratedSchema).to.eql(VERSION_4);
     });
 });

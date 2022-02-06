@@ -4,10 +4,12 @@
       "cancel": "Cancel",
       "done": "Done",
       "entity": "Entity",
-      "entity_config": "Entity Config",
+      "entity_config": "Entity config",
       "entity_id": "Entity ID",
       "filter_results_label": "Filter",
       "filter_results_title": "Filter results",
+      "for": "For",
+      "if_state": "If state",
       "label": "Label",
       "name": "Name",
       "no_matches": "No matches",
@@ -38,7 +40,7 @@
         "substring": "substring"
       },
       "server": "Server",
-      "state_type": "State Type"
+      "state_type": "State type"
     },
     "ui": {
       "migrations": {
