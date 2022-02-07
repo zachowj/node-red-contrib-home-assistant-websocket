@@ -7,11 +7,15 @@ import { HassNodeProperties } from './types';
 declare const RED: EditorRED;
 let $upgradeHaNode: JQuery<HTMLElement>;
 
-export function versionCheck(node: EditorNodeInstance<HassNodeProperties>) {
-    if (isCurrentVersion(node)) {
-        return;
+export function versionCheck() {
+    const selection = RED.view.selection();
+    const node = selection
+        ?.nodes?.[0] as EditorNodeInstance<HassNodeProperties>;
+    if (node && isHomeAssistantNode(node) && !isCurrentVersion(node)) {
+        migrate(node);
+        RED.nodes.dirty(true);
+        RED.notify(i18n('home-assistant.ui.migrations.node_schema_updated'));
     }
-    migrateNode(node);
 }
 
 function migrate(node: any) {
@@ -80,17 +84,6 @@ export function migrateAllNodesConfirm() {
             },
         },
     });
-}
-
-function migrateNode(node: EditorNodeInstance<HassNodeProperties>) {
-    migrate(node);
-    RED.events.on('editor:close', function reopen() {
-        RED.events.off('editor:close', reopen);
-        RED.editor.edit(node);
-    });
-    RED.nodes.dirty(true);
-    RED.tray.close();
-    RED.notify(i18n('home-assistant.ui.migrations.node_schema_updated'));
 }
 
 // Turn string into camel case and append the string 'Version'

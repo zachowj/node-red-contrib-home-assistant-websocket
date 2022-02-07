@@ -9,7 +9,12 @@ import {
     updateTargetDomains,
 } from './editor/data';
 import { updateIntegration } from './editor/exposenode';
-import { onNodesAdd, onNodesRemove, setupMigrations } from './editor/version';
+import {
+    onNodesAdd,
+    onNodesRemove,
+    setupMigrations,
+    versionCheck,
+} from './editor/version';
 import ApiEditor from './nodes/api/editor';
 import ButtonEditor from './nodes/button/editor';
 import CallServiceEditor from './nodes/call-service/editor';
@@ -44,6 +49,7 @@ RED.comms.subscribe('homeassistant/targetDomains/#', updateTargetDomains);
 setupMigrations();
 RED.events.on('nodes:add', onNodesAdd);
 RED.events.on('nodes:remove', onNodesRemove);
+RED.events.on('editor:open', versionCheck);
 
 RED.nodes.registerType('ha-api', ApiEditor);
 RED.nodes.registerType('ha-button', ButtonEditor);
