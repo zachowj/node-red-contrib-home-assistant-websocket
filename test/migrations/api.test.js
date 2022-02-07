@@ -52,10 +52,12 @@ describe('Migrations - API Node', function () {
         });
     });
     describe('Version 1', function () {
+        let migrate = null;
+        before(function () {
+            migrate = migrations.find((m) => m.version === 1);
+        });
         it('should update version 0 to version 1', function () {
-            const migrate = migrations.find((m) => m.version === 1);
             const migratedSchema = migrate.up(VERSION_0);
-
             expect(migratedSchema).to.eql(VERSION_1);
         });
         it('should create empty outputProperties if locationType was none', function () {
@@ -67,7 +69,6 @@ describe('Migrations - API Node', function () {
                 ...VERSION_1,
                 outputProperties: [],
             };
-            const migrate = migrations.find((m) => m.version === 1);
             const migratedSchema = migrate.up(schema);
 
             expect(migratedSchema).to.eql(expectedSchema);

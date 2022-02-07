@@ -8,11 +8,13 @@ describe('HTTP API', function () {
         access_token: '123',
         host: 'http://homeassistant',
     };
-
+    let httpApi = null;
+    before(function () {
+        httpApi = new HttpAPI(CREDS);
+    });
     describe('get', function () {
         it('should use the correct authentication header', async function () {
             const path = '/config';
-            const httpApi = new HttpAPI(CREDS);
 
             nock(CREDS.host)
                 .matchHeader('authorization', `Bearer ${CREDS.access_token}`)
@@ -26,7 +28,6 @@ describe('HTTP API', function () {
     describe('fireEvent', function () {
         it('should post to the correct endpoint', async function () {
             const event = 'test';
-            const httpApi = new HttpAPI(CREDS);
 
             nock(CREDS.host).post(`/api/events/${event}`).reply(200, true);
             const response = await httpApi.fireEvent(event);
@@ -36,7 +37,6 @@ describe('HTTP API', function () {
         it('should post to correct endpoint with event data', async function () {
             const event = 'test';
             const eventData = { abc: 1234 };
-            const httpApi = new HttpAPI(CREDS);
 
             nock(CREDS.host)
                 .post(`/api/events/${event}`, JSON.stringify(eventData))
@@ -49,8 +49,6 @@ describe('HTTP API', function () {
 
     describe('get-history', function () {
         it('should use the correct endpoint with no data', async function () {
-            const httpApi = new HttpAPI(CREDS);
-
             nock(CREDS.host).get('/api/history/period').reply(200, true);
             const response = await httpApi.getHistory();
 
@@ -62,7 +60,6 @@ describe('HTTP API', function () {
                 filterEntityId: 'sun.sun',
                 timestamp: '2020-01-01:12:12:12',
             };
-            const httpApi = new HttpAPI(CREDS);
 
             nock(CREDS.host)
                 .get(
@@ -81,7 +78,6 @@ describe('HTTP API', function () {
             const data = {
                 endTimestamp: '2020-01-01:12:12:12',
             };
-            const httpApi = new HttpAPI(CREDS);
 
             nock(CREDS.host)
                 .get(`/api/history/period?end_time=${data.endTimestamp}`)
@@ -112,7 +108,6 @@ describe('HTTP API', function () {
                 createEntity(4),
                 createEntity(5),
             ];
-            const httpApi = new HttpAPI(CREDS);
 
             nock(CREDS.host).get('/api/history/period').reply(200, arr);
             const response = await httpApi.getHistory(null, null, null, {
@@ -126,7 +121,6 @@ describe('HTTP API', function () {
     describe('renderTemplate', function () {
         it('should return a string', async function () {
             const str = 'Hello!';
-            const httpApi = new HttpAPI(CREDS);
 
             nock(CREDS.host)
                 .post(`/api/template`, { template: str })

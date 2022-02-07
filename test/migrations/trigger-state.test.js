@@ -58,8 +58,11 @@ describe('Migrations - Trigger State Node', function () {
         });
     });
     describe('Version 2', function () {
+        let migrate = null;
+        before(function () {
+            migrate = migrations.find((m) => m.version === 2);
+        });
         it('should add version 1 to version 2', function () {
-            const migrate = migrations.find((m) => m.version === 2);
             const migratedSchema = migrate.up(VERSION_1);
             expect(migratedSchema).to.eql(VERSION_2);
         });
@@ -69,7 +72,6 @@ describe('Migrations - Trigger State Node', function () {
                 entityid: 'entity.id,entity2.id, entity3.id',
                 entityidfiltertype: 'substring',
             };
-            const migrate = migrations.find((m) => m.version === 2);
             const migratedSchema = migrate.up(schema);
             expect(migratedSchema.entityid).to.eql([
                 'entity.id',
@@ -84,7 +86,6 @@ describe('Migrations - Trigger State Node', function () {
                 entityid: 'entity.id,',
                 entityidfiltertype: 'substring',
             };
-            const migrate = migrations.find((m) => m.version === 2);
             const migratedSchema = migrate.up(schema);
             expect(migratedSchema.entityid).to.have.lengthOf(1);
         });

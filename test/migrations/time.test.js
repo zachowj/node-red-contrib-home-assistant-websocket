@@ -78,13 +78,15 @@ describe('Migrations - Time Node', function () {
         });
     });
     describe('Version 2', function () {
+        let migrate = null;
+        before(function () {
+            migrate = migrations.find((m) => m.version === 2);
+        });
         it('should update version 1 to version 2', function () {
-            const migrate = migrations.find((m) => m.version === 2);
             const migratedSchema = migrate.up(VERSION_1);
             expect(migratedSchema).to.eql(VERSION_2);
         });
         it('payload value should update to same value in outputProperties', function () {
-            const migrate = migrations.find((m) => m.version === 2);
             const schema = {
                 ...VERSION_1,
                 payload: 'abc',
@@ -104,7 +106,6 @@ describe('Migrations - Time Node', function () {
             expect(migratedSchema).to.eql(expectedSchema);
         });
         it('payload number type should update to number type in outputProperties', function () {
-            const migrate = migrations.find((m) => m.version === 2);
             const schema = {
                 ...VERSION_1,
                 payload: '123',

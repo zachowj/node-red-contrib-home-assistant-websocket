@@ -42,8 +42,11 @@ const VERSION_1 = {
 
 describe('Migrations - Events: All Node', function () {
     describe('Version 0', function () {
+        let migrate = null;
+        before(function () {
+            migrate = migrations.find((m) => m.version === 0);
+        });
         it('should add version 0 to schema when no version is defined', function () {
-            const migrate = migrations.find((m) => m.version === 0);
             const migratedSchema = migrate.up(VERSION_UNDEFINED);
 
             expect(migratedSchema).to.eql(VERSION_0);
@@ -54,7 +57,6 @@ describe('Migrations - Events: All Node', function () {
                 ...VERSION_0,
                 waitForRunning: false,
             };
-            const migrate = migrations.find((m) => m.version === 0);
             const migratedSchema = migrate.up(schema);
 
             expect(migratedSchema).to.eql(expectedSchema);

@@ -73,8 +73,11 @@ describe('Migrations - Current State Node', function () {
         });
     });
     describe('Version 1', function () {
+        let migrate = null;
+        before(function () {
+            migrate = migrations.find((m) => m.version === 1);
+        });
         it('should update version 0 to version 1', function () {
-            const migrate = migrations.find((m) => m.version === 1);
             const migratedSchema = migrate.up(VERSION_0);
 
             expect(migratedSchema).to.eql(VERSION_1);
@@ -90,15 +93,17 @@ describe('Migrations - Current State Node', function () {
                 override_payload: 'none',
                 override_data: 'none',
             };
-            const migrate = migrations.find((m) => m.version === 1);
             const migratedSchema = migrate.up(schema);
 
             expect(migratedSchema).to.eql(expectedSchema);
         });
     });
     describe('Version 2', function () {
+        let migrate = null;
+        before(function () {
+            migrate = migrations.find((m) => m.version === 2);
+        });
         it('should update version 1 to version 2', function () {
-            const migrate = migrations.find((m) => m.version === 2);
             const migratedSchema = migrate.up(VERSION_1);
 
             expect(migratedSchema).to.eql(VERSION_2);
@@ -114,7 +119,6 @@ describe('Migrations - Current State Node', function () {
                 ...VERSION_2,
                 outputProperties: [],
             };
-            const migrate = migrations.find((m) => m.version === 2);
             const migratedSchema = migrate.up(schema);
 
             expect(migratedSchema).to.eql(expectedSchema);

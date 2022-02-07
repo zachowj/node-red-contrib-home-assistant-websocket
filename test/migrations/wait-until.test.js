@@ -41,8 +41,11 @@ describe('Migrations - Wait Until Node', function () {
         });
     });
     describe('Version 1', function () {
+        let migrate = null;
+        before(function () {
+            migrate = migrations.find((m) => m.version === 1);
+        });
         it('should add version 1 to version 0', function () {
-            const migrate = migrations.find((m) => m.version === 1);
             const migratedSchema = migrate.up(VERSION_0);
             expect(migratedSchema).to.eql(VERSION_1);
         });
@@ -52,7 +55,6 @@ describe('Migrations - Wait Until Node', function () {
                 entityId: 'entity.id,entity2.id, entity3.id',
                 entityIdFilterType: 'substring',
             };
-            const migrate = migrations.find((m) => m.version === 1);
             const migratedSchema = migrate.up(schema);
             expect(migratedSchema.entityId).to.eql([
                 'entity.id',
@@ -67,7 +69,6 @@ describe('Migrations - Wait Until Node', function () {
                 entityId: 'entity.id,',
                 entityIdFilterType: 'substring',
             };
-            const migrate = migrations.find((m) => m.version === 1);
             const migratedSchema = migrate.up(schema);
             expect(migratedSchema.entityId).to.have.lengthOf(1);
         });
