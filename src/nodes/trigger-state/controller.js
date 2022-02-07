@@ -26,7 +26,7 @@ class TriggerState extends EventsHaNode {
 
         if (this.nodeConfig.entityidfiltertype === 'exact') {
             eventTopic =
-                this.eventTopic = `ha_events:state_changed:${this.nodeConfig.entityid}`;
+                this.eventTopic = `ha_events:state_changed:${this.nodeConfig.entityid.trim()}`;
         }
 
         this.addEventClientListener(

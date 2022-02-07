@@ -10,7 +10,7 @@ const {
 
 const nodeOptions = {
     config: {
-        entityidfilter: (nodeDef) => (nodeDef.entityidfilter || '').trim(),
+        entityidfilter: {},
         entityidfiltertype: {},
         haltIfState: (nodeDef) =>
             nodeDef.haltifstate ? nodeDef.haltifstate.trim() : null,
@@ -39,7 +39,7 @@ class EventsState extends EventsHaNode {
 
         if (this.nodeConfig.entityidfiltertype === 'exact') {
             eventTopic =
-                this.eventTopic = `ha_events:state_changed:${this.nodeConfig.entityidfilter}`;
+                this.eventTopic = `ha_events:state_changed:${this.nodeConfig.entityidfilter?.trim()}`;
         }
 
         this.addEventClientListener(

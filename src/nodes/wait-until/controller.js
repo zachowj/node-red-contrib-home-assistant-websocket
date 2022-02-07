@@ -286,7 +286,7 @@ class WaitUntil extends EventsNode {
         let eventTopic = 'ha_events:state_changed';
 
         if (config.entityIdFilterType === 'exact') {
-            eventTopic = `${eventTopic}:${config.entityId}`;
+            eventTopic = `${eventTopic}:${config.entityId.trim()}`;
         }
 
         this.addEventClientListener(eventTopic, this.onEntityChange.bind(this));
