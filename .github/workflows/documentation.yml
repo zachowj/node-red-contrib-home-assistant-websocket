@@ -21,7 +21,6 @@ jobs:
         with:
           node-version: 14
           cache: npm
-      - run: npm set-script prepare ""
       - run: npm ci
       - run: npm run docs:build
       - name: Deploy

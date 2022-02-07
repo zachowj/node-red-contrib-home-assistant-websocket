@@ -29,7 +29,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: npm
-      - run: npm set-script prepare ""
       - name: npm install
         run: npm ci
       - name: npm lint
@@ -57,7 +56,6 @@ jobs:
         with:
           node-version: 14
           cache: npm
-      - run: npm set-script prepare ""
       - run: npm ci
       - id: publish
         uses: JS-DevTools/npm-publish@v1
