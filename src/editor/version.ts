@@ -1,6 +1,6 @@
 import { EditorNodeInstance, EditorRED } from 'node-red';
 
-import { migrate as m } from '../helpers/migrate';
+import { migrate } from '../helpers/migrate';
 import { i18n } from './i18n';
 import { HassNodeProperties } from './types';
 
@@ -12,16 +12,16 @@ export function versionCheck() {
     const node = selection
         ?.nodes?.[0] as EditorNodeInstance<HassNodeProperties>;
     if (node && isHomeAssistantNode(node) && !isCurrentVersion(node)) {
-        migrate(node);
+        migrateNode(node);
         RED.nodes.dirty(true);
         RED.notify(i18n('home-assistant.ui.migrations.node_schema_updated'));
     }
 }
 
-function migrate(node: any) {
+function migrateNode(node: any) {
     const data = RED.nodes.convertNode(node, false);
 
-    const migratedData = m(data);
+    const migratedData = migrate(data);
 
     for (const key in migratedData) {
         if (migratedData[key] === undefined) {
@@ -41,25 +41,18 @@ function migrate(node: any) {
 }
 
 function migrateAllNodes() {
-    RED.nodes.eachNode((node) => {
+    const m = (node) => {
         if (
             isHomeAssistantNode(node as EditorNodeInstance) &&
             !isCurrentVersion(node as EditorNodeInstance<HassNodeProperties>)
         ) {
-            migrate(node);
+            migrateNode(node);
         }
 
         return true;
-    });
-    RED.nodes.eachConfig((node) => {
-        if (
-            isHomeAssistantNode(node as EditorNodeInstance) &&
-            !isCurrentVersion(node as EditorNodeInstance<HassNodeProperties>)
-        ) {
-            migrate(node);
-        }
-        return true;
-    });
+    };
+    RED.nodes.eachNode(m);
+    RED.nodes.eachConfig(m);
     RED.nodes.dirty(true);
     RED.notify(i18n('home-assistant.ui.migrations.all_nodes_updated'));
     RED.view.redraw();
@@ -120,7 +113,7 @@ export function isHomeAssistantNode(node: EditorNodeInstance) {
 
 export function getOldNodeCount() {
     let count = 0;
-    RED.nodes.eachNode((n) => {
+    const addToCount = (n) => {
         if (
             isHomeAssistantNode(n as EditorNodeInstance) &&
             !isCurrentVersion(n as EditorNodeInstance<HassNodeProperties>)
@@ -128,16 +121,9 @@ export function getOldNodeCount() {
             count++;
         }
         return true;
-    });
-    RED.nodes.eachConfig((n) => {
-        if (
-            isHomeAssistantNode(n as EditorNodeInstance) &&
-            !isCurrentVersion(n as EditorNodeInstance<HassNodeProperties>)
-        ) {
-            count++;
-        }
-        return true;
-    });
+    };
+    RED.nodes.eachNode(addToCount);
+    RED.nodes.eachConfig(addToCount);
 
     return count;
 }
