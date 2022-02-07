@@ -21,7 +21,8 @@ jobs:
         with:
           node-version: 14
           cache: npm
-      - run: npm ci --ignore-scripts
+      - run: npm set-script prepare ""
+      - run: npm ci
       - run: npm run docs:build
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
