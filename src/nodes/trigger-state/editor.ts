@@ -110,7 +110,7 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
         enableInput: { value: false },
     },
     oneditprepare: function () {
-        ha.setup(this);
+        ha.setup();
         const $constraintList = $('#constraint-list');
         const $outputList = $('#output-list');
 

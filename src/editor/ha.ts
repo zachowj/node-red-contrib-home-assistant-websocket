@@ -1,7 +1,7 @@
 import { EditorNodeInstance } from 'node-red';
 
 import { HassNodeProperties } from './types';
-import { isCurrentVersion, versionCheck } from './version';
+import { isCurrentVersion } from './version';
 
 const nodeColors = {
     action: '#46B1EF',
@@ -13,7 +13,7 @@ const nodeColors = {
     haBlue: '#41BDF5',
 };
 
-const setup = (node: EditorNodeInstance<HassNodeProperties>) => {
+const setup = () => {
     $('#dialog-form, #node-config-dialog-edit-form').addClass('home-assistant');
 };
 

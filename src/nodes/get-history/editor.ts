@@ -57,7 +57,7 @@ const GetHistoryEditor: EditorNodeDef<GetHistoryEditorNodeProperties> = {
         output_location: { value: 'payload' },
     },
     oneditprepare: function () {
-        ha.setup(this);
+        ha.setup();
         this.entityidtype = this.entityidtype || 'is';
         $('#node-input-entityidtype').val(this.entityidtype);
 

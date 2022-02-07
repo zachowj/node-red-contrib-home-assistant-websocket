@@ -73,7 +73,7 @@ const TagEditor: EditorNodeDef<TagEditorNodeProperties> = {
         },
     },
     oneditprepare: function () {
-        ha.setup(this);
+        ha.setup();
         exposeNode.init(this);
         const ALL_TAGS = '__ALL_TAGS__';
         const $tags = $('#tags');

@@ -86,7 +86,7 @@ const CurrentStateEditor: EditorNodeDef<CurrentStateEditorNodeProperties> = {
         override_data: { value: 'msg' }, // entity location types
     },
     oneditprepare: function () {
-        ha.setup(this);
+        ha.setup();
         haServer.init(this, '#node-input-server');
         hassAutocomplete({ root: '#node-input-entity_id' });
 

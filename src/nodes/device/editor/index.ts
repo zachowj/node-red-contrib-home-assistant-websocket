@@ -114,7 +114,7 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
         },
     },
     oneditprepare: function () {
-        ha.setup(this);
+        ha.setup();
         haServer.init(this, '#node-input-server');
         exposeNode.init(this);
         const SERVER_ADD = '_ADD_';

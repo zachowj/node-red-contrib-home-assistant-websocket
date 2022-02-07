@@ -63,7 +63,7 @@ const ButtonEditor: EditorNodeDef<ButtonEditorNodeProperties> = {
         },
     },
     oneditprepare: function () {
-        ha.setup(this);
+        ha.setup();
         exposeNode.init(this);
 
         haOutputs.createOutputs(this.outputProperties, {

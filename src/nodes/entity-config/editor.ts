@@ -32,7 +32,7 @@ const EntityConfigEditor: EditorNodeDef<EntityConfigEditorNodeProperties> = {
         return this.name || `${this.entityType} ${this.id}`;
     },
     oneditprepare: function () {
-        ha.setup(this);
+        ha.setup();
 
         const haConfigOptions = {
             button: [

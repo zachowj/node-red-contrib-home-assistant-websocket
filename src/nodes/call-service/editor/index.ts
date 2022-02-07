@@ -92,7 +92,7 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
         mergecontext: { value: undefined },
     },
     oneditprepare: function () {
-        ha.setup(this);
+        ha.setup();
         haServer.init(this, '#node-input-server');
         const $domainField = $('#domain');
         const $serviceField = $('#service');

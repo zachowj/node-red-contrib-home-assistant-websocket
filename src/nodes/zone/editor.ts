@@ -52,7 +52,7 @@ const ZoneEditor: EditorNodeDef<ZoneEditorNodeProperties> = {
         },
     },
     oneditprepare: function () {
-        ha.setup(this);
+        ha.setup();
         const $entities = $('#entities');
         const $zones = $('#zones');
 

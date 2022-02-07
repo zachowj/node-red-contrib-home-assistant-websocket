@@ -41,7 +41,7 @@ const RenderTemplateEditor: EditorNodeDef<RenderTemplateEditorNodeProperties> =
             templateLocationType: { value: 'msg' },
         },
         oneditprepare: function () {
-            ha.setup(this);
+            ha.setup();
             haServer.init(this, '#node-input-server');
 
             const $inputTemplate = $('#node-input-template');

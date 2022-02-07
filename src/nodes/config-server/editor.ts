@@ -49,7 +49,7 @@ const ConfigServerEditor: EditorNodeDef<
         return this.name || 'Home Assistant';
     },
     oneditprepare: function () {
-        ha.setup(this);
+        ha.setup();
         const $addon = $('#node-config-input-addon');
         const $host = $('#node-config-input-host');
 

@@ -73,7 +73,7 @@ const WebhookEditor: EditorNodeDef<WebhookEditorNodeProperties> = {
         headersLocationType: { value: false },
     },
     oneditprepare: function () {
-        ha.setup(this);
+        ha.setup();
         haServer.init(this, '#node-input-server');
         exposeNode.init(this);
         const $webhookId = $('#node-input-webhookId');
