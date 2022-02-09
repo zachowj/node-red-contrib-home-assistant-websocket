@@ -1,5 +1,5 @@
 const selectn = require('selectn');
-const { CronJob } = require('cron');
+const Cron = require('croner');
 
 const EventsHaNode = require('../EventsHaNode');
 const {
@@ -129,7 +129,7 @@ class Time extends EventsHaNode {
 
         this.createCronjob(crontab);
 
-        const nextTime = this.formatDate(this.cronjob.nextDates().toDate());
+        const nextTime = this.formatDate(this.cronjob.next());
         this.status.setText(this.RED._('ha-time.status.next_at', { nextTime }));
     }
 
@@ -153,7 +153,7 @@ class Time extends EventsHaNode {
 
         if (this.nodeConfig.repeatDaily) {
             const sentTime = this.formatDate(now);
-            const nextTime = this.formatDate(this.cronjob.nextDates().toDate());
+            const nextTime = this.formatDate(this.cronjob.next());
             this.status.set({
                 text: this.RED._('ha-time.status.sent_and_next', {
                     sentTime,
@@ -201,12 +201,8 @@ class Time extends EventsHaNode {
 
     createCronjob(crontab) {
         const node = this.node;
-        this.cronjob = new CronJob({
-            cronTime: crontab,
-            onTick: () => {
-                node.emit('input', {});
-            },
-            start: true,
+        this.cronjob = new Cron(crontab, () => {
+            node.emit('input', {});
         });
     }
 
