@@ -18,7 +18,7 @@ export function versionCheck() {
     }
 }
 
-function migrateNode(node: any) {
+function migrateNode(node: EditorNodeInstance<HassNodeProperties>) {
     const data = RED.nodes.convertNode(node, false);
 
     const migratedData = migrate(data);
@@ -32,8 +32,9 @@ function migrateNode(node: any) {
         }
     }
 
-    node.dirty = true;
+    // @ts-ignore - DefinitelyTyped incorrectly defines the property
     node.changed = true;
+    RED.editor.updateNodeProperties(node);
     const $upgradeHaNode = $('#upgrade-ha-node');
     if ($upgradeHaNode.is(':visible') && getOldNodeCount() === 0) {
         $upgradeHaNode.hide();
