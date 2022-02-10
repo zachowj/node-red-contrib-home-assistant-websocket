@@ -1,5 +1,4 @@
 import EventEmitter from 'events';
-import matchAll from 'string.prototype.matchall';
 
 export function shouldInclude(
     targetString: string,
@@ -134,7 +133,7 @@ export function parseTime(time: string):
 
 export function getEntitiesFromJsonata(jsonata: string): Set<string> {
     const regex = /\$entities\("([a-z_]+\.[a-z0-9_]+)"\)/g;
-    const matches = matchAll(jsonata, regex);
+    const matches = jsonata.matchAll(regex);
 
     return new Set(Array.from(matches, (m) => m[1] as string));
 }
