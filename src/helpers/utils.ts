@@ -169,3 +169,8 @@ export function validEntityId(entityId: string): boolean {
         entityId
     );
 }
+
+export function isNodeRedEnvVar(envVar: string) {
+    // Check for ${env-var}
+    return /^\$\{[a-zA-Z_][a-zA-Z0-9_]*\}$/.test(envVar);
+}

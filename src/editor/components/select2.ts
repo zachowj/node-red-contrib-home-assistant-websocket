@@ -1,6 +1,7 @@
 import { Options, SearchOptions } from 'select2';
 
 import { containsMustache } from '../../helpers/mustache';
+import { isNodeRedEnvVar } from '../../helpers/utils';
 import { isjQuery } from '../utils';
 
 export interface Select2Data {
@@ -61,15 +62,13 @@ export const createSelect2Options = ({
         opts.tags = true;
         // Only allow custom entities if they contain mustache tags
         opts.createTag = (params: SearchOptions) => {
-            // Check for valid mustache tags
-            if (!containsMustache(params.term)) {
-                return;
+            // Check for valid mustache tags or env var
+            if (containsMustache(params.term) || isNodeRedEnvVar(params.term)) {
+                return {
+                    id: params.term,
+                    text: params.term,
+                };
             }
-
-            return {
-                id: params.term,
-                text: params.term,
-            };
         };
     }
 
@@ -90,7 +89,9 @@ export const createCustomIdListByProperty = <T>(
             const propertyId = (item: T) =>
                 opts?.property ? item[opts?.property] : item;
             if (
-                (opts?.includeUnknownIds || containsMustache(id)) &&
+                (opts?.includeUnknownIds ||
+                    containsMustache(id) ||
+                    isNodeRedEnvVar(id)) &&
                 !list.find((item) => propertyId(item) === id)
             ) {
                 acc.push({

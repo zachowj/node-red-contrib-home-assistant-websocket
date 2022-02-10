@@ -4,6 +4,7 @@ const EventsNode = require('../EventsNode');
 const merge = require('lodash.merge');
 const { generateRenderTemplate } = require('../../helpers/mustache');
 const { HA_CLIENT_READY } = require('../../const');
+const { isNodeRedEnvVar } = require('../../helpers/utils');
 
 const QUEUE_NONE = 'none';
 const QUEUE_FIRST = 'first';
@@ -180,7 +181,13 @@ class CallService extends EventsNode {
                     configTarget[prop] = undefined;
                 } else {
                     configTarget[prop].forEach((target, index) => {
-                        configTarget[prop][index] = render(target);
+                        configTarget[prop][index] = isNodeRedEnvVar(target)
+                            ? this.RED.util.evaluateNodeProperty(
+                                  target,
+                                  'env',
+                                  this.node
+                              )
+                            : render(target);
                     });
                 }
             } else if (configTarget[prop] !== undefined) {
