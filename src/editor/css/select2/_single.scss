@@ -1,13 +1,13 @@
 $height: 34px;
 
 .select2-selection--single {
-    background-color: #fff;
-    border: 1px solid #ccc;
+    background-color: $form-background;
+    border: 1px solid $form-input-border-color;
     border-radius: 4px;
     height: $height !important;
 
     .select2-selection__rendered {
-        color: #555;
+        color: $form-text-color;
         line-height: $height;
     }
 
@@ -54,7 +54,7 @@ $height: 34px;
 
     &:focus {
         outline-color: #555;
-        border-color: rgba(85, 150, 230, 0.8);
+        border-color: $form-input-border-color-focus;
         outline: 0;
     }
 }
@@ -74,7 +74,7 @@ $height: 34px;
 
 &.select2-container--disabled {
     .select2-selection--single {
-        background-color: #eee;
+        background-color: $list-item-background;
         cursor: default;
 
         .select2-selection__clear {

@@ -1,6 +1,6 @@
 .select2-selection--multiple {
-    background-color: white;
-    border: 1px solid #ccc;
+    background-color: $form-background;
+    border: 1px solid $form-input-border-color;
     border-radius: 4px;
     cursor: text;
     padding-bottom: 5px;
@@ -33,7 +33,7 @@
     }
 
     .select2-selection__choice {
-        border-bottom: 1px solid #ccc;
+        border-bottom: 1px solid $form-input-border-color;
         box-sizing: border-box;
 
         display: inline-block;
@@ -59,9 +59,9 @@
     .select2-selection__choice__remove {
         background-color: transparent;
         border: none;
-        border-left: 1px solid #ccc;
+        border-left: 1px solid $form-input-border-color;
 
-        color: #999;
+        color: $form-text-color;
         cursor: pointer;
 
         font-size: 1.5em;
@@ -75,8 +75,8 @@
 
         &:hover,
         &:focus {
-            background-color: #f1f1f1;
-            color: #333;
+            background-color: $list-item-background;
+            color: $list-item-background-selected;
             outline: none;
         }
     }
@@ -95,7 +95,7 @@
         }
 
         .select2-selection__choice__remove {
-            border-left: 1px solid #ccc;
+            border-left: 1px solid $form-input-border-color;
             border-right: none;
             border-top-left-radius: 0;
             border-bottom-left-radius: 0;
@@ -119,7 +119,7 @@
 
 &.select2-container--disabled {
     .select2-selection--multiple {
-        background-color: #eee;
+        background-color: $list-item-background;
         cursor: default;
     }
 
