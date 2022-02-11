@@ -4,6 +4,7 @@ import EntitySelector from '../../editor/components/EntitySelector';
 import * as exposeNode from '../../editor/exposenode';
 import ha from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
+import { i18n } from '../../editor/i18n';
 import { HassExposedConfig } from '../../editor/types';
 
 declare const RED: EditorRED;
@@ -294,7 +295,7 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
             addButton: true,
             removable: true,
             height: 'auto',
-            header: $('<div>').append('Conditions'),
+            header: $('<div>').append(i18n('trigger-state.label.conditions')),
             addItem: constraintListAddItem,
         });
 

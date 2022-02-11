@@ -1,6 +1,7 @@
 {
   "trigger-state": {
     "label": {
+      "conditions": "Conditions",
       "enable_input": "Enable input",
       "output_on_connect": "Output on connect",
       "select_option": {
