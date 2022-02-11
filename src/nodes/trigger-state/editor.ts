@@ -114,17 +114,18 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
         const $constraintList = $('#constraint-list');
         const $outputList = $('#output-list');
 
-        let availableEntities: string[] = [];
-        let availableProperties: string[] = [];
-        let availablePropertiesPrefixed: string[] = [];
+        haServer.init(this, '#node-input-server', () => {
+            entitySelector.serverChanged();
+        });
         const entitySelector = new EntitySelector({
             filterTypeSelector: '#node-input-entityidfiltertype',
             entityId: this.entityid,
         });
         $('#dialog-form').data('entitySelector', entitySelector);
-        haServer.init(this, '#node-input-server', () => {
-            entitySelector.serverChanged();
-        });
+
+        let availableEntities: string[] = [];
+        let availableProperties: string[] = [];
+        let availablePropertiesPrefixed: string[] = [];
         haServer.autocomplete('entities', (entities: string[]) => {
             availableEntities = entities;
         });
