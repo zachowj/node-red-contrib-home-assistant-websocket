@@ -2,6 +2,51 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.42.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.41.3...v0.42.0) (2022-02-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* **wait-until:** Add entity selector
+* substring filter type no longer parses comma delimited lists. Substrings with comma will be converted to arrays and the filter type changed to list
+* Don't move resource files to the dist directory leave in the root folder so NR can find them
+* **call-service:** The data field is no longer the last word for the entity id. The new target properties are. Home Assistant updates the data target properties from the target property.
+
+### Features
+
+* Add entity selector ([27880af](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/27880afa0253f51e499f3e671621b12fbb495dac))
+* **button:** Move the button out of beta ([112d038](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/112d038035c9ec15381bca9fe6b7b97661f8a527))
+* **call-service:** Add area and device selector ([8a33245](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/8a3324562dcf8facf9185b57cde2a3f7033b5ba6))
+* **call-service:** Filter entities based on service target ([57f59fa](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/57f59fafe21e677d891f01a107f64ff125862122))
+* **events-state:** Add entity selector ([61b8ad1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/61b8ad1f538a4c0593da00881e48e7746353e718))
+* **trigger-state:** Add entity selector ([c8dfbc2](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/c8dfbc270d83976b400913aafe2c9b2ebacab3ba))
+* **wait-until:** Add entity selector ([27880af](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/27880afa0253f51e499f3e671621b12fbb495dac))
+
+
+### Bug Fixes
+
+* Add config node id to HA editor setup ([47f18d1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/47f18d16a5ecb46161f1d6c878f5816c5040ff88))
+* Add node path to debug output ([721e061](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/721e0611a6b1b22ef9361284fed92212d705493d))
+* Allow ${envVar} in select2 inputs ([a638cd0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a638cd0912d17015f15135f81c5b0542766d39cf))
+* **call-service:** Convert comma delimited entity id list to array ([87e8209](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/87e8209a72e78aee6e942255f726c244e4ff2b37))
+* **call-service:** Fix migration of entity id to target ([29c260b](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/29c260b9148d063e6dd20924a9ab20c32d94f9fc))
+* **call-service:** Fix parsing of data field ([8bf60f9](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/8bf60f9ecd5b322f0c5972c53b507e0594881203))
+* **device:** Add missing boolean type for the device capabilities ([2d0e37f](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/2d0e37f573f6b6a70c53aab6fd694a9489021813))
+* **device:** Add missing integer type for the device capabilities ([2d0e37f](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/2d0e37f573f6b6a70c53aab6fd694a9489021813)), closes [#565](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/565)
+* Don't move resource files to the dist directory leave in the root folder so NR can find them ([55dd39b](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/55dd39b737417f8b6b5a04d11aa248fb347616a6))
+* **entity:** Only output state change when the state actually changes ([d6c6cf4](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d6c6cf472ce99834c2d255e407c139342a065ae6)), closes [#562](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/562)
+* Fix circular dependencies ([b400bf3](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/b400bf38bd70e82765f68d20d2a0887cf3bef077))
+* Fix filename case for hassAutocomplete ([b9fd34c](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/b9fd34cde5aaa834088f46962d326dfbcb57e39e))
+* **migrations:** Delete properties with undefined values from the config ([d1ad8ae](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d1ad8aeeffab7c40ffde18bdd5ee37a6f3390e36))
+* Stop css from polluting the global css scope ([227e940](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/227e94042f0eda501a0ce904750fe718466d492a)), closes [#552](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/552)
+* **trigger-state:** Call haServer.init before entitySelector so it know which server to use ([b8487a4](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/b8487a428581e9f0eedb3860ed50c207bcbafc53))
+* Update the HA service list on each update just not the first ([22f8c0a](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/22f8c0a0fa7183c4eea4eb4141263e11bb2b0657))
+
+
+### Documentation
+
+* **current-state:** Remove old node options and add For text ([ff40f75](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ff40f757b416f9086e3df41e73f07f7856cd7826)), closes [#561](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/561)
+
 ### [0.41.3](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.41.2...v0.41.3) (2022-01-03)
 
 
