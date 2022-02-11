@@ -6,11 +6,14 @@ $home-assistant-color: #41bdf5;
 
 $primary-font: var(--red-ui-primary-font);
 $primary-font-size: var(--red-ui-primary-font-size);
-$form-background: var(--red-ui-form-background);
-$form-input-border-color: var(--red-ui-form-input-border-color);
-$form-text-color: var(--red-ui-form-text-color);
-$form-input-border-color-focus: var(--red-ui-form-input-border-color-focus);
+$primary-text-color: var(--red-ui-primary-text-color);
 $secondary-text-color: var(--red-ui-secondary-text-color);
+$form-background: var(--red-ui-form-background);
+$form-text-color: var(--red-ui-form-text-color);
+$form-text-color-disabled: var(--red-ui-form-text-color-disabled);
+$form-input-border-color: var(--red-ui-form-input-border-color);
+$form-input-border-color-focus: var(--red-ui-form-input-border-color-focus);
+$form-placeholder-color: var(--red-ui-form-placeholder-color);
 $list-item-color: var(--red-ui-list-item-color);
 $list-item-secondary-color: var(--red-ui-list-item-secondary-color);
 $list-item-background: var(--red-ui-list-item-background);

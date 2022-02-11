@@ -21,7 +21,7 @@ $height: 34px;
     }
 
     .select2-selection__placeholder {
-        color: #999;
+        color: $form-placeholder-color;
     }
 
     .select2-selection__arrow {
@@ -35,7 +35,8 @@ $height: 34px;
         width: 20px;
 
         b {
-            border-color: #888 transparent transparent transparent;
+            border-color: $secondary-text-color transparent transparent
+                transparent;
             border-style: solid;
             border-width: 5px 4px 0 4px;
 
@@ -53,7 +54,7 @@ $height: 34px;
     }
 
     &:focus {
-        outline-color: #555;
+        outline-color: $form-text-color;
         border-color: $form-input-border-color-focus;
         outline: 0;
     }
@@ -87,7 +88,8 @@ $height: 34px;
     .select2-selection--single {
         .select2-selection__arrow {
             b {
-                border-color: transparent transparent #888 transparent;
+                border-color: transparent transparent $secondary-text-color
+                    transparent;
                 border-width: 0 4px 5px 4px;
             }
         }

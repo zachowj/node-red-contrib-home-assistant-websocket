@@ -14,7 +14,7 @@
 
     a,
     a:hover {
-        color: #555;
+        color: $primary-text-color;
     }
 }
 
@@ -49,7 +49,7 @@
         }
 
         &.add-spacer {
-            border-bottom: 1px solid #c6c6c6;
+            border-bottom: 1px solid $primary-text-color;
         }
 
         > select {
@@ -78,7 +78,7 @@
 
     li span.property-type {
         font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
-        color: #666;
+        color: $primary-text-color;
         font-style: italic;
         font-size: 11px;
         float: right;
@@ -223,7 +223,7 @@
 .ui-autocomplete {
     .ui-menu-item-wrapper {
         .sublabel {
-            color: #9c9c9c;
+            color: $secondary-text-color;
             font-size: smaller;
             margin: 4px 0;
         }

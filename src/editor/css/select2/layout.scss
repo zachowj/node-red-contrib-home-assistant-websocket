@@ -31,7 +31,7 @@
             color: $list-item-color;
 
             &:focus {
-                outline-color: #555;
+                outline-color: $form-text-color;
                 border-color: $form-input-border-color-focus;
                 outline: 0;
             }
@@ -103,7 +103,7 @@
     }
 
     .select2-results__option--disabled {
-        color: #999;
+        color: $form-text-color-disabled;
     }
 
     .select2-results__option--selected {
