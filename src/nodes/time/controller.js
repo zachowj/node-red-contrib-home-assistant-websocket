@@ -84,7 +84,7 @@ class Time extends EventsHaNode {
             const digits = parseTime(dateString);
 
             // Doesn't match time format 00:00:00
-            if (digits === null) {
+            if (!digits) {
                 if (!isValidDate(dateString)) {
                     this.debugToClient(`Invalid date`);
                     throw new Error(this.RED._('ha-time.status.invalid_date'));
