@@ -44,50 +44,47 @@
     <label
         for="node-input-haltifstate"
         data-i18n="home-assistant.label.if_state"
-    ></label
-    >&nbsp;
-    <div class="ha-multi-item-row">
-        <select id="node-input-halt_if_compare">
-            <option
-                value="is"
-                data-i18n="home-assistant.label.select_option.is"
-            ></option>
-            <option
-                value="is_not"
-                data-i18n="home-assistant.label.select_option.is_not"
-            ></option>
-            <option
-                value="lt"
-                data-i18n="home-assistant.label.select_option.less_than"
-            ></option>
-            <option
-                value="lte"
-                data-i18n="home-assistant.label.select_option.less_than_equal"
-            ></option>
-            <option
-                value="gt"
-                data-i18n="home-assistant.label.select_option.greater_than"
-            ></option>
-            <option
-                value="gte"
-                data-i18n="home-assistant.label.select_option.greater_than_equal"
-            ></option>
-            <option
-                value="includes"
-                data-i18n="home-assistant.label.select_option.in"
-            ></option>
-            <option
-                value="does_not_include"
-                data-i18n="home-assistant.label.select_option.not_in"
-            ></option>
-            <option
-                value="jsonata"
-                data-i18n="home-assistant.label.select_option.jsonata"
-            ></option>
-        </select>
-        <input type="text" id="node-input-haltifstate" />
-        <input type="hidden" id="node-input-halt_if_type" />
-    </div>
+    ></label>
+    <select id="node-input-halt_if_compare" style="width: 20%">
+        <option
+            value="is"
+            data-i18n="home-assistant.label.select_option.is"
+        ></option>
+        <option
+            value="is_not"
+            data-i18n="home-assistant.label.select_option.is_not"
+        ></option>
+        <option
+            value="lt"
+            data-i18n="home-assistant.label.select_option.less_than"
+        ></option>
+        <option
+            value="lte"
+            data-i18n="home-assistant.label.select_option.less_than_equal"
+        ></option>
+        <option
+            value="gt"
+            data-i18n="home-assistant.label.select_option.greater_than"
+        ></option>
+        <option
+            value="gte"
+            data-i18n="home-assistant.label.select_option.greater_than_equal"
+        ></option>
+        <option
+            value="includes"
+            data-i18n="home-assistant.label.select_option.in"
+        ></option>
+        <option
+            value="does_not_include"
+            data-i18n="home-assistant.label.select_option.not_in"
+        ></option>
+        <option
+            value="jsonata"
+            data-i18n="home-assistant.label.select_option.jsonata"
+        ></option>
+    </select>
+    <input type="text" id="node-input-haltifstate" style="width: 50%" />
+    <input type="hidden" id="node-input-halt_if_type" />
 </div>
 
 <div class="form-row">
