@@ -189,25 +189,27 @@ class CallService extends EventsNode {
                               )
                             : render(target);
                     });
+                    // If prop has a length of 1 convert it to a string
+                    if (configTarget[prop].length === 1) {
+                        configTarget[prop] = configTarget[prop][0];
+                    }
                 }
             } else if (configTarget[prop] !== undefined) {
-                configTarget[prop] = [render(configTarget[prop])];
+                configTarget[prop] = render(configTarget[prop]);
+                if (prop === 'entity_id') {
+                    // Convert possible comma delimited list to array
+                    configTarget.entity_id = configTarget.entity_id.reduce(
+                        (acc, curr) =>
+                            acc.concat(
+                                curr.indexOf(',')
+                                    ? curr.split(',').map((e) => e.trim())
+                                    : curr
+                            ),
+                        []
+                    );
+                }
             }
         });
-        // Convert possible comma delimited list to array
-        configTarget.entity_id = configTarget.entity_id?.reduce(
-            (acc, curr) =>
-                acc.concat(
-                    curr.indexOf(',')
-                        ? curr.split(',').map((e) => e.trim())
-                        : curr
-                ),
-            []
-        );
-        // If entity_id has a length of 1 convert it to a string
-        if (configTarget.entity_id.length === 1) {
-            configTarget.entity_id = configTarget.entity_id[0];
-        }
         return merge(configTarget, payload);
     }
 
