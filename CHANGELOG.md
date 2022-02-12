@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.42.1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.42.0...v0.42.1) (2022-02-12)
+
+
+### Bug Fixes
+
+* **call-service:** If entity_id is a single id convert it to a string. Some services don't accept entity_id as an array ([25e1e86](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/25e1e866d9e5c34ac9f7df221c530cd36c05d5e3))
+
 ## [0.42.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.41.3...v0.42.0) (2022-02-11)
 
 
