@@ -1,13 +1,6 @@
 name: Bug report
 description: Create a report to help us improve
 body:
-  - type: checkboxes
-    attributes:
-      label: Is there an existing issue for this?
-      description: Please search to see if an issue already exists for the bug you encountered.
-      options:
-        - label: I have searched the existing issues
-          required: true
   - type: textarea
     attributes:
       label: Describe the bug
@@ -46,7 +39,7 @@ body:
       required: false
   - type: input
     attributes:
-      label: This package's version
+      label: This package's version (not the Home Assistant add-on verison)
       placeholder: 0.33.1
     validations:
       required: true
