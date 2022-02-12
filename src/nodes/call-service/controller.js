@@ -204,7 +204,10 @@ class CallService extends EventsNode {
                 ),
             []
         );
-
+        // If entity_id has a length of 1 convert it to a string
+        if (configTarget.entity_id.length === 1) {
+            configTarget.entity_id = configTarget.entity_id[0];
+        }
         return merge(configTarget, payload);
     }
 
