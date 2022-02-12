@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.42.2](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.42.1...v0.42.2) (2022-02-12)
+
+
+### Bug Fixes
+
+* **call-service:** Convert all targets to strings if only 1 id ([64b3467](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/64b346774f1f98c6de6c818b73849d2a065b4bd2))
+
 ### [0.42.1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.42.0...v0.42.1) (2022-02-12)
 
 
