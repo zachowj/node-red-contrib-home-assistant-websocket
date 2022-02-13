@@ -11,6 +11,7 @@
   },
   "scripts": {
     "build": "gulp build",
+    "coverage": "nyc --reporter=lcov npm run test",
     "dev": "gulp start",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
@@ -19,7 +20,8 @@
     "lint:fix": "eslint . --fix && prettier --write {docs,src,test}/**/*.{css,js,ts,md,html}",
     "prepare": "husky install",
     "prepublishOnly": "gulp build",
-    "test": "mocha -r ts-node/register test/**/*.test.js",
+    "test": "mocha -r ts-node/register test/**/*.test.[tj]s",
+    "test:coverage": "nyc npm run test",
     "test:watch": "mocha -r ts-node/register --watch --recursive"
   },
   "repository": {
@@ -62,6 +64,7 @@
     "ws": "7.5.6"
   },
   "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-typescript": "^8.3.0",
     "@rollup/stream": "^2.0.0",
