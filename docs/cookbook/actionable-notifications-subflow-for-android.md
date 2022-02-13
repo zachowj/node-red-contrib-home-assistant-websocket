@@ -6,7 +6,21 @@ Post questions and follow the discussion about this recipe [here](https://github
 
 ![screenshot](./images/actionable-notifications-subflow-for-android_01.png)
 
+v1.0.0 - Requires Nodejs v12
+
+**Changes**
+
+- Any setting can be set or overwritten using `msg.actionable` to pass a notification object into the node.
+
+<<< @/examples/cookbook/actionable-notifications-subflow-for-android/subflow_1_0_0.json
+
+:::details Old versions
+
+v0.0.0
+
 <<< @/examples/cookbook/actionable-notifications-subflow-for-android/subflow.json
+
+:::
 
 | Options        | Description                                                                                            |                                                             Documentation                                                             |
 | -------------- | ------------------------------------------------------------------------------------------------------ | :-----------------------------------------------------------------------------------------------------------------------------------: |
@@ -21,6 +35,8 @@ Post questions and follow the discussion about this recipe [here](https://github
 | Color          | Color name or the hex code                                                                             |                 [link](https://companion.home-assistant.io/docs/notifications/notifications-basic#notification-color)                 |
 | Timeout        | How long a notification will be shown on a users device before being removed automatically             |                [link](https://companion.home-assistant.io/docs/notifications/notifications-basic#notification-timeout)                |
 | Icon           | Path to icon                                                                                           |                 [link](https://companion.home-assistant.io/docs/notifications/notifications-basic#notification-icon)                  |
+
+Any setting can be set or overwritten using `msg.actionable` to pass a notification object into the node.
 
 ## Demo flow
 
