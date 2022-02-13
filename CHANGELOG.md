@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.42.4](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.42.3...v0.42.4) (2022-02-13)
+
+
+### Bug Fixes
+
+* **call-service:** Allow "all" to used in entity field ([c3bd333](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/c3bd3336575d3c95698ab7ebbccfc3629c185067))
+
+
+### Documentation
+
+* Add reference to minimum version of HA needed ([7a9865c](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/7a9865c6f7e7331801a47229f312fd926b83e1e3))
+
 ### [0.42.3](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.42.2...v0.42.3) (2022-02-12)
 
 
