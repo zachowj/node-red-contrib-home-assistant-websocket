@@ -66,7 +66,12 @@ const populateEntities = ({
         );
     $entityIdField
         .select2(
-            createSelect2Options({ data: data, multiple: true, tags: true })
+            createSelect2Options({
+                data: data,
+                multiple: true,
+                tags: true,
+                customTags: ['all'],
+            })
         )
         .maximizeSelect2Height();
 };

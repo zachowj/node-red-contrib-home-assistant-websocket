@@ -45,10 +45,12 @@ export const select2DefaultOptions: Options = {
 export const createSelect2Options = ({
     multiple = false,
     tags = false,
+    customTags = [],
     data,
 }: {
     multiple?: boolean;
     tags?: boolean;
+    customTags?: string[];
     data?: Select2Data[];
 }) => {
     const opts = {
@@ -63,7 +65,11 @@ export const createSelect2Options = ({
         // Only allow custom entities if they contain mustache tags
         opts.createTag = (params: SearchOptions) => {
             // Check for valid mustache tags or env var
-            if (containsMustache(params.term) || isNodeRedEnvVar(params.term)) {
+            if (
+                containsMustache(params.term) ||
+                isNodeRedEnvVar(params.term) ||
+                customTags.includes(params.term)
+            ) {
                 return {
                     id: params.term,
                     text: params.term,
