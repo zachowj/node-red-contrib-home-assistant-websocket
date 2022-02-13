@@ -17,6 +17,7 @@ install Node-RED see [here](https://nodered.org/docs/getting-started/installatio
 
 - [Node.js](https://nodejs.org) v12.0 or newer
 - [Node-RED](https://nodered.org/) v1.3 or newer
+- [Home Assistant](https://home-assistant.io) v2021.3.0 or newer
 
 ### Installation
 
