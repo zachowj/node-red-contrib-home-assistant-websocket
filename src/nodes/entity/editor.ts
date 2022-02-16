@@ -3,7 +3,11 @@ import { EditorNodeDef, EditorRED, EditorWidgetTypedInputType } from 'node-red';
 import * as exposeNode from '../../editor/exposenode';
 import ha from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
-import { HassExposedConfig, HassNodeProperties } from '../../editor/types';
+import {
+    HassExposedConfig,
+    HassNodeProperties,
+    HATypedInputTypeOptions,
+} from '../../editor/types';
 
 declare const RED: EditorRED;
 
@@ -52,7 +56,7 @@ const haConfigOptions = {
     ],
     switch: ['name', 'icon'],
 };
-const attributeTypes = [
+const attributeTypes: HATypedInputTypeOptions = [
     'str',
     'num',
     'bool',
@@ -171,10 +175,9 @@ const EntityEditor: EditorNodeDef<EntityEditorNodeProperties> = {
                         .val(data.value);
 
                     $value.typedInput({
-                        types: attributeTypes as any,
-                        // @ts-ignore - DefinitelyTyped is wrong typedInput can take a object as a parameter
-                        type: data.valueType,
+                        types: attributeTypes,
                     });
+                    $value.typedInput('type', data.valueType);
                 },
             })
             .editableList('addItems', this.attributes);
