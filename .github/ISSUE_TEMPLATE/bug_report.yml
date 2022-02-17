@@ -33,13 +33,13 @@ body:
   - type: textarea
     attributes:
       label: Example Flow
-      description: If applicable, add an example of exported json of a flow exhibiting the issue to aid in reproduction.
+      description: If applicable, add an example in exported JSON format of a flow exhibiting the issue to aid in reproduction.
       render: json
     validations:
       required: false
   - type: input
     attributes:
-      label: This package's version (not the Home Assistant add-on verison)
+      label: This package's version (not the Home Assistant add-on version)
       placeholder: 0.33.1
     validations:
       required: true
