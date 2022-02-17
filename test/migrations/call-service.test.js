@@ -62,6 +62,14 @@ const VERSION_4 = {
     service_domain: undefined,
     mergecontext: undefined,
 };
+const VERSION_5 = {
+    ...VERSION_4,
+    version: 5,
+    areaId: [],
+    deviceId: [],
+    entityId: ['entity.id1', 'entity.id2'],
+    target: undefined,
+};
 
 describe('Migrations - Call Service Node', function () {
     describe('Version 0', function () {
@@ -200,8 +208,35 @@ describe('Migrations - Call Service Node', function () {
             });
         });
     });
+    describe('Version 5', function () {
+        let migrate = null;
+        before(function () {
+            migrate = migrations.find((m) => m.version === 5);
+        });
+        it('should update version 4 to version 5', function () {
+            const migratedSchema = migrate.up(VERSION_4);
+
+            expect(migratedSchema).to.eql(VERSION_5);
+        });
+        it('should move targets to the base object', function () {
+            const schema = {
+                ...VERSION_4,
+                target: {
+                    areaId: ['living_room'],
+                    deviceId: ['1234'],
+                    entityId: ['sun.sun'],
+                },
+            };
+            const migratedSchema = migrate.up(schema);
+
+            expect(migratedSchema.areaId).to.eql(['living_room']);
+            expect(migratedSchema.deviceId).to.eql(['1234']);
+            expect(migratedSchema.entityId).to.eql(['sun.sun']);
+            expect(migratedSchema.target).to.eql(undefined);
+        });
+    });
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_4);
+        expect(migratedSchema).to.eql(VERSION_5);
     });
 });

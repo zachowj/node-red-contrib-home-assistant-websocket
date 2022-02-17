@@ -16,6 +16,9 @@
       "queue_none": "don't queue messages",
       "service": "Service",
       "show_debug": "Show debug information"
+    },
+    "error": {
+      "invalid_entity_id": "Invalid entity id format"
     }
   }
 }

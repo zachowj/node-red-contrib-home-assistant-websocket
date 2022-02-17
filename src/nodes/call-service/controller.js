@@ -16,7 +16,9 @@ const nodeOptions = {
     config: {
         domain: {},
         service: {},
-        target: {},
+        areaId: {},
+        deviceId: {},
+        entityId: {},
         data: {},
         dataType: (nodeDef) => nodeDef.dataType || 'json',
         mergeContext: {},
@@ -60,6 +62,17 @@ class CallService extends EventsNode {
         const render = generateRenderTemplate(message, context, states);
         const apiDomain = render(payloadDomain || config.domain);
         const apiService = render(payloadService || config.service);
+
+        if (!apiDomain || !apiService) {
+            done(
+                `call service node is missing api "${
+                    !apiDomain ? 'domain' : 'service'
+                }" property, not found in config or payload`
+            );
+            this.status.setFailed('Error');
+            return;
+        }
+
         const apiTarget = this.getTargetData(payloadTarget, message);
         let configData;
         if (config.dataType === 'jsonata' && config.data) {
@@ -75,17 +88,11 @@ class CallService extends EventsNode {
         } else {
             configData = render(config.data, config.mustacheAltTags);
         }
-        const apiData = this.getApiData(payloadData, configData);
-
-        if (!apiDomain || !apiService) {
-            done(
-                `call service node is missing api "${
-                    !apiDomain ? 'domain' : 'service'
-                }" property, not found in config or payload`
-            );
-            this.status.setFailed('Error');
-            return;
-        }
+        const apiData = this.getApiData(
+            payloadData,
+            this.tryToObject(configData),
+            apiTarget
+        );
 
         this.node.debug(
             `Calling Service: ${JSON.stringify({
@@ -100,7 +107,6 @@ class CallService extends EventsNode {
             apiDomain,
             apiService,
             apiData: Object.keys(apiData).length ? apiData : undefined,
-            apiTarget: Object.keys(apiTarget).length ? apiTarget : undefined,
             message,
             done,
             send,
@@ -142,7 +148,7 @@ class CallService extends EventsNode {
         }
     }
 
-    getApiData(payload = {}, config = {}) {
+    getApiData(payload = {}, config = {}, target = {}) {
         let contextData = {};
 
         // Calculate payload to send end priority ends up being 'Config, Global Ctx, Flow Ctx, Payload' with right most winning
@@ -155,12 +161,12 @@ class CallService extends EventsNode {
             contextData = { ...globalVal, ...flowVal };
         }
 
-        return { ...this.tryToObject(config), ...contextData, ...payload };
+        return { ...config, ...contextData, ...payload, ...target };
     }
 
     getTargetData(payload, message) {
         const context = this.node.context();
-        const states = this.homeAssistant.getStates();
+        const states = this.homeAssistant && this.homeAssistant.getStates();
         const render = generateRenderTemplate(message, context, states);
 
         const map = {
@@ -170,10 +176,10 @@ class CallService extends EventsNode {
         };
         const configTarget = {};
 
-        Object.keys(this.nodeConfig?.target).forEach((key) => {
+        Object.keys(map).forEach((key) => {
             const prop = map[key];
-            configTarget[prop] = this.nodeConfig.target[key]
-                ? [...this.nodeConfig.target[key]]
+            configTarget[prop] = this.nodeConfig[key]
+                ? [...this.nodeConfig[key]]
                 : undefined;
             if (Array.isArray(configTarget[prop])) {
                 // If length is 0 set it to undefined so the target can be overridden from the data field
@@ -210,14 +216,19 @@ class CallService extends EventsNode {
                 }
             }
         });
-        return merge(configTarget, payload);
+        const targets = merge(configTarget, payload);
+        // remove undefined values
+        Object.keys(targets).forEach(
+            (key) => targets[key] === undefined && delete targets[key]
+        );
+
+        return targets;
     }
 
     async processInput({
         apiDomain,
         apiService,
         apiData,
-        apiTarget,
         message,
         done,
         send,
@@ -227,7 +238,6 @@ class CallService extends EventsNode {
         const data = {
             domain: apiDomain,
             service: apiService,
-            target: apiTarget,
             data: apiData,
         };
         this.debugToClient(data);
@@ -236,8 +246,7 @@ class CallService extends EventsNode {
             await this.homeAssistant.callService(
                 apiDomain,
                 apiService,
-                apiData,
-                apiTarget
+                apiData
             );
         } catch (err) {
             // ignore 'connection lost' error on homeassistant.restart
@@ -246,6 +255,16 @@ class CallService extends EventsNode {
                 apiService !== 'restart' &&
                 selectn('error.code', err) !== 3
             ) {
+                // When entity id is not fomatted correctly, the error is not very helpful
+                if (
+                    err.code === 'unknown_error' &&
+                    err.message ===
+                        'not enough values to unpack (expected 2, got 1)'
+                ) {
+                    err.message = this.RED._(
+                        'api-call-service.error.invalid_entity_id'
+                    );
+                }
                 done(`Call-service error. ${err.message ? err.message : ''}`);
                 this.status.setFailed('API Error');
                 return;

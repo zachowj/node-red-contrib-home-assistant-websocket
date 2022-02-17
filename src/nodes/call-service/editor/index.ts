@@ -16,12 +16,6 @@ import { displayValidTargets, getTarget, populateTargets } from './targets';
 
 declare const RED: EditorRED;
 
-interface Target {
-    areaId?: string[];
-    deviceId?: string[];
-    entityId?: string[];
-}
-
 interface CallServiceEditorNodeProperties extends EditorNodeProperties {
     server: any;
     version: number;
@@ -31,13 +25,15 @@ interface CallServiceEditorNodeProperties extends EditorNodeProperties {
     service: string;
     data: string;
     dataType: string;
-    target: Target;
+    areaId?: string[];
+    deviceId?: string[];
+    entityId?: string[];
     mergeContext: string;
     mustacheAltTags: boolean;
     queue: string;
     outputProperties: OutputProperty[];
     // deprecated
-    entityId?: string;
+    target: undefined;
     output_location?: string;
     output_location_type?: string;
     service_domain?: string;
@@ -68,13 +64,9 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
         debugenabled: { value: false },
         domain: { value: '' },
         service: { value: '' },
-        target: {
-            value: {
-                areaId: [],
-                deviceId: [],
-                entityId: [],
-            },
-        },
+        areaId: { value: [] },
+        deviceId: { value: [] },
+        entityId: { value: [] },
         data: { value: '' },
         dataType: { value: 'jsonata' },
         mergeContext: { value: '' },
@@ -85,7 +77,7 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
         },
         queue: { value: 'none' },
         // deprecated
-        entityId: { value: undefined },
+        target: { value: undefined },
         output_location: { value: undefined },
         output_location_type: { value: undefined },
         service_domain: { value: undefined },
@@ -189,9 +181,9 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
             populateDomains(this.domain);
             populateServices(this.service);
             populateTargets({
-                entityId: this.target.entityId,
-                areaId: this.target.areaId,
-                deviceId: this.target.deviceId,
+                entityId: this.entityId,
+                areaId: this.areaId,
+                deviceId: this.deviceId,
             });
             displayValidTargets();
             updateServiceSelection();
@@ -220,7 +212,10 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
         this.outputProperties = haOutputs.getOutputs();
         this.domain = $('#domain').select2('data')?.[0]?.id;
         this.service = $('#service').select2('data')?.[0]?.id;
-        this.target = getTarget();
+        const { areaId, deviceId, entityId } = getTarget();
+        this.areaId = areaId;
+        this.deviceId = deviceId;
+        this.entityId = entityId;
     },
 };
 

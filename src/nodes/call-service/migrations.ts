@@ -93,4 +93,19 @@ export default [
             return newSchema;
         },
     },
+    {
+        version: 5,
+        up: (schema: any) => {
+            const newSchema = {
+                ...schema,
+                version: 5,
+                areaId: schema.target?.areaId,
+                deviceId: schema.target?.deviceId,
+                entityId: schema.target?.entityId,
+                target: undefined,
+            };
+
+            return newSchema;
+        },
+    },
 ];
