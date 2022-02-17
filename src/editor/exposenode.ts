@@ -65,7 +65,9 @@ export function init(n: HassNodeProperties) {
                 renderAlert();
                 break;
             case 'ha-button':
-                renderAlert('1.0.4');
+                if ($('#node-input-entityConfig').val() !== '_ADD_') {
+                    renderAlert('1.0.4');
+                }
                 break;
             case 'ha-device':
                 renderAlert('0.5.0');
@@ -84,7 +86,9 @@ function render() {
             renderAlert();
             break;
         case 'ha-button':
-            renderAlert('1.0.4');
+            if ($('#node-input-entityConfig').val() !== '_ADD_') {
+                renderAlert('1.0.4');
+            }
             break;
         default:
             renderEventNode();
