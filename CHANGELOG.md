@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.42.5](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.42.4...v0.42.5) (2022-02-17)
+
+
+### Bug Fixes
+
+* **call-service:** Send targets in the data field so HA doesn't automatically convert them to arrays ([d085ef4](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d085ef444f04d3f472180eae6e4e6f895c7a22eb)), closes [#584](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/584) [#582](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/582)
+* **entity:** Select correct attribute type value ([581992b](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/581992bc5465b1375e61e2bd85d7fc58fe76250e)), closes [#583](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/583)
+
+
+### Documentation
+
+* **cookbook:** Update actionable notification subflow ([b28415e](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/b28415ebfe9eb2cb813054586250e9afb5020580))
+
 ### [0.42.4](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.42.3...v0.42.4) (2022-02-13)
 
 
