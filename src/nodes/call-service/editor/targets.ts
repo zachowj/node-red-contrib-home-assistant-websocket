@@ -262,18 +262,12 @@ export const getTarget = () => {
     const $deviceId = $(deviceIdSelector);
     const $entityId = $(entityIdSelector);
 
+    const getIds = (ele: JQuery) =>
+        isSelect2Initialized(ele) ? ele.select2('data')?.map((d) => d.id) : [];
+
     return {
-        areaId:
-            (isSelect2Initialized($areaId) &&
-                $areaId.select2('data')?.map((d) => d.id)) ??
-            [],
-        deviceId:
-            (isSelect2Initialized($deviceId) &&
-                $deviceId.select2('data')?.map((d) => d.id)) ??
-            [],
-        entityId:
-            (isSelect2Initialized($entityId) &&
-                $entityId.select2('data')?.map((d) => d.id)) ??
-            [],
+        areaId: getIds($areaId),
+        deviceId: getIds($deviceId),
+        entityId: getIds($entityId),
     };
 };
