@@ -106,7 +106,10 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
                 .concat(
                     createCustomIdListByProperty<string>(
                         selectedId,
-                        Object.keys(services)
+                        Object.keys(services),
+                        {
+                            includeUnknownIds: true,
+                        }
                     )
                 );
             $domainField
@@ -151,7 +154,10 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
                 .concat(
                     createCustomIdListByProperty<string>(
                         selectedId,
-                        filteredServices
+                        filteredServices,
+                        {
+                            includeUnknownIds: true,
+                        }
                     )
                 );
 
