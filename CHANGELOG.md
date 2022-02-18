@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.42.6](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.42.5...v0.42.6) (2022-02-18)
+
+
+### Bug Fixes
+
+* **call-service:** Check that select2 initialized before trying to read data ([07df6ca](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/07df6ca8fdb2f8407e3e543ac6fe96a0eae70c1c))
+
 ### [0.42.5](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.42.4...v0.42.5) (2022-02-17)
 
 
