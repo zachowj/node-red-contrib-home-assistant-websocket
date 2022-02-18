@@ -3,6 +3,7 @@ import { HassEntity } from 'home-assistant-js-websocket';
 import {
     createCustomIdListByProperty,
     createSelect2Options,
+    isSelect2Initialized,
     Select2Data,
 } from '../../../editor/components/select2';
 import * as haServer from '../../../editor/haserver';
@@ -257,18 +258,22 @@ export const populateTargets = ({
 };
 
 export const getTarget = () => {
+    const $areaId = $(areaIdSelector);
+    const $deviceId = $(deviceIdSelector);
+    const $entityId = $(entityIdSelector);
+
     return {
         areaId:
-            $(areaIdSelector)
-                .select2('data')
-                ?.map((d) => d.id) ?? [],
+            (isSelect2Initialized($areaId) &&
+                $areaId.select2('data')?.map((d) => d.id)) ??
+            [],
         deviceId:
-            $(deviceIdSelector)
-                .select2('data')
-                ?.map((d) => d.id) ?? [],
+            (isSelect2Initialized($deviceId) &&
+                $deviceId.select2('data')?.map((d) => d.id)) ??
+            [],
         entityId:
-            $(entityIdSelector)
-                .select2('data')
-                ?.map((d) => d.id) ?? [],
+            (isSelect2Initialized($entityId) &&
+                $entityId.select2('data')?.map((d) => d.id)) ??
+            [],
     };
 };

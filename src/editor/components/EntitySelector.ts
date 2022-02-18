@@ -6,7 +6,7 @@ import { i18n } from '../i18n';
 import {
     createCustomIdListByProperty,
     createSelect2Options,
-    isInitialized,
+    isSelect2Initialized,
     Select2Data,
 } from './select2';
 
@@ -40,12 +40,12 @@ export default class EntitySelector {
         let id: string | string[] = [];
         switch (this.#$filterType.val()) {
             case 'exact':
-                id = isInitialized(this.#$select)
+                id = isSelect2Initialized(this.#$select)
                     ? this.#$select.select2('data')?.[0]?.id
                     : '';
                 break;
             case 'list':
-                id = isInitialized(this.#$select)
+                id = isSelect2Initialized(this.#$select)
                     ? this.#$select.select2('data')?.map((e) => e.id) ?? []
                     : '';
                 break;
@@ -231,7 +231,7 @@ export default class EntitySelector {
 
     destroy() {
         this.#$filterDialog.dialog('destroy');
-        if (isInitialized(this.#$select)) {
+        if (isSelect2Initialized(this.#$select)) {
             this.#$select.select2('destroy');
         }
     }

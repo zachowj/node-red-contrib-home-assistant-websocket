@@ -112,7 +112,7 @@ export const createCustomIdListByProperty = <T>(
     );
 };
 
-export const isInitialized = (
+export const isSelect2Initialized = (
     selector: JQuery<HTMLElement> | string
 ): boolean => {
     const $selector = (
