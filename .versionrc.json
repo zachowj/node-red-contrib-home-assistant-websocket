@@ -4,7 +4,7 @@
     { "type": "fix", "section": "Bug Fixes" },
     { "type": "chore", "hidden": true },
     { "type": "docs", "section": "Documentation", "hidden": false },
-    { "type": "style", "hidden": true },
+    { "type": "style", "section": "Style", "hidden": false },
     { "type": "refactor", "hidden": true },
     { "type": "perf", "hidden": true },
     { "type": "test", "hidden": true }
