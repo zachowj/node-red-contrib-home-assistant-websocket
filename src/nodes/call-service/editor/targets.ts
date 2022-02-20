@@ -3,10 +3,10 @@ import { HassEntity } from 'home-assistant-js-websocket';
 import {
     createCustomIdListByProperty,
     createSelect2Options,
-    isSelect2Initialized,
     Select2Data,
 } from '../../../editor/components/select2';
 import * as haServer from '../../../editor/haserver';
+import { disableSelect2OpenOnRemove } from '../../../editor/utils';
 import { byPropertiesOf } from '../../../helpers/sort';
 import { HassArea, HassDevice } from '../../../types/home-assistant';
 import { getNormalizedDomainServices } from './utils';
@@ -25,9 +25,9 @@ type ServiceTarget = {
 
 export type Filter<T> = (value: T, index: number, array: T[]) => boolean;
 
-const areaIdSelector = '#areaId';
-const deviceIdSelector = '#deviceId';
-const entityIdSelector = '#entityId';
+const areaIdSelector = '#node-input-areaId';
+const deviceIdSelector = '#node-input-deviceId';
+const entityIdSelector = '#node-input-entityId';
 
 const ValidTargetNone = 'none';
 const ValidTargetAll = 'all';
@@ -75,6 +75,7 @@ const populateEntities = ({
             })
         )
         .maximizeSelect2Height();
+    disableSelect2OpenOnRemove($entityIdField);
 };
 
 const populateAreas = ({
@@ -108,6 +109,7 @@ const populateAreas = ({
             createSelect2Options({ data: data, multiple: true, tags: true })
         )
         .maximizeSelect2Height();
+    disableSelect2OpenOnRemove($areaId);
 };
 
 const populateDevices = ({
@@ -142,6 +144,7 @@ const populateDevices = ({
             createSelect2Options({ data: data, multiple: true, tags: true })
         )
         .maximizeSelect2Height();
+    disableSelect2OpenOnRemove($deviceId);
 };
 
 /*
@@ -255,19 +258,4 @@ export const populateTargets = ({
             .val(null)
             .trigger('change');
     }
-};
-
-export const getTarget = () => {
-    const $areaId = $(areaIdSelector);
-    const $deviceId = $(deviceIdSelector);
-    const $entityId = $(entityIdSelector);
-
-    const getIds = (ele: JQuery) =>
-        isSelect2Initialized(ele) ? ele.select2('data')?.map((d) => d.id) : [];
-
-    return {
-        areaId: getIds($areaId),
-        deviceId: getIds($deviceId),
-        entityId: getIds($entityId),
-    };
 };

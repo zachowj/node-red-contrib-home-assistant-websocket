@@ -12,7 +12,7 @@ import { OutputProperty } from '../../../editor/types';
 import { containsMustache } from '../../../helpers/mustache';
 import { byPropertiesOf } from '../../../helpers/sort';
 import { loadExampleData, updateServiceSelection } from './service-table';
-import { displayValidTargets, getTarget, populateTargets } from './targets';
+import { displayValidTargets, populateTargets } from './targets';
 
 declare const RED: EditorRED;
 
@@ -86,8 +86,8 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
     oneditprepare: function () {
         ha.setup();
         haServer.init(this, '#node-input-server');
-        const $domainField = $('#domain');
-        const $serviceField = $('#service');
+        const $domainField = $('#node-input-domain');
+        const $serviceField = $('#node-input-service');
         const $data = $('#node-input-data');
         const $dataType = $('#node-input-dataType');
         const $loadExampleData = $('#example-data');
@@ -216,12 +216,6 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
     },
     oneditsave: function () {
         this.outputProperties = haOutputs.getOutputs();
-        this.domain = $('#domain').select2('data')?.[0]?.id;
-        this.service = $('#service').select2('data')?.[0]?.id;
-        const { areaId, deviceId, entityId } = getTarget();
-        this.areaId = areaId;
-        this.deviceId = deviceId;
-        this.entityId = entityId;
     },
 };
 

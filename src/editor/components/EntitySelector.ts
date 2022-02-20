@@ -3,6 +3,7 @@ import { HassEntity } from 'home-assistant-js-websocket';
 import { byPropertiesOf } from '../../helpers/sort';
 import { getEntities } from '../haserver';
 import { i18n } from '../i18n';
+import { disableSelect2OpenOnRemove } from '../utils';
 import {
     createCustomIdListByProperty,
     createSelect2Options,
@@ -227,6 +228,9 @@ export default class EntitySelector {
                 })
             )
             .maximizeSelect2Height();
+        if (multiple) {
+            disableSelect2OpenOnRemove(this.#$select);
+        }
     }
 
     destroy() {
