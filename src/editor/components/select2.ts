@@ -95,7 +95,7 @@ export const createCustomIdListByProperty = <T>(
             const propertyId = (item: T) =>
                 opts?.property ? item[opts?.property] : item;
             if (
-                (opts?.includeUnknownIds ||
+                ((opts?.includeUnknownIds && id) ||
                     containsMustache(id) ||
                     isNodeRedEnvVar(id)) &&
                 !list.find((item) => propertyId(item) === id)
