@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.42.8](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.42.7...v0.42.8) (2022-02-20)
+
+
+### Bug Fixes
+
+* **call-service:** Don't add id to select2 if it is an empty string ([86e7551](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/86e75513fb8bdbd8c2a75364ac85d67bb064dced))
+
+
+### Documentation
+
+* **call-service:** Update tips and tricks and node docs with target info ([8073a88](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/8073a88588e263714410b7134095910cc4e9cce3)), closes [#574](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/574)
+
 ### [0.42.7](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.42.6...v0.42.7) (2022-02-18)
 
 
