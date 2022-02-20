@@ -4,13 +4,9 @@
 
 The `homeassisant` domain can be used with different domains of entities with certain services.
 
-Here's an example of using the `homeassistant` domain to turn off a light and a switch in a single service call. This can save you from having to have multiple call-service nodes.
+Here's an example of using the `homeassistant` domain to turn off some lights, switches, and everything that can be turned off in the laundry room in a single service call. This can save you from having to have multiple call-service nodes.
 
 ![screenshot of a call-service node using homeassistant domain](./images/call-service_06.png)
-
-::: tip
-Most services in Home Assistant accept multiple entity ids in a single call. This is accomplished in the call-service node by using a comma-delimited list in the entity id field.
-:::
 
 ## Using Mustache Templates
 
@@ -30,16 +26,22 @@ Mustache templates are also accepted in the data field when their type is set to
 
 - [Mustache Templates](./mustache-templates.md)
 
+## Targets
+
+The target fields allow you to target areas, devices, and/or entities. Any combination can be used when they are available, some services don't accept areas and devices.
+
+Mustache templates and environment variables can be used inside each target list.
+
+## Data Field
+
 ::: tip
-It's recommend using the JSONata expression, `J: Expression`, for the data field as it has several advantages over JSON.
+It's recommended to use the JSONata expression, `J: Expression`, for the data field as it has several advantages over JSON.
 
 - Handles quotes based on the type of variable
 - Allows the insertion of more complex variables such as arrays and object
 - Mathematical operations are permitted
 
 :::
-
-## Data Field
 
 ### Inserting a message property into a string
 
@@ -64,7 +66,7 @@ There's a custom function in JSONata inside Home Assistant nodes that allows the
 
 ### Doing arithmetic
 
-Home Assistant states are represented as strings so to be able to do arithmetic on then in JSONata they will need to be cast to a number first use [`$number()`](https://docs.jsonata.org/numeric-functions#number). Most attributes of entities are in their correct state but never hurts to be safe and cast them as a number.
+Home Assistant states are represented as strings so to be able to do arithmetic on them in JSONata they will need to be cast to a number first use [`$number()`](https://docs.jsonata.org/numeric-functions#number). Most attributes of entities are in their correct state but never hurt to be safe and cast them as a number.
 
 `$number($entities("sensor.kitchen_lux").state)`
 
@@ -78,7 +80,7 @@ Home Assistant states are represented as strings so to be able to do arithmetic 
 
 ### Create a comma-delimited entity id list
 
-Example of getting a list of lights from the get-entities node and then creating an entity id list to turn them off. The entity id field is left blank in this example as we defining it in the data field.
+Example of getting a list of lights from the get-entities node and then creating an entity id list to turn them off. The entity id field is left blank in this example as it is defined in the data field.
 
 ![screenshot of flow](./images/call-service_07.png)
 
@@ -92,6 +94,7 @@ Example of getting a list of lights from the get-entities node and then creating
 
 **Also see:**
 
+- [Call-service node](../node/call-service.md)
 - [JSONata Guide](./jsonata.md)
 - [https://docs.jsonata.org](https://docs.jsonata.org)
 - [http://try.jsonata.org](http://try.jsonata.org)

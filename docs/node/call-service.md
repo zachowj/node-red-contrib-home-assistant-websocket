@@ -20,22 +20,28 @@ Service domain to call
 - Type: `string`
 - Accepts [Mustache Templates](/guide/mustache-templates.md)
 
-Service service to call
+Service to call
 
 ### Area
 
 - Type: `an array of area ids`
 - Accepts [Mustache Templates](/guide/mustache-templates.md) for ids
 
+A list of area ids that will be used as targets for the service call
+
 ### Device
 
 - Type: `an array of device ids`
 - Accepts [Mustache Templates](/guide/mustache-templates.md) for ids
 
+A list of device ids that will be used as targets for the service call
+
 ### Entity
 
 - Type: `an array of entity ids`
 - Accepts [Mustache Templates](/guide/mustache-templates.md) for ids
+
+A list of entity ids that will be used as targets for the service call
 
 ### Data
 
@@ -54,13 +60,13 @@ If defined will attempt to merge the global and flow context variable into the c
 
 - Type: `boolean`
 
-Will change the tags used for mustache template to `<%` and `%>`
+Will change the tags used for the mustache template to `<%` and `%>`
 
 ### Queue
 
 - Type: `none | first | all | last`
 
-Will store the first, last or all messages received while disconnected from Home Assistant and send them once connected again
+Will store the first, last, or all messages received while disconnected from Home Assistant and send them once connected again
 
 ## Input
 
@@ -114,7 +120,7 @@ Service service to call
 
 - Type: `JSON Object`
 
-Service data to send with API call
+Service data to send with the service call
 
 ### target
 
