@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.43.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.42.8...v0.43.0) (2022-02-24)
+
+
+### Features
+
+* Custom strings can be used in select2 selectors by using a # as the suffix ([e23ab9c](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/e23ab9cfae9aeeb16fb33b3755cb71e177b389cf))
+
 ### [0.42.8](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.42.7...v0.42.8) (2022-02-20)
 
 
