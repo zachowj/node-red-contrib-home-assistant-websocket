@@ -12,6 +12,8 @@ The autocomplete will open to allow easier selection in the case you want a spec
 
 matches for entity_id field
 
+Custom ids can be inserted into the list by adding a `#` at the end of the id
+
 ### Entity ID Filter Types <Badge text="required"/>
 
 - Type: `string`
@@ -52,7 +54,7 @@ Convert the state of the entity to the selected type. Boolean will be converted 
 
 - Type: `boolean`
 
-A list of possible states that will be ignore if seletected.
+A list of possible states that will be ignored.
 
 ### Output on Connect
 

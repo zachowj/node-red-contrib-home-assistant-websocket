@@ -15,12 +15,16 @@ Sends a request to home assistant for any domain and service available (`light/t
 
 Service domain to call
 
+A custom domain can be used by adding a `#` at the end of the domain
+
 ### Service <Badge text="required"/>
 
 - Type: `string`
 - Accepts [Mustache Templates](/guide/mustache-templates.md)
 
 Service to call
+
+Custom service can be used by adding a `#` at the end of the service
 
 ### Area
 
@@ -29,6 +33,8 @@ Service to call
 
 A list of area ids that will be used as targets for the service call
 
+Custom ids can be inserted into the list by adding a `#` at the end of the id
+
 ### Device
 
 - Type: `an array of device ids`
@@ -36,12 +42,16 @@ A list of area ids that will be used as targets for the service call
 
 A list of device ids that will be used as targets for the service call
 
+Custom ids can be inserted into the list by adding a `#` at the end of the id
+
 ### Entity
 
 - Type: `an array of entity ids`
 - Accepts [Mustache Templates](/guide/mustache-templates.md) for ids
 
 A list of entity ids that will be used as targets for the service call
+
+Custom ids can be inserted into the list by adding a `#` at the end of the id
 
 ### Data
 

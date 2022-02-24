@@ -3,17 +3,40 @@
 Much like the `State Changed Node` however, provides some advanced functionality
 around common automation use cases.
 
-An advanced version of `server:state-changed` node
+An advanced version of the `server:state-changed` node
 
 <!-- TODO: Needs a total rework -->
 
 ## Configuration
 
+### Entity ID <Badge text="required"/>
+
+- Type: `string`
+- Accepts [Mustache Templates](/guide/mustache-templates.md)
+
+The id of an entity to use for the comparison.
+
+Custom ids can be inserted into the list by adding a `#` at the end of the id
+
+### Entity ID Filter Types <Badge text="required"/>
+
+- Type: `string`
+- Values: `exact|list|substring|regex`
+- Default: `exact`
+
+### State Type
+
+- Type: `string`
+- Values: `string|number|boolean`
+- Default: `string`
+
+Convert the state of the entity to the selected type. Boolean will be converted to true based on if the string is equal by default to (`y|yes|true|on|home|open`). Original value stored in msg.data.original_state
+
 ### Conditions
 
 This node has two default outputs "allowed" and "blocked". If all the
 conditions are true the default message will be sent to the "allowed" output
-otherwise it will be sent to the "blocked" output.
+otherwise, it will be sent to the "blocked" output.
 
 **See Also:**
 
@@ -34,7 +57,7 @@ Input is disabled by default. It can be enabled using the `Enable Input` option.
 
 - Type: `string`
 
-If incoming payload or message is a string and equal to `enable` or `disable` then set the node accordingly.
+If the incoming payload or message is a string and equal to `enable` or `disable` then set the node accordingly.
 Saves over restarts.
 
 ### Output Initially

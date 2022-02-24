@@ -64,6 +64,14 @@ export const createSelect2Options = ({
         opts.tags = true;
         // Only allow custom entities if they contain mustache tags
         opts.createTag = (params: SearchOptions) => {
+            // Allow custom ids to be created when user uses # as a suffix
+            if (params.term.endsWith('#')) {
+                const id = params.term.substring(0, params.term.length - 1);
+                return {
+                    id: id,
+                    text: id,
+                };
+            }
             // Check for valid mustache tags or env var
             if (
                 containsMustache(params.term) ||

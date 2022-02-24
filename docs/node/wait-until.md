@@ -13,6 +13,8 @@ reset the timeout timer.
 
 The id of an entity to use for the comparison.
 
+Custom ids can be inserted into the list by adding a `#` at the end of the id
+
 ### Entity ID Filter Types <Badge text="required"/>
 
 - Type: `string`
@@ -35,7 +37,7 @@ The amount of time to wait for the condition to become true before deactivating 
 
 - Type: `string`
 
-The entity object can also be pass with the message object.
+The entity object can also be passed with the message object.
 
 ### Check against the current state
 
@@ -71,5 +73,5 @@ Override config values by passing in a property with a valid value.
 ## Output
 
 Will output the last received message when the condition is true or the timeout
-occurs. If the condition becomes true the message will be pass to the first
+occurs. If the condition becomes true the message will be passed to the first
 output. If the timeout passes the message will be sent to the second output.
