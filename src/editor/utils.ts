@@ -45,7 +45,7 @@ export function isjQuery(obj: any) {
 
 export const disableSelect2OpenOnRemove = (ele: HTMLElement | JQuery) => {
     const $ele = isjQuery(ele) ? (ele as JQuery) : $(ele);
-    $ele.on('select2:unselecting', (e) => {
+    $ele.on('select2:unselecting', () => {
         $ele.on('select2:opening', (e) => {
             e.preventDefault();
             $ele.off('select2:opening');
