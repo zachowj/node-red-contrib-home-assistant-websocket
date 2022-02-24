@@ -130,7 +130,6 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
             const domainNormalized = (
                 $domainField.val() as string
             )?.toLowerCase();
-            const selectedId = service ?? ($serviceField.val() as string);
             const showAll =
                 !services?.[domainNormalized] ||
                 containsMustache(domainNormalized);
@@ -148,12 +147,12 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
                 .map((d) => ({
                     id: d,
                     text: d,
-                    selected: d === selectedId,
+                    selected: d === service,
                 }))
                 .sort(byPropertiesOf<Select2Data>(['text']))
                 .concat(
                     createCustomIdListByProperty<string>(
-                        selectedId,
+                        service,
                         filteredServices,
                         {
                             includeUnknownIds: true,
@@ -167,7 +166,7 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
                     createSelect2Options({ data: domainServices, tags: true })
                 )
                 .maximizeSelect2Height();
-            if (!selectedId) {
+            if (!service) {
                 $serviceField.val(null).trigger('change');
             }
         };
