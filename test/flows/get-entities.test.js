@@ -1,11 +1,11 @@
 const expect = require('chai').expect;
 const helper = require('node-red-node-test-helper');
 
-const callService = require('../src/index');
+const currentState = require('../../src/index');
 
 helper.init(require.resolve('node-red'));
 
-describe('call-service node', function () {
+describe('get-entities node', function () {
     beforeEach(function (done) {
         helper.startServer(done);
     });
@@ -17,11 +17,11 @@ describe('call-service node', function () {
 
     it('should be loaded', function (done) {
         const flow = [
-            { id: 'n1', type: 'api-call-service', name: 'call-service' },
+            { id: 'n1', type: 'ha-get-entities', name: 'get-entities' },
         ];
-        helper.load(callService, flow, function () {
+        helper.load(currentState, flow, function () {
             const n1 = helper.getNode('n1');
-            expect(n1).to.have.property('name', 'call-service');
+            expect(n1).to.have.property('name', 'get-entities');
             done();
         });
     });

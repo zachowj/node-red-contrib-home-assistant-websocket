@@ -1,11 +1,11 @@
 const expect = require('chai').expect;
 const helper = require('node-red-node-test-helper');
 
-const currentState = require('../src/index');
+const renderTemplate = require('../../src/index');
 
 helper.init(require.resolve('node-red'));
 
-describe('get-entities node', function () {
+describe('render-template node', function () {
     beforeEach(function (done) {
         helper.startServer(done);
     });
@@ -17,11 +17,11 @@ describe('get-entities node', function () {
 
     it('should be loaded', function (done) {
         const flow = [
-            { id: 'n1', type: 'ha-get-entities', name: 'get-entities' },
+            { id: 'n1', type: 'api-render-template', name: 'render-template' },
         ];
-        helper.load(currentState, flow, function () {
+        helper.load(renderTemplate, flow, function () {
             const n1 = helper.getNode('n1');
-            expect(n1).to.have.property('name', 'get-entities');
+            expect(n1).to.have.property('name', 'render-template');
             done();
         });
     });

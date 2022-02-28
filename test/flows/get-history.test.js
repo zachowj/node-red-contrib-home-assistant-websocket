@@ -1,11 +1,11 @@
 const expect = require('chai').expect;
 const helper = require('node-red-node-test-helper');
 
-const api = require('../src/index');
+const getHistory = require('../../src/index');
 
 helper.init(require.resolve('node-red'));
 
-describe('api node', function () {
+describe('get-history node', function () {
     beforeEach(function (done) {
         helper.startServer(done);
     });
@@ -16,10 +16,12 @@ describe('api node', function () {
     });
 
     it('should be loaded', function (done) {
-        const flow = [{ id: 'n1', type: 'ha-api', name: 'API' }];
-        helper.load(api, flow, function () {
+        const flow = [
+            { id: 'n1', type: 'api-get-history', name: 'get-history' },
+        ];
+        helper.load(getHistory, flow, function () {
             const n1 = helper.getNode('n1');
-            expect(n1).to.have.property('name', 'API');
+            expect(n1).to.have.property('name', 'get-history');
             done();
         });
     });

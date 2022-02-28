@@ -1,7 +1,7 @@
 const expect = require('chai').expect;
 const helper = require('node-red-node-test-helper');
 
-const fireEvent = require('../src/index');
+const fireEvent = require('../../src/index');
 
 helper.init(require.resolve('node-red'));
 
