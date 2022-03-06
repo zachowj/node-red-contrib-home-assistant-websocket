@@ -12,7 +12,7 @@
       "if_state": "If state",
       "label": "Label",
       "name": "Name",
-      "no_matches": "No matches",
+      "no_matches_found": "No matches found",
       "output_debug": "Output debug information",
       "output_on_connect": "Output on connect",
       "output_properties": "Output properties",
@@ -40,7 +40,8 @@
         "substring": "substring"
       },
       "server": "Server",
-      "state_type": "State type"
+      "state_type": "State type",
+      "test": "Test"
     },
     "ui": {
       "migrations": {

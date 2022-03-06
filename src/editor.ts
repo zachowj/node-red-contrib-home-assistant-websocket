@@ -8,6 +8,7 @@ import {
     updateServices,
     updateTargetDomains,
 } from './editor/data';
+import { setupEditors } from './editor/editors';
 import { updateIntegration } from './editor/exposenode';
 import {
     onNodesAdd,
@@ -47,6 +48,7 @@ RED.comms.subscribe('homeassistant/integration/#', updateIntegration);
 RED.comms.subscribe('homeassistant/services/#', updateServices);
 RED.comms.subscribe('homeassistant/targetDomains/#', updateTargetDomains);
 setupMigrations();
+setupEditors();
 RED.events.on('nodes:add', onNodesAdd);
 RED.events.on('nodes:remove', onNodesRemove);
 RED.events.on('editor:open', versionCheck);

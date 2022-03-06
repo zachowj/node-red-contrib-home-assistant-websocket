@@ -25,11 +25,16 @@
     width: auto;
 }
 
-.ha-entity-search-dialog {
-    .ha-entity-filter-bar {
+.home-assistant {
+    .ha-entity-search-row {
         display: flex;
         align-items: baseline;
         margin-bottom: 10px;
+
+        label {
+            display: inline;
+            width: auto;
+        }
 
         input {
             background-color: var(--red-ui-form-input-background);
@@ -51,20 +56,13 @@
             border-color: var(--red-ui-form-input-border-color-focus);
             outline: 0;
         }
-    }
 
-    ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        overflow: hidden;
-        overflow-y: auto;
-        height: 400px;
-    }
-
-    .ui-dialog-buttonset {
-        button {
-            line-height: 20px;
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            overflow-y: auto;
         }
     }
 }

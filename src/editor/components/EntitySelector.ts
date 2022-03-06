@@ -1,8 +1,8 @@
 import { HassEntity } from 'home-assistant-js-websocket';
 
 import { byPropertiesOf } from '../../helpers/sort';
+import { openEntityFilter } from '../editors/entity-filter';
 import { getEntities } from '../haserver';
-import { i18n } from '../i18n';
 import { disableSelect2OpenOnRemove } from '../utils';
 import {
     createCustomIdListByProperty,
@@ -16,10 +16,6 @@ export default class EntitySelector {
     #$filter: JQuery<HTMLElement>;
     #$filterType: JQuery<HTMLElement>;
     #$filterButton: JQuery<HTMLElement>;
-    #$filterBar: JQuery<HTMLElement>;
-    #$filterBarLabel: JQuery<HTMLElement>;
-    #$filterDialog: JQuery<HTMLElement>;
-    #$filterResults: JQuery<HTMLElement>;
     #entityId: string | string[];
     #select2Data: Select2Data[];
 
@@ -78,65 +74,20 @@ export default class EntitySelector {
             $div.append([this.#$select, this.#$filter, this.#$filterButton])
         );
         this.#$filterType.appendTo($div);
-
-        // Filter dialog
-        this.#$filterDialog = $('<div />');
-        const $filterBar = $('<div />', {
-            class: 'ha-entity-filter-bar',
-        });
-        this.#$filterBarLabel = $(
-            `<label>${i18n(
-                'home-assistant.label.filter_results_label'
-            )}</label>`
-        );
-        this.#$filterBar = $('<input />', {
-            type: 'text',
-        });
-        this.#$filterResults = $('<ul />');
-        this.#$filterDialog
-            .append([
-                $filterBar.append([this.#$filterBarLabel, this.#$filterBar]),
-                this.#$filterResults,
-            ])
-            .appendTo('#dialog-form');
     }
 
     init() {
         this.#$filterType.on('change', this.showHide.bind(this));
 
-        this.#$filterDialog.dialog({
-            autoOpen: false,
-            dialogClass: 'ha-entity-search-dialog',
-            height: 600,
-            modal: true,
-            resizable: false,
-            title: i18n('home-assistant.label.filter_results_title'),
-            width: 700,
-            buttons: [
-                {
-                    text: i18n('home-assistant.label.cancel'),
-                    click: () => {
-                        this.#$filterDialog.dialog('close');
-                    },
-                },
-                {
-                    text: i18n('home-assistant.label.done'),
-                    class: 'primary',
-                    click: () => {
-                        this.#$filter.val(this.#$filterBar.val());
-                        this.#$filterDialog.dialog('close');
-                    },
-                },
-            ],
-            open: () => {
-                this.#$filterBar.val(this.#$filter.val());
-            },
-        });
-
-        this.#$filterBar.on('input', () => this.filterIds());
         this.#$filterButton.on('click', () => {
-            this.#$filterDialog.dialog('open');
-            this.filterIds();
+            openEntityFilter({
+                filter: this.#$filter.val() as string,
+                filterType: this.#$filterType.val() as 'substring' | 'regex',
+                entities: getEntities(),
+                complete: (filter) => {
+                    this.#$filter.val(filter);
+                },
+            });
         });
 
         this.generateEntityList();
@@ -160,35 +111,6 @@ export default class EntitySelector {
                 this.#$filter.val(this.#entityId).show();
                 break;
         }
-    }
-
-    private filterIds() {
-        if (!this.#$filterDialog.dialog('isOpen')) return;
-        const filterType = this.#$filterType.val();
-        const str = this.#$filterDialog.find('input').val() as string;
-
-        let results: HassEntity[];
-        if (filterType === 'regex') {
-            try {
-                const regex = new RegExp(str);
-                results = getEntities().filter((e) => regex.test(e.entity_id));
-            } catch (e) {
-                results = [];
-            }
-        } else if (filterType === 'substring') {
-            results = getEntities().filter((e) => e.entity_id.includes(str));
-        }
-        const text = results
-            .sort(byPropertiesOf(['entity_id']))
-            .map((e) => `<li>${e.entity_id}</li>`)
-            .join('');
-        this.#$filterResults
-            .empty()
-            .append(
-                text.length
-                    ? text
-                    : `<li>${i18n('home-assistant.label.no_matches')}</li>`
-            );
     }
 
     private generateEntityList() {
@@ -234,7 +156,6 @@ export default class EntitySelector {
     }
 
     destroy() {
-        this.#$filterDialog.dialog('destroy');
         if (isSelect2Initialized(this.#$select)) {
             this.#$select.select2('destroy');
         }

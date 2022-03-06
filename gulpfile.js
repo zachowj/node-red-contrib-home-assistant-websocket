@@ -85,6 +85,10 @@ const nodeMap = {
     zone: { doc: 'zone', type: 'ha-zone' },
 };
 
+const editorMap = {
+    'entity-filter': 'ha_entity_filter',
+};
+
 let nodemonInstance;
 let browserSyncInstance;
 let currentFilename;
@@ -120,6 +124,19 @@ const buildForm = lazypipe()
         wrap(
             uiFormWrap,
             { type: nodeMap[currentFilename].type },
+            { variable: 'data' }
+        )
+    );
+
+const buildEditor = lazypipe()
+    .pipe(gulpHtmlmin, {
+        collapseWhitespace: true,
+        minifyCSS: true,
+    })
+    .pipe(() =>
+        wrap(
+            uiFormWrap,
+            { type: editorMap[currentFilename] },
             { variable: 'data' }
         )
     );
@@ -290,6 +307,15 @@ task('buildEditorFiles', (done) => {
         .pipe(buffer())
         .pipe(buildJs());
 
+    const editorsHtml = src(['src/editor/editors/*.html']).pipe(
+        flatmap((stream, file) => {
+            const [filename] = file.basename.split('.');
+
+            currentFilename = filename;
+            return stream.pipe(buildEditor());
+        })
+    );
+
     const html = src([
         'src/nodes/**/*.html',
         `docs/node/*.md`,
@@ -316,7 +342,7 @@ task('buildEditorFiles', (done) => {
         })
     );
 
-    return merge([css, js, html])
+    return merge([css, js, html, editorsHtml])
         .pipe(concat('index.html'))
         .pipe(header(resourceFiles.join('')))
         .pipe(dest(editorFilePath + '/'));
