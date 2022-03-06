@@ -59,8 +59,10 @@ ConnectionOptions): Promise<any> {
             }
         };
 
-        const onMessage = (event: { data: string }) => {
-            const message = JSON.parse(event.data);
+        const onMessage = (data: WebSocket.RawData, isBinary: boolean) => {
+            if (isBinary) return;
+
+            const message = JSON.parse(data.toString());
 
             debug('[Auth Phase] Received', message);
 
@@ -71,10 +73,10 @@ ConnectionOptions): Promise<any> {
                     break;
 
                 case MSG_TYPE_AUTH_OK:
-                    socket.removeEventListener('open', onOpen);
-                    socket.removeEventListener('message', onMessage);
-                    socket.removeEventListener('close', onClose);
-                    socket.removeEventListener('error', onClose);
+                    socket.off('open', onOpen);
+                    socket.off('message', onMessage);
+                    socket.off('close', onClose);
+                    socket.off('error', onClose);
                     promResolve(socket);
                     break;
 
@@ -87,7 +89,7 @@ ConnectionOptions): Promise<any> {
 
         const onClose = () => {
             // If we are in error handler make sure close handler doesn't also fire.
-            socket.removeEventListener('close', onClose);
+            socket.off('close', onClose);
             if (invalidAuth) {
                 promReject(ERR_INVALID_AUTH);
                 return;
@@ -97,10 +99,10 @@ ConnectionOptions): Promise<any> {
             setTimeout(() => connect(promResolve, promReject), 5000);
         };
 
-        socket.addEventListener('open', onOpen);
-        socket.addEventListener('message', onMessage);
-        socket.addEventListener('close', onClose);
-        socket.addEventListener('error', onClose);
+        socket.on('open', onOpen);
+        socket.on('message', onMessage);
+        socket.on('close', onClose);
+        socket.on('error', onClose);
     }
 
     return new Promise<WebSocket>((resolve, reject) => {
