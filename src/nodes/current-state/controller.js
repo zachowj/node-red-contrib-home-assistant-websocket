@@ -84,7 +84,7 @@ class CurrentState extends BaseNode {
 
         if (this.checkForDuration(isIfState)) {
             try {
-                const forDurationMs = this.getForDurationMs();
+                const forDurationMs = this.getForDurationMs(message);
                 if (forDurationMs > 0) {
                     isIfState = entity.timeSinceChangedMs > forDurationMs;
                 }
@@ -130,11 +130,12 @@ class CurrentState extends BaseNode {
         );
     }
 
-    getForDurationMs() {
+    getForDurationMs(message) {
         if (this.nodeConfig.for === '') return 0;
         const value = this.getTypedInputValue(
             this.nodeConfig.for,
-            this.nodeConfig.forType
+            this.nodeConfig.forType,
+            { message }
         );
 
         if (isNaN(value) || value < 0) {
