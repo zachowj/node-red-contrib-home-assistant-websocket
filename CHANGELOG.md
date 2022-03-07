@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.43.1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.43.0...v0.43.1) (2022-03-07)
+
+
+### Bug Fixes
+
+* **current-state:** Provide the message object so it can be used to look of msg properties ([62c4a39](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/62c4a391d7b5b273dad87717b11d32a505a2c0ed))
+
 ## [0.43.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.42.8...v0.43.0) (2022-02-24)
 
 
