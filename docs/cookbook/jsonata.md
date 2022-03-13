@@ -14,7 +14,7 @@ JSONata expression in the call-service node
 {
   "brightness": $min([
     $entities("light.kitchen").attributes.brightness +
-      $entities("input_number.brightness").state,
+      $number($entities("input_number.brightness").state),
     255
   ])
 }
