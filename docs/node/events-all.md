@@ -1,3 +1,7 @@
+---
+sidebarDepth: 1
+---
+
 # Events: all
 
 Listens for all types of events from Home Assistant with the ability to filter

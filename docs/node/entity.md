@@ -1,3 +1,7 @@
+---
+sidebarDepth: 1
+---
+
 # Entity
 
 Creates an entity in Home Assistant which can be manipulated from this node.

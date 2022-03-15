@@ -4,7 +4,7 @@ Use a Home Assistant automation to set an input boolean to `on` then from Node-R
 
 ![screenshot](./images/starting-flow-after-home-assistant-restart_01.png)
 
-<<< @/examples/cookbook/starting-flow-after-home-assistant-restart/example_01.json
+@[code](@examples/cookbook/starting-flow-after-home-assistant-restart/example_01.json)
 
 ::: tip
 The input boolean and automation can be created directly from Node-RED using the inject node found in the exported flow.

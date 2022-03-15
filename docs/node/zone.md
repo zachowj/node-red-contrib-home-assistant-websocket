@@ -1,3 +1,7 @@
+---
+sidebarDepth: 1
+---
+
 # Zone
 
 Outputs when one of the configured entities enter or leaves one of the defined zones.

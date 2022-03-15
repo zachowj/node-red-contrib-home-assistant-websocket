@@ -4,10 +4,10 @@ Use the `get-history` to get a list of state changes for the last 24 hours. Filt
 
 ![screenshot](./images/check-if-an-entity-was-turned-on-in-the-last-24-hours_01.png)
 
-<<< @/examples/cookbook/check-if-an-entity-was-turned-on-in-the-last-24-hours/example_01.json
+@[code](@examples/cookbook/check-if-an-entity-was-turned-on-in-the-last-24-hours/example_01.json)
 
 Here's the same example but using a `function` node.
 
 ![screenshot](./images/check-if-an-entity-was-turned-on-in-the-last-24-hours_02.png)
 
-<<< @/examples/cookbook/check-if-an-entity-was-turned-on-in-the-last-24-hours/example_02.json
+@[code](@examples/cookbook/check-if-an-entity-was-turned-on-in-the-last-24-hours/example_02.json)

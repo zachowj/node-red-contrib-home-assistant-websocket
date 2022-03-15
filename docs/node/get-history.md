@@ -1,3 +1,7 @@
+---
+sidebarDepth: 1
+---
+
 # Get History
 
 Fetches history from Home Assistant (all history for the past day by default)

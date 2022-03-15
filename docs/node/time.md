@@ -1,3 +1,7 @@
+---
+sidebarDepth: 1
+---
+
 # Time
 
 A node that can be scheduled to trigger at a future date and time from a Home Assistant entity.

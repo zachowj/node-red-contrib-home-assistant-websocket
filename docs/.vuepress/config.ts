@@ -1,15 +1,38 @@
-module.exports = {
+import { defineUserConfig } from 'vuepress';
+import type { DefaultThemeOptions } from 'vuepress';
+import path from 'path';
+
+export default defineUserConfig<DefaultThemeOptions>({
     base: '/node-red-contrib-home-assistant-websocket/',
     title: 'node-red-contrib-home-assistant-websocket',
     description:
         'Node-RED integration with Home Assistant through the WebSocket and HTTP API',
     head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
     plugins: [
-        ['@vuepress/google-analytics', { ga: 'UA-155074503-1' }],
-        ['@vuepress/plugin-back-to-top', true],
-        '@vuepress/medium-zoom',
-        ['vuepress-plugin-code-copy', true],
+        //     ['@vuepress/google-analytics', { ga: 'UA-155074503-1' }],
+        ['@snippetors/vuepress-plugin-code-copy'],
+        [
+            '@vuepress/register-components',
+            {
+                componentsDir: path.resolve(__dirname, './components'),
+            },
+        ],
+        ['@vuepress/plugin-palette', { preset: 'sass' }],
+        ['@vuepress/plugin-search'],
     ],
+    markdown: {
+        code: {
+            lineNumbers: false,
+        },
+        importCode: {
+            handleImportPath: (str) =>
+                str.replace(
+                    /^@examples/,
+                    path.resolve(__dirname, '../../examples')
+                ),
+        },
+    },
+    theme: '@vuepress/theme-default',
     themeConfig: {
         repo: 'zachowj/node-red-contrib-home-assistant-websocket',
         repoLabel: 'Github',
@@ -17,8 +40,7 @@ module.exports = {
         docsBranch: 'main',
         editLinks: true,
         editLinkText: 'Help us improve this page!',
-        lastUpdated: 'Last Updated',
-        nav: [
+        navbar: [
             { text: 'Guides', link: '/guide/' },
             { text: 'Nodes', link: '/node/' },
             { text: 'FAQ', link: '/FAQ.md' },
@@ -32,8 +54,8 @@ module.exports = {
         sidebar: {
             '/cookbook/': [
                 {
-                    title: 'Cookbook',
-                    collapsable: false,
+                    text: 'Cookbook',
+                    collapsible: false,
                     children: [
                         'jsonata',
                         'motion-triggered-light',
@@ -52,8 +74,8 @@ module.exports = {
             ],
             '/guide/': [
                 {
-                    title: 'Guides',
-                    collapsable: false,
+                    text: 'Guides',
+                    collapsible: false,
                     children: [
                         '',
                         'first-automation',
@@ -64,8 +86,8 @@ module.exports = {
                     ],
                 },
                 {
-                    title: 'Custom Integration',
-                    collapsable: false,
+                    text: 'Custom Integration',
+                    collapsible: false,
                     children: [
                         'custom_integration/',
                         'custom_integration/event-nodes',
@@ -73,16 +95,16 @@ module.exports = {
                     ],
                 },
                 {
-                    title: 'Contribute to',
-                    collapsable: false,
+                    text: 'Contribute to',
+                    collapsible: false,
                     children: ['development', 'documentation'],
                 },
             ],
             '/node/': [
                 {
-                    title: 'Nodes',
-                    collapsable: false,
-                    sidebarDepth: 1,
+                    text: 'Nodes',
+                    collapsible: false,
+
                     children: [
                         'API',
                         'button',
@@ -110,4 +132,4 @@ module.exports = {
             ],
         },
     },
-};
+});

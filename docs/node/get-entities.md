@@ -1,3 +1,7 @@
+---
+sidebarDepth: 1
+---
+
 # Get Entities
 
 Get Entities based on search criteria
@@ -144,7 +148,7 @@ Using the `get entities` node here to get a possible list of entity ids [binary_
 
 ![screenshot](./images/get-entities_03.png)
 
-<<< @/examples/node/get-entities/example_01.json
+@[code](@examples/node/get-entities/example_01.json)
 
 #### Example 2
 
@@ -154,7 +158,7 @@ Using an `inject` node here but you could use your preference of timer node. The
 
 ![screenshot](./images/get-entities_02.png)
 
-<<< @/examples/node/get-entities/example_02.json
+@[code](@examples/node/get-entities/example_02.json)
 
 ---
 
@@ -166,7 +170,7 @@ Here's my take on it using the `get entities` and a `function` node. Using the `
 
 ![screenshot](./images/get-entities_01.png)
 
-<<< @/examples/node/get-entities/example_03.json
+@[code](@examples/node/get-entities/example_03.json)
 
 Disclaimer: All these examples are untested but should give you a general idea of how to use it.
 

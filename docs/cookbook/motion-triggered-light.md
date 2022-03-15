@@ -9,7 +9,7 @@ the light.
 
 ![screenshot](./images/motion-triggered-light_01.png)
 
-<<< @/examples/cookbook/motion-triggered-light/example_01.json
+@[code](@examples/cookbook/motion-triggered-light/example_01.json)
 
 ## Example 2
 
@@ -18,4 +18,4 @@ no longer detected.
 
 ![screenshot](./images/motion-triggered-light_02.png)
 
-<<< @/examples/cookbook/motion-triggered-light/example_02.json
+@[code](@examples/cookbook/motion-triggered-light/example_02.json)

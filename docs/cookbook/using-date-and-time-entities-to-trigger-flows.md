@@ -6,15 +6,15 @@ There is now a [time](../node/time.md) node that simplifies the example flows be
 
 - Home Assistant Companion app next alarm sensor
 
-  <<< @/examples/cookbook/using-date-and-time-entities-to-trigger-flows/example1a_using_time_node.json
+  @[code](@examples/cookbook/using-date-and-time-entities-to-trigger-flows/example1a_using_time_node.json)
 
 - Adding an offset and on/off switch by exposing the node the Home Assistant using the [custom component](https://github.com/zachowj/hass-node-red).
 
-  <<< @/examples/cookbook/using-date-and-time-entities-to-trigger-flows/example1b_using_time_node.json
+  @[code](@examples/cookbook/using-date-and-time-entities-to-trigger-flows/example1b_using_time_node.json)
 
 - Daily alarm using Datetime Entity
 
-  <<< @/examples/cookbook/using-date-and-time-entities-to-trigger-flows/example2_using_time_node.json
+  @[code](@examples/cookbook/using-date-and-time-entities-to-trigger-flows/example2_using_time_node.json)
 
 ## Home Assistant Companion app next alarm sensor
 
@@ -26,7 +26,7 @@ Here's a basic example of using the Home Assistant Companion app next alarm sens
 
 ![screenshot](./images/using-date-and-time-entities-to-trigger-flows_01.png)
 
-<<< @/examples/cookbook/using-date-and-time-entities-to-trigger-flows/example1a.json
+@[code](@examples/cookbook/using-date-and-time-entities-to-trigger-flows/example1a.json)
 
 ### Adding an offset and on/off switch
 
@@ -38,7 +38,7 @@ If the [Node-RED custom component](https://github.com/zachowj/hass-node-red) is 
 
 ![screenshot](./images/using-date-and-time-entities-to-trigger-flows_02.png)
 
-<<< @/examples/cookbook/using-date-and-time-entities-to-trigger-flows/example1b.json
+@[code](@examples/cookbook/using-date-and-time-entities-to-trigger-flows/example1b.json)
 
 ::: warning
 Delay nodes can have a max timeout of around 24.8 days greater than that and weird things will happen.
@@ -54,12 +54,12 @@ This flow was developed and tested with a Pixel 2 XL and the companion app in It
 
 ![screenshot](./images/using-date-and-time-entities-to-trigger-flows_04.png)
 
-<<< @/examples/cookbook/using-date-and-time-entities-to-trigger-flows/example1c.json
+@[code](@examples/cookbook/using-date-and-time-entities-to-trigger-flows/example1c.json)
 
 ## Daily alarm using Datetime Entity
 
 ![screenshot](./images/using-date-and-time-entities-to-trigger-flows_03.png)
 
-<<< @/examples/cookbook/using-date-and-time-entities-to-trigger-flows/example2.json
+@[code](@examples/cookbook/using-date-and-time-entities-to-trigger-flows/example2.json)
 
 An offset can also be added as shown in the next alarm sensor example.

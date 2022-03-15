@@ -1,3 +1,7 @@
+---
+sidebarDepth: 1
+---
+
 # Render Template
 
 Can either set the template in the node configuration or pass in the `msg.template` property of the incoming message. Passing template via `msg.template` will override the template string set in node configuration.

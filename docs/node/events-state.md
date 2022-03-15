@@ -1,3 +1,7 @@
+---
+sidebarDepth: 1
+---
+
 # Events: state
 
 Outputs state_changed event types sent from Home Assistant

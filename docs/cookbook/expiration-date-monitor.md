@@ -53,7 +53,7 @@ You can set the inject node to fire at a set time each day or every other day wh
 
 ![image|690x93](./images/expiration-date-monitor_02.png)
 
-<<< @/examples/cookbook/expiration-date-monitor/export.json
+@[code](@examples/cookbook/expiration-date-monitor/export.json)
 
 ![image|551x297](./images/expiration-date-monitor_03.png)
 

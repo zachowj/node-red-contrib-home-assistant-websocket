@@ -8,7 +8,7 @@ notification about turning on vacation mode if you have been gone longer than 24
 
 #### Full Export
 
-<<< @/examples/cookbook/vacation-mode/full_export.json
+@[code](@examples/cookbook/vacation-mode/full_export.json)
 
 ## Step 1
 
@@ -34,7 +34,7 @@ hours.
 
 ![screenshot](./images/vacation-mode_03.png)
 
-<<< @/examples/cookbook/vacation-mode/step_02.json
+@[code](@examples/cookbook/vacation-mode/step_02.json)
 
 **Also See**
 
@@ -65,4 +65,4 @@ random intervals if vacation mode is enabled.
 
 ![screenshot](./images/vacation-mode_04.png)
 
-<<< @/examples/cookbook/vacation-mode/step_04.json
+@[code](@examples/cookbook/vacation-mode/step_04.json)

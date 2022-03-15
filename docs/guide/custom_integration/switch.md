@@ -12,4 +12,4 @@ Sample Flow using the new switch entity:
 
 ![Screenshot of Example](./images/trigger_switch.png)
 
-<<< @/examples/guides/custom_integration/switch_01.json
+@[code](@examples/guides/custom_integration/switch_01.json)

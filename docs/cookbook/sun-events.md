@@ -4,13 +4,13 @@
 
 ![screenshot](../guide/images/first-automation_05.png)
 
-<<< @/examples/cookbook/sun-events/option_01.json
+@[code](@examples/cookbook/sun-events/option_01.json)
 
 ## Option 2
 
 ![screenshot](./images/sun-events_01.png)
 
-<<< @/examples/cookbook/sun-events/option_02.json
+@[code](@examples/cookbook/sun-events/option_02.json)
 
 ## Option 3
 
@@ -20,4 +20,4 @@
 
 ![screenshot](./images/sun-events_02.png)
 
-<<< @/examples/cookbook/sun-events/option_03.json
+@[code](@examples/cookbook/sun-events/option_03.json)

@@ -12,16 +12,14 @@ The holiday lights turn on each day at sunset and then off at midnight. It uses 
 
 ### Version 1
 
-<<< @/examples/cookbook/holiday-lights-scheduler-and-demo-mode-for-wled/holiday-lights-scheduler-and-demo-mode-for-wled_v1.json
-
-</code-block>
+@[code](@examples/cookbook/holiday-lights-scheduler-and-demo-mode-for-wled/holiday-lights-scheduler-and-demo-mode-for-wled_v1.json)
 
 ::: details version 0
 
 - [Home Assistant](https://home-assistant.io) v0.118+
 - [WLED](https://github.com/Aircoookie/WLED) v0.11+
 
-<<< @/examples/cookbook/holiday-lights-scheduler-and-demo-mode-for-wled/holiday-lights-scheduler-and-demo-mode-for-wled_v0.json
+@[code](@examples/cookbook/holiday-lights-scheduler-and-demo-mode-for-wled/holiday-lights-scheduler-and-demo-mode-for-wled_v0.json)
 
 :::
 

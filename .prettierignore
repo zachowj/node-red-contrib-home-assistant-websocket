@@ -2,3 +2,5 @@ examples
 dist
 ui/css/lib/
 ui/js/lib/
+docs/.vuepress/.temp
+docs/.vuepress/.cache

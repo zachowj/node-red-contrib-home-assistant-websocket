@@ -18,7 +18,7 @@ Here's an example using [eztimer](https://flows.nodered.org/node/node-red-contri
 
 ![screenshot of the call-service node](./images/call-service_03.png)
 
-<<< @/examples/guides/call-service/mustache_templates_01.json
+@[code](@examples/guides/call-service/mustache_templates_01.json)
 
 Mustache templates are also accepted in the data field when their type is set to JSON.
 
@@ -55,7 +55,7 @@ It's recommended to use the JSONata expression, `J: Expression`, for the data fi
 { "message": "The " & data.attributes.friendly_name & " has been opened." }
 ```
 
-<<< @/examples/guides/call-service/door_sensor_tts.json
+@[code](@examples/guides/call-service/door_sensor_tts.json)
 
 ### Getting a property value of a Home Assistant entity
 
@@ -90,7 +90,7 @@ Example of getting a list of lights from the get-entities node and then creating
 { "entity_id": $join(payload.entity_id, ",") }
 ```
 
-<<< @/examples/guides/call-service/entity_id_list.json
+@[code](@examples/guides/call-service/entity_id_list.json)
 
 **Also see:**
 

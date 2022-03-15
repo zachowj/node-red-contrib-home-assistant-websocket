@@ -12,13 +12,13 @@ v1.0.0 - Requires Nodejs v12
 
 - Any setting can be set or overwritten using `msg.actionable` to pass a notification object into the node.
 
-<<< @/examples/cookbook/actionable-notifications-subflow-for-android/subflow_1_0_0.json
+@[code](@examples/cookbook/actionable-notifications-subflow-for-android/subflow_1_0_0.json)
 
 :::details Old versions
 
 v0.0.0
 
-<<< @/examples/cookbook/actionable-notifications-subflow-for-android/subflow.json
+@[code](@examples/cookbook/actionable-notifications-subflow-for-android/subflow.json)
 
 :::
 
@@ -42,13 +42,13 @@ Any setting can be set or overwritten using `msg.actionable` to pass a notificat
 
 ![screenshot](./images/actionable-notifications-subflow-for-android_02.png)
 
-<<< @/examples/cookbook/actionable-notifications-subflow-for-android/demo.json
+@[code](@examples/cookbook/actionable-notifications-subflow-for-android/demo.json)
 
 ## Use Case 1: Get a notification when garage door is left open with ability to ignore the alert for an amount of time
 
 ![screenshot](./images/actionable-notifications-subflow-for-android_03.png)
 
-<<< @/examples/cookbook/actionable-notifications-subflow-for-android/use-case-01.json
+@[code](@examples/cookbook/actionable-notifications-subflow-for-android/use-case-01.json)
 
 **Required Nodes**
 
@@ -58,7 +58,7 @@ Any setting can be set or overwritten using `msg.actionable` to pass a notificat
 
 ![screenshot](./images/actionable-notifications-subflow-for-android_04.png)
 
-<<< @/examples/cookbook/actionable-notifications-subflow-for-android/use-case-02.json
+@[code](@examples/cookbook/actionable-notifications-subflow-for-android/use-case-02.json)
 
 **Also see:**
 

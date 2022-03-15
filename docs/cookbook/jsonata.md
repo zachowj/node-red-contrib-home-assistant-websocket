@@ -6,7 +6,7 @@ A remote with a button that when clicked it increases the brightness of a given 
 
 ![screenshot](./images/jsonata_1.png)
 
-<<< @/examples/cookbook/jsonata/increase-lights-brightness-with-remote.json
+@[code](@examples/cookbook/jsonata/increase-lights-brightness-with-remote.json)
 
 JSONata expression in the call-service node
 
@@ -26,13 +26,13 @@ Get notified when light or switch is left on when you leave. This a remake of Ex
 
 ![screenshot](./images/jsonata_2.png)
 
-<<< @/examples/cookbook/jsonata/notification-of-lights-on-when-leaving-home.json
+@[code](@examples/cookbook/jsonata/notification-of-lights-on-when-leaving-home.json)
 
 This is the same as above but uses an event:state node and shows how to use the `$entity()` and `$prevEntity()` functions to compare states.
 
 ![screenshot](./images/jsonata_3.png)
 
-<<< @/examples/cookbook/jsonata/notification-of-lights-on-when-leaving-home_02.json
+@[code](@examples/cookbook/jsonata/notification-of-lights-on-when-leaving-home_02.json)
 
 Event-State Node:
 `$entity().state != $prevEntity().state`
@@ -54,7 +54,7 @@ Motion sensor at the front door triggers and have a text to speech notification 
 
 ![screenshot](./images/jsonata_3.png)
 
-<<< @/examples/cookbook/jsonata/or-conditional-for-the-events-state-node.json
+@[code](@examples/cookbook/jsonata/or-conditional-for-the-events-state-node.json)
 
 ```json
 $entity().state = "on" and (

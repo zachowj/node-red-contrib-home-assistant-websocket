@@ -1,3 +1,7 @@
+---
+sidebarDepth: 1
+---
+
 # Button
 
 Creates a [button entity](https://developers.home-assistant.io/docs/core/entity/button) in Home Assistant that will trigger the flow when pressed.

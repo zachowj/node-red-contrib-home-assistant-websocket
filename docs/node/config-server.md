@@ -1,3 +1,7 @@
+---
+sidebarDepth: 1
+---
+
 # Config Server
 
 Home Assistant connection configuration

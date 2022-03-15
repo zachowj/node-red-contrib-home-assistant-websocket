@@ -10,3 +10,5 @@ _scratchpad_flows
 coverage
 .nyc_output
 dist/
+docs/.vuepress/.cache
+docs/.vuepress/.temp

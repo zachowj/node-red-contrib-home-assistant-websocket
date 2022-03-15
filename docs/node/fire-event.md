@@ -1,3 +1,7 @@
+---
+sidebarDepth: 1
+---
+
 # Fire Event
 
 Fire an event to Home Assistants event bus

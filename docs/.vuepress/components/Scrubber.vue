@@ -15,14 +15,14 @@
 
         <button v-on:click="scrub">Scrub</button>
         <transition name="fade">
-            <span v-if="showError" class="error">Invalid JSON</span>
+            <span v-if="showError" class="popup error">Invalid JSON</span>
         </transition>
 
         <textarea v-model="after" ref="copyme"></textarea>
 
         <button v-on:click="copy">Copy to Clipboard</button>
         <transition name="fade">
-            <span v-if="showCopied" class="copied">Copied</span>
+            <span v-if="showCopied" class="popup copied">Copied</span>
         </transition>
     </div>
 </template>
@@ -115,7 +115,9 @@ export default {
 };
 </script>
 
-<style scoped lang="stylus">
+<style scoped lang="scss">
+$accentColor: var(--c-brand);
+
 textarea {
     width: 100%;
     height: 10em;
@@ -123,8 +125,8 @@ textarea {
 }
 
 button {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-        Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue",
         sans-serif;
     font-size: 16px !important;
     border-radius: 4px;
@@ -142,7 +144,7 @@ button {
 }
 
 button:hover {
-    background-color: lighten($accentColor, 10%);
+    background-color: var(--c-brand-light);
 }
 
 .fade-leave-active {
@@ -153,7 +155,8 @@ button:hover {
     opacity: 0;
 }
 
-span.error, span.copied {
+span.error,
+span.copied {
     font-weight: 600;
     display: inline-block;
     font-size: 14px;
@@ -164,10 +167,14 @@ span.error, span.copied {
     color: #fff;
 }
 .error {
-    background-color: $badgeErrorColor;
+    background-color: var(--c-danger);
 }
 
 .copied {
-    background-color: $badgeWarningColor;
+    background-color: var(--c-warning);
+}
+
+.popup {
+    margin-left: 10px;
 }
 </style>

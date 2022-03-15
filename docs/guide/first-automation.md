@@ -57,7 +57,7 @@ Node-RED.
 
 ![screenshot](./images/first-automation_05.png)
 
-<<< @/examples/guides/first-automation/complete-automation.json
+@[code](@examples/guides/first-automation/complete-automation.json)
 
 **Also see:**
 

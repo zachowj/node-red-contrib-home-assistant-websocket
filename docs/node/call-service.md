@@ -1,3 +1,7 @@
+---
+sidebarDepth: 1
+---
+
 # Call Service
 
 Sends a request to home assistant for any domain and service available (`light/turn_on`, `input_select/select_option`, etc..)
