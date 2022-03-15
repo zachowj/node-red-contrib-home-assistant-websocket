@@ -9,15 +9,17 @@ export default defineUserConfig<DefaultThemeOptions>({
         'Node-RED integration with Home Assistant through the WebSocket and HTTP API',
     head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
     plugins: [
-        //     ['@vuepress/google-analytics', { ga: 'UA-155074503-1' }],
-        ['@snippetors/vuepress-plugin-code-copy'],
+        ['@vuepress/google-analytics', { ga: 'G-T0F3RKFVF3' }],
+        [
+            '@snippetors/vuepress-plugin-code-copy',
+            { backgroundTransition: false, staticIcon: true },
+        ],
         [
             '@vuepress/register-components',
             {
                 componentsDir: path.resolve(__dirname, './components'),
             },
         ],
-        ['@vuepress/plugin-palette', { preset: 'sass' }],
         ['@vuepress/plugin-search'],
     ],
     markdown: {
