@@ -58,7 +58,6 @@ export default class EntityConfigController extends EventEmitter {
         node.on('close', this.onClose.bind(this));
         this.events = {
             'ha_client:close': this.onHaEventsClose,
-            'ha_client:error': this.onHaEventsError,
             [INTEGRATION_EVENT]: this.onHaIntegration,
         };
         addEventListeners(this.events, this.server?.homeAssistant?.eventBus);
@@ -80,10 +79,6 @@ export default class EntityConfigController extends EventEmitter {
 
     onHaEventsClose = () => {
         this.registered = false;
-    };
-
-    onHaEventsError = (err: Error) => {
-        this.node.error(err.message ?? err);
     };
 
     onHaIntegration = (type: IntegrationEvent) => {
