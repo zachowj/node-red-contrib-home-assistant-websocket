@@ -1,5 +1,12 @@
 {
   "home-assistant": {
+    "error": {
+      "cannot_connect": "Cannot connect to Home Assistant server",
+      "connection_lost": "connection lost",
+      "hass_host_required": "Base URL not set in server config",
+      "invalid_auth": "Invalid access token for websocket",
+      "user_not_admin": "User required to have admin privileges in Home Assistant"
+    },
     "label": {
       "cancel": "Cancel",
       "done": "Done",

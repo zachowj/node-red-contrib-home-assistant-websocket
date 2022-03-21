@@ -41,6 +41,7 @@ import {
     STATE_DISCONNECTED,
     STATE_ERROR,
 } from '../const';
+import { RED } from '../globals';
 import {
     HassAreas,
     HassDeviceActions,
@@ -134,21 +135,30 @@ export default class Websocket {
         }).catch((e) => {
             this.connectionState = STATE_ERROR;
             this.emitEvent('ha_client:error');
+
             // Handle connection errors
             switch (e) {
                 case ERR_CANNOT_CONNECT:
-                    throw new Error('Cannot connect to Home Assistant server');
+                    e = new Error(RED._('home-assistant.error.cannot-connect'));
+                    break;
                 case ERR_INVALID_AUTH:
-                    throw new Error(
-                        'Invalid access token or password for websocket'
-                    );
+                    e = new Error(RED._('home-assistant.error.invalid_auth'));
+                    break;
                 case ERR_CONNECTION_LOST:
-                    throw new Error('connection lost');
+                    e = new Error(
+                        RED._('home-assistant.error.connection_lost')
+                    );
+                    break;
                 case ERR_HASS_HOST_REQUIRED:
-                    throw new Error('Base URL not set in server config');
+                    e = new Error(
+                        RED._('home-assistant.error.hass_host_required')
+                    );
+                    break;
                 case ERR_INVALID_HTTPS_TO_HTTP:
-                    throw new Error('ERR_INVALID_HTTPS_TO_HTTP');
+                    e = new Error('ERR_INVALID_HTTPS_TO_HTTP');
+                    break;
             }
+
             throw e;
         });
 
@@ -164,13 +174,11 @@ export default class Websocket {
     }
 
     private async checkUserType() {
-        const user = (await this.getUser()) as HassUser;
+        const user = await this.getUser();
         if (user.is_admin === false) {
             this.connectionState = STATE_ERROR;
             this.client.close();
-            throw new Error(
-                'User required to have admin privileges in Home Assistant'
-            );
+            throw new Error(RED._('home-assistant.error.user_not_admin'));
         }
     }
 

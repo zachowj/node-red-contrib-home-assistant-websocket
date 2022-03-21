@@ -10,10 +10,7 @@ export default defineUserConfig<DefaultThemeOptions>({
     head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
     plugins: [
         ['@vuepress/plugin-google-analytics', { id: 'G-T0F3RKFVF3' }],
-        [
-            '@snippetors/vuepress-plugin-code-copy',
-            { backgroundTransition: false, staticIcon: true },
-        ],
+        ['vuepress-plugin-copy-code2', {}],
         [
             '@vuepress/register-components',
             {
