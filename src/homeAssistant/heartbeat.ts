@@ -19,12 +19,7 @@ export const startHeartbeat = (
         async () => {
             beatTimeoutId = setTimeout(() => {
                 debug(`No pong received from ${host} attempting to reconnect`);
-                client.suspendReconnectUntil(
-                    new Promise((resolve) => {
-                        resolve();
-                    })
-                );
-                client.suspend();
+                client.reconnect(true);
             }, HEARTBEAT_TIMEOUT);
 
             debug(`Ping sent to ${host}`);
