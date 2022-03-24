@@ -67,7 +67,6 @@
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@rollup/plugin-typescript": "^8.3.1",
     "@rollup/stream": "^2.0.0",
-    "@snippetors/vuepress-plugin-code-copy": "^1.1.2",
     "@types/bonjour": "^3.5.10",
     "@types/chai": "^4.3.0",
     "@types/debug": "^4.1.7",
