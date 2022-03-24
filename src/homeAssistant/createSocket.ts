@@ -11,6 +11,10 @@ import WebSocket from 'ws';
 
 const debug = Debug('home-assistant:socket');
 
+interface HaWebSocket extends WebSocket {
+    haVersion: string;
+}
+
 type ConnectionOptions = {
     auth: {
         // eslint-disable-next-line camelcase
@@ -32,12 +36,11 @@ export default function createSocket({
     eventBus,
     rejectUnauthorizedCerts,
     url,
-}: // eslint-disable-next-line @typescript-eslint/no-explicit-any
-ConnectionOptions): Promise<any> {
+}: ConnectionOptions): Promise<HaWebSocket> {
     debug('[Auth Phase] Initializing', url);
 
     function connect(
-        promResolve: (socket: WebSocket) => void,
+        promResolve: (socket: HaWebSocket) => void,
         promReject: (err: Error) => void
     ) {
         debug('[Auth Phase] New connection', url);
@@ -45,7 +48,7 @@ ConnectionOptions): Promise<any> {
 
         const socket = new WebSocket(url, {
             rejectUnauthorized: rejectUnauthorizedCerts,
-        });
+        }) as HaWebSocket;
 
         // If invalid auth, we will not try to reconnect.
         let invalidAuth = false;
@@ -77,6 +80,7 @@ ConnectionOptions): Promise<any> {
                     socket.off('message', onMessage);
                     socket.off('close', onClose);
                     socket.off('error', onClose);
+                    socket.haVersion = message.ha_version;
                     promResolve(socket);
                     break;
 
@@ -105,7 +109,7 @@ ConnectionOptions): Promise<any> {
         socket.on('error', onClose);
     }
 
-    return new Promise<WebSocket>((resolve, reject) => {
+    return new Promise<HaWebSocket>((resolve, reject) => {
         // if hass.io, do a 5 second delay so it doesn't spam the hass.io proxy
         // https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/76
         setTimeout(

@@ -16,6 +16,8 @@ import {
     HassEvent,
     HassServices,
     HassServiceTarget,
+    HassUser,
+    HaWebSocket,
     MessageBase,
     subscribeConfig,
     subscribeEntities,
@@ -51,7 +53,6 @@ import {
     HassEntityRegistryEntry,
     HassTags,
     HassTranslations,
-    HassUser,
     SubscriptionUnsubscribe,
 } from '../types/home-assistant';
 import { Credentials } from './';
@@ -115,7 +116,7 @@ export default class Websocket {
 
     async connect(): Promise<void> {
         // Convert from http:// -> ws://, https:// -> wss://
-        const url = `ws${this.config.host.substr(4)}/api/websocket`;
+        const url = `ws${this.config.host.substring(4)}/api/websocket`;
 
         const auth = {
             type: 'auth',
@@ -131,35 +132,32 @@ export default class Websocket {
                     rejectUnauthorizedCerts:
                         this.config.rejectUnauthorizedCerts,
                     url,
-                }),
+                }) as unknown as Promise<HaWebSocket>,
         }).catch((e) => {
             this.connectionState = STATE_ERROR;
             this.emitEvent('ha_client:error');
 
             // Handle connection errors
+            let message: string | undefined;
             switch (e) {
                 case ERR_CANNOT_CONNECT:
-                    e = new Error(RED._('home-assistant.error.cannot-connect'));
+                    message = RED._('home-assistant.error.cannot-connect');
                     break;
                 case ERR_INVALID_AUTH:
-                    e = new Error(RED._('home-assistant.error.invalid_auth'));
+                    message = RED._('home-assistant.error.invalid_auth');
                     break;
                 case ERR_CONNECTION_LOST:
-                    e = new Error(
-                        RED._('home-assistant.error.connection_lost')
-                    );
+                    message = RED._('home-assistant.error.connection_lost');
                     break;
                 case ERR_HASS_HOST_REQUIRED:
-                    e = new Error(
-                        RED._('home-assistant.error.hass_host_required')
-                    );
+                    message = RED._('home-assistant.error.hass_host_required');
                     break;
                 case ERR_INVALID_HTTPS_TO_HTTP:
-                    e = new Error('ERR_INVALID_HTTPS_TO_HTTP');
+                    message = 'ERR_INVALID_HTTPS_TO_HTTP';
                     break;
             }
 
-            throw e;
+            throw message ? new Error(message) : e;
         });
 
         // Check if user has admin privileges
@@ -183,7 +181,7 @@ export default class Websocket {
     }
 
     getUser(): Promise<HassUser> {
-        return getUser(this.client) as Promise<HassUser>;
+        return getUser(this.client);
     }
 
     private clientEvents() {
@@ -208,7 +206,6 @@ export default class Websocket {
         subscribeConfig(this.client, (config) =>
             this.onClientConfigUpdate(config)
         );
-
         subscribeEntities(this.client, this.onClientStates.bind(this));
         subscribeServices(this.client, this.onClientServices.bind(this));
 

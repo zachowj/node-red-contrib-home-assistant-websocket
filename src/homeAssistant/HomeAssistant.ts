@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import Debug from 'debug';
 import { EventEmitter } from 'events';
 import { HassEntities } from 'home-assistant-js-websocket';

@@ -18,6 +18,10 @@ const sendResult = (
     ws.send(str);
 };
 
+const defaults = {
+    haVersion: '2021.3.0',
+};
+
 export default class HaServer {
     #accessToken: string;
     #host: string;
@@ -26,6 +30,7 @@ export default class HaServer {
     #lastMessage?: MessageBase;
     #resolveConnection!: () => void;
     #rejectConnection!: (reason?: any) => void;
+    #haVersion = defaults.haVersion;
 
     waitForConnection!: Promise<void>;
 
@@ -63,7 +68,12 @@ export default class HaServer {
                 this.#lastMessage = data;
                 switch (data.type) {
                     case 'auth':
-                        ws.send(JSON.stringify({ type: 'auth_ok' }));
+                        ws.send(
+                            JSON.stringify({
+                                type: 'auth_ok',
+                                ha_version: this.#haVersion,
+                            })
+                        );
                         if (data.access_token !== this.#accessToken) {
                             this.#rejectConnection('Invalid access token');
                         }
@@ -126,10 +136,16 @@ export default class HaServer {
     }
 
     restore(cb?: () => void) {
+        this.#haVersion = defaults.haVersion;
+
         this.waitForConnection = new Promise<void>((resolve, reject) => {
             this.#resolveConnection = resolve;
             this.#rejectConnection = reject;
         });
         cb?.();
+    }
+
+    setHaVersion(haVersion: string) {
+        this.#haVersion = haVersion;
     }
 }

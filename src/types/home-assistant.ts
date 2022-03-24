@@ -2,7 +2,6 @@
 import {
     HassEntity as HomeAssistantEntity,
     HassEventBase,
-    HassUser as HomeAssistantUser,
 } from 'home-assistant-js-websocket';
 
 export type HassArea = {
@@ -12,10 +11,6 @@ export type HassArea = {
 };
 
 export type HassAreas = HassArea[];
-
-export type HassUser = HomeAssistantUser & {
-    is_admin: boolean;
-};
 
 export type HassDevice = {
     area_id?: string;
