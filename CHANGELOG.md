@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.43.2](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.43.1...v0.43.2) (2022-03-27)
+
+
+### Bug Fixes
+
+* **call-service:** Allow any input for the entity id field ([1d4f486](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/1d4f486c03152e09b48b3822a4111c28d37b19c3)), closes [#615](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/615)
+
+
+### Documentation
+
+* Change code copy plugin ([6272a91](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/6272a91b985d279be0c494b2dc871f634cecd904))
+* config changes for vuepress v2 ([0dd2f68](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/0dd2f681586ffe130adac1d2785c9cbcd98f1f2c))
+* **cookbook:** Fix JSONata example to use $number on entity state as it is a string ([ae751fc](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ae751fc8edb3f5329589755fefa41ba8d68ab767))
+* Fix plugin config setting ([95f89f0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/95f89f03ad9aaed7ca3e96688adb92d46ce3bd66))
+* Migrate docs to vuepress v2 ([cf890fa](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/cf890fa5ce0bdf2615f50c80601a25039794ede0))
+* **poll-state:** Fix output location information ([a4dcc28](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a4dcc280c6ee2f08e0925714bd92f27a9dc85531)), closes [#617](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/617)
+* Update getting started prerequisites ([f002d04](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f002d04b1b592be4f9cf1bdcd9cac5788746bdf4))
+
 ### [0.43.1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.43.0...v0.43.1) (2022-03-07)
 
 
