@@ -54,19 +54,19 @@ Creates a switch within Home Assistant to enable/disable this node. This feature
 
 entity_id of changed entity
 
-### payload.data
+### payload
 
 - Type: `object`
 
 The last known state of the entity
 
-### payload.data.timeSinceChanged
+### data.timeSinceChanged
 
 - Type: `string`
 
 Human readable format string of time since last updated, example "1 hour ago"
 
-### payload.data.timeSinceChangedMs
+### data.timeSinceChangedMs
 
 - Type: `number`
 
@@ -75,9 +75,3 @@ Number of milliseconds since last changed
 ## References
 
 - [Home Assistant State Objects](https://home-assistant.io/docs/configuration/state_object/)
-
-## Changelog
-
-#### Version 1
-
-- "if state"/"halt if" will now send the message to the first output if true and to the second if not. The old behavior, sending the message to the second output if true, will continue to be in place until you edit one of the existing nodes via the UI and at that time the outputs will automatically be switched.
