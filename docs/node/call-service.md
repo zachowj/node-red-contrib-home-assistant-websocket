@@ -55,8 +55,6 @@ Custom ids can be inserted into the list by adding a `#` at the end of the id
 
 A list of entity ids that will be used as targets for the service call
 
-Custom ids can be inserted into the list by adding a `#` at the end of the id
-
 ### Data
 
 - Type: `JSONata | JSON`

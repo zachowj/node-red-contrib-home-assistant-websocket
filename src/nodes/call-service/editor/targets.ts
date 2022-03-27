@@ -4,6 +4,7 @@ import {
     createCustomIdListByProperty,
     createSelect2Options,
     Select2Data,
+    Tags,
 } from '../../../editor/components/select2';
 import * as haServer from '../../../editor/haserver';
 import { disableSelect2OpenOnRemove } from '../../../editor/utils';
@@ -70,8 +71,7 @@ const populateEntities = ({
             createSelect2Options({
                 data: data,
                 multiple: true,
-                tags: true,
-                customTags: ['all'],
+                tags: Tags.any,
             })
         )
         .maximizeSelect2Height();
@@ -106,7 +106,11 @@ const populateAreas = ({
         );
     $areaId
         .select2(
-            createSelect2Options({ data: data, multiple: true, tags: true })
+            createSelect2Options({
+                data: data,
+                multiple: true,
+                tags: Tags.custom,
+            })
         )
         .maximizeSelect2Height();
     disableSelect2OpenOnRemove($areaId);
@@ -141,7 +145,11 @@ const populateDevices = ({
         );
     $deviceId
         .select2(
-            createSelect2Options({ data: data, multiple: true, tags: true })
+            createSelect2Options({
+                data: data,
+                multiple: true,
+                tags: Tags.custom,
+            })
         )
         .maximizeSelect2Height();
     disableSelect2OpenOnRemove($deviceId);

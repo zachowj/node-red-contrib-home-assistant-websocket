@@ -4,6 +4,12 @@ import { containsMustache } from '../../helpers/mustache';
 import { isNodeRedEnvVar } from '../../helpers/utils';
 import { isjQuery } from '../utils';
 
+export enum Tags {
+    any,
+    custom,
+    none,
+}
+
 export interface Select2Data {
     id: string;
     text: string;
@@ -44,13 +50,15 @@ export const select2DefaultOptions: Options = {
 
 export const createSelect2Options = ({
     multiple = false,
-    tags = false,
+    tags = Tags.none,
     customTags = [],
+    displayIds = false,
     data,
 }: {
     multiple?: boolean;
-    tags?: boolean;
+    tags?: Tags;
     customTags?: string[];
+    displayIds?: boolean;
     data?: Select2Data[];
 }) => {
     const opts = {
@@ -60,8 +68,9 @@ export const createSelect2Options = ({
         dropdownAutoWidth: true,
     };
 
-    if (tags) {
-        opts.tags = true;
+    opts.tags = tags === Tags.any || tags === Tags.custom;
+
+    if (tags === Tags.custom) {
         // Only allow custom entities if they contain mustache tags
         opts.createTag = (params: SearchOptions) => {
             // Allow custom ids to be created when user uses # as a suffix
@@ -83,6 +92,12 @@ export const createSelect2Options = ({
                     text: params.term,
                 };
             }
+        };
+    }
+
+    if (displayIds) {
+        opts.templateSelection = (selection) => {
+            return selection.id.toString();
         };
     }
 

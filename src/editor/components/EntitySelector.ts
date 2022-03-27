@@ -9,6 +9,7 @@ import {
     createSelect2Options,
     isSelect2Initialized,
     Select2Data,
+    Tags,
 } from './select2';
 
 export default class EntitySelector {
@@ -145,7 +146,7 @@ export default class EntitySelector {
             .select2(
                 createSelect2Options({
                     data: this.#select2Data.filter((e) => e.id?.length > 0),
-                    tags: true,
+                    tags: Tags.custom,
                     multiple: multiple,
                 })
             )

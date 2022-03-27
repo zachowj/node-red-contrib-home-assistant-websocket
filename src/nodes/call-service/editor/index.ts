@@ -5,6 +5,7 @@ import {
     createCustomIdListByProperty,
     createSelect2Options,
     Select2Data,
+    Tags,
 } from '../../../editor/components/select2';
 import ha from '../../../editor/ha';
 import * as haServer from '../../../editor/haserver';
@@ -116,7 +117,7 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
                 .empty()
                 .select2(
                     createSelect2Options({
-                        tags: true,
+                        tags: Tags.custom,
                         data: domains,
                     })
                 )
@@ -163,7 +164,10 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
             $serviceField
                 .empty()
                 .select2(
-                    createSelect2Options({ data: domainServices, tags: true })
+                    createSelect2Options({
+                        data: domainServices,
+                        tags: Tags.custom,
+                    })
                 )
                 .maximizeSelect2Height();
             if (!service) {
