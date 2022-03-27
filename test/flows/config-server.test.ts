@@ -6,7 +6,7 @@ import sinonChai from 'sinon-chai';
 import { Credentials } from '../../src/homeAssistant';
 import nodes from '../../src/index';
 import { ServerNode } from '../../src/types/nodes';
-import HaServer from '../test-helpers/HaServer';
+import HaServer from './HaServer';
 
 chai.use(sinonChai);
 helper.init(require.resolve('node-red'));
