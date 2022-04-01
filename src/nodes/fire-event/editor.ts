@@ -34,7 +34,7 @@ const FireEventEditor: EditorNodeDef<FireEventEditorNodeProperties> = {
         dataType: { value: 'jsonata' },
     },
     oneditprepare: function () {
-        ha.setup();
+        ha.setup(this);
         haServer.init(this, '#node-input-server');
 
         $('#node-input-data').typedInput({

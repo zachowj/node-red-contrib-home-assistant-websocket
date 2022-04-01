@@ -62,7 +62,7 @@ const GetEntitiesEditor: EditorNodeDef<GetEntitiesEditorNodeProperties> = {
         },
     },
     oneditprepare: function () {
-        ha.setup();
+        ha.setup(this);
         const operators = [
             { value: 'is', text: 'is' },
             { value: 'is_not', text: 'is not' },

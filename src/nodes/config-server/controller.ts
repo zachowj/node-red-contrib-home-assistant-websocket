@@ -34,6 +34,9 @@ const nodeDefaults = {
     cacheJson: {},
     heartbeat: {},
     heartbeatInterval: {},
+    areaSelector: {},
+    deviceSelector: {},
+    entitySelector: {},
 };
 
 type HomeAssistantStatesContext = { [entity_id: string]: HomeAssistantEntity };

@@ -1,7 +1,7 @@
 import { EditorNodeInstance } from 'node-red';
 
 import { HassNodeProperties } from './types';
-import { isCurrentVersion } from './version';
+import { isCurrentVersion, versionCheckOnEditPrepare } from './version';
 
 const nodeColors = {
     action: '#46B1EF',
@@ -13,8 +13,9 @@ const nodeColors = {
     haBlue: '#41BDF5',
 };
 
-const setup = () => {
+const setup = (node: EditorNodeInstance<HassNodeProperties>) => {
     $('#dialog-form, #node-config-dialog-edit-form').addClass('home-assistant');
+    versionCheckOnEditPrepare(node);
 };
 
 const alphaWarning = (id: number) => {

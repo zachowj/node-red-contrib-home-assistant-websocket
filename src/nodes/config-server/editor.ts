@@ -5,7 +5,9 @@ import { Credentials } from '../../homeAssistant/index';
 
 declare const RED: EditorRED;
 
-interface ConfigServerEditorNodeProperties extends EditorNodeProperties {
+export type SelectorType = 'id' | 'friendlyName';
+
+export interface ConfigServerEditorNodeProperties extends EditorNodeProperties {
     version: number;
     addon: boolean;
     rejectUnauthorizedCerts: boolean;
@@ -14,6 +16,9 @@ interface ConfigServerEditorNodeProperties extends EditorNodeProperties {
     cacheJson: boolean;
     heartbeat: boolean;
     heartbeatInterval: number;
+    areaSelector: SelectorType;
+    deviceSelector: SelectorType;
+    entitySelector: SelectorType;
 }
 
 const ConfigServerEditor: EditorNodeDef<
@@ -39,6 +44,9 @@ const ConfigServerEditor: EditorNodeDef<
                 );
             },
         },
+        areaSelector: { value: 'friendlyName' },
+        deviceSelector: { value: 'friendlyName' },
+        entitySelector: { value: 'friendlyName' },
     },
     credentials: {
         host: { type: 'text' },
@@ -49,7 +57,7 @@ const ConfigServerEditor: EditorNodeDef<
         return this.name || 'Home Assistant';
     },
     oneditprepare: function () {
-        ha.setup();
+        ha.setup(this);
         const $addon = $('#node-config-input-addon');
         const $host = $('#node-config-input-host');
 

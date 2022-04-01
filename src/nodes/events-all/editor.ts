@@ -65,7 +65,7 @@ const EventsAllEditor: EditorNodeDef<EventsAllEditorNodeProperties> = {
     },
     labelStyle: ha.labelStyle,
     oneditprepare: function () {
-        ha.setup();
+        ha.setup(this);
         haServer.init(this, '#node-input-server');
         exposeNode.init(this);
 

@@ -62,7 +62,7 @@ const PollStateEditor: EditorNodeDef<PollStateEditorNodeProperties> = {
         outputs: { value: 1 },
     },
     oneditprepare: function () {
-        ha.setup();
+        ha.setup(this);
         haServer.init(this, '#node-input-server');
         exposeNode.init(this);
         hassAutocomplete({ root: '#node-input-entity_id' });

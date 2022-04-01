@@ -42,4 +42,17 @@ export default [
             return newSchema;
         },
     },
+    {
+        version: 3,
+        up: (schema: any) => {
+            const newSchema = {
+                ...schema,
+                version: 3,
+                areaSelector: 'friendlyName',
+                deviceSelector: 'friendlyName',
+                entitySelector: 'friendlyName',
+            };
+            return newSchema;
+        },
+    },
 ];

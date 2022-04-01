@@ -4,8 +4,26 @@
       "empty_base_url": "Home Assistant base URL needs to be set",
       "invalid_base_url": "Invalid base URL for Home Assistant: [__url__]",
       "invalid_protocol": "Home Assistnat base URL needs to begin with http:// or https://",
-      "server_deploy": "Deploy a valid server config for autocomplete to show results.",
-      "no_server_selected": "No server selected and deployed."
+      "no_server_selected": "No server selected and deployed.",
+      "server_deploy": "Deploy a valid server config for autocomplete to show results."
+    },
+    "label": {
+      "accept_all_certs": "Accept Unauthorized SSL Certificates",
+      "access_token": "Access token",
+      "base_url": "Base URL",
+      "cache_autocomplete_results": "Cache autocomplete results",
+      "delay_connection_attempts": "Delay connection attempts",
+      "enable_heartbeat": "Enable heartbeat",
+      "heartbeat_interval": "Heartbeat interval",
+      "seconds": "Seconds",
+      "state_boolean_list": "State boolean",
+      "ui_settings": "UI Settings",
+      "using_add_on": "Using the Home Assistant Add-on",
+      "area_selector": "Area Selector",
+      "device_selector": "Device Selector",
+      "entity_selector": "Entity Selector",
+      "id": "ID",
+      "friendly_name": "friendly name"
     },
     "status": {
       "connected": "connected",
@@ -14,8 +32,8 @@
       "disconnected": "disconnected",
       "error": "error",
       "registered": "registered",
-      "triggered": "triggered",
-      "running": "running"
+      "running": "running",
+      "triggered": "triggered"
     }
   }
 }

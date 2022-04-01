@@ -3,6 +3,7 @@ import { Node, NodeDef } from 'node-red';
 import { HassExposedConfig } from '../editor/types';
 import { Credentials } from '../homeAssistant';
 import ConfigServer from '../nodes/config-server/controller';
+import { SelectorType } from '../nodes/config-server/editor';
 import EntityConfigController from '../nodes/entity-config/controller';
 
 export interface BaseNodeDef extends NodeDef {
@@ -26,6 +27,9 @@ export interface ServerNodeConfig extends NodeDef {
     cacheJson: boolean;
     heartbeat: boolean;
     heartbeatInterval: number;
+    areaSelector: SelectorType;
+    deviceSelector: SelectorType;
+    entitySelector: SelectorType;
 }
 
 type OutputProperty = {

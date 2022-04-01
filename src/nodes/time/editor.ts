@@ -105,7 +105,7 @@ const TimeEditor: EditorNodeDef<TimeEditorNodeProperties> = {
         payloadType: { value: undefined },
     },
     oneditprepare: function () {
-        ha.setup();
+        ha.setup(this);
         const $server = $('#node-input-server');
         const $entityId = $('#node-input-entityId');
 

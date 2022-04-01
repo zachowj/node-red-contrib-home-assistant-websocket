@@ -57,7 +57,7 @@ const WaitUntilEditor: EditorNodeDef<WaitUntilEditorNodeProperties> = {
         blockInputOverrides: { value: true },
     },
     oneditprepare: function () {
-        ha.setup();
+        ha.setup(this);
         haServer.init(this, '#node-input-server', () => {
             entitySelector.serverChanged();
         });

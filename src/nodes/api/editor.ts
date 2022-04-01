@@ -62,7 +62,7 @@ const ApiEditor: EditorNodeDef<ApiEditorNodeProperties> = {
     oneditprepare: function (
         this: EditorNodeInstance<ApiEditorNodeProperties>
     ) {
-        ha.setup();
+        ha.setup(this);
         haServer.init(this, '#node-input-server');
 
         $('#node-input-data').typedInput({

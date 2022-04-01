@@ -72,6 +72,7 @@ const populateEntities = ({
                 data: data,
                 multiple: true,
                 tags: Tags.any,
+                displayIds: haServer.getUiSettings().entitySelector === 'id',
             })
         )
         .maximizeSelect2Height();
@@ -110,6 +111,7 @@ const populateAreas = ({
                 data: data,
                 multiple: true,
                 tags: Tags.custom,
+                displayIds: haServer.getUiSettings().areaSelector === 'id',
             })
         )
         .maximizeSelect2Height();
@@ -149,6 +151,7 @@ const populateDevices = ({
                 data: data,
                 multiple: true,
                 tags: Tags.custom,
+                displayIds: haServer.getUiSettings().deviceSelector === 'id',
             })
         )
         .maximizeSelect2Height();

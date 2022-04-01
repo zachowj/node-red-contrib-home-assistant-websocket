@@ -4,6 +4,8 @@ import { migrate } from '../helpers/migrate';
 import { i18n } from './i18n';
 import { HassNodeProperties } from './types';
 
+type NodeCallback = (n: object) => boolean;
+
 declare const RED: EditorRED;
 let $upgradeHaNode: JQuery<HTMLElement>;
 
@@ -18,21 +20,43 @@ export function versionCheck() {
     }
 }
 
+// This is used when nodes are opened in the editor from sources other than the workspace
+// e.g. search results, configuration list
+export function versionCheckOnEditPrepare(
+    node: EditorNodeInstance<HassNodeProperties>
+) {
+    if (!isHomeAssistantNode(node) || isCurrentVersion(node)) return;
+
+    // the close event will not fire if the editor was already opened
+    if (!isHomeAssistantConfigNode(node)) {
+        RED.events.on('editor:close', function reopen() {
+            RED.events.off('editor:close', reopen);
+            RED.editor.edit(node);
+        });
+    }
+    migrateNode(node);
+    RED.nodes.dirty(true);
+    RED.tray.close();
+    RED.notify(i18n('home-assistant.ui.migrations.node_schema_updated'));
+}
+
 function migrateNode(node: EditorNodeInstance<HassNodeProperties>) {
     const data = RED.nodes.convertNode(node, false);
 
-    const migratedData = migrate(data);
+    const migratedData: HassNodeProperties = migrate(data);
 
-    for (const key in migratedData) {
+    let key: keyof HassNodeProperties;
+    for (key in migratedData) {
         if (migratedData[key] === undefined) {
             // remove deprecated properties
             delete node[key];
         } else {
+            // @ts-expect-error - DefinitelyTyped has properties marked as never
             node[key] = migratedData[key];
         }
     }
 
-    // @ts-ignore - DefinitelyTyped incorrectly defines the property
+    // @ts-expect-error - DefinitelyTyped incorrectly defines the property
     node.changed = true;
     RED.editor.updateNodeProperties(node);
     const $upgradeHaNode = $('#upgrade-ha-node');
@@ -42,18 +66,13 @@ function migrateNode(node: EditorNodeInstance<HassNodeProperties>) {
 }
 
 function migrateAllNodes() {
-    const m = (node) => {
-        if (
-            isHomeAssistantNode(node as EditorNodeInstance) &&
-            !isCurrentVersion(node as EditorNodeInstance<HassNodeProperties>)
-        ) {
+    const m = (node: EditorNodeInstance<HassNodeProperties>) => {
+        if (isHomeAssistantNode(node) && !isCurrentVersion(node)) {
             migrateNode(node);
         }
-
-        return true;
     };
-    RED.nodes.eachNode(m);
-    RED.nodes.eachConfig(m);
+    RED.nodes.eachNode(m as NodeCallback);
+    RED.nodes.eachConfig(m as NodeCallback);
     RED.nodes.dirty(true);
     RED.notify(i18n('home-assistant.ui.migrations.all_nodes_updated'));
     RED.view.redraw();
@@ -105,26 +124,30 @@ export function isCurrentVersion(node: EditorNodeInstance<HassNodeProperties>) {
     return node.version !== undefined && node.version >= version;
 }
 
-export function isHomeAssistantNode(node: EditorNodeInstance) {
+export function isHomeAssistantNode(
+    node: EditorNodeInstance<HassNodeProperties>
+) {
     const nodeSet = RED.nodes.registry.getNodeSetForType(
         node.type as unknown as string
     ) as { module?: string } | undefined;
     return nodeSet?.module === 'node-red-contrib-home-assistant-websocket';
 }
 
+function isHomeAssistantConfigNode(
+    node: EditorNodeInstance<HassNodeProperties>
+) {
+    return ['server', 'ha-entity-config'].includes(node.type ?? '');
+}
+
 export function getOldNodeCount() {
     let count = 0;
-    const addToCount = (n) => {
-        if (
-            isHomeAssistantNode(n as EditorNodeInstance) &&
-            !isCurrentVersion(n as EditorNodeInstance<HassNodeProperties>)
-        ) {
+    const addToCount = (n: EditorNodeInstance<HassNodeProperties>) => {
+        if (isHomeAssistantNode(n) && !isCurrentVersion(n)) {
             count++;
         }
-        return true;
     };
-    RED.nodes.eachNode(addToCount);
-    RED.nodes.eachConfig(addToCount);
+    RED.nodes.eachNode(addToCount as NodeCallback);
+    RED.nodes.eachConfig(addToCount as NodeCallback);
 
     return count;
 }
@@ -142,7 +165,7 @@ export function onNodesAdd(node: EditorNodeInstance<HassNodeProperties>) {
     }
 }
 
-export function onNodesRemove(node: EditorNodeInstance) {
+export function onNodesRemove(node: EditorNodeInstance<HassNodeProperties>) {
     if (
         $upgradeHaNode.is(':visible') &&
         isHomeAssistantNode(node) &&

@@ -2,7 +2,7 @@ import { HassEntity } from 'home-assistant-js-websocket';
 
 import { byPropertiesOf } from '../../helpers/sort';
 import { openEntityFilter } from '../editors/entity-filter';
-import { getEntities } from '../haserver';
+import { getEntities, getUiSettings } from '../haserver';
 import { disableSelect2OpenOnRemove } from '../utils';
 import {
     createCustomIdListByProperty,
@@ -148,6 +148,7 @@ export default class EntitySelector {
                     data: this.#select2Data.filter((e) => e.id?.length > 0),
                     tags: Tags.custom,
                     multiple: multiple,
+                    displayIds: getUiSettings().entitySelector === 'id',
                 })
             )
             .maximizeSelect2Height();

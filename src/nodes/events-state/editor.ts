@@ -102,7 +102,7 @@ const EventsStateEditor: EditorNodeDef<EventsStateEditorNodeProperties> = {
         },
     },
     oneditprepare: function () {
-        ha.setup();
+        ha.setup(this);
         const $entityidfilter = $('#node-input-entityidfilter');
 
         haServer.init(this, '#node-input-server', () => {

@@ -1,6 +1,7 @@
 import { HassEntity, HassServices } from 'home-assistant-js-websocket';
 import { EditorNodeInstance, EditorRED } from 'node-red';
 
+import { ConfigServerEditorNodeProperties } from '../nodes/config-server/editor';
 import { HassArea, HassAreas, HassDevices } from '../types/home-assistant';
 import * as haData from './data';
 import { HassNodeProperties, HassTargetDomains } from './types';
@@ -132,4 +133,16 @@ export const getServices = (): HassServices => {
 
 export const getTargetDomains = (): HassTargetDomains => {
     return haData.getTargetDomains(serverId);
+};
+
+export const getUiSettings = () => {
+    const node = RED.nodes.node(
+        serverId
+    ) as EditorNodeInstance<ConfigServerEditorNodeProperties>;
+
+    return {
+        areaSelector: node?.areaSelector,
+        deviceSelector: node?.deviceSelector,
+        entitySelector: node?.entitySelector,
+    };
 };

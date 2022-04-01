@@ -23,6 +23,9 @@ const sn1 = {
     cacheJson: true,
     heartbeat: false,
     heartbeatInterval: 30,
+    areaSelector: 'friendlyName',
+    deviceSelector: 'friendlyName',
+    entitySelector: 'friendlyName',
 };
 
 const host = 'localhost';
@@ -63,22 +66,26 @@ describe('config-server node', function () {
             helper.load(nodes, flow, { sn1: creds1 }, async function () {
                 const s1 = helper.getNode('sn1') as ServerNode<Credentials>;
                 await haServer.waitForConnection;
-                expect(s1.id).to.equal('sn1');
-                expect(s1.name).to.equal('Home Assistant');
-                expect(s1.config.id).to.equal('sn1');
-                expect(s1.config.name).to.equal('Home Assistant');
-                expect(s1.config.version).to.equal(2);
-                expect(s1.config.addon).to.equal(false);
-                expect(s1.config.rejectUnauthorizedCerts).to.equal(true);
-                expect(s1.config.ha_boolean).to.equal(
-                    'y|yes|true|on|home|open'
-                );
-                expect(s1.config.connectionDelay).to.equal(false);
-                expect(s1.config.cacheJson).to.equal(true);
-                expect(s1.config.heartbeat).to.equal(false);
-                expect(s1.config.heartbeatInterval).to.equal(30);
-
-                done();
+                try {
+                    expect(s1.config.id).to.equal('sn1');
+                    expect(s1.config.name).to.equal('Home Assistant');
+                    expect(s1.config.version).to.equal(3);
+                    expect(s1.config.addon).to.equal(false);
+                    expect(s1.config.rejectUnauthorizedCerts).to.equal(true);
+                    expect(s1.config.ha_boolean).to.equal(
+                        'y|yes|true|on|home|open'
+                    );
+                    expect(s1.config.connectionDelay).to.equal(false);
+                    expect(s1.config.cacheJson).to.equal(true);
+                    expect(s1.config.heartbeat).to.equal(false);
+                    expect(s1.config.heartbeatInterval).to.equal(30);
+                    expect(s1.config.areaSelector).to.equal('friendlyName');
+                    expect(s1.config.deviceSelector).to.equal('friendlyName');
+                    expect(s1.config.entitySelector).to.equal('friendlyName');
+                    done();
+                } catch (err) {
+                    done(err);
+                }
             });
         });
     });
