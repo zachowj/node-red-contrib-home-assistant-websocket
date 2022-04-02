@@ -42,7 +42,7 @@ const VERSION_4 = {
     entitySelector: 'friendlyName',
     statusSeparator: 'at: ',
     statusYear: 'hidden',
-    statusMonth: 'numeric',
+    statusMonth: 'short',
     statusDay: 'numeric',
     statusHourCycle: 'h23',
     statusHour: 'numeric',

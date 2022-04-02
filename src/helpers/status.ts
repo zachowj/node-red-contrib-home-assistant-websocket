@@ -110,7 +110,9 @@ export class Status {
             hour: config.statusHour ?? 'numeric',
             minute: config.statusMinute ?? 'numeric',
             second: config.statusSecond,
-            fractionalSecondDigits: config.statusMillisecond,
+            fractionalSecondDigits: config.statusMillisecond
+                ? Number(config.statusMillisecond)
+                : 0,
         };
 
         let key: keyof typeof options;

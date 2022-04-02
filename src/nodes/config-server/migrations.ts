@@ -63,7 +63,7 @@ export default [
                 version: 4,
                 statusSeparator: 'at: ',
                 statusYear: 'hidden',
-                statusMonth: 'numeric',
+                statusMonth: 'short',
                 statusDay: 'numeric',
                 statusHourCycle: 'h23',
                 statusHour: 'numeric',
