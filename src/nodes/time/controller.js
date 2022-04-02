@@ -8,6 +8,7 @@ const {
     parseTime,
     getEntitiesFromJsonata,
 } = require('../../helpers/utils');
+const { formatDate } = require('../../helpers/date');
 const { STATUS_COLOR_GREEN } = require('../../helpers/status');
 const { TYPEDINPUT_JSONATA } = require('../../const');
 
@@ -169,14 +170,17 @@ class Time extends EventsHaNode {
     }
 
     formatDate(d) {
-        const year = d.getFullYear();
-        const month = (d.getMonth() + 1).toString().padStart(2, '0');
-        const day = d.getDate().toString().padStart(2, '0');
-        const hours = d.getHours().toString().padStart(2, '0');
-        const minutes = d.getMinutes().toString().padStart(2, '0');
-        const seconds = d.getSeconds().toString().padStart(2, '0');
-
-        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        return formatDate({
+            date: d,
+            options: {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+            },
+        });
     }
 
     onClose(removed) {
