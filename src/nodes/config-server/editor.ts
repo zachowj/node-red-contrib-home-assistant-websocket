@@ -59,7 +59,7 @@ const ConfigServerEditor: EditorNodeDef<
         entitySelector: { value: 'friendlyName' },
         statusSeparator: { value: ': ' },
         statusYear: { value: 'hidden' },
-        statusMonth: { value: 'numeric' },
+        statusMonth: { value: 'short' },
         statusDay: { value: 'numeric' },
         statusHourCycle: { value: 'default' },
         statusHour: { value: 'numeric' },
