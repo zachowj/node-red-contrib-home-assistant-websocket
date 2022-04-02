@@ -102,31 +102,36 @@ export class Status {
     statusOptions(): DateTimeFormatOptions {
         const config = this.serverConfig;
 
-        const options = {
-            year: config.statusYear,
-            month: config.statusMonth ?? 'short',
-            day: config.statusDay ?? 'numeric',
-            hourCycle: config.statusHourCycle ?? 'h23',
-            hour: config.statusHour ?? 'numeric',
-            minute: config.statusMinute ?? 'numeric',
-            second: config.statusSecond,
-            fractionalSecondDigits: config.statusMillisecond
-                ? Number(config.statusMillisecond)
-                : 0,
+        const options: DateTimeFormatOptions = {
+            year:
+                config.statusYear === 'hidden' ? undefined : config.statusYear,
+            month:
+                config.statusMonth === 'hidden'
+                    ? undefined
+                    : config.statusMonth ?? 'short',
+            day:
+                config.statusDay === 'hidden'
+                    ? undefined
+                    : config.statusDay ?? 'numeric',
+            hourCycle:
+                config.statusHourCycle === 'default'
+                    ? undefined
+                    : config.statusHourCycle ?? 'h23',
+            hour: 'numeric',
+            minute: 'numeric',
         };
 
-        let key: keyof typeof options;
-        for (key in options) {
-            if (
-                !options[key] ||
-                options[key] === 'hidden' ||
-                options[key] === 'default'
-            ) {
-                delete options[key];
-            }
+        switch (config.statusTimeFormat) {
+            case 'h:m:s':
+                options.second = 'numeric';
+                break;
+            case 'h:m:s.ms':
+                options.second = 'numeric';
+                options.fractionalSecondDigits = 3;
+                break;
         }
 
-        return options as DateTimeFormatOptions;
+        return options;
     }
 }
 

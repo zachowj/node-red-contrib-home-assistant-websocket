@@ -150,9 +150,7 @@ export const getUiSettings = () => {
             month: node?.statusMonth,
             day: node?.statusDay,
             hourCycle: node?.statusHourCycle,
-            hour: node?.statusHour,
-            minute: node?.statusMinute,
-            second: node?.statusSecond,
+            timeFormat: node?.statusTimeFormat,
         },
     };
 };

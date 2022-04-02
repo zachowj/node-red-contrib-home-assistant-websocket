@@ -22,7 +22,6 @@ export interface ServerNodeConfig extends NodeDef {
     debugenabled?: boolean;
     addon: boolean;
     rejectUnauthorizedCerts: boolean;
-    // eslint-disable-next-line camelcase
     ha_boolean: string;
     connectionDelay: boolean;
     cacheJson: boolean;
@@ -36,10 +35,7 @@ export interface ServerNodeConfig extends NodeDef {
     statusMonth: DateTimeFormatOptions['month'] | 'hidden';
     statusDay: DateTimeFormatOptions['day'] | 'hidden';
     statusHourCycle: DateTimeFormatOptions['hourCycle'] | 'default';
-    statusHour: DateTimeFormatOptions['hour'] | 'hidden';
-    statusMinute: DateTimeFormatOptions['minute'] | 'hidden';
-    statusSecond: DateTimeFormatOptions['second'] | 'hidden';
-    statusMillisecond: DateTimeFormatOptions['fractionalSecondDigits'];
+    statusTimeFormat: 'h:m' | 'h:m:s' | 'h:m:s.ms';
 }
 
 type OutputProperty = {
