@@ -1,4 +1,4 @@
-import { DateTimeFormatOptions } from 'types/DateTimeFormatOptions';
+import { DateTimeFormatOptions } from '../types/DateTimeFormatOptions';
 
 const fallbackLocale = 'en-US';
 const defaultLocale = Intl?.DateTimeFormat()?.resolvedOptions()?.locale;

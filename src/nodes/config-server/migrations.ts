@@ -66,10 +66,7 @@ export default [
                 statusMonth: 'short',
                 statusDay: 'numeric',
                 statusHourCycle: 'h23',
-                statusHour: 'numeric',
-                statusMinute: 'numeric',
-                statusSecond: 'hidden',
-                statusMillisecond: 0,
+                statusTimeFormat: 'h:m',
             };
             return newSchema;
         },

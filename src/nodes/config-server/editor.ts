@@ -1,6 +1,7 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
 import ha from '../../editor/ha';
+import { formatDate } from '../../helpers/date';
 import { Credentials } from '../../homeAssistant/index';
 import { DateTimeFormatOptions } from '../../types/DateTimeFormatOptions';
 
@@ -25,10 +26,7 @@ export interface ConfigServerEditorNodeProperties extends EditorNodeProperties {
     statusMonth: DateTimeFormatOptions['month'] | 'hidden';
     statusDay: DateTimeFormatOptions['day'] | 'hidden';
     statusHourCycle: DateTimeFormatOptions['hourCycle'] | 'default';
-    statusHour: DateTimeFormatOptions['hour'] | 'hidden';
-    statusMinute: DateTimeFormatOptions['minute'] | 'hidden';
-    statusSecond: DateTimeFormatOptions['second'] | 'hidden';
-    statusMillisecond: DateTimeFormatOptions['fractionalSecondDigits'];
+    statusTimeFormat: 'h:m' | 'h:m:s' | 'h:m:s.ms';
 }
 
 const ConfigServerEditor: EditorNodeDef<
@@ -62,10 +60,7 @@ const ConfigServerEditor: EditorNodeDef<
         statusMonth: { value: 'short' },
         statusDay: { value: 'numeric' },
         statusHourCycle: { value: 'default' },
-        statusHour: { value: 'numeric' },
-        statusMinute: { value: 'numeric' },
-        statusSecond: { value: 'hidden' },
-        statusMillisecond: { value: 0 },
+        statusTimeFormat: { value: 'h:m' },
     },
     credentials: {
         host: { type: 'text' },
@@ -140,6 +135,41 @@ const ConfigServerEditor: EditorNodeDef<
                 $('#heartbeatIntervalRow').toggle(this.checked);
             }
         );
+
+        $('#node-config-input-statusHourCycle')
+            .on('change', function () {
+                const options: DateTimeFormatOptions = {
+                    hour: 'numeric',
+                    minute: 'numeric',
+                };
+                const value = $(this).val();
+                if (value && value !== 'default') {
+                    options.hourCycle =
+                        value as DateTimeFormatOptions['hourCycle'];
+                }
+                $('#node-config-input-statusTimeFormat')
+                    .children()
+                    .each(function () {
+                        const $this = $(this);
+                        switch ($this.val()) {
+                            case 'h:m:s':
+                                options.second = 'numeric';
+                                break;
+                            case 'h:m:s.ms':
+                                options.second = 'numeric';
+                                options.fractionalSecondDigits = 3;
+                                break;
+                            default:
+                                break;
+                        }
+                        const datetime = formatDate({
+                            date: new Date(2022, 1, 1, 3, 4, 5, 6),
+                            options: options,
+                        });
+                        $this.text(datetime);
+                    });
+            })
+            .trigger('change');
     },
     oneditsave: function () {
         const addon = $('#node-config-input-addon').is(':checked');

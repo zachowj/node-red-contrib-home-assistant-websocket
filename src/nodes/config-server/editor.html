@@ -239,74 +239,28 @@
 <div class="form-row">
     <label data-i18n="config-server.label.status.hour_cycle"></label>
     <select id="node-config-input-statusHourCycle">
-        <option value="default">default</option>
-        <option value="h11">h11</option>
-        <option value="h12">h12</option>
-        <option value="h23">h23</option>
-        <option value="h24">h24</option>
-    </select>
-</div>
-
-<div class="form-row">
-    <label data-i18n="config-server.label.status.hour"></label>
-    <select id="node-config-input-statusHour">
         <option
-            value="hidden"
-            data-i18n="config-server.label.status.hidden"
+            value="default"
+            data-i18n="config-server.label.status.default"
         ></option>
         <option
-            value="numeric"
-            data-i18n="config-server.label.status.numeric"
+            value="h12"
+            data-i18n="config-server.label.status.12_hour_format"
         ></option>
         <option
-            value="2-digit"
-            data-i18n="config-server.label.status.two_digit"
+            value="h23"
+            data-i18n="config-server.label.status.24_hour_format"
         ></option>
     </select>
 </div>
 
 <div class="form-row">
-    <label data-i18n="config-server.label.status.minute"></label>
-    <select id="node-config-input-statusMinute">
-        <option
-            value="hidden"
-            data-i18n="config-server.label.status.hidden"
-        ></option>
-        <option
-            value="numeric"
-            data-i18n="config-server.label.status.numeric"
-        ></option>
-        <option
-            value="2-digit"
-            data-i18n="config-server.label.status.two_digit"
-        ></option>
-    </select>
-</div>
-
-<div class="form-row">
-    <label data-i18n="config-server.label.status.second"></label>
-    <select id="node-config-input-statusSecond">
-        <option
-            value="hidden"
-            data-i18n="config-server.label.status.hidden"
-        ></option>
-        <option
-            value="numeric"
-            data-i18n="config-server.label.status.numeric"
-        ></option>
-        <option
-            value="2-digit"
-            data-i18n="config-server.label.status.two_digit"
-        ></option>
-    </select>
-</div>
-
-<div class="form-row">
-    <label data-i18n="config-server.label.status.millisecond"></label>
-    <select id="node-config-input-statusMillisecond">
-        <option value="0">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
+    <label data-i18n="config-server.label.status.time_format"> </label>
+    <select id="node-config-input-statusTimeFormat">
+        <option value="h:m">hour and minutes</option>
+        <option value="h:m:s">hour, minutes, and seconds</option>
+        <option value="h:m:s.ms">
+            hour, minutes, seconds and milliseconds
+        </option>
     </select>
 </div>
