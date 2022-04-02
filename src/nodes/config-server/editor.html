@@ -120,6 +120,10 @@
 </div>
 
 <div class="form-row">
+    <span data-i18n="config-server.label.id_selector"></span>
+</div>
+
+<div class="form-row">
     <label
         for="node-config-input-areaSelector"
         data-i18n="config-server.label.area_selector"
@@ -158,5 +162,151 @@
             value="friendlyName"
             data-i18n="config-server.label.friendly_name"
         ></option>
+    </select>
+</div>
+
+<div class="form-row">
+    <span data-i18n="config-server.label.status.title"></span>
+</div>
+
+<div class="form-row">
+    <label data-i18n="config-server.label.status.separator"></label>
+    <input id="node-config-input-statusSeparator" type="text" />
+</div>
+
+<div class="form-row">
+    <label data-i18n="config-server.label.status.year"></label>
+    <select id="node-config-input-statusYear">
+        <option
+            value="hidden"
+            data-i18n="config-server.label.status.hidden"
+        ></option>
+        <option
+            value="numeric"
+            data-i18n="config-server.label.status.numeric"
+        ></option>
+        <option
+            value="2-digit"
+            data-i18n="config-server.label.status.two_digit"
+        ></option>
+    </select>
+</div>
+
+<div class="form-row">
+    <label data-i18n="config-server.label.status.month"></label>
+    <select id="node-config-input-statusMonth">
+        <option
+            value="hidden"
+            data-i18n="config-server.label.status.hidden"
+        ></option>
+        <option
+            value="numeric"
+            data-i18n="config-server.label.status.numeric"
+        ></option>
+        <option
+            value="2-digit"
+            data-i18n="config-server.label.status.two_digit"
+        ></option>
+        <option
+            value="long"
+            data-i18n="config-server.label.status.long"
+        ></option>
+        <option
+            value="short"
+            data-i18n="config-server.label.status.short"
+        ></option>
+    </select>
+</div>
+
+<div class="form-row">
+    <label data-i18n="config-server.label.status.day"></label>
+    <select id="node-config-input-statusDay">
+        <option
+            value="hidden"
+            data-i18n="config-server.label.status.hidden"
+        ></option>
+        <option
+            value="numeric"
+            data-i18n="config-server.label.status.numeric"
+        ></option>
+        <option
+            value="2-digit"
+            data-i18n="config-server.label.status.two_digit"
+        ></option>
+    </select>
+</div>
+
+<div class="form-row">
+    <label data-i18n="config-server.label.status.hour_cycle"></label>
+    <select id="node-config-input-statusHourCycle">
+        <option value="default">default</option>
+        <option value="h11">h11</option>
+        <option value="h12">h12</option>
+        <option value="h23">h23</option>
+        <option value="h24">h24</option>
+    </select>
+</div>
+
+<div class="form-row">
+    <label data-i18n="config-server.label.status.hour"></label>
+    <select id="node-config-input-statusHour">
+        <option
+            value="hidden"
+            data-i18n="config-server.label.status.hidden"
+        ></option>
+        <option
+            value="numeric"
+            data-i18n="config-server.label.status.numeric"
+        ></option>
+        <option
+            value="2-digit"
+            data-i18n="config-server.label.status.two_digit"
+        ></option>
+    </select>
+</div>
+
+<div class="form-row">
+    <label data-i18n="config-server.label.status.minute"></label>
+    <select id="node-config-input-statusMinute">
+        <option
+            value="hidden"
+            data-i18n="config-server.label.status.hidden"
+        ></option>
+        <option
+            value="numeric"
+            data-i18n="config-server.label.status.numeric"
+        ></option>
+        <option
+            value="2-digit"
+            data-i18n="config-server.label.status.two_digit"
+        ></option>
+    </select>
+</div>
+
+<div class="form-row">
+    <label data-i18n="config-server.label.status.second"></label>
+    <select id="node-config-input-statusSecond">
+        <option
+            value="hidden"
+            data-i18n="config-server.label.status.hidden"
+        ></option>
+        <option
+            value="numeric"
+            data-i18n="config-server.label.status.numeric"
+        ></option>
+        <option
+            value="2-digit"
+            data-i18n="config-server.label.status.two_digit"
+        ></option>
+    </select>
+</div>
+
+<div class="form-row">
+    <label data-i18n="config-server.label.status.millisecond"></label>
+    <select id="node-config-input-statusMillisecond">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
     </select>
 </div>

@@ -96,7 +96,7 @@ describe('Status', function () {
             sinon.useFakeTimers(fakeNow.getTime());
             const status = new Status(fakeNode);
             const result = status.appendDateString('hello');
-            expect(result).to.equal('hello at: Jan 12, 12:12');
+            expect(result).to.equal('hello Jan 12, 12:12');
         });
     });
 });

@@ -50,7 +50,7 @@ describe('SwitchEntityStatus', function () {
             const expectedStatus = {
                 fill: 'yellow',
                 shape: 'dot',
-                text: 'on at: Jan 12, 12:12',
+                text: 'on Jan 12, 12:12',
             };
             const spy = sinon.spy(status, 'updateStatus');
             status.setNodeState(true);
@@ -65,7 +65,7 @@ describe('SwitchEntityStatus', function () {
             const expectedStatus = {
                 fill: 'yellow',
                 shape: 'ring',
-                text: 'off at: Jan 12, 12:12',
+                text: 'off Jan 12, 12:12',
             };
             const spy = sinon.spy(status, 'updateStatus');
             status.setNodeState(false);

@@ -44,10 +44,6 @@ This will allow you to use self-signed certificates. Only use this if you know w
 
 A list of strings, not case sensitive, delimited by vertical pipe, |, that will return true for State Type Boolean.
 
-### Cache Autocomplete Results
-
-Enables the caching of the JSON autocomplete requests. Enabling or disabling this may require a restart of Node-RED for it to take effect.
-
 ### Enable Heartbeat
 
 Heartbeat will send a ping message using the websocket connection to Home Assistant every X seconds. If a pong response is not received within a 5 seconds Node-RED will attempt to reconnect to Home Assistant.
@@ -55,6 +51,26 @@ Heartbeat will send a ping message using the websocket connection to Home Assist
 ### Heartbeat Interval
 
 The interval at which the ping message is sent to Home Assistant. The mininum value is 10 seconds.
+
+## UI Settings
+
+### Cache Autocomplete Results
+
+Enables the caching of the JSON autocomplete requests. Enabling or disabling this may require a restart of Node-RED for it to take effect.
+
+### ID Selector Display
+
+Which text to show in the selector after the id has been chosen.
+
+### Status Date Format
+
+#### Separator
+
+A string that will appear in the status of an event node between the state and date string.
+
+#### Other options
+
+The other options are directly from [DateTimeFormat Options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat#options).
 
 ## Details
 

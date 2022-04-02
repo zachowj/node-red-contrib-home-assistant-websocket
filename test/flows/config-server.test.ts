@@ -69,7 +69,7 @@ describe('config-server node', function () {
                 try {
                     expect(s1.config.id).to.equal('sn1');
                     expect(s1.config.name).to.equal('Home Assistant');
-                    expect(s1.config.version).to.equal(3);
+                    expect(s1.config.version).to.equal(4);
                     expect(s1.config.addon).to.equal(false);
                     expect(s1.config.rejectUnauthorizedCerts).to.equal(true);
                     expect(s1.config.ha_boolean).to.equal(

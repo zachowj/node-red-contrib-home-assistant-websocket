@@ -34,6 +34,22 @@ const VERSION_3 = {
     deviceSelector: 'friendlyName',
     entitySelector: 'friendlyName',
 };
+const VERSION_4 = {
+    ...VERSION_3,
+    version: 4,
+    areaSelector: 'friendlyName',
+    deviceSelector: 'friendlyName',
+    entitySelector: 'friendlyName',
+    statusSeparator: 'at: ',
+    statusYear: 'hidden',
+    statusMonth: 'numeric',
+    statusDay: 'numeric',
+    statusHourCycle: 'h23',
+    statusHour: 'numeric',
+    statusMinute: 'numeric',
+    statusSecond: 'hidden',
+    statusMillisecond: 0,
+};
 
 describe('Migrations - Server Config Node', function () {
     describe('Version 0', function () {
@@ -69,6 +85,6 @@ describe('Migrations - Server Config Node', function () {
     });
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_3);
+        expect(migratedSchema).to.eql(VERSION_4);
     });
 });

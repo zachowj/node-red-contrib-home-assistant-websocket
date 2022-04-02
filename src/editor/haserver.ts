@@ -144,5 +144,15 @@ export const getUiSettings = () => {
         areaSelector: node?.areaSelector,
         deviceSelector: node?.deviceSelector,
         entitySelector: node?.entitySelector,
+        status: {
+            separator: node?.statusSeparator,
+            year: node?.statusYear,
+            month: node?.statusMonth,
+            day: node?.statusDay,
+            hourCycle: node?.statusHourCycle,
+            hour: node?.statusHour,
+            minute: node?.statusMinute,
+            second: node?.statusSecond,
+        },
     };
 };

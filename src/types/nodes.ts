@@ -5,6 +5,7 @@ import { Credentials } from '../homeAssistant';
 import ConfigServer from '../nodes/config-server/controller';
 import { SelectorType } from '../nodes/config-server/editor';
 import EntityConfigController from '../nodes/entity-config/controller';
+import { DateTimeFormatOptions } from '../types/DateTimeFormatOptions';
 
 export interface BaseNodeDef extends NodeDef {
     version: number;
@@ -30,6 +31,15 @@ export interface ServerNodeConfig extends NodeDef {
     areaSelector: SelectorType;
     deviceSelector: SelectorType;
     entitySelector: SelectorType;
+    statusSeparator: string;
+    statusYear: DateTimeFormatOptions['year'] | 'hidden';
+    statusMonth: DateTimeFormatOptions['month'] | 'hidden';
+    statusDay: DateTimeFormatOptions['day'] | 'hidden';
+    statusHourCycle: DateTimeFormatOptions['hourCycle'] | 'default';
+    statusHour: DateTimeFormatOptions['hour'] | 'hidden';
+    statusMinute: DateTimeFormatOptions['minute'] | 'hidden';
+    statusSecond: DateTimeFormatOptions['second'] | 'hidden';
+    statusMillisecond: DateTimeFormatOptions['fractionalSecondDigits'];
 }
 
 type OutputProperty = {

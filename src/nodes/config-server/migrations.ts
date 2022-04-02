@@ -55,4 +55,23 @@ export default [
             return newSchema;
         },
     },
+    {
+        version: 4,
+        up: (schema: any) => {
+            const newSchema = {
+                ...schema,
+                version: 4,
+                statusSeparator: 'at: ',
+                statusYear: 'hidden',
+                statusMonth: 'numeric',
+                statusDay: 'numeric',
+                statusHourCycle: 'h23',
+                statusHour: 'numeric',
+                statusMinute: 'numeric',
+                statusSecond: 'hidden',
+                statusMillisecond: 0,
+            };
+            return newSchema;
+        },
+    },
 ];

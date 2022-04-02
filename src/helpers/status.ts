@@ -1,4 +1,6 @@
-import { Node, NodeStatus } from 'node-red';
+import { Credentials } from 'homeAssistant';
+import { NodeStatus } from 'node-red';
+import { BaseNode, ServerNode, ServerNodeConfig } from 'types/nodes';
 
 import {
     STATE_CONNECTED,
@@ -7,7 +9,10 @@ import {
     STATE_ERROR,
     STATE_RUNNING,
 } from '../const';
+import { RED } from '../globals';
 import HomeAssistant from '../homeAssistant/HomeAssistant';
+import { DateTimeFormatOptions } from '../types/DateTimeFormatOptions';
+import { formatDate } from './date';
 
 export const STATUS_COLOR_BLUE = 'blue';
 export const STATUS_COLOR_GREEN = 'green';
@@ -20,9 +25,13 @@ export const STATUS_SHAPE_RING = 'ring';
 export class Status {
     protected isNodeDisabled = false;
     private lastStatus: NodeStatus = {};
+    serverConfig: ServerNodeConfig;
 
-    // eslint-disable-next-line no-useless-constructor
-    constructor(readonly node: Node) {}
+    constructor(readonly node: BaseNode) {
+        const serverId = this.node?.config?.server as unknown as string;
+        const server = RED.nodes.getNode(serverId) as ServerNode<Credentials>;
+        this.serverConfig = server?.config ?? {};
+    }
 
     // eslint-disable-next-line no-empty-pattern, @typescript-eslint/no-empty-function
     init({} = {}): void {}
@@ -82,17 +91,40 @@ export class Status {
     }
 
     appendDateString(text: string): string {
-        return `${text} at: ${this.getPrettyDate()}`;
+        const separator = this.serverConfig.statusSeparator ?? '';
+        const dateString = formatDate({
+            options: this.statusOptions(),
+        });
+
+        return `${text} ${separator}${dateString}`;
     }
 
-    getPrettyDate(): string {
-        return new Date().toLocaleDateString('en-US', {
-            hourCycle: 'h23',
-            month: 'short',
-            day: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric',
-        });
+    statusOptions(): DateTimeFormatOptions {
+        const config = this.serverConfig;
+
+        const options = {
+            year: config.statusYear,
+            month: config.statusMonth ?? 'short',
+            day: config.statusDay ?? 'numeric',
+            hourCycle: config.statusHourCycle ?? 'h23',
+            hour: config.statusHour ?? 'numeric',
+            minute: config.statusMinute ?? 'numeric',
+            second: config.statusSecond,
+            fractionalSecondDigits: config.statusMillisecond,
+        };
+
+        let key: keyof typeof options;
+        for (key in options) {
+            if (
+                !options[key] ||
+                options[key] === 'hidden' ||
+                options[key] === 'default'
+            ) {
+                delete options[key];
+            }
+        }
+
+        return options as DateTimeFormatOptions;
     }
 }
 

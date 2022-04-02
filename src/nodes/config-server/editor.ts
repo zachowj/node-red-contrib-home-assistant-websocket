@@ -2,6 +2,7 @@ import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
 import ha from '../../editor/ha';
 import { Credentials } from '../../homeAssistant/index';
+import { DateTimeFormatOptions } from '../../types/DateTimeFormatOptions';
 
 declare const RED: EditorRED;
 
@@ -19,6 +20,15 @@ export interface ConfigServerEditorNodeProperties extends EditorNodeProperties {
     areaSelector: SelectorType;
     deviceSelector: SelectorType;
     entitySelector: SelectorType;
+    statusSeparator: string;
+    statusYear: DateTimeFormatOptions['year'] | 'hidden';
+    statusMonth: DateTimeFormatOptions['month'] | 'hidden';
+    statusDay: DateTimeFormatOptions['day'] | 'hidden';
+    statusHourCycle: DateTimeFormatOptions['hourCycle'] | 'default';
+    statusHour: DateTimeFormatOptions['hour'] | 'hidden';
+    statusMinute: DateTimeFormatOptions['minute'] | 'hidden';
+    statusSecond: DateTimeFormatOptions['second'] | 'hidden';
+    statusMillisecond: DateTimeFormatOptions['fractionalSecondDigits'];
 }
 
 const ConfigServerEditor: EditorNodeDef<
@@ -47,6 +57,15 @@ const ConfigServerEditor: EditorNodeDef<
         areaSelector: { value: 'friendlyName' },
         deviceSelector: { value: 'friendlyName' },
         entitySelector: { value: 'friendlyName' },
+        statusSeparator: { value: ': ' },
+        statusYear: { value: 'hidden' },
+        statusMonth: { value: 'numeric' },
+        statusDay: { value: 'numeric' },
+        statusHourCycle: { value: 'default' },
+        statusHour: { value: 'numeric' },
+        statusMinute: { value: 'numeric' },
+        statusSecond: { value: 'hidden' },
+        statusMillisecond: { value: 0 },
     },
     credentials: {
         host: { type: 'text' },

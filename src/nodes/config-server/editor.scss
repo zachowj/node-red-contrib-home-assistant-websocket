@@ -1,0 +1,16 @@
+.home-assistant {
+    .form-row.status-options {
+        div {
+            display: flex;
+            margin-top: 12px;
+            .spacer {
+                display: inline-block;
+                width: 100px;
+            }
+            select,
+            input {
+                flex: 1;
+            }
+        }
+    }
+}
