@@ -2,6 +2,7 @@ import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
 import ha from '../../editor/ha';
 import { formatDate } from '../../helpers/date';
+import { isNodeRedEnvVar } from '../../helpers/utils';
 import { Credentials } from '../../homeAssistant/index';
 import { DateTimeFormatOptions } from '../../types/DateTimeFormatOptions';
 
@@ -183,7 +184,7 @@ const ConfigServerEditor: EditorNodeDef<
             const parser = document.createElement('a');
             parser.href = hostname;
 
-            if (hostname !== parser.origin) {
+            if (hostname !== parser.origin && !isNodeRedEnvVar(hostname)) {
                 RED.notify('Invalid format of Base URL: ' + hostname);
             }
 
