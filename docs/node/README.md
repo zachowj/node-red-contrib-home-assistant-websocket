@@ -4,6 +4,10 @@
 
 Access all points of the WebSocket and HTTP API.
 
+## [Button](./button.md)
+
+Creates a button in Home Assistant that triggers a flow in Node-RED
+
 ## [Call Service](./call-service.md)
 
 Sends a request to home assistant for any domain and service available ( `light/turn_on`, `input_select/select_option`, etc..)
