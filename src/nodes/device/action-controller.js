@@ -17,6 +17,12 @@ class DeviceAction extends EventsHaNode {
     }
 
     async onInput({ message, send, done }) {
+        if (!this.isConnected) {
+            this.status.setFailed('No Connection');
+            done('Server call attempted without connection to server.');
+            return;
+        }
+
         const capabilities = this.nodeConfig.capabilities.reduce((acc, cap) => {
             acc[cap.name] = cap.value;
             return acc;
@@ -25,9 +31,8 @@ class DeviceAction extends EventsHaNode {
             type: 'nodered/device_action',
             action: { ...this.nodeConfig.event, ...capabilities },
         };
-        await this.homeAssistant.send({ ...payload });
-
         try {
+            await this.homeAssistant.send({ ...payload });
             this.setCustomOutputs(this.nodeConfig.outputProperties, message, {
                 config: this.nodeConfig,
                 data: payload,
