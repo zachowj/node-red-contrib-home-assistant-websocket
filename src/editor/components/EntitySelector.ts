@@ -146,7 +146,7 @@ export default class EntitySelector {
             .select2(
                 createSelect2Options({
                     data: this.#select2Data.filter((e) => e.id?.length > 0),
-                    tags: Tags.custom,
+                    tags: Tags.Custom,
                     multiple: multiple,
                     displayIds: getUiSettings().entitySelector === 'id',
                 })

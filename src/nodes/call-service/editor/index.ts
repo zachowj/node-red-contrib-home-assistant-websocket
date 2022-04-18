@@ -117,7 +117,7 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
                 .empty()
                 .select2(
                     createSelect2Options({
-                        tags: Tags.custom,
+                        tags: Tags.Custom,
                         data: domains,
                     })
                 )
@@ -166,7 +166,7 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
                 .select2(
                     createSelect2Options({
                         data: domainServices,
-                        tags: Tags.custom,
+                        tags: Tags.Custom,
                     })
                 )
                 .maximizeSelect2Height();

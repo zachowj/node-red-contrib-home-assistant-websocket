@@ -5,9 +5,9 @@ import { isNodeRedEnvVar } from '../../helpers/utils';
 import { isjQuery } from '../utils';
 
 export enum Tags {
-    any,
-    custom,
-    none,
+    Any,
+    Custom,
+    None,
 }
 
 export interface Select2Data {
@@ -50,7 +50,7 @@ export const select2DefaultOptions: Options = {
 
 export const createSelect2Options = ({
     multiple = false,
-    tags = Tags.none,
+    tags = Tags.None,
     customTags = [],
     displayIds = false,
     data,
@@ -68,9 +68,9 @@ export const createSelect2Options = ({
         dropdownAutoWidth: true,
     };
 
-    opts.tags = tags === Tags.any || tags === Tags.custom;
+    opts.tags = tags === Tags.Any || tags === Tags.Custom;
 
-    if (tags === Tags.custom) {
+    if (tags === Tags.Custom) {
         // Only allow custom entities if they contain mustache tags
         opts.createTag = (params: SearchOptions) => {
             // Allow custom ids to be created when user uses # as a suffix
