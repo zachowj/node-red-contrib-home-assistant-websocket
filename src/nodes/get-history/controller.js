@@ -98,10 +98,18 @@ class GetHistory extends BaseNode {
             useRelativeTime ||
             parsedMessage.relativeTime.source === 'message'
         ) {
-            startDate = new Date(
-                Date.now() - timestring(relativeTime, 'ms')
-            ).toISOString();
-            endDate = new Date().toISOString();
+            try {
+                const relativeTimeMs = timestring(relativeTime, 'ms');
+                startDate = new Date(Date.now() - relativeTimeMs).toISOString();
+                endDate = new Date().toISOString();
+            } catch (e) {
+                const errorMessage = this.RED._(
+                    'get-history.error.invalid_relative_time'
+                );
+                this.status.setFailed(errorMessage);
+                done(errorMessage);
+                return;
+            }
         }
 
         const apiRequest =
