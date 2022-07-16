@@ -71,6 +71,7 @@ const RenderTemplateEditor: EditorNodeDef<RenderTemplateEditorNodeProperties> =
             // TODO: Add a preview render button for testing (or call render on debounced keyup)
             templateEditor = RED.editor.createEditor({
                 id: 'node-input-template-editor',
+                mode: 'ace/mode/text',
                 value: $inputTemplate.val() as string,
             });
         },
