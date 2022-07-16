@@ -142,7 +142,7 @@
     "merge-stream": "^2.0.0",
     "mocha": "^9.2.2",
     "nock": "^13.2.4",
-    "node-red": "^2.2.2",
+    "node-red": "^3.0.0",
     "node-red-node-test-helper": "^0.2.7",
     "node-sass": "^7.0.1",
     "nodemon": "^2.0.15",
