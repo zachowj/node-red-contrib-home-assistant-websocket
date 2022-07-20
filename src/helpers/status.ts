@@ -1,6 +1,4 @@
-import { Credentials } from 'homeAssistant';
 import { NodeStatus } from 'node-red';
-import { BaseNode, ServerNode, ServerNodeConfig } from 'types/nodes';
 
 import {
     STATE_CONNECTED,
@@ -10,8 +8,10 @@ import {
     STATE_RUNNING,
 } from '../const';
 import { RED } from '../globals';
+import { Credentials } from '../homeAssistant';
 import HomeAssistant from '../homeAssistant/HomeAssistant';
 import { DateTimeFormatOptions } from '../types/DateTimeFormatOptions';
+import { BaseNode, ServerNode, ServerNodeConfig } from '../types/nodes';
 import { formatDate } from './date';
 
 export const STATUS_COLOR_BLUE = 'blue';
@@ -25,12 +25,12 @@ export const STATUS_SHAPE_RING = 'ring';
 export class Status {
     protected isNodeDisabled = false;
     private lastStatus: NodeStatus = {};
-    serverConfig: ServerNodeConfig;
+    serverConfig?: ServerNodeConfig;
 
     constructor(readonly node: BaseNode) {
         const serverId = this.node?.config?.server as unknown as string;
         const server = RED.nodes.getNode(serverId) as ServerNode<Credentials>;
-        this.serverConfig = server?.config ?? {};
+        this.serverConfig = server?.config;
     }
 
     // eslint-disable-next-line no-empty-pattern, @typescript-eslint/no-empty-function
@@ -91,7 +91,7 @@ export class Status {
     }
 
     appendDateString(text: string): string {
-        const separator = this.serverConfig.statusSeparator ?? '';
+        const separator = this.serverConfig?.statusSeparator ?? '';
         const dateString = formatDate({
             options: this.statusOptions(),
         });
@@ -104,24 +104,26 @@ export class Status {
 
         const options: DateTimeFormatOptions = {
             year:
-                config.statusYear === 'hidden' ? undefined : config.statusYear,
+                config?.statusYear === 'hidden'
+                    ? undefined
+                    : config?.statusYear,
             month:
-                config.statusMonth === 'hidden'
+                config?.statusMonth === 'hidden'
                     ? undefined
-                    : config.statusMonth ?? 'short',
+                    : config?.statusMonth ?? 'short',
             day:
-                config.statusDay === 'hidden'
+                config?.statusDay === 'hidden'
                     ? undefined
-                    : config.statusDay ?? 'numeric',
+                    : config?.statusDay ?? 'numeric',
             hourCycle:
-                config.statusHourCycle === 'default'
+                config?.statusHourCycle === 'default'
                     ? undefined
-                    : config.statusHourCycle ?? 'h23',
+                    : config?.statusHourCycle ?? 'h23',
             hour: 'numeric',
             minute: 'numeric',
         };
 
-        switch (config.statusTimeFormat) {
+        switch (config?.statusTimeFormat) {
             case 'h:m:s':
                 options.second = 'numeric';
                 break;
