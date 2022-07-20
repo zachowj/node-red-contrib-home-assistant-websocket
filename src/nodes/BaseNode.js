@@ -4,6 +4,8 @@ const random = require('lodash.random');
 const sampleSize = require('lodash.samplesize');
 const selectn = require('selectn');
 
+const NodeRedContext = require('../common/NodeRedContext').default;
+
 const DEFAULT_NODE_OPTIONS = {
     config: {
         debugenabled: {},
@@ -26,7 +28,10 @@ class BaseNode {
         this._internals = _internals;
         this._enabled = true;
         this.status = status;
+        // TODO: move to initializer after controllers are converted to typescript
+        this.context = new NodeRedContext(node);
 
+        // TODO: move this to initializer and pass in as a parameter
         this.nodeConfig = Object.entries(this.options.config).reduce(
             (acc, [key, value]) => {
                 if (value.isNode) {
@@ -160,34 +165,9 @@ class BaseNode {
         }
     }
 
-    getContextValue(location, property, message) {
-        if (message && location === 'msg') {
-            return this.RED.util.getMessageProperty(message, property);
-        }
-
-        const contextKey = this.RED.util.parseContextStore(property);
-        return this.node
-            .context()
-            [location].get(contextKey.key, contextKey.store);
-    }
-
+    // TODO: Remove after controllers are converted to typescript
     setContextValue(val, location, property, message) {
-        const contextKey = this.RED.util.parseContextStore(property);
-
-        switch (location) {
-            case 'none':
-                break;
-            case 'flow':
-            case 'global':
-                this.node
-                    .context()
-                    [location].set(contextKey.key, val, contextKey.store);
-                break;
-            case 'msg':
-            default:
-                this.RED.util.setObjectProperty(message, contextKey.key, val);
-                break;
-        }
+        this.context.set(val, location, property, message);
     }
 
     getComparatorResult(
@@ -203,7 +183,7 @@ class BaseNode {
 
         let cValue;
         if (['msg', 'flow', 'global'].includes(comparatorValueDatatype)) {
-            cValue = this.getContextValue(
+            cValue = this.context.get(
                 comparatorValueDatatype,
                 comparatorValue,
                 message
@@ -336,7 +316,7 @@ class BaseNode {
             case 'msg':
             case 'flow':
             case 'global':
-                val = this.getContextValue(valueType, value, props.message);
+                val = this.context.get(valueType, value, props.message);
                 break;
             case 'bool':
                 val = value === 'true';
@@ -410,7 +390,7 @@ class BaseNode {
             });
 
             try {
-                this.setContextValue(
+                this.context.set(
                     value,
                     item.propertyType,
                     item.property,
