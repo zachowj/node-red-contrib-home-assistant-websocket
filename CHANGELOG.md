@@ -2,6 +2,52 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.44.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.43.1...v0.44.0) (2022-07-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* **time:** The status text format of the node changed. Could breaking things if the status node was used to monitor the time node status text.
+
+### Features
+
+* Add configurable display option to the id selector ([c491806](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/c4918065052c8f38b0ab81f62ddaf9c8901c7a42))
+* Make datetime string in the status text configurable ([c6b2ecd](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/c6b2ecd4ea6c7e87fb021ce6512e54fafe87851c))
+
+
+### Bug Fixes
+
+* **call-service:** Allow any input for the entity id field ([1d4f486](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/1d4f486c03152e09b48b3822a4111c28d37b19c3)), closes [#615](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/615)
+* **config-server:** Stop reporting base url error when node-red env var ([eb972b6](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/eb972b60c5a3814f702f68ce79bbf97db76838fb))
+* **device:** Catch promise rejection from WS send ([28ff1d9](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/28ff1d9cc897bb74e8d10e0c1436d67306be96b0))
+* **get-history:** Catch invalid relative time string ([32a0389](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/32a0389f14af2dfca95094dd05999d5bee8f8dbf))
+* Make sure fractionalSecondDigits is a number ([43d7b8e](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/43d7b8ea0684fac1387dcc1ebb53576394e41d62))
+* **render-template:** Add mode type to editor so it works with NR 3.0 ([6fb4de1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/6fb4de1b30e42ec397df09ff01b962335ce23ceb)), closes [#647](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/647)
+* Set status date migration month to short ([43d7b8e](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/43d7b8ea0684fac1387dcc1ebb53576394e41d62))
+* **status:** Fix import paths ([d894b98](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d894b988eb7508ddcb25ed09c65853e7c99ecfc2))
+
+
+### Style
+
+* Remove unnecessary style from legacy label class ([685c2b1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/685c2b1ea05134025fa3ce24888a47fa9b339a1b))
+
+
+### refactor
+
+* **time:** Change time node to use formatDate ([e88abaf](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/e88abaf5687b1aef968c65ee93e560aab6808442))
+
+
+### Documentation
+
+* Add button node link to node list ([a89f048](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a89f048e21abeec0f77752f37e2928c99abeb355))
+* Change code copy plugin ([6272a91](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/6272a91b985d279be0c494b2dc871f634cecd904))
+* config changes for vuepress v2 ([0dd2f68](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/0dd2f681586ffe130adac1d2785c9cbcd98f1f2c))
+* **cookbook:** Fix JSONata example to use $number on entity state as it is a string ([ae751fc](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ae751fc8edb3f5329589755fefa41ba8d68ab767))
+* Fix plugin config setting ([95f89f0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/95f89f03ad9aaed7ca3e96688adb92d46ce3bd66))
+* Migrate docs to vuepress v2 ([cf890fa](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/cf890fa5ce0bdf2615f50c80601a25039794ede0))
+* **poll-state:** Fix output location information ([a4dcc28](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a4dcc280c6ee2f08e0925714bd92f27a9dc85531)), closes [#617](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/617)
+* Update getting started prerequisites ([f002d04](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f002d04b1b592be4f9cf1bdcd9cac5788746bdf4))
+
 ### [0.43.1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.43.0...v0.43.1) (2022-03-07)
 
 
