@@ -273,7 +273,7 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
 
                 const deviceType = $type.val() as string;
                 $event.data('events', data).empty().prop('disabled', false);
-                const options = [];
+                const options: HTMLOptionElement[] = [];
                 for (let index = 0; index < data.length; index++) {
                     const str = await localizeDeviceEvent(
                         deviceType,
