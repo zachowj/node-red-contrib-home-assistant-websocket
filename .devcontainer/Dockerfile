@@ -1,4 +1,4 @@
-FROM nodered/node-red:latest-12
+FROM nodered/node-red:latest
 
 RUN mkdir -p /data/node_modules
 
