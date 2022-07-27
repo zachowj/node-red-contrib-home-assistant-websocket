@@ -110,6 +110,10 @@ export default class Websocket {
         this.onStatesLoadedAndRunning('initial_connection_ready');
     }
 
+    get isConnected(): boolean {
+        return this.connectionState === STATE_CONNECTED;
+    }
+
     private emitEvent(event: string, data?: any) {
         return this.eventBus.emit(event, data);
     }
@@ -511,7 +515,7 @@ export default class Websocket {
     }
 
     async getDeviceActions(deviceId?: string): Promise<HassDeviceActions> {
-        if (!deviceId) return [];
+        if (!this.isConnected || !deviceId) return [];
 
         return this.send<HassDeviceActions>({
             type: 'device_automation/action/list',
@@ -522,7 +526,7 @@ export default class Websocket {
     async getDeviceActionCapabilities(action: {
         [key: string]: any;
     }): Promise<HassDeviceCapabilities> {
-        if (!action) return [];
+        if (!this.isConnected || !action) return [];
 
         const results = await this.send<HassDeviceCapabilitiesResponse>({
             type: 'device_automation/action/capabilities',
@@ -533,7 +537,7 @@ export default class Websocket {
     }
 
     async getDeviceTriggers(deviceId?: string): Promise<HassDeviceTriggers> {
-        if (!deviceId) return [];
+        if (!this.isConnected || !deviceId) return [];
 
         return this.send<HassDeviceTriggers>({
             type: 'device_automation/trigger/list',
@@ -544,7 +548,7 @@ export default class Websocket {
     async getDeviceTriggerCapabilities(trigger: {
         [key: string]: any;
     }): Promise<HassDeviceCapabilities> {
-        if (!trigger) return [];
+        if (!this.isConnected || !trigger) return [];
 
         const results = await this.send<HassDeviceCapabilitiesResponse>({
             type: 'device_automation/trigger/capabilities',
@@ -572,7 +576,7 @@ export default class Websocket {
         category: string,
         language: string
     ): Promise<HassTranslations> {
-        if (!category) return [];
+        if (!this.isConnected || !category) return [];
 
         const results = await this.send<HassTranslationsResponse>({
             type: 'frontend/get_translations',
@@ -595,6 +599,6 @@ export default class Websocket {
 
     send<Results>(data: MessageBase): Promise<Results> {
         debug(`Send: ${JSON.stringify(data)}`);
-        return this.client.sendMessagePromise(data);
+        return this.client?.sendMessagePromise(data);
     }
 }
