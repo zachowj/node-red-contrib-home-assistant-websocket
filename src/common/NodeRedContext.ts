@@ -1,4 +1,4 @@
-import { Node, NodeContext, NodeContextData, NodeMessage } from 'node-red';
+import { Node, NodeContext, NodeMessage } from 'node-red';
 
 import { RED } from '../globals';
 
@@ -18,8 +18,14 @@ export default class NodeRedContext {
         }
 
         const { key, store } = RED.util.parseContextStore(property);
-        const context = this.node.context()[location] as NodeContextData;
-        return context.get(key, store);
+        const context = this.node.context();
+
+        switch (location) {
+            case 'flow':
+                return context.flow.get(key, store);
+            case 'global':
+                return context.global.get(key, store);
+        }
     }
 
     set(
@@ -31,16 +37,16 @@ export default class NodeRedContext {
         const { key, store } = RED.util.parseContextStore(property);
 
         switch (location) {
-            case 'none':
-                break;
             case 'flow':
             case 'global':
                 this.node.context()[location].set(key, val, store);
                 break;
             case 'msg':
-            default:
                 if (!message) return;
                 RED.util.setObjectProperty(message, key, val);
+                break;
+            case 'none':
+            default:
                 break;
         }
     }
