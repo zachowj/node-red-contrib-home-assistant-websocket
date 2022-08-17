@@ -3,7 +3,7 @@ import EventEmitter from 'events';
 import { BaseNode } from '../../types/nodes';
 
 export type EventHandler = (...args: any[]) => void;
-export type EventsList = [string, EventHandler][];
+export type EventsList = [string | symbol, EventHandler][];
 
 export default class Events {
     listeners: EventsList = [];
@@ -14,11 +14,16 @@ export default class Events {
         this.node = node;
         this.emitter = emitter;
 
-        this.node.on('close', this.removeListeners);
+        node.on('close', this.onClose.bind(this));
+    }
+
+    onClose(_removed: boolean, done?: (err?: Error) => void) {
+        this.removeListeners();
+        done?.();
     }
 
     addListener(
-        event: string,
+        event: string | symbol,
         handler: EventHandler,
         options = { once: false }
     ): void {
