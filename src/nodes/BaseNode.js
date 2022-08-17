@@ -4,7 +4,8 @@ const random = require('lodash.random');
 const sampleSize = require('lodash.samplesize');
 const selectn = require('selectn');
 
-const NodeRedContext = require('../common/NodeRedContext').default;
+const NodeRedContext =
+    require('../common/services/NodeRedContextService').default;
 
 const DEFAULT_NODE_OPTIONS = {
     config: {

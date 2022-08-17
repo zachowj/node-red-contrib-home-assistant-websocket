@@ -1,9 +1,23 @@
 import { Node, NodeContext, NodeMessage } from 'node-red';
 
-import { RED } from '../globals';
+import { RED } from '../../globals';
 
-export default class NodeRedContext {
-    constructor(private readonly node: Node) {
+export enum ContextLocation {
+    Msg = 'msg',
+    Flow = 'flow',
+    Global = 'global',
+}
+
+export const isContextLocation = (
+    location: string | ContextLocation
+): location is ContextLocation => {
+    return Object.values(ContextLocation).includes(location as ContextLocation);
+};
+
+export default class NodeRedContextService {
+    private readonly node: Node;
+
+    constructor(node: Node) {
         this.node = node;
     }
 
@@ -30,7 +44,7 @@ export default class NodeRedContext {
 
     set(
         val: any,
-        location: 'none' | 'msg' | keyof NodeContext,
+        location: ContextLocation,
         property: string,
         message?: NodeMessage
     ) {
@@ -42,11 +56,9 @@ export default class NodeRedContext {
                 this.node.context()[location].set(key, val, store);
                 break;
             case 'msg':
-                if (!message) return;
-                RED.util.setObjectProperty(message, key, val);
-                break;
-            case 'none':
-            default:
+                if (message) {
+                    RED.util.setObjectProperty(message, key, val);
+                }
                 break;
         }
     }

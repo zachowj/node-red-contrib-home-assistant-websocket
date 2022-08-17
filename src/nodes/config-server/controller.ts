@@ -2,15 +2,15 @@ import {
     HassEntity as HomeAssistantEntity,
     HassServices,
 } from 'home-assistant-js-websocket';
-import merge from 'lodash.merge';
 import { Node } from 'node-red';
 
-import { HA_EVENT_SERVICES_UPDATED, INTEGRATION_NOT_LOADED } from '../../const';
+import { EventsList } from '../../common/events/Events';
+import { IntegrationEvent } from '../../common/Integration';
+import { HA_EVENT_SERVICES_UPDATED } from '../../const';
 import { RED } from '../../globals';
 import Comms from '../../helpers/Comms';
 import {
     addEventListeners,
-    EventsList,
     removeEventListeners,
     toCamelCase,
 } from '../../helpers/utils';
@@ -20,24 +20,9 @@ import {
     SUPERVISOR_URL,
 } from '../../homeAssistant';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
-import { IntegrationEvent } from '../../types';
+import { ClientEvent } from '../../homeAssistant/Websocket';
 import { HassEntity, HassStateChangedEvent } from '../../types/home-assistant';
-import { ServerNodeConfig } from '../../types/nodes';
-
-const nodeDefaults = {
-    name: {},
-    version: (nodeDef: ServerNodeConfig) => nodeDef.version || 0,
-    addon: {},
-    rejectUnauthorizedCerts: {},
-    ha_boolean: {},
-    connectionDelay: {},
-    cacheJson: {},
-    heartbeat: {},
-    heartbeatInterval: {},
-    areaSelector: {},
-    deviceSelector: {},
-    entitySelector: {},
-};
+import { ServerNode, ServerNodeConfig } from '../../types/nodes';
 
 type HomeAssistantStatesContext = { [entity_id: string]: HomeAssistantEntity };
 
@@ -59,21 +44,15 @@ type ExposedNodes = {
 export default class ConfigServer {
     node: Node<Credentials>;
     config: ServerNodeConfig;
-    events: EventsList = {};
+    events: EventsList = [];
     homeAssistant?: HomeAssistant;
     comms?: Comms;
     exposedNodes: ExposedNodes = {};
     isHomeAssistantRunning = false;
 
-    constructor({
-        node,
-        config,
-    }: {
-        node: Node<Credentials>;
-        config: ServerNodeConfig;
-    }) {
+    constructor(node: ServerNode<Credentials>) {
         this.node = node;
-        this.config = merge({}, nodeDefaults, config);
+        this.config = node.config;
 
         this.setOnContext('states', {});
         this.setOnContext('services', {});
@@ -108,21 +87,21 @@ export default class ConfigServer {
 
     startListeners() {
         // Setup event listeners
-        this.events = {
-            'ha_client:close': this.onHaEventsClose,
-            'ha_client:open': this.onHaEventsOpen,
-            'ha_client:connecting': this.onHaEventsConnecting,
-            'ha_client:error': this.onHaEventsError,
-            'ha_client:running': this.onHaEventsRunning,
-            'ha_client:states_loaded': this.onHaStatesLoaded,
-            'ha_client:services_loaded': this.onHaServicesLoaded,
-            [HA_EVENT_SERVICES_UPDATED]: this.onHaServicesUpdated,
-            'ha_events:state_changed': this.onHaStateChanged,
-            integration: this.onIntegrationEvent,
-        };
+        this.events = [
+            [ClientEvent.Close, this.onHaEventsClose],
+            [ClientEvent.Open, this.onHaEventsOpen],
+            [ClientEvent.Connecting, this.onHaEventsConnecting],
+            [ClientEvent.Error, this.onHaEventsError],
+            [ClientEvent.Running, this.onHaEventsRunning],
+            [ClientEvent.StatesLoaded, this.onHaStatesLoaded],
+            [ClientEvent.ServicesLoaded, this.onHaServicesLoaded],
+            [HA_EVENT_SERVICES_UPDATED, this.onHaServicesUpdated],
+            ['ha_events:state_changed', this.onHaStateChanged],
+            ['integration', this.onIntegrationEvent],
+        ];
         addEventListeners(this.events, this?.homeAssistant?.eventBus);
         this?.homeAssistant?.addListener(
-            'ha_client:connected',
+            ClientEvent.Connected,
             this.registerEvents,
             { once: true }
         );
@@ -222,7 +201,7 @@ export default class ConfigServer {
 
     onIntegrationEvent = (eventType: IntegrationEvent) => {
         if (
-            eventType === INTEGRATION_NOT_LOADED &&
+            eventType === IntegrationEvent.NotLoaded &&
             !this.isHomeAssistantRunning
         ) {
             return;

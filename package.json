@@ -16,13 +16,16 @@
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "docs:lint": "prettier --write docs/{.vuepress/**,**}/*.{js,md,html}",
+    "editor:compile": "tsc --project tsconfig.editor.json",
     "lint": "eslint . && prettier --check {docs,src,test}/**/*.{css,js,ts,md,html}",
     "lint:fix": "eslint . --fix && prettier --write {docs,src,test}/**/*.{css,js,ts,md,html}",
     "prepare": "husky install",
     "prepublishOnly": "gulp build",
     "test": "mocha -r ts-node/register test/**/*.test.[tj]s --exit",
     "test:coverage": "nyc npm run test",
-    "test:watch": "mocha -r ts-node/register --watch --recursive"
+    "test:single": "mocha -r ts-node/register --exit",
+    "test:watch": "mocha -r ts-node/register --watch --recursive",
+    "test:watch:single": "mocha -r ts-node/register --watch-files **/*.[tj]s --watch --exit"
   },
   "repository": {
     "type": "git",
@@ -134,6 +137,7 @@
     "gulp-typescript": "^6.0.0-alpha.1",
     "gulp-wrap": "^0.15.0",
     "husky": "^8.0.1",
+    "jsonata": "^1.8.6",
     "lazypipe": "^1.0.2",
     "lint-staged": "^13.0.3",
     "markdown-it": "^13.0.1",
@@ -153,6 +157,7 @@
     "rollup-plugin-sourcemaps": "^0.6.3",
     "sinon-chai": "^3.7.0",
     "ts-node": "^10.9.1",
+    "ts-sinon": "^2.0.2",
     "tslib": "^2.4.0",
     "typescript": "^4.7.4",
     "vinyl-source-stream": "^2.0.0",

@@ -81,6 +81,25 @@ type HassDeviceCapabilitiesResponse = {
     extra_fields: HassDeviceCapabilities;
 };
 
+export enum ClientState {
+    Connecting = 0,
+    Connected = 1,
+    Disconnected = 2,
+    Error = 3,
+    Running = 4,
+}
+
+export enum ClientEvent {
+    Close = 'ha_client:close',
+    Connected = 'ha_client:connected',
+    Connecting = 'ha_client:connecting',
+    Error = 'ha_client:error',
+    Open = 'ha_client:open',
+    Running = 'ha_client:running',
+    ServicesLoaded = 'ha_client:services_loaded',
+    StatesLoaded = 'ha_client:states_loaded',
+}
+
 export default class Websocket {
     private servicesLoaded = false;
     private statesLoaded = false;

@@ -1,5 +1,7 @@
 import EventEmitter from 'events';
 
+import { EventsList } from '../common/events/Events';
+
 export function shouldInclude(
     targetString: string,
     includeRegex: RegExp | undefined,
@@ -138,16 +140,14 @@ export function getEntitiesFromJsonata(jsonata: string): Set<string> {
     return new Set(Array.from(matches, (m) => m[1] as string));
 }
 
-export type EventsList = { [key: string]: (...args: any[]) => void };
-
 export function addEventListeners(
     eventListeners: EventsList,
     emitter?: EventEmitter
 ): void {
     if (!emitter) return;
 
-    Object.keys(eventListeners).forEach((event) => {
-        emitter.on(event, eventListeners[event]);
+    eventListeners.forEach(([event, callback]) => {
+        emitter.on(event, callback);
     });
 }
 
@@ -157,8 +157,8 @@ export function removeEventListeners(
 ): void {
     if (!emitter) return;
 
-    Object.keys(eventListeners).forEach((event) => {
-        emitter.off(event, eventListeners[event]);
+    eventListeners.forEach(([event, callback]) => {
+        emitter.off(event, callback);
     });
 }
 

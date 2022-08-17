@@ -1,31 +1,15 @@
 import EventEmitter from 'events';
-import merge from 'lodash.merge';
 import { Node } from 'node-red';
 
-import {
-    INTEGRATION_EVENT,
-    INTEGRATION_LOADED,
-    INTEGRATION_NOT_LOADED,
-    INTEGRATION_UNLOADED,
-} from '../../const';
+import { EventsList } from '../../common/events/Events';
+import { IntegrationEvent } from '../../common/Integration';
+import { INTEGRATION_EVENT } from '../../const';
 import { RED } from '../../globals';
-import {
-    addEventListeners,
-    EventsList,
-    removeEventListeners,
-} from '../../helpers/utils';
+import { addEventListeners, removeEventListeners } from '../../helpers/utils';
 import { Credentials } from '../../homeAssistant';
-import { IntegrationEvent } from '../../types';
+import { ClientEvent } from '../../homeAssistant/Websocket';
 import { SubscriptionUnsubscribe } from '../../types/home-assistant';
 import { ServerNode } from '../../types/nodes';
-
-const nodeDefaults = {
-    name: {},
-    version: (nodeDef: { version?: number }) => nodeDef.version ?? 0,
-    server: {},
-    haConfig: {},
-    entityType: {},
-};
 
 type Config = {
     property: string;
@@ -38,9 +22,9 @@ type Event = {
 };
 
 export default class EntityConfigController extends EventEmitter {
-    private node: Node;
-    private nodeConfig;
-    private server;
+    private readonly node: Node;
+    private readonly config;
+    private readonly server;
     private subscription?: SubscriptionUnsubscribe;
     private registered = false;
     private events: EventsList;
@@ -48,18 +32,18 @@ export default class EntityConfigController extends EventEmitter {
     constructor({ node, config }: { node: Node; config: any }) {
         super();
         this.node = node;
-        this.nodeConfig = merge({}, nodeDefaults, config);
+        this.config = config;
         const serverNode = RED.nodes.getNode(
-            this.nodeConfig.server
+            this.config.server
         ) as ServerNode<Credentials>;
         this.server = serverNode.controller;
 
         // Setup event listeners
         node.on('close', this.onClose.bind(this));
-        this.events = {
-            'ha_client:close': this.onHaEventsClose,
-            [INTEGRATION_EVENT]: this.onHaIntegration,
-        };
+        this.events = [
+            [ClientEvent.Close, this.onHaEventsClose],
+            [INTEGRATION_EVENT, this.onHaIntegration],
+        ];
         addEventListeners(this.events, this.server?.homeAssistant?.eventBus);
 
         if (this.server?.homeAssistant?.isIntegrationLoaded) {
@@ -83,11 +67,11 @@ export default class EntityConfigController extends EventEmitter {
 
     onHaIntegration = (type: IntegrationEvent) => {
         switch (type) {
-            case INTEGRATION_LOADED:
+            case IntegrationEvent.Loaded:
                 this.registerEntity();
                 break;
-            case INTEGRATION_UNLOADED:
-            case INTEGRATION_NOT_LOADED:
+            case IntegrationEvent.Unloaded:
+            case IntegrationEvent.NotLoaded:
                 this.removeSubscription();
                 this.registered = false;
                 break;
@@ -99,7 +83,7 @@ export default class EntityConfigController extends EventEmitter {
             type: 'nodered/discovery',
             server_id: this.server.node.id,
             node_id: this.node.id,
-            component: this.nodeConfig.entityType,
+            component: this.config.entityType,
             config,
         };
     }
@@ -110,7 +94,7 @@ export default class EntityConfigController extends EventEmitter {
         }
 
         const haConfig: Record<string, any> = {};
-        const config = this.nodeConfig.haConfig as Config[];
+        const config = this.config.haConfig as Config[];
         config
             .filter((c) => c.value.length)
             .forEach((e) => (haConfig[e.property] = e.value));

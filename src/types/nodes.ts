@@ -1,11 +1,33 @@
-import { Node, NodeDef } from 'node-red';
+import { Node, NodeDef, NodeMessage } from 'node-red';
 
+import { ContextLocation } from '../common/services/NodeRedContextService';
+import { TypedInputTypes } from '../common/services/TypedInputService';
 import { HassExposedConfig } from '../editor/types';
 import { Credentials } from '../homeAssistant';
+import HomeAssistant from '../homeAssistant/HomeAssistant';
 import ConfigServer from '../nodes/config-server/controller';
 import { SelectorType } from '../nodes/config-server/editor';
 import EntityConfigController from '../nodes/entity-config/controller';
 import { DateTimeFormatOptions } from '../types/DateTimeFormatOptions';
+
+export type NodeSend = (
+    msg: NodeMessage | Array<NodeMessage | NodeMessage[] | null>
+) => void;
+export type NodeDone = (err?: Error) => void;
+
+export interface NodeProperties extends NodeDef {
+    debugenabled?: boolean;
+    version: number;
+}
+
+export interface BaseNodeProperties extends NodeProperties {
+    server?: string;
+}
+
+export interface EntityBaseNodeProperties extends NodeProperties {
+    entityType: string;
+    entityConfig?: string;
+}
 
 export interface BaseNodeDef extends NodeDef {
     version: number;
@@ -17,9 +39,7 @@ export interface BaseNodeDef extends NodeDef {
     haConfig?: HassExposedConfig[];
 }
 
-export interface ServerNodeConfig extends NodeDef {
-    version: number;
-    debugenabled?: boolean;
+export interface ServerNodeConfig extends NodeProperties {
     addon: boolean;
     rejectUnauthorizedCerts: boolean;
     ha_boolean: string;
@@ -38,11 +58,11 @@ export interface ServerNodeConfig extends NodeDef {
     statusTimeFormat: 'h:m' | 'h:m:s' | 'h:m:s.ms';
 }
 
-type OutputProperty = {
+export type OutputProperty = {
     property: string;
-    propertyType: string;
+    propertyType: ContextLocation;
     value: string;
-    valueType: string;
+    valueType: TypedInputTypes;
 };
 
 export interface EntityNodeDef extends NodeDef {
@@ -58,6 +78,7 @@ export interface EntityNodeDef extends NodeDef {
 export interface ServerNode<T> extends Node<T> {
     config: ServerNodeConfig;
     controller: ConfigServer;
+    getHomeAssistant: () => HomeAssistant;
 }
 
 export interface BaseNodeConfig {
@@ -79,6 +100,6 @@ export interface DeviceNode extends BaseNode {
 }
 
 export interface EntityNode extends Node {
-    config: EntityNodeDef;
+    config: EntityBaseNodeProperties;
     controller: any;
 }
