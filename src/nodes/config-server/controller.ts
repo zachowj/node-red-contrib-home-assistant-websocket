@@ -8,7 +8,6 @@ import { EventsList } from '../../common/events/Events';
 import { IntegrationEvent } from '../../common/Integration';
 import { HA_EVENT_SERVICES_UPDATED } from '../../const';
 import { RED } from '../../globals';
-import Comms from '../../helpers/Comms';
 import {
     addEventListeners,
     removeEventListeners,
@@ -23,6 +22,7 @@ import HomeAssistant from '../../homeAssistant/HomeAssistant';
 import { ClientEvent } from '../../homeAssistant/Websocket';
 import { HassEntity, HassStateChangedEvent } from '../../types/home-assistant';
 import { ServerNode, ServerNodeConfig } from '../../types/nodes';
+import Comms from './Comms';
 
 type HomeAssistantStatesContext = { [entity_id: string]: HomeAssistantEntity };
 

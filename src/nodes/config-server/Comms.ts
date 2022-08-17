@@ -5,15 +5,15 @@ import {
     HA_EVENT_DEVICE_REGISTRY_UPDATED,
     HA_EVENT_REGISTRY_UPDATED,
     HA_EVENT_SERVICES_UPDATED,
-} from '../const';
-import { RED } from '../globals';
-import HomeAssistant from '../homeAssistant/HomeAssistant';
+} from '../../const';
+import { RED } from '../../globals';
+import HomeAssistant from '../../homeAssistant/HomeAssistant';
 import {
     HassAreas,
     HassDevices,
     HassEntityRegistryEntry,
     HassStateChangedEvent,
-} from '../types/home-assistant';
+} from '../../types/home-assistant';
 
 const convertSetToArray = (obj: { [key: string]: Set<string> }) => {
     const result: { [key: string]: string[] } = {};
