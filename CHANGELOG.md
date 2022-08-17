@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.44.1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.44.0...v0.44.1) (2022-08-17)
+
+
+### Bug Fixes
+
+* **device:** Fix type for html option element ([58672e6](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/58672e6dc59dd2a037459ab7050c122d2da415d2))
+* **websocket:** Stop device lookups call to HA when there's no connection ([f165659](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f165659ea654cd18586269d4604d3870d7e4e7d7))
+
 ## [0.44.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.43.1...v0.44.0) (2022-07-20)
 
 
