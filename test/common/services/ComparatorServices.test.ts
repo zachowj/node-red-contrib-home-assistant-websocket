@@ -3,7 +3,7 @@ import { afterEach } from 'mocha';
 import sinonChai from 'sinon-chai';
 import sinon, { StubbedInstance, stubInterface } from 'ts-sinon';
 
-import ComparatorService from '../../../src/common/services/ComparatorServices';
+import ComparatorService from '../../../src/common/services/ComparatorService';
 import JSONataService from '../../../src/common/services/JSONataService';
 import NodeRedContextService from '../../../src/common/services/NodeRedContextService';
 import TransformState from '../../../src/common/TransformState';

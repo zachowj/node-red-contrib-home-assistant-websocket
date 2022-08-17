@@ -1,11 +1,12 @@
-const clonedeep = require('lodash.clonedeep');
 const merge = require('lodash.merge');
-const random = require('lodash.random');
-const sampleSize = require('lodash.samplesize');
 const selectn = require('selectn');
 
-const NodeRedContext =
-    require('../common/services/NodeRedContextService').default;
+const ComparatorService =
+    require('../common/services/ComparatorService').default;
+const TransformState = require('../common/TransformState').default;
+const {
+    createControllerDependencies,
+} = require('../common/controllers/helpers');
 
 const DEFAULT_NODE_OPTIONS = {
     config: {
@@ -29,8 +30,6 @@ class BaseNode {
         this._internals = _internals;
         this._enabled = true;
         this.status = status;
-        // TODO: move to initializer after controllers are converted to typescript
-        this.context = new NodeRedContext(node);
 
         // TODO: move this to initializer and pass in as a parameter
         this.nodeConfig = Object.entries(this.options.config).reduce(
@@ -50,6 +49,23 @@ class BaseNode {
 
         node.on('input', this._eventHandlers.preOnInput.bind(this));
         node.on('close', this._eventHandlers.preOnClose.bind(this));
+
+        // TODO: move to initializer after controllers are converted to typescript
+        const { jsonataService, nodeRedContextService, typedInputService } =
+            createControllerDependencies(this.node, this.homeAssistant);
+        const transformState = new TransformState(
+            this.server?.config?.ha_boolean
+        );
+        this.comparatorService = new ComparatorService({
+            jsonataService,
+            nodeRedContextService,
+            typedInputService,
+            transformState,
+        });
+        this.nodeRedContextService = nodeRedContextService;
+        this.jsonataService = jsonataService;
+        this.typedInputService = typedInputService;
+        this.transformState = transformState;
 
         const name = selectn('nodeConfig.name', this);
         this.node.debug(`instantiated node, name: ${name || 'undefined'}`);
@@ -130,33 +146,7 @@ class BaseNode {
     }
 
     getCastValue(datatype, value) {
-        if (!datatype) return value;
-
-        switch (datatype) {
-            case 'num':
-                return parseFloat(value);
-            case 'str':
-                return value + '';
-            case 'bool':
-                return !!value;
-            case 'habool': {
-                const booleanConfig = selectn(
-                    'nodeConfig.server.config.ha_boolean',
-                    this
-                );
-                const regex =
-                    booleanConfig === undefined
-                        ? `^(y|yes|true|on|home|open)$`
-                        : `^(${booleanConfig})$`;
-                return new RegExp(regex, 'i').test(value);
-            }
-            case 're':
-                return new RegExp(value);
-            case 'list':
-                return value ? value.split(',').map((e) => e.trim()) : [];
-            default:
-                return value;
-        }
+        return this.transformState.transform(datatype, value);
     }
 
     castState(entity, type) {
@@ -168,7 +158,7 @@ class BaseNode {
 
     // TODO: Remove after controllers are converted to typescript
     setContextValue(val, location, property, message) {
-        this.context.set(val, location, property, message);
+        this.nodeRedContextService.set(val, location, property, message);
     }
 
     getComparatorResult(
@@ -178,209 +168,21 @@ class BaseNode {
         comparatorValueDatatype,
         { message, entity, prevEntity }
     ) {
-        if (comparatorValueDatatype === 'bool') {
-            comparatorValue = comparatorValue === 'true';
-        }
-
-        let cValue;
-        if (['msg', 'flow', 'global'].includes(comparatorValueDatatype)) {
-            cValue = this.context.get(
-                comparatorValueDatatype,
-                comparatorValue,
-                message
-            );
-        } else if (['entity', 'prevEntity'].includes(comparatorValueDatatype)) {
-            cValue = selectn(
-                comparatorValue,
-                comparatorValueDatatype === 'entity' ? entity : prevEntity
-            );
-        } else if (
-            comparatorType !== 'jsonata' &&
-            comparatorValueDatatype === 'jsonata' &&
-            comparatorValue
-        ) {
-            try {
-                cValue = this.evaluateJSONata(comparatorValue, {
-                    message,
-                    entity,
-                    prevEntity,
-                });
-            } catch (e) {
-                throw new Error(`JSONata Error: ${e.message}`);
-            }
-        } else {
-            if (
-                comparatorType === 'includes' ||
-                comparatorType === 'does_not_include'
-            ) {
-                comparatorValueDatatype = 'list';
-            }
-
-            cValue = this.getCastValue(
-                comparatorValueDatatype,
-                comparatorValue
-            );
-        }
-
-        switch (comparatorType) {
-            case 'is':
-            case 'is_not': {
-                // Datatype might be num, bool, str, re (regular expression)
-                const isMatch =
-                    comparatorValueDatatype === 're'
-                        ? cValue.test(actualValue)
-                        : cValue === actualValue;
-                return comparatorType === 'is' ? isMatch : !isMatch;
-            }
-            case 'includes':
-            case 'does_not_include': {
-                const isIncluded = cValue.includes(actualValue);
-                return comparatorType === 'includes' ? isIncluded : !isIncluded;
-            }
-            case 'cont':
-                return (actualValue + '').indexOf(cValue) !== -1;
-            case 'greater_than': // here for backwards compatibility
-            case '>':
-            case 'gt':
-                return actualValue > cValue;
-            case '>=':
-            case 'gte':
-                return actualValue >= cValue;
-            case 'less_than': // here for backwards compatibility
-            case '<':
-            case 'lt':
-                return actualValue < cValue;
-            case '<=':
-            case 'lte':
-                return actualValue <= cValue;
-            case 'starts_with':
-                return actualValue && actualValue.startsWith(cValue);
-            case 'in_group': {
-                const ent = this.homeAssistant.getStates(cValue);
-                const groupEntities =
-                    selectn('attributes.entity_id', ent) || [];
-                return groupEntities.includes(actualValue);
-            }
-            case 'jsonata':
-                if (!cValue) return true;
-
-                try {
-                    return (
-                        this.evaluateJSONata(cValue, {
-                            message,
-                            entity,
-                            prevEntity,
-                        }) === true
-                    );
-                } catch (e) {
-                    throw new Error(`JSONata Error: ${e.message}`);
-                }
-        }
+        return this.comparatorService.getComparatorResult(
+            comparatorType,
+            comparatorValue,
+            actualValue,
+            comparatorValueDatatype,
+            { message, entity, prevEntity }
+        );
     }
 
     evaluateJSONata(expression, objs = {}) {
-        const expr = this.RED.util.prepareJSONataExpression(
-            expression,
-            this.node
-        );
-        const { entity, message, prevEntity } = objs;
-
-        expr.assign('entity', () => entity);
-        expr.assign(
-            'entities',
-            (val) => this.homeAssistant && this.homeAssistant.getStates(val)
-        );
-        expr.assign('outputData', (obj) => {
-            if (!obj) {
-                const filtered = Object.keys(objs).reduce((acc, key) => {
-                    // ignore message as it already accessable
-                    if (key !== 'message' && objs[key] !== undefined) {
-                        acc[key] = objs[key];
-                    }
-                    return acc;
-                }, {});
-                return filtered;
-            }
-
-            return objs[obj];
-        });
-        expr.assign('prevEntity', () => prevEntity);
-        expr.assign('randomNumber', random);
-        expr.assign('sampleSize', sampleSize);
-
-        return this.RED.util.evaluateJSONataExpression(expr, message);
+        return this.jsonataService.evaluate(expression, objs);
     }
 
     getTypedInputValue(value, valueType, props = {}) {
-        let val;
-        switch (valueType) {
-            case 'msg':
-            case 'flow':
-            case 'global':
-                val = this.context.get(valueType, value, props.message);
-                break;
-            case 'bool':
-                val = value === 'true';
-                break;
-            case 'json':
-                try {
-                    val = JSON.parse(value);
-                } catch (e) {
-                    // error parsing
-                }
-                break;
-            case 'date':
-                val = Date.now();
-                break;
-            case 'jsonata':
-                // no reason to error just return undefined
-                if (value === '') {
-                    val = undefined;
-                    break;
-                }
-                try {
-                    val = this.evaluateJSONata(value, {
-                        data: props.data,
-                        entity: props.entity,
-                        entityId: props.entityId,
-                        eventData: props.eventData,
-                        message: props.message,
-                        prevEntity: props.prevEntity,
-                        results: props.results,
-                    });
-                } catch (e) {
-                    throw new Error(`JSONata Error: ${e.message}`);
-                }
-                break;
-            case 'num':
-                val = Number(value);
-                break;
-            case 'none':
-                val = undefined;
-                break;
-            case 'config': {
-                val = clonedeep(
-                    value.length
-                        ? selectn(value, this.nodeConfig)
-                        : this.nodeConfig
-                );
-                break;
-            }
-            case 'data':
-            case 'entity':
-            case 'entityState':
-            case 'eventData':
-            case 'headers':
-            case 'params':
-            case 'triggerId':
-            case 'prevEntity':
-            case 'results':
-                val = props[valueType];
-                break;
-            default:
-                val = value;
-        }
-        return val;
+        return this.typedInputService.getValue(value, valueType, props);
     }
 
     setCustomOutputs(properties = [], message, extras) {
@@ -391,7 +193,7 @@ class BaseNode {
             });
 
             try {
-                this.context.set(
+                this.nodeRedContextService.set(
                     value,
                     item.propertyType,
                     item.property,
