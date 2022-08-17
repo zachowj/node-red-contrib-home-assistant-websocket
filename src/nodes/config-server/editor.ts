@@ -165,7 +165,7 @@ const ConfigServerEditor: EditorNodeDef<
                         }
                         const datetime = formatDate({
                             date: new Date(2022, 1, 1, 3, 4, 5, 6),
-                            options: options,
+                            options,
                         });
                         $this.text(datetime);
                     });

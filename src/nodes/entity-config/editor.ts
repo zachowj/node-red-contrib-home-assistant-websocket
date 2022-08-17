@@ -88,8 +88,8 @@ const EntityConfigEditor: EditorNodeDef<EntityConfigEditorNodeProperties> = {
             return $('<input />', {
                 type: 'text',
                 name: 'value',
-                value: value,
-                id: id,
+                value,
+                id,
                 'data-property': data.id,
             }).attr('autocomplete', 'off');
         };
@@ -100,7 +100,7 @@ const EntityConfigEditor: EditorNodeDef<EntityConfigEditorNodeProperties> = {
         ) => {
             const $select = $('<select />', {
                 name: 'value',
-                id: id,
+                id,
                 style: 'width: 70%',
                 'data-property': data.id,
             });

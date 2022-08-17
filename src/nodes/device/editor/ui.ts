@@ -275,7 +275,7 @@ export function getCapabilities(capabilities: any[] = []) {
                     acc.push({
                         name: item.name,
                         type: item.type,
-                        value: value,
+                        value,
                     });
                 }
                 break;

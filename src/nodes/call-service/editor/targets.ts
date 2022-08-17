@@ -69,7 +69,7 @@ const populateEntities = ({
     $entityIdField
         .select2(
             createSelect2Options({
-                data: data,
+                data,
                 multiple: true,
                 tags: Tags.Any,
                 displayIds: haServer.getUiSettings().entitySelector === 'id',
@@ -108,7 +108,7 @@ const populateAreas = ({
     $areaId
         .select2(
             createSelect2Options({
-                data: data,
+                data,
                 multiple: true,
                 tags: Tags.Custom,
                 displayIds: haServer.getUiSettings().areaSelector === 'id',
@@ -148,7 +148,7 @@ const populateDevices = ({
     $deviceId
         .select2(
             createSelect2Options({
-                data: data,
+                data,
                 multiple: true,
                 tags: Tags.Custom,
                 displayIds: haServer.getUiSettings().deviceSelector === 'id',

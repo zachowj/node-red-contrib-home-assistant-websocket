@@ -115,11 +115,11 @@ class GetHistory extends BaseNode {
         const apiRequest =
             entityIdType.value === 'includes' && entityId
                 ? this.homeAssistant.getHistory(startDate, null, endDate, {
-                      flatten: flatten,
+                      flatten,
                       include: new RegExp(entityId),
                   })
                 : this.homeAssistant.getHistory(startDate, entityId, endDate, {
-                      flatten: flatten,
+                      flatten,
                   });
 
         this.status.setSending('Requesting');

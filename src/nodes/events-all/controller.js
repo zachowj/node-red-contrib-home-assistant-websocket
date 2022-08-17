@@ -82,7 +82,7 @@ class EventsAll extends EventsHaNode {
                 event_type: 'home_assistant_client',
                 topic: `home_assistant_client:${type}`,
                 payload: type,
-                data: data,
+                data,
             });
 
             if (type === 'states_loaded' || type === 'services_loaded') {

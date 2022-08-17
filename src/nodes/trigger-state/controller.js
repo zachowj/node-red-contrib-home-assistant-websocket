@@ -67,7 +67,7 @@ class TriggerState extends EventsHaNode {
         if (entity_id && new_state && old_state) {
             const evt = {
                 event_type: 'state_changed',
-                entity_id: entity_id,
+                entity_id,
                 event: message.payload,
             };
 

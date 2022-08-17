@@ -63,8 +63,8 @@ export const createSelect2Options = ({
 }) => {
     const opts = {
         ...select2DefaultOptions,
-        data: data,
-        multiple: multiple,
+        data,
+        multiple,
         dropdownAutoWidth: true,
     };
 
@@ -77,7 +77,7 @@ export const createSelect2Options = ({
             if (params.term.endsWith('#')) {
                 const id = params.term.substring(0, params.term.length - 1);
                 return {
-                    id: id,
+                    id,
                     text: id,
                 };
             }
@@ -124,7 +124,7 @@ export const createCustomIdListByProperty = <T>(
                 !list.find((item) => propertyId(item) === id)
             ) {
                 acc.push({
-                    id: id,
+                    id,
                     text: id,
                     selected: true,
                 });

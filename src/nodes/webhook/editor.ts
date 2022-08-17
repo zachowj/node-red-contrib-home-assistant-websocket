@@ -26,7 +26,7 @@ function generateId(length: number) {
         'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
     return Array.from(
-        { length: length },
+        { length },
         () => possible[Math.floor(Math.random() * possible.length)]
     ).join('');
 }

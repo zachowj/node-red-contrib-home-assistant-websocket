@@ -57,7 +57,7 @@ class Sensor extends EntityNode {
             server_id: this.nodeConfig.server.id,
             node_id: this.node.id,
             component: this.nodeConfig.entityType,
-            config: config,
+            config,
         };
 
         // Add state and attributes to payload if resend enabled
@@ -166,12 +166,12 @@ class Sensor extends EntityNode {
             type: 'nodered/entity',
             server_id: this.nodeConfig.server.id,
             node_id: this.node.id,
-            state: state,
+            state,
             attributes: attr,
         };
         if (this.nodeConfig.resend) {
             this.lastPayload = {
-                state: state,
+                state,
                 attributes: attr,
             };
             this.storage.saveData('lastPayload', this.lastPayload);

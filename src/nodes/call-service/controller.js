@@ -276,7 +276,7 @@ class CallService extends EventsNode {
         try {
             this.setCustomOutputs(this.nodeConfig.outputProperties, message, {
                 config: this.nodeConfig,
-                data: data,
+                data,
             });
         } catch (e) {
             this.status.setFailed('error');

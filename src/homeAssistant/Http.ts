@@ -134,7 +134,7 @@ export default class Http {
         this.client.defaults.responseType = responseType;
 
         const response = await this.client
-            .request({ url: path, params: params })
+            .request({ url: path, params })
             .catch((err) => {
                 debug(`GET: request error: ${err.toString()}`);
                 throw err;
