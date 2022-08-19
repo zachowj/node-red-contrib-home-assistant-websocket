@@ -4,20 +4,20 @@ import { RED } from '../../globals';
 import { BaseNode, NodeSend, OutputProperty } from '../../types/nodes';
 import NodeRedContextService from '../services/NodeRedContextService';
 import TypedInputService from '../services/TypedInputService';
+import State from '../states/State';
 import { Status } from '../status/Status';
 
 export interface OutputControllerOptions<T> {
     nodeRedContextService: NodeRedContextService;
     node: T;
     status: Status;
+    state?: State;
     typedInputService: TypedInputService;
 }
 
 // export default abstract class OutputController<T extends BaseNode> {
 export default abstract class OutputController<T extends BaseNode = BaseNode> {
-    // TODO: create a state machine for this
-    private _enabled = true;
-
+    protected readonly state?: State;
     protected readonly contextService: NodeRedContextService;
     protected readonly node: T;
     protected readonly status: Status;
@@ -26,11 +26,13 @@ export default abstract class OutputController<T extends BaseNode = BaseNode> {
     constructor({
         nodeRedContextService,
         node,
+        state,
         status,
         typedInputService,
     }: OutputControllerOptions<T>) {
         this.contextService = nodeRedContextService;
         this.node = node;
+        this.state = state;
         this.status = status;
         this.typedInputService = typedInputService;
 
@@ -42,13 +44,11 @@ export default abstract class OutputController<T extends BaseNode = BaseNode> {
 
     protected onClose?(removed: boolean, done?: (err?: Error) => void): void;
 
-    get isEnabled() {
-        return this._enabled;
-    }
-
-    set isEnabled(value) {
-        this._enabled = !!value;
-        this.status.setNodeState(this._enabled);
+    protected setEnabled(value: boolean) {
+        if (this.state) {
+            this.state.setEnabled(value);
+            this.status.setNodeState(this.state.isEnabled());
+        }
     }
 
     protected sendSplit(

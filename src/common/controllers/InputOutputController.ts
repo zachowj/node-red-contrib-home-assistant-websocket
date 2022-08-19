@@ -4,10 +4,10 @@ import { BaseNode, NodeDone, NodeSend } from '../../types/nodes';
 import InputService, { Results } from '../services/InputService';
 import OutputController, { OutputControllerOptions } from './OutputController';
 
-interface InputControllerOptions<T> extends OutputControllerOptions<T> {
+interface InputOutputControllerOptions<T> extends OutputControllerOptions<T> {
     inputService: InputService;
 }
-export default abstract class InputController<
+export default abstract class InputOutputController<
     T extends BaseNode
 > extends OutputController<T> {
     protected readonly inputService: InputService;
@@ -16,12 +16,14 @@ export default abstract class InputController<
         nodeRedContextService,
         inputService,
         node,
+        state,
         status,
         typedInputService,
-    }: InputControllerOptions<T>) {
+    }: InputOutputControllerOptions<T>) {
         super({
             nodeRedContextService,
             node,
+            state,
             status,
             typedInputService,
         });
