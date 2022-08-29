@@ -1,0 +1,16 @@
+{
+  "ha-binary-sensor": {
+    "error": {
+      "no_connection": "Sensor update attempted without connection to server",
+      "integration_not_loaded": "Integration not loaded/enabled",
+      "invalid_state": "State must be defined",
+      "api_error": "API error"
+    },
+    "label": {
+      "state": "State",
+      "input_override": "Input Override",
+      "resend": "Resend state and attributes",
+      "debug": "Show Debug Information"
+    }
+  }
+}

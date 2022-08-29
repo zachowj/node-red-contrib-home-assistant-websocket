@@ -8,6 +8,10 @@ describe('Node State Class', function () {
             const state = new State();
             expect(state.isEnabled()).to.be.true;
         });
+        it('should return payload as undefined', function () {
+            const state = new State();
+            expect(state.getLastPayload()).to.be.undefined;
+        });
     });
     describe('setEnabled', function () {
         it('should set the node state to false', function () {
@@ -31,6 +35,23 @@ describe('Node State Class', function () {
             const state = new State();
             state.setEnabled(true);
             expect(state.isEnabled()).to.be.true;
+        });
+    });
+    describe('setLastPayload', function () {
+        it('should set the last payload', function () {
+            const state = new State();
+            state.setLastPayload({
+                state: 'foo',
+                attributes: {
+                    foo: 'bar',
+                },
+            });
+            expect(state.getLastPayload()).to.deep.equal({
+                state: 'foo',
+                attributes: {
+                    foo: 'bar',
+                },
+            });
         });
     });
 });

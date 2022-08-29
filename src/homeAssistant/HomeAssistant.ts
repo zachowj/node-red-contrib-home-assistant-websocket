@@ -2,10 +2,9 @@ import Debug from 'debug';
 import { EventEmitter } from 'events';
 import { HassEntities } from 'home-assistant-js-websocket';
 
-import { STATE_CONNECTED } from '../const';
 import { HassTags } from '../types/home-assistant';
 import httpAPI from './Http';
-import websocketAPI from './Websocket';
+import websocketAPI, { ClientState } from './Websocket';
 
 const debug = Debug('home-assistant');
 const websocketMethods: string[] = [
@@ -57,7 +56,7 @@ export default class HomeAssistant {
     }
 
     get isConnected(): boolean {
-        return this.websocket.connectionState === STATE_CONNECTED;
+        return this.websocket.connectionState === ClientState.Connected;
     }
 
     get isHomeAssistantRunning(): boolean {

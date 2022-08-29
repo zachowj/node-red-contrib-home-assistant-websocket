@@ -17,13 +17,14 @@ import {
     versionCheck,
 } from './editor/version';
 import ApiEditor from './nodes/api/editor';
+import BinarySensorEditor from './nodes/binary-sensor/editor';
 import ButtonEditor from './nodes/button/editor';
 import CallServiceEditor from './nodes/call-service/editor';
 import ConfigServerEditor from './nodes/config-server/editor';
 import CurrentStateEditor from './nodes/current-state/editor';
 import DeviceEditor from './nodes/device/editor';
 import EntityEditor from './nodes/entity/editor';
-import EntityConfigEditor from './nodes/entity-config/editor';
+import EntityConfigEditor from './nodes/entity-config/editor/editor';
 import EventsAllEditor from './nodes/events-all/editor';
 import EventsStateEditor from './nodes/events-state/editor';
 import FireEventEditor from './nodes/fire-event/editor';
@@ -31,6 +32,7 @@ import GetEntitiesEditor from './nodes/get-entities/editor';
 import GetHistoryEditor from './nodes/get-history/editor';
 import PollStateEditor from './nodes/poll-state/editor';
 import RenderTemplateEditor from './nodes/render-template/editor';
+import SensorEditor from './nodes/sensor/editor';
 import TagEditor from './nodes/tag/editor';
 import TimeEditor from './nodes/time/editor';
 import TriggerStateEditor from './nodes/trigger-state/editor';
@@ -53,11 +55,14 @@ RED.events.on('nodes:add', onNodesAdd);
 RED.events.on('nodes:remove', onNodesRemove);
 RED.events.on('editor:open', versionCheck);
 
+// config nodes
+RED.nodes.registerType('ha-entity-config', EntityConfigEditor);
+RED.nodes.registerType('server', ConfigServerEditor);
+
+// general nodes
 RED.nodes.registerType('ha-api', ApiEditor);
 RED.nodes.registerType('ha-button', ButtonEditor);
-RED.nodes.registerType('ha-entity-config', EntityConfigEditor);
 RED.nodes.registerType('api-call-service', CallServiceEditor);
-RED.nodes.registerType('server', ConfigServerEditor);
 RED.nodes.registerType('api-current-state', CurrentStateEditor);
 RED.nodes.registerType('ha-device', DeviceEditor);
 RED.nodes.registerType('ha-entity', EntityEditor);
@@ -74,3 +79,7 @@ RED.nodes.registerType('trigger-state', TriggerStateEditor);
 RED.nodes.registerType('ha-wait-until', WaitUntilEditor);
 RED.nodes.registerType('ha-webhook', WebhookEditor);
 RED.nodes.registerType('ha-zone', ZoneEditor);
+
+// entities nodes
+RED.nodes.registerType('ha-binary-sensor', BinarySensorEditor);
+RED.nodes.registerType('ha-sensor', SensorEditor);

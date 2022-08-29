@@ -6,6 +6,11 @@ import HomeAssistant from './HomeAssistant';
 import HttpAPI, { HttpConfig } from './Http';
 import WebsocketAPI, { WebsocketConfig } from './Websocket';
 
+export enum HaEvent {
+    AutomationTriggered = 'automation_triggered',
+    StateChanged = 'state_changed',
+}
+
 export const SUPERVISOR_URL = 'http://supervisor/core';
 
 export type Credentials = {

@@ -2,12 +2,9 @@ import { Node, NodeDef, NodeMessage } from 'node-red';
 
 import { ContextLocation } from '../common/services/NodeRedContextService';
 import { TypedInputTypes } from '../common/services/TypedInputService';
-import { HassExposedConfig } from '../editor/types';
-import { Credentials } from '../homeAssistant';
 import HomeAssistant from '../homeAssistant/HomeAssistant';
 import ConfigServer from '../nodes/config-server/controller';
 import { SelectorType } from '../nodes/config-server/editor';
-import EntityConfigController from '../nodes/entity-config/controller';
 import { DateTimeFormatOptions } from '../types/DateTimeFormatOptions';
 
 export type NodeSend = (
@@ -27,16 +24,6 @@ export interface BaseNodeProperties extends NodeProperties {
 export interface EntityBaseNodeProperties extends NodeProperties {
     entityType: string;
     entityConfig?: string;
-}
-
-export interface BaseNodeDef extends NodeDef {
-    version: number;
-    debugenabled?: boolean;
-    server?: string;
-    entityConfigNode?: string;
-    exposeToHomeAssistant?: boolean;
-    outputs?: number;
-    haConfig?: HassExposedConfig[];
 }
 
 export interface ServerNodeConfig extends NodeProperties {
@@ -65,27 +52,19 @@ export type OutputProperty = {
     valueType: TypedInputTypes;
 };
 
-export interface EntityNodeDef extends NodeDef {
-    version: number;
-    debugenabled?: boolean;
-    entityType: string;
-    entityConfig: {
-        controller: EntityConfigController;
-    };
-    outputProperties: OutputProperty[];
-}
-
 export interface ServerNode<T> extends Node<T> {
     config: ServerNodeConfig;
     controller: ConfigServer;
     getHomeAssistant: () => HomeAssistant;
 }
 
-export interface BaseNodeConfig {
-    debugenabled?: boolean;
-    name: string;
-    server?: ServerNode<Credentials>;
+export interface BaseNodeConfig extends NodeProperties {
     version: number;
+    debugenabled?: boolean;
+    server?: string;
+    entityConfigNode?: string;
+    exposeToHomeAssistant?: boolean;
+    outputs?: number;
 }
 
 export interface BaseNode extends Node {

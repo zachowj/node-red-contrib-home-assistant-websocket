@@ -5,6 +5,7 @@ import EventsStatus from '../../common/status/EventStatus';
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
 import { getConfigNodes } from '../../helpers/node';
+import { HaEvent } from '../../homeAssistant/index';
 import {
     BaseNode,
     EntityBaseNodeProperties,
@@ -29,22 +30,35 @@ export default function buttonNode(
 
     const { entityConfigNode, serverConfigNode } = getConfigNodes(this);
     const homeAssistant = serverConfigNode.getHomeAssistant();
-    const clientEvents = new ClientEvents({ node: this, homeAssistant });
+    const clientEvents = new ClientEvents({
+        node: this,
+        emitter: homeAssistant.eventBus,
+    });
     const status = new EventsStatus(
         this,
         serverConfigNode.config,
         clientEvents
     );
-    const controllerDeps = createControllerDependencies(this, homeAssistant);
     const entityEvents = new Events({
         node: this,
-        emitter: entityConfigNode.controller,
+        emitter: this,
     });
-    // eslint-disable-next-line no-new
-    new ButtonController({
+    const entityConfigEvents = new Events({
+        node: entityConfigNode,
+        emitter: entityConfigNode,
+    });
+    const controllerDeps = createControllerDependencies(this, homeAssistant);
+
+    entityConfigNode.integration.setStatus(status);
+    const controller = new ButtonController({
         entityEvents,
         node: this,
         status,
         ...controllerDeps,
     });
+
+    entityConfigEvents.addListener(
+        HaEvent.AutomationTriggered,
+        controller.onTrigger.bind(controller)
+    );
 }

@@ -1,0 +1,40 @@
+<input type="hidden" id="node-input-version" />
+
+<div class="form-row">
+    <label for="node-input-name">
+        <span data-i18n="home-assistant.label.name"></span>
+    </label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+</div>
+
+<div class="form-row">
+    <label for="node-input-entityConfig">
+        <span data-i18n="home-assistant.label.entity_config"></span>
+    </label>
+    <input type="text" id="node-input-entityConfig" />
+</div>
+
+<div class="form-row">
+    <label for="node-input-state">
+        <span data-i18n="ha-binary-sensor.label.state"></span>
+    </label>
+    <input type="text" id="node-input-state" style="width: 70%" />
+    <input type="hidden" id="node-input-stateType" />
+</div>
+
+<div class="form-row">
+    <ol id="attributes"></ol>
+</div>
+
+<div class="form-row"><ol id="custom-outputs"></ol></div>
+
+<div class="form-row">
+    <label for="node-input-inputOverride">
+        <span data-i18n="ha-binary-sensor.label.input_override"></span>
+    </label>
+    <select id="node-input-inputOverride" style="width: 68%">
+        <option value="allow">Allow</option>
+        <option value="merge">Merge</option>
+        <option value="block">Block</option>
+    </select>
+</div>

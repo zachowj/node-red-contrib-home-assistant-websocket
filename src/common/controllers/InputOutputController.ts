@@ -1,53 +1,81 @@
-import { NodeMessage } from 'node-red';
+import Joi from 'joi';
+import { NodeMessage, NodeMessageInFlow } from 'node-red';
 
-import { BaseNode, NodeDone, NodeSend } from '../../types/nodes';
-import InputService, { Results } from '../services/InputService';
+import { RED } from '../../globals';
+import {
+    BaseNode,
+    NodeDone,
+    NodeProperties,
+    NodeSend,
+} from '../../types/nodes';
+import BaseError from '../errors/InputError';
+import Integration from '../integration/Integration';
+import InputService, { ParsedMessage } from '../services/InputService';
 import OutputController, { OutputControllerOptions } from './OutputController';
 
-interface InputOutputControllerOptions<T> extends OutputControllerOptions<T> {
-    inputService: InputService;
+export interface InputOutputControllerOptions<
+    T extends BaseNode,
+    C extends NodeProperties
+> extends OutputControllerOptions<T> {
+    inputService: InputService<C>;
+    integration?: Integration;
 }
-export default abstract class InputOutputController<
-    T extends BaseNode
-> extends OutputController<T> {
-    protected readonly inputService: InputService;
 
-    constructor({
-        nodeRedContextService,
-        inputService,
-        node,
-        state,
-        status,
-        typedInputService,
-    }: InputOutputControllerOptions<T>) {
-        super({
-            nodeRedContextService,
-            node,
-            state,
-            status,
-            typedInputService,
-        });
-        this.inputService = inputService;
-        node.on('input', this.preOnInput.bind(this));
+export interface InputProperties {
+    done: NodeDone;
+    message: NodeMessage;
+    parsedMessage: ParsedMessage;
+    send: NodeSend;
+}
+
+export default abstract class InputOutputController<
+    T extends BaseNode,
+    K extends NodeProperties
+> extends OutputController<T> {
+    protected readonly inputService: InputService<K>;
+    protected readonly integration?: Integration;
+
+    constructor(params: InputOutputControllerOptions<T, K>) {
+        super(params);
+        this.inputService = params.inputService;
+        this.integration = params.integration;
+        params.node.on('input', this.preOnInput.bind(this));
     }
 
-    private preOnInput(message: NodeMessage, send: NodeSend, done: NodeDone) {
-        const parsedMessage = this.inputService.parse({}, message);
+    private async preOnInput(
+        message: NodeMessageInFlow,
+        send: NodeSend,
+        done: NodeDone
+    ) {
+        const parsedMessage = this.inputService.parse(message);
 
         try {
-            this.inputService.validate({}, message);
+            this.inputService.validate(parsedMessage);
 
-            this.onInput?.({
+            await this.onInput?.({
                 parsedMessage,
                 message,
                 send,
                 done,
             });
         } catch (e) {
-            // TODO: catch all errors and report them to the client
-            // TODO: handle validation errors, created a new validation error type
-            this.status.setFailed('Error');
-            done(e as Error);
+            let statusMessage = RED._('home-assistant.error.status.error');
+            if (e instanceof Joi.ValidationError) {
+                statusMessage = RED._(
+                    'home-assistant.error.status.validation_error'
+                );
+                done(e);
+            } else if (e instanceof BaseError) {
+                statusMessage = e.statusMessage;
+                done(e);
+            } else if (e instanceof Error) {
+                done(e);
+            } else if (typeof e === 'string') {
+                done(new Error(e));
+            } else {
+                done(new Error(`Unknown error: ${e}`));
+            }
+            this.status.setFailed(statusMessage);
         }
     }
 
@@ -56,10 +84,5 @@ export default abstract class InputOutputController<
         message,
         parsedMessage,
         send,
-    }: {
-        done: NodeDone;
-        message: NodeMessage;
-        parsedMessage?: Results;
-        send: NodeSend;
-    }): void;
+    }: InputProperties): Promise<void>;
 }

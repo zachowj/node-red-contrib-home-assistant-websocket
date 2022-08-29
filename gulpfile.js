@@ -60,6 +60,7 @@ const resourceFiles = [
 
 const nodeMap = {
     api: { doc: 'API', type: 'ha-api' },
+    'binary-sensor': { doc: 'binary-sensor', type: 'ha-binary-sensor' },
     button: { doc: 'button', type: 'ha-button' },
     'call-service': { doc: 'call-service', type: 'api-call-service' },
     'config-server': { doc: 'config-server', type: 'server' },
@@ -77,6 +78,7 @@ const nodeMap = {
     'get-history': { doc: 'get-history', type: 'api-get-history' },
     'poll-state': { doc: 'poll-state', type: 'poll-state' },
     'render-template': { doc: 'render-template', type: 'api-render-template' },
+    sensor: { doc: 'sensor', type: 'ha-sensor' },
     tag: { doc: 'tag', type: 'ha-tag' },
     time: { doc: 'time', type: 'ha-time' },
     'trigger-state': { doc: 'trigger-state', type: 'trigger-state' },

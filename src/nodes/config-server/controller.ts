@@ -5,7 +5,7 @@ import {
 import { Node } from 'node-red';
 
 import { EventsList } from '../../common/events/Events';
-import { IntegrationEvent } from '../../common/Integration';
+import { IntegrationState } from '../../common/integration/Integration';
 import { HA_EVENT_SERVICES_UPDATED } from '../../const';
 import { RED } from '../../globals';
 import {
@@ -199,9 +199,9 @@ export default class ConfigServer {
         this.node.debug(err);
     };
 
-    onIntegrationEvent = (eventType: IntegrationEvent) => {
+    onIntegrationEvent = (eventType: IntegrationState) => {
         if (
-            eventType === IntegrationEvent.NotLoaded &&
+            eventType === IntegrationState.NotLoaded &&
             !this.isHomeAssistantRunning
         ) {
             return;

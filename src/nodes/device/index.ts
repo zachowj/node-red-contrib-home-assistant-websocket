@@ -1,4 +1,4 @@
-import { NodeDef } from 'node-red';
+import { Node, NodeDef } from 'node-red';
 
 import { HassExposedConfig } from '../../editor/types';
 import { RED } from '../../globals';
@@ -30,8 +30,9 @@ interface DeviceNodeConfig extends BaseNodeConfig {
     deviceType: string;
 }
 
-interface DeviceNode extends BaseNode {
+interface DeviceNode extends Node {
     config: DeviceNodeConfig;
+    controller: any;
 }
 
 export default function deviceNode(this: DeviceNode, config: BaseNodeDef) {
@@ -45,12 +46,12 @@ export default function deviceNode(this: DeviceNode, config: BaseNodeDef) {
     };
     switch (this.config.deviceType) {
         case 'action': {
-            const status = new Status(this);
+            const status = new Status(this as unknown as BaseNode);
             this.controller = new DeviceAction({ ...params, status });
             break;
         }
         case 'trigger': {
-            const status = new EventsStatus(this);
+            const status = new EventsStatus(this as unknown as BaseNode);
             this.controller = new DeviceTrigger({ ...params, status });
             break;
         }

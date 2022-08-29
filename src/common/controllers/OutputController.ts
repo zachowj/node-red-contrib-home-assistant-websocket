@@ -1,13 +1,18 @@
 import { NodeMessage, NodeMessageInFlow } from 'node-red';
 
 import { RED } from '../../globals';
-import { BaseNode, NodeSend, OutputProperty } from '../../types/nodes';
+import {
+    BaseNode,
+    NodeDone,
+    NodeSend,
+    OutputProperty,
+} from '../../types/nodes';
 import NodeRedContextService from '../services/NodeRedContextService';
 import TypedInputService from '../services/TypedInputService';
 import State from '../states/State';
 import { Status } from '../status/Status';
 
-export interface OutputControllerOptions<T> {
+export interface OutputControllerOptions<T extends BaseNode> {
     nodeRedContextService: NodeRedContextService;
     node: T;
     status: Status;
@@ -127,7 +132,7 @@ export default abstract class OutputController<T extends BaseNode = BaseNode> {
         });
     }
 
-    private preOnClose(removed: boolean, done: () => void) {
+    private preOnClose(removed: boolean, done: NodeDone) {
         this.node.debug(
             `closing node. Reason: ${
                 removed ? 'node deleted' : 'node re-deployed'
@@ -137,7 +142,11 @@ export default abstract class OutputController<T extends BaseNode = BaseNode> {
             this.onClose?.(removed);
             done();
         } catch (e) {
-            this.node.error(e);
+            if (e instanceof Error) {
+                done(e);
+            } else {
+                done(new Error(e as string));
+            }
         }
     }
 }

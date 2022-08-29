@@ -5,7 +5,16 @@
       "connection_lost": "connection lost",
       "hass_host_required": "Base URL not set in server config",
       "invalid_auth": "Invalid access token for websocket",
-      "user_not_admin": "User required to have admin privileges in Home Assistant"
+      "user_not_admin": "User required to have admin privileges in Home Assistant",
+      "no_connection": "No connection to Home Assistant",
+      "integration_not_loaded": "Integration not loaded",
+      "invalid_state": "Invalid state",
+      "status": {
+        "failed": "Failed",
+        "error": "Error",
+        "no_connection": "No connection",
+        "validation_error": "Validation error"
+      }
     },
     "label": {
       "cancel": "Cancel",

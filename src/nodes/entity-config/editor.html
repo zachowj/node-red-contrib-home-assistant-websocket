@@ -1,4 +1,4 @@
-<input type="hidden" id="node-input-version" />
+<input type="hidden" id="node-config-input-version" />
 
 <div class="form-row">
     <label for="node-config-input-name">
@@ -20,8 +20,27 @@
     </label>
     <select id="node-config-input-entityType" style="width: 70%">
         <option
+            value="binary_sensor"
+            data-i18n="ha-entity-config.label.type_options.binary_sensor"
+        ></option>
+        <option
             value="button"
-            data-i18n="ha-entity-config.label.button"
+            data-i18n="ha-entity-config.label.type_options.button"
+        ></option>
+        <option
+            value="sensor"
+            data-i18n="ha-entity-config.label.type_options.sensor"
         ></option>
     </select>
+</div>
+
+<hr />
+
+<div id="ha-config-rows"></div>
+
+<div id="resend-row" class="form-row ha-optional-row checkbox-option">
+    <input type="checkbox" id="node-config-input-resend" />
+    <label for="node-config-input-resend">
+        <span data-i18n="ha-entity.label.resend"></span>
+    </label>
 </div>

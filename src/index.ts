@@ -3,6 +3,7 @@ import { NodeAPI } from 'node-red';
 import { setRED } from './globals';
 import { getExposedSettings } from './helpers/exposed-settings';
 import apiNode from './nodes/api';
+import binarySensorNode from './nodes/binary-sensor';
 import buttonNode from './nodes/button';
 import callServiceNode from './nodes/call-service';
 import configServerNode from './nodes/config-server';
@@ -17,6 +18,7 @@ import getEntitiesNode from './nodes/get-entities';
 import getHistoryNode from './nodes/get-history';
 import pollStateNode from './nodes/poll-state';
 import renderTemplateNode from './nodes/render-template';
+import sensorNode from './nodes/sensor';
 import tagNode from './nodes/tag';
 import timeNode from './nodes/time';
 import triggerStateNode from './nodes/trigger-state';
@@ -29,11 +31,9 @@ const nodes: { [type: string]: any } = {
     'ha-api': apiNode,
     'ha-button': buttonNode,
     'api-call-service': callServiceNode,
-    server: configServerNode,
     'api-current-state': currentStateNode,
     'ha-device': deviceNode,
     'ha-entity': entityNode,
-    'ha-entity-config': entityConfigNode,
     'server-events': eventsAllNode,
     'server-state-changed': eventsStateNode,
     'ha-fire-event': fireEventNode,
@@ -47,6 +47,14 @@ const nodes: { [type: string]: any } = {
     'ha-wait-until': waitUntilNode,
     'ha-webhook': webhookNode,
     'ha-zone': zoneNode,
+
+    // Config nodes
+    server: configServerNode,
+    'ha-entity-config': entityConfigNode,
+
+    // Entities
+    'ha-binary-sensor': binarySensorNode,
+    'ha-sensor': sensorNode,
 };
 
 export = (RED: NodeAPI): void => {
