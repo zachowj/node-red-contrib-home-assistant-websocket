@@ -10,10 +10,10 @@
       "integration_not_loaded": "Integration not loaded",
       "invalid_state": "Invalid state",
       "status": {
-        "failed": "Failed",
-        "error": "Error",
-        "no_connection": "No connection",
-        "validation_error": "Validation error"
+        "failed": "failed",
+        "error": "error",
+        "no_connection": "no connection",
+        "validation_error": "validation error"
       }
     },
     "label": {
