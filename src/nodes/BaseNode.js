@@ -3,6 +3,7 @@ const selectn = require('selectn');
 
 const ComparatorService =
     require('../common/services/ComparatorService').default;
+const State = require('../common/states/State').default;
 const TransformState = require('../common/TransformState').default;
 const {
     createControllerDependencies,
@@ -28,8 +29,8 @@ class BaseNode {
         this.options = merge({}, DEFAULT_NODE_OPTIONS, nodeOptions);
         this._eventHandlers = _eventHandlers;
         this._internals = _internals;
-        this._enabled = true;
         this.status = status;
+        this.state = new State(this.node);
 
         // TODO: move this to initializer and pass in as a parameter
         this.nodeConfig = Object.entries(this.options.config).reduce(
@@ -92,12 +93,12 @@ class BaseNode {
     }
 
     get isEnabled() {
-        return this._enabled;
+        return this.state.isEnabled();
     }
 
     set isEnabled(value) {
-        this._enabled = !!value;
-        this.status.setNodeState(this._enabled);
+        this.state.setEnabled(value);
+        this.status.setNodeState(value);
     }
 
     // Subclasses should override these as hooks into common events

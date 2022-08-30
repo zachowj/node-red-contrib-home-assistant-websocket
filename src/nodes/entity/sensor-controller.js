@@ -174,7 +174,7 @@ class Sensor extends EntityNode {
                 state,
                 attributes: attr,
             };
-            this.storage.saveData('lastPayload', this.lastPayload);
+            this.state.setLastPayload(this.lastPayload);
         }
         this.debugToClient(payload);
 

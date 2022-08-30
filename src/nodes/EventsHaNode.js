@@ -2,7 +2,6 @@ const Joi = require('joi');
 const merge = require('lodash.merge');
 
 const EventsNode = require('./EventsNode');
-const Storage = require('../helpers/Storage').default;
 const { INTEGRATION_UNLOADED, INTEGRATION_NOT_LOADED } = require('../const');
 const { STATUS_SHAPE_DOT, STATUS_SHAPE_RING } = require('../helpers/status');
 
@@ -21,10 +20,6 @@ class EventsHaNode extends EventsNode {
     constructor({ node, config, RED, status, nodeOptions = {} }) {
         nodeOptions = merge({}, DEFAULT_NODE_OPTIONS, nodeOptions);
         super({ node, config, RED, status, nodeOptions });
-        this.storage = new Storage({
-            id: this.node.id,
-            path: RED.settings.userDir,
-        });
 
         // Check if there's a server selected
         if (this.nodeConfig.server) {
@@ -40,9 +35,15 @@ class EventsHaNode extends EventsNode {
         this.init();
     }
 
-    async init() {
-        await this.loadPersistedData();
+    get lastPayload() {
+        return this.state.getLastPayload();
+    }
 
+    set lastPayload(payload) {
+        this.state.setLastPayload(payload);
+    }
+
+    async init() {
         if (this.isIntegrationLoaded) {
             this.registerEntity();
             this.removeFromHomeAssistant();
@@ -59,7 +60,6 @@ class EventsHaNode extends EventsNode {
             ) {
                 this.removeFromHomeAssistant(true);
             }
-            await this.storage.removeData();
         }
 
         this.removeSubscription();
@@ -80,21 +80,6 @@ class EventsHaNode extends EventsNode {
                     this.isEnabled = true;
                 }
                 break;
-        }
-    }
-
-    async loadPersistedData() {
-        const data = await this.storage.getData().catch((e) => {
-            this.node.error(e.message);
-        });
-
-        if (!data) return;
-
-        if (Object.prototype.hasOwnProperty.call(data, 'isEnabled')) {
-            this.isEnabled = data.isEnabled;
-        }
-        if (Object.prototype.hasOwnProperty.call(data, 'lastPayload')) {
-            this.lastPayload = data.lastPayload;
         }
     }
 
@@ -152,7 +137,6 @@ class EventsHaNode extends EventsNode {
             switch (evt.type) {
                 case 'state_changed':
                     this.isEnabled = evt.state;
-                    this.storage.saveData('isEnabled', this.isEnabled);
                     this.updateHomeAssistant();
                     break;
                 case 'automation_triggered':
@@ -267,7 +251,6 @@ class EventsHaNode extends EventsNode {
         // Enabled node when removing it from Home Assistant as there is no
         // way to do so once it's removed except for the trigger-state node
         this.isEnabled = true;
-        this.storage.saveData('isEnabled', this.isEnabled);
     }
 
     async removeSubscription() {

@@ -52,13 +52,11 @@ class TriggerState extends EventsHaNode {
     onInput({ message }) {
         if (message === 'enable' || message.payload === 'enable') {
             this.isEnabled = true;
-            this.storage.saveData('isEnabled', true);
             this.updateHomeAssistant();
             return;
         }
         if (message === 'disable' || message.payload === 'disable') {
             this.isEnabled = false;
-            this.storage.saveData('isEnabled', false);
             this.updateHomeAssistant();
             return;
         }
