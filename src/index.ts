@@ -1,5 +1,6 @@
 import { NodeAPI } from 'node-red';
 
+import Storage from './common/Storage';
 import { setRED } from './globals';
 import { getExposedSettings } from './helpers/exposed-settings';
 import apiNode from './nodes/api';
@@ -57,9 +58,11 @@ const nodes: { [type: string]: any } = {
     'ha-sensor': sensorNode,
 };
 
-export = (RED: NodeAPI): void => {
+export = async (RED: NodeAPI): Promise<void> => {
     setRED(RED);
     createRoutes();
+
+    await Storage.init();
 
     for (const type in nodes) {
         RED.nodes.registerType(type, nodes[type], getExposedSettings(type));
