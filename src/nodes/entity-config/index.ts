@@ -1,7 +1,7 @@
 import ClientEvents from '../../common/events/ClientEvents';
 import BidirectionalIntegration from '../../common/integration/BidirectionalIntegration';
 import Integration, { EntityType } from '../../common/integration/Integration';
-import State from '../../common/states/State';
+import State from '../../common/State';
 import { HassExposedConfig } from '../../editor/types';
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
@@ -39,7 +39,7 @@ export default function entityConfigNode(
         node: this,
         clientEvents,
         homeAssistant,
-        state: new State(),
+        state: new State(this),
     };
 
     switch (props.node.config.entityType) {

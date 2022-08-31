@@ -3,7 +3,7 @@ const selectn = require('selectn');
 
 const ComparatorService =
     require('../common/services/ComparatorService').default;
-const State = require('../common/states/State').default;
+const State = require('../common/State').default;
 const TransformState = require('../common/TransformState').default;
 const {
     createControllerDependencies,

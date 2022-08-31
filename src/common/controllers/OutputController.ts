@@ -9,7 +9,7 @@ import {
 } from '../../types/nodes';
 import NodeRedContextService from '../services/NodeRedContextService';
 import TypedInputService from '../services/TypedInputService';
-import State from '../states/State';
+import State from '../State';
 import { Status } from '../status/Status';
 
 export interface OutputControllerOptions<T extends BaseNode> {
