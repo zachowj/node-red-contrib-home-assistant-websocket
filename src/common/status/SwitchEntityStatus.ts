@@ -1,9 +1,9 @@
 import { NodeStatus } from 'node-red';
 
-import { Status, StatusColor, StatusShape } from './Status';
+import Status, { StatusColor, StatusShape } from './Status';
 
 export default class SwitchEntityStatus extends Status {
-    set({
+    public set({
         fill = StatusColor.Yellow,
         shape = StatusShape.Dot,
         text = '',
@@ -16,19 +16,21 @@ export default class SwitchEntityStatus extends Status {
         super.set(status);
     }
 
-    setNodeState(value: boolean): void {
-        this.isNodeDisabled = !value;
-
+    protected onNodeStateChange() {
         const status: NodeStatus = {
             fill: StatusColor.Yellow,
-            shape: value ? StatusShape.Dot : StatusShape.Ring,
-            text: this.appendDateString(value ? 'on' : 'off'),
+            shape: this.isNodeEnabled ? StatusShape.Dot : StatusShape.Ring,
+            text: this.appendDateString(
+                this.isNodeEnabled
+                    ? 'home-assistant.status.on'
+                    : 'home-assistant.status.off'
+            ),
         };
 
         this.updateStatus(status);
     }
 
-    updateStatus(status: NodeStatus | string): void {
+    protected updateStatus(status: NodeStatus | string): void {
         this.node.status(status);
     }
 }

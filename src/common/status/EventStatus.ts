@@ -1,87 +1,87 @@
 import { NodeStatus } from 'node-red';
 
+import { RED } from '../../globals';
 import { ClientEvent, ClientState } from '../../homeAssistant/Websocket';
-import { BaseNode, ServerNodeConfig } from '../../types/nodes';
 import ClientEvents from '../events/ClientEvents';
-import { Status, StatusColor, StatusShape } from './Status';
+import Status, {
+    StatusColor,
+    StatusConstructorProps,
+    StatusShape,
+} from './Status';
+
+interface EventsStatusConstructorProps extends StatusConstructorProps {
+    clientEvents: ClientEvents;
+}
 
 export default class EventsStatus extends Status {
-    private connectionState = ClientState.Disconnected;
+    #connectionState = ClientState.Disconnected;
 
-    constructor(
-        node: BaseNode,
-        config: ServerNodeConfig,
-        clientEvents: ClientEvents
-    ) {
-        super(node, config);
+    constructor(props: EventsStatusConstructorProps) {
+        super(props);
 
-        clientEvents.addListeners(this, [
-            [ClientEvent.Close, this.onClientClose],
-            [ClientEvent.Connecting, this.onClientConnecting],
-            [ClientEvent.Error, this.onClientError],
-            [ClientEvent.Open, this.onClientOpen],
-            [ClientEvent.Running, this.onClientRunning],
+        props.clientEvents.addListeners(this, [
+            [ClientEvent.Close, this.#onClientClose],
+            [ClientEvent.Connecting, this.#onClientConnecting],
+            [ClientEvent.Error, this.#onClientError],
+            [ClientEvent.Open, this.#onClientOpen],
+            [ClientEvent.Running, this.#onClientRunning],
         ]);
     }
 
-    init({ nodeState }: { nodeState: boolean }): void {
-        if (nodeState !== undefined) {
-            this.isNodeDisabled = !nodeState;
-        }
+    #onClientClose(): void {
+        this.#connectionState = ClientState.Disconnected;
+        this.#updateConnectionStatus();
     }
 
-    onClientClose(): void {
-        this.connectionState = ClientState.Disconnected;
-        this.updateConnectionStatus();
+    #onClientConnecting(): void {
+        this.#connectionState = ClientState.Connecting;
+        this.#updateConnectionStatus();
     }
 
-    onClientConnecting(): void {
-        this.connectionState = ClientState.Connecting;
-        this.updateConnectionStatus();
+    #onClientError(): void {
+        this.#connectionState = ClientState.Error;
+        this.#updateConnectionStatus();
     }
 
-    onClientError(): void {
-        this.connectionState = ClientState.Error;
-        this.updateConnectionStatus();
+    #onClientOpen(): void {
+        this.#connectionState = ClientState.Connected;
+        this.#updateConnectionStatus();
     }
 
-    onClientOpen(): void {
-        this.connectionState = ClientState.Connected;
-        this.updateConnectionStatus();
+    #onClientRunning(): void {
+        this.#connectionState = ClientState.Running;
+        this.#updateConnectionStatus();
     }
 
-    onClientRunning(): void {
-        this.connectionState = ClientState.Running;
-        this.updateConnectionStatus();
-    }
-
-    updateConnectionStatus(): void {
-        const status = this.getConnectionStatus();
+    #updateConnectionStatus(): void {
+        const status = this.#getConnectionStatus();
+        status.text = RED._(`${status.text}`);
+        this.lastStatus = status;
         this.updateStatus(status);
     }
 
-    getConnectionStatus(): NodeStatus {
+    #getConnectionStatus(): NodeStatus {
         const status: NodeStatus = {
             fill: StatusColor.Red,
             shape: StatusShape.Ring,
-            text: 'config-server.status.disconnected',
+            text: 'home-assistant.status.disconnected',
         };
 
-        switch (this.connectionState) {
+        switch (this.#connectionState) {
             case ClientState.Connected:
                 status.fill = StatusColor.Green;
-                status.text = 'config-server.status.connected';
+                status.text = 'home-assistant.status.connected';
                 break;
             case ClientState.Connecting:
                 status.fill = StatusColor.Yellow;
-                status.text = 'config-server.status.connecting';
+                status.text = 'home-assistant.status.connecting';
                 break;
             case ClientState.Error:
-                status.text = 'config-server.status.error';
+                status.text = 'home-assistant.status.error';
                 break;
             case ClientState.Running:
                 status.fill = StatusColor.Green;
-                status.text = 'config-server.status.running';
+                status.text = 'home-assistant.status.running';
                 break;
         }
 

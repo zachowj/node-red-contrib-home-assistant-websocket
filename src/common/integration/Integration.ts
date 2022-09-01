@@ -5,7 +5,7 @@ import { EntityConfigNode } from '../../nodes/entity-config/index';
 import { NodeDone } from '../../types/nodes';
 import ClientEvents from '../events/ClientEvents';
 import State from '../State';
-import { Status } from '../status/Status';
+import Status from '../status/Status';
 import { createHaConfig } from './helpers';
 
 export enum IntegrationState {

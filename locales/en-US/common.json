@@ -4,17 +4,11 @@
       "cannot_connect": "Cannot connect to Home Assistant server",
       "connection_lost": "connection lost",
       "hass_host_required": "Base URL not set in server config",
-      "invalid_auth": "Invalid access token for websocket",
-      "user_not_admin": "User required to have admin privileges in Home Assistant",
-      "no_connection": "No connection to Home Assistant",
       "integration_not_loaded": "Integration not loaded",
+      "invalid_auth": "Invalid access token for websocket",
       "invalid_state": "Invalid state",
-      "status": {
-        "failed": "failed",
-        "error": "error",
-        "no_connection": "no connection",
-        "validation_error": "validation error"
-      }
+      "no_connection": "No connection to Home Assistant",
+      "user_not_admin": "User required to have admin privileges in Home Assistant"
     },
     "label": {
       "cancel": "Cancel",
@@ -58,6 +52,24 @@
       "server": "Server",
       "state_type": "State type",
       "test": "Test"
+    },
+    "status": {
+      "connected": "connected",
+      "connecting": "connecting",
+      "disabled": "DISABLED",
+      "disconnected": "disconnected",
+      "error": "error",
+      "failed": "failed",
+      "no_connection": "no connection",
+      "off": "off",
+      "on": "on",
+      "pressed": "pressed",
+      "registered": "registered",
+      "running": "running",
+      "sending": "sending",
+      "success": "success",
+      "triggered": "triggered",
+      "validation_error": "validation error"
     },
     "ui": {
       "migrations": {

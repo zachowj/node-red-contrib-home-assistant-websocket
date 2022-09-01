@@ -1,8 +1,11 @@
-import { Node, NodeStatus } from 'node-red';
+import { NodeStatus } from 'node-red';
 
+import { RED } from '../../globals';
 import { formatDate } from '../../helpers/date';
-import { DateTimeFormatOptions } from '../../types/DateTimeFormatOptions';
 import { BaseNode, ServerNodeConfig } from '../../types/nodes';
+import Events, { NodeEvent } from '../events/Events';
+import State from '../State';
+import { getStatusOptions } from './helpers';
 
 export enum StatusColor {
     Blue = 'blue',
@@ -17,36 +20,57 @@ export enum StatusShape {
     Ring = 'ring',
 }
 
-export class Status {
-    protected isNodeDisabled = false;
-    protected lastStatus: NodeStatus = {};
-    protected readonly node: Node;
+export interface StatusConstructorProps {
+    config: ServerNodeConfig;
+    nodeEvents: Events;
+    node: BaseNode;
+    state: State;
+}
+
+export default class Status {
     protected readonly config: ServerNodeConfig;
+    protected readonly nodeEvents: Events;
+    protected readonly node: BaseNode;
+    protected readonly nodeState: State;
 
-    constructor(node: BaseNode, config: ServerNodeConfig) {
-        this.node = node;
-        this.config = config;
+    protected lastStatus: NodeStatus = {};
+
+    constructor(props: StatusConstructorProps) {
+        this.config = props.config;
+        this.nodeEvents = props.nodeEvents;
+        this.node = props.node;
+        this.nodeState = props.state;
+
+        this.nodeEvents.addListener(
+            NodeEvent.StateChanged,
+            this.onNodeStateChange.bind(this)
+        );
     }
 
-    setNodeState(value: boolean): void {
-        if (this.isNodeDisabled === value) {
-            this.isNodeDisabled = !value;
-            this.updateStatus(this.lastStatus);
-        }
+    get isNodeEnabled(): boolean {
+        return this.nodeState.isEnabled();
     }
 
-    set(status: NodeStatus = {}): void {
-        if (this.isNodeDisabled === false) {
+    get isNodeDisabled(): boolean {
+        return this.nodeState.isEnabled() === false;
+    }
+
+    protected onNodeStateChange() {
+        this.updateStatus(this.lastStatus);
+    }
+
+    public set(status: NodeStatus = {}): void {
+        if (this.isNodeEnabled) {
             this.lastStatus = status;
         }
         this.updateStatus(status);
     }
 
-    setText(text = ''): void {
+    public setText(text = ''): void {
         this.set({ text });
     }
 
-    setSuccess(text = 'Success'): void {
+    public setSuccess(text = 'home-assistant.status.success'): void {
         this.set({
             fill: StatusColor.Green,
             shape: StatusShape.Dot,
@@ -54,7 +78,7 @@ export class Status {
         });
     }
 
-    setSending(text = 'Sending'): void {
+    public setSending(text = 'home-assistant.status.sending'): void {
         this.set({
             fill: StatusColor.Yellow,
             shape: StatusShape.Dot,
@@ -62,7 +86,7 @@ export class Status {
         });
     }
 
-    setFailed(text = 'Failed'): void {
+    public setFailed(text = 'home-assistant.status.failed'): void {
         this.set({
             fill: StatusColor.Red,
             shape: StatusShape.Ring,
@@ -70,61 +94,24 @@ export class Status {
         });
     }
 
-    updateStatus(status: NodeStatus): void {
+    protected updateStatus(status: NodeStatus): void {
         if (this.isNodeDisabled) {
             status = {
                 fill: StatusColor.Grey,
                 shape: StatusShape.Dot,
-                text: 'config-server.status.disabled',
+                text: 'home-assistant.status.disabled',
             };
         }
 
         this.node.status(status);
     }
 
-    appendDateString(text: string): string {
+    protected appendDateString(text: string): string {
         const separator = this.config?.statusSeparator ?? '';
         const dateString = formatDate({
-            options: this.statusOptions(),
+            options: getStatusOptions(this.config),
         });
 
-        return `${text} ${separator}${dateString}`;
-    }
-
-    statusOptions(): DateTimeFormatOptions {
-        const config = this.config;
-
-        const options: DateTimeFormatOptions = {
-            year:
-                config?.statusYear === 'hidden'
-                    ? undefined
-                    : config?.statusYear,
-            month:
-                config?.statusMonth === 'hidden'
-                    ? undefined
-                    : config?.statusMonth ?? 'short',
-            day:
-                config?.statusDay === 'hidden'
-                    ? undefined
-                    : config?.statusDay ?? 'numeric',
-            hourCycle:
-                config?.statusHourCycle === 'default'
-                    ? undefined
-                    : config?.statusHourCycle ?? 'h23',
-            hour: 'numeric',
-            minute: 'numeric',
-        };
-
-        switch (config?.statusTimeFormat) {
-            case 'h:m:s':
-                options.second = 'numeric';
-                break;
-            case 'h:m:s.ms':
-                options.second = 'numeric';
-                options.fractionalSecondDigits = 3;
-                break;
-        }
-
-        return options;
+        return `${RED._(`${text}`)} ${separator}${dateString}`;
     }
 }

@@ -5,6 +5,12 @@ import { BaseNode } from '../../types/nodes';
 export type EventHandler = (...args: any[]) => void;
 export type EventsList = [string | symbol, EventHandler][];
 
+export enum NodeEvent {
+    Close = 'close',
+    On = 'on',
+    StateChanged = 'stateChanged',
+}
+
 export default class Events {
     listeners: EventsList = [];
     protected readonly node;
@@ -14,7 +20,7 @@ export default class Events {
         this.node = node;
         this.emitter = emitter;
 
-        node.on('close', this.onClose.bind(this));
+        node.on(NodeEvent.Close, this.onClose.bind(this));
     }
 
     onClose(_removed: boolean, done?: (err?: Error) => void) {

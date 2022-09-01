@@ -10,7 +10,7 @@ import {
 import NodeRedContextService from '../services/NodeRedContextService';
 import TypedInputService from '../services/TypedInputService';
 import State from '../State';
-import { Status } from '../status/Status';
+import Status from '../status/Status';
 
 export interface OutputControllerOptions<T extends BaseNode> {
     nodeRedContextService: NodeRedContextService;
@@ -50,10 +50,7 @@ export default abstract class OutputController<T extends BaseNode = BaseNode> {
     protected onClose?(removed: boolean, done?: (err?: Error) => void): void;
 
     protected setEnabled(value: boolean) {
-        if (this.state) {
-            this.state.setEnabled(value);
-            this.status.setNodeState(this.state.isEnabled());
-        }
+        this.state?.setEnabled(value);
     }
 
     protected sendSplit(

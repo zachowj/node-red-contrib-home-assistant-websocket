@@ -16,7 +16,7 @@ export default class ButtonController extends OutputController<ButtonNode> {
     }
 
     onTrigger(data: { entity: HassEntity }) {
-        this.status.setSuccess('pressed');
+        this.status.setSuccess('home-assistant.status.pressed');
         const message = {};
         this.setCustomOutputs(this.node.config.outputProperties, message, {
             config: this.node.config,

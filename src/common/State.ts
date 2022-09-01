@@ -1,4 +1,5 @@
 import { BaseNode, NodeDone } from '../types/nodes';
+import { NodeEvent } from './events/Events';
 import Storage, { LastPayloadData } from './Storage';
 
 export default class State {
@@ -11,7 +12,7 @@ export default class State {
         this.#enabled = Storage.getNodeData(node.id, 'isEnabled') ?? true;
         this.#lastPayload = Storage.getNodeData(node.id, 'lastPayload');
 
-        node.on('close', this.#onClose.bind(this));
+        node.on(NodeEvent.Close, this.#onClose.bind(this));
     }
 
     async #onClose(removed: boolean, done: NodeDone) {
@@ -30,6 +31,7 @@ export default class State {
         await Storage.saveNodeData(this.#node.id, 'isEnabled', state).catch(
             this.#node.error
         );
+        this.#emitChange();
     }
 
     async setLastPayload(payload: LastPayloadData) {
@@ -37,9 +39,17 @@ export default class State {
         await Storage.saveNodeData(this.#node.id, 'lastPayload', payload).catch(
             this.#node.error
         );
+        this.#emitChange();
     }
 
     getLastPayload(): LastPayloadData | undefined {
         return this.#lastPayload;
+    }
+
+    #emitChange(): void {
+        this.#node.emit(NodeEvent.StateChanged, {
+            isEnabled: this.#enabled,
+            lastPayload: this.#lastPayload,
+        });
     }
 }

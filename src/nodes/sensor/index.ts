@@ -7,7 +7,9 @@ import {
     SensorBaseNodeProperties,
 } from '../../common/controllers/SensorBaseController';
 import ClientEvents from '../../common/events/ClientEvents';
+import Events from '../../common/events/Events';
 import InputService, { NodeInputs } from '../../common/services/InputService';
+import State from '../../common/State';
 import EventsStatus from '../../common/status/EventStatus';
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
@@ -76,11 +78,15 @@ export default function Sensor(this: SensorNode, config: NodeDef) {
         node: this,
         emitter: homeAssistant.eventBus,
     });
-    const status = new EventsStatus(
-        this,
-        serverConfigNode.config,
-        clientEvents
-    );
+    const nodeEvents = new Events({ node: this, emitter: this });
+    const state = new State(this);
+    const status = new EventsStatus({
+        config: serverConfigNode.config,
+        clientEvents,
+        nodeEvents,
+        node: this,
+        state,
+    });
     const controllerDeps = createControllerDependencies(this, homeAssistant);
     const inputService = new InputService<SensorNodeProperties>({
         inputs,

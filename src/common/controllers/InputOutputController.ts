@@ -59,11 +59,9 @@ export default abstract class InputOutputController<
                 done,
             });
         } catch (e) {
-            let statusMessage = RED._('home-assistant.error.status.error');
+            let statusMessage = RED._('home-assistant.status.error');
             if (e instanceof Joi.ValidationError) {
-                statusMessage = RED._(
-                    'home-assistant.error.status.validation_error'
-                );
+                statusMessage = RED._('home-assistant.status.validation_error');
                 done(e);
             } else if (e instanceof BaseError) {
                 statusMessage = e.statusMessage;
