@@ -60,10 +60,6 @@ const nodes: { [type: string]: any } = {
     'ha-sensor': sensorNode,
 };
 
-process.on('unhandledRejection', (reason, p) => {
-    console.log('Unhandled Rejection: ', p, 'reason:', reason);
-});
-
 export = async (RED: NodeAPI): Promise<void> => {
     setRED(RED);
     createRoutes();
