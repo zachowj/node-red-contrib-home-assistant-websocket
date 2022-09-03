@@ -1,23 +1,51 @@
-import { EditorNodeProperties, EditorRED } from 'node-red';
+import { EditorNodeInstance, EditorNodeProperties, EditorRED } from 'node-red';
 
-import { sensorUnitOfMeasurement } from './ha-config-data';
+import { sensorUnitOfMeasurement } from './data/sensor';
 
 declare const RED: EditorRED;
 
 const packageName = 'node-red-contrib-home-assistant-websocket/all:';
 
-export const createServerList = (selectedServier: string) => {
-    let html = '';
+export const createConfigList = (
+    id: 'server' | 'deviceConfig',
+    node: EditorNodeInstance,
+    options?: { allowNone?: boolean }
+) => {
+    const $div = $(`
+        <div style="width: 70%; display: inline-flex">    
+            <select id="node-config-input-${id}" style="flex: 1"></select>
+            <a class="red-ui-button" style="margin-left: 10px"><i class="fa fa-pencil"></i></a>
+        </div>
+    `);
+
+    let selectOptions = options?.allowNone ? '<option value="">' : '';
+    const type = id === 'server' ? 'server' : 'ha-device-config';
     RED.nodes.eachConfig((n: EditorNodeProperties) => {
-        if (n.type === 'server') {
-            html += `<option value="${n.id}" ${
-                selectedServier === n.id && 'selected'
+        if (n.type === type) {
+            selectOptions += `<option value="${n.id}" ${
+                node[id] === n.id && 'selected'
             }>${n.name}</option>`;
         }
         return true;
     });
 
-    return html;
+    selectOptions += `<option value="_ADD_">add new ${type}...</option>`;
+    $div.find('select').html(selectOptions);
+
+    $div.find('a').on('click', () => {
+        const selected = $div.find('select').val();
+        if (!selected) return;
+        RED.editor.editConfig(
+            id,
+            type,
+            selected,
+            'node-config-input',
+            // @ts-expect-error - editConfig accepts 5 arguments
+            node
+        );
+    });
+
+    return $div;
 };
 
 const createDate = (
@@ -158,4 +186,22 @@ export const createRow = (
     }
 
     return $row;
+};
+
+export const saveEntityType = (
+    type: 'button' | 'binary_sensor' | 'sensor' | 'switch'
+) => {
+    $('#node-input-lookup-entityConfig').on('click', function () {
+        if ($('#node-input-entityConfig').val() === '_ADD_') {
+            $('body').data('haEntityType', type);
+        }
+    });
+};
+
+export const setEntityType = () => {
+    const type = $('body').data('haEntityType');
+    if (type) {
+        $('#node-config-input-entityType').val(type);
+        $('body').data('haEntityType', null);
+    }
 };

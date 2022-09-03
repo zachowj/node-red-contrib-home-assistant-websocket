@@ -10,6 +10,7 @@ import callServiceNode from './nodes/call-service';
 import configServerNode from './nodes/config-server';
 import currentStateNode from './nodes/current-state';
 import deviceNode from './nodes/device';
+import deviceConfigNode from './nodes/device-config';
 import entityNode from './nodes/entity';
 import entityConfigNode from './nodes/entity-config';
 import eventsAllNode from './nodes/events-all';
@@ -51,12 +52,17 @@ const nodes: { [type: string]: any } = {
 
     // Config nodes
     server: configServerNode,
+    'ha-device-config': deviceConfigNode,
     'ha-entity-config': entityConfigNode,
 
     // Entities
     'ha-binary-sensor': binarySensorNode,
     'ha-sensor': sensorNode,
 };
+
+process.on('unhandledRejection', (reason, p) => {
+    console.log('Unhandled Rejection: ', p, 'reason:', reason);
+});
 
 export = async (RED: NodeAPI): Promise<void> => {
     setRED(RED);

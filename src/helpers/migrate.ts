@@ -4,6 +4,7 @@ import callService from '../nodes/call-service/migrations';
 import configServer from '../nodes/config-server/migrations';
 import currentState from '../nodes/current-state/migrations';
 import device from '../nodes/device/migrations';
+import deviceConfig from '../nodes/device-config/migrations';
 import entity from '../nodes/entity/migrations';
 import entityConfig from '../nodes/entity-config/migrations';
 import eventsAll from '../nodes/events-all/migrations';
@@ -33,6 +34,7 @@ const nodeTypeTranslation: Record<string, Migration[]> = {
     server: configServer,
     'api-current-state': currentState,
     'ha-device': device,
+    'ha-device-config': deviceConfig,
     'ha-entity': entity,
     'ha-entity-config': entityConfig,
     'server-events': eventsAll,
@@ -80,12 +82,14 @@ function findMigration(
     version = -1
 ): Migration | undefined {
     const migrations = getMigrationsByType(nodeType);
-    const migration = migrations.find((m) => m.version === Number(version) + 1);
+    const migration = migrations?.find(
+        (m) => m.version === Number(version) + 1
+    );
 
     return migration;
 }
 
-function getMigrationsByType(nodeType: NodeTypeKey): Migration[] {
+function getMigrationsByType(nodeType: NodeTypeKey): Migration[] | undefined {
     return nodeTypeTranslation[nodeType];
 }
 

@@ -9,6 +9,7 @@ import {
     HATypedInputTypeOptions,
     OutputProperty,
 } from '../../editor/types';
+import { saveEntityType } from '../entity-config/editor/helpers';
 
 declare const RED: EditorRED;
 
@@ -109,7 +110,7 @@ const SensorEditor: EditorNodeDef<SensorEditorNodeProperties> = {
             // @ts-expect-error - DefinitelyTyped is wrong typedInput can take a object as a parameter
             type: this.stateType,
         });
-
+        saveEntityType('sensor');
         $('#attributes')
             .editableList({
                 removable: true,

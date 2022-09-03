@@ -116,12 +116,19 @@ function capitalizeNodeType(type: string) {
 }
 
 export function isCurrentVersion(node: EditorNodeInstance<HassNodeProperties>) {
-    const version = RED.settings.get<number>(
+    const currentVersion = RED.settings.get<number>(
         capitalizeNodeType(node.type as unknown as string),
         -1
     );
 
-    return node.version !== undefined && node.version >= version;
+    // coonfig nodes don't have default vaules set yet at this point
+    const nodeVersion =
+        isHomeAssistantConfigNode(node) && node.version === undefined
+            ? // @ts-expect-error - Use a private property to get the version before the node is initialized
+              node._def.defaults.version.value
+            : node.version;
+
+    return nodeVersion !== undefined && nodeVersion >= currentVersion;
 }
 
 export function isHomeAssistantNode(
@@ -136,7 +143,9 @@ export function isHomeAssistantNode(
 function isHomeAssistantConfigNode(
     node: EditorNodeInstance<HassNodeProperties>
 ) {
-    return ['server', 'ha-entity-config'].includes(node.type ?? '');
+    return ['server', 'ha-entity-config', 'ha-device-config'].includes(
+        node.type ?? ''
+    );
 }
 
 export function getOldNodeCount() {

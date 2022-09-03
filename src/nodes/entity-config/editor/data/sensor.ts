@@ -1,34 +1,3 @@
-const binarySensorDeviceClasses = [
-    'battery',
-    'battery_charging',
-    'co',
-    'cold',
-    'connectivity',
-    'door',
-    'garage_door',
-    'gas',
-    'heat',
-    'light',
-    'lock',
-    'moisture',
-    'motion',
-    'moving',
-    'occupancy',
-    'opening',
-    'plug',
-    'power',
-    'presence',
-    'problem',
-    'running',
-    'safety',
-    'smoke',
-    'sound',
-    'tamper',
-    'update',
-    'vibration',
-    'window',
-] as const;
-
 const sensorDeviceClasses = [
     'apparent_power',
     'aqi',
@@ -106,39 +75,17 @@ export const sensorUnitOfMeasurement: Record<
     voltage: ['V'],
 };
 
-export const defaultHaConfigOptions = [
-    { id: 'name', type: 'string' },
-    { id: 'icon', type: 'string' },
+export default [
+    {
+        id: 'device_class',
+        type: 'select',
+        values: ['', ...sensorDeviceClasses],
+    },
+    { id: 'unit_of_measurement', type: 'sensor_uom' },
+    {
+        id: 'state_class',
+        type: 'select',
+        values: ['', 'measurement', 'total', 'total_increasing'],
+    },
+    { id: 'last_reset', type: 'datetime' },
 ];
-
-export const haConfigOptions = {
-    button: [
-        {
-            id: 'device_class',
-            type: 'select',
-            values: ['', 'restart', 'update'],
-        },
-    ],
-    binary_sensor: [
-        {
-            id: 'device_class',
-            type: 'select',
-            values: ['', ...binarySensorDeviceClasses],
-        },
-    ],
-    sensor: [
-        {
-            id: 'device_class',
-            type: 'select',
-            values: ['', ...sensorDeviceClasses],
-        },
-        { id: 'unit_of_measurement', type: 'sensor_uom' },
-        {
-            id: 'state_class',
-            type: 'select',
-            values: ['', 'measurement', 'total', 'total_increasing'],
-        },
-        { id: 'last_reset', type: 'datetime' },
-    ],
-    switch: [],
-};

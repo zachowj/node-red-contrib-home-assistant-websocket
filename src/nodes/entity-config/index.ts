@@ -5,12 +5,14 @@ import State from '../../common/State';
 import { HassExposedConfig } from '../../editor/types';
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
-import { getServerConfigNode } from '../../helpers/node';
+import { getNode, getServerConfigNode } from '../../helpers/node';
 import { BaseNode, BaseNodeProperties } from '../../types/nodes';
+import { DeviceConfigNode } from '../device-config/index';
 
 export interface EntityConfigNodeProperties extends BaseNodeProperties {
     entityType: EntityType;
     server: string;
+    deviceConfig: string;
     resend: boolean;
     haConfig: HassExposedConfig[];
 }
@@ -34,15 +36,19 @@ export default function entityConfigNode(
         node: this,
         emitter: homeAssistant.eventBus,
     });
+    const deviceConfigNode = getNode<DeviceConfigNode>(
+        this.config.deviceConfig
+    );
 
     const props = {
-        node: this,
         clientEvents,
+        deviceConfigNode,
+        entityConfigNode: this,
         homeAssistant,
         state: new State(this),
     };
 
-    switch (props.node.config.entityType) {
+    switch (this.config.entityType) {
         case EntityType.BinarySensor:
         case EntityType.Sensor: {
             this.integration = new Integration(props);
@@ -53,9 +59,7 @@ export default function entityConfigNode(
             break;
         }
         default:
-            throw new Error(
-                `Unknown entity type: ${props.node.config.entityType}`
-            );
+            throw new Error(`Unknown entity type: ${this.config.entityType}`);
     }
     this.integration.init();
 }

@@ -1,8 +1,8 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
 import ha from '../../../editor/ha';
-import { defaultHaConfigOptions, haConfigOptions } from './ha-config-data';
-import { createRow, createServerList } from './helpers';
+import { defaultHaConfigOptions, haConfigOptions } from './data';
+import { createConfigList, createRow, setEntityType } from './helpers';
 
 declare const RED: EditorRED;
 
@@ -14,6 +14,7 @@ type HaConfig = {
 interface EntityConfigEditorNodeProperties extends EditorNodeProperties {
     version: number;
     server: string;
+    deviceConfig: string;
     entityType: string;
     haConfig: HaConfig[];
     resend: boolean;
@@ -31,6 +32,7 @@ const EntityConfigEditor: EditorNodeDef<EntityConfigEditorNodeProperties> = {
             value: '',
             required: true,
         },
+        deviceConfig: { value: '' },
         name: { value: '' },
         version: { value: RED.settings.get('haEntityConfigVersion', 0) },
         entityType: { value: 'binary_sensor', required: true },
@@ -43,7 +45,15 @@ const EntityConfigEditor: EditorNodeDef<EntityConfigEditorNodeProperties> = {
     oneditprepare: function () {
         ha.setup(this);
 
-        $('#node-config-input-server').append(createServerList(this.server));
+        $('#node-config-input-server').replaceWith(
+            createConfigList('server', this)
+        );
+        $('#node-config-input-deviceConfig').replaceWith(
+            createConfigList('deviceConfig', this, {
+                allowNone: true,
+            })
+        );
+        setEntityType();
 
         const $container = $('#ha-config-rows');
         // eslint-disable-next-line @typescript-eslint/no-this-alias

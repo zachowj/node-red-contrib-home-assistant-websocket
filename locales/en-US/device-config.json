@@ -1,0 +1,11 @@
+{
+  "ha-device-config": {
+    "label": {
+      "name": "Name",
+      "manufacturer": "Manufacturer",
+      "model": "Model",
+      "hw_version": "Hardware Version",
+      "sw_version": "Software Version"
+    }
+  }
+}

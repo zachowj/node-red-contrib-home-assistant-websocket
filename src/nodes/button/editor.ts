@@ -4,6 +4,7 @@ import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
 import ha from '../../editor/ha';
 import { OutputProperty } from '../../editor/types';
+import { saveEntityType } from '../entity-config/editor/helpers';
 
 declare const RED: EditorRED;
 
@@ -65,6 +66,8 @@ const ButtonEditor: EditorNodeDef<ButtonEditorNodeProperties> = {
     oneditprepare: function () {
         ha.setup(this);
         exposeNode.init(this);
+
+        saveEntityType('button');
 
         haOutputs.createOutputs(this.outputProperties, {
             extraTypes: ['entity', 'entityState', 'entityId'],

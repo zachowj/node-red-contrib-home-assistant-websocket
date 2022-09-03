@@ -61,6 +61,11 @@
         "voltage": "voltage",
         "window": "window"
       },
+      "entity_category_options": {
+        "config": "config",
+        "diagnostic": "diagnostic"
+      },
+      "entity_category": "Category",
       "icon": "Icon",
       "last_reset": "Last reset",
       "name": "Friendly name",

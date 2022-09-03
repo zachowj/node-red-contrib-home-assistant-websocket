@@ -13,6 +13,7 @@
     "label": {
       "cancel": "Cancel",
       "done": "Done",
+      "device": "Device",
       "entity": "Entity",
       "entity_config": "Entity config",
       "entity_id": "Entity ID",

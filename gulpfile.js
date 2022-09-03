@@ -66,6 +66,7 @@ const nodeMap = {
     'config-server': { doc: 'config-server', type: 'server' },
     'current-state': { doc: 'current-state', type: 'api-current-state' },
     device: { doc: 'device', type: 'ha-device' },
+    'device-config': { doc: 'device-config', type: 'ha-device-config' },
     entity: { doc: 'entity', type: 'ha-entity' },
     'entity-config': { doc: 'entity-config', type: 'ha-entity-config' },
     'events-all': { doc: 'events-all', type: 'server-events' },

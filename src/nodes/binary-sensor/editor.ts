@@ -9,6 +9,7 @@ import {
     HATypedInputTypeOptions,
     OutputProperty,
 } from '../../editor/types';
+import { saveEntityType } from '../entity-config/editor/helpers';
 
 declare const RED: EditorRED;
 
@@ -53,7 +54,7 @@ const BinarySensorEditor: EditorNodeDef<BinarySensorEditorNodeProperties> = {
     color: ha.nodeColors.haBlue,
     inputs: 1,
     outputs: 1,
-    icon: 'font-awesome/fa-genderless',
+    icon: 'font-awesome/fa-check-circle-o',
     align: 'right',
     paletteLabel: 'binary sensor',
     label: function () {
@@ -109,6 +110,7 @@ const BinarySensorEditor: EditorNodeDef<BinarySensorEditorNodeProperties> = {
             // @ts-expect-error - DefinitelyTyped is wrong typedInput can take a object as a parameter
             type: this.stateType,
         });
+        saveEntityType('binary_sensor');
 
         $('#attributes')
             .editableList({

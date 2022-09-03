@@ -12,7 +12,7 @@ export enum NodeEvent {
 }
 
 export default class Events {
-    listeners: EventsList = [];
+    #listeners: EventsList = [];
     protected readonly node;
     protected readonly emitter;
 
@@ -33,7 +33,7 @@ export default class Events {
         handler: EventHandler,
         options = { once: false }
     ): void {
-        this.listeners.push([event, handler]);
+        this.#listeners.push([event, handler]);
 
         if (options.once === true) {
             this.emitter.once(event, handler);
@@ -44,14 +44,14 @@ export default class Events {
 
     addListeners(bind: any, eventsList: EventsList) {
         eventsList.forEach(([event, handler]) => {
-            this.emitter.addListener(event, handler.bind(bind));
+            this.addListener(event, handler.bind(bind));
         });
     }
 
     removeListeners() {
-        this.listeners.forEach(([event, handler]) => {
+        this.#listeners.forEach(([event, handler]) => {
             this.emitter.removeListener(event, handler);
         });
-        this.listeners = [];
+        this.#listeners = [];
     }
 }

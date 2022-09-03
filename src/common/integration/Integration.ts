@@ -1,9 +1,12 @@
-import { INTEGRATION_EVENT } from '../../const';
+import { compareVersions } from 'compare-versions';
+
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
 import { ClientEvent } from '../../homeAssistant/Websocket';
+import { DeviceConfigNode } from '../../nodes/device-config/index';
 import { EntityConfigNode } from '../../nodes/entity-config/index';
 import { NodeDone } from '../../types/nodes';
 import ClientEvents from '../events/ClientEvents';
+import { NodeEvent } from '../events/Events';
 import State from '../State';
 import Status from '../status/Status';
 import { createHaConfig } from './helpers';
@@ -27,12 +30,22 @@ export enum EntityType {
 export enum MessageType {
     Discovery = 'nodered/discovery',
     Entity = 'nodered/entity',
+    RemoveDevice = 'nodered/device/remove',
 }
 
 export interface MessageBase {
     type: MessageType;
     server_id: string;
     node_id: string;
+}
+
+export interface DeviceInfo {
+    id: string;
+    hw_version?: string;
+    name: string;
+    manufacturer?: string;
+    model?: string;
+    sw_version?: string;
 }
 
 export interface DiscoveryMessage extends MessageBase {
@@ -42,6 +55,7 @@ export interface DiscoveryMessage extends MessageBase {
     remove?: boolean;
     state?: any;
     attributes?: Record<string, any>;
+    device_info?: DeviceInfo;
 }
 
 export interface EntityMessage extends MessageBase {
@@ -52,15 +66,17 @@ export interface EntityMessage extends MessageBase {
 
 export interface IntegrationConstructor {
     clientEvents: ClientEvents;
+    deviceConfigNode?: DeviceConfigNode;
+    entityConfigNode: EntityConfigNode;
     homeAssistant: HomeAssistant;
-    node: EntityConfigNode;
     state: State;
 }
 
 export default class Integration {
     protected readonly clientEvents: ClientEvents;
+    protected readonly deviceConfigNode?: DeviceConfigNode;
+    protected readonly entityConfigNode: EntityConfigNode;
     protected readonly homeAssistant: HomeAssistant;
-    protected readonly node: EntityConfigNode;
     public readonly state: State;
     protected status: Status[] = [];
 
@@ -70,21 +86,30 @@ export default class Integration {
 
     constructor({
         clientEvents,
+        deviceConfigNode,
         homeAssistant,
-        node,
+        entityConfigNode,
         state,
     }: IntegrationConstructor) {
         this.clientEvents = clientEvents;
+        this.deviceConfigNode = deviceConfigNode;
+        this.entityConfigNode = entityConfigNode;
         this.homeAssistant = homeAssistant;
-        this.node = node;
         this.state = state;
     }
 
     async init() {
-        this.node.on('close', this.onClose.bind(this));
+        this.entityConfigNode.on(
+            NodeEvent.Close,
+            this.onEntityConfigNodeClose.bind(this)
+        );
+        this.deviceConfigNode?.on(
+            NodeEvent.Close,
+            this.onDeviceConfigNodeClose.bind(this)
+        );
         this.clientEvents.addListeners(this, [
             [ClientEvent.Close, this.onHaEventsClose],
-            [INTEGRATION_EVENT, this.onHaIntegration],
+            [ClientEvent.Integration, this.#onHaIntegration],
         ]);
 
         if (this.isIntegrationLoaded) {
@@ -100,24 +125,33 @@ export default class Integration {
         return this.registered;
     }
 
-    protected async onClose(removed: boolean, done: NodeDone) {
+    protected async onEntityConfigNodeClose(removed: boolean, done: NodeDone) {
         if (this.registered && this.isIntegrationLoaded && removed) {
             try {
                 await this.unregisterEntity();
-                done();
             } catch (err) {
                 done(err as Error);
             }
-        } else {
-            done();
         }
+        done();
+    }
+
+    protected async onDeviceConfigNodeClose(removed: boolean, done: NodeDone) {
+        if (this.registered && this.isIntegrationLoaded && removed) {
+            try {
+                await this.#removeDevice();
+            } catch (err) {
+                done(err as Error);
+            }
+        }
+        done();
     }
 
     protected onHaEventsClose() {
         this.registered = false;
     }
 
-    private async onHaIntegration(type: IntegrationState) {
+    async #onHaIntegration(type: IntegrationState) {
         switch (type) {
             case IntegrationState.Loaded:
                 await this.registerEntity();
@@ -129,6 +163,23 @@ export default class Integration {
         }
     }
 
+    protected getDeviceInfo(): DeviceInfo | undefined {
+        if (!this.deviceConfigNode) {
+            return undefined;
+        }
+
+        const config = this.deviceConfigNode.config;
+
+        return {
+            id: config.id,
+            hw_version: config.hwVersion,
+            name: config.name,
+            manufacturer: config.manufacturer,
+            model: config.model,
+            sw_version: config.swVersion,
+        };
+    }
+
     protected getDiscoveryPayload({
         config,
         remove,
@@ -138,13 +189,16 @@ export default class Integration {
         remove?: boolean;
         state?: State;
     }): DiscoveryMessage {
+        const deviceInfo = this.getDeviceInfo();
+
         let message: DiscoveryMessage = {
             type: MessageType.Discovery,
-            server_id: this.node.config.server,
-            node_id: this.node.id,
+            server_id: this.entityConfigNode.config.server,
+            node_id: this.entityConfigNode.id,
             config,
-            component: this.node.config.entityType,
+            component: this.entityConfigNode.config.entityType,
             remove,
+            device_info: deviceInfo,
         };
 
         const lastPayload = state?.getLastPayload();
@@ -161,8 +215,8 @@ export default class Integration {
     ): EntityMessage {
         return {
             type: MessageType.Entity,
-            server_id: this.node.config.server,
-            node_id: this.node.id,
+            server_id: this.entityConfigNode.config.server,
+            node_id: this.entityConfigNode.id,
             state,
             attributes,
         };
@@ -170,25 +224,25 @@ export default class Integration {
 
     protected async registerEntity() {
         if (!this.isIntegrationLoaded) {
-            this.node.error(this.notInstallMessage);
+            this.entityConfigNode.error(this.notInstallMessage);
             this.status.forEach((status) => status.setFailed('Error'));
             return;
         }
 
-        if (this.isRegistered) {
-            return;
-        }
+        if (this.isRegistered) return;
 
-        const config = createHaConfig(this.node.config.haConfig);
+        const config = createHaConfig(this.entityConfigNode.config.haConfig);
 
         const payload = this.getDiscoveryPayload({
             config,
-            state: this.node.config.resend ? this.state : undefined,
+            state: this.entityConfigNode.config.resend ? this.state : undefined,
         });
 
         // this.node.debugToClient(payload);
 
-        this.node.debug(`Registering ${this.node.config.entityType} with HA`);
+        this.entityConfigNode.debug(
+            `Registering ${this.entityConfigNode.config.entityType} with HA`
+        );
         try {
             await this.homeAssistant.websocket.send(payload);
         } catch (err) {
@@ -196,7 +250,7 @@ export default class Integration {
                 status.setFailed('Error registering')
             );
             const message = err instanceof Error ? err.message : err;
-            this.node.error(
+            this.entityConfigNode.error(
                 `Error registering entity. Error Message: ${message}`
             );
             return;
@@ -207,17 +261,17 @@ export default class Integration {
         this.registered = true;
     }
 
-    setStatus(status: Status) {
+    public setStatus(status: Status) {
         this.status.push(status);
     }
 
-    async updateStateAndAttributes(
+    public async updateStateAndAttributes(
         state: any,
         attributes: Record<string, any>
     ) {
         const payload = this.getEntityPayload(state, attributes);
         await this.homeAssistant.websocket.send(payload);
-        if (this.node.config.resend) {
+        if (this.entityConfigNode.config.resend) {
             const lastPayload = {
                 state,
                 attributes,
@@ -228,14 +282,37 @@ export default class Integration {
         return payload;
     }
 
-    async unregisterEntity() {
-        this.node.debug(
-            `Unregistering ${this.node.config.entityType} node from HA`
+    protected async unregisterEntity() {
+        this.entityConfigNode.debug(
+            `Unregistering ${this.entityConfigNode.config.entityType} node from HA`
         );
 
-        const payload = this.node.integration.getDiscoveryPayload({
+        const payload = this.entityConfigNode.integration.getDiscoveryPayload({
             remove: true,
         });
         await this.homeAssistant?.websocket.send(payload);
+    }
+
+    // device endpoints are only available in 1.1.0+
+    #isValidVersionforDevices() {
+        return (
+            compareVersions(
+                `${this.homeAssistant.websocket.integrationVersion}`,
+                '1.1'
+            ) >= 0
+        );
+    }
+
+    async #removeDevice() {
+        if (!this.deviceConfigNode || !this.#isValidVersionforDevices()) return;
+
+        this.deviceConfigNode.debug(
+            `Removing device from Home Assistant: ${this.deviceConfigNode.config.name}`
+        );
+
+        await this.homeAssistant?.websocket.send({
+            type: MessageType.RemoveDevice,
+            node_id: this.deviceConfigNode.id,
+        });
     }
 }
