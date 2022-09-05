@@ -1,6 +1,7 @@
 import { defineUserConfig } from 'vuepress';
 import type { DefaultThemeOptions } from 'vuepress';
 import path from 'path';
+import { trimEnd } from 'lodash';
 
 export default defineUserConfig<DefaultThemeOptions>({
     base: '/node-red-contrib-home-assistant-websocket/',
@@ -101,18 +102,23 @@ export default defineUserConfig<DefaultThemeOptions>({
             ],
             '/node/': [
                 {
-                    text: 'Nodes',
-                    collapsible: false,
+                    text: 'Config Nodes',
+                    collapsible: true,
+                    children: [
+                        'device-config',
+                        'entity-config',
+                        'config-server',
+                    ],
+                },
 
+                {
+                    text: 'General Nodes',
+                    collapsible: true,
                     children: [
                         'API',
-                        'button',
                         'call-service',
-                        'config-server',
                         'current-state',
                         'device',
-                        'entity',
-                        'entity-config',
                         'events-all',
                         'events-state',
                         'fire-event',
@@ -126,6 +132,17 @@ export default defineUserConfig<DefaultThemeOptions>({
                         'wait-until',
                         'webhook',
                         'zone',
+                    ],
+                },
+                {
+                    text: 'Entity Nodes',
+                    collapsible: true,
+                    children: [
+                        'binary-sensor',
+                        'button',
+                        'entity',
+                        'sensor',
+                        'switch',
                     ],
                 },
             ],

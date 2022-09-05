@@ -104,17 +104,3 @@ ability to track which entities were changed by Node-RED.
 ::: tip
 Once you've configured the WebSocket connection using the `Events: all` node, this node should be removed for optimal NodeRed performance. Instead, prefer using the other node types provided by this package (`Events: state`, `Trigger: state` etc), or add an event type filter to the `Events: all` node to avoid overloading the websocket message queue.
 :::
-
-## Migrating
-
-Coming from a different version, e.g. [node-red-contrib-home-assistant](https://github.com/AYapejian/node-red-contrib-home-assistant) or [node-red-contrib-home-assistant-llat](https://github.com/Spartan-II-117/node-red-contrib-home-assistant-llat)?
-
-If you have been using
-[node-red-contrib-home-assistant](https://github.com/AYapejian/node-red-contrib-home-assistant)
-version there are some breaking changes with two of the nodes. The [poll state](/node/poll-state.md)
-and [current state](/node/current-state.md) both have a little different formatted outputs. Check your nodes
-and make sure they are outputting what you expect. A more in-depth example can
-be found
-[here](./migration.md).
-
-If you have been using the [node-red-contrib-home-assistant-llat](https://github.com/Spartan-II-117/node-red-contrib-home-assistant-llat) fork this should be a drop-in replacement.
