@@ -1,7 +1,3 @@
----
-sidebarDepth: 1
----
-
 # Poll State
 
 Polls for the state at regular intervals, optionally also outputting at the start and when the state changes. Useful for either alert for non-communicating devices (time since change > 1 day for example) or dashboard graphs with consistent interval charts

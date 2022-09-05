@@ -1,7 +1,3 @@
----
-sidebarDepth: 1
----
-
 # Tag
 
 Sends an output when Home Assistant receives a tag scanned event for a configured tag id.

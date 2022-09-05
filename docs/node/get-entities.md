@@ -1,7 +1,3 @@
----
-sidebarDepth: 1
----
-
 # Get Entities
 
 Get Entities based on search criteria

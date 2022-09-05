@@ -1,7 +1,3 @@
----
-sidebarDepth: 1
----
-
 # Trigger: state
 
 Much like the `State Changed Node` however, provides some advanced functionality

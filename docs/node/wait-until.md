@@ -1,7 +1,3 @@
----
-sidebarDepth: 1
----
-
 # Wait Until
 
 When an input is received the node will wait until the condition is met or the

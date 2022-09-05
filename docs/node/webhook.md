@@ -1,7 +1,3 @@
----
-sidebarDepth: 1
----
-
 # Webhook
 
 Outputs the data received from the created webhook in Home Assistant

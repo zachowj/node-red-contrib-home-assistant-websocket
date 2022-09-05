@@ -1,7 +1,3 @@
----
-sidebarDepth: 1
----
-
 # Current State
 
 Returns the current state of an entity. Useful for using conditional logic to automation flows.

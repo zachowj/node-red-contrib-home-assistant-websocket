@@ -1,7 +1,3 @@
----
-sidebarDepth: 1
----
-
 # Device
 
 ## Configuration
