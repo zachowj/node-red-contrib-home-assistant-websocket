@@ -7,8 +7,14 @@ import HttpAPI, { HttpConfig } from './Http';
 import WebsocketAPI, { WebsocketConfig } from './Websocket';
 
 export enum HaEvent {
+    AreaRegistryUpdated = 'areas_updated',
     AutomationTriggered = 'automation_triggered',
+    DeviceRegistryUpdated = 'devices_updated',
+    Integration = 'nodered',
+    RegistryUpdated = 'registry_updated',
+    ServicesUpdated = 'services_updated',
     StateChanged = 'state_changed',
+    TagScanned = 'tag_scanned',
 }
 
 export const SUPERVISOR_URL = 'http://supervisor/core';

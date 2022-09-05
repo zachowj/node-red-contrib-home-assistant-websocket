@@ -1,13 +1,10 @@
 import { HassEntities, HassServices } from 'home-assistant-js-websocket';
 
-import {
-    HA_EVENT_AREA_REGISTRY_UPDATED,
-    HA_EVENT_DEVICE_REGISTRY_UPDATED,
-    HA_EVENT_REGISTRY_UPDATED,
-    HA_EVENT_SERVICES_UPDATED,
-} from '../../const';
+import { EventsList } from '../../common/events/Events';
 import { RED } from '../../globals';
+import { HaEvent } from '../../homeAssistant';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
+import { ClientEvent } from '../../homeAssistant/Websocket';
 import {
     HassAreas,
     HassDevices,
@@ -33,17 +30,18 @@ export default class Comms {
 
     startListeners(): void {
         // Setup event listeners
-        const events: { [key: string]: (data?: any) => void } = {
-            [HA_EVENT_SERVICES_UPDATED]: this.onServicesUpdated,
-            'ha_client:states_loaded': this.onStatesLoaded,
-            'ha_events:state_changed': this.onStateChanged,
-            integration: this.onIntegrationEvent,
-            [HA_EVENT_AREA_REGISTRY_UPDATED]: this.onAreaRegistryUpdate,
-            [HA_EVENT_DEVICE_REGISTRY_UPDATED]: this.onDeviceRegistryUpdate,
-            [HA_EVENT_REGISTRY_UPDATED]: this.onRegistryUpdate,
-        };
-        Object.entries(events).forEach(([event, callback]) =>
-            this.homeAssistant.addListener(event, callback.bind(this))
+        const events: EventsList = [
+            [HaEvent.ServicesUpdated, this.onServicesUpdated],
+            [ClientEvent.ServicesLoaded, this.onStatesLoaded],
+            [HaEvent.StateChanged, this.onStateChanged],
+            [HaEvent.Integration, this.onIntegrationEvent],
+            [HaEvent.AreaRegistryUpdated, this.onAreaRegistryUpdate],
+            [HaEvent.DeviceRegistryUpdated, this.onDeviceRegistryUpdate],
+            [HaEvent.RegistryUpdated, this.onRegistryUpdate],
+        ];
+
+        events.forEach(([event, callback]) =>
+            this.homeAssistant.addListener(String(event), callback.bind(this))
         );
     }
 
