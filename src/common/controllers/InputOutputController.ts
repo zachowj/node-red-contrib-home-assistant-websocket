@@ -1,10 +1,11 @@
 import Joi from 'joi';
-import { NodeMessage, NodeMessageInFlow } from 'node-red';
+import { NodeMessageInFlow } from 'node-red';
 
 import { RED } from '../../globals';
 import {
     BaseNode,
     NodeDone,
+    NodeMessage,
     NodeProperties,
     NodeSend,
 } from '../../types/nodes';

@@ -15,6 +15,7 @@ import getHistory from '../nodes/get-history/migrations';
 import pollState from '../nodes/poll-state/migrations';
 import renderTemplate from '../nodes/render-template/migrations';
 import sensor from '../nodes/sensor/migrations';
+import switchMigration from '../nodes/switch/migrations';
 import tag from '../nodes/tag/migrations';
 import time from '../nodes/time/migrations';
 import triggerState from '../nodes/trigger-state/migrations';
@@ -45,6 +46,7 @@ const nodeTypeTranslation: Record<string, Migration[]> = {
     'poll-state': pollState,
     'api-render-template': renderTemplate,
     'ha-sensor': sensor,
+    'ha-switch': switchMigration,
     'trigger-state': triggerState,
     'ha-tag': tag,
     'ha-time': time,

@@ -4,6 +4,28 @@ import { SubscriptionUnsubscribe } from '../../types/home-assistant';
 import { createHaConfig } from './helpers';
 import Integration, { EntityMessage, MessageType } from './Integration';
 
+export interface TriggerPayload {
+    entity_id?: string;
+    skip_condition: boolean;
+    output_path: boolean;
+    payload?: boolean | string | number | Record<string, unknown>;
+}
+
+interface TriggerEvent {
+    type: HaEvent.AutomationTriggered;
+    data: TriggerPayload;
+}
+
+interface StateChangeEvent {
+    type: HaEvent.StateChanged;
+    state: boolean;
+}
+
+export interface StateChangePayload {
+    state: boolean;
+    changed: boolean;
+}
+
 export default class BidirectionalIntegration extends Integration {
     #unsubscribe?: SubscriptionUnsubscribe;
 
@@ -54,20 +76,20 @@ export default class BidirectionalIntegration extends Integration {
         this.#unsubscribe = undefined;
     }
 
-    protected updateHomeAssistant() {
+    public async updateHomeAssistant() {
         if (!this.isIntegrationLoaded) return;
 
         const message: EntityMessage = {
             type: MessageType.Entity,
             server_id: this.entityConfigNode.config.server,
             node_id: this.entityConfigNode.id,
-            state: this.state.isEnabled,
+            state: this.state.isEnabled(),
         };
 
-        this.homeAssistant.websocket.send(message);
+        await this.homeAssistant.websocket.send(message);
     }
 
-    protected onHaEventMessage(evt: { type?: HaEvent; data: any }) {
+    protected onHaEventMessage(evt: TriggerEvent | StateChangeEvent) {
         switch (evt.type) {
             case HaEvent.AutomationTriggered:
                 this.entityConfigNode.emit(
@@ -76,10 +98,17 @@ export default class BidirectionalIntegration extends Integration {
                 );
                 break;
             case HaEvent.StateChanged:
-            default: // no type prior to 0.20.0
-                this.state.setEnabled(evt.data.state);
+            default: {
+                // no type prior to 0.20.0
+                const previousState = this.state.isEnabled();
+                this.state.setEnabled(evt.state);
+                this.entityConfigNode.emit(HaEvent.StateChanged, {
+                    state: evt.state,
+                    changed: evt.state !== previousState,
+                });
                 this.updateHomeAssistant();
                 break;
+            }
         }
     }
 }

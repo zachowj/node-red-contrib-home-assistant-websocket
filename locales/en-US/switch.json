@@ -1,0 +1,8 @@
+{
+  "ha-switch": {
+    "label": {
+      "enable_input": "Enable input",
+      "output_on_state_change": "Output on state change"
+    }
+  }
+}

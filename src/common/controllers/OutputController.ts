@@ -1,9 +1,10 @@
-import { NodeMessage, NodeMessageInFlow } from 'node-red';
+import { NodeMessageInFlow } from 'node-red';
 
 import { RED } from '../../globals';
 import {
     BaseNode,
     NodeDone,
+    NodeMessage,
     NodeSend,
     OutputProperty,
 } from '../../types/nodes';

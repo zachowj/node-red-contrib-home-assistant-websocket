@@ -21,6 +21,7 @@ import getHistoryNode from './nodes/get-history';
 import pollStateNode from './nodes/poll-state';
 import renderTemplateNode from './nodes/render-template';
 import sensorNode from './nodes/sensor';
+import switchNode from './nodes/switch';
 import tagNode from './nodes/tag';
 import timeNode from './nodes/time';
 import triggerStateNode from './nodes/trigger-state';
@@ -43,6 +44,7 @@ const nodes: { [type: string]: any } = {
     'api-get-history': getHistoryNode,
     'poll-state': pollStateNode,
     'api-render-template': renderTemplateNode,
+    'ha-switch': switchNode,
     'trigger-state': triggerStateNode,
     'ha-tag': tagNode,
     'ha-time': timeNode,

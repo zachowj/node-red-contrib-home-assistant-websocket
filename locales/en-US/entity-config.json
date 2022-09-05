@@ -34,6 +34,7 @@
         "nitrous_oxide": "nitrous oxide",
         "occupancy": "occupancy",
         "opening": "opening",
+        "outlet": "outlet",
         "ozone": "ozone",
         "plug": "plug",
         "pm1": "pm1",
@@ -52,6 +53,7 @@
         "smoke": "smoke",
         "sound": "sound",
         "sulphur_dioxide": "sulphur dioxide",
+        "switch": "switch",
         "tamper": "tamper",
         "temperature": "temperature",
         "timestamp": "timestamp",
@@ -61,11 +63,11 @@
         "voltage": "voltage",
         "window": "window"
       },
+      "entity_category": "Category",
       "entity_category_options": {
         "config": "config",
         "diagnostic": "diagnostic"
       },
-      "entity_category": "Category",
       "icon": "Icon",
       "last_reset": "Last reset",
       "name": "Friendly name",
@@ -79,7 +81,8 @@
       "type_options": {
         "binary_sensor": "binary sensor",
         "button": "button",
-        "sensor": "sensor"
+        "sensor": "sensor",
+        "switch": "switch"
       },
       "unit_of_measurement": "Unit of measurement"
     }

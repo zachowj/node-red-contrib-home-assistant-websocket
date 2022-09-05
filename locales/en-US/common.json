@@ -68,6 +68,7 @@
       "registered": "registered",
       "running": "running",
       "sending": "sending",
+      "state_change": "state change",
       "success": "success",
       "triggered": "triggered",
       "validation_error": "validation error"

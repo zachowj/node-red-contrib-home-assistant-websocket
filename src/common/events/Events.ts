@@ -1,6 +1,6 @@
 import EventEmitter from 'events';
 
-import { BaseNode } from '../../types/nodes';
+import { BaseNode, NodeDone } from '../../types/nodes';
 
 export type EventHandler = (...args: any[]) => void;
 export type EventsList = [string | symbol, EventHandler][];
@@ -23,9 +23,9 @@ export default class Events {
         node.on(NodeEvent.Close, this.onClose.bind(this));
     }
 
-    onClose(_removed: boolean, done?: (err?: Error) => void) {
+    onClose(_removed: boolean, done: NodeDone) {
         this.removeListeners();
-        done?.();
+        done();
     }
 
     addListener(

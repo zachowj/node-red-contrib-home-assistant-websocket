@@ -19,7 +19,9 @@ export interface EntityConfigNodeProperties extends BaseNodeProperties {
 
 export interface EntityConfigNode extends BaseNode {
     config: EntityConfigNodeProperties;
+    enableInput: boolean;
     integration: Integration;
+    state: State;
 }
 
 export default function entityConfigNode(
@@ -39,13 +41,14 @@ export default function entityConfigNode(
     const deviceConfigNode = getNode<DeviceConfigNode>(
         this.config.deviceConfig
     );
+    this.state = new State(this);
 
     const props = {
         clientEvents,
         deviceConfigNode,
         entityConfigNode: this,
         homeAssistant,
-        state: new State(this),
+        state: this.state,
     };
 
     switch (this.config.entityType) {
@@ -54,7 +57,8 @@ export default function entityConfigNode(
             this.integration = new Integration(props);
             break;
         }
-        case EntityType.Button: {
+        case EntityType.Button:
+        case EntityType.Switch: {
             this.integration = new BidirectionalIntegration(props);
             break;
         }

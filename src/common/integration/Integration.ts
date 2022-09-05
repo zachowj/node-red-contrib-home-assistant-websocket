@@ -25,6 +25,7 @@ export enum EntityType {
     BinarySensor = 'binary_sensor',
     Button = 'button',
     Sensor = 'sensor',
+    Switch = 'switch',
 }
 
 export enum MessageType {

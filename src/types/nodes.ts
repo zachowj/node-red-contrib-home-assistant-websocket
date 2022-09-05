@@ -1,4 +1,4 @@
-import { Node, NodeDef, NodeMessage } from 'node-red';
+import { Node, NodeDef, NodeMessage as NodeMessageBase } from 'node-red';
 
 import { ContextLocation } from '../common/services/NodeRedContextService';
 import { TypedInputTypes } from '../common/services/TypedInputService';
@@ -6,6 +6,10 @@ import HomeAssistant from '../homeAssistant/HomeAssistant';
 import ConfigServer from '../nodes/config-server/controller';
 import { SelectorType } from '../nodes/config-server/editor';
 import { DateTimeFormatOptions } from '../types/DateTimeFormatOptions';
+
+export interface NodeMessage extends NodeMessageBase {
+    [key: string]: any;
+}
 
 export type NodeSend = (
     msg: NodeMessage | Array<NodeMessage | NodeMessage[] | null>
@@ -52,7 +56,8 @@ export type OutputProperty = {
     valueType: TypedInputTypes;
 };
 
-export interface ServerNode<T> extends Node<T> {
+// eslint-disable-next-line @typescript-eslint/ban-types
+export interface ServerNode<T extends {}> extends Node<T> {
     config: ServerNodeConfig;
     controller: ConfigServer;
     getHomeAssistant: () => HomeAssistant;
