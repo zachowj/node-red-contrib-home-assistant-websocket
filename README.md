@@ -43,10 +43,6 @@ Under the server node config just check the checkbox for `I use the Home Assista
 
 The add-on can be found here: <https://github.com/hassio-addons/addon-node-red#readme>
 
-## Nodes
-
-This package includes nodes that trigger on events from Home Assistant.
-
 ## Contribute
 
 - [Setting up Development Environment](https://zachowj.github.io/node-red-contrib-home-assistant-websocket/guide/development.html)

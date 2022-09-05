@@ -1,7 +1,6 @@
 import { defineUserConfig } from 'vuepress';
 import type { DefaultThemeOptions } from 'vuepress';
 import path from 'path';
-import { trimEnd } from 'lodash';
 
 export default defineUserConfig<DefaultThemeOptions>({
     base: '/node-red-contrib-home-assistant-websocket/',
