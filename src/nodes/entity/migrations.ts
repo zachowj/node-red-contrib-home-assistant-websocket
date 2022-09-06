@@ -35,4 +35,14 @@ export default [
             return newSchema;
         },
     },
+    {
+        version: 3,
+        up: (schema: any) => {
+            const newSchema = {
+                ...schema,
+                version: 3,
+            };
+            return newSchema;
+        },
+    },
 ];

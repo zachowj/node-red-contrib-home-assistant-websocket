@@ -134,6 +134,9 @@ export function isCurrentVersion(node: EditorNodeInstance<HassNodeProperties>) {
 export function isHomeAssistantNode(
     node: EditorNodeInstance<HassNodeProperties>
 ) {
+    // This can be removed when the ha-entity node is removed
+    if (node.type === 'ha-entity') return false;
+
     const nodeSet = RED.nodes.registry.getNodeSetForType(
         node.type as unknown as string
     ) as { module?: string } | undefined;

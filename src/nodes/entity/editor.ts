@@ -102,7 +102,9 @@ const EntityEditor: EditorNodeDef<EntityEditorNodeProperties> = {
     label: function () {
         return this.name || `type: ${this.entityType}`;
     },
-    labelStyle: ha.labelStyle,
+    labelStyle: function () {
+        return this.name ? 'node_label_italic' : '';
+    },
     defaults: {
         name: { value: '' },
         server: { value: '', type: 'server', required: true },
@@ -134,6 +136,14 @@ const EntityEditor: EditorNodeDef<EntityEditorNodeProperties> = {
         outputPayloadType: { value: null },
     },
     oneditprepare: function () {
+        if (this.version >= RED.settings.get('haEntityVersion', 0)) {
+            $('#ha-entity-removed').hide().after(`
+            <div>
+                This node has been deperacated in favor of the indivdual entity nodes.
+            </div>
+            `);
+            return;
+        }
         ha.setup(this);
         haServer.init(this, '#node-input-server');
         exposeNode.init(this);

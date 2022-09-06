@@ -1,93 +1,95 @@
-<input type="hidden" id="node-input-version" />
+<div id="ha-entity-removed">
+    <input type="hidden" id="node-input-version" />
 
-<div class="form-row">
-    <label for="node-input-name">
-        <span data-i18n="ha-entity.label.name"></span>
-    </label>
-    <input type="text" id="node-input-name" placeholder="Name" />
-</div>
+    <div class="form-row">
+        <label for="node-input-name">
+            <span data-i18n="ha-entity.label.name"></span>
+        </label>
+        <input type="text" id="node-input-name" placeholder="Name" />
+    </div>
 
-<div class="form-row">
-    <label for="node-input-server">
-        <span data-i18n="ha-entity.label.server"></span>
-    </label>
-    <input type="text" id="node-input-server" />
-</div>
+    <div class="form-row">
+        <label for="node-input-server">
+            <span data-i18n="ha-entity.label.server"></span>
+        </label>
+        <input type="text" id="node-input-server" />
+    </div>
 
-<div class="form-row">
-    <label for="node-input-entityType">
-        <span data-i18n="ha-entity.label.type"></span>
-    </label>
-    <select id="node-input-entityType" style="width: 70%">
-        <option value="binary_sensor">Binary Sensor</option>
-        <option value="sensor">Sensor</option>
-        <option value="switch">Switch</option>
-    </select>
-</div>
+    <div class="form-row">
+        <label for="node-input-entityType">
+            <span data-i18n="ha-entity.label.type"></span>
+        </label>
+        <select id="node-input-entityType" style="width: 70%">
+            <option value="binary_sensor">Binary Sensor</option>
+            <option value="sensor">Sensor</option>
+            <option value="switch">Switch</option>
+        </select>
+    </div>
 
-<div id="state-row" class="form-row optional-row">
-    <label for="node-input-state">
-        <span data-i18n="ha-entity.label.state"></span>
-    </label>
-    <input type="text" id="node-input-state" style="width: 70%" />
-    <input type="hidden" id="node-input-stateType" />
-</div>
+    <div id="state-row" class="form-row optional-row">
+        <label for="node-input-state">
+            <span data-i18n="ha-entity.label.state"></span>
+        </label>
+        <input type="text" id="node-input-state" style="width: 70%" />
+        <input type="hidden" id="node-input-stateType" />
+    </div>
 
-<div id="attributes-row" class="form-row optional-row">
-    <ol id="attributes"></ol>
-</div>
+    <div id="attributes-row" class="form-row optional-row">
+        <ol id="attributes"></ol>
+    </div>
 
-<div id="config-row" class="form-row">
-    <ol id="haConfig"></ol>
-</div>
+    <div id="config-row" class="form-row">
+        <ol id="haConfig"></ol>
+    </div>
 
-<div id="output-location-row" class="form-row optional-row">
-    <label for="node-input-outputLocation">
-        <span data-i18n="ha-entity.label.output_location"></span>
-    </label>
-    <input type="hidden" id="node-input-outputLocationType" />
-    <input type="text" id="node-input-outputLocation" style="width: 68%" />
-</div>
+    <div id="output-location-row" class="form-row optional-row">
+        <label for="node-input-outputLocation">
+            <span data-i18n="ha-entity.label.output_location"></span>
+        </label>
+        <input type="hidden" id="node-input-outputLocationType" />
+        <input type="text" id="node-input-outputLocation" style="width: 68%" />
+    </div>
 
-<div id="input-override-row" class="form-row optional-row">
-    <label for="node-input-inputOverride">
-        <span data-i18n="ha-entity.label.input_override"></span>
-    </label>
-    <select id="node-input-inputOverride" style="width: 68%">
-        <option value="allow">Allow</option>
-        <option value="merge">Merge</option>
-        <option value="block">Block</option>
-    </select>
-</div>
+    <div id="input-override-row" class="form-row optional-row">
+        <label for="node-input-inputOverride">
+            <span data-i18n="ha-entity.label.input_override"></span>
+        </label>
+        <select id="node-input-inputOverride" style="width: 68%">
+            <option value="allow">Allow</option>
+            <option value="merge">Merge</option>
+            <option value="block">Block</option>
+        </select>
+    </div>
 
-<div id="resend-row" class="form-row optional-row checkbox-option">
-    <input type="checkbox" id="node-input-resend" />
-    <label for="node-input-resend">
-        <span data-i18n="ha-entity.label.resend"></span>
-    </label>
-</div>
+    <div id="resend-row" class="form-row optional-row checkbox-option">
+        <input type="checkbox" id="node-input-resend" />
+        <label for="node-input-resend">
+            <span data-i18n="ha-entity.label.resend"></span>
+        </label>
+    </div>
 
-<div
-    id="output-on-state-change-row"
-    class="form-row optional-row checkbox-option"
->
-    <input type="checkbox" id="node-input-outputOnStateChange" />
-    <label for="node-input-outputOnStateChange">
-        <span data-i18n="ha-entity.label.on_state_change"></span>
-    </label>
-</div>
+    <div
+        id="output-on-state-change-row"
+        class="form-row optional-row checkbox-option"
+    >
+        <input type="checkbox" id="node-input-outputOnStateChange" />
+        <label for="node-input-outputOnStateChange">
+            <span data-i18n="ha-entity.label.on_state_change"></span>
+        </label>
+    </div>
 
-<div id="output-payload-row" class="form-row">
-    <label for="node-input-outputPayload">
-        <span data-i18n="ha-entity.label.payload"></span>
-    </label>
-    <input type="text" id="node-input-outputPayload" />
-    <input type="hidden" id="node-input-outputPayloadType" />
-</div>
+    <div id="output-payload-row" class="form-row">
+        <label for="node-input-outputPayload">
+            <span data-i18n="ha-entity.label.payload"></span>
+        </label>
+        <input type="text" id="node-input-outputPayload" />
+        <input type="hidden" id="node-input-outputPayloadType" />
+    </div>
 
-<div id="debug-row" class="form-row optional-row checkbox-option">
-    <input type="checkbox" id="node-input-debugenabled" />
-    <label for="node-input-debugenabled">
-        <span data-i18n="ha-entity.label.debug"></span>
-    </label>
+    <div id="debug-row" class="form-row optional-row checkbox-option">
+        <input type="checkbox" id="node-input-debugenabled" />
+        <label for="node-input-debugenabled">
+            <span data-i18n="ha-entity.label.debug"></span>
+        </label>
+    </div>
 </div>
