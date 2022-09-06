@@ -52,7 +52,7 @@ const inputSchema: Joi.ObjectSchema = Joi.object({
                 value: Joi.any().required(),
                 valueType: Joi.string()
                     .valid(
-                        'msg.',
+                        'msg',
                         'flow',
                         'global',
                         'jsonata',

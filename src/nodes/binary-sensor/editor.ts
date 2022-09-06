@@ -76,26 +76,7 @@ const BinarySensorEditor: EditorNodeDef<BinarySensorEditorNodeProperties> = {
         attributes: { value: [] },
         inputOverride: { value: 'allow' },
         outputProperties: {
-            value: [
-                {
-                    property: 'payload',
-                    propertyType: 'msg',
-                    value: '',
-                    valueType: 'entityState',
-                },
-                {
-                    property: 'topic',
-                    propertyType: 'msg',
-                    value: '',
-                    valueType: 'triggerId',
-                },
-                {
-                    property: 'data',
-                    propertyType: 'msg',
-                    value: '',
-                    valueType: 'entity',
-                },
-            ],
+            value: [],
             validate: haOutputs.validate,
         },
     },

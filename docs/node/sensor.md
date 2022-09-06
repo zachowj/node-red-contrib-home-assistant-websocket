@@ -1,6 +1,6 @@
 # Sensor
 
-Creates a binary sensor in Home Assistant which can be manipulated from this node.
+Creates a sensor in Home Assistant which can be manipulated from this node.
 
 ::: warning
 _Needs [Custom Integration](https://github.com/zachowj/hass-node-red) installed
