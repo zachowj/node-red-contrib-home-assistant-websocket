@@ -15,7 +15,8 @@ export function updateIntegration(topic: string, msg: any) {
 }
 
 function isEntityNode() {
-    return node.type === 'ha-button';
+    const nodes = ['ha-button', 'ha-binary-sensor', 'ha-sensor', 'ha-switch'];
+    return node?.type && nodes.includes(node.type);
 }
 
 function getServerId(): string | undefined {
@@ -64,6 +65,13 @@ export function init(n: HassNodeProperties) {
             case 'ha-entity':
                 renderAlert();
                 break;
+            case 'ha-binary-sensor':
+            case 'ha-sensor':
+            case 'ha-switch':
+                if ($('#node-input-entityConfig').val() !== '_ADD_') {
+                    renderAlert('1.1.0');
+                }
+                break;
             case 'ha-button':
                 if ($('#node-input-entityConfig').val() !== '_ADD_') {
                     renderAlert('1.0.4');
@@ -84,6 +92,13 @@ function render() {
         case 'ha-webhook':
         case 'ha-entity':
             renderAlert();
+            break;
+        case 'ha-binary-sensor':
+        case 'ha-sensor':
+        case 'ha-switch':
+            if ($('#node-input-entityConfig').val() !== '_ADD_') {
+                renderAlert('1.1.0');
+            }
             break;
         case 'ha-button':
             if ($('#node-input-entityConfig').val() !== '_ADD_') {

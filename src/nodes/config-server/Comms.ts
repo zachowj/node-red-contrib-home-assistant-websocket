@@ -34,7 +34,7 @@ export default class Comms {
             [HaEvent.ServicesUpdated, this.onServicesUpdated],
             [ClientEvent.ServicesLoaded, this.onStatesLoaded],
             [HaEvent.StateChanged, this.onStateChanged],
-            [HaEvent.Integration, this.onIntegrationEvent],
+            [ClientEvent.Integration, this.onIntegrationEvent],
             [HaEvent.AreaRegistryUpdated, this.onAreaRegistryUpdate],
             [HaEvent.DeviceRegistryUpdated, this.onDeviceRegistryUpdate],
             [HaEvent.RegistryUpdated, this.onRegistryUpdate],
