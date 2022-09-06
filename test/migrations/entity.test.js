@@ -49,6 +49,19 @@ const VERSION_2 = {
         { property: 'last_reset', value: '' },
     ],
 };
+const VERSION_3 = {
+    ...VERSION_2,
+    version: 3,
+    inputOverride: 'allow',
+    config: [
+        { property: 'name', value: '' },
+        { property: 'device_class', value: '' },
+        { property: 'icon', value: '' },
+        { property: 'unit_of_measurement', value: '' },
+        { property: 'state_class', value: '' },
+        { property: 'last_reset', value: '' },
+    ],
+};
 
 describe('Migrations - Entity Node', function () {
     describe('Version 0', function () {
@@ -77,6 +90,6 @@ describe('Migrations - Entity Node', function () {
     });
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_2);
+        expect(migratedSchema).to.eql(VERSION_3);
     });
 });
