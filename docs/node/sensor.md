@@ -1,11 +1,11 @@
-# Sensor
-
-Creates a sensor in Home Assistant which can be manipulated from this node.
-
 ::: warning
 _Needs [Custom Integration](https://github.com/zachowj/hass-node-red) installed
 in Home Assistant for this node to function_
 :::
+
+# Sensor
+
+Creates a sensor in Home Assistant which can be manipulated from this node.
 
 ## Configuration
 

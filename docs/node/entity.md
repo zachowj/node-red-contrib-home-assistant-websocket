@@ -1,5 +1,5 @@
-::: danger DEPERCATED
-This node has been deperacated in favor of the indivdual entity nodes. The indivdual entity nodes can be used in subflows and added to devices.
+::: danger DEPRECATED
+This node has been deprecated in favor of the individual entity nodes. The individual entity nodes can be used in subflows and added to devices.
 :::
 
 # Entity
