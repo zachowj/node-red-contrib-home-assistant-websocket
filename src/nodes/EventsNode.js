@@ -1,5 +1,6 @@
 const merge = require('lodash.merge');
 
+const BaseError = require('../common/errors/BaseError').default;
 const BaseNode = require('./BaseNode');
 const {
     INTEGRATION_EVENT,
@@ -43,17 +44,40 @@ class EventsNode extends BaseNode {
         );
     }
 
+    errorHanlderForEvents(callback) {
+        return (...args) => {
+            try {
+                // eslint-disable-next-line n/no-callback-literal
+                callback(...args);
+            } catch (err) {
+                if (err instanceof BaseError) {
+                    this.status.setFailed(err.statusMessage);
+                    this.node.error(err);
+                } else {
+                    this.status.setFailed(
+                        this.RED._('home-assistant.status.error')
+                    );
+                    this.node.error(err.message);
+                }
+            }
+        };
+    }
+
     addEventClientListener(event, handler) {
         if (this.homeAssistant) {
-            this.listeners[event] = handler;
-            this.homeAssistant.addListener(event, handler);
+            const callback = this.errorHanlderForEvents(handler);
+            this.listeners[event] = callback;
+            this.homeAssistant.addListener(event, callback);
         }
     }
 
     removeEventClientListeners() {
         if (this.homeAssistant) {
             Object.entries(this.listeners).forEach(([event, handler]) => {
-                this.homeAssistant.removeListener(event, handler);
+                this.homeAssistant.removeListener(
+                    event,
+                    this.errorHanlderForEvents(handler)
+                );
             });
         }
     }

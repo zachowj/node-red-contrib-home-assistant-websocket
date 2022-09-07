@@ -9,7 +9,7 @@ import {
     NodeProperties,
     NodeSend,
 } from '../../types/nodes';
-import BaseError from '../errors/InputError';
+import BaseError from '../errors/BaseError';
 import Integration from '../integration/Integration';
 import InputService, { ParsedMessage } from '../services/InputService';
 import OutputController, { OutputControllerOptions } from './OutputController';
@@ -72,7 +72,7 @@ export default abstract class InputOutputController<
             } else if (typeof e === 'string') {
                 done(new Error(e));
             } else {
-                done(new Error(`Unknown error: ${e}`));
+                done(new Error(`Unrecognised error: ${e}`));
             }
             this.status.setFailed(statusMessage);
         }

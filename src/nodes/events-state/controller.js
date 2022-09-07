@@ -104,14 +104,8 @@ class EventsState extends EventsHaNode {
         // Track multiple entity ids
         this.topics[entityId] = this.topics[entityId] || {};
 
-        let timer;
-        try {
-            timer = this.getTimerValue();
-        } catch (e) {
-            this.node.error(e.message);
-            this.status.setFailed('Error');
-            return;
-        }
+        const timer = this.getTimerValue();
+
         const validTimer = timer > 0;
 
         if (validTimer) {

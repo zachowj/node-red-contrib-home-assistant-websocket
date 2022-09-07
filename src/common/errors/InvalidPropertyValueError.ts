@@ -1,4 +1,4 @@
-import BaseError from './InputError';
+import BaseError from './BaseError';
 
 export default class InvalidPropertyValueError extends BaseError {
     constructor(

@@ -64,15 +64,11 @@ export default class ComparatorService {
             comparatorValueDatatype === 'jsonata' &&
             comparatorValue
         ) {
-            try {
-                cValue = this.jsonataService.evaluate(comparatorValue, {
-                    message,
-                    entity,
-                    prevEntity,
-                });
-            } catch (e) {
-                throw new Error(`JSONata Error: ${e}`);
-            }
+            cValue = this.jsonataService.evaluate(comparatorValue, {
+                message,
+                entity,
+                prevEntity,
+            });
         } else {
             if (
                 comparatorType === 'includes' ||
@@ -132,17 +128,13 @@ export default class ComparatorService {
             case 'jsonata':
                 if (!cValue) return true;
 
-                try {
-                    return (
-                        this.jsonataService.evaluate(cValue, {
-                            message,
-                            entity,
-                            prevEntity,
-                        }) === true
-                    );
-                } catch (e) {
-                    throw new Error(`JSONata Error: ${e}`);
-                }
+                return (
+                    this.jsonataService.evaluate(cValue, {
+                        message,
+                        entity,
+                        prevEntity,
+                    }) === true
+                );
         }
     }
 }

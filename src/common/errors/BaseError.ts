@@ -1,7 +1,6 @@
 import { RED } from '../../globals';
-import BaseError from './BaseError';
 
-export default class InputError extends BaseError {
+export default class BaseError extends Error {
     public statusMessage: string;
 
     constructor(
@@ -9,7 +8,7 @@ export default class InputError extends BaseError {
         statusMessage = 'home-assistant.error.failed'
     ) {
         super(message);
-        this.name = 'InputError';
+        this.name = 'BaseError';
         this.message = RED._(message);
         this.statusMessage = RED._(statusMessage);
     }

@@ -12,8 +12,8 @@
     },
     "label": {
       "cancel": "Cancel",
-      "done": "Done",
       "device": "Device",
+      "done": "Done",
       "entity": "Entity",
       "entity_config": "Entity config",
       "entity_id": "Entity ID",
@@ -61,6 +61,7 @@
       "disconnected": "disconnected",
       "error": "error",
       "failed": "failed",
+      "jsonata_error": "jsonata error",
       "no_connection": "no connection",
       "off": "off",
       "on": "on",

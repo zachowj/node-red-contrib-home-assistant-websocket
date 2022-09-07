@@ -3,6 +3,18 @@ import { Node } from 'node-red';
 
 import { RED } from '../../globals';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
+import JSONataError from '../errors/JSONataError';
+
+const isJSONataError = (error: unknown): error is JSONataError => {
+    if (typeof error !== 'object' || !error) return false;
+
+    return (
+        'code' in error &&
+        'value' in error &&
+        'stack' in error &&
+        'message' in error
+    );
+};
 
 export default class JSONataService {
     private readonly homeAssistant?: HomeAssistant;
@@ -45,6 +57,13 @@ export default class JSONataService {
         expr.assign('randomNumber', random);
         expr.assign('sampleSize', sampleSize);
 
-        return RED.util.evaluateJSONataExpression(expr, message);
+        try {
+            return RED.util.evaluateJSONataExpression(expr, message);
+        } catch (err) {
+            if (isJSONataError(err)) {
+                throw new JSONataError(err);
+            }
+            throw err;
+        }
     }
 }
