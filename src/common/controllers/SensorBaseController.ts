@@ -14,6 +14,7 @@ import {
     EntityBaseNodeProperties,
     OutputProperty,
 } from '../../types/nodes';
+import BaseError from '../errors/BaseError';
 import HomeAssistantError, {
     isHomeAssistantApiError,
 } from '../errors/HomeAssistantError';
@@ -117,6 +118,9 @@ export default abstract class SensorBase<
                 return acc;
             }, {} as Record<string, any>);
         } catch (e) {
+            if (e instanceof BaseError) {
+                throw e;
+            }
             throw new InputError(`Attribute: ${e}`);
         }
 

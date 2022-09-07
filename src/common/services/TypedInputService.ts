@@ -79,19 +79,15 @@ export default class TypedInputService {
                     val = undefined;
                     break;
                 }
-                try {
-                    val = this.jsonata.evaluate(value, {
-                        data: props.data,
-                        entity: props.entity,
-                        entityId: props.entityId,
-                        eventData: props.eventData,
-                        message: props.message,
-                        prevEntity: props.prevEntity,
-                        results: props.results,
-                    });
-                } catch (e) {
-                    throw new Error(`JSONata Error: ${e}`);
-                }
+                val = this.jsonata.evaluate(value, {
+                    data: props.data,
+                    entity: props.entity,
+                    entityId: props.entityId,
+                    eventData: props.eventData,
+                    message: props.message,
+                    prevEntity: props.prevEntity,
+                    results: props.results,
+                });
                 break;
             case 'num':
                 val = Number(value);
