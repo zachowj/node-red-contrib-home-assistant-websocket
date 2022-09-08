@@ -3,6 +3,7 @@ import { NodeDef } from 'node-red';
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
 import { Status, SwitchEntityStatus } from '../../helpers/status';
+import { checkValidServerConfig } from '../../helpers/utils';
 import { BaseNode, BaseNodeConfig } from '../../types/nodes';
 import Sensor from './sensor-controller';
 import Switch from './switch-controller';
@@ -17,7 +18,7 @@ export default function entityNode(this: EntityNode, config: NodeDef) {
     RED.nodes.createNode(this, config);
 
     this.config = migrate(config);
-
+    checkValidServerConfig(this, this.config.server);
     switch (this.config.entityType) {
         case 'binary_sensor':
         case 'sensor': {

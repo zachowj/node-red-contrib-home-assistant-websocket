@@ -1,6 +1,9 @@
 import EventEmitter from 'events';
 
 import { EventsList } from '../common/events/Events';
+import { RED } from '../globals';
+import { DeviceNode } from '../nodes/device';
+import { BaseNode } from '../types/nodes';
 
 export function shouldInclude(
     targetString: string,
@@ -173,3 +176,21 @@ export function isNodeRedEnvVar(envVar: string) {
     // Check for ${env-var}
     return /^\$\{[a-zA-Z_][a-zA-Z0-9_]*\}$/.test(envVar);
 }
+
+export const checkValidServerConfig = (
+    node: BaseNode | DeviceNode,
+    serverNodeId?: string
+): boolean => {
+    const serverConfigNode = RED.nodes.getNode(serverNodeId ?? '');
+
+    if (!serverConfigNode) {
+        node.status({
+            fill: 'red',
+            shape: 'dot',
+            text: RED._('home-assistant.status.error'),
+        });
+        throw new Error('Server config node not found');
+    }
+
+    return true;
+};

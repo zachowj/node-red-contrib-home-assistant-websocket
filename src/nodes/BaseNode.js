@@ -8,6 +8,7 @@ const TransformState = require('../common/TransformState').default;
 const {
     createControllerDependencies,
 } = require('../common/controllers/helpers');
+const { getHomeAssistant } = require('../homeAssistant');
 
 const DEFAULT_NODE_OPTIONS = {
     config: {
@@ -73,11 +74,11 @@ class BaseNode {
     }
 
     get server() {
-        return selectn('nodeConfig.server.controller', this);
+        return this?.nodeConfig?.server;
     }
 
     get homeAssistant() {
-        return selectn('server.homeAssistant', this);
+        return getHomeAssistant(this.server);
     }
 
     get isConnected() {

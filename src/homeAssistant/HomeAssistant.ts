@@ -102,7 +102,6 @@ export default class HomeAssistant {
         return this?.websocket?.tags ?? [];
     }
 
-    // TODO: remove after typescript conversion done
     subscribeEvents(): Promise<void> {
         return this.websocket.subscribeEvents(this.eventsList);
     }

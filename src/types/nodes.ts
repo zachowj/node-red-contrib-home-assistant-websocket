@@ -2,8 +2,7 @@ import { Node, NodeDef, NodeMessage as NodeMessageBase } from 'node-red';
 
 import { ContextLocation } from '../common/services/NodeRedContextService';
 import { TypedInputTypes } from '../common/services/TypedInputService';
-import HomeAssistant from '../homeAssistant/HomeAssistant';
-import ConfigServer from '../nodes/config-server/controller';
+import { ExposedNodes } from '../nodes/config-server';
 import { SelectorType } from '../nodes/config-server/editor';
 import { DateTimeFormatOptions } from '../types/DateTimeFormatOptions';
 
@@ -59,8 +58,7 @@ export type OutputProperty = {
 // eslint-disable-next-line @typescript-eslint/ban-types
 export interface ServerNode<T extends {}> extends Node<T> {
     config: ServerNodeConfig;
-    controller: ConfigServer;
-    getHomeAssistant: () => HomeAssistant;
+    exposedNodes: ExposedNodes;
 }
 
 export interface BaseNodeConfig extends NodeProperties {

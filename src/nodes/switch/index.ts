@@ -9,6 +9,7 @@ import SwitchEntityStatus from '../../common/status/SwitchEntityStatus';
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
 import { getConfigNodes } from '../../helpers/node';
+import { getHomeAssistant } from '../../homeAssistant';
 import {
     BaseNode,
     EntityBaseNodeProperties,
@@ -42,7 +43,7 @@ export default function switchNode(
     this.config = migrate(config);
 
     const { entityConfigNode, serverConfigNode } = getConfigNodes(this);
-    const homeAssistant = serverConfigNode.getHomeAssistant();
+    const homeAssistant = getHomeAssistant(serverConfigNode);
     const nodeEvents = new Events({ node: this, emitter: this });
     const entityConfigEvents = new Events({
         node: this,

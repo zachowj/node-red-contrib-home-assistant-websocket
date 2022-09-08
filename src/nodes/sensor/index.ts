@@ -14,6 +14,7 @@ import EventsStatus from '../../common/status/EventStatus';
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
 import { getConfigNodes } from '../../helpers/node';
+import { getHomeAssistant } from '../../homeAssistant';
 import SensorController from './SensorController';
 
 export type SensorNodeProperties = SensorBaseNodeProperties;
@@ -73,7 +74,7 @@ export default function Sensor(this: SensorNode, config: NodeDef) {
     this.config = migrate(config);
 
     const { entityConfigNode, serverConfigNode } = getConfigNodes(this);
-    const homeAssistant = serverConfigNode.getHomeAssistant();
+    const homeAssistant = getHomeAssistant(serverConfigNode);
     const clientEvents = new ClientEvents({
         node: this,
         emitter: homeAssistant.eventBus,

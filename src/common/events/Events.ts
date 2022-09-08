@@ -1,6 +1,7 @@
 import EventEmitter from 'events';
+import { Node } from 'node-red';
 
-import { BaseNode, NodeDone } from '../../types/nodes';
+import { NodeDone } from '../../types/nodes';
 
 export type EventHandler = (...args: any[]) => void;
 export type EventsList = [string | symbol, EventHandler][];
@@ -16,7 +17,7 @@ export default class Events {
     protected readonly node;
     protected readonly emitter;
 
-    constructor({ node, emitter }: { node: BaseNode; emitter: EventEmitter }) {
+    constructor({ node, emitter }: { node: Node; emitter: EventEmitter }) {
         this.node = node;
         this.emitter = emitter;
 

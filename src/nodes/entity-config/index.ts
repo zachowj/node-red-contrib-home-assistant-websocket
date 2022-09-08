@@ -6,6 +6,7 @@ import { HassExposedConfig } from '../../editor/types';
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
 import { getNode, getServerConfigNode } from '../../helpers/node';
+import { getHomeAssistant } from '../../homeAssistant';
 import { BaseNode, BaseNodeProperties } from '../../types/nodes';
 import { DeviceConfigNode } from '../device-config/index';
 
@@ -32,8 +33,8 @@ export default function entityConfigNode(
 
     this.config = migrate(config);
 
-    const serverConfigNode = getServerConfigNode(this);
-    const homeAssistant = serverConfigNode.getHomeAssistant();
+    const serverConfigNode = getServerConfigNode(this.config.server);
+    const homeAssistant = getHomeAssistant(serverConfigNode);
     const clientEvents = new ClientEvents({
         node: this,
         emitter: homeAssistant.eventBus,

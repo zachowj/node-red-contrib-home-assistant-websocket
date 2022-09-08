@@ -1,6 +1,6 @@
 import { HassEntities, HassServices } from 'home-assistant-js-websocket';
 
-import { EventsList } from '../../common/events/Events';
+import ClientEvents from '../../common/events/ClientEvents';
 import { RED } from '../../globals';
 import { HaEvent } from '../../homeAssistant';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
@@ -21,33 +21,37 @@ const convertSetToArray = (obj: { [key: string]: Set<string> }) => {
 };
 
 export default class Comms {
+    readonly #clientEvents: ClientEvents;
+    readonly #homeAssistant: HomeAssistant;
+    readonly #serverId: string;
+
     constructor(
-        private readonly homeAssistant: HomeAssistant,
-        private readonly serverId: string
+        serverId: string,
+        homeAssistant: HomeAssistant,
+        clientEvents: ClientEvents
     ) {
+        this.#clientEvents = clientEvents;
+        this.#homeAssistant = homeAssistant;
+        this.#serverId = serverId;
+
         this.startListeners();
     }
 
     startListeners(): void {
-        // Setup event listeners
-        const events: EventsList = [
+        this.#clientEvents.addListeners(this, [
             [HaEvent.ServicesUpdated, this.onServicesUpdated],
             [ClientEvent.ServicesLoaded, this.onStatesLoaded],
-            [HaEvent.StateChanged, this.onStateChanged],
+            ['ha_events:state_changed', this.onStateChanged],
             [ClientEvent.Integration, this.onIntegrationEvent],
             [HaEvent.AreaRegistryUpdated, this.onAreaRegistryUpdate],
             [HaEvent.DeviceRegistryUpdated, this.onDeviceRegistryUpdate],
             [HaEvent.RegistryUpdated, this.onRegistryUpdate],
-        ];
-
-        events.forEach(([event, callback]) =>
-            this.homeAssistant.addListener(String(event), callback.bind(this))
-        );
+        ]);
     }
 
     publish(type: string, data: { [key: string]: any }, retain = true): void {
         RED.comms.publish(
-            `homeassistant/${type}/${this.serverId}`,
+            `homeassistant/${type}/${this.#serverId}`,
             data,
             retain
         );
@@ -109,7 +113,7 @@ export default class Comms {
     onIntegrationEvent(eventType: string): void {
         this.publish('integration', {
             event: eventType,
-            version: this.homeAssistant.integrationVersion,
+            version: this.#homeAssistant.integrationVersion,
         });
     }
 

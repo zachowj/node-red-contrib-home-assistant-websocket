@@ -4,6 +4,7 @@ import { HassExposedConfig } from '../../editor/types';
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
 import { EventsStatus, Status } from '../../helpers/status';
+import { checkValidServerConfig } from '../../helpers/utils';
 import { Credentials } from '../../homeAssistant';
 import { BaseNode, ServerNode } from '../../types/nodes';
 import DeviceAction from './action-controller';
@@ -30,7 +31,7 @@ interface DeviceNodeConfig extends BaseNodeConfig {
     deviceType: string;
 }
 
-interface DeviceNode extends Node {
+export interface DeviceNode extends Node {
     config: DeviceNodeConfig;
     controller: any;
 }
@@ -39,6 +40,7 @@ export default function deviceNode(this: DeviceNode, config: BaseNodeDef) {
     RED.nodes.createNode(this, config);
 
     this.config = migrate(config);
+    checkValidServerConfig(this, this.config.server?.config.id);
     const params = {
         node: this,
         config: this.config,

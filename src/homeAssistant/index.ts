@@ -1,10 +1,17 @@
 import { EventEmitter } from 'events';
 import { URL } from 'url';
 
-import { ServerNodeConfig } from '../types/nodes';
+import ClientEvents from '../common/events/ClientEvents';
+import { RED } from '../globals';
+import Comms from '../nodes/config-server/Comms';
+import ConnectionLog from '../nodes/config-server/ConnectionLog';
+import EditorContext from '../nodes/config-server/EditorContext';
+import { ServerNode, ServerNodeConfig } from '../types/nodes';
 import HomeAssistant from './HomeAssistant';
 import HttpAPI, { HttpConfig } from './Http';
-import WebsocketAPI, { WebsocketConfig } from './Websocket';
+import WebsocketAPI, { ClientEvent, WebsocketConfig } from './Websocket';
+
+const homeAssistantConnections = new Map<string, HomeAssistant>();
 
 export enum HaEvent {
     AreaRegistryUpdated = 'areas_updated',
@@ -21,32 +28,72 @@ export const SUPERVISOR_URL = 'http://supervisor/core';
 
 export type Credentials = {
     host: string;
-    // eslint-disable-next-line camelcase
     access_token: string;
 };
 
-export function createHomeAssistantClient(
-    config: ServerNodeConfig,
-    credentials: Credentials
-): HomeAssistant {
+export const hasCredentials = (credentials: Credentials): boolean => {
+    return !!credentials.host && !!credentials.access_token;
+};
+
+export const createHomeAssistantClient = (
+    node: ServerNode<Credentials>
+): HomeAssistant => {
+    let homeAssistant = homeAssistantConnections.get(node.id);
+
+    if (homeAssistant) return homeAssistant;
+
+    if (!hasCredentials(node.credentials) && !node.config.addon) {
+        throw new Error('No credentials provided');
+    }
+
     const eventBus = new EventEmitter();
     eventBus.setMaxListeners(0);
-    const creds = createCredentials(credentials, config);
-    const httpConfig = createHttpConfig(creds, config);
-    const websocketConfig = createWebsocketConfig(creds, config);
+    const creds = createCredentials(node.credentials, node.config);
+    const httpConfig = createHttpConfig(creds, node.config);
+    const websocketConfig = createWebsocketConfig(creds, node.config);
     const httpAPI = new HttpAPI(httpConfig);
     const websocketAPI = new WebsocketAPI(websocketConfig, eventBus);
 
-    return new HomeAssistant({ websocketAPI, httpAPI, eventBus });
-}
+    homeAssistant = new HomeAssistant({
+        websocketAPI,
+        httpAPI,
+        eventBus,
+    });
 
-function createCredentials(
+    const clientEvents = new ClientEvents({
+        node,
+        emitter: homeAssistant.eventBus,
+    });
+    clientEvents.addListener(
+        ClientEvent.Connected,
+        homeAssistant.subscribeEvents.bind(homeAssistant),
+        {
+            once: true,
+        }
+    );
+    // eslint-disable-next-line no-new
+    new Comms(node.id, homeAssistant, clientEvents);
+    // eslint-disable-next-line no-new
+    new ConnectionLog(node, clientEvents);
+    // eslint-disable-next-line no-new
+    new EditorContext(node, homeAssistant, clientEvents);
+
+    homeAssistant.websocket.connect();
+
+    homeAssistantConnections.set(node.id, homeAssistant);
+    return homeAssistant;
+};
+
+const createCredentials = (
     credentials: Credentials,
     config: ServerNodeConfig
-): Credentials {
+): Credentials => {
     let host;
+    if (!credentials) {
+        throw new Error('No credentials');
+    }
     // eslint-disable-next-line camelcase
-    let access_token = credentials.access_token;
+    let accessToken = credentials.access_token;
 
     // Check if using HA Add-on and import proxy token
     const addonBaseUrls = ['http://hassio/homeassistant', SUPERVISOR_URL];
@@ -57,7 +104,7 @@ function createCredentials(
         }
         host = SUPERVISOR_URL;
         // eslint-disable-next-line camelcase
-        access_token = process.env.SUPERVISOR_TOKEN;
+        accessToken = process.env.SUPERVISOR_TOKEN;
     } else {
         host = getBaseUrl(credentials.host);
     }
@@ -65,28 +112,28 @@ function createCredentials(
     return {
         host,
         // eslint-disable-next-line camelcase
-        access_token,
+        access_token: accessToken,
     };
-}
+};
 
-function createHttpConfig(
+const createHttpConfig = (
     credentials: Credentials,
     config: ServerNodeConfig
-): HttpConfig {
+): HttpConfig => {
     return {
         access_token: credentials.access_token,
         host: credentials.host,
         rejectUnauthorizedCerts: config.rejectUnauthorizedCerts,
     };
-}
+};
 
-function createWebsocketConfig(
+const createWebsocketConfig = (
     credentials: Credentials,
     config: Partial<ServerNodeConfig> = {
         rejectUnauthorizedCerts: true,
         connectionDelay: true,
     }
-): WebsocketConfig {
+): WebsocketConfig => {
     const connectionDelay =
         credentials.host !== SUPERVISOR_URL
             ? false
@@ -104,30 +151,44 @@ function createWebsocketConfig(
         connectionDelay,
         heartbeatInterval: heartbeat,
     };
-}
+};
 
-function getBaseUrl(url: string): string {
-    const errorMessage = validateBaseUrl(url);
-    if (errorMessage) {
-        throw new Error(errorMessage);
-    }
+const getBaseUrl = (url: string): string => {
+    validateBaseUrl(url);
 
     return url.trim();
-}
+};
 
-function validateBaseUrl(baseUrl: string): string | void {
+const validateBaseUrl = (baseUrl: string): string | void => {
     if (!baseUrl) {
-        return 'config-server.errors.empty_base_url';
+        throw new Error(RED._('config-server.errors.empty_base_url'));
     }
 
     let parsedUrl;
     try {
         parsedUrl = new URL(baseUrl);
     } catch (e) {
-        return 'config-server.errors.invalid_base_url';
+        throw new Error(RED._('config-server.errors.invalid_base_url'));
     }
 
     if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
-        return 'config-server.errors.invalid_protocol';
+        throw new Error(RED._('config-server.errors.invalid_protocol'));
     }
-}
+};
+
+export const getHomeAssistant = (
+    serverNode: ServerNode<Credentials>
+): HomeAssistant => {
+    return (
+        homeAssistantConnections.get(serverNode.id) ??
+        createHomeAssistantClient(serverNode)
+    );
+};
+
+export const closeHomeAssistant = (nodeId: string): void => {
+    const homeAssistant = homeAssistantConnections.get(nodeId);
+    if (homeAssistant) {
+        homeAssistant.close();
+        homeAssistantConnections.delete(nodeId);
+    }
+};
