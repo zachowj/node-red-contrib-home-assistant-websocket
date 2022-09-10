@@ -1,52 +1,10 @@
-import { EditorNodeInstance, EditorNodeProperties, EditorRED } from 'node-red';
+import { EditorRED } from 'node-red';
 
 import { sensorUnitOfMeasurement } from './data/sensor';
 
 declare const RED: EditorRED;
 
 const packageName = 'node-red-contrib-home-assistant-websocket/all:';
-
-export const createConfigList = (
-    id: 'server' | 'deviceConfig',
-    node: EditorNodeInstance,
-    options?: { allowNone?: boolean }
-) => {
-    const $div = $(`
-        <div style="width: 70%; display: inline-flex">    
-            <select id="node-config-input-${id}" style="flex: 1"></select>
-            <a class="red-ui-button" style="margin-left: 10px"><i class="fa fa-pencil"></i></a>
-        </div>
-    `);
-
-    let selectOptions = options?.allowNone ? '<option value="">' : '';
-    const type = id === 'server' ? 'server' : 'ha-device-config';
-    RED.nodes.eachConfig((n: EditorNodeProperties) => {
-        if (n.type === type) {
-            selectOptions += `<option value="${n.id}" ${
-                node[id] === n.id && 'selected'
-            }>${n.name}</option>`;
-        }
-        return true;
-    });
-
-    selectOptions += `<option value="_ADD_">add new ${type}...</option>`;
-    $div.find('select').html(selectOptions);
-
-    $div.find('a').on('click', () => {
-        const selected = $div.find('select').val();
-        if (!selected) return;
-        RED.editor.editConfig(
-            id,
-            type,
-            selected,
-            'node-config-input',
-            // @ts-expect-error - editConfig accepts 5 arguments
-            node
-        );
-    });
-
-    return $div;
-};
 
 const createDate = (
     id: string,

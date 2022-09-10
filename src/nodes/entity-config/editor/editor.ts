@@ -2,7 +2,7 @@ import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
 import ha from '../../../editor/ha';
 import { defaultHaConfigOptions, haConfigOptions } from './data';
-import { createConfigList, createRow, setEntityType } from './helpers';
+import { createRow, setEntityType } from './helpers';
 
 declare const RED: EditorRED;
 
@@ -30,12 +30,20 @@ const EntityConfigEditor: EditorNodeDef<EntityConfigEditorNodeProperties> = {
     defaults: {
         server: {
             value: '',
+            type: 'server',
             required: true,
         },
-        deviceConfig: { value: '' },
+        deviceConfig: {
+            value: '_ADD_',
+            type: 'ha-device-config',
+            required: false,
+        },
         name: { value: '' },
         version: { value: RED.settings.get('haEntityConfigVersion', 0) },
-        entityType: { value: 'binary_sensor', required: true },
+        entityType: {
+            value: 'binary_sensor',
+            required: true,
+        },
         haConfig: { value: [] },
         resend: { value: false },
     },
@@ -45,14 +53,10 @@ const EntityConfigEditor: EditorNodeDef<EntityConfigEditorNodeProperties> = {
     oneditprepare: function () {
         ha.setup(this);
 
-        $('#node-config-input-server').replaceWith(
-            createConfigList('server', this)
-        );
-        $('#node-config-input-deviceConfig').replaceWith(
-            createConfigList('deviceConfig', this, {
-                allowNone: true,
-            })
-        );
+        if (this.deviceConfig === '_ADD_') {
+            $('#node-config-input-deviceConfig').val('_ADD_');
+        }
+
         setEntityType();
 
         const $container = $('#ha-config-rows');
