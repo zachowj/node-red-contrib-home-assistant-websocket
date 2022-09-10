@@ -84,6 +84,7 @@ const nodeMap = {
     tag: { doc: 'tag', type: 'ha-tag' },
     time: { doc: 'time', type: 'ha-time' },
     'trigger-state': { doc: 'trigger-state', type: 'trigger-state' },
+    'update-config': { doc: 'update-config', type: 'ha-update-config' },
     'wait-until': { doc: 'wait-until', type: 'ha-wait-until' },
     webhook: { doc: 'webhook', type: 'ha-webhook' },
     zone: { doc: 'zone', type: 'ha-zone' },

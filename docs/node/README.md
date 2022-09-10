@@ -89,6 +89,10 @@ A node that can be scheduled to trigger at a future date and time from a Home As
 
 Much like the `State Changed Node` however, provides some advanced functionality around common automation use cases
 
+## [Update Config](./update-config.md)
+
+Allows updating of entities configuration in Home Assistant
+
 ## [Wait Until](./wait-until.md)
 
 When an input is received the node will wait until the condition is met or the timeout occurs then will pass on the last received message

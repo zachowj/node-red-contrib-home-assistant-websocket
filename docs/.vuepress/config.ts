@@ -142,6 +142,7 @@ export default defineUserConfig<DefaultThemeOptions>({
                         'entity',
                         'sensor',
                         'switch',
+                        'update-config',
                     ],
                 },
             ],

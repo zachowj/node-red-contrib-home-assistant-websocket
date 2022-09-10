@@ -11,8 +11,12 @@ export const getNode = <T extends BaseNode>(nodeId?: string): T | undefined => {
 };
 
 export const getServerConfigNode = (
-    nodeId: string
+    nodeId?: string
 ): ServerNode<Credentials> => {
+    if (!nodeId) {
+        throw new Error('Invalid server config');
+    }
+
     const node = RED.nodes.getNode(nodeId) as ServerNode<Credentials>;
 
     if (!node) {

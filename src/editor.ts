@@ -38,6 +38,7 @@ import SwitchEditor from './nodes/switch/editor';
 import TagEditor from './nodes/tag/editor';
 import TimeEditor from './nodes/time/editor';
 import TriggerStateEditor from './nodes/trigger-state/editor';
+import UpdateConfigEditor from './nodes/update-config/editor';
 import WaitUntilEditor from './nodes/wait-until/editor';
 import WebhookEditor from './nodes/webhook/editor';
 import ZoneEditor from './nodes/zone/editor';
@@ -58,16 +59,15 @@ RED.events.on('nodes:remove', onNodesRemove);
 RED.events.on('editor:open', versionCheck);
 
 // config nodes
+RED.nodes.registerType('ha-device-config', DeviceConfigEditor);
 RED.nodes.registerType('ha-entity-config', EntityConfigEditor);
 RED.nodes.registerType('server', ConfigServerEditor);
 
 // general nodes
 RED.nodes.registerType('ha-api', ApiEditor);
-RED.nodes.registerType('ha-button', ButtonEditor);
 RED.nodes.registerType('api-call-service', CallServiceEditor);
 RED.nodes.registerType('api-current-state', CurrentStateEditor);
 RED.nodes.registerType('ha-device', DeviceEditor);
-RED.nodes.registerType('ha-device-config', DeviceConfigEditor);
 RED.nodes.registerType('ha-entity', EntityEditor);
 RED.nodes.registerType('server-events', EventsAllEditor);
 RED.nodes.registerType('server-state-changed', EventsStateEditor);
@@ -76,7 +76,6 @@ RED.nodes.registerType('ha-get-entities', GetEntitiesEditor);
 RED.nodes.registerType('api-get-history', GetHistoryEditor);
 RED.nodes.registerType('poll-state', PollStateEditor);
 RED.nodes.registerType('api-render-template', RenderTemplateEditor);
-RED.nodes.registerType('ha-switch', SwitchEditor);
 RED.nodes.registerType('ha-tag', TagEditor);
 RED.nodes.registerType('ha-time', TimeEditor);
 RED.nodes.registerType('trigger-state', TriggerStateEditor);
@@ -86,4 +85,7 @@ RED.nodes.registerType('ha-zone', ZoneEditor);
 
 // entities nodes
 RED.nodes.registerType('ha-binary-sensor', BinarySensorEditor);
+RED.nodes.registerType('ha-button', ButtonEditor);
 RED.nodes.registerType('ha-sensor', SensorEditor);
+RED.nodes.registerType('ha-switch', SwitchEditor);
+RED.nodes.registerType('ha-update-config', UpdateConfigEditor);

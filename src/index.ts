@@ -25,6 +25,7 @@ import switchNode from './nodes/switch';
 import tagNode from './nodes/tag';
 import timeNode from './nodes/time';
 import triggerStateNode from './nodes/trigger-state';
+import updateConfigNode from './nodes/update-config';
 import waitUntilNode from './nodes/wait-until';
 import webhookNode from './nodes/webhook';
 import zoneNode from './nodes/zone';
@@ -32,7 +33,6 @@ import { createRoutes } from './routes';
 
 const nodes: { [type: string]: any } = {
     'ha-api': apiNode,
-    'ha-button': buttonNode,
     'api-call-service': callServiceNode,
     'api-current-state': currentStateNode,
     'ha-device': deviceNode,
@@ -44,7 +44,6 @@ const nodes: { [type: string]: any } = {
     'api-get-history': getHistoryNode,
     'poll-state': pollStateNode,
     'api-render-template': renderTemplateNode,
-    'ha-switch': switchNode,
     'trigger-state': triggerStateNode,
     'ha-tag': tagNode,
     'ha-time': timeNode,
@@ -59,7 +58,10 @@ const nodes: { [type: string]: any } = {
 
     // Entities
     'ha-binary-sensor': binarySensorNode,
+    'ha-button': buttonNode,
     'ha-sensor': sensorNode,
+    'ha-switch': switchNode,
+    'ha-update-config': updateConfigNode,
 };
 
 export = async (RED: NodeAPI): Promise<void> => {
