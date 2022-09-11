@@ -2,7 +2,8 @@ import { RED } from '../../globals';
 import { HaEvent } from '../../homeAssistant/index';
 import { SubscriptionUnsubscribe } from '../../types/home-assistant';
 import { createHaConfig } from './helpers';
-import Integration, { EntityMessage, MessageType } from './Integration';
+import { MessageType } from './Integration';
+import Integration, { EntityMessage } from './UnidirectionalEntityIntegration';
 
 export interface TriggerPayload {
     entity_id?: string;

@@ -19,6 +19,7 @@ import HomeAssistantError, {
     isHomeAssistantApiError,
 } from '../errors/HomeAssistantError';
 import InputError from '../errors/InputError';
+import UnidirectionalEntityIntegration from '../integration/UnidirectionalEntityIntegration';
 
 interface Attribute {
     property: string;
@@ -57,6 +58,7 @@ export default abstract class SensorBase<
     P extends SensorBaseNodeProperties
 > extends InputOutputController<T, P> {
     readonly #homeAssistant: HomeAssistant;
+    protected integration?: UnidirectionalEntityIntegration;
 
     constructor(props: SensorBaseControllerOptions<T, P>) {
         super(props);

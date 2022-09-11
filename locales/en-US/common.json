@@ -72,6 +72,7 @@
       "state_change": "state change",
       "success": "success",
       "triggered": "triggered",
+      "updated": "updated",
       "validation_error": "validation error"
     },
     "ui": {

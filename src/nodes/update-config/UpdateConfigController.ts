@@ -2,10 +2,8 @@ import InputOutputController, {
     InputOutputControllerOptions,
     InputProperties,
 } from '../../common/controllers/InputOutputController';
-import HomeAssistantError, {
-    isHomeAssistantApiError,
-} from '../../common/errors/HomeAssistantError';
 import InputError from '../../common/errors/InputError';
+import NoConnectionError from '../../common/errors/NoConnectionError';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
 import { UpdateConfigNode, UpdateConfigNodeProperties } from '.';
 
@@ -28,7 +26,11 @@ export default class UpdateConfig<
     }
 
     async onInput({ parsedMessage, message, send, done }: InputProperties) {
-        if (!this.#homeAssistant.isIntegrationLoaded) {
+        if (!this.integration?.isConnected) {
+            throw new NoConnectionError();
+        }
+
+        if (!this.integration?.isIntegrationLoaded) {
             throw new InputError(
                 'home-assistant.error.integration_not_loaded',
                 'home-assistant.error.error'
@@ -36,26 +38,16 @@ export default class UpdateConfig<
         }
 
         this.status.setSending();
-        try {
-            const payload = {
-                type: 'nodered/entity/update_config',
-                server_id: this.node.config.server,
-                node_id: parsedMessage.id.value ?? this.node.id,
-                config: {
-                    name: parsedMessage.name.value,
-                    icon: parsedMessage.icon.value,
-                },
-            };
-            await this.#homeAssistant.websocket.send(payload);
-            this.status.setSuccess('updated');
-            this.debugToClient(payload);
-        } catch (err) {
-            if (isHomeAssistantApiError(err)) {
-                throw new HomeAssistantError(err, 'home-assistant.error.error');
+        await this.integration?.sendUpdateConfig(
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            this.node.config.server!,
+            parsedMessage.id.value ?? this.node.id,
+            {
+                name: parsedMessage.name.value,
+                icon: parsedMessage.icon.value,
             }
-
-            throw err;
-        }
+        );
+        this.status.setSuccess('home-assistant.status.updated');
 
         this.setCustomOutputs(this.node.config.outputProperties, message, {
             config: this.node.config,

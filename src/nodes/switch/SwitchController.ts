@@ -6,7 +6,7 @@ import Events from '../../common/events/Events';
 import BidirectionalIntegration, {
     StateChangePayload,
     TriggerPayload,
-} from '../../common/integration/BidirectionalIntegration';
+} from '../../common/integration/BidirectionalEntityIntegration';
 import { HaEvent } from '../../homeAssistant';
 import { NodeMessage } from '../../types/nodes';
 import { EntityConfigNode } from '../entity-config';

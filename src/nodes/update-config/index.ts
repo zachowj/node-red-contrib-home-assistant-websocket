@@ -3,6 +3,7 @@ import { NodeDef } from 'node-red';
 
 import { createControllerDependencies } from '../../common/controllers/helpers';
 import Events from '../../common/events/Events';
+import Integration from '../../common/integration/Integration';
 import InputService, { NodeInputs } from '../../common/services/InputService';
 import State from '../../common/State';
 import Status from '../../common/status/Status';
@@ -66,11 +67,13 @@ export default function UpdateConfig(this: UpdateConfigNode, config: NodeDef) {
         nodeConfig: this.config,
         schema: inputSchema,
     });
+    const integration = new Integration({ homeAssistant, state });
 
     // eslint-disable-next-line no-new
     new UpdateConfigController({
         homeAssistant,
         inputService,
+        integration,
         node: this,
         status,
         ...controllerDeps,

@@ -2,7 +2,7 @@ import Joi from 'joi';
 
 import { createControllerDependencies } from '../../common/controllers/helpers';
 import Events from '../../common/events/Events';
-import BidirectionalIntegration from '../../common/integration/BidirectionalIntegration';
+import BidirectionalIntegration from '../../common/integration/BidirectionalEntityIntegration';
 import InputService, { NodeInputs } from '../../common/services/InputService';
 import State from '../../common/State';
 import SwitchEntityStatus from '../../common/status/SwitchEntityStatus';

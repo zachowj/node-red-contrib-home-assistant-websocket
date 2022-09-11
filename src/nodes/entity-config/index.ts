@@ -1,6 +1,8 @@
 import ClientEvents from '../../common/events/ClientEvents';
-import BidirectionalIntegration from '../../common/integration/BidirectionalIntegration';
-import Integration, { EntityType } from '../../common/integration/Integration';
+import BidirectionalIntegration from '../../common/integration/BidirectionalEntityIntegration';
+import Integration, {
+    EntityType,
+} from '../../common/integration/UnidirectionalEntityIntegration';
 import State from '../../common/State';
 import { HassExposedConfig } from '../../editor/types';
 import { RED } from '../../globals';
