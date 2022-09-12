@@ -40,7 +40,7 @@ export default function deviceNode(this: DeviceNode, config: BaseNodeDef) {
     RED.nodes.createNode(this, config);
 
     this.config = migrate(config);
-    checkValidServerConfig(this, this.config.server?.config.id);
+    checkValidServerConfig(this, config.server);
     const params = {
         node: this,
         config: this.config,
