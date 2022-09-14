@@ -87,8 +87,8 @@ const rows = {
 };
 
 const EntityEditor: EditorNodeDef<EntityEditorNodeProperties> = {
-    category: 'home_assistant',
-    color: ha.nodeColors.haBlue,
+    category: 'home_assistant_deprecated',
+    color: ha.nodeColors.deprecated,
     inputs: 1,
     outputs: 1,
     // @ts-ignore - DefinitelyTyped is wrong icon can be a function

@@ -9,6 +9,7 @@ const nodeColors = {
     api: '#7CDFFD',
     beta: '#77DD77',
     data: '#5BCBF7',
+    deprecated: '#A6BBCF',
     event: '#399CDF',
     haBlue: '#41BDF5',
 };
