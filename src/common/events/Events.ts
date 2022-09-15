@@ -20,6 +20,7 @@ export default class Events {
     constructor({ node, emitter }: { node: Node; emitter: EventEmitter }) {
         this.node = node;
         this.emitter = emitter;
+        emitter.setMaxListeners(0);
 
         node.on(NodeEvent.Close, this.onClose.bind(this));
     }
