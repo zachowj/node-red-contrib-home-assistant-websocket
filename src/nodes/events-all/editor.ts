@@ -21,6 +21,8 @@ interface EventsAllEditorNodeProperties extends HassNodeProperties {
     haConfig: HassExposedConfig[];
     waitForRunning: boolean;
     outputProperties: OutputProperty[];
+    // Deprecated
+    event_type: string;
 }
 
 const EventsAllEditor: EditorNodeDef<EventsAllEditorNodeProperties> = {
@@ -51,12 +53,15 @@ const EventsAllEditor: EditorNodeDef<EventsAllEditorNodeProperties> = {
                 {
                     property: 'topic',
                     propertyType: 'msg',
-                    value: '$outputData("eventData").eventType',
+                    value: '$outputData("eventData").event_type',
                     valueType: 'jsonata',
                 },
             ],
             validate: haOutputs.validate,
         },
+
+        // Deprecated
+        event_type: { value: '', required: false },
     },
     inputs: 0,
     outputs: 1,

@@ -39,6 +39,12 @@ const VERSION_1 = {
         },
     ],
 };
+const VERSION_2 = {
+    ...VERSION_1,
+    version: 2,
+    eventType: '',
+    event_type: undefined,
+};
 
 describe('Migrations - Events: All Node', function () {
     describe('Version 0', function () {
@@ -70,8 +76,27 @@ describe('Migrations - Events: All Node', function () {
             expect(migratedSchema).to.eql(VERSION_1);
         });
     });
+    describe('Version 2', function () {
+        it('should update version 1 to version 2', function () {
+            const migrate = migrations.find((m) => m.version === 2);
+            const migratedSchema = migrate.up(VERSION_1);
+            expect(migratedSchema).to.eql(VERSION_2);
+        });
+        it('should move event_type to eventType', function () {
+            const migrate = migrations.find((m) => m.version === 2);
+            const migratedSchema = migrate.up({
+                ...VERSION_1,
+                event_type: 'event_name',
+            });
+            const expectedSchema = {
+                ...VERSION_2,
+                eventType: 'event_name',
+            };
+            expect(migratedSchema).to.eql(expectedSchema);
+        });
+    });
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_1);
+        expect(migratedSchema).to.eql(VERSION_2);
     });
 });

@@ -43,4 +43,17 @@ export default [
             return newSchema;
         },
     },
+    {
+        version: 2,
+        up: (schema: any) => {
+            const newSchema = {
+                ...schema,
+                version: 2,
+                eventType: schema.event_type,
+                event_type: undefined,
+            };
+
+            return newSchema;
+        },
+    },
 ];
