@@ -74,10 +74,7 @@ class EventsNode extends BaseNode {
     removeEventClientListeners() {
         if (this.homeAssistant) {
             Object.entries(this.listeners).forEach(([event, handler]) => {
-                this.homeAssistant.removeListener(
-                    event,
-                    this.errorHanlderForEvents(handler)
-                );
+                this.homeAssistant.removeListener(event, handler);
             });
         }
     }
