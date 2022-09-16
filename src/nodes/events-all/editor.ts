@@ -15,8 +15,9 @@ declare const RED: EditorRED;
 interface EventsAllEditorNodeProperties extends HassNodeProperties {
     server: string;
     version: number;
-    event_type: string;
+    eventType: string;
     exposeToHomeAssistant: boolean;
+    eventData: Record<string, unknown>;
     haConfig: HassExposedConfig[];
     waitForRunning: boolean;
     outputProperties: OutputProperty[];
@@ -29,8 +30,9 @@ const EventsAllEditor: EditorNodeDef<EventsAllEditorNodeProperties> = {
         name: { value: '' },
         server: { value: '', type: 'server', required: true },
         version: { value: RED.settings.get('serverEventsVersion', 0) },
-        event_type: { value: '', required: false },
+        eventType: { value: '', required: false },
         exposeToHomeAssistant: { value: false },
+        eventData: { value: '', required: false },
         haConfig: {
             value: [
                 { property: 'name', value: '' },
@@ -49,7 +51,7 @@ const EventsAllEditor: EditorNodeDef<EventsAllEditorNodeProperties> = {
                 {
                     property: 'topic',
                     propertyType: 'msg',
-                    value: '$outputData("eventData").event_type',
+                    value: '$outputData("eventData").eventType',
                     valueType: 'jsonata',
                 },
             ],
@@ -61,7 +63,7 @@ const EventsAllEditor: EditorNodeDef<EventsAllEditorNodeProperties> = {
     icon: 'ha-events-all.svg',
     paletteLabel: 'events: all',
     label: function () {
-        return this.name || `events: ${this.event_type || 'all'}`;
+        return this.name || `events: ${this.eventType || 'all'}`;
     },
     labelStyle: ha.labelStyle,
     oneditprepare: function () {
@@ -69,11 +71,25 @@ const EventsAllEditor: EditorNodeDef<EventsAllEditorNodeProperties> = {
         haServer.init(this, '#node-input-server');
         exposeNode.init(this);
 
-        $('#node-input-event_type').on(
-            'change keyup',
+        $('#node-input-eventData')
+            .on('change input', function () {
+                // hack to hide error border when data field is empty
+                const $this = $(this);
+                const val = $this.val() as string;
+                if (val.length === 0) {
+                    $this.next().removeClass('input-error');
+                }
+            })
+            .typedInput({
+                types: ['json'],
+            });
+
+        $('#node-input-eventType').on(
+            'change input',
             function (this: HTMLInputElement) {
-                const type = $(this).val() as string;
+                const type = ($(this).val() as string).trim();
                 $('#eventAlert').toggle(type.length === 0);
+                this.value = type;
             }
         );
 

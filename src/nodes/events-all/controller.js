@@ -1,10 +1,12 @@
 const EventsHaNode = require('../EventsHaNode');
+const isMatch = require('lodash.ismatch');
 
 const nodeOptions = {
     config: {
-        event_type: (nodeDef) => (nodeDef.event_type || '').trim(),
+        eventType: (nodeDef) => (nodeDef.eventType || '').trim(),
         waitForRunning: {},
         outputProperties: {},
+        eventData: {},
     },
 };
 
@@ -12,36 +14,42 @@ class EventsAll extends EventsHaNode {
     constructor({ node, config, RED, status }) {
         super({ node, config, RED, status, nodeOptions });
 
+        if (this.nodeConfig.eventData) {
+            try {
+                this.eventData = JSON.parse(this.nodeConfig.eventData);
+            } catch (e) {
+                this.status.setFailed(
+                    this.RED._('home-assistant.status.error')
+                );
+                throw new Error(this.RED._('server-events.error.invalid_json'));
+            }
+        }
+
+        const type = this.nodeConfig.eventType || 'all';
         this.addEventClientListener(
-            'ha_events:' + (this.nodeConfig.event_type || 'all'),
+            `ha_events:${type}`,
             this.onHaEventsAll.bind(this)
         );
         if (
             !this.nodeConfig.event_type ||
             this.nodeConfig.event_type === 'home_assistant_client'
         ) {
-            this.addEventClientListener(
-                'ha_client:states_loaded',
-                this.onClientStatesLoaded.bind(this)
-            );
-            this.addEventClientListener(
-                'ha_client:services_loaded',
-                this.onClientServicesLoaded.bind(this)
-            );
-            this.addEventClientListener(
-                'ha_client:running',
-                this.onHaEventsRunning.bind(this)
-            );
-            this.addEventClientListener(
-                'ha_client:ready',
-                this.onHaEventsReady.bind(this)
-            );
+            const clientEvents = [
+                ['ha_client:states_loaded', this.onClientStatesLoaded],
+                ['ha_client:services_loaded', this.onClientServicesLoaded],
+                ['ha_client:running', this.onHaEventsRunning],
+                ['ha_client:ready', this.onHaEventsReady],
+            ];
+
+            clientEvents.forEach(([event, callback]) => {
+                this.addEventClientListener(event, callback.bind(this));
+            });
         }
 
         // Registering only needed event types
         if (this.homeAssistant) {
             this.homeAssistant.eventsList[this.node.id] =
-                this.nodeConfig.event_type || '__ALL__';
+                this.nodeConfig.eventType || '__ALL__';
             this.updateEventList();
         }
     }
@@ -56,6 +64,9 @@ class EventsAll extends EventsHaNode {
             return;
         }
 
+        // Compare event data
+        if (this.eventData && !isMatch(evt.event, this.eventData)) return;
+
         const message = {};
         try {
             this.setCustomOutputs(this.nodeConfig.outputProperties, message, {
@@ -63,7 +74,7 @@ class EventsAll extends EventsHaNode {
                 eventData: evt,
             });
         } catch (e) {
-            this.status.setFailed('error');
+            this.status.setFailed(this.RED._('home-assistant.status.errror'));
             return;
         }
 
@@ -75,8 +86,8 @@ class EventsAll extends EventsHaNode {
         if (this.isEnabled === false) return;
 
         if (
-            !this.nodeConfig.event_type ||
-            this.nodeConfig.event_type === 'home_assistant_client'
+            !this.nodeConfig.eventType ||
+            this.nodeConfig.eventType === 'home_assistant_client'
         ) {
             this.send({
                 event_type: 'home_assistant_client',
@@ -94,6 +105,8 @@ class EventsAll extends EventsHaNode {
     onClose(nodeRemoved) {
         super.onClose(nodeRemoved);
 
+        const type = `ha_events:${this.nodeConfig.eventType || 'all'}`;
+        this.homeAssistant.removeListener(type, this.onHaEventsAll.bind(this));
         if (nodeRemoved) {
             delete this.homeAssistant.eventsList[this.node.id];
             this.updateEventList();

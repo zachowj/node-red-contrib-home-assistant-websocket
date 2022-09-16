@@ -1,0 +1,16 @@
+{
+  "server-events": {
+    "alert": "Alert",
+    "alert_message": "Leaving Event Type empty and listening for all events may overload the websocket message queue.",
+    "error": {
+      "invalid_json": "Event data is not valid JSON"
+    },
+    "label": {
+      "event_data": "Event data",
+      "event_type": "Event type",
+      "name": "Name",
+      "output_only_after_running": "Output only after Home Assistant is running",
+      "server": "Server"
+    }
+  }
+}
