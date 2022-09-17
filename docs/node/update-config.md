@@ -24,7 +24,7 @@ The node id of an [entity config](./entity-config.md). This can be overridden by
 
 ## Inputs
 
-Allow properties must be under `msg.payload` and will be ignored if not.
+All properties must be under `msg.payload` and will be ignored if not.
 
 ### id
 
