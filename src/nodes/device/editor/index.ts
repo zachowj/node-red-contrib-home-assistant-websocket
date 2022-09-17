@@ -80,8 +80,8 @@ const defaultOutputProperties: OutputProperty[] = [
 ];
 
 const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
-    category: 'home_assistant_deprecated',
-    color: '#a6bbcf',
+    category: 'home_assistant',
+    color: ha.nodeColors.alpha,
     inputs: 0,
     outputs: 1,
     icon: 'font-awesome/fa-cube',
