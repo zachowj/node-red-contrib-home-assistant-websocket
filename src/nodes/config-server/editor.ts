@@ -1,6 +1,6 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
-import ha from '../../editor/ha';
+import ha, { NodeCategory } from '../../editor/ha';
 import { formatDate } from '../../helpers/date';
 import { isNodeRedEnvVar } from '../../helpers/utils';
 import { Credentials } from '../../homeAssistant/index';
@@ -34,7 +34,7 @@ const ConfigServerEditor: EditorNodeDef<
     ConfigServerEditorNodeProperties,
     Credentials
 > = {
-    category: 'config',
+    category: NodeCategory.Config,
     defaults: {
         name: { value: 'Home Assistant', required: false },
         version: { value: RED.settings.get('serverVersion', 0) },

@@ -4,7 +4,7 @@ import * as haOutputs from '../../../editor/components/output-properties';
 import { select2DefaultOptions } from '../../../editor/components/select2';
 import * as haData from '../../../editor/data';
 import * as exposeNode from '../../../editor/exposenode';
-import ha from '../../../editor/ha';
+import ha, { NodeCategory, NodeColor } from '../../../editor/ha';
 import * as haServer from '../../../editor/haserver';
 import { i18n } from '../../../editor/i18n';
 import {
@@ -80,8 +80,8 @@ const defaultOutputProperties: OutputProperty[] = [
 ];
 
 const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
-    category: 'home_assistant',
-    color: ha.nodeColors.alpha,
+    category: NodeCategory.HomeAssistant,
+    color: NodeColor.Alpha,
     inputs: 0,
     outputs: 1,
     icon: 'font-awesome/fa-cube',

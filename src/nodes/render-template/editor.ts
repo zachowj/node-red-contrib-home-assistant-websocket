@@ -1,6 +1,6 @@
 import { EditorNodeDef, EditorRED } from 'node-red';
 
-import ha from '../../editor/ha';
+import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import { HassNodeProperties } from '../../editor/types';
 
@@ -20,8 +20,8 @@ let templateEditor: AceAjax.Editor | undefined;
 
 const RenderTemplateEditor: EditorNodeDef<RenderTemplateEditorNodeProperties> =
     {
-        category: 'home_assistant',
-        color: ha.nodeColors.haBlue,
+        category: NodeCategory.HomeAssistant,
+        color: NodeColor.HaBlue,
         inputs: 1,
         outputs: 1,
         icon: 'ha-render-template.svg',

@@ -1,6 +1,6 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
-import ha from '../../../editor/ha';
+import ha, { NodeCategory } from '../../../editor/ha';
 import { defaultHaConfigOptions, haConfigOptions } from './data';
 import { createRow, setEntityType } from './helpers';
 
@@ -26,7 +26,7 @@ const rows = {
 };
 
 const EntityConfigEditor: EditorNodeDef<EntityConfigEditorNodeProperties> = {
-    category: 'config',
+    category: NodeCategory.Config,
     defaults: {
         server: {
             value: '',

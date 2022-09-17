@@ -1,7 +1,7 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
 import { hassAutocomplete } from '../../editor/components/hassAutocomplete';
-import ha from '../../editor/ha';
+import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 
 declare const RED: EditorRED;
@@ -22,8 +22,8 @@ interface GetHistoryEditorNodeProperties extends EditorNodeProperties {
 }
 
 const GetHistoryEditor: EditorNodeDef<GetHistoryEditorNodeProperties> = {
-    category: 'home_assistant',
-    color: ha.nodeColors.haBlue,
+    category: NodeCategory.HomeAssistant,
+    color: NodeColor.HaBlue,
     inputs: 1,
     outputs: 1,
     icon: 'ha-get-history.svg',

@@ -1,6 +1,6 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
-import ha from '../../editor/ha';
+import ha, { NodeCategory } from '../../editor/ha';
 
 declare const RED: EditorRED;
 
@@ -13,7 +13,7 @@ export interface DeviceConfigEditorNodeProperties extends EditorNodeProperties {
 }
 
 const DeviceConfigEditor: EditorNodeDef<DeviceConfigEditorNodeProperties> = {
-    category: 'config',
+    category: NodeCategory.Config,
     defaults: {
         version: { value: RED.settings.get('haDeviceConfigVersion', 0) },
         name: { value: '', required: false },

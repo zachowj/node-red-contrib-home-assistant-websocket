@@ -3,16 +3,23 @@ import { EditorNodeInstance } from 'node-red';
 import { HassNodeProperties } from './types';
 import { isCurrentVersion, versionCheckOnEditPrepare } from './version';
 
-const nodeColors = {
-    action: '#46B1EF',
-    alpha: '#E78BB9',
-    api: '#7CDFFD',
-    beta: '#77DD77',
-    data: '#5BCBF7',
-    deprecated: '#A6BBCF',
-    event: '#399CDF',
-    haBlue: '#41BDF5',
-};
+export enum NodeCategory {
+    Config = 'config',
+    HomeAssistant = 'home_assistant',
+    HomeAssistantDeprecated = 'home_assistant_deprecated',
+    HomeAssistantEntities = 'home_assistant_entities',
+}
+
+export enum NodeColor {
+    Action = '#46B1EF',
+    Alpha = '#E78BB9',
+    Api = '#7CDFFD',
+    Beta = '#77DD77',
+    Data = '#5BCBF7',
+    Deprecated = '#A6BBCF',
+    Event = '#399CDF',
+    HaBlue = '#41BDF5',
+}
 
 const setup = (node: EditorNodeInstance<HassNodeProperties>) => {
     $('#dialog-form, #node-config-dialog-edit-form').addClass('home-assistant');
@@ -90,6 +97,5 @@ export default {
     alphaWarning,
     betaWarning,
     labelStyle,
-    nodeColors,
     setup,
 };

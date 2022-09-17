@@ -3,7 +3,7 @@ import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 import { hassAutocomplete } from '../../editor/components/hassAutocomplete';
 import * as ifState from '../../editor/components/ifstate';
 import * as exposeNode from '../../editor/exposenode';
-import ha from '../../editor/ha';
+import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import { HassExposedConfig, StateType } from '../../editor/types';
 
@@ -27,8 +27,8 @@ interface PollStateEditorNodeProperties extends EditorNodeProperties {
 }
 
 const PollStateEditor: EditorNodeDef<PollStateEditorNodeProperties> = {
-    category: 'home_assistant',
-    color: ha.nodeColors.haBlue,
+    category: NodeCategory.HomeAssistant,
+    color: NodeColor.HaBlue,
     inputs: 0,
     outputs: 1,
     outputLabels: ["'If State' is true", "'If State' is false"],

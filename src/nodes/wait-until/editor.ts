@@ -1,7 +1,7 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
 import EntitySelector from '../../editor/components/EntitySelector';
-import ha from '../../editor/ha';
+import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import { HATypedInputTypeOptions } from '../../editor/types';
 
@@ -26,8 +26,8 @@ interface WaitUntilEditorNodeProperties extends EditorNodeProperties {
 }
 
 const WaitUntilEditor: EditorNodeDef<WaitUntilEditorNodeProperties> = {
-    category: 'home_assistant',
-    color: ha.nodeColors.haBlue,
+    category: NodeCategory.HomeAssistant,
+    color: NodeColor.HaBlue,
     inputs: 1,
     outputs: 1,
     outputLabels: ['', 'timed out'],

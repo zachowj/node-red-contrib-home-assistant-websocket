@@ -5,7 +5,7 @@ import {
     EditorWidgetTypedInputType,
 } from 'node-red';
 
-import ha from '../../editor/ha';
+import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import { HATypedInputTypeOptions } from '../../editor/types';
 
@@ -30,8 +30,8 @@ interface GetEntitiesEditorNodeProperties extends EditorNodeProperties {
 }
 
 const GetEntitiesEditor: EditorNodeDef<GetEntitiesEditorNodeProperties> = {
-    category: 'home_assistant',
-    color: ha.nodeColors.haBlue,
+    category: NodeCategory.HomeAssistant,
+    color: NodeColor.HaBlue,
     inputs: 1,
     outputs: 1,
     icon: 'ha-get-entities.svg',

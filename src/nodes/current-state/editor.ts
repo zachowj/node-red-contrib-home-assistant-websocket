@@ -3,7 +3,7 @@ import { EditorNodeDef, EditorRED } from 'node-red';
 import { hassAutocomplete } from '../../editor/components/hassAutocomplete';
 import * as ifState from '../../editor/components/ifstate';
 import * as haOutputs from '../../editor/components/output-properties';
-import ha from '../../editor/ha';
+import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import { HassNodeProperties, OutputProperty } from '../../editor/types';
 
@@ -30,8 +30,8 @@ interface CurrentStateEditorNodeProperties extends HassNodeProperties {
 }
 
 const CurrentStateEditor: EditorNodeDef<CurrentStateEditorNodeProperties> = {
-    category: 'home_assistant',
-    color: ha.nodeColors.haBlue,
+    category: NodeCategory.HomeAssistant,
+    color: NodeColor.HaBlue,
     inputs: 1,
     outputs: 1,
     outputLabels: function (index) {

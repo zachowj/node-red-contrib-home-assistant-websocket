@@ -2,7 +2,7 @@ import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
 import { hassAutocomplete } from '../../editor/components/hassAutocomplete';
 import * as exposeNode from '../../editor/exposenode';
-import ha from '../../editor/ha';
+import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import { HassExposedConfig } from '../../editor/types';
 
@@ -19,8 +19,8 @@ interface ZoneEditorNodeProperties extends EditorNodeProperties {
 }
 
 const ZoneEditor: EditorNodeDef<ZoneEditorNodeProperties> = {
-    category: 'home_assistant',
-    color: ha.nodeColors.haBlue,
+    category: NodeCategory.HomeAssistant,
+    color: NodeColor.HaBlue,
     outputs: 1,
     icon: 'font-awesome/fa-map-marker',
     paletteLabel: 'zone',

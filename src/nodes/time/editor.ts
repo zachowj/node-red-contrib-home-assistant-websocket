@@ -4,7 +4,7 @@ import { hassAutocomplete } from '../../editor/components/hassAutocomplete';
 import * as haOutputs from '../../editor/components/output-properties';
 import * as haData from '../../editor/data';
 import * as exposeNode from '../../editor/exposenode';
-import ha from '../../editor/ha';
+import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import { HassExposedConfig, OutputProperty } from '../../editor/types';
 
@@ -37,8 +37,8 @@ interface TimeEditorNodeProperties extends EditorNodeProperties {
 }
 
 const TimeEditor: EditorNodeDef<TimeEditorNodeProperties> = {
-    category: 'home_assistant',
-    color: ha.nodeColors.haBlue,
+    category: NodeCategory.HomeAssistant,
+    color: NodeColor.HaBlue,
     outputs: 1,
     icon: 'font-awesome/fa-clock-o',
     paletteLabel: 'time',

@@ -1,6 +1,6 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
-import ha from '../../editor/ha';
+import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 
 declare const RED: EditorRED;
@@ -14,8 +14,8 @@ interface FireEventEditorNodeProperties extends EditorNodeProperties {
 }
 
 const FireEventEditor: EditorNodeDef<FireEventEditorNodeProperties> = {
-    category: 'home_assistant',
-    color: ha.nodeColors.haBlue,
+    category: NodeCategory.HomeAssistant,
+    color: NodeColor.HaBlue,
     inputs: 1,
     outputs: 1,
     icon: 'ha-fire-event.svg',

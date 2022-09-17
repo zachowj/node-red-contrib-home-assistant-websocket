@@ -2,7 +2,7 @@ import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
 import EntitySelector from '../../editor/components/EntitySelector';
 import * as exposeNode from '../../editor/exposenode';
-import ha from '../../editor/ha';
+import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import { i18n } from '../../editor/i18n';
 import { HassExposedConfig } from '../../editor/types';
@@ -46,8 +46,8 @@ interface TriggerStateEditorNodeProperties extends EditorNodeProperties {
 }
 
 const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
-    category: 'home_assistant',
-    color: ha.nodeColors.haBlue,
+    category: NodeCategory.HomeAssistant,
+    color: NodeColor.HaBlue,
     inputs: 0,
     outputs: 2,
     outputLabels: function (index) {

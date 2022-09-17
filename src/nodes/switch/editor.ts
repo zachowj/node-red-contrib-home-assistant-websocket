@@ -2,7 +2,7 @@ import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
 import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
-import ha from '../../editor/ha';
+import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import { OutputProperty } from '../../editor/types';
 import { saveEntityType } from '../entity-config/editor/helpers';
 
@@ -18,8 +18,8 @@ interface SwitchEditorNodeProperties extends EditorNodeProperties {
 }
 
 const SwitchEditor: EditorNodeDef<SwitchEditorNodeProperties> = {
-    category: 'home_assistant_entities',
-    color: ha.nodeColors.haBlue,
+    category: NodeCategory.HomeAssistantEntities,
+    color: NodeColor.HaBlue,
     inputs: 0,
     outputs: 1,
     icon: 'font-awesome/fa-toggle-on',

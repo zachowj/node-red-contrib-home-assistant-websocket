@@ -7,7 +7,7 @@ import {
     Select2Data,
     Tags,
 } from '../../../editor/components/select2';
-import ha from '../../../editor/ha';
+import ha, { NodeCategory, NodeColor } from '../../../editor/ha';
 import * as haServer from '../../../editor/haserver';
 import { OutputProperty } from '../../../editor/types';
 import { containsMustache } from '../../../helpers/mustache';
@@ -42,8 +42,8 @@ interface CallServiceEditorNodeProperties extends EditorNodeProperties {
 }
 
 const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
-    category: 'home_assistant',
-    color: ha.nodeColors.haBlue,
+    category: NodeCategory.HomeAssistant,
+    color: NodeColor.HaBlue,
     inputs: 1,
     outputs: 1,
     icon: 'ha-call-service.svg',

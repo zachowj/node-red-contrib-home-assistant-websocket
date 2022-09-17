@@ -2,7 +2,7 @@ import { EditorNodeDef, EditorRED, EditorWidgetTypedInputType } from 'node-red';
 
 import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
-import ha from '../../editor/ha';
+import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import {
     HassNodeProperties,
@@ -50,8 +50,8 @@ const attributeTypes: HATypedInputTypeOptions = [
 ];
 
 const BinarySensorEditor: EditorNodeDef<BinarySensorEditorNodeProperties> = {
-    category: 'home_assistant_entities',
-    color: ha.nodeColors.haBlue,
+    category: NodeCategory.HomeAssistantEntities,
+    color: NodeColor.HaBlue,
     inputs: 1,
     outputs: 1,
     icon: 'font-awesome/fa-check-circle-o',

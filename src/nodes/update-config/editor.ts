@@ -1,7 +1,7 @@
 import { EditorNodeDef, EditorRED } from 'node-red';
 
 import * as haOutputs from '../../editor/components/output-properties';
-import ha from '../../editor/ha';
+import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import { HassNodeProperties, OutputProperty } from '../../editor/types';
 
@@ -13,8 +13,8 @@ interface UpdateConfigEditorNodeProperties extends HassNodeProperties {
 }
 
 const UpdateConfigEditor: EditorNodeDef<UpdateConfigEditorNodeProperties> = {
-    category: 'home_assistant_entities',
-    color: ha.nodeColors.haBlue,
+    category: NodeCategory.HomeAssistantEntities,
+    color: NodeColor.HaBlue,
     inputs: 1,
     outputs: 1,
     icon: 'font-awesome/fa-asterisk',

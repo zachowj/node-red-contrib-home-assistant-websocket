@@ -1,7 +1,7 @@
 import { EditorNodeDef, EditorRED, EditorWidgetTypedInputType } from 'node-red';
 
 import * as exposeNode from '../../editor/exposenode';
-import ha from '../../editor/ha';
+import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import {
     HassExposedConfig,
@@ -87,8 +87,8 @@ const rows = {
 };
 
 const EntityEditor: EditorNodeDef<EntityEditorNodeProperties> = {
-    category: 'home_assistant_deprecated',
-    color: ha.nodeColors.deprecated,
+    category: NodeCategory.HomeAssistantDeprecated,
+    color: NodeColor.Deprecated,
     inputs: 1,
     outputs: 1,
     // @ts-ignore - DefinitelyTyped is wrong icon can be a function

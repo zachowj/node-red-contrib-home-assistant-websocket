@@ -2,7 +2,7 @@ import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
 import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
-import ha from '../../editor/ha';
+import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import {
     EditorWidgetEditableListOptions,
@@ -24,8 +24,8 @@ interface TagEditorNodeProperties extends EditorNodeProperties {
 }
 
 const TagEditor: EditorNodeDef<TagEditorNodeProperties> = {
-    category: 'home_assistant',
-    color: ha.nodeColors.haBlue,
+    category: NodeCategory.HomeAssistant,
+    color: NodeColor.HaBlue,
     outputs: 1,
     icon: 'font-awesome/fa-tag',
     paletteLabel: 'tag',

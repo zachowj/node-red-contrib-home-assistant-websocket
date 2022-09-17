@@ -2,7 +2,7 @@ import { EditorNodeDef, EditorRED } from 'node-red';
 
 import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
-import ha from '../../editor/ha';
+import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import {
     HassExposedConfig,
@@ -26,8 +26,8 @@ interface EventsAllEditorNodeProperties extends HassNodeProperties {
 }
 
 const EventsAllEditor: EditorNodeDef<EventsAllEditorNodeProperties> = {
-    category: 'home_assistant',
-    color: ha.nodeColors.haBlue,
+    category: NodeCategory.HomeAssistant,
+    color: NodeColor.HaBlue,
     defaults: {
         name: { value: '' },
         server: { value: '', type: 'server', required: true },
