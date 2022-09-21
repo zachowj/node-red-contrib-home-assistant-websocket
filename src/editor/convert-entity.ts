@@ -31,6 +31,7 @@ export interface EntityProperties {
     version: number;
     debugenabled: boolean;
     outputs: number;
+    g?: string;
     x: number;
     y: number;
     z: string;
@@ -72,6 +73,7 @@ const convertToSeperateEntityNode = (data: EntityProperties, newId: string) => {
         inputs: 1,
         outputs: 1,
         version: 0,
+        g: data.g,
         x: data.x,
         y: data.y,
         z: data.z,
@@ -87,10 +89,10 @@ const convertToSeperateEntityNode = (data: EntityProperties, newId: string) => {
                     data.entityType === 'sensor'
                         ? 'ha-sensor'
                         : 'ha-binary-sensor',
-                state: data.state,
-                stateType: data.stateType,
-                attributes: data.attributes,
-                inputOverride: data.inputOverride,
+                state: data.state ?? 'payload',
+                stateType: data.stateType ?? 'msg',
+                attributes: data.attributes ?? [],
+                inputOverride: data.inputOverride ?? 'allow',
                 outputProperties:
                     data.outputLocationType === 'none'
                         ? []
@@ -110,7 +112,7 @@ const convertToSeperateEntityNode = (data: EntityProperties, newId: string) => {
                 ...node,
                 type: 'ha-switch',
                 outputs: 2,
-                outputOnStateChange: data.outputOnStateChange,
+                outputOnStateChange: data.outputOnStateChange ?? false,
                 enableInput: true,
                 outputProperties:
                     data.outputPayloadType === 'none'
@@ -158,11 +160,25 @@ export const convertEntityNode = (node: EntityProperties) => {
     };
 
     const newId = generateId();
+    // If the node is in a group remove it so NR doesn't think the new config node is in the group
+    if (node.g) {
+        const oldEntityNode = RED.nodes.node(node.id);
+        if (oldEntityNode) {
+            RED.group.removeFromGroup(RED.nodes.group(node.g), oldEntityNode);
+        }
+    }
     RED.nodes.remove(node.id);
     createEntityConfigNode(node);
     convertToSeperateEntityNode(node, newId);
     addLinks(newId, wires);
-    // @ts-expect-error - changed defined as readonly
-    RED.nodes.node(newId).changed = true;
+    const entityNode = RED.nodes.node(newId);
+    if (entityNode) {
+        RED.nodes.moveNodeToTab(entityNode, node.z);
+        if (node.g) {
+            RED.group.addToGroup(RED.nodes.group(node.g), entityNode);
+        }
+        // @ts-expect-error - changed defined as readonly
+        entityNode.changed = true;
+    }
     RED.view.redraw(true);
 };

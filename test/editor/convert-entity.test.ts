@@ -73,6 +73,7 @@ const EXPECTED_BASE_NODE = {
     inputs: 1,
     name: 'i am name',
     entityConfig: 'oldId',
+    g: undefined,
     x: 50,
     y: 100,
     z: 'zId',
@@ -101,12 +102,19 @@ describe('convert-entity', function () {
     let RED: StubbedInstance<EditorRED>;
 
     beforeEach(function () {
+        const newId = '123';
+
         RED = stubInterface<EditorRED>();
-        RED.nodes.import = sinon.stub();
+
+        RED.group.addToGroup = sinon.stub();
+        RED.group.removeFromGroup = sinon.stub();
+
         // @ts-expect-error - function is not defined in types
         RED.nodes.getNodeLinks = sinon.stub().returns([]);
-        const newId = '123';
+        RED.nodes.group = sinon.stub();
         RED.nodes.id = sinon.stub().returns(newId);
+        RED.nodes.import = sinon.stub();
+        RED.nodes.moveNodeToTab = sinon.stub();
         RED.nodes.node = sinon
             .stub()
             .onFirstCall()
@@ -114,8 +122,11 @@ describe('convert-entity', function () {
             .onSecondCall()
             .returns({ id: newId });
         RED.nodes.remove = sinon.stub();
+
         RED.settings.get = sinon.stub().returns(0);
+
         RED.view.redraw = sinon.stub();
+
         global.RED = RED;
     });
 
@@ -126,6 +137,7 @@ describe('convert-entity', function () {
     it('should remove old entity node and create config node and sensor node', function () {
         convertEntityNode(NODE_DATA);
         expect(RED.nodes.remove).to.have.been.calledWith('oldId');
+        expect(RED.nodes.moveNodeToTab).to.have.been.called;
         expect(RED.nodes.import).to.have.been.calledWith(EXPECTED_CONFIG_NODE);
         expect(RED.nodes.import).to.have.been.calledWith(EXPECTED_SENSOR_NODE);
         expect(RED.view.redraw).to.have.been.calledWith(true);
@@ -141,6 +153,23 @@ describe('convert-entity', function () {
             };
             expect(RED.nodes.import).to.have.been.calledWith(expected);
         });
+    });
+
+    it("should remove and add to group if it's in a group", function () {
+        RED.nodes.node = sinon
+            .stub()
+            .onFirstCall()
+            .returns(null)
+            .onSecondCall()
+            .returns({ id: '123' })
+            .onThirdCall()
+            .returns({ id: '123' });
+        const data = { ...NODE_DATA, g: 'groupId' };
+        convertEntityNode(data);
+        expect(RED.group.removeFromGroup).to.have.been.called;
+        expect(RED.group.addToGroup).to.have.been.called;
+        expect(RED.nodes.group).to.have.been.calledTwice;
+        expect(RED.nodes.group).to.have.been.calledWith('groupId');
     });
 
     describe('binary sensor/sensor', function () {

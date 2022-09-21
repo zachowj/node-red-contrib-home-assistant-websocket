@@ -72,13 +72,16 @@ function migrateNode(node: EditorNodeInstance<HassNodeProperties>) {
 }
 
 function migrateAllNodes() {
-    const m = (node: EditorNodeInstance<HassNodeProperties>) => {
+    // Get all nodes then iterate over them to avoid stopping if one is removed
+    const nodes: EditorNodeInstance<HassNodeProperties>[] = [];
+    const checkMigrate = (node: EditorNodeInstance<HassNodeProperties>) => {
         if (isHomeAssistantNode(node) && !isCurrentVersion(node)) {
-            migrateNode(node);
+            nodes.push(node);
         }
     };
-    RED.nodes.eachNode(m as NodeCallback);
-    RED.nodes.eachConfig(m as NodeCallback);
+    RED.nodes.eachNode(checkMigrate as NodeCallback);
+    RED.nodes.eachConfig(checkMigrate as NodeCallback);
+    nodes.forEach((n) => migrateNode(n));
     RED.nodes.dirty(true);
     RED.notify(i18n('home-assistant.ui.migrations.all_nodes_updated'));
     RED.view.redraw();
