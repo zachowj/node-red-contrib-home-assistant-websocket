@@ -127,7 +127,9 @@ const BinarySensorEditor: EditorNodeDef<BinarySensorEditorNodeProperties> = {
                 },
             })
             .editableList('addItems', this.attributes);
-        haOutputs.createOutputs(this.outputProperties);
+        haOutputs.createOutputs(this.outputProperties, {
+            extraTypes: ['sentData'],
+        });
     },
     oneditsave: function () {
         this.attributes = [];
