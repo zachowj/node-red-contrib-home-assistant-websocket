@@ -61,8 +61,8 @@ const createEntityConfigNode = (node: EntityProperties) => {
         }`,
         version: RED.settings.get('haEntityConfigVersion', 0),
         entityType: node.entityType,
-        haConfig: node.config,
-        resend: node.resend,
+        haConfig: node.config ?? [],
+        resend: node.resend ?? false,
     });
 };
 

@@ -34,7 +34,7 @@ const EntityConfigEditor: EditorNodeDef<EntityConfigEditorNodeProperties> = {
             required: true,
         },
         deviceConfig: {
-            value: '_ADD_',
+            value: '',
             type: 'ha-device-config',
             required: false,
         },
@@ -53,7 +53,7 @@ const EntityConfigEditor: EditorNodeDef<EntityConfigEditorNodeProperties> = {
     oneditprepare: function () {
         ha.setup(this);
 
-        if (this.deviceConfig === '_ADD_') {
+        if (!this.deviceConfig) {
             $('#node-config-input-deviceConfig').val('_ADD_');
         }
 
