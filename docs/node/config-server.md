@@ -10,7 +10,7 @@ Home Assistant connection configuration
 
 Label for this configuration, see details below for implications
 
-### Hass.io
+### Using the Home Assistant Add-on
 
 - Type: `boolean`
 
@@ -20,7 +20,7 @@ If you're running Node-RED as a Hass.io Add-on check this. No other information 
 
 - Type: `string`
 
-The base URL and port the home assistant instance can be reached at, for example: `http://192.168.0.100:8123` or `https://homeassistant.mysite.com`
+The base URL and port of the Home Assistant instance can be reached at, for example: `http://192.168.0.100:8123` or `https://homeassistant.mysite.com`
 
 ### Access Token
 
@@ -42,11 +42,23 @@ A list of strings, not case sensitive, delimited by vertical pipe, |, that will 
 
 ### Enable Heartbeat
 
-Heartbeat will send a ping message using the websocket connection to Home Assistant every X seconds. If a pong response is not received within a 5 seconds Node-RED will attempt to reconnect to Home Assistant.
+- Type: `boolean`
+
+Heartbeat will send a ping message using the websocket connection to Home Assistant every X seconds. If a pong response is not received within 5 seconds Node-RED will attempt to reconnect to Home Assistant.
 
 ### Heartbeat Interval
 
-The interval at which the ping message is sent to Home Assistant. The mininum value is 10 seconds.
+- Type: `number`
+
+The interval at which the ping message is sent to Home Assistant. The minimum value is 10 seconds.
+
+### Enable Global Context Store
+
+- Type: `boolean`
+
+If enabled, the global context store will be used to store the Home Assistant connection, state, and service information. This allows you to use the information in other nodes using context functions.
+
+Example below
 
 ## UI Settings
 
@@ -74,9 +86,9 @@ Every node requires a configuration attached to define how to contact Home Assis
 
 ### Context
 
-Each config node will also make some data available on the global context, the `Name` value in this node is used as, camelcase, the namespace for those values
+Each config node will also make some data available in the global context, the `Name` value in this node is used as, camelcase, and the namespace for those values
 
-Currently `states`, `services` and `events` is made available on the global context. `states` is always set to all available states at startup and updated whenever state changes occur so it should be always up to date. `services` and `events` is only updated on initial deploy.
+Currently `states`, `services`, and `events` is made available in the global context. `states` is always set to all available states at startup and updated whenever state changes occur so it should be always up to date. `services` and `events` is only updated on initial deploy.
 
 ### Context Example
 
@@ -91,7 +103,7 @@ return entityState.state === "on" ? true : false;
 
 ## Connection Issues
 
-Communication with Home Assistant is accomplished via a combination of WebSocket and the REST API if you are having troubles communicating with home assistant make sure you can access the API outside of node-red, but from the same server node-red is running on, using a REST client, curl, or any number of other methods to validate the connection
+Communication with Home Assistant is accomplished via a combination of WebSocket and the REST API if you are having trouble communicating with home assistant make sure you can access the API outside of node-red, but from the same server node-red is running on, using a REST client, curl, or any number of other methods to validate the connection
 
 ## References
 

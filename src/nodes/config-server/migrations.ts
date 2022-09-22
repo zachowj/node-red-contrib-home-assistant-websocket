@@ -71,4 +71,15 @@ export default [
             return newSchema;
         },
     },
+    {
+        version: 5,
+        up: (schema: any) => {
+            const newSchema = {
+                ...schema,
+                version: 5,
+                enableGlobalContextStore: true,
+            };
+            return newSchema;
+        },
+    },
 ];

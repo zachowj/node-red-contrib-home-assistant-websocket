@@ -23,5 +23,7 @@ export default function configServerNode(
 
     this.on('close', () => {
         closeHomeAssistant(this.id);
+        // @ts-expect-error - set context second argument is optional
+        this.context().global.set('homeassistant');
     });
 }

@@ -28,6 +28,7 @@ export interface ConfigServerEditorNodeProperties extends EditorNodeProperties {
     statusDay: DateTimeFormatOptions['day'] | 'hidden';
     statusHourCycle: DateTimeFormatOptions['hourCycle'] | 'default';
     statusTimeFormat: 'h:m' | 'h:m:s' | 'h:m:s.ms';
+    enableGlobalContextStore: boolean;
 }
 
 const ConfigServerEditor: EditorNodeDef<
@@ -62,6 +63,7 @@ const ConfigServerEditor: EditorNodeDef<
         statusDay: { value: 'numeric' },
         statusHourCycle: { value: 'default' },
         statusTimeFormat: { value: 'h:m' },
+        enableGlobalContextStore: { value: false },
     },
     credentials: {
         host: { type: 'text' },

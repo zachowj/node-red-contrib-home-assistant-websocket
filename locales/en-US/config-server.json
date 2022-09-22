@@ -15,6 +15,7 @@
       "cache_autocomplete_results": "Cache autocomplete results",
       "delay_connection_attempts": "Delay connection attempts",
       "device_selector": "Device Selector",
+      "enable_global_context_store": "Enable global context store",
       "enable_heartbeat": "Enable heartbeat",
       "entity_selector": "Entity Selector",
       "friendly_name": "friendly name",

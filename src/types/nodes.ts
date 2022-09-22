@@ -46,6 +46,7 @@ export interface ServerNodeConfig extends NodeProperties {
     statusDay: DateTimeFormatOptions['day'] | 'hidden';
     statusHourCycle: DateTimeFormatOptions['hourCycle'] | 'default';
     statusTimeFormat: 'h:m' | 'h:m:s' | 'h:m:s.ms';
+    enableGlobalContextStore: boolean;
 }
 
 export type OutputProperty = {

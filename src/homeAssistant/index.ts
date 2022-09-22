@@ -75,8 +75,10 @@ export const createHomeAssistantClient = (
     new Comms(node.id, homeAssistant, clientEvents);
     // eslint-disable-next-line no-new
     new ConnectionLog(node, clientEvents);
-    // eslint-disable-next-line no-new
-    new EditorContext(node, homeAssistant, clientEvents);
+    if (node.config.enableGlobalContextStore) {
+        // eslint-disable-next-line no-new
+        new EditorContext(node, homeAssistant, clientEvents);
+    }
 
     homeAssistant.websocket.connect();
 
