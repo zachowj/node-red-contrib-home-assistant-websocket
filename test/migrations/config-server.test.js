@@ -47,6 +47,11 @@ const VERSION_4 = {
     statusHourCycle: 'h23',
     statusTimeFormat: 'h:m',
 };
+const VERSION_5 = {
+    ...VERSION_4,
+    version: 5,
+    enableGlobalContextStore: true,
+};
 
 describe('Migrations - Server Config Node', function () {
     describe('Version 0', function () {
@@ -80,8 +85,22 @@ describe('Migrations - Server Config Node', function () {
             expect(migratedSchema).to.eql(VERSION_3);
         });
     });
+    describe('Version 4', function () {
+        it('should update version 3 to version 4', function () {
+            const migrate = migrations.find((m) => m.version === 4);
+            const migratedSchema = migrate.up(VERSION_3);
+            expect(migratedSchema).to.eql(VERSION_4);
+        });
+    });
+    describe('Version 5', function () {
+        it('should update version 4 to version 5', function () {
+            const migrate = migrations.find((m) => m.version === 5);
+            const migratedSchema = migrate.up(VERSION_4);
+            expect(migratedSchema).to.eql(VERSION_5);
+        });
+    });
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_4);
+        expect(migratedSchema).to.eql(VERSION_5);
     });
 });
