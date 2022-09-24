@@ -6,7 +6,7 @@ import sinon, { StubbedInstance, stubInterface } from 'ts-sinon';
 import JSONataService from '../../../src/common/services/JSONataService';
 import NodeRedContextService from '../../../src/common/services/NodeRedContextService';
 import TypedInputService, {
-    CustomOutputTypes,
+    TypedInputTypes,
 } from '../../../src/common/services/TypedInputService';
 import { resetStubInterface } from '../../helpers';
 
@@ -45,9 +45,13 @@ describe('Typed Input Service', function () {
             contextServiceStub.get
                 .withArgs('msg', 'payload', message)
                 .returns('bar');
-            const results = typedInputService.getValue('payload', 'msg', {
-                message,
-            });
+            const results = typedInputService.getValue(
+                'payload',
+                TypedInputTypes.Msg,
+                {
+                    message,
+                }
+            );
 
             expect(contextServiceStub.get).to.have.been.calledOnceWithExactly(
                 'msg',
@@ -58,27 +62,42 @@ describe('Typed Input Service', function () {
         });
         it('should return the value of the flow property', function () {
             contextServiceStub.get.withArgs('flow', 'payload').returns('bar');
-            const results = typedInputService.getValue('payload', 'flow');
+            const results = typedInputService.getValue(
+                'payload',
+                TypedInputTypes.Flow
+            );
 
             expect(results).to.equal('bar');
         });
         it('should return the value of the global property', function () {
             contextServiceStub.get.withArgs('global', 'payload').returns('bar');
-            const results = typedInputService.getValue('payload', 'global');
+            const results = typedInputService.getValue(
+                'payload',
+                TypedInputTypes.Global
+            );
 
             expect(results).to.equal('bar');
         });
         describe('bool', function () {
             it('should return true when type is set to bool and value "true"', function () {
-                const results = typedInputService.getValue('true', 'bool');
+                const results = typedInputService.getValue(
+                    'true',
+                    TypedInputTypes.Boolean
+                );
                 expect(results).to.be.true;
             });
             it('should return false when type is set to bool and value "false"', function () {
-                const results = typedInputService.getValue('false', 'bool');
+                const results = typedInputService.getValue(
+                    'false',
+                    TypedInputTypes.Boolean
+                );
                 expect(results).to.be.false;
             });
             it('should return false when type is set to bool and value is not "true"', function () {
-                const results = typedInputService.getValue('foo', 'bool');
+                const results = typedInputService.getValue(
+                    'foo',
+                    TypedInputTypes.Boolean
+                );
                 expect(results).to.be.false;
             });
         });
@@ -86,45 +105,60 @@ describe('Typed Input Service', function () {
             it('should return the value of the json property', function () {
                 const results = typedInputService.getValue(
                     '{"foo": "bar"}',
-                    'json'
+                    TypedInputTypes.JSON
                 );
                 expect(results).to.deep.equal({ foo: 'bar' });
             });
             it('should catch errors silently when parsing the json', function () {
                 const results = typedInputService.getValue(
                     '{"foo": "bar"',
-                    'json'
+                    TypedInputTypes.JSON
                 );
                 expect(results).to.be.undefined;
             });
         });
         it('should return the current timestamp', function () {
             const clock = sinon.useFakeTimers(Date.now());
-            const results = typedInputService.getValue('', 'date');
+            const results = typedInputService.getValue(
+                '',
+                TypedInputTypes.Date
+            );
             expect(results).to.equal(clock.now);
             clock.restore();
         });
         it('should return a number', function () {
-            const results = typedInputService.getValue('1', 'num');
+            const results = typedInputService.getValue(
+                '1',
+                TypedInputTypes.Number
+            );
             expect(results).to.equal(1);
         });
         it('should return undefined when type set to "none"', function () {
-            const results = typedInputService.getValue('', 'none');
+            const results = typedInputService.getValue(
+                '',
+                TypedInputTypes.None
+            );
             expect(results).to.be.undefined;
         });
         it('should retun a string', function () {
-            const results = typedInputService.getValue('foo', 'str');
+            const results = typedInputService.getValue(
+                'foo',
+                TypedInputTypes.String
+            );
             expect(results).to.equal('foo');
         });
         describe('JSONata', function () {
             it('should return undefined when value is empty', function () {
-                const results = typedInputService.getValue('', 'jsonata');
+                const results = typedInputService.getValue(
+                    '',
+                    TypedInputTypes.JSONata
+                );
                 expect(results).to.be.undefined;
             });
             it('should throw an error when the expression is invalid', function () {
                 jsonataServiceStub.evaluate.withArgs('foo').throws(new Error());
                 expect(() => {
-                    typedInputService.getValue('foo', 'jsonata');
+                    typedInputService.getValue('foo', TypedInputTypes.JSONata);
                 }).to.throw(Error);
             });
             it('should pass the correct properties to the JSONata service', function () {
@@ -140,7 +174,7 @@ describe('Typed Input Service', function () {
                 jsonataServiceStub.evaluate.withArgs('foo').returns('bar');
                 const results = typedInputService.getValue(
                     'foo',
-                    'jsonata',
+                    TypedInputTypes.JSONata,
                     objs
                 );
 
@@ -152,15 +186,24 @@ describe('Typed Input Service', function () {
         });
         describe('config', function () {
             it('should return the id value of the config', function () {
-                const results = typedInputService.getValue('id', 'config');
+                const results = typedInputService.getValue(
+                    'id',
+                    TypedInputTypes.Config
+                );
                 expect(results).to.equal('test');
             });
             it('should return the name value of the config', function () {
-                const results = typedInputService.getValue('name', 'config');
+                const results = typedInputService.getValue(
+                    'name',
+                    TypedInputTypes.Config
+                );
                 expect(results).to.equal('test node');
             });
             it('should return the complete config when value is empty', function () {
-                const results = typedInputService.getValue('', 'config');
+                const results = typedInputService.getValue(
+                    '',
+                    TypedInputTypes.Config
+                );
                 expect(results).to.deep.equal({
                     id: 'test',
                     type: 'ha-test',
@@ -169,7 +212,7 @@ describe('Typed Input Service', function () {
             });
         });
         describe('custom ouput properties', function () {
-            const props: Record<CustomOutputTypes, any> = {
+            const props: Partial<Record<TypedInputTypes, any>> = {
                 data: 'data_value',
                 entity: 'entity_value',
                 entityState: 'entityState_value',
@@ -181,7 +224,7 @@ describe('Typed Input Service', function () {
                 results: 'results_value',
             };
             it('should return the prop value for a given prop', function () {
-                const properties = Object.keys(props) as CustomOutputTypes[];
+                const properties = Object.keys(props) as TypedInputTypes[];
                 properties.forEach((prop) => {
                     const results = typedInputService.getValue('', prop, props);
                     expect(results).to.equal(prop + '_value');

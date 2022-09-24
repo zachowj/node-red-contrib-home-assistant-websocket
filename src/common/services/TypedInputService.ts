@@ -4,30 +4,28 @@ import selectn from 'selectn';
 import JSONata from './JSONataService';
 import NodeRedContext from './NodeRedContextService';
 
-export type CustomOutputTypes =
-    | 'data'
-    | 'entity'
-    | 'entityState'
-    | 'eventData'
-    | 'headers'
-    | 'params'
-    | 'triggerId'
-    | 'prevEntity'
-    | 'results';
-
-export type TypedInputTypes =
-    | 'msg'
-    | 'flow'
-    | 'global'
-    | 'bool'
-    | 'json'
-    | 'date'
-    | 'jsonata'
-    | 'num'
-    | 'str'
-    | 'none'
-    | 'config'
-    | CustomOutputTypes;
+export enum TypedInputTypes {
+    Msg = 'msg',
+    Flow = 'flow',
+    Global = 'global',
+    Boolean = 'bool',
+    JSON = 'json',
+    Date = 'date',
+    JSONata = 'jsonata',
+    Number = 'num',
+    String = 'str',
+    None = 'none',
+    Config = 'config',
+    Data = 'data',
+    Entity = 'entity',
+    EntityState = 'entityState',
+    EventData = 'eventData',
+    Headers = 'headers',
+    Params = 'params',
+    TriggerId = 'triggerId',
+    PrevEntity = 'prevEntity',
+    Results = 'results',
+}
 
 export default class TypedInputService {
     readonly #nodeConfig: Record<string, any>;
@@ -55,25 +53,25 @@ export default class TypedInputService {
     ) {
         let val;
         switch (valueType) {
-            case 'msg':
-            case 'flow':
-            case 'global':
+            case TypedInputTypes.Msg:
+            case TypedInputTypes.Flow:
+            case TypedInputTypes.Global:
                 val = this.#context.get(valueType, value, props.message);
                 break;
-            case 'bool':
+            case TypedInputTypes.Boolean:
                 val = value === 'true';
                 break;
-            case 'json':
+            case TypedInputTypes.JSON:
                 try {
                     val = JSON.parse(value);
                 } catch (e) {
                     // error parsing
                 }
                 break;
-            case 'date':
+            case TypedInputTypes.Date:
                 val = Date.now();
                 break;
-            case 'jsonata':
+            case TypedInputTypes.JSONata:
                 // no reason to error just return undefined
                 if (value === '') {
                     val = undefined;
@@ -89,13 +87,13 @@ export default class TypedInputService {
                     results: props.results,
                 });
                 break;
-            case 'num':
+            case TypedInputTypes.Number:
                 val = Number(value);
                 break;
-            case 'none':
+            case TypedInputTypes.None:
                 val = undefined;
                 break;
-            case 'config': {
+            case TypedInputTypes.Config: {
                 val = cloneDeep(
                     value.length
                         ? selectn(value, this.#nodeConfig)
@@ -103,15 +101,15 @@ export default class TypedInputService {
                 );
                 break;
             }
-            case 'data':
-            case 'entity':
-            case 'entityState':
-            case 'eventData':
-            case 'headers':
-            case 'params':
-            case 'triggerId':
-            case 'prevEntity':
-            case 'results':
+            case TypedInputTypes.Data:
+            case TypedInputTypes.Entity:
+            case TypedInputTypes.EntityState:
+            case TypedInputTypes.EventData:
+            case TypedInputTypes.Headers:
+            case TypedInputTypes.Params:
+            case TypedInputTypes.TriggerId:
+            case TypedInputTypes.PrevEntity:
+            case TypedInputTypes.Results:
                 val = props[valueType];
                 break;
             default:

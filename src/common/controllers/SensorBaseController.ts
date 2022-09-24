@@ -173,7 +173,7 @@ export default abstract class SensorBase<
                 attributes.push({
                     property: prop,
                     value: val,
-                    valueType: 'str' as TypedInputTypes,
+                    valueType: TypedInputTypes.String,
                 });
             }
         }
