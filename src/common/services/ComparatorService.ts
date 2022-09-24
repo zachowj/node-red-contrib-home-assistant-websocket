@@ -10,10 +10,10 @@ import NodeRedContextService, {
 } from './NodeRedContextService';
 
 export default class ComparatorService {
-    private readonly nodeRedContextService: NodeRedContextService;
-    private readonly homeAssistant: HomeAssistant;
-    private readonly jsonataService: JSONataService;
-    private readonly transformState: TransformState;
+    readonly #nodeRedContextService: NodeRedContextService;
+    readonly #homeAssistant: HomeAssistant;
+    readonly #jsonataService: JSONataService;
+    readonly #transformState: TransformState;
 
     constructor({
         nodeRedContextService,
@@ -26,10 +26,10 @@ export default class ComparatorService {
         jsonataService: JSONataService;
         transformState: TransformState;
     }) {
-        this.nodeRedContextService = nodeRedContextService;
-        this.homeAssistant = homeAssistant;
-        this.jsonataService = jsonataService;
-        this.transformState = transformState;
+        this.#nodeRedContextService = nodeRedContextService;
+        this.#homeAssistant = homeAssistant;
+        this.#jsonataService = jsonataService;
+        this.#transformState = transformState;
     }
 
     getComparatorResult(
@@ -49,7 +49,7 @@ export default class ComparatorService {
     ) {
         let cValue;
         if (isContextLocation(comparatorValueDatatype)) {
-            cValue = this.nodeRedContextService.get(
+            cValue = this.#nodeRedContextService.get(
                 comparatorValueDatatype,
                 comparatorValue,
                 message
@@ -64,7 +64,7 @@ export default class ComparatorService {
             comparatorValueDatatype === 'jsonata' &&
             comparatorValue
         ) {
-            cValue = this.jsonataService.evaluate(comparatorValue, {
+            cValue = this.#jsonataService.evaluate(comparatorValue, {
                 message,
                 entity,
                 prevEntity,
@@ -77,7 +77,7 @@ export default class ComparatorService {
                 comparatorValueDatatype = 'list';
             }
 
-            cValue = this.transformState.transform(
+            cValue = this.#transformState.transform(
                 comparatorValueDatatype as DataType,
                 comparatorValue
             );
@@ -120,7 +120,7 @@ export default class ComparatorService {
                 if (cValue === '') return false;
                 return actualValue?.startsWith(cValue);
             case 'in_group': {
-                const ent = this.homeAssistant?.websocket.getStates(cValue);
+                const ent = this.#homeAssistant?.websocket.getStates(cValue);
                 const groupEntities =
                     selectn('attributes.entity_id', ent) || [];
                 return groupEntities.includes(actualValue);
@@ -129,7 +129,7 @@ export default class ComparatorService {
                 if (!cValue) return true;
 
                 return (
-                    this.jsonataService.evaluate(cValue, {
+                    this.#jsonataService.evaluate(cValue, {
                         message,
                         entity,
                         prevEntity,

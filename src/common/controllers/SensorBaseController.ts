@@ -101,7 +101,7 @@ export default abstract class SensorBase<
             );
         }
 
-        const attributes = this.getAttributes(parsedMessage);
+        const attributes = this.#getAttributes(parsedMessage);
         let attr: Record<string, any> = {};
         try {
             attr = attributes.reduce((acc, cur) => {
@@ -149,7 +149,7 @@ export default abstract class SensorBase<
         done();
     }
 
-    private getAttributes(parsedMessage: ParsedMessage): Attribute[] {
+    #getAttributes(parsedMessage: ParsedMessage): Attribute[] {
         let attributes = [];
         if (
             parsedMessage.attributes.source !== 'message' ||

@@ -99,14 +99,14 @@ export default class InputService<C extends NodeProperties> {
     }
 
     validate(parsedMessage: ParsedMessage): boolean {
-        const schemaObject = this.parsedMessageToSchemaObject(parsedMessage);
+        const schemaObject = this.#parsedMessageToSchemaObject(parsedMessage);
         const { error } = this.#schema.validate(schemaObject);
         if (error) throw error;
 
         return true;
     }
 
-    private parsedMessageToSchemaObject(
+    #parsedMessageToSchemaObject(
         parsedMessage: ParsedMessage
     ): Record<string, any> {
         const schemaObject: Record<string, any> = {};

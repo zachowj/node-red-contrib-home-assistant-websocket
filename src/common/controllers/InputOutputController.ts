@@ -40,10 +40,10 @@ export default abstract class InputOutputController<
         super(params);
         this.inputService = params.inputService;
         this.integration = params.integration;
-        params.node.on('input', this.preOnInput.bind(this));
+        params.node.on('input', this.#preOnInput.bind(this));
     }
 
-    private async preOnInput(
+    async #preOnInput(
         message: NodeMessageInFlow,
         send: NodeSend,
         done: NodeDone

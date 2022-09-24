@@ -15,10 +15,10 @@ export const isContextLocation = (
 };
 
 export default class NodeRedContextService {
-    private readonly node: Node;
+    readonly #node: Node;
 
     constructor(node: Node) {
-        this.node = node;
+        this.#node = node;
     }
 
     get(
@@ -32,7 +32,7 @@ export default class NodeRedContextService {
         }
 
         const { key, store } = RED.util.parseContextStore(property);
-        const context = this.node.context();
+        const context = this.#node.context();
 
         switch (location) {
             case 'flow':
@@ -53,7 +53,7 @@ export default class NodeRedContextService {
         switch (location) {
             case 'flow':
             case 'global':
-                this.node.context()[location].set(key, val, store);
+                this.#node.context()[location].set(key, val, store);
                 break;
             case 'msg':
                 if (message) {

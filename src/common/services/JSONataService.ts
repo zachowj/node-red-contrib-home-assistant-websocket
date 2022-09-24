@@ -17,8 +17,8 @@ const isJSONataError = (error: unknown): error is JSONataError => {
 };
 
 export default class JSONataService {
-    private readonly homeAssistant?: HomeAssistant;
-    private readonly node: Node;
+    readonly #homeAssistant?: HomeAssistant;
+    readonly #node: Node;
 
     constructor({
         homeAssistant,
@@ -27,17 +27,17 @@ export default class JSONataService {
         homeAssistant?: HomeAssistant;
         node: Node;
     }) {
-        this.homeAssistant = homeAssistant;
-        this.node = node;
+        this.#homeAssistant = homeAssistant;
+        this.#node = node;
     }
 
     evaluate(expression: string, objs: Record<string, any> = {}) {
-        const expr = RED.util.prepareJSONataExpression(expression, this.node);
+        const expr = RED.util.prepareJSONataExpression(expression, this.#node);
         const { entity, message, prevEntity } = objs;
 
         expr.assign('entity', () => entity);
         expr.assign('entities', (val: string) =>
-            this?.homeAssistant?.websocket?.getStates(val)
+            this.#homeAssistant?.websocket?.getStates(val)
         );
         expr.assign('outputData', (obj: string) => {
             if (!obj) {

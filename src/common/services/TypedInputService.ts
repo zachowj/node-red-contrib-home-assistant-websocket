@@ -30,9 +30,9 @@ export type TypedInputTypes =
     | CustomOutputTypes;
 
 export default class TypedInputService {
-    private readonly nodeConfig: Record<string, any>;
-    private readonly context: NodeRedContext;
-    private readonly jsonata: JSONata;
+    readonly #nodeConfig: Record<string, any>;
+    readonly #context: NodeRedContext;
+    readonly #jsonata: JSONata;
 
     constructor({
         nodeConfig,
@@ -43,9 +43,9 @@ export default class TypedInputService {
         context: NodeRedContext;
         jsonata: JSONata;
     }) {
-        this.nodeConfig = nodeConfig;
-        this.context = context;
-        this.jsonata = jsonata;
+        this.#nodeConfig = nodeConfig;
+        this.#context = context;
+        this.#jsonata = jsonata;
     }
 
     getValue(
@@ -58,7 +58,7 @@ export default class TypedInputService {
             case 'msg':
             case 'flow':
             case 'global':
-                val = this.context.get(valueType, value, props.message);
+                val = this.#context.get(valueType, value, props.message);
                 break;
             case 'bool':
                 val = value === 'true';
@@ -79,7 +79,7 @@ export default class TypedInputService {
                     val = undefined;
                     break;
                 }
-                val = this.jsonata.evaluate(value, {
+                val = this.#jsonata.evaluate(value, {
                     data: props.data,
                     entity: props.entity,
                     entityId: props.entityId,
@@ -98,8 +98,8 @@ export default class TypedInputService {
             case 'config': {
                 val = cloneDeep(
                     value.length
-                        ? selectn(value, this.nodeConfig)
-                        : this.nodeConfig
+                        ? selectn(value, this.#nodeConfig)
+                        : this.#nodeConfig
                 );
                 break;
             }

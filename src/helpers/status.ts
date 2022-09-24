@@ -24,7 +24,7 @@ export const STATUS_SHAPE_RING = 'ring';
 
 export class Status {
     protected isNodeDisabled = false;
-    private lastStatus: NodeStatus = {};
+    #lastStatus: NodeStatus = {};
     serverConfig?: ServerNodeConfig;
 
     constructor(readonly node: BaseNode) {
@@ -39,13 +39,13 @@ export class Status {
     setNodeState(value: boolean): void {
         if (this.isNodeDisabled === value) {
             this.isNodeDisabled = !value;
-            this.updateStatus(this.lastStatus);
+            this.updateStatus(this.#lastStatus);
         }
     }
 
     set(status: NodeStatus = {}): void {
         if (this.isNodeDisabled === false) {
-            this.lastStatus = status;
+            this.#lastStatus = status;
         }
         this.updateStatus(status);
     }
@@ -138,8 +138,8 @@ export class Status {
 }
 
 export class EventsStatus extends Status {
-    private connectionState = STATE_DISCONNECTED;
-    private eventListeners: { (): void }[] = [];
+    #connectionState = STATE_DISCONNECTED;
+    #eventListeners: { (): void }[] = [];
 
     init({
         nodeState,
@@ -168,7 +168,7 @@ export class EventsStatus extends Status {
         };
 
         Object.entries(events).forEach(([event, callback]) => {
-            this.eventListeners.push(() =>
+            this.#eventListeners.push(() =>
                 homeAssistant.removeListener(event, callback)
             );
             homeAssistant.addListener(event, callback.bind(this));
@@ -176,27 +176,27 @@ export class EventsStatus extends Status {
     }
 
     onClientClose(): void {
-        this.connectionState = STATE_DISCONNECTED;
+        this.#connectionState = STATE_DISCONNECTED;
         this.updateConnectionStatus();
     }
 
     onClientConnecting(): void {
-        this.connectionState = STATE_CONNECTING;
+        this.#connectionState = STATE_CONNECTING;
         this.updateConnectionStatus();
     }
 
     onClientError(): void {
-        this.connectionState = STATE_ERROR;
+        this.#connectionState = STATE_ERROR;
         this.updateConnectionStatus();
     }
 
     onClientOpen(): void {
-        this.connectionState = STATE_CONNECTED;
+        this.#connectionState = STATE_CONNECTED;
         this.updateConnectionStatus();
     }
 
     onClientRunning(): void {
-        this.connectionState = STATE_RUNNING;
+        this.#connectionState = STATE_RUNNING;
         this.updateConnectionStatus();
     }
 
@@ -212,7 +212,7 @@ export class EventsStatus extends Status {
             text: 'config-server.status.disconnected',
         };
 
-        switch (this.connectionState) {
+        switch (this.#connectionState) {
             case STATE_CONNECTED:
                 status.fill = STATUS_COLOR_GREEN;
                 status.text = 'config-server.status.connected';
@@ -234,7 +234,7 @@ export class EventsStatus extends Status {
     }
 
     destroy(): void {
-        this.eventListeners.forEach((callback) => callback());
+        this.#eventListeners.forEach((callback) => callback());
     }
 }
 

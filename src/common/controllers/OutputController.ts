@@ -42,7 +42,7 @@ export default abstract class OutputController<T extends BaseNode = BaseNode> {
         this.status = status;
         this.typedInputService = typedInputService;
 
-        node.on('close', this.preOnClose.bind(this));
+        node.on('close', this.#preOnClose.bind(this));
 
         const name = this.node?.config?.name ?? 'undefined';
         node.debug(`instantiated node, name: ${name}`);
@@ -130,7 +130,7 @@ export default abstract class OutputController<T extends BaseNode = BaseNode> {
         });
     }
 
-    private preOnClose(removed: boolean, done: NodeDone) {
+    #preOnClose(removed: boolean, done: NodeDone) {
         this.node.debug(
             `closing node. Reason: ${
                 removed ? 'node deleted' : 'node re-deployed'

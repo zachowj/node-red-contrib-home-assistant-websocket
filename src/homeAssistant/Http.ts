@@ -13,7 +13,7 @@ export type HttpConfig = Credentials & {
 };
 
 export default class Http {
-    private client: AxiosInstance;
+    #client: AxiosInstance;
 
     constructor(config: HttpConfig) {
         const apiOpts: AxiosRequestConfig = {
@@ -27,7 +27,7 @@ export default class Http {
             });
         }
 
-        this.client = axios.create(apiOpts);
+        this.#client = axios.create(apiOpts);
     }
 
     async getHistory(
@@ -110,11 +110,11 @@ export default class Http {
         data: any = {},
         responseType: ResponseType = 'json'
     ): Promise<T> {
-        debug(`HTTP POST: ${this.client.defaults.baseURL}/${path}`);
+        debug(`HTTP POST: ${this.#client.defaults.baseURL}/${path}`);
 
-        this.client.defaults.responseType = responseType;
+        this.#client.defaults.responseType = responseType;
 
-        const response = await this.client.post(path, data).catch((err) => {
+        const response = await this.#client.post(path, data).catch((err) => {
             debug(`POST: request error: ${err.toString()}`);
             throw err;
         });
@@ -129,11 +129,11 @@ export default class Http {
         params: any = {},
         responseType: ResponseType = 'json'
     ): Promise<T> {
-        debug(`HTTP GET: ${this.client.defaults.baseURL}/${path}`);
+        debug(`HTTP GET: ${this.#client.defaults.baseURL}/${path}`);
 
-        this.client.defaults.responseType = responseType;
+        this.#client.defaults.responseType = responseType;
 
-        const response = await this.client
+        const response = await this.#client
             .request({ url: path, params })
             .catch((err) => {
                 debug(`GET: request error: ${err.toString()}`);

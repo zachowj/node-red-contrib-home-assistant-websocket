@@ -8,10 +8,10 @@ export enum DataType {
 }
 
 export default class TransformState {
-    private readonly haBooleans: string;
+    readonly #haBooleans: string;
 
     constructor(haBooleans = 'y|yes|true|on|home|open') {
-        this.haBooleans = haBooleans;
+        this.#haBooleans = haBooleans;
     }
 
     transform(datatype: DataType, value: string) {
@@ -25,7 +25,7 @@ export default class TransformState {
             case DataType.Boolean:
                 return !!value;
             case DataType.Home_Assistant_Boolean: {
-                const regex = `^(${this.haBooleans})$`;
+                const regex = `^(${this.#haBooleans})$`;
                 return new RegExp(regex, 'i').test(value);
             }
             case DataType.Regexp:

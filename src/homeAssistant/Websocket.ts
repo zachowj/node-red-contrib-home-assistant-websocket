@@ -102,11 +102,13 @@ export enum ClientEvent {
 }
 
 export default class Websocket {
-    private servicesLoaded = false;
-    private statesLoaded = false;
-    private subscribedEvents = new Set<string>();
-    private unsubCallback: { [id: string]: () => void } = {};
-    private stopHeartbeat?: StopHeartbeat;
+    readonly #config: WebsocketConfig;
+    readonly #eventBus: EventEmitter;
+    #servicesLoaded = false;
+    #statesLoaded = false;
+    #stopHeartbeat?: StopHeartbeat;
+    #subscribedEvents = new Set<string>();
+    #unsubCallback: { [id: string]: () => void } = {};
 
     areas: HassAreas = [];
     client!: Connection;
@@ -119,11 +121,11 @@ export default class Websocket {
     services: HassServices = {};
     tags: HassTags | null = null;
 
-    constructor(
-        private config: WebsocketConfig,
-        private eventBus: EventEmitter
-    ) {
-        this.eventBus.on(
+    constructor(config: WebsocketConfig, eventBus: EventEmitter) {
+        this.#config = config;
+        this.#eventBus = eventBus;
+
+        this.#eventBus.on(
             'ha_client:connecting',
             this.onClientConnecting.bind(this)
         );
@@ -134,32 +136,32 @@ export default class Websocket {
         return this.connectionState === STATE_CONNECTED;
     }
 
-    private emitEvent(event: string, data?: any) {
-        return this.eventBus.emit(event, data);
+    #emitEvent(event: string, data?: any) {
+        return this.#eventBus.emit(event, data);
     }
 
     async connect(): Promise<void> {
         // Convert from http:// -> ws://, https:// -> wss://
-        const url = `ws${this.config.host.substring(4)}/api/websocket`;
+        const url = `ws${this.#config.host.substring(4)}/api/websocket`;
 
         const auth = {
             type: 'auth',
-            access_token: this.config.access_token,
+            access_token: this.#config.access_token,
         };
 
         this.client = await createConnection({
             createSocket: () =>
                 createSocket({
                     auth,
-                    connectionDelay: this.config.connectionDelay,
-                    eventBus: this.eventBus,
+                    connectionDelay: this.#config.connectionDelay,
+                    eventBus: this.#eventBus,
                     rejectUnauthorizedCerts:
-                        this.config.rejectUnauthorizedCerts,
+                        this.#config.rejectUnauthorizedCerts,
                     url,
                 }) as unknown as Promise<HaWebSocket>,
         }).catch((e) => {
             this.connectionState = STATE_ERROR;
-            this.emitEvent('ha_client:error');
+            this.#emitEvent('ha_client:error');
 
             // Handle connection errors
             let message: string | undefined;
@@ -185,17 +187,17 @@ export default class Websocket {
         });
 
         // Check if user has admin privileges
-        await this.checkUserType();
+        await this.#checkUserType();
 
         this.onClientOpen();
         // emit connected for only the first connection to the server
         // so we can setup certain things only once like registerEvents
-        this.emitEvent('ha_client:connected');
-        this.clientEvents();
-        this.haEvents();
+        this.#emitEvent('ha_client:connected');
+        this.#clientEvents();
+        this.#haEvents();
     }
 
-    private async checkUserType() {
+    async #checkUserType() {
         const user = await this.getUser();
         if (user.is_admin === false) {
             this.connectionState = STATE_ERROR;
@@ -208,7 +210,7 @@ export default class Websocket {
         return getUser(this.client);
     }
 
-    private clientEvents() {
+    #clientEvents() {
         // Client events
         this.client.addEventListener('ready', this.onClientOpen.bind(this));
         this.client.addEventListener(
@@ -221,10 +223,10 @@ export default class Websocket {
         );
     }
 
-    private async haEvents() {
+    async #haEvents() {
         // Home Assistant Events
         await this.client.subscribeEvents<HassEvent>(
-            (evt) => this.integrationEvent(evt),
+            (evt) => this.#integrationEvent(evt),
             HA_EVENT_INTEGRATION
         );
         subscribeConfig(this.client, (config) =>
@@ -234,37 +236,37 @@ export default class Websocket {
         subscribeServices(this.client, this.onClientServices.bind(this));
 
         subscribeAreaRegistry(this.client, (areas) => {
-            this.emitEvent(HA_EVENT_AREA_REGISTRY_UPDATED, areas);
+            this.#emitEvent(HA_EVENT_AREA_REGISTRY_UPDATED, areas);
             this.areas = areas;
         });
         subscribeDeviceRegistry(this.client, (devices) => {
-            this.emitEvent(HA_EVENT_DEVICE_REGISTRY_UPDATED, devices);
+            this.#emitEvent(HA_EVENT_DEVICE_REGISTRY_UPDATED, devices);
             this.devices = devices;
-            this.emitEvent(HA_EVENT_REGISTRY_UPDATED, {
+            this.#emitEvent(HA_EVENT_REGISTRY_UPDATED, {
                 devices: this.devices,
                 entities: this.entities,
             });
         });
         subscribeEntityRegistry(this.client, (entities) => {
             this.entities = entities;
-            this.emitEvent(HA_EVENT_REGISTRY_UPDATED, {
+            this.#emitEvent(HA_EVENT_REGISTRY_UPDATED, {
                 devices: this.devices,
                 entities: this.entities,
             });
         });
     }
 
-    private onHomeAssistantRunning() {
+    #onHomeAssistantRunning() {
         if (!this.isHomeAssistantRunning) {
             this.isHomeAssistantRunning = true;
-            this.emitEvent('ha_client:running');
+            this.#emitEvent('ha_client:running');
             if (this.integrationVersion === 0) {
                 this.createIntegrationEvent(INTEGRATION_NOT_LOADED);
             }
         }
     }
 
-    private integrationEvent(evt: Partial<HassEvent>) {
+    #integrationEvent(evt: Partial<HassEvent>) {
         const oldVersion = this.integrationVersion;
         switch (evt?.data?.type) {
             case INTEGRATION_LOADED:
@@ -274,11 +276,11 @@ export default class Websocket {
                 this.integrationVersion = 0;
                 break;
             case INTEGRATION_NOT_LOADED:
-                this.emitEvent(INTEGRATION_EVENT, evt.data.type);
+                this.#emitEvent(INTEGRATION_EVENT, evt.data.type);
                 return;
         }
         if (oldVersion !== this.integrationVersion) {
-            this.emitEvent(INTEGRATION_EVENT, evt?.data?.type);
+            this.#emitEvent(INTEGRATION_EVENT, evt?.data?.type);
         }
     }
 
@@ -287,26 +289,26 @@ export default class Websocket {
 
         // If events contains '__ALL__' register all events and skip individual ones
         if (currentEvents.has('__ALL__')) {
-            if (this.subscribedEvents.has('__ALL__')) {
+            if (this.#subscribedEvents.has('__ALL__')) {
                 // Nothing to do
                 return;
             }
 
-            this.subscribedEvents.forEach((e) => {
+            this.#subscribedEvents.forEach((e) => {
                 if (e !== '__ALL__') {
-                    this.unsubCallback[e]();
-                    delete this.unsubCallback[e];
-                    this.subscribedEvents.delete(e);
+                    this.#unsubCallback[e]();
+                    delete this.#unsubCallback[e];
+                    this.#subscribedEvents.delete(e);
                 }
             });
 
             // subscribe to all event and save unsubscribe callback
-            this.unsubCallback.__ALL__ =
+            this.#unsubCallback.__ALL__ =
                 await this.client.subscribeEvents<HassEvent>((ent) =>
                     this.onClientEvents(ent)
                 );
 
-            this.subscribedEvents.add('__ALL__');
+            this.#subscribedEvents.add('__ALL__');
             return;
         }
 
@@ -315,27 +317,27 @@ export default class Websocket {
         currentEvents.add(HA_EVENT_TAG_SCANNED);
 
         const add = new Set(
-            [...currentEvents].filter((x) => !this.subscribedEvents.has(x))
+            [...currentEvents].filter((x) => !this.#subscribedEvents.has(x))
         );
         const remove = new Set(
-            [...this.subscribedEvents].filter((x) => !currentEvents.has(x))
+            [...this.#subscribedEvents].filter((x) => !currentEvents.has(x))
         );
 
         // Create new subscription list
-        this.subscribedEvents = new Set([
-            ...[...currentEvents].filter((x) => this.subscribedEvents.has(x)),
+        this.#subscribedEvents = new Set([
+            ...[...currentEvents].filter((x) => this.#subscribedEvents.has(x)),
             ...add,
         ]);
 
         // Remove unused subscriptions
         remove.forEach((e) => {
-            this.unsubCallback[e]();
-            delete this.unsubCallback[e];
+            this.#unsubCallback[e]();
+            delete this.#unsubCallback[e];
         });
 
         // Subscribe to each event type and save each unsubscribe callback
         for (const type of add) {
-            this.unsubCallback[type] =
+            this.#unsubCallback[type] =
                 await this.client.subscribeEvents<HassEvent>(
                     (ent) => this.onClientEvents(ent),
                     type
@@ -362,9 +364,9 @@ export default class Websocket {
 
         this.states = entities;
 
-        if (!this.statesLoaded) {
-            this.statesLoaded = true;
-            this.emitEvent('ha_client:states_loaded', this.states);
+        if (!this.#statesLoaded) {
+            this.#statesLoaded = true;
+            this.#emitEvent('ha_client:states_loaded', this.states);
         }
     }
 
@@ -374,22 +376,22 @@ export default class Websocket {
         }
 
         this.services = services;
-        this.emitEvent(HA_EVENT_SERVICES_UPDATED, this.services);
-        if (!this.servicesLoaded) {
-            this.servicesLoaded = true;
-            this.emitEvent('ha_client:services_loaded');
+        this.#emitEvent(HA_EVENT_SERVICES_UPDATED, this.services);
+        if (!this.#servicesLoaded) {
+            this.#servicesLoaded = true;
+            this.#emitEvent('ha_client:services_loaded');
         }
     }
 
     onStatesLoadedAndRunning(event = 'ready'): void {
         const statesLoaded = new Promise((resolve) => {
-            this.eventBus.once('ha_client:states_loaded', resolve);
+            this.#eventBus.once('ha_client:states_loaded', resolve);
         });
         const homeAssinstantRunning = new Promise((resolve) => {
-            this.eventBus.once('ha_client:running', resolve);
+            this.#eventBus.once('ha_client:running', resolve);
         });
         Promise.all([statesLoaded, homeAssinstantRunning]).then(([states]) => {
-            this.eventBus.emit(`ha_client:${event}`, states);
+            this.#eventBus.emit(`ha_client:${event}`, states);
         });
     }
 
@@ -426,16 +428,16 @@ export default class Websocket {
 
         // Emit on the event type channel
         if (eventType) {
-            this.emitEvent(`${HA_EVENTS}:${eventType}`, event);
+            this.#emitEvent(`${HA_EVENTS}:${eventType}`, event);
 
             // Most specific emit for event_type and entity_id
             if (entityId) {
-                this.emitEvent(`${HA_EVENTS}:${eventType}:${entityId}`, event);
+                this.#emitEvent(`${HA_EVENTS}:${eventType}:${entityId}`, event);
             }
         }
 
         // Emit on all channel
-        this.emitEvent(`${HA_EVENTS}:all`, event);
+        this.#emitEvent(`${HA_EVENTS}:all`, event);
     }
 
     async onClientConfigUpdate(config: HassConfig): Promise<void> {
@@ -455,7 +457,7 @@ export default class Websocket {
 
         // Prior to HA 0.111.0 state didn't exist
         if (config.state === undefined || config.state === 'RUNNING') {
-            this.onHomeAssistantRunning();
+            this.#onHomeAssistantRunning();
         }
     }
 
@@ -478,7 +480,7 @@ export default class Websocket {
     }
 
     createIntegrationEvent(type: string, version?: string): void {
-        this.integrationEvent({
+        this.#integrationEvent({
             data: { type, version },
         });
     }
@@ -488,14 +490,14 @@ export default class Websocket {
         this.integrationVersion = 0;
         this.isHomeAssistantRunning = false;
         this.connectionState = STATE_CONNECTED;
-        if (this.config.heartbeatInterval) {
-            this.stopHeartbeat = startHeartbeat(
+        if (this.#config.heartbeatInterval) {
+            this.#stopHeartbeat = startHeartbeat(
                 this.client,
-                this.config.heartbeatInterval,
-                this.config.host
+                this.#config.heartbeatInterval,
+                this.#config.host
             );
         }
-        this.emitEvent('ha_client:open');
+        this.#emitEvent('ha_client:open');
     }
 
     onClientClose(): void {
@@ -504,13 +506,13 @@ export default class Websocket {
         this.connectionState = STATE_DISCONNECTED;
         this.resetClient();
         debug('events connection closed, cleaning up connection');
-        this.emitEvent('ha_client:close');
+        this.#emitEvent('ha_client:close');
     }
 
     onClientError(data: unknown): void {
         debug('events connection error, cleaning up connection');
         debug(data);
-        this.emitEvent('ha_client:error', data);
+        this.#emitEvent('ha_client:error', data);
         this.resetClient();
     }
 
@@ -519,15 +521,15 @@ export default class Websocket {
     }
 
     close(): void {
-        if (typeof this.stopHeartbeat === 'function') this.stopHeartbeat();
+        if (typeof this.#stopHeartbeat === 'function') this.#stopHeartbeat();
         this?.client?.close();
     }
 
     resetClient(): void {
-        this.servicesLoaded = false;
-        this.statesLoaded = false;
+        this.#servicesLoaded = false;
+        this.#statesLoaded = false;
         this.connectionState = STATE_DISCONNECTED;
-        this.emitEvent('ha_client:close');
+        this.#emitEvent('ha_client:close');
     }
 
     getDevices(): HassDevices {

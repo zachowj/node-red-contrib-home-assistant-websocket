@@ -27,24 +27,29 @@ function parseContext(key: string) {
  */
 
 class CustomContext extends Context {
+    readonly #nodeContext: NodeContext;
+    readonly #entities: HassEntities;
+
     constructor(
         view: any,
         parentContext: CustomContext | undefined,
-        private nodeContext: NodeContext,
-        private entities: HassEntities
+        nodeContext: NodeContext,
+        entities: HassEntities
     ) {
         super(view, parentContext);
+        this.#nodeContext = nodeContext;
+        this.#entities = entities;
     }
 
     lookup(name: string): string {
         // try message first:
         let value = super.lookup(name);
         if (value === undefined) {
-            if (this.nodeContext) {
+            if (this.#nodeContext) {
                 // try flow/global context:
                 const context = parseContext(name);
                 if (context) {
-                    const target = this.nodeContext[context.type];
+                    const target = this.#nodeContext[context.type];
                     if (target) {
                         try {
                             value = target.get(context.field, context.store);
@@ -52,7 +57,7 @@ class CustomContext extends Context {
                     }
                 }
             }
-            if (value === undefined && this.entities) {
+            if (value === undefined && this.#entities) {
                 // try state entities
                 // version 0.10.3 changed from states.domain.entity to entity.d.e
                 const match = /^(?:states|entity)\.(\w+\.\w+)(?:\.(.+))?/.exec(
@@ -62,7 +67,7 @@ class CustomContext extends Context {
                     const entityId = match[1];
                     const path = match[2] ?? 'state';
 
-                    value = selectn(path, this.entities[entityId]);
+                    value = selectn(path, this.#entities[entityId]);
                 }
             }
         }
@@ -71,7 +76,7 @@ class CustomContext extends Context {
     }
 
     push(view: any) {
-        return new CustomContext(view, this, this.nodeContext, this.entities);
+        return new CustomContext(view, this, this.#nodeContext, this.#entities);
     }
 }
 

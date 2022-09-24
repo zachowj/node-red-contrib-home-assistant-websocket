@@ -31,7 +31,8 @@ const httpMethods: string[] = [
 ];
 
 export default class HomeAssistant {
-    private eventsList: { [nodeId: string]: string } = {};
+    // TODO: this can be made private after typescript conversion
+    public eventsList: { [nodeId: string]: string } = {};
 
     eventBus: EventEmitter;
     http: httpAPI;

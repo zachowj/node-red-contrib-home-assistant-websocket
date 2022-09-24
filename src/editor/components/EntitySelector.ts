@@ -30,7 +30,7 @@ export default class EntitySelector {
         this.#$filterType = $(filterTypeSelector);
         this.#entityId = entityId;
 
-        this.buildElements();
+        this.#buildElements();
         this.init();
     }
 
@@ -55,7 +55,7 @@ export default class EntitySelector {
         return id;
     }
 
-    private buildElements() {
+    #buildElements() {
         const $formRow = this.#$filterType.parent();
         const $div = $('<div />', {
             class: 'ha-entity-selector',
@@ -78,7 +78,7 @@ export default class EntitySelector {
     }
 
     init() {
-        this.#$filterType.on('change', this.showHide.bind(this));
+        this.#$filterType.on('change', this.#showHide.bind(this));
 
         this.#$filterButton.on('click', () => {
             openEntityFilter({
@@ -91,17 +91,17 @@ export default class EntitySelector {
             });
         });
 
-        this.generateEntityList();
-        this.initSelect2(Array.isArray(this.#entityId));
+        this.#generateEntityList();
+        this.#initSelect2(Array.isArray(this.#entityId));
         this.#$filter.val(this.#entityId);
     }
 
-    private showHide() {
+    #showHide() {
         const filter = this.#$filterType.val() as string;
         switch (filter) {
             case 'exact':
             case 'list':
-                this.initSelect2(filter === 'list');
+                this.#initSelect2(filter === 'list');
                 this.#$filterButton.hide();
                 this.#$filter.hide();
                 break;
@@ -114,7 +114,7 @@ export default class EntitySelector {
         }
     }
 
-    private generateEntityList() {
+    #generateEntityList() {
         const entities = Object.values(getEntities());
         const entityIds = !this.#select2Data
             ? Array.isArray(this.#entityId)
@@ -141,7 +141,7 @@ export default class EntitySelector {
         this.#select2Data = data;
     }
 
-    private initSelect2(multiple = false) {
+    #initSelect2(multiple = false) {
         this.#$select
             .select2(
                 createSelect2Options({
@@ -165,7 +165,7 @@ export default class EntitySelector {
 
     serverChanged() {
         this.#$select.empty();
-        this.generateEntityList();
-        this.showHide();
+        this.#generateEntityList();
+        this.#showHide();
     }
 }
