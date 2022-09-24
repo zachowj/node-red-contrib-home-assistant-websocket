@@ -177,10 +177,10 @@ export function isNodeRedEnvVar(envVar: string) {
     return /^\$\{[a-zA-Z_][a-zA-Z0-9_]*\}$/.test(envVar);
 }
 
-export const checkValidServerConfig = (
+export function checkValidServerConfig(
     node: BaseNode | DeviceNode,
     serverNodeId?: string
-): boolean => {
+): boolean {
     const serverConfigNode = RED.nodes.getNode(serverNodeId ?? '');
 
     if (!serverConfigNode) {
@@ -193,4 +193,4 @@ export const checkValidServerConfig = (
     }
 
     return true;
-};
+}

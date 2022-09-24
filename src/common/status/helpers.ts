@@ -1,9 +1,9 @@
 import { DateTimeFormatOptions } from '../../types/DateTimeFormatOptions';
 import { ServerNodeConfig } from '../../types/nodes';
 
-export const getStatusOptions = (
+export function getStatusOptions(
     config: Partial<ServerNodeConfig>
-): DateTimeFormatOptions => {
+): DateTimeFormatOptions {
     const options: DateTimeFormatOptions = {
         year: config?.statusYear === 'hidden' ? undefined : config?.statusYear,
         month:
@@ -33,4 +33,4 @@ export const getStatusOptions = (
     }
 
     return options;
-};
+}

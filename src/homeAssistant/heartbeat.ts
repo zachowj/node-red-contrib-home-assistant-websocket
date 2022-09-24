@@ -8,11 +8,11 @@ export type StopHeartbeat = () => void;
 const HEARTBEAT_TIMEOUT = 5000;
 const MIN_HEARTBEAT_INTERVAL = 10000;
 
-export const startHeartbeat = (
+export function startHeartbeat(
     client: Connection,
     interval: number,
     host: string
-): StopHeartbeat => {
+): StopHeartbeat {
     let beatTimeoutId: NodeJS.Timeout;
 
     const heartbeatIntervalId = setInterval(
@@ -37,4 +37,4 @@ export const startHeartbeat = (
         clearInterval(heartbeatIntervalId);
         clearTimeout(beatTimeoutId);
     };
-};
+}

@@ -5,14 +5,12 @@ import { Credentials, hasCredentials } from '../homeAssistant';
 import { EntityConfigNode } from '../nodes/entity-config/index';
 import { BaseNode, EntityNode, ServerNode } from '../types/nodes';
 
-export const getNode = <T extends BaseNode>(nodeId?: string): T | undefined => {
+export function getNode<T extends BaseNode>(nodeId?: string): T | undefined {
     if (!nodeId) return;
     return RED.nodes.getNode(nodeId) as T;
-};
+}
 
-export const getServerConfigNode = (
-    nodeId?: string
-): ServerNode<Credentials> => {
+export function getServerConfigNode(nodeId?: string): ServerNode<Credentials> {
     if (!nodeId) {
         throw new Error('Invalid server config');
     }
@@ -26,9 +24,9 @@ export const getServerConfigNode = (
     checkValidServerConfig(node);
 
     return node;
-};
+}
 
-const checkValidServerConfig = (serverConfigNode: ServerNode<Credentials>) => {
+function checkValidServerConfig(serverConfigNode: ServerNode<Credentials>) {
     if (serverConfigNode.config.addon) {
         return;
     }
@@ -36,9 +34,9 @@ const checkValidServerConfig = (serverConfigNode: ServerNode<Credentials>) => {
     if (!hasCredentials(serverConfigNode.credentials)) {
         throw new Error('Invalid server config');
     }
-};
+}
 
-export const getConfigNodes = (node: EntityNode) => {
+export function getConfigNodes(node: EntityNode) {
     const status: NodeStatus = {
         shape: 'dot',
         fill: 'red',
@@ -69,4 +67,4 @@ export const getConfigNodes = (node: EntityNode) => {
         entityConfigNode,
         serverConfigNode,
     };
-};
+}

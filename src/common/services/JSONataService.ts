@@ -5,7 +5,7 @@ import { RED } from '../../globals';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
 import JSONataError from '../errors/JSONataError';
 
-const isJSONataError = (error: unknown): error is JSONataError => {
+function isJSONataError(error: unknown): error is JSONataError {
     if (typeof error !== 'object' || !error) return false;
 
     return (
@@ -14,7 +14,7 @@ const isJSONataError = (error: unknown): error is JSONataError => {
         'stack' in error &&
         'message' in error
     );
-};
+}
 
 export default class JSONataService {
     readonly #homeAssistant?: HomeAssistant;

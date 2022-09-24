@@ -8,11 +8,11 @@ export enum ContextLocation {
     Global = 'global',
 }
 
-export const isContextLocation = (
+export function isContextLocation(
     location: string | ContextLocation
-): location is ContextLocation => {
+): location is ContextLocation {
     return Object.values(ContextLocation).includes(location as ContextLocation);
-};
+}
 
 export default class NodeRedContextService {
     readonly #node: Node;

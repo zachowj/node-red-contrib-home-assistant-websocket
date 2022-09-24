@@ -31,13 +31,13 @@ export type Credentials = {
     access_token: string;
 };
 
-export const hasCredentials = (credentials: Credentials): boolean => {
+export function hasCredentials(credentials: Credentials): boolean {
     return !!credentials.host && !!credentials.access_token;
-};
+}
 
-export const createHomeAssistantClient = (
+export function createHomeAssistantClient(
     node: ServerNode<Credentials>
-): HomeAssistant => {
+): HomeAssistant {
     let homeAssistant = homeAssistantConnections.get(node.id);
 
     if (homeAssistant) return homeAssistant;
@@ -84,12 +84,12 @@ export const createHomeAssistantClient = (
 
     homeAssistantConnections.set(node.id, homeAssistant);
     return homeAssistant;
-};
+}
 
-const createCredentials = (
+function createCredentials(
     credentials: Credentials,
     config: ServerNodeConfig
-): Credentials => {
+): Credentials {
     let host;
     if (!credentials) {
         throw new Error('No credentials');
@@ -116,26 +116,26 @@ const createCredentials = (
         // eslint-disable-next-line camelcase
         access_token: accessToken,
     };
-};
+}
 
-const createHttpConfig = (
+function createHttpConfig(
     credentials: Credentials,
     config: ServerNodeConfig
-): HttpConfig => {
+): HttpConfig {
     return {
         access_token: credentials.access_token,
         host: credentials.host,
         rejectUnauthorizedCerts: config.rejectUnauthorizedCerts,
     };
-};
+}
 
-const createWebsocketConfig = (
+function createWebsocketConfig(
     credentials: Credentials,
     config: Partial<ServerNodeConfig> = {
         rejectUnauthorizedCerts: true,
         connectionDelay: true,
     }
-): WebsocketConfig => {
+): WebsocketConfig {
     const connectionDelay =
         credentials.host !== SUPERVISOR_URL
             ? false
@@ -153,15 +153,15 @@ const createWebsocketConfig = (
         connectionDelay,
         heartbeatInterval: heartbeat,
     };
-};
+}
 
-const getBaseUrl = (url: string): string => {
+function getBaseUrl(url: string): string {
     validateBaseUrl(url);
 
     return url.trim();
-};
+}
 
-const validateBaseUrl = (baseUrl: string): string | void => {
+function validateBaseUrl(baseUrl: string): string | void {
     if (!baseUrl) {
         throw new Error(RED._('config-server.errors.empty_base_url'));
     }
@@ -176,21 +176,21 @@ const validateBaseUrl = (baseUrl: string): string | void => {
     if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
         throw new Error(RED._('config-server.errors.invalid_protocol'));
     }
-};
+}
 
-export const getHomeAssistant = (
+export function getHomeAssistant(
     serverNode: ServerNode<Credentials>
-): HomeAssistant => {
+): HomeAssistant {
     return (
         homeAssistantConnections.get(serverNode.id) ??
         createHomeAssistantClient(serverNode)
     );
-};
+}
 
-export const closeHomeAssistant = (nodeId: string): void => {
+export function closeHomeAssistant(nodeId: string): void {
     const homeAssistant = homeAssistantConnections.get(nodeId);
     if (homeAssistant) {
         homeAssistant.close();
         homeAssistantConnections.delete(nodeId);
     }
-};
+}

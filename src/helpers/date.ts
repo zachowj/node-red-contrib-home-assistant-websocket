@@ -9,10 +9,10 @@ const defaultOptions: DateTimeFormatOptions = {
     minute: 'numeric',
 };
 
-export const formatDate = ({
+export function formatDate({
     date = new Date(),
     locale = defaultLocale ?? fallbackLocale,
     options = defaultOptions,
-}): string => {
+}): string {
     return new Intl.DateTimeFormat(locale, options).format(date);
-};
+}

@@ -10,10 +10,10 @@ import TypedInputService from '../services/TypedInputService';
  * @param homeAssistant The home assistant instance to use.
  * @returns The dependencies needed for a BaseNode controller.
  */
-export const createControllerDependencies = (
+export function createControllerDependencies(
     node: BaseNode,
     homeAssistant?: HomeAssistant
-) => {
+) {
     const jsonataService = new JSONataService({
         homeAssistant,
         node,
@@ -30,4 +30,4 @@ export const createControllerDependencies = (
         nodeRedContextService,
         typedInputService,
     };
-};
+}
