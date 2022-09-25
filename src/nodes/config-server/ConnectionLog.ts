@@ -28,7 +28,7 @@ export default class ConnectionLog {
         node.on(NodeEvent.Close, this.onClose.bind(this));
     }
 
-    onClose(removed: boolean, done: NodeDone) {
+    onClose(_removed: boolean, done: NodeDone) {
         this.#node.log(`Closing connection to ${this.#hostname}`);
         done();
     }

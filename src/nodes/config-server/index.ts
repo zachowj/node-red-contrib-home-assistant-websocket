@@ -6,7 +6,7 @@ import {
     createHomeAssistantClient,
     Credentials,
 } from '../../homeAssistant';
-import { ServerNode, ServerNodeConfig } from '../../types/nodes';
+import { NodeDone, ServerNode, ServerNodeConfig } from '../../types/nodes';
 
 export interface ExposedNodes {
     [nodeId: string]: boolean;
@@ -22,9 +22,10 @@ export default function configServerNode(
 
     createHomeAssistantClient(this);
 
-    this.on(NodeEvent.Close, () => {
+    this.on(NodeEvent.Close, (_removed: boolean, done: NodeDone) => {
         closeHomeAssistant(this.id);
         // @ts-expect-error - set context second argument is optional
         this.context().global.set('homeassistant');
+        done();
     });
 }
