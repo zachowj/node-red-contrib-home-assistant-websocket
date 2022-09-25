@@ -14,11 +14,7 @@ interface CustomRequest extends Request {
     homeAssistant?: HomeAssistant;
 }
 
-const disableCache = (
-    req: Request,
-    res: Response,
-    next: NextFunction
-): void => {
+function disableCache(req: Request, res: Response, next: NextFunction): void {
     const node = RED.nodes.getNode(req.params.id) as ServerNode<Credentials>;
 
     if (node?.config?.cacheJson === false) {
@@ -32,13 +28,13 @@ const disableCache = (
     }
 
     next();
-};
+}
 
-const checkHomeAssistant = (
+function checkHomeAssistant(
     req: CustomRequest,
     res: Response,
     next: NextFunction
-): void => {
+): void {
     try {
         const node = getServerConfigNode(req.params.serverId);
         req.homeAssistant = getHomeAssistant(node);
@@ -49,69 +45,69 @@ const checkHomeAssistant = (
     }
 
     next();
-};
+}
 
-const getDeviceActions = async (
+async function getDeviceActions(
     req: CustomRequest,
     res: Response
-): Promise<void> => {
+): Promise<void> {
     const deviceId = req.query.deviceId?.toString();
     const actions = await req?.homeAssistant?.websocket.getDeviceActions(
         deviceId
     );
     res.json(actions ?? []);
-};
+}
 
-const getDeviceActionCapabilities = async (
+async function getDeviceActionCapabilities(
     req: CustomRequest,
     res: Response
-): Promise<void> => {
+): Promise<void> {
     const action = req.query.action as { [key: string]: any };
     const capabilities =
         await req?.homeAssistant?.websocket.getDeviceActionCapabilities(action);
     res.json(capabilities ?? []);
-};
+}
 
-const getDeviceTriggers = async (
+async function getDeviceTriggers(
     req: CustomRequest,
     res: Response
-): Promise<void> => {
+): Promise<void> {
     const deviceId = req.query.deviceId?.toString();
     const triggers = await req?.homeAssistant?.websocket.getDeviceTriggers(
         deviceId
     );
     res.json(triggers ?? []);
-};
+}
 
-const getDeviceTriggerCapabilities = async (
+async function getDeviceTriggerCapabilities(
     req: CustomRequest,
     res: Response
-): Promise<void> => {
+): Promise<void> {
     const trigger = req.query.trigger as { [key: string]: any };
     const capabilities =
         await req?.homeAssistant?.websocket.getDeviceTriggerCapabilities(
             trigger
         );
     res.json(capabilities ?? []);
-};
+}
 
-const getEntities = (req: CustomRequest, res: Response): void => {
+function getEntities(req: CustomRequest, res: Response): void {
     const states = req?.homeAssistant?.getEntities();
     res.json(states ?? []);
-};
+}
 
-const getStates = (req: CustomRequest, res: Response): void => {
+function getStates(req: CustomRequest, res: Response): void {
     const entityId = req.query.entityId?.toString();
     const states = req?.homeAssistant?.websocket.getStates(entityId);
     res.json(states ?? []);
-};
+}
 
-const getServices = (req: CustomRequest, res: Response): void => {
+function getServices(req: CustomRequest, res: Response): void {
     const services = req?.homeAssistant?.websocket.getServices();
     res.json(services ?? []);
-};
+}
 
-const getProperties = (req: CustomRequest, res: Response): void => {
+function getProperties(req: CustomRequest, res: Response): void {
     let flat: (string | string[])[] = [];
     let singleEntity = !!req.query.entityId;
     const entityId = req.query.entityId?.toString();
@@ -147,9 +143,9 @@ const getProperties = (req: CustomRequest, res: Response): void => {
     });
 
     res.json(sortedProperties);
-};
+}
 
-const getTags = async (req: CustomRequest, res: Response): Promise<void> => {
+async function getTags(req: CustomRequest, res: Response): Promise<void> {
     const homeAssistant = req?.homeAssistant;
     const tags = req.query.update
         ? await homeAssistant?.websocket.updateTagList()
@@ -163,12 +159,12 @@ const getTags = async (req: CustomRequest, res: Response): Promise<void> => {
     });
 
     res.json(tags ?? []);
-};
+}
 
-const getTranslations = async (
+async function getTranslations(
     req: CustomRequest,
     res: Response
-): Promise<void> => {
+): Promise<void> {
     const category = req.query.cat?.toString();
     const language = req.query.lang?.toString() ?? 'en';
 
@@ -183,15 +179,15 @@ const getTranslations = async (
     );
 
     res.json(results ?? []);
-};
+}
 
-const getIntegrationVersion = (req: CustomRequest, res: Response): void => {
+function getIntegrationVersion(req: CustomRequest, res: Response): void {
     const data = { version: req?.homeAssistant?.integrationVersion ?? 0 };
 
     res.json(data);
-};
+}
 
-const findServers = (req: CustomRequest, res: Response): void => {
+function findServers(req: CustomRequest, res: Response): void {
     const instances: {
         label: string;
         value: string;
@@ -210,7 +206,7 @@ const findServers = (req: CustomRequest, res: Response): void => {
         res.json(instances);
         browser.stop();
     }, 3000);
-};
+}
 
 export function createRoutes(): void {
     const endpoints = {
