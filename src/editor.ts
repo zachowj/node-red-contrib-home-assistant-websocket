@@ -1,5 +1,6 @@
 import { EditorRED } from 'node-red';
 
+import { NodeType } from './const';
 import {
     updateAreas,
     updateDevices,
@@ -59,33 +60,33 @@ RED.events.on('nodes:remove', onNodesRemove);
 RED.events.on('editor:open', versionCheck);
 
 // config nodes
-RED.nodes.registerType('ha-device-config', DeviceConfigEditor);
-RED.nodes.registerType('ha-entity-config', EntityConfigEditor);
-RED.nodes.registerType('server', ConfigServerEditor);
+RED.nodes.registerType(NodeType.DeviceConfig, DeviceConfigEditor);
+RED.nodes.registerType(NodeType.EntityConfig, EntityConfigEditor);
+RED.nodes.registerType(NodeType.Server, ConfigServerEditor);
 
 // general nodes
-RED.nodes.registerType('ha-api', ApiEditor);
-RED.nodes.registerType('api-call-service', CallServiceEditor);
-RED.nodes.registerType('api-current-state', CurrentStateEditor);
-RED.nodes.registerType('ha-device', DeviceEditor);
-RED.nodes.registerType('ha-entity', EntityEditor);
-RED.nodes.registerType('server-events', EventsAllEditor);
-RED.nodes.registerType('server-state-changed', EventsStateEditor);
-RED.nodes.registerType('ha-fire-event', FireEventEditor);
-RED.nodes.registerType('ha-get-entities', GetEntitiesEditor);
-RED.nodes.registerType('api-get-history', GetHistoryEditor);
-RED.nodes.registerType('poll-state', PollStateEditor);
-RED.nodes.registerType('api-render-template', RenderTemplateEditor);
-RED.nodes.registerType('ha-tag', TagEditor);
-RED.nodes.registerType('ha-time', TimeEditor);
-RED.nodes.registerType('trigger-state', TriggerStateEditor);
-RED.nodes.registerType('ha-wait-until', WaitUntilEditor);
-RED.nodes.registerType('ha-webhook', WebhookEditor);
-RED.nodes.registerType('ha-zone', ZoneEditor);
+RED.nodes.registerType(NodeType.API, ApiEditor);
+RED.nodes.registerType(NodeType.CallSevice, CallServiceEditor);
+RED.nodes.registerType(NodeType.CurrentState, CurrentStateEditor);
+RED.nodes.registerType(NodeType.Device, DeviceEditor);
+RED.nodes.registerType(NodeType.Entity, EntityEditor);
+RED.nodes.registerType(NodeType.EventsAll, EventsAllEditor);
+RED.nodes.registerType(NodeType.EventsState, EventsStateEditor);
+RED.nodes.registerType(NodeType.FireEvent, FireEventEditor);
+RED.nodes.registerType(NodeType.GetEntities, GetEntitiesEditor);
+RED.nodes.registerType(NodeType.GetHistory, GetHistoryEditor);
+RED.nodes.registerType(NodeType.PollState, PollStateEditor);
+RED.nodes.registerType(NodeType.RenderTemplate, RenderTemplateEditor);
+RED.nodes.registerType(NodeType.Tag, TagEditor);
+RED.nodes.registerType(NodeType.Time, TimeEditor);
+RED.nodes.registerType(NodeType.TriggerState, TriggerStateEditor);
+RED.nodes.registerType(NodeType.WaitUntil, WaitUntilEditor);
+RED.nodes.registerType(NodeType.Webhook, WebhookEditor);
+RED.nodes.registerType(NodeType.Zone, ZoneEditor);
 
 // entities nodes
-RED.nodes.registerType('ha-binary-sensor', BinarySensorEditor);
-RED.nodes.registerType('ha-button', ButtonEditor);
-RED.nodes.registerType('ha-sensor', SensorEditor);
-RED.nodes.registerType('ha-switch', SwitchEditor);
-RED.nodes.registerType('ha-update-config', UpdateConfigEditor);
+RED.nodes.registerType(NodeType.BinarySensor, BinarySensorEditor);
+RED.nodes.registerType(NodeType.Button, ButtonEditor);
+RED.nodes.registerType(NodeType.Sensor, SensorEditor);
+RED.nodes.registerType(NodeType.Switch, SwitchEditor);
+RED.nodes.registerType(NodeType.UpdateConfig, UpdateConfigEditor);

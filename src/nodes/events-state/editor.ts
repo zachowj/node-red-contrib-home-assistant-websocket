@@ -1,5 +1,6 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
+import { NodeType } from '../../const';
 import EntitySelector from '../../editor/components/EntitySelector';
 import * as ifState from '../../editor/components/ifstate';
 import * as haOutputs from '../../editor/components/output-properties';
@@ -51,7 +52,7 @@ const EventsStateEditor: EditorNodeDef<EventsStateEditorNodeProperties> = {
     labelStyle: ha.labelStyle,
     defaults: {
         name: { value: '' },
-        server: { value: '', type: 'server', required: true },
+        server: { value: '', type: NodeType.Server, required: true },
         version: { value: RED.settings.get('serverStateChangedVersion', 0) },
         exposeToHomeAssistant: { value: false },
         haConfig: {

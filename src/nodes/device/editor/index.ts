@@ -1,5 +1,6 @@
 import { EditorNodeDef, EditorRED } from 'node-red';
 
+import { NodeType } from '../../../const';
 import * as haOutputs from '../../../editor/components/output-properties';
 import { select2DefaultOptions } from '../../../editor/components/select2';
 import * as haData from '../../../editor/data';
@@ -92,7 +93,7 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
     labelStyle: ha.labelStyle,
     defaults: {
         name: { value: '' },
-        server: { value: '', type: 'server', required: true },
+        server: { value: '', type: NodeType.Server, required: true },
         version: { value: RED.settings.get('haDeviceVersion', 0) },
         debugenabled: { value: false },
         exposeToHomeAssistant: { value: false },

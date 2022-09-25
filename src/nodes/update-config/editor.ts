@@ -1,5 +1,6 @@
 import { EditorNodeDef, EditorRED } from 'node-red';
 
+import { NodeType } from '../../const';
 import * as haOutputs from '../../editor/components/output-properties';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
@@ -26,10 +27,10 @@ const UpdateConfigEditor: EditorNodeDef<UpdateConfigEditorNodeProperties> = {
     labelStyle: ha.labelStyle,
     defaults: {
         name: { value: '' },
-        server: { value: '', type: 'server', required: true },
+        server: { value: '', type: NodeType.Server, required: true },
         entityConfig: {
             value: '',
-            type: 'ha-entity-config',
+            type: NodeType.EntityConfig,
             required: false,
         },
         version: { value: RED.settings.get('haSensorVersion', 0) },

@@ -1,5 +1,6 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
+import { NodeType } from '../../const';
 import { hassAutocomplete } from '../../editor/components/hassAutocomplete';
 import * as ifState from '../../editor/components/ifstate';
 import * as exposeNode from '../../editor/exposenode';
@@ -40,7 +41,7 @@ const PollStateEditor: EditorNodeDef<PollStateEditorNodeProperties> = {
     labelStyle: ha.labelStyle,
     defaults: {
         name: { value: '' },
-        server: { value: '', type: 'server', required: true },
+        server: { value: '', type: NodeType.Server, required: true },
         version: { value: RED.settings.get('pollStateVersion', 0) },
         exposeToHomeAssistant: { value: false },
         haConfig: {

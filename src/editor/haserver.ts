@@ -1,6 +1,7 @@
 import { HassEntity, HassServices } from 'home-assistant-js-websocket';
 import { EditorNodeInstance, EditorRED } from 'node-red';
 
+import { NodeType } from '../const';
 import { ConfigServerEditorNodeProperties } from '../nodes/config-server/editor';
 import { HassArea, HassAreas, HassDevices } from '../types/home-assistant';
 import * as haData from './data';
@@ -16,7 +17,7 @@ let limitNotification = false;
 function setDefault() {
     let defaultServer: string | undefined;
     RED.nodes.eachConfig((n: any) => {
-        if (n.type === 'server' && !defaultServer) defaultServer = n.id;
+        if (n.type === NodeType.Server && !defaultServer) defaultServer = n.id;
 
         return true;
     });

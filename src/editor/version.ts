@@ -1,5 +1,6 @@
 import { EditorNodeInstance, EditorRED } from 'node-red';
 
+import { NodeType } from '../const';
 import { migrate } from '../helpers/migrate';
 import { convertEntityNode, EntityProperties } from './convert-entity';
 import { i18n } from './i18n';
@@ -47,7 +48,7 @@ function migrateNode(node: EditorNodeInstance<HassNodeProperties>) {
     const migratedData: HassNodeProperties = migrate(data);
 
     // TODO: Can be removed after ha-entity is removed
-    if (migratedData.type === 'ha-entity') {
+    if (migratedData.type === NodeType.Entity) {
         convertEntityNode(migratedData as unknown as EntityProperties);
     }
 
@@ -152,8 +153,13 @@ export function isHomeAssistantNode(
 function isHomeAssistantConfigNode(
     node: EditorNodeInstance<HassNodeProperties>
 ) {
-    return ['server', 'ha-entity-config', 'ha-device-config'].includes(
-        node.type ?? ''
+    return (
+        node?.type &&
+        [
+            NodeType.Server,
+            NodeType.EntityConfig,
+            NodeType.DeviceConfig,
+        ].includes(node.type)
     );
 }
 

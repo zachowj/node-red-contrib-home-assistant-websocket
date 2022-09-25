@@ -1,6 +1,7 @@
 // TODO: Can be removed after ha-entity is removed
 import { EditorRED } from 'node-red';
 
+import { NodeType } from '../const';
 import { HassExposedConfig } from './types';
 
 declare const RED: EditorRED;
@@ -24,7 +25,7 @@ interface EntityAttribute {
     valueType: string;
 }
 export interface EntityProperties {
-    type: 'ha-entity';
+    type: NodeType.Entity;
     id: string;
     name: string;
     server: string;
@@ -35,7 +36,7 @@ export interface EntityProperties {
     x: number;
     y: number;
     z: string;
-    entityType: 'binary_sensor' | 'sensor' | 'switch';
+    entityType: NodeType.BinarySensor | NodeType.Sensor | NodeType.Switch;
     config: HassExposedConfig[];
     state: string;
     stateType: string;
@@ -52,7 +53,7 @@ export interface EntityProperties {
 
 const createEntityConfigNode = (node: EntityProperties) => {
     RED.nodes.import({
-        type: 'ha-entity-config',
+        type: NodeType.EntityConfig,
         id: node.id,
         server: node.server,
         deviceConfig: '',
@@ -81,14 +82,14 @@ const convertToSeperateEntityNode = (data: EntityProperties, newId: string) => {
     };
 
     switch (data.entityType) {
-        case 'binary_sensor':
-        case 'sensor':
+        case NodeType.BinarySensor:
+        case NodeType.Sensor:
             node = {
                 ...node,
                 type:
-                    data.entityType === 'sensor'
-                        ? 'ha-sensor'
-                        : 'ha-binary-sensor',
+                    data.entityType === NodeType.Sensor
+                        ? NodeType.Sensor
+                        : NodeType.BinarySensor,
                 state: data.state ?? 'payload',
                 stateType: data.stateType ?? 'msg',
                 attributes: data.attributes ?? [],
@@ -106,11 +107,11 @@ const convertToSeperateEntityNode = (data: EntityProperties, newId: string) => {
                           ],
             };
             break;
-        case 'switch':
+        case NodeType.Switch:
         default:
             node = {
                 ...node,
-                type: 'ha-switch',
+                type: NodeType.Switch,
                 outputs: 2,
                 outputOnStateChange: data.outputOnStateChange ?? false,
                 enableInput: true,

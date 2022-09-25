@@ -1,5 +1,6 @@
 import { NodeCredentials } from 'node-red';
 
+import { NodeType } from '../const';
 import { Credentials } from '../homeAssistant';
 import { getCurrentVersion } from './migrate';
 import { toCamelCase } from './utils';
@@ -14,7 +15,7 @@ type Options = {
     };
 };
 
-export function getExposedSettings(type: string) {
+export function getExposedSettings(type: NodeType) {
     const name = toCamelCase(type).replace(/-/g, '');
 
     const expose: Options = {
@@ -26,7 +27,7 @@ export function getExposedSettings(type: string) {
         },
     };
 
-    if (type === 'server') {
+    if (type === NodeType.Server) {
         expose.credentials = {
             host: { type: 'text' },
             access_token: { type: 'text' },

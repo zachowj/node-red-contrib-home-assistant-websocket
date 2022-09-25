@@ -24,3 +24,34 @@ export const ZONE_ENTER = 'enter';
 export const ZONE_ENTER_OR_LEAVE = 'enter_leave';
 export const ZONE_LEAVE = 'leave';
 export const SERVER_ADD = '_ADD_';
+
+export enum NodeType {
+    API = 'ha-api',
+    CallSevice = 'api-call-service',
+    CurrentState = 'api-current-state',
+    Device = 'ha-device',
+    Entity = 'ha-entity',
+    EventsAll = 'server-events',
+    EventsState = 'server-state-changed',
+    FireEvent = 'ha-fire-event',
+    GetEntities = 'ha-get-entities',
+    GetHistory = 'api-get-history',
+    PollState = 'poll-state',
+    RenderTemplate = 'api-render-template',
+    TriggerState = 'trigger-state',
+    Tag = 'ha-tag',
+    Time = 'ha-time',
+    WaitUntil = 'ha-wait-until',
+    Webhook = 'ha-webhook',
+    Zone = 'ha-zone',
+
+    Server = 'server',
+    DeviceConfig = 'ha-device-config',
+    EntityConfig = 'ha-entity-config',
+
+    BinarySensor = 'ha-binary-sensor',
+    Button = 'ha-button',
+    Sensor = 'ha-sensor',
+    Switch = 'ha-switch',
+    UpdateConfig = 'ha-update-config',
+}

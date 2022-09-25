@@ -1,5 +1,6 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
+import { NodeType } from '../../const';
 import { hassAutocomplete } from '../../editor/components/hassAutocomplete';
 import * as haOutputs from '../../editor/components/output-properties';
 import * as haData from '../../editor/data';
@@ -53,7 +54,7 @@ const TimeEditor: EditorNodeDef<TimeEditorNodeProperties> = {
     labelStyle: ha.labelStyle,
     defaults: {
         name: { value: '' },
-        server: { value: '', type: 'server', required: true },
+        server: { value: '', type: NodeType.Server, required: true },
         version: { value: RED.settings.get('haTimeVersion', 0) },
         exposeToHomeAssistant: { value: false },
         haConfig: {

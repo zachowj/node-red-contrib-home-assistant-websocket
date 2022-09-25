@@ -1,5 +1,6 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
+import { NodeType } from '../../const';
 import { hassAutocomplete } from '../../editor/components/hassAutocomplete';
 import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
@@ -30,7 +31,7 @@ const ZoneEditor: EditorNodeDef<ZoneEditorNodeProperties> = {
     labelStyle: ha.labelStyle,
     defaults: {
         name: { value: '' },
-        server: { value: '', type: 'server', required: true },
+        server: { value: '', type: NodeType.Server, required: true },
         version: { value: RED.settings.get('haZoneVersion', 0) },
         exposeToHomeAssistant: { value: false },
         haConfig: {

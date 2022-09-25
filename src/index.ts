@@ -1,6 +1,7 @@
 import { NodeAPI } from 'node-red';
 
 import Storage from './common/Storage';
+import { NodeType } from './const';
 import { setRED } from './globals';
 import { getExposedSettings } from './helpers/exposed-settings';
 import apiNode from './nodes/api';
@@ -31,37 +32,37 @@ import webhookNode from './nodes/webhook';
 import zoneNode from './nodes/zone';
 import { createRoutes } from './routes';
 
-const nodes: { [type: string]: any } = {
-    'ha-api': apiNode,
-    'api-call-service': callServiceNode,
-    'api-current-state': currentStateNode,
-    'ha-device': deviceNode,
-    'ha-entity': entityNode,
-    'server-events': eventsAllNode,
-    'server-state-changed': eventsStateNode,
-    'ha-fire-event': fireEventNode,
-    'ha-get-entities': getEntitiesNode,
-    'api-get-history': getHistoryNode,
-    'poll-state': pollStateNode,
-    'api-render-template': renderTemplateNode,
-    'trigger-state': triggerStateNode,
-    'ha-tag': tagNode,
-    'ha-time': timeNode,
-    'ha-wait-until': waitUntilNode,
-    'ha-webhook': webhookNode,
-    'ha-zone': zoneNode,
+const nodes: Record<NodeType, any> = {
+    [NodeType.API]: apiNode,
+    [NodeType.CallSevice]: callServiceNode,
+    [NodeType.CurrentState]: currentStateNode,
+    [NodeType.Device]: deviceNode,
+    [NodeType.Entity]: entityNode,
+    [NodeType.EventsAll]: eventsAllNode,
+    [NodeType.EventsState]: eventsStateNode,
+    [NodeType.FireEvent]: fireEventNode,
+    [NodeType.GetEntities]: getEntitiesNode,
+    [NodeType.GetHistory]: getHistoryNode,
+    [NodeType.PollState]: pollStateNode,
+    [NodeType.RenderTemplate]: renderTemplateNode,
+    [NodeType.TriggerState]: triggerStateNode,
+    [NodeType.Tag]: tagNode,
+    [NodeType.Time]: timeNode,
+    [NodeType.WaitUntil]: waitUntilNode,
+    [NodeType.Webhook]: webhookNode,
+    [NodeType.Zone]: zoneNode,
 
     // Config nodes
-    server: configServerNode,
-    'ha-device-config': deviceConfigNode,
-    'ha-entity-config': entityConfigNode,
+    [NodeType.Server]: configServerNode,
+    [NodeType.DeviceConfig]: deviceConfigNode,
+    [NodeType.EntityConfig]: entityConfigNode,
 
     // Entities
-    'ha-binary-sensor': binarySensorNode,
-    'ha-button': buttonNode,
-    'ha-sensor': sensorNode,
-    'ha-switch': switchNode,
-    'ha-update-config': updateConfigNode,
+    [NodeType.BinarySensor]: binarySensorNode,
+    [NodeType.Button]: buttonNode,
+    [NodeType.Sensor]: sensorNode,
+    [NodeType.Switch]: switchNode,
+    [NodeType.UpdateConfig]: updateConfigNode,
 };
 
 export = async (RED: NodeAPI): Promise<void> => {
@@ -70,7 +71,8 @@ export = async (RED: NodeAPI): Promise<void> => {
 
     await Storage.init();
 
-    for (const type in nodes) {
+    let type: NodeType;
+    for (type in nodes) {
         RED.nodes.registerType(type, nodes[type], getExposedSettings(type));
     }
 };

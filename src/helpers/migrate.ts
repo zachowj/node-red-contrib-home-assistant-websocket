@@ -1,3 +1,4 @@
+import { NodeType } from '../const';
 import api from '../nodes/api/migrations';
 import binarySensor from '../nodes/binary-sensor/migrations';
 import callService from '../nodes/call-service/migrations';
@@ -28,31 +29,31 @@ interface Migration {
     up: (node: any) => any;
 }
 
-const nodeTypeTranslation: Record<string, Migration[]> = {
-    'ha-api': api,
-    'ha-binary-sensor': binarySensor,
-    'api-call-service': callService,
-    server: configServer,
-    'api-current-state': currentState,
-    'ha-device': device,
-    'ha-device-config': deviceConfig,
-    'ha-entity': entity,
-    'ha-entity-config': entityConfig,
-    'server-events': eventsAll,
-    'server-state-changed': eventsState,
-    'ha-fire-event': fireEvent,
-    'ha-get-entities': getEntities,
-    'api-get-history': getHistory,
-    'poll-state': pollState,
-    'api-render-template': renderTemplate,
-    'ha-sensor': sensor,
-    'ha-switch': switchMigration,
-    'trigger-state': triggerState,
-    'ha-tag': tag,
-    'ha-time': time,
-    'ha-wait-until': waitUntil,
-    'ha-webhook': webhook,
-    'ha-zone': zone,
+const nodeTypeTranslation: Partial<Record<NodeType, Migration[]>> = {
+    [NodeType.API]: api,
+    [NodeType.BinarySensor]: binarySensor,
+    [NodeType.CallSevice]: callService,
+    [NodeType.Server]: configServer,
+    [NodeType.CurrentState]: currentState,
+    [NodeType.Device]: device,
+    [NodeType.DeviceConfig]: deviceConfig,
+    [NodeType.Entity]: entity,
+    [NodeType.EntityConfig]: entityConfig,
+    [NodeType.EventsAll]: eventsAll,
+    [NodeType.EventsState]: eventsState,
+    [NodeType.FireEvent]: fireEvent,
+    [NodeType.GetEntities]: getEntities,
+    [NodeType.GetHistory]: getHistory,
+    [NodeType.PollState]: pollState,
+    [NodeType.RenderTemplate]: renderTemplate,
+    [NodeType.Sensor]: sensor,
+    [NodeType.Switch]: switchMigration,
+    [NodeType.TriggerState]: triggerState,
+    [NodeType.Tag]: tag,
+    [NodeType.Time]: time,
+    [NodeType.WaitUntil]: waitUntil,
+    [NodeType.Webhook]: webhook,
+    [NodeType.Zone]: zone,
 };
 
 type NodeTypeKey = keyof typeof nodeTypeTranslation;

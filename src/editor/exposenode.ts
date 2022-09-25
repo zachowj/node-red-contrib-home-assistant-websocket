@@ -1,5 +1,6 @@
 import { EditorRED } from 'node-red';
 
+import { NodeType } from '../const';
 import { HassExposedConfig, HassNodeProperties } from './types';
 import * as haUtils from './utils';
 
@@ -15,7 +16,12 @@ export function updateIntegration(topic: string, msg: any) {
 }
 
 function isEntityNode() {
-    const nodes = ['ha-button', 'ha-binary-sensor', 'ha-sensor', 'ha-switch'];
+    const nodes = [
+        NodeType.Button,
+        NodeType.BinarySensor,
+        NodeType.Sensor,
+        NodeType.Switch,
+    ];
     return node?.type && nodes.includes(node.type);
 }
 
@@ -61,23 +67,23 @@ export function init(n: HassNodeProperties) {
 
     $('#node-input-server, #node-input-entityConfig').on('change', () => {
         switch (node.type as unknown) {
-            case 'ha-webhook':
-            case 'ha-entity':
+            case NodeType.Webhook:
+            case NodeType.Entity:
                 renderAlert();
                 break;
-            case 'ha-binary-sensor':
-            case 'ha-sensor':
-            case 'ha-switch':
+            case NodeType.BinarySensor:
+            case NodeType.Sensor:
+            case NodeType.Switch:
                 if ($('#node-input-entityConfig').val() !== '_ADD_') {
                     renderAlert('1.1.0');
                 }
                 break;
-            case 'ha-button':
+            case NodeType.Button:
                 if ($('#node-input-entityConfig').val() !== '_ADD_') {
                     renderAlert('1.0.4');
                 }
                 break;
-            case 'ha-device':
+            case NodeType.Device:
                 renderAlert('0.5.0');
                 break;
             default:
@@ -89,18 +95,18 @@ export function init(n: HassNodeProperties) {
 
 function render() {
     switch (node.type as unknown) {
-        case 'ha-webhook':
-        case 'ha-entity':
+        case NodeType.Webhook:
+        case NodeType.Entity:
             renderAlert();
             break;
-        case 'ha-binary-sensor':
-        case 'ha-sensor':
-        case 'ha-switch':
+        case NodeType.BinarySensor:
+        case NodeType.Sensor:
+        case NodeType.Switch:
             if ($('#node-input-entityConfig').val() !== '_ADD_') {
                 renderAlert('1.1.0');
             }
             break;
-        case 'ha-button':
+        case NodeType.Button:
             if ($('#node-input-entityConfig').val() !== '_ADD_') {
                 renderAlert('1.0.4');
             }

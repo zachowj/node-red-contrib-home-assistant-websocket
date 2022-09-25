@@ -1,5 +1,6 @@
 import { EditorNodeDef, EditorRED, EditorWidgetTypedInputType } from 'node-red';
 
+import { NodeType } from '../../const';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import { HassExposedConfig, HassNodeProperties } from '../../editor/types';
 
@@ -52,7 +53,7 @@ const EntityEditor: EditorNodeDef<EntityEditorNodeProperties> = {
     },
     defaults: {
         name: { value: '' },
-        server: { value: '', type: 'server', required: true },
+        server: { value: '', type: NodeType.Server, required: true },
         version: { value: RED.settings.get('haEntityVersion', 0) },
         debugenabled: { value: false },
         outputs: { value: 1 },

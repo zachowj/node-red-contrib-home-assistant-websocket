@@ -1,5 +1,6 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
+import { NodeType } from '../../../const';
 import * as haOutputs from '../../../editor/components/output-properties';
 import {
     createCustomIdListByProperty,
@@ -60,7 +61,7 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
     labelStyle: ha.labelStyle,
     defaults: {
         name: { value: '' },
-        server: { value: '', type: 'server', required: true },
+        server: { value: '', type: NodeType.Server, required: true },
         version: { value: RED.settings.get('apiCallServiceVersion', 0) },
         debugenabled: { value: false },
         domain: { value: '' },

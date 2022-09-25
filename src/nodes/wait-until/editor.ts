@@ -1,5 +1,6 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
+import { NodeType } from '../../const';
 import EntitySelector from '../../editor/components/EntitySelector';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
@@ -39,7 +40,7 @@ const WaitUntilEditor: EditorNodeDef<WaitUntilEditorNodeProperties> = {
     labelStyle: ha.labelStyle,
     defaults: {
         name: { value: '' },
-        server: { value: '', type: 'server', required: true },
+        server: { value: '', type: NodeType.Server, required: true },
         version: { value: RED.settings.get('haWaitUntilVersion', 0) },
         outputs: { value: 1 },
         entityId: { value: '' },

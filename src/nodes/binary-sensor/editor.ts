@@ -1,5 +1,6 @@
 import { EditorNodeDef, EditorRED, EditorWidgetTypedInputType } from 'node-red';
 
+import { NodeType } from '../../const';
 import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
@@ -65,7 +66,7 @@ const BinarySensorEditor: EditorNodeDef<BinarySensorEditorNodeProperties> = {
         name: { value: '' },
         entityConfig: {
             value: '',
-            type: 'ha-entity-config',
+            type: NodeType.EntityConfig,
             // @ts-ignore - DefinitelyTyped is missing this property
             filter: (config) => config.entityType === 'binary_sensor',
             required: true,

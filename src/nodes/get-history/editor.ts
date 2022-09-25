@@ -1,5 +1,6 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
+import { NodeType } from '../../const';
 import { hassAutocomplete } from '../../editor/components/hassAutocomplete';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
@@ -43,7 +44,7 @@ const GetHistoryEditor: EditorNodeDef<GetHistoryEditorNodeProperties> = {
     labelStyle: ha.labelStyle,
     defaults: {
         name: { value: '' },
-        server: { value: '', type: 'server', required: true },
+        server: { value: '', type: NodeType.Server, required: true },
         version: { value: RED.settings.get('apiGetHistoryVersion', 0) },
         startdate: { value: '' },
         enddate: { value: '' },

@@ -5,6 +5,7 @@ import {
     EditorWidgetTypedInputType,
 } from 'node-red';
 
+import { NodeType } from '../../const';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import { HATypedInputTypeOptions } from '../../editor/types';
@@ -42,7 +43,7 @@ const GetEntitiesEditor: EditorNodeDef<GetEntitiesEditorNodeProperties> = {
     labelStyle: ha.labelStyle,
     defaults: {
         name: { value: '' },
-        server: { value: '', type: 'server', required: true },
+        server: { value: '', type: NodeType.Server, required: true },
         version: { value: RED.settings.get('haGetEntitiesVersion', 0) },
         rules: {
             value: [{ property: '', logic: 'is', value: '', valueType: 'str' }],

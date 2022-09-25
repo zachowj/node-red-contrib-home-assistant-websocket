@@ -1,5 +1,6 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
+import { NodeType } from '../../const';
 import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
@@ -38,7 +39,7 @@ const SwitchEditor: EditorNodeDef<SwitchEditorNodeProperties> = {
         outputs: { value: 2 },
         entityConfig: {
             value: '',
-            type: 'ha-entity-config',
+            type: NodeType.EntityConfig,
             // @ts-ignore - DefinitelyTyped is missing this property
             filter: (config) => config.entityType === 'switch',
             required: true,
