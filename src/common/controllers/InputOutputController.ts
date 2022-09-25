@@ -10,6 +10,7 @@ import {
     NodeSend,
 } from '../../types/nodes';
 import BaseError from '../errors/BaseError';
+import { NodeEvent } from '../events/Events';
 import Integration from '../integration/Integration';
 import InputService, { ParsedMessage } from '../services/InputService';
 import OutputController, { OutputControllerOptions } from './OutputController';
@@ -40,7 +41,7 @@ export default abstract class InputOutputController<
         super(params);
         this.inputService = params.inputService;
         this.integration = params.integration;
-        params.node.on('input', this.#preOnInput.bind(this));
+        params.node.on(NodeEvent.Input, this.#preOnInput.bind(this));
     }
 
     async #preOnInput(
