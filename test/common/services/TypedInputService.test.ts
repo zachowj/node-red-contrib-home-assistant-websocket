@@ -47,7 +47,7 @@ describe('Typed Input Service', function () {
                 .returns('bar');
             const results = typedInputService.getValue(
                 'payload',
-                TypedInputTypes.Msg,
+                TypedInputTypes.Message,
                 {
                     message,
                 }
