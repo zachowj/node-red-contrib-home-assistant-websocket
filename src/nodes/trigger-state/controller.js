@@ -22,6 +22,10 @@ class TriggerState extends EventsHaNode {
     constructor({ node, config, RED, status }) {
         super({ node, config, RED, status, nodeOptions });
 
+        if (!this.nodeConfig.entityid) {
+            throw new Error('Entity ID is required');
+        }
+
         let eventTopic = 'ha_events:state_changed';
 
         if (this.nodeConfig.entityidfiltertype === 'exact') {
