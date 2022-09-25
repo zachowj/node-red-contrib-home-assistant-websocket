@@ -9,6 +9,7 @@ import {
 import ClientEvents from '../../common/events/ClientEvents';
 import Events from '../../common/events/Events';
 import InputService, { NodeInputs } from '../../common/services/InputService';
+import { TypedInputTypes } from '../../common/services/TypedInputService';
 import State from '../../common/State';
 import EventsStatus from '../../common/status/EventStatus';
 import { RED } from '../../globals';
@@ -32,7 +33,7 @@ const inputs: NodeInputs = {
     stateType: {
         messageProp: 'payload.stateType',
         configProp: 'stateType',
-        default: 'msg',
+        default: TypedInputTypes.Message,
     },
     attributes: {
         messageProp: 'payload.attributes',
@@ -44,7 +45,15 @@ const inputs: NodeInputs = {
 const inputSchema: Joi.ObjectSchema = Joi.object({
     state: Joi.string().default('payload'),
     stateType: Joi.string()
-        .valid('msg', 'flow', 'global', 'jsonata', 'str', 'num', 'bool')
+        .valid(
+            TypedInputTypes.Message,
+            TypedInputTypes.Flow,
+            TypedInputTypes.Global,
+            TypedInputTypes.JSONata,
+            TypedInputTypes.String,
+            TypedInputTypes.Number,
+            TypedInputTypes.Boolean
+        )
         .default('msg'),
     attributes: Joi.array()
         .items(
@@ -53,14 +62,14 @@ const inputSchema: Joi.ObjectSchema = Joi.object({
                 value: Joi.any().required(),
                 valueType: Joi.string()
                     .valid(
-                        'msg',
-                        'flow',
-                        'global',
-                        'jsonata',
-                        'str',
-                        'num',
-                        'bool',
-                        'date'
+                        TypedInputTypes.Message,
+                        TypedInputTypes.Flow,
+                        TypedInputTypes.Global,
+                        TypedInputTypes.JSONata,
+                        TypedInputTypes.String,
+                        TypedInputTypes.Number,
+                        TypedInputTypes.Boolean,
+                        TypedInputTypes.Date
                     )
                     .required(),
             })

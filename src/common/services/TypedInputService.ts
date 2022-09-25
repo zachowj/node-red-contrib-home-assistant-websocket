@@ -5,7 +5,7 @@ import JSONata from './JSONataService';
 import NodeRedContext from './NodeRedContextService';
 
 export enum TypedInputTypes {
-    Msg = 'msg',
+    Message = 'msg',
     Flow = 'flow',
     Global = 'global',
     Boolean = 'bool',
@@ -53,7 +53,7 @@ export default class TypedInputService {
     ) {
         let val;
         switch (valueType) {
-            case TypedInputTypes.Msg:
+            case TypedInputTypes.Message:
             case TypedInputTypes.Flow:
             case TypedInputTypes.Global:
                 val = this.#context.get(valueType, value, props.message);
