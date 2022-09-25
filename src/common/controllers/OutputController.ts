@@ -8,6 +8,7 @@ import {
     NodeSend,
     OutputProperty,
 } from '../../types/nodes';
+import { NodeEvent } from '../events/Events';
 import NodeRedContextService from '../services/NodeRedContextService';
 import TypedInputService from '../services/TypedInputService';
 import State from '../State';
@@ -42,7 +43,7 @@ export default abstract class OutputController<T extends BaseNode = BaseNode> {
         this.status = status;
         this.typedInputService = typedInputService;
 
-        node.on('close', this.#preOnClose.bind(this));
+        node.on(NodeEvent.Close, this.#preOnClose.bind(this));
 
         const name = this.node?.config?.name ?? 'undefined';
         node.debug(`instantiated node, name: ${name}`);

@@ -8,7 +8,7 @@ export type EventsList = [string | symbol, EventHandler][];
 
 export enum NodeEvent {
     Close = 'close',
-    On = 'on',
+    Input = 'input',
     StateChanged = 'stateChanged',
 }
 

@@ -1,4 +1,5 @@
 import ClientEvents from '../../common/events/ClientEvents';
+import { NodeEvent } from '../../common/events/Events';
 import { IntegrationState } from '../../common/integration/Integration';
 import { Credentials, SUPERVISOR_URL } from '../../homeAssistant';
 import { ClientEvent } from '../../homeAssistant/Websocket';
@@ -24,7 +25,7 @@ export default class ConnectionLog {
             [ClientEvent.ServicesLoaded, this.onHaServicesLoaded],
             ['integration', this.onIntegrationEvent],
         ]);
-        node.on('close', this.onClose.bind(this));
+        node.on(NodeEvent.Close, this.onClose.bind(this));
     }
 
     onClose(removed: boolean, done: NodeDone) {

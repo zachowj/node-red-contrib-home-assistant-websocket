@@ -1,3 +1,4 @@
+import { NodeEvent } from '../../common/events/Events';
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
 import {
@@ -21,7 +22,7 @@ export default function configServerNode(
 
     createHomeAssistantClient(this);
 
-    this.on('close', () => {
+    this.on(NodeEvent.Close, () => {
         closeHomeAssistant(this.id);
         // @ts-expect-error - set context second argument is optional
         this.context().global.set('homeassistant');
