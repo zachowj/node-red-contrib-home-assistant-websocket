@@ -7,6 +7,8 @@ import { Context, render } from 'mustache';
 import { NodeContext, NodeMessage } from 'node-red';
 import selectn from 'selectn';
 
+import { containsMustache } from './utils';
+
 function parseContext(key: string) {
     const match = /^(flow|global)(\[(\w+)\])?\.(.+)/.exec(key);
     if (match) {
@@ -78,11 +80,6 @@ class CustomContext extends Context {
     push(view: any) {
         return new CustomContext(view, this, this.#nodeContext, this.#entities);
     }
-}
-
-export function containsMustache(str: string): boolean {
-    const regex = /{{(?:(?!}}).+)}}/g;
-    return regex.test(str);
 }
 
 function containsAltMustache(str: string): boolean {

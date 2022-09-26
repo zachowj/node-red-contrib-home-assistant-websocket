@@ -11,8 +11,8 @@ import {
 import ha, { NodeCategory, NodeColor } from '../../../editor/ha';
 import * as haServer from '../../../editor/haserver';
 import { OutputProperty } from '../../../editor/types';
-import { containsMustache } from '../../../helpers/mustache';
 import { byPropertiesOf } from '../../../helpers/sort';
+import { containsMustache } from '../../../helpers/utils';
 import { loadExampleData, updateServiceSelection } from './service-table';
 import { displayValidTargets, populateTargets } from './targets';
 

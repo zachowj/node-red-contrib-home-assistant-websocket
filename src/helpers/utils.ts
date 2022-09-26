@@ -194,3 +194,8 @@ export function checkValidServerConfig(
 
     return true;
 }
+
+export function containsMustache(str: string): boolean {
+    const regex = /{{(?:(?!}}).+)}}/g;
+    return regex.test(str);
+}

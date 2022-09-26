@@ -1,7 +1,6 @@
 import { Options, SearchOptions } from 'select2';
 
-import { containsMustache } from '../../helpers/mustache';
-import { isNodeRedEnvVar } from '../../helpers/utils';
+import { containsMustache, isNodeRedEnvVar } from '../../helpers/utils';
 import { isjQuery } from '../utils';
 
 export enum Tags {
