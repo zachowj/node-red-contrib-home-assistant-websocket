@@ -1,7 +1,7 @@
 // TODO: Can be removed after ha-entity is removed
 import { EditorRED } from 'node-red';
 
-import { NodeType } from '../const';
+import { EntityType, NodeType } from '../const';
 import { HassExposedConfig } from './types';
 
 declare const RED: EditorRED;
@@ -36,7 +36,7 @@ export interface EntityProperties {
     x: number;
     y: number;
     z: string;
-    entityType: NodeType.BinarySensor | NodeType.Sensor | NodeType.Switch;
+    entityType: EntityType;
     config: HassExposedConfig[];
     state: string;
     stateType: string;
@@ -82,12 +82,12 @@ const convertToSeperateEntityNode = (data: EntityProperties, newId: string) => {
     };
 
     switch (data.entityType) {
-        case NodeType.BinarySensor:
-        case NodeType.Sensor:
+        case EntityType.BinarySensor:
+        case EntityType.Sensor:
             node = {
                 ...node,
                 type:
-                    data.entityType === NodeType.Sensor
+                    data.entityType === EntityType.Sensor
                         ? NodeType.Sensor
                         : NodeType.BinarySensor,
                 state: data.state ?? 'payload',
@@ -107,7 +107,7 @@ const convertToSeperateEntityNode = (data: EntityProperties, newId: string) => {
                           ],
             };
             break;
-        case NodeType.Switch:
+        case EntityType.Switch:
         default:
             node = {
                 ...node,

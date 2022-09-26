@@ -25,6 +25,13 @@ export const ZONE_ENTER_OR_LEAVE = 'enter_leave';
 export const ZONE_LEAVE = 'leave';
 export const SERVER_ADD = '_ADD_';
 
+export enum EntityType {
+    BinarySensor = 'binary_sensor',
+    Button = 'button',
+    Sensor = 'sensor',
+    Switch = 'switch',
+}
+
 export enum NodeType {
     API = 'ha-api',
     CallSevice = 'api-call-service',

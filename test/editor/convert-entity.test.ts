@@ -3,6 +3,7 @@ import { EditorRED } from 'node-red';
 import sinonChai from 'sinon-chai';
 import sinon, { StubbedInstance, stubInterface } from 'ts-sinon';
 
+import { EntityType, NodeType } from '../../src/const';
 import {
     convertEntityNode,
     EntityProperties,
@@ -17,14 +18,14 @@ declare global {
 }
 const NODE_DATA: EntityProperties = {
     id: 'oldId',
-    type: 'ha-entity' as const,
+    type: NodeType.Entity,
     z: 'zId',
     name: 'i am name',
     server: 'serverId',
     version: 2,
     debugenabled: false,
     outputs: 1,
-    entityType: 'sensor' as const,
+    entityType: EntityType.Sensor,
     config: [
         { property: 'name', value: 'name1' },
         { property: 'device_class', value: 'devcie1' },
@@ -82,7 +83,7 @@ const EXPECTED_BASE_NODE = {
 
 const EXPECTED_SENSOR_NODE = {
     ...EXPECTED_BASE_NODE,
-    type: 'ha-sensor',
+    type: NodeType.Sensor,
     outputs: 1,
     state: 'payload',
     stateType: 'msg',
@@ -92,7 +93,7 @@ const EXPECTED_SENSOR_NODE = {
 
 const EXPECTED_SWITCH_NODE = {
     ...EXPECTED_BASE_NODE,
-    type: 'ha-switch',
+    type: NodeType.Switch,
     outputs: 2,
     outputOnStateChange: false,
     enableInput: true,
@@ -233,12 +234,12 @@ describe('convert-entity', function () {
             it('should create node of type ha-binary-sensor', function () {
                 const data = {
                     ...NODE_DATA,
-                    entityType: 'binary_sensor' as const,
+                    entityType: EntityType.BinarySensor,
                 };
                 convertEntityNode(data);
                 const expected = {
                     ...EXPECTED_SENSOR_NODE,
-                    type: 'ha-binary-sensor',
+                    type: NodeType.BinarySensor,
                 };
                 expect(RED.nodes.import).to.have.been.calledWith(expected);
             });
@@ -246,11 +247,11 @@ describe('convert-entity', function () {
 
         describe('sensor', function () {
             it('should create node of type ha-sensor', function () {
-                const data = { ...NODE_DATA, entityType: 'sensor' as const };
+                const data = { ...NODE_DATA, entityType: EntityType.Sensor };
                 convertEntityNode(data);
                 const expected = {
                     ...EXPECTED_SENSOR_NODE,
-                    type: 'ha-sensor',
+                    type: NodeType.Sensor,
                 };
                 expect(RED.nodes.import).to.have.been.calledWith(expected);
             });
@@ -258,7 +259,7 @@ describe('convert-entity', function () {
     });
     describe('switch', function () {
         it('should set defaults', function () {
-            const data = { ...NODE_DATA, entityType: 'switch' as const };
+            const data = { ...NODE_DATA, entityType: EntityType.Switch };
             convertEntityNode(data);
             expect(RED.nodes.import).to.have.been.calledWith(
                 EXPECTED_SWITCH_NODE
@@ -267,7 +268,7 @@ describe('convert-entity', function () {
         it('should set outputOnStateChange to true', function () {
             const data = {
                 ...NODE_DATA,
-                entityType: 'switch' as const,
+                entityType: EntityType.Switch,
                 outputOnStateChange: true,
             };
             convertEntityNode(data);
@@ -280,7 +281,7 @@ describe('convert-entity', function () {
         it('should set outputOnStateChange to false', function () {
             const data = {
                 ...NODE_DATA,
-                entityType: 'switch' as const,
+                entityType: EntityType.Switch,
                 outputOnStateChange: false,
             };
             convertEntityNode(data);
@@ -293,7 +294,7 @@ describe('convert-entity', function () {
         it('should convert switch output properties', function () {
             const data = {
                 ...NODE_DATA,
-                entityType: 'switch' as const,
+                entityType: EntityType.Switch,
                 outputPayload: '123',
                 outputPayloadType: 'num',
             };

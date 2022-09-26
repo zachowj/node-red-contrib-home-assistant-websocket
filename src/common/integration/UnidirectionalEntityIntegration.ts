@@ -1,5 +1,6 @@
 import { compareVersions } from 'compare-versions';
 
+import { EntityType } from '../../const';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
 import { ClientEvent } from '../../homeAssistant/Websocket';
 import { DeviceConfigNode } from '../../nodes/device-config/index';
@@ -15,13 +16,6 @@ import Integration, {
     MessageBase,
     MessageType,
 } from './Integration';
-
-export enum EntityType {
-    BinarySensor = 'binary_sensor',
-    Button = 'button',
-    Sensor = 'sensor',
-    Switch = 'switch',
-}
 
 export interface DeviceInfo {
     id: string;
