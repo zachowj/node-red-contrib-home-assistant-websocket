@@ -2,6 +2,57 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.45.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.44.0...v0.45.0) (2022-09-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* Entity node is being deprecated. Use the individual entity nodes.
+* In the get-entities node "starts with" and "contains" will no longer return true for an empty string
+
+### Features
+
+* **config-server:** HA global context data can be enable/disabled ([053be16](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/053be1680877db3396cff5a4dc1050ce25f7b987))
+* Create devices in HA that entities can be added to ([6c64212](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/6c6421298acd176a9632d01ec34356417e163fda))
+* **events:all:** Add event data comparison ([d8e3840](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d8e3840912312fd09df8bb3bab59864b6f2275c9))
+* **update-config:** New node to update HA entity config dynamically ([7a70f43](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/7a70f4396e250c3688e323cbcd79a51fabb4f0bf))
+
+
+### Bug Fixes
+
+* Add entity node back to group after importing ([73f8fcf](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/73f8fcf85f782d87d5816ed3b71de336ee5440d3))
+* Catch all onEvent errors ([533c094](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/533c0940cdf6295f66dd44b4e31ecba6b5e4d4c6))
+* **device:** Fix type for html option element ([58672e6](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/58672e6dc59dd2a037459ab7050c122d2da415d2))
+* **device:** Use correct server id ([9cc4c75](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/9cc4c75bb9680b7a7d2fdf94c6afc8f70c6cfed1))
+* Integration event trigger ([3ec43c9](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/3ec43c96b3e909cad692a3c29ed81f1602a3d525))
+* Remove correct event listener when node is closed ([b1311b9](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/b1311b923c8064dc1376082a9c38c4bdbb919505))
+* Remove event listeners on node close ([21fbdeb](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/21fbdeb67437acdb84eea83724bdd895907b6724))
+* **sensor:** Fix validation of state value and remove default output properties ([b03f1b4](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/b03f1b4649b26d9e3364dc1ef44672c0d28f87a5))
+* Trigger Node Custom Output Comparators [#580](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/580) ([#665](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/665)) ([7e22233](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/7e22233b01dfed5c35ed6008f4711754752ab4a7))
+* **trigger-state:** Throw error when id is missing ([65b62fe](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/65b62fe4048436beb87d2a26fc726fb1d957dfbb))
+* **websocket:** Stop device lookups call to HA when there's no connection ([f165659](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f165659ea654cd18586269d4604d3870d7e4e7d7))
+
+
+### Style
+
+* eslint changes ([9def058](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/9def0588d3859327145a4d6a80ccb436552b0405))
+* lower case status message ([c08f38d](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/c08f38d2ad8b111fb33581d6638c7b09321f93b2))
+
+
+### refactor
+
+* Deprecate the entity node ([1e31ec3](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/1e31ec37439729fc1081c7dcac978e01a11b77e7))
+* Use new services in BaseNode controller ([51b9717](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/51b9717ec6607c1c11572cecd35dea6015e259b8))
+
+
+### Documentation
+
+* Add documentation for the new entity nodes ([36bb956](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/36bb956ed0e1daf963f3d44a67e69f2ac82970ad))
+* Remove sidebar length ([7f65fec](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/7f65fecc59e3e406fed96c94a011b15f81117470))
+* restore entity node page ([2d4616a](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/2d4616a102550f845d327df208dbcb99e4e9a095))
+* spelling fixes ([0d20801](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/0d208016085dfd7dd1405f1a04b6de6f386efe41))
+* **update-config:** Fix spelling ([d70c836](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d70c836e4fdc60ce452f1bbce65228adfe841988))
+
 ## [0.44.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.43.1...v0.44.0) (2022-07-20)
 
 
