@@ -73,7 +73,7 @@ Creates a sensor entity in Home Assistant that is controlled from with Node-RED.
 
 Home Assistant connection configuration
 
-## [Switch](./swtich.md)
+## [Switch](./switch.md)
 
 Creates a switch entity in Home Assistant that is controlled from with Node-RED. Also allows a flow to be started from a service call.
 
