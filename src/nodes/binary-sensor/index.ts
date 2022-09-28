@@ -9,9 +9,9 @@ import {
 import ClientEvents from '../../common/events/ClientEvents';
 import Events from '../../common/events/Events';
 import InputService, { NodeInputs } from '../../common/services/InputService';
-import { TypedInputTypes } from '../../common/services/TypedInputService';
 import State from '../../common/State';
 import EventsStatus from '../../common/status/EventStatus';
+import { TypedInputTypes } from '../../const';
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
 import { getConfigNodes } from '../../helpers/node';

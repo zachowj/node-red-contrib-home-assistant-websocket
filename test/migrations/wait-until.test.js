@@ -31,6 +31,20 @@ const VERSION_1 = {
     ...VERSION_0,
     version: 1,
 };
+const VERSION_2 = {
+    ...VERSION_1,
+    version: 2,
+    outputProperties: [
+        {
+            property: 'data',
+            propertyType: 'msg',
+            value: '',
+            valueType: 'entity',
+        },
+    ],
+    entityLocation: undefined,
+    entityLocationType: undefined,
+};
 
 describe('Migrations - Wait Until Node', function () {
     describe('Version 0', function () {
@@ -73,8 +87,33 @@ describe('Migrations - Wait Until Node', function () {
             expect(migratedSchema.entityId).to.have.lengthOf(1);
         });
     });
+    describe('Version 2', function () {
+        let migrate = null;
+        before(function () {
+            migrate = migrations.find((m) => m.version === 2);
+        });
+        it('should change payload output to custom output format', function () {
+            const migratedSchema = migrate.up(VERSION_1);
+            expect(migratedSchema).to.eql(VERSION_2);
+        });
+        it('should have empty output properties if entity location set to none', function () {
+            const migratedSchema = migrate.up({
+                ...VERSION_1,
+                entityLocationType: 'none',
+            });
+
+            expect(migratedSchema).to.eql({
+                ...VERSION_2,
+                outputProperties: [],
+            });
+        });
+        it('should add version 2 to version 1', function () {
+            const migratedSchema = migrate.up(VERSION_1);
+            expect(migratedSchema).to.eql(VERSION_2);
+        });
+    });
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_1);
+        expect(migratedSchema).to.eql(VERSION_2);
     });
 });

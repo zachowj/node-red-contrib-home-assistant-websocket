@@ -5,9 +5,8 @@ import sinon, { StubbedInstance, stubInterface } from 'ts-sinon';
 
 import JSONataService from '../../../src/common/services/JSONataService';
 import NodeRedContextService from '../../../src/common/services/NodeRedContextService';
-import TypedInputService, {
-    TypedInputTypes,
-} from '../../../src/common/services/TypedInputService';
+import TypedInputService from '../../../src/common/services/TypedInputService';
+import { TypedInputTypes } from '../../../src/const';
 import { resetStubInterface } from '../../helpers';
 
 chai.use(sinonChai);

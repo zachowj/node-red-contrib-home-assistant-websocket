@@ -580,7 +580,9 @@ export default class Websocket {
         return results.extra_fields;
     }
 
-    getStates(entityId?: string): HassEntity | HassEntities | null {
+    getStates(): HassEntities;
+    getStates(entityId?: string): HassEntity | null;
+    getStates(entityId?: string): HassEntities | HassEntity | null {
         if (entityId) {
             return this.states[entityId]
                 ? cloneDeep(this.states[entityId])

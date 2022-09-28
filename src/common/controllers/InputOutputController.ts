@@ -30,9 +30,14 @@ export interface InputProperties {
     send: NodeSend;
 }
 
+type OptionalInputHandler = (
+    message: NodeMessageInFlow,
+    send: NodeSend
+) => boolean;
+
 interface OptionalInput {
     schema: Joi.ObjectSchema;
-    handler: (message: NodeMessageInFlow, send: NodeSend) => boolean;
+    handler: OptionalInputHandler;
 }
 
 export default abstract class InputOutputController<
@@ -57,14 +62,13 @@ export default abstract class InputOutputController<
         done: NodeDone
     ) {
         // Run optional inputs
-        if (!this.#optionalInputs.size) {
+        if (this.#optionalInputs.size) {
             for (const [, { schema, handler }] of this.#optionalInputs) {
                 let validSchema = false;
                 try {
                     validSchema = InputService.validateSchema(schema, message);
-                } catch (e) {
-                    // silent fail
-                }
+                } catch (e) {} // silent fail
+
                 if (validSchema) {
                     try {
                         if (handler(message, send)) {
@@ -119,7 +123,7 @@ export default abstract class InputOutputController<
         this.status.setFailed(statusMessage);
     }
 
-    addOptionalInput(
+    protected addOptionalInput(
         key: string,
         schema: Joi.ObjectSchema,
         callback: () => boolean
@@ -130,7 +134,7 @@ export default abstract class InputOutputController<
         });
     }
 
-    removeOptionalInput(key: string) {
+    protected removeOptionalInput(key: string) {
         this.#optionalInputs.delete(key);
     }
 }

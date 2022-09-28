@@ -1,7 +1,7 @@
 import { Node, NodeDef, NodeMessage as NodeMessageBase } from 'node-red';
 
 import { ContextLocation } from '../common/services/NodeRedContextService';
-import { TypedInputTypes } from '../common/services/TypedInputService';
+import { TypedInputTypes } from '../const';
 import { ExposedNodes } from '../nodes/config-server';
 import { SelectorType } from '../nodes/config-server/editor';
 import { DateTimeFormatOptions } from '../types/DateTimeFormatOptions';

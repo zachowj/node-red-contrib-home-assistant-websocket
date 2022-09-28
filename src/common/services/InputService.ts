@@ -32,6 +32,7 @@ export default class InputService<C extends NodeProperties> {
     readonly #inputs: NodeInputs;
     readonly #nodeConfig: C;
     readonly #schema: Joi.ObjectSchema;
+    #allowInputOverrides = true;
 
     constructor({
         inputs,
@@ -52,22 +53,29 @@ export default class InputService<C extends NodeProperties> {
         const parsedResult: ParsedMessage = {};
 
         for (const [fieldKey, fieldConfig] of Object.entries(this.#inputs)) {
-            // Find messageProp value if it's a string or Array
-            // When it's an array lowest valid index takes precedent
-            const props = Array.isArray(fieldConfig.messageProp)
-                ? fieldConfig.messageProp
-                : [fieldConfig.messageProp];
-            const messageProp = props.reduce(
-                (val, cur) => val ?? selectn(cur, msg),
-                undefined
-            );
-
-            // Try to load from message
-            const result: ParsedMessageValues = {
+            let result: ParsedMessageValues = {
                 key: fieldKey,
-                value: messageProp,
-                source: DataSource.Message,
+                value: undefined,
+                source: DataSource.Missing,
             };
+
+            if (this.#allowInputOverrides) {
+                // Find messageProp value if it's a string or Array
+                // When it's an array lowest valid index takes precedent
+                const props = Array.isArray(fieldConfig.messageProp)
+                    ? fieldConfig.messageProp
+                    : [fieldConfig.messageProp];
+                const messageProp = props.reduce(
+                    (val, cur) => val ?? selectn(cur, msg),
+                    undefined
+                );
+
+                result = {
+                    key: fieldKey,
+                    value: messageProp,
+                    source: DataSource.Message,
+                };
+            }
 
             // If message missing value and node has config that can be used instead
             if (result.value === undefined && fieldConfig.configProp) {
@@ -118,5 +126,13 @@ export default class InputService<C extends NodeProperties> {
         if (error) throw error;
 
         return true;
+    }
+
+    disableInputOverrides() {
+        this.#allowInputOverrides = false;
+    }
+
+    enableInputOverrides() {
+        this.#allowInputOverrides = true;
     }
 }

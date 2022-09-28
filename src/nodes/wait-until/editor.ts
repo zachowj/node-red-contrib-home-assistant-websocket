@@ -1,10 +1,16 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
-import { NodeType } from '../../const';
+import {
+    ComparatorType,
+    EntityFilterType,
+    NodeType,
+    TypedInputTypes,
+} from '../../const';
 import EntitySelector from '../../editor/components/EntitySelector';
+import * as haOutputs from '../../editor/components/output-properties';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
-import { HATypedInputTypeOptions } from '../../editor/types';
+import { HATypedInputTypeOptions, OutputProperty } from '../../editor/types';
 
 declare const RED: EditorRED;
 
@@ -20,10 +26,13 @@ interface WaitUntilEditorNodeProperties extends EditorNodeProperties {
     timeout: string;
     timeoutType: string;
     timeoutUnits: string;
-    entityLocation: string;
-    entityLocationType: string;
     checkCurrentState: boolean;
     blockInputOverrides: boolean;
+    outputProperties: OutputProperty[];
+
+    // deprecated
+    entityLocation: string;
+    entityLocationType: string;
 }
 
 const WaitUntilEditor: EditorNodeDef<WaitUntilEditorNodeProperties> = {
@@ -52,10 +61,12 @@ const WaitUntilEditor: EditorNodeDef<WaitUntilEditorNodeProperties> = {
         timeout: { value: '0' },
         timeoutType: { value: 'num' },
         timeoutUnits: { value: 'seconds' },
-        entityLocation: { value: 'data' },
-        entityLocationType: { value: 'none' },
         checkCurrentState: { value: true },
         blockInputOverrides: { value: true },
+        outputProperties: { value: [] },
+        // deprecated but needed to import old versions
+        entityLocation: { value: 'data' },
+        entityLocationType: { value: 'none' },
     },
     oneditprepare: function () {
         ha.setup(this);
@@ -68,7 +79,7 @@ const WaitUntilEditor: EditorNodeDef<WaitUntilEditorNodeProperties> = {
         });
         $('#dialog-form').data('entitySelector', entitySelector);
 
-        let availableProperties = [];
+        let availableProperties: string[] = [];
         haServer.autocomplete('properties', (properties: string[]) => {
             availableProperties = properties;
             $('#node-input-property').autocomplete({
@@ -79,18 +90,18 @@ const WaitUntilEditor: EditorNodeDef<WaitUntilEditorNodeProperties> = {
 
         const entityType = { value: 'entity', label: 'entity.' };
         const defaultTypes: HATypedInputTypeOptions = [
-            'str',
-            'num',
-            'bool',
-            're',
-            'jsonata',
-            'msg',
-            'flow',
-            'global',
+            TypedInputTypes.String,
+            TypedInputTypes.Number,
+            TypedInputTypes.Boolean,
+            TypedInputTypes.Regex,
+            TypedInputTypes.JSONata,
+            TypedInputTypes.Message,
+            TypedInputTypes.Flow,
+            TypedInputTypes.Global,
             entityType,
         ];
         $('#node-input-value').typedInput({
-            default: 'str',
+            default: TypedInputTypes.String,
             types: defaultTypes,
             typeField: '#node-input-valueType',
         });
@@ -101,28 +112,34 @@ const WaitUntilEditor: EditorNodeDef<WaitUntilEditorNodeProperties> = {
             $('#node-input-property').prop('disabled', value === 'jsonata');
 
             switch (value) {
-                case 'is':
-                case 'is_not':
+                case ComparatorType.Is:
+                case ComparatorType.IsNot:
                     break;
-                case 'lt':
-                case 'lte':
-                case 'gt':
-                case 'gte':
+                case ComparatorType.IsLessThan:
+                case ComparatorType.IsLessThanOrEqual:
+                case ComparatorType.IsGreaterThan:
+                case ComparatorType.IsGreaterThanOrEqual:
                     types = [
-                        'num',
-                        'jsonata',
-                        'msg',
-                        'flow',
-                        'global',
+                        TypedInputTypes.Number,
+                        TypedInputTypes.JSONata,
+                        TypedInputTypes.Message,
+                        TypedInputTypes.Flow,
+                        TypedInputTypes.Global,
                         entityType,
                     ];
                     break;
-                case 'includes':
-                case 'does_not_include':
-                    types = ['str', 'jsonata', 'msg', 'flow', 'global'];
+                case ComparatorType.Includes:
+                case ComparatorType.DoesNotInclude:
+                    types = [
+                        TypedInputTypes.String,
+                        TypedInputTypes.JSONata,
+                        TypedInputTypes.Message,
+                        TypedInputTypes.Flow,
+                        TypedInputTypes.Global,
+                    ];
                     break;
-                case 'jsonata':
-                    types = ['jsonata'];
+                case ComparatorType.JSONata:
+                    types = [TypedInputTypes.JSONata];
                     break;
             }
             $('#node-input-value').typedInput('types', types);
@@ -132,32 +149,33 @@ const WaitUntilEditor: EditorNodeDef<WaitUntilEditorNodeProperties> = {
         const node = this;
         $('#node-input-timeout')
             .typedInput({
-                default: 'num',
-                types: ['num', 'jsonata'],
+                default: TypedInputTypes.Number,
+                types: [TypedInputTypes.Number, TypedInputTypes.JSONata],
                 typeField: '#node-input-timeoutType',
             })
             .on('change', function (_, timeoutType) {
                 if (timeoutType === true) return;
 
                 node.outputs =
-                    timeoutType === 'jsonata' ||
-                    (timeoutType === 'num' && Number($(this).val()) > 0)
+                    timeoutType === TypedInputTypes.JSONata ||
+                    (timeoutType === TypedInputTypes.Number &&
+                        Number($(this).val()) > 0)
                         ? 2
                         : 1;
             });
 
-        const NoneType = { value: 'none', label: 'None', hasValue: false };
-        $('#node-input-entityLocation').typedInput({
-            types: ['msg', 'flow', 'global', NoneType],
-            typeField: '#node-input-entityLocationType',
-        });
-
         const $filterType = $('#node-input-entityIdFilterType');
         $filterType.on('change', function () {
-            $('.exact-only').toggle($filterType.val() === 'exact');
+            $('.exact-only').toggle(
+                $filterType.val() === EntityFilterType.Exact
+            );
+        });
+        haOutputs.createOutputs(this.outputProperties, {
+            extraTypes: ['entity'],
         });
     },
     oneditsave: function () {
+        this.outputProperties = haOutputs.getOutputs();
         const entitySelector = $('#dialog-form').data(
             'entitySelector'
         ) as EntitySelector;

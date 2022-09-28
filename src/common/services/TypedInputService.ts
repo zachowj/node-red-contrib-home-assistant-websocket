@@ -1,31 +1,9 @@
 import { cloneDeep } from 'lodash';
 import selectn from 'selectn';
 
+import { TypedInputTypes } from '../../const';
 import JSONata from './JSONataService';
 import NodeRedContext from './NodeRedContextService';
-
-export enum TypedInputTypes {
-    Message = 'msg',
-    Flow = 'flow',
-    Global = 'global',
-    Boolean = 'bool',
-    JSON = 'json',
-    Date = 'date',
-    JSONata = 'jsonata',
-    Number = 'num',
-    String = 'str',
-    None = 'none',
-    Config = 'config',
-    Data = 'data',
-    Entity = 'entity',
-    EntityState = 'entityState',
-    EventData = 'eventData',
-    Headers = 'headers',
-    Params = 'params',
-    TriggerId = 'triggerId',
-    PrevEntity = 'prevEntity',
-    Results = 'results',
-}
 
 export default class TypedInputService {
     readonly #nodeConfig: Record<string, any>;

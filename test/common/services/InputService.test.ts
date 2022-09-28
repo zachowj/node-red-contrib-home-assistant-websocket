@@ -194,6 +194,33 @@ describe('Input Service', function () {
                 },
             });
         });
+        it('should ignore message values if block input override is enabled', function () {
+            const config = { ...nodeConfig, foo: 'bar' };
+            const inputService = new InputService<TestNode>({
+                inputs: {
+                    foobar: {
+                        messageProp: 'payload',
+                        configProp: 'foo',
+                    },
+                },
+                nodeConfig: config,
+                schema,
+            });
+            inputService.disableInputOverrides();
+
+            const msg = {
+                payload: 'from message',
+            };
+
+            const parsed = inputService.parse(msg);
+            expect(parsed).to.deep.equal({
+                foobar: {
+                    key: 'foobar',
+                    source: 'config',
+                    value: 'bar',
+                },
+            });
+        });
     });
 
     describe('validate', function () {

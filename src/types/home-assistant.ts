@@ -85,6 +85,7 @@ export type HassData = {
 export type HassEntity = Omit<HomeAssistantEntity, 'state'> & {
     original_state: string;
     state: string | number | boolean | RegExp | string[];
+    timeSinceChangedMs: number;
 };
 
 export type HassStateChangedEvent = HassEventBase & {

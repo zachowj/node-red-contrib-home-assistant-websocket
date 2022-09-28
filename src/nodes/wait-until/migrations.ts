@@ -1,3 +1,5 @@
+import { TypedInputTypes } from '../../const';
+
 export default [
     {
         version: 0,
@@ -44,6 +46,29 @@ export default [
                     .map((e) => e.trim())
                     .filter((e) => e.length > 0);
             }
+            return newSchema;
+        },
+    },
+    {
+        version: 2,
+        up: (schema: any) => {
+            const newSchema = {
+                ...schema,
+                version: 2,
+                outputProperties: [],
+                entityLocation: undefined,
+                entityLocationType: undefined,
+            };
+
+            if (schema.entityLocationType !== 'none') {
+                newSchema.outputProperties.push({
+                    property: schema.entityLocation,
+                    propertyType: schema.entityLocationType,
+                    value: '',
+                    valueType: TypedInputTypes.Entity,
+                });
+            }
+
             return newSchema;
         },
     },

@@ -1,7 +1,6 @@
 import bonjour from 'bonjour';
 import { NextFunction, Request, Response } from 'express';
 import flatten from 'flat';
-import { HassEntities } from 'home-assistant-js-websocket';
 
 import { RED } from './globals';
 import { getServerConfigNode } from './helpers/node';
@@ -109,24 +108,24 @@ function getServices(req: CustomRequest, res: Response): void {
 
 function getProperties(req: CustomRequest, res: Response): void {
     let flat: (string | string[])[] = [];
-    let singleEntity = !!req.query.entityId;
     const entityId = req.query.entityId?.toString();
 
-    let states = req?.homeAssistant?.websocket.getStates(entityId);
+    const entity = req?.homeAssistant?.websocket.getStates(entityId);
 
-    if (!states) {
-        states = req?.homeAssistant?.websocket.getStates() as HassEntities;
-        singleEntity = false;
-    }
+    if (!entity) {
+        const entities = req.homeAssistant?.websocket.getStates();
+        if (!entities) {
+            res.json([]);
+            return;
+        }
 
-    if (singleEntity) {
-        flat = Object.keys(flatten(states)).filter(
-            (e) =>
-                req?.query?.term && e.indexOf(req.query.term.toString()) !== -1
+        flat = Object.values(entities).map((entity) =>
+            Object.keys(flatten(entity))
         );
     } else {
-        flat = Object.values(states).map((entity) =>
-            Object.keys(flatten(entity))
+        flat = Object.keys(flatten(entity)).filter(
+            (e) =>
+                req?.query?.term && e.indexOf(req.query.term.toString()) !== -1
         );
     }
 

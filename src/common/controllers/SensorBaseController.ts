@@ -7,7 +7,7 @@ import InputOutputController, {
 import InvalidPropertyValueError from '../../common/errors/InvalidPropertyValueError';
 import NoConnectionError from '../../common/errors/NoConnectionError';
 import { DataSource, ParsedMessage } from '../../common/services/InputService';
-import { TypedInputTypes } from '../../common/services/TypedInputService';
+import { TypedInputTypes } from '../../const';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
 import {
     BaseNode,

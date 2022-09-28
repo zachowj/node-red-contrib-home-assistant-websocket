@@ -25,11 +25,30 @@ export const ZONE_ENTER_OR_LEAVE = 'enter_leave';
 export const ZONE_LEAVE = 'leave';
 export const SERVER_ADD = '_ADD_';
 
+export enum ComparatorType {
+    Is = 'is',
+    IsNot = 'is_not',
+    IsLessThan = 'lt',
+    IsLessThanOrEqual = 'lte',
+    IsGreaterThan = 'gt',
+    IsGreaterThanOrEqual = 'gte',
+    Includes = 'includes',
+    DoesNotInclude = 'does_not_include',
+    JSONata = 'jsonata',
+}
+
 export enum EntityType {
     BinarySensor = 'binary_sensor',
     Button = 'button',
     Sensor = 'sensor',
     Switch = 'switch',
+}
+
+export enum EntityFilterType {
+    Exact = 'exact',
+    List = 'list',
+    Regex = 'regex',
+    Substring = 'substring',
 }
 
 export enum NodeType {
@@ -61,4 +80,36 @@ export enum NodeType {
     Sensor = 'ha-sensor',
     Switch = 'ha-switch',
     UpdateConfig = 'ha-update-config',
+}
+
+export enum TypedInputTypes {
+    Message = 'msg',
+    Flow = 'flow',
+    Global = 'global',
+    Boolean = 'bool',
+    JSON = 'json',
+    Date = 'date',
+    JSONata = 'jsonata',
+    Number = 'num',
+    String = 'str',
+    None = 'none',
+    Config = 'config',
+    Data = 'data',
+    Entity = 'entity',
+    EntityState = 'entityState',
+    EventData = 'eventData',
+    Headers = 'headers',
+    Params = 'params',
+    TriggerId = 'triggerId',
+    PrevEntity = 'prevEntity',
+    Results = 'results',
+    Regex = 're',
+}
+
+export enum TimeUnit {
+    Milliseconds = 'milliseconds',
+    Seconds = 'seconds',
+    Minutes = 'minutes',
+    Hours = 'hours',
+    Days = 'days',
 }
