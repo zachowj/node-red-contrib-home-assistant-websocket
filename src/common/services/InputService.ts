@@ -100,10 +100,7 @@ export default class InputService<C extends NodeProperties> {
 
     validate(parsedMessage: ParsedMessage): boolean {
         const schemaObject = this.#parsedMessageToSchemaObject(parsedMessage);
-        const { error } = this.#schema.validate(schemaObject);
-        if (error) throw error;
-
-        return true;
+        return InputService.validateSchema(this.#schema, schemaObject);
     }
 
     #parsedMessageToSchemaObject(
@@ -114,5 +111,12 @@ export default class InputService<C extends NodeProperties> {
             schemaObject[key] = value.value;
         }
         return schemaObject;
+    }
+
+    static validateSchema(schema: Joi.ObjectSchema, obj: any): boolean {
+        const { error } = schema.validate(obj);
+        if (error) throw error;
+
+        return true;
     }
 }

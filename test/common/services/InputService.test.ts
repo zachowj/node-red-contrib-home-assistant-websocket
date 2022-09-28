@@ -248,4 +248,24 @@ describe('Input Service', function () {
             );
         });
     });
+
+    describe('validateSchema', function () {
+        it('should return true if schema is valid', function () {
+            const schema = Joi.object({
+                foo: Joi.string().required(),
+            });
+            const result = InputService.validateSchema(schema, { foo: 'bar' });
+
+            expect(result).to.equal(true);
+        });
+        it('should throw ValidationError if schema is invalid', function () {
+            const schema = Joi.object({
+                foo: Joi.string().required(),
+            });
+            expect(() => InputService.validateSchema(schema, {})).to.throw(
+                Joi.ValidationError,
+                '"foo" is required'
+            );
+        });
+    });
 });
