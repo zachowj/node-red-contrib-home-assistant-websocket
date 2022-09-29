@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.45.1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.45.0...v0.45.1) (2022-09-29)
+
+
+### Bug Fixes
+
+* **sensor:** Fix attribute validation for sensor and binary sensor ([914b4b2](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/914b4b2b46a5863d06abef6a5cf0dc9f0522eff1)), closes [#669](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/669)
+
+
+### Documentation
+
+* Fix spelling in node list ([cde607f](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/cde607f9e7438a48fd86238bd318476f8f10afac))
+
 ## [0.45.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.44.0...v0.45.0) (2022-09-26)
 
 
