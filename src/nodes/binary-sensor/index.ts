@@ -57,24 +57,12 @@ const inputSchema: Joi.ObjectSchema = Joi.object({
             TypedInputTypes.Boolean
         )
         .required(),
-    attributes: Joi.array().items(
-        Joi.object({
-            property: Joi.string().required(),
-            value: Joi.any().required(),
-            valueType: Joi.string()
-                .valid(
-                    TypedInputTypes.Message,
-                    TypedInputTypes.Flow,
-                    TypedInputTypes.Global,
-                    TypedInputTypes.JSONata,
-                    TypedInputTypes.String,
-                    TypedInputTypes.Number,
-                    TypedInputTypes.Boolean,
-                    TypedInputTypes.Date
-                )
-                .required(),
-        })
-    ),
+    attributes: Joi.object().pattern(/.*/, [
+        Joi.string(),
+        Joi.number(),
+        Joi.boolean(),
+        Joi.object(),
+    ]),
 });
 
 export default function BinarySensor(this: BinarySensorNode, config: NodeDef) {
