@@ -55,13 +55,7 @@ const inputSchema: Joi.ObjectSchema = Joi.object({
             TypedInputTypes.Boolean
         )
         .default('msg'),
-    attributes: Joi.object().pattern(/.*/, [
-        Joi.string(),
-        Joi.number(),
-        Joi.boolean(),
-        Joi.object(),
-    ]),
-});
+}).unknown(true);
 
 export default function Sensor(this: SensorNode, config: NodeDef) {
     RED.nodes.createNode(this, config);

@@ -57,13 +57,7 @@ const inputSchema: Joi.ObjectSchema = Joi.object({
             TypedInputTypes.Boolean
         )
         .required(),
-    attributes: Joi.object().pattern(/.*/, [
-        Joi.string(),
-        Joi.number(),
-        Joi.boolean(),
-        Joi.object(),
-    ]),
-});
+}).unknown(true);
 
 export default function BinarySensor(this: BinarySensorNode, config: NodeDef) {
     RED.nodes.createNode(this, config);
