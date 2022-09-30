@@ -38,7 +38,6 @@ const inputs: NodeInputs = {
     attributes: {
         messageProp: 'payload.attributes',
         configProp: 'attributes',
-        default: [],
     },
 };
 
@@ -55,7 +54,35 @@ const inputSchema: Joi.ObjectSchema = Joi.object({
             TypedInputTypes.Boolean
         )
         .default('msg'),
-}).unknown(true);
+    attributes: Joi.alternatives().try(
+        // schema for config attributes
+        Joi.array().items(
+            Joi.object({
+                property: Joi.string().required(),
+                value: Joi.any().required(),
+                valueType: Joi.string()
+                    .valid(
+                        TypedInputTypes.Message,
+                        TypedInputTypes.Flow,
+                        TypedInputTypes.Global,
+                        TypedInputTypes.JSONata,
+                        TypedInputTypes.String,
+                        TypedInputTypes.Number,
+                        TypedInputTypes.Boolean,
+                        TypedInputTypes.Date
+                    )
+                    .required(),
+            })
+        ),
+        // schema for message attributes
+        Joi.object().pattern(/.*/, [
+            Joi.string(),
+            Joi.number(),
+            Joi.boolean(),
+            Joi.object(),
+        ])
+    ),
+});
 
 export default function Sensor(this: SensorNode, config: NodeDef) {
     RED.nodes.createNode(this, config);
