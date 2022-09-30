@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.45.3](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.45.2...v0.45.3) (2022-09-30)
+
+
+### Bug Fixes
+
+* Listen for the correct event states_loaded to publish entities ([ef48a68](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ef48a682268962ef237d7a2eb2a1b851c4332a1b)), closes [#672](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/672)
+* Make sure old style node using comparator service has access to states ([f25bebe](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f25bebe10876ba6b87900f1414593a437a04d751))
+
 ### [0.45.2](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.45.1...v0.45.2) (2022-09-29)
 
 
