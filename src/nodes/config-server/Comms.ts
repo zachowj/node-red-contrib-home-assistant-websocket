@@ -40,7 +40,7 @@ export default class Comms {
     startListeners(): void {
         this.#clientEvents.addListeners(this, [
             [HaEvent.ServicesUpdated, this.onServicesUpdated],
-            [ClientEvent.ServicesLoaded, this.onStatesLoaded],
+            [ClientEvent.StatesLoaded, this.onStatesLoaded],
             ['ha_events:state_changed', this.onStateChanged],
             [ClientEvent.Integration, this.onIntegrationEvent],
             [HaEvent.AreaRegistryUpdated, this.onAreaRegistryUpdate],
