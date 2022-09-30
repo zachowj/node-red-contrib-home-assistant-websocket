@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.45.4](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.45.3...v0.45.4) (2022-09-30)
+
+
+### Bug Fixes
+
+* Convert bool string to boolean when comparator is set to boolean ([e9dc0e3](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/e9dc0e3f8218c8dc90dbe1baa7bd8e2b5c64cae1)), closes [#671](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/671)
+
 ### [0.45.3](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.45.2...v0.45.3) (2022-09-30)
 
 
