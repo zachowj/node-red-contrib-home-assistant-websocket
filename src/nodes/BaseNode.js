@@ -61,7 +61,7 @@ class BaseNode {
         this.comparatorService = new ComparatorService({
             jsonataService,
             nodeRedContextService,
-            typedInputService,
+            homeAssistant: this.homeAssistant,
             transformState,
         });
         this.nodeRedContextService = nodeRedContextService;

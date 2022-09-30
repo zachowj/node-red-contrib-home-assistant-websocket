@@ -582,8 +582,8 @@ export default class Websocket {
 
     getStates(): HassEntities;
     getStates(entityId?: string): HassEntity | null;
-    getStates(entityId?: string): HassEntities | HassEntity | null {
-        if (entityId) {
+    getStates(entityId?: unknown): unknown {
+        if (typeof entityId === 'string') {
             return this.states[entityId]
                 ? cloneDeep(this.states[entityId])
                 : null;
