@@ -69,6 +69,8 @@ export default class ComparatorService {
                 entity,
                 prevEntity,
             });
+        } else if (comparatorValueDatatype === 'bool') {
+            cValue = comparatorValue === 'true';
         } else {
             if (
                 comparatorType === 'includes' ||
