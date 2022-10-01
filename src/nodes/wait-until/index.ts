@@ -100,7 +100,10 @@ const defaultInputSchema = Joi.object({
     comparator: Joi.string().valid(...Object.values(ComparatorType)),
     value: Joi.alternatives().try(Joi.string(), Joi.number()),
     valueType: Joi.string(),
-    timeout: Joi.string(),
+    timeout: Joi.alternatives()
+        .try(Joi.string(), Joi.number())
+        .allow('')
+        .default('0'),
     timeoutUnits: Joi.string().valid(...Object.values(TimeUnit)),
     checkCurrentState: Joi.boolean(),
 });
