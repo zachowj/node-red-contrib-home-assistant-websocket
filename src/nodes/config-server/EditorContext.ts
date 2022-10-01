@@ -64,7 +64,7 @@ export default class EditorContext {
             [ClientEvent.Running, this.onHaEventsRunning],
             [ClientEvent.StatesLoaded, this.onHaStatesLoaded],
             [HA_EVENT_SERVICES_UPDATED, this.onHaServicesUpdated],
-            [HaEvent.StateChanged, this.onHaStateChanged],
+            [`ha_events:${HaEvent.StateChanged}`, this.onHaStateChanged],
         ]);
     }
 
