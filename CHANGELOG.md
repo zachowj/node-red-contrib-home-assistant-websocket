@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.45.5](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.45.4...v0.45.5) (2022-10-01)
+
+
+### Bug Fixes
+
+* **wait-until:** Allow validation to accept a number or an empty string ([87a8846](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/87a884646bac99d0f2fd9b22086a6b3bfbacac1c))
+
 ### [0.45.4](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.45.3...v0.45.4) (2022-09-30)
 
 
