@@ -1,22 +1,97 @@
-import { NodeDef } from 'node-red';
+import Joi from 'joi';
 
+import { createControllerDependencies } from '../../common/controllers/helpers';
+import Events from '../../common/events/Events';
+import ComparatorService from '../../common/services/ComparatorService';
+import InputService, { NodeInputs } from '../../common/services/InputService';
+import State from '../../common/State';
+import Status from '../../common/status/Status';
+import TransformState, { TransformType } from '../../common/TransformState';
+import { ComparatorType, TypedInputTypes } from '../../const';
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
-import { Status } from '../../helpers/status';
-import { checkValidServerConfig } from '../../helpers/utils';
-import { BaseNode } from '../../types/nodes';
-import CurrentState from './controller';
+import { getServerConfigNode } from '../../helpers/node';
+import { getHomeAssistant } from '../../homeAssistant';
+import {
+    BaseNode,
+    BaseNodeProperties,
+    OutputProperty,
+} from '../../types/nodes';
+import CurrentStateController from './CurrentStateController';
 
-export default function currentStateNode(this: BaseNode, config: NodeDef) {
+export interface CurrentStateNodeProperties extends BaseNodeProperties {
+    halt_if: string;
+    halt_if_type: string;
+    halt_if_compare: ComparatorType;
+    entity_id: string;
+    state_type: TransformType;
+    blockInputOverrides: boolean;
+    outputProperties: OutputProperty[];
+    for: string;
+    forType: TypedInputTypes;
+    forUnits: string;
+}
+
+export interface CurrentStateNode extends BaseNode {
+    config: CurrentStateNodeProperties;
+}
+
+const inputs: NodeInputs = {
+    entityId: {
+        messageProp: ['payload.entity_id', 'payload.entityId'],
+        configProp: 'entity_id',
+    },
+};
+
+const inputSchema: Joi.ObjectSchema = Joi.object({
+    entityId: Joi.string().required(),
+});
+
+export default function currentStateNode(
+    this: CurrentStateNode,
+    config: CurrentStateNodeProperties
+): void {
     RED.nodes.createNode(this, config);
 
     this.config = migrate(config);
-    checkValidServerConfig(this, this.config.server);
-    const status = new Status(this);
-    this.controller = new CurrentState({
+    const serverConfigNode = getServerConfigNode(this.config.server);
+    const homeAssistant = getHomeAssistant(serverConfigNode);
+    const nodeEvents = new Events({ node: this, emitter: this });
+
+    const state = new State(this);
+    const status = new Status({
+        config: serverConfigNode.config,
         node: this,
-        config: this.config,
-        RED,
+        nodeEvents,
+        state,
+    });
+    const inputService = new InputService<CurrentStateNodeProperties>({
+        inputs,
+        nodeConfig: this.config,
+        schema: inputSchema,
+    });
+    if (this.config.blockInputOverrides) {
+        inputService.disableInputOverrides();
+    }
+    const controllerDeps = createControllerDependencies(this, homeAssistant);
+    const transformState = new TransformState(
+        serverConfigNode.config.ha_boolean
+    );
+    const comparatorService = new ComparatorService({
+        nodeRedContextService: controllerDeps.nodeRedContextService,
+        homeAssistant,
+        jsonataService: controllerDeps.jsonataService,
+        transformState,
+    });
+
+    // eslint-disable-next-line no-new
+    new CurrentStateController({
+        comparatorService,
+        homeAssistant,
+        inputService,
+        node: this,
         status,
+        transformState,
+        ...controllerDeps,
     });
 }

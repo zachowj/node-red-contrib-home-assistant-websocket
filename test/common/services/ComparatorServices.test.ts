@@ -258,6 +258,26 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.false;
                 });
+                it('should return true when comparing two same booleans', function () {
+                    const result = comparatorService.getComparatorResult(
+                        'is',
+                        'true',
+                        true,
+                        'bool'
+                    );
+
+                    expect(result).to.be.true;
+                });
+                it('should return false when comparing two different booleans', function () {
+                    const result = comparatorService.getComparatorResult(
+                        'is',
+                        'true',
+                        false,
+                        'bool'
+                    );
+
+                    expect(result).to.be.false;
+                });
             });
             describe('is not', function () {
                 it('should return false when comparing equal values', function () {

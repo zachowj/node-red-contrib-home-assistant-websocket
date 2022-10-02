@@ -34,6 +34,9 @@ export enum ComparatorType {
     IsGreaterThanOrEqual = 'gte',
     Includes = 'includes',
     DoesNotInclude = 'does_not_include',
+    Contains = 'cont',
+    StartsWith = 'starts_with',
+    InGroup = 'in_group',
     JSONata = 'jsonata',
 }
 

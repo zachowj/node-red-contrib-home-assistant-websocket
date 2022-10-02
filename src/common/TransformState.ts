@@ -1,4 +1,4 @@
-export enum DataType {
+export enum TransformType {
     Boolean = 'bool',
     Home_Assistant_Boolean = 'habool',
     List = 'list',
@@ -14,23 +14,23 @@ export default class TransformState {
         this.#haBooleans = haBooleans;
     }
 
-    transform(datatype: DataType, value: string) {
+    transform(datatype: TransformType, value: string) {
         if (!datatype) return value;
 
         switch (datatype) {
-            case DataType.Number:
+            case TransformType.Number:
                 return parseFloat(value);
-            case DataType.String:
+            case TransformType.String:
                 return value + '';
-            case DataType.Boolean:
+            case TransformType.Boolean:
                 return !!value;
-            case DataType.Home_Assistant_Boolean: {
+            case TransformType.Home_Assistant_Boolean: {
                 const regex = `^(${this.#haBooleans})$`;
                 return new RegExp(regex, 'i').test(value);
             }
-            case DataType.Regexp:
+            case TransformType.Regexp:
                 return new RegExp(value);
-            case DataType.List:
+            case TransformType.List:
                 return value ? value.split(',').map((e) => e.trim()) : [];
             default:
                 return value;

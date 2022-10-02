@@ -3,7 +3,7 @@ import selectn from 'selectn';
 import { HassEntity } from 'types/home-assistant';
 
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
-import TransformState, { DataType } from '../TransformState';
+import TransformState, { TransformType } from '../TransformState';
 import JSONataService from './JSONataService';
 import NodeRedContextService, {
     isContextLocation,
@@ -35,7 +35,7 @@ export default class ComparatorService {
     getComparatorResult(
         comparatorType: string, // is, is not, less, greater, less or equal, greater or equal
         comparatorValue: string, // user entered value
-        actualValue: string, // value to compare against, state
+        actualValue: any, // value to compare against, state
         comparatorValueDatatype: string, // datatype of the comparator value, str, num, bool
         {
             message,
@@ -80,7 +80,7 @@ export default class ComparatorService {
             }
 
             cValue = this.#transformState.transform(
-                comparatorValueDatatype as DataType,
+                comparatorValueDatatype as TransformType,
                 comparatorValue
             );
         }

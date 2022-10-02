@@ -46,11 +46,11 @@ Stop msg.payload values from overriding local config
 
 ## Inputs
 
-### payload.entity_id
+### payload.entityId
 
 - Type : `string`
 
-  Overrides or sets the entity_id for which the current state is being fetched
+  Overrides or sets the entity id for which the current state is being fetched
 
 ## Outputs
 
