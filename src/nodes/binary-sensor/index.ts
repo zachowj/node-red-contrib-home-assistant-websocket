@@ -24,7 +24,7 @@ export interface BinarySensorNode extends SensorBaseNode {
     config: BinarySensorNodeProperties;
 }
 
-const inputs: NodeInputs = {
+export const inputs: NodeInputs = {
     state: {
         messageProp: 'payload.state',
         configProp: 'state',
@@ -42,7 +42,7 @@ const inputs: NodeInputs = {
     },
 };
 
-const inputSchema: Joi.ObjectSchema = Joi.object({
+export const inputSchema: Joi.ObjectSchema = Joi.object({
     state: Joi.alternatives()
         .try(Joi.string(), Joi.boolean(), Joi.number())
         .required(),
