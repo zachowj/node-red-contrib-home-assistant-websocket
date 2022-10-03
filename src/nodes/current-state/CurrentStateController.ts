@@ -132,7 +132,10 @@ export default class CurrentStateController extends InputOutputController<
         );
 
         if (isNaN(value) || value < 0) {
-            throw new InputError(`Invalid for value: ${value}`, 'error');
+            throw new InputError(
+                `Invalid for value: ${value}`,
+                'home-assistant.status.error'
+            );
         }
 
         return getTimeInMilliseconds(value, this.node.config.forUnits);

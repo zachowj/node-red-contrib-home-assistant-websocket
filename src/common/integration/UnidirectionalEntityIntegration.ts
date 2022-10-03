@@ -212,7 +212,9 @@ export default class UnidirectionalIntegration extends Integration {
     protected async registerEntity() {
         if (!this.isIntegrationLoaded) {
             this.entityConfigNode.error(this.notInstallMessage);
-            this.status.forEach((status) => status.setFailed('Error'));
+            this.status.forEach((status) =>
+                status.setFailed('home-assistant.status.error')
+            );
             return;
         }
 
