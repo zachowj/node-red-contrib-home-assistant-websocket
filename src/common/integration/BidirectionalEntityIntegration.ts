@@ -72,12 +72,9 @@ export default class BidirectionalIntegration extends Integration {
     }
 
     protected async unregisterEntity() {
-        this.entityConfigNode.debug(
-            `Unregistering ${this.entityConfigNode.config.entityType} node from HA`
-        );
-
-        this.#unsubscribe?.();
+        await this.#unsubscribe?.();
         this.#unsubscribe = undefined;
+        await super.unregisterEntity();
     }
 
     public async updateHomeAssistant() {
