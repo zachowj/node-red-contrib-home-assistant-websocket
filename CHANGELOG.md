@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.45.8](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.45.7...v0.45.8) (2022-10-03)
+
+
+### Bug Fixes
+
+* Send saved switch state on registration ([296bd37](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/296bd3718151b2e59be09838600519b03763deae)), closes [#685](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/685)
+
 ### [0.45.7](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.45.6...v0.45.7) (2022-10-02)
 
 
