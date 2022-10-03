@@ -148,6 +148,29 @@ export default class UnidirectionalIntegration extends Integration {
         };
     }
 
+    protected getStateData(state?: State): Partial<EntityMessage> {
+        if (!state) {
+            return {};
+        }
+
+        let data: Partial<EntityMessage> = {};
+
+        switch (this.entityConfigNode.config.entityType) {
+            case EntityType.BinarySensor:
+            case EntityType.Sensor: {
+                if (this.entityConfigNode.config.resend && state) {
+                    const lastPayload = state.getLastPayload();
+                    if (lastPayload) {
+                        data = { ...lastPayload };
+                    }
+                }
+                break;
+            }
+        }
+
+        return data;
+    }
+
     protected getDiscoveryPayload({
         config,
         remove,
@@ -159,7 +182,8 @@ export default class UnidirectionalIntegration extends Integration {
     }): DiscoveryMessage {
         const deviceInfo = this.getDeviceInfo();
 
-        let message: DiscoveryMessage = {
+        const message: DiscoveryMessage = {
+            ...this.getStateData(state),
             type: MessageType.Discovery,
             server_id: this.entityConfigNode.config.server,
             node_id: this.entityConfigNode.id,
@@ -168,11 +192,6 @@ export default class UnidirectionalIntegration extends Integration {
             remove,
             device_info: deviceInfo,
         };
-
-        const lastPayload = state?.getLastPayload();
-        if (lastPayload) {
-            message = { ...lastPayload, ...message };
-        }
 
         return message;
     }
@@ -203,7 +222,7 @@ export default class UnidirectionalIntegration extends Integration {
 
         const payload = this.getDiscoveryPayload({
             config,
-            state: this.entityConfigNode.config.resend ? this.state : undefined,
+            state: this.state,
         });
 
         // this.node.debugToClient(payload);

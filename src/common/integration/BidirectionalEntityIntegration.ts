@@ -1,6 +1,8 @@
+import { EntityType } from '../../const';
 import { RED } from '../../globals';
 import { HaEvent } from '../../homeAssistant/index';
 import { SubscriptionUnsubscribe } from '../../types/home-assistant';
+import State from '../State';
 import { createHaConfig } from './helpers';
 import { MessageType } from './Integration';
 import Integration, { EntityMessage } from './UnidirectionalEntityIntegration';
@@ -40,6 +42,7 @@ export default class BidirectionalIntegration extends Integration {
         try {
             const payload = this.getDiscoveryPayload({
                 config: haConfig,
+                state: this.state,
             });
             this.entityConfigNode.debug(
                 `Registering ${this.entityConfigNode.config.entityType} node with Home Assistant`
@@ -111,5 +114,21 @@ export default class BidirectionalIntegration extends Integration {
                 break;
             }
         }
+    }
+
+    protected getStateData(state?: State): Partial<EntityMessage> {
+        if (!state) {
+            return {};
+        }
+
+        const data: Partial<EntityMessage> = {};
+
+        switch (this.entityConfigNode.config.entityType) {
+            case EntityType.Switch:
+                data.state = state.isEnabled();
+                break;
+        }
+
+        return data;
     }
 }
