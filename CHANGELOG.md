@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.45.9](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.45.8...v0.45.9) (2022-10-03)
+
+
+### Bug Fixes
+
+* Remove entity from HA when entity config is deleted ([d78851b](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d78851b943bb22dc86ac70b4b86aff853bbf5265))
+
 ### [0.45.8](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.45.7...v0.45.8) (2022-10-03)
 
 
