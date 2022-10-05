@@ -6,6 +6,7 @@ const sensorDeviceClasses = [
     'carbon_monoxide',
     'current',
     'date',
+    'distance',
     'duration',
     'energy',
     'frequency',
@@ -25,11 +26,14 @@ const sensorDeviceClasses = [
     'pressure',
     'reactive_power',
     'signal_strength',
+    'speed',
     'sulphur_dioxide',
     'temperature',
     'timestamp',
     'volatile_organic_compounds',
     'voltage',
+    'volume',
+    'weight',
 ] as const;
 
 //  ISO 4217	Monetary value with a currency.
@@ -49,6 +53,7 @@ export const sensorUnitOfMeasurement: Record<
     carbon_monoxide: ['ppm'],
     current: ['A'],
     date: null,
+    distance: ['km', 'm', 'cm', 'mm', 'mi', 'yd', 'in'],
     duration: ['d', 'h', 'min', 's'],
     energy: ['Wh', 'kWh', 'MWh'],
     frequency: ['Hz', 'kHz', 'MHz', 'GHz'],
@@ -68,11 +73,14 @@ export const sensorUnitOfMeasurement: Record<
     pressure: ['cbar', 'bar', 'hPa', 'inHg', 'kPa', 'mbar', 'Pa', 'psi'],
     reactive_power: ['var'],
     signal_strength: ['dB', 'dBm'],
+    speed: ['ft/s', 'in/d', 'in/h', 'km/h', 'kn', 'm/s', 'mm/d', 'mph'],
     sulphur_dioxide: ['µg/m³'],
     temperature: ['°C', '°F'],
     timestamp: null,
     volatile_organic_compounds: ['µg/m³'],
     voltage: ['V'],
+    volume: ['fl. oz.', 'ft³', 'gal', 'L', 'mL', 'm³'],
+    weight: ['g', 'kg', 'lb', 'mg', 'oz', 'µg'],
 };
 
 export default [
