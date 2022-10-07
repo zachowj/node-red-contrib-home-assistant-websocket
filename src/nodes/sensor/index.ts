@@ -43,6 +43,7 @@ export default function Sensor(this: SensorNode, config: NodeDef) {
         node: this,
         state,
     });
+    clientEvents.setStatus(status);
     const controllerDeps = createControllerDependencies(this, homeAssistant);
     const inputService = new InputService<SensorNodeProperties>({
         inputs,

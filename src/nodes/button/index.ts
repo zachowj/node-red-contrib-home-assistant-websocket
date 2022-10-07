@@ -44,6 +44,7 @@ export default function buttonNode(
         node: this,
         state,
     });
+    clientEvents.setStatus(status);
     const entityEvents = new Events({
         node: this,
         emitter: this,

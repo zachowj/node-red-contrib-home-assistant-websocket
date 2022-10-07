@@ -107,6 +107,8 @@ export default function BinarySensor(this: BinarySensorNode, config: NodeDef) {
         node: this,
         state,
     });
+    clientEvents.setStatus(status);
+
     const controllerDeps = createControllerDependencies(this, homeAssistant);
     const inputService = new InputService<BinarySensorNodeProperties>({
         inputs,

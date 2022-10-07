@@ -126,6 +126,7 @@ export default function waitUntilNode(this: WaitUntilNode, config: NodeDef) {
         nodeEvents,
         state,
     });
+    clientEvents.setStatus(status);
     const inputService = new InputService<WaitUntilNodeProperties>({
         inputs,
         nodeConfig: this.config,
