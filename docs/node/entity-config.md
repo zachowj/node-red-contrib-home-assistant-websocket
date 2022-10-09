@@ -13,7 +13,7 @@ The name of the entity that will show in Node-RED
 ### Device
 
 - Type: `string`
-- [device config documentation](./device-config.md)
+- [device config documentation](/node/device-config.md)
 
 A list of devices the entity can be associated with. This is used to group entities together in the UI.
 
