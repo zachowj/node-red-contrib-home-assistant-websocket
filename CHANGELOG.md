@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.46.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.45.10...v0.46.0) (2022-10-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* Dropping support for Node 12 and NR v1 and v2
+
+### Bug Fixes
+
+* Allow editor context to handle large number of entities ([0d496e2](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/0d496e26da51125511a98a8e9f2f4644ff37c62d)), closes [#696](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/696)
+
+
+### chore
+
+* Drop support for Node 12 and NR v1 and v2 ([5dbe2f5](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/5dbe2f5a42c38ef365ab790b0ab8221edb0bf674))
+
 ### [0.45.10](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.45.9...v0.45.10) (2022-10-07)
 
 
