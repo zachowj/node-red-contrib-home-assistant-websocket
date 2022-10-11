@@ -1,37 +1,79 @@
 # Development
 
-An environment with Home Assistant/Node Red can be easily spun up using docker and docker-compose along with built in VSCode debug enabled.
+Also see [CONTRIBUTING.md](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/blob/main/CONTRIBUTING.md).
 
-1. Clone this repository: `git clone https://github.com/zachowj/node-red-contrib-home-assistant-websocket.git`
-2. Install node dependencies as usual: `cd node-red-contrib-home-assistant-websocket && npm`
-3. Start the docker dev environment: `npm run dev`
-   a. _Note: First run will take a bit to download the images ( home-assistants image is over 1gb (yikes!) after that launch is much quicker)_
-   b. _Note: Also first run load of HomeAssistant web interface seems very slow, but after first time it's also much faster_
-4. The `npm run dev` command will leave you with a terminal spitting out logs, `ctrl+c` out of this and it kills all the servers by design, just run `npm run dev` again to pick back up. The following services and ports are launched in the `dev` script
+## Environment setup
 
-| service        | port mappings            | info                                                                                                                            |
-| -------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
-| home-assistant | `8123:8123`, `8300:8300` | exposed for local access via browser                                                                                            |
-| node-red       | `1880:1880`, `9123:9229` | exposed for local access via browser, `9123` is used for debugging. Includes default flow example connected to `home-assistant` |
+Here are the steps to successfully setup your development environment to contribute to this project
 
-## Docker Tips
+### Setup using the VS Code dev container
 
-1. If you run into environment issues running `npm run dev:clean` should remove all docker data and get you back to a clean state
-2. All data will be discarded when the docker container is removed. You can map volumes locally to persist data. Create and copy as directed below then modify `docker-compose.yaml` to map the container directories to the created host dirs below. _See: `./_docker/docker-compose.mapped.yaml` for an example or just use that file to launch manually_
+This will set up a docker container with all the required tools and dependencies to get started.
 
-```bash
-$ mkdir -p _docker-volumes/home-assistant/config
-$ mkdir -p _docker-volumes/node-red/data
-$ cp _docker/home-assistant/root-fs/config/* _docker-volumes/home-assistant/config/
-$ cp _docker/node-red/root-fs/data/*  _docker-volumes/node-red/data
-```
+1. Go to the [Node-RED Home Assistant](https://github.com/zachowj/node-red-contrib-home-assistant-websocket) repository and fork it.
 
-## Node Debugger via VSCode
+1. Clone your forked repository to your local machine.
 
-Optional but it's pretty nice if you have VSCode installed.
+   ```sh
+   git clone https://github.com/<GITHUB_USER_NAME>/node-red-contrib-home-assistant-websocket
+   ```
 
-- Open the project directory in VSCode
-- Go to the debug tab ( or `cmd/ctrl+shift+d`)
-- In the debug tab you should see an target for "Attach: Docker", run that guy and you can place debug breakpoints and changes will be reloaded within docker automatically
-- Open [http://localhost:8123](http://localhost:8123) for HomeAssistant (password is `password` by default).
-- For node-red either open up via the HomeAssistant web link or left hand menu or just open a browser tab to [http://localhost:1880](http://localhost:1880)
+1. Open the project in VS Code.
+
+1. Install the [Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension.
+
+1. Click the green button in the lower-left corner of the window that says "Reopen in Container".
+
+1. Wait for the container to build and start.
+
+1. Open a terminal in VS Code and run `npm run dev` to start the development server.
+
+### Setup locally
+
+1. Go to the [Node-RED Home Assistant](https://github.com/zachowj/node-red-contrib-home-assistant-websocket) repository and fork it.
+
+1. Clone your forked repository to your local machine.
+
+   ```sh
+   git clone https://github.com/zachowj/node-red-contrib-home-assistant-websocket
+   ```
+
+1. create an npm link to your forked project. This will also build this project's dependencies.
+
+   ```sh
+   cd node-red-contrib-home-assistant-websocket
+   npm link
+   ```
+
+1. [Install](https://nodered.org/docs/getting-started/local) Node-RED on localhost, assuming we install it on ~/dev directory (you can install it in another location as you wish)
+
+   ```sh
+   cd ~/dev/node-red
+   npm install -g --unsafe-perm node-red
+   ```
+
+1. Install your fork project into local Node-RED using npm link:
+
+   ```sh
+   cd ~/dev/node-red
+   npm link node-red-contrib-home-assistant-websocket
+   ```
+
+1. Starting Node-RED on localhost
+
+   ```sh
+   cd ~/dev/node_modules/node-red
+   npm run dev
+   ```
+
+### Accessing
+
+After running `npm run dev` Node-RED will be running on ports 1880 and 3000. You can access the development server at http://localhost:1880 or http://localhost:3000 either port can be used. On port 3000 browser-sync is running and will reload the browser when changes are made to the editor source code.
+
+### Linting
+
+This project uses [ESLint](https://eslint.org/) and [Prettier](https://prettier.io/) to lint and format the code. You can run `npm run lint` to lint the code.
+
+### Testing
+
+1. Run `npm run test` to run the tests.
