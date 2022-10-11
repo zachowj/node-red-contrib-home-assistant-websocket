@@ -65,7 +65,7 @@ const nodes: Record<NodeType, any> = {
     [NodeType.UpdateConfig]: updateConfigNode,
 };
 
-export = async (RED: NodeAPI): Promise<void> => {
+export default async (RED: NodeAPI): Promise<void> => {
     setRED(RED);
     createRoutes();
 

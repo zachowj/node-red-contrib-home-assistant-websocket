@@ -1,8 +1,8 @@
 import { NodeMessage } from 'node-red';
 import selectn from 'selectn';
-import { HassEntity } from 'types/home-assistant';
 
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
+import { HassEntity } from '../../types/home-assistant';
 import TransformState, { TransformType } from '../TransformState';
 import JSONataService from './JSONataService';
 import NodeRedContextService, {

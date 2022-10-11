@@ -7,7 +7,7 @@
     "lib": ["es2016", "dom", "es6"],
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
-    "forceConsistentCasingInFileNames": true
-  },
-  "files": ["src/editor.ts"]
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
+  }
 }
