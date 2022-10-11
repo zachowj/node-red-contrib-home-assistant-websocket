@@ -48,9 +48,33 @@ having zero conditions is a valid option. Each custom output can send the
 default message or a custom message. Also, each one can have its constraint
 on whether or not to be sent.
 
+### Output on connect
+
+- Type: `boolean`
+
+Output once on startup/deployment.
+
+### Enable input
+
+- Type: `boolean`
+
+Enable the input to be used to send a message to the node.
+
+### Output debug information
+
+- Type: `boolean`
+
+Output debug information to the debug tab.
+
+### Expose to Home Assistant
+
+- Type: `boolean`
+
+Expose the node to Home Assistant.
+
 ## Input
 
-Input is disabled by default. It can be enabled using the `Enable Input` option.
+Input is disabled by default. It can be enabled using the `Enable Input` option. Input can be used to [enable/disable](#enable-disable) the node or for [testing](#testing).
 
 ### Enable / Disable
 
@@ -58,12 +82,6 @@ Input is disabled by default. It can be enabled using the `Enable Input` option.
 
 If the incoming payload or message is a string and equal to `enable` or `disable` then set the node accordingly.
 Saves over restarts.
-
-### Output Initially
-
-- Type: `boolean`
-
-Output once on startup/deploy.
 
 ## Output
 
@@ -87,7 +105,7 @@ The original home assistant event containing `entity_id` `new_state` and `old_st
 
 ## Testing
 
-To test automation without having to manually change state in-home assistant send an input `payload` as an object which contains `entity_id`, `new_state`, and `old_state` properties. This will trigger the node as if the event came from Home Assistant.
+To test automation without having to manually change the state in home assistant send an input `payload` as an object which contains `entity_id`, `new_state`, and `old_state` properties. This will trigger the node as if the event came from Home Assistant.
 
 ```json
 {
