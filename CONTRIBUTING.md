@@ -1,75 +1,100 @@
-# Contributing to Node Red Home Assistant
+# Contributing
 
-Please take a moment to review this document in order to make the contribution process easy and effective for everyone involved.
+When contributing to this repository, please first discuss the change you wish to make via [GitHub Discussions](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/discussions/categories/feature-request).
 
-Following these guidelines helps to communicate that you respect the time of the developers managing and developing this open source project. In return, they should reciprocate that respect in addressing your issue, assessing changes, and helping you finalize your pull requests.
+## Development environment setup
 
-## Using the issue tracker
+Here are the steps to successfully setup your development environment to contribute to this project
 
-The issue tracker is the preferred channel for [bug reports](#bug-reports), [features requests](#features-requets) and [submitting pull requests](#pull-requests). Currently [support issues](#support-issues) are acceptable in the issue tracker as well although this may change in the future to cut down on the noise.
+### Setup using the VS Code dev container
 
-## Bug reports
+This will set up a docker container with all the required tools and dependencies to get started.
 
-A bug is a _demonstrable problem_ that is caused by the code in the repository. Good bug reports are extremely helpful - thank you!
+1. Go to the [Node-RED Home Assistant](https://github.com/zachowj/node-red-contrib-home-assistant-websocket) repository and fork it.
 
-Guidelines for bug reports:
+1. Clone your forked repository to your local machine.
 
-1. **Use the GitHub issue search** &mdash; check if the issue has already been reported.
-2. **Check if the issue has been fixed** &mdash; try to reproduce it using the latest `dev` branch in the repository.
-3. **Isolate the problem** &mdash; ideally create a reduced test case, an example flow in node-red that you can add to the issue is preferred.
-
-A good bug report shouldn't leave others needing to chase you up for more information. Please try to be as detailed as possible in your report. What is your environment? What steps will reproduce the issue? What OS experiences the problem? What would you expect to be the outcome? All these details will help people to fix any potential bugs. Fill out all the information you can when presented with the Bug Issue template.
-
-## Feature requests
-
-Feature requests are welcome. But take a moment to find out whether your idea fits with the scope and aims of the project. It's up to _you_ to make a strong case to convince the project's developers of the merits of this feature. Please provide as much detail and context as possible.
-
-## Pull requests
-
-Good pull requests - patches, improvements, new features - are a fantastic help. They should remain focused in scope and avoid containing unrelated commits.
-
-**Please ask first** before embarking on any significant pull request (e.g. implementing features, refactoring code), otherwise you risk spending a lot of time working on something that the project's developers might not want to merge into the project.
-
-### For new Contributors
-
-If you never created a pull request before, welcome :tada: :smile: [Here is a great tutorial](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github) on how to send one :)
-
-1. [Fork](http://help.github.com/fork-a-repo/) the project, clone your fork, and configure the remotes:
-
-   ```bash
-   # Clone your fork of the repo into the current directory
-   git clone https://github.com/<your-username>/<repo-name>
-   # Navigate to the newly cloned directory
-   cd <repo-name>
-   # Assign the original repo to a remote called "upstream"
-   git remote add upstream https://github.com/zachowj/node-red-contrib-home-assistant-websocket
+   ```sh
+   git clone https://github.com/<GITHUB_USER_NAME>/node-red-contrib-home-assistant-websocket
    ```
 
-2. If you cloned a while ago, get the latest changes from upstream:
+1. Open the project in VS Code.
 
-   ```bash
-   git checkout dev
-   git pull upstream dev
+1. Install the [Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension.
+
+1. Click the green button in the lower-left corner of the window that says "Reopen in Container".
+
+1. Wait for the container to build and start.
+
+1. Open a terminal in VS Code and run `npm run dev` to start the development server.
+
+### Setup locally
+
+1. Go to the [Node-RED Home Assistant](https://github.com/zachowj/node-red-contrib-home-assistant-websocket) repository and fork it.
+
+1. Clone your forked repository to your local machine.
+
+   ```sh
+   git clone https://github.com/zachowj/node-red-contrib-home-assistant-websocket
    ```
 
-3. Create a new topic branch (off the main project development branch) to contain your feature, change, or fix:
+1. create an npm link to your forked project. This will also build this project's dependencies.
 
-   ```bash
-   git checkout -b <topic-branch-name>
+   ```sh
+   cd node-red-contrib-home-assistant-websocket
+   npm link
    ```
 
-4. If you added or changed a feature, make sure to document it accordingly in the `README.md` file.
+1. [Install](https://nodered.org/docs/getting-started/local) Node-RED on localhost, assuming we install it on ~/dev directory (you can install it in another location as you wish)
 
-5. Push your topic branch up to your fork:
-
-   ```bash
-   git push origin <topic-branch-name>
+   ```sh
+   cd ~/dev/node-red
+   npm install -g --unsafe-perm node-red
    ```
 
-6. [Open a Pull Request](https://help.github.com/articles/using-pull-requests/) with a clear title and description.
+1. Install your fork project into local Node-RED using npm link:
 
-## Support Issues
+   ```sh
+   cd ~/dev/node-red
+   npm link node-red-contrib-home-assistant-websocket
+   ```
 
-At some point, if the need is apparent, the project may get another venue to foster discussion and help each other with support issues at which point support issues will no longer be accepted in the github issues interface. Until that happens feel free to submit your support issues if they are unique and you are stuck.
+1. Starting Node-RED on localhost
 
-Examples of support issues are thing like server communication errors, something that only happens "in your environment" (not directly code related). A lot of support issues have already been logged and solved so make sure to search previous issues (including closed issues) first and also read the README.md file here. If applicable please fully document how the issue was resolved, this will help others in the future.
+   ```sh
+   cd ~/dev/node_modules/node-red
+   npm run dev
+   ```
+
+### Accessing the development server
+
+Node-RED will be running on ports 1880 and 3000. You can access the development server at http://localhost:1880. On port 3000 browser-sync is running and will reload the browser when changes are made to the editor source code.
+
+## Issues and feature requests
+
+You've found a bug in the source code, a mistake in the documentation or maybe you'd like a new feature? Take a look at [GitHub Discussions](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/discussions) to see if it's already being discussed. You can help us by [submitting an issue on GitHub](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues). Before you create an issue, make sure to search the issue archive -- your issue may have already been addressed!
+
+Please try to create bug reports that are:
+
+- _Reproducible._ Include steps to reproduce the problem.
+- _Specific._ Include as much detail as possible: which version, what environment, etc.
+- _Unique._ Do not duplicate existing opened issues.
+- _Scoped to a Single Bug._ One bug per report.
+
+**Even better: Submit a pull request with a fix or new feature!**
+
+### How to submit a Pull Request
+
+1. Search our repository for open or closed
+   [Pull Requests](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/pulls)
+   that relates to your submission. You don't want to duplicate effort.
+2. Fork the project
+3. Create your feature branch (`git checkout -b feat/amazing_feature`)
+4. Commit your changes (`git commit -m 'feat: add amazing_feature'`)  
+   node-red-contrib-home-assistant-websocket uses [conventional commits](https://www.conventionalcommits.org), so please follow the specification in your commit messages.
+5. Push to the branch (`git push origin feat/amazing_feature`)
+6. [Open a Pull Request](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare?expand=1)
+
+### Testing
+
+1. Run `npm run test` to run the tests.

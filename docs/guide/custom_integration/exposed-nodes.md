@@ -1,4 +1,4 @@
-# Event Nodes
+# Exposed Nodes
 
 ## Available to all event nodes
 

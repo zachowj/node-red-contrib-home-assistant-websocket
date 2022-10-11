@@ -64,9 +64,24 @@ There's a custom function in JSONata inside Home Assistant nodes that allows the
 - `$entities()` returns all entities in the cache
 - `$entities("entity_id")` returns a single entity from the cache matching the passed in `entity_id`
 
+#### Example of getting the friendly name of an entity
+
+```json
+{ "message": "The " & $entities("binary_sensor.front_door").attributes.friendly_name & " has been opened." }
+```
+
+#### Example of getting friendly names of all the lights and switches with an `on` state
+
+```json
+{
+     "message": "The " & $join($entities().*[state = "on" and entity_id ~> /^light|^switch/].attributes.friendly_name, ", ") & " are on.",
+     "title": "Left On"
+}
+```
+
 ### Doing arithmetic
 
-Home Assistant states are represented as strings so to be able to do arithmetic on them in JSONata they will need to be cast to a number first use [`$number()`](https://docs.jsonata.org/numeric-functions#number). Most attributes of entities are in their correct state but never hurt to be safe and cast them as a number.
+Home Assistant states are represented as strings so to be able to do arithmetic on them in JSONata they will need to be cast to a number first use [`$number()`](https://docs.jsonata.org/numeric-functions#number). Most attributes of entities are in their correct state but it never hurts to be safe and cast them as a number.
 
 `$number($entities("sensor.kitchen_lux").state)`
 
