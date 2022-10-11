@@ -12,7 +12,6 @@ An advanced version of the `server:state-changed` node
 ### Entity ID <Badge text="required"/>
 
 - Type: `string`
-- Accepts [Mustache Templates](/guide/mustache-templates.md)
 
 The id of an entity to use for the comparison.
 
