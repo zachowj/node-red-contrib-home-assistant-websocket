@@ -14,13 +14,13 @@ A name for the node.
 
 - Type: `string`
 
-The node id of a [Server Config](./config-server.md) node.
+The node id of a [Server Config](/node/config-server.md) node.
 
 ### Entity Config
 
 - Type: `string`
 
-The node id of an [entity config](./entity-config.md). This can be overridden by the `payload.id` property on the msg object.
+The node id of an [entity config](/node/entity-config.md). This can be overridden by the `payload.id` property on the msg object.
 
 ## Inputs
 
