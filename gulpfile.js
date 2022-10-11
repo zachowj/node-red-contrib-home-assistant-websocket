@@ -234,24 +234,20 @@ const buildHelp = lazypipe()
 
         // Change relative links to the full address of docs
         $('a').each((i, item) => {
-            const href = $(item).attr('href');
-            if (href.startsWith('.') || href.startsWith('/')) {
-                $(item)
+            const $item = $(item);
+            const href = $item.attr('href');
+            if (href.startsWith('#')) {
+                $item.replaceWith($item.text());
+            } else if (href.startsWith('.') || href.startsWith('/')) {
+                $item
                     .attr('href', `${docsUrl}${href.replace('.md', '.html')}`)
                     .attr('rel', 'noopener noreferrer');
             }
         });
 
         $('h3').each((i, item) => {
-            const h3 = $(item);
-            const items = h3.nextUntil('h3');
-            // Remove Changelog from the end of the file
-            if (h3.text().toLowerCase() !== 'Changelog'.toLowerCase()) {
-                items.wrapAll('<dl class="message-properties" />');
-            } else {
-                h3.remove();
-                items.remove();
-            }
+            const items = $(item).nextUntil('h3');
+            items.wrapAll('<dl class="message-properties" />');
         });
 
         // Convert <p> inside <dl> to <dd>
