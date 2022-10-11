@@ -1,23 +1,26 @@
 import { defineUserConfig } from 'vuepress';
-import type { DefaultThemeOptions } from 'vuepress';
-import path from 'path';
+import { defaultTheme } from '@vuepress/theme-default';
+import { googleAnalyticsPlugin } from '@vuepress/plugin-google-analytics';
+import { registerComponentsPlugin } from '@vuepress/plugin-register-components';
+import { copyCodePlugin } from 'vuepress-plugin-copy-code2';
+import { searchPlugin } from '@vuepress/plugin-search';
+import { getDirname, path } from '@vuepress/utils';
 
-export default defineUserConfig<DefaultThemeOptions>({
+const __dirname = getDirname(import.meta.url);
+
+export default defineUserConfig({
     base: '/node-red-contrib-home-assistant-websocket/',
     title: 'node-red-contrib-home-assistant-websocket',
     description:
         'Node-RED integration with Home Assistant through the WebSocket and HTTP API',
     head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
     plugins: [
-        ['@vuepress/plugin-google-analytics', { id: 'G-T0F3RKFVF3' }],
-        ['vuepress-plugin-copy-code2', {}],
-        [
-            '@vuepress/register-components',
-            {
-                componentsDir: path.resolve(__dirname, './components'),
-            },
-        ],
-        ['@vuepress/plugin-search'],
+        googleAnalyticsPlugin({ id: 'G-T0F3RKFVF3' }),
+        copyCodePlugin(),
+        registerComponentsPlugin({
+            componentsDir: path.resolve(__dirname, './components'),
+        }),
+        searchPlugin(),
     ],
     markdown: {
         code: {
@@ -31,13 +34,12 @@ export default defineUserConfig<DefaultThemeOptions>({
                 ),
         },
     },
-    theme: '@vuepress/theme-default',
-    themeConfig: {
+    theme: defaultTheme({
         repo: 'zachowj/node-red-contrib-home-assistant-websocket',
         repoLabel: 'Github',
         docsDir: 'docs',
         docsBranch: 'main',
-        editLinks: true,
+        // editLinks: true,
         editLinkText: 'Help us improve this page!',
         navbar: [
             { text: 'Guides', link: '/guide/' },
@@ -147,5 +149,5 @@ export default defineUserConfig<DefaultThemeOptions>({
                 },
             ],
         },
-    },
+    }),
 });
