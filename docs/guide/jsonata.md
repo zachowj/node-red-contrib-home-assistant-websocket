@@ -25,11 +25,9 @@ When it is chosen with a conditional, not JSONata it will return a value of the 
 
 ![screenshot](./images/jsonata_2.png)
 
-## Examples
-
-- [Increase lights brightness with remote](/cookbook/jsonata.html#increase-lights-brightness-with-remote)
-- [Notification of lights left on when leaving home](/cookbook/jsonata.html#notification-of-lights-left-on-when-leaving-home)
-- [OR conditional for the events: state node](/cookbook/jsonata.html#or-conditional-for-the-events-state-node)
+- [Increase lights brightness with remote](../cookbook/jsonata.html#increase-lights-brightness-with-remote)
+- [Notification of lights left on when leaving home](../cookbook/jsonata.html#notification-of-lights-left-on-when-leaving-home)
+- [OR conditional for the events: state node](../cookbook/jsonata.html#or-conditional-for-the-events-state-node)
 
 **Also see:**
 
