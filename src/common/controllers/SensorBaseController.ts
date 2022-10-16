@@ -19,7 +19,9 @@ import HomeAssistantError, {
     isHomeAssistantApiError,
 } from '../errors/HomeAssistantError';
 import InputError from '../errors/InputError';
-import UnidirectionalEntityIntegration from '../integration/UnidirectionalEntityIntegration';
+import UnidirectionalEntityIntegration, {
+    EntityMessage,
+} from '../integration/UnidirectionalEntityIntegration';
 
 interface Attribute {
     property: string;
@@ -126,13 +128,13 @@ export default abstract class SensorBase<
             throw new InputError(`Attribute: ${e}`);
         }
 
+        let payload: EntityMessage | undefined;
         try {
-            const payload = await this.integration?.updateStateAndAttributes(
+            payload = await this.integration?.updateStateAndAttributes(
                 state,
                 attr
             );
             this.status.setSuccess(payload?.state);
-            // this.debugToClient(payload);
         } catch (err) {
             if (isHomeAssistantApiError(err)) {
                 throw new HomeAssistantError(err, 'home-assistant.error.error');
@@ -144,6 +146,7 @@ export default abstract class SensorBase<
         this.status.setSuccess(state);
         this.setCustomOutputs(this.node.config.outputProperties, message, {
             config: this.node.config,
+            data: payload,
         });
         send(message);
         done();
