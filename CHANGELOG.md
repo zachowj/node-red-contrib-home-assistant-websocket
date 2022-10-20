@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.46.1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.46.0...v0.46.1) (2022-10-19)
+
+
+### Bug Fixes
+
+* Changes so devcontainer works ([bddfde3](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/bddfde313dfcf0add3de13c39d980816a17442fe))
+* **sensor:** Expose sent data to output properties ([1dd6fb0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/1dd6fb08071ff8d5fb0ef4517d1db4b5ec3864b1)), closes [#702](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/702)
+
+
+### Documentation
+
+* change url for device-config.md ([#697](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/697)) ([60a9bb9](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/60a9bb9d6862b58f7c73b8cf296ad18dc22092a7))
+* Fix JSONata Example links ([#666](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/666)) ([46ee50f](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/46ee50fd16de171247d8ca69dd44d696365d0269))
+* Fix sidebar links for guides ([9422b63](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/9422b637bb3a24857c8c26a881a265d243de0a89))
+* More changes for contributing ([4711413](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/47114136dfd35da92d455e19f4bf18e6b4adc401))
+* **trigger-state:** Remove reference to mustache template for entity id ([#699](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/699)) ([35e40fe](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/35e40fe36278bbb4adb03312b32756c6b027351e))
+* **trigger-state:** Update config settings and input ([09250fe](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/09250fe91be8fa516302fd0ad8778fe030c8be11))
+* Update contriubting and set up environment ([9422b63](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/9422b637bb3a24857c8c26a881a265d243de0a89)), closes [#511](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/511)
+* Update vuepress ([2a5b5f8](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/2a5b5f81ca56024afd9776445aff8ba914a64c48))
+* **update-config:** Fix links to other config nodes ([7ad62ee](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/7ad62ee5ce19761ae4a7409b92dddaac27d052ea))
+
 ## [0.46.0](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.45.10...v0.46.0) (2022-10-09)
 
 
