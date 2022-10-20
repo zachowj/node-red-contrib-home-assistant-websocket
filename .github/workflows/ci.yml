@@ -27,7 +27,7 @@ jobs:
         node-version: [14, 16]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
@@ -55,7 +55,7 @@ jobs:
           package-name: node-red-contrib-home-assistant-websocket
           changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"docs","section":"Documentation","hidden":false},{"type":"style","section":"Style","hidden":false}]'
           bump-minor-pre-major: true
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 14
