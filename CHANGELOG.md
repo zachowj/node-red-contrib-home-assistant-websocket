@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.46.2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.46.1...v0.46.2) (2022-10-31)
+
+
+### Bug Fixes
+
+* **sensor:** Allow attriubtes input to be an array ([d066479](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d066479308310768019bc4c98bebb893ffac91ff)), closes [#725](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/725)
+
 ### [0.46.1](https://www.github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.46.0...v0.46.1) (2022-10-19)
 
 
