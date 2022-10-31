@@ -83,6 +83,7 @@ export const inputSchema: Joi.ObjectSchema = Joi.object({
             Joi.number(),
             Joi.boolean(),
             Joi.object(),
+            Joi.array(),
         ])
     ),
 });
