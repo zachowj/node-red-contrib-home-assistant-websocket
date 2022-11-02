@@ -52,8 +52,6 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: node
-          package-name: node-red-contrib-home-assistant-websocket
-          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"docs","section":"Documentation","hidden":false},{"type":"style","section":"Style","hidden":false}]'
           bump-minor-pre-major: true
           changelog-notes-type: "github"
       - uses: actions/checkout@v3
