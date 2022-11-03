@@ -13,6 +13,7 @@ const sensorDeviceClasses = [
     'gas',
     'humidity',
     'illuminance',
+    'moisture',
     'monetary',
     'nitrogen_dioxide',
     'nitrogen_monoxide',
@@ -33,7 +34,9 @@ const sensorDeviceClasses = [
     'volatile_organic_compounds',
     'voltage',
     'volume',
+    'water',
     'weight',
+    'wind_speed',
 ] as const;
 
 //  ISO 4217	Monetary value with a currency.
@@ -60,6 +63,7 @@ export const sensorUnitOfMeasurement: Record<
     gas: ['m³', 'ft³'],
     humidity: ['%'],
     illuminance: ['lx', 'lm'],
+    moisture: ['%'],
     monetary: monetaryList, // ISO 4217	Monetary value with a currency.
     nitrogen_dioxide: ['µg/m³'],
     nitrogen_monoxide: ['µg/m³'],
@@ -80,7 +84,9 @@ export const sensorUnitOfMeasurement: Record<
     volatile_organic_compounds: ['µg/m³'],
     voltage: ['V'],
     volume: ['fl. oz.', 'ft³', 'gal', 'L', 'mL', 'm³'],
+    water: ['L', 'gal', 'm³', 'ft³'],
     weight: ['g', 'kg', 'lb', 'mg', 'oz', 'µg'],
+    wind_speed: ['ft/s', 'km/h', 'kn', 'm/s', 'mph'],
 };
 
 export default [

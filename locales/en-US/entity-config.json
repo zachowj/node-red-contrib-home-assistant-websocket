@@ -64,8 +64,10 @@
         "volatile_organic_compounds": "volatile organic compounds",
         "voltage": "voltage",
         "volume": "volume",
+        "water": "water",
         "weight": "weight",
-        "window": "window"
+        "window": "window",
+        "wind_speed": "wind speed"
       },
       "entity_category": "Category",
       "entity_category_options": {
