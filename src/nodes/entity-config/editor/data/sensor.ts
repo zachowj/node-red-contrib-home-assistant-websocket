@@ -58,7 +58,7 @@ export const sensorUnitOfMeasurement: Record<
     date: null,
     distance: ['km', 'm', 'cm', 'mm', 'mi', 'yd', 'in'],
     duration: ['d', 'h', 'min', 's'],
-    energy: ['Wh', 'kWh', 'MWh'],
+    energy: ['Wh', 'kWh', 'MWh', 'GJ'],
     frequency: ['Hz', 'kHz', 'MHz', 'GHz'],
     gas: ['m³', 'ft³'],
     humidity: ['%'],
