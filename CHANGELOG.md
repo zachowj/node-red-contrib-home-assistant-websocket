@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.47.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.46.2...v0.47.0) (2022-11-13)
+
+
+### Features
+
+* Add water device class to entity config ([4e05721](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/4e05721c8f184c90aa766d78a11eece0cc547b1b)), closes [#733](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/733)
+* **entity-config:** Added Giga Joule as an energy unit ([#735](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/735)) ([4e8514c](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/4e8514c32409bb26005bb4f74fb6d33edb140874))
+
+
+### Bug Fixes
+
+* **entity-config:** Add missing moisture and wind speed device classes to entity config ([4e05721](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/4e05721c8f184c90aa766d78a11eece0cc547b1b))
+* Fix "show debug information" for all nodes ([65181f6](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/65181f6cb8556456a2b904f50b23956a5c1216a3))
+* **wait-until:** Catch errors thrown during timeout ([eab4c19](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/eab4c19400d572462f2fec2c8cd3645dc017709e))
+
 ## [0.46.2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.46.1...v0.46.2) (2022-10-31)
 
 
