@@ -1,7 +1,6 @@
 import Joi from 'joi';
 import { NodeMessageInFlow } from 'node-red';
 
-import { RED } from '../../globals';
 import {
     BaseNode,
     NodeDone,
@@ -9,7 +8,7 @@ import {
     NodeProperties,
     NodeSend,
 } from '../../types/nodes';
-import BaseError from '../errors/BaseError';
+import { inputErrorHandler } from '../errors/inputErrorHandler';
 import { NodeEvent } from '../events/Events';
 import Integration from '../integration/Integration';
 import InputService, { ParsedMessage } from '../services/InputService';
@@ -76,7 +75,7 @@ export default abstract class InputOutputController<
                             return;
                         }
                     } catch (error) {
-                        this.#inputErrorHandler(error, done);
+                        inputErrorHandler(error, { done, status: this.status });
                     }
                 }
             }
@@ -94,7 +93,7 @@ export default abstract class InputOutputController<
                 done,
             });
         } catch (e) {
-            this.#inputErrorHandler(e, done);
+            inputErrorHandler(e, { done, status: this.status });
         }
     }
 
@@ -104,24 +103,6 @@ export default abstract class InputOutputController<
         parsedMessage,
         send,
     }: InputProperties): Promise<void>;
-
-    #inputErrorHandler(e: unknown, done?: NodeDone) {
-        let statusMessage = RED._('home-assistant.status.error');
-        if (e instanceof Joi.ValidationError) {
-            statusMessage = RED._('home-assistant.status.validation_error');
-            done?.(e);
-        } else if (e instanceof BaseError) {
-            statusMessage = e.statusMessage;
-            done?.(e);
-        } else if (e instanceof Error) {
-            done?.(e);
-        } else if (typeof e === 'string') {
-            done?.(new Error(e));
-        } else {
-            done?.(new Error(`Unrecognised error: ${e}`));
-        }
-        this.status.setFailed(statusMessage);
-    }
 
     protected addOptionalInput(
         key: string,

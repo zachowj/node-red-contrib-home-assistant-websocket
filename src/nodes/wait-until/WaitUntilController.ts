@@ -8,9 +8,12 @@ import InputOutputController, {
     InputProperties,
 } from '../../common/controllers/InputOutputController';
 import InputError from '../../common/errors/InputError';
+import { setTimeoutWithErrorHandling } from '../../common/errors/inputErrorHandler';
 import ClientEvents from '../../common/events/ClientEvents';
 import ComparatorService from '../../common/services/ComparatorService';
+import { DataSource } from '../../common/services/InputService';
 import JSONataService from '../../common/services/JSONataService';
+import { EntityFilterType, TypedInputTypes } from '../../const';
 import { renderTemplate } from '../../helpers/mustache';
 import {
     getTimeInMilliseconds,
@@ -118,7 +121,7 @@ export default class WaitUntil extends InputOutputController<
         const { send, done } = this.#savedConfig;
         clearTimeout(this.#timeoutId);
         this.#active = false;
-        this.status.setSuccess('true');
+        this.status.setSuccess('ha-wait-until.status.true');
 
         event.new_state.timeSinceChangedMs =
             Date.now() - new Date(event.new_state.last_changed).getTime();
@@ -136,7 +139,12 @@ export default class WaitUntil extends InputOutputController<
         done();
     }
 
-    async onInput({ message, parsedMessage, send, done }: InputProperties) {
+    protected async onInput({
+        message,
+        parsedMessage,
+        send,
+        done,
+    }: InputProperties) {
         clearTimeout(this.#timeoutId);
 
         const config: SavedConfig = {
@@ -155,8 +163,8 @@ export default class WaitUntil extends InputOutputController<
 
         // Render mustache templates in the entity id field
         if (
-            parsedMessage.entityId.source === 'config' &&
-            config.entityIdFilterType === 'exact'
+            parsedMessage.entityId.source === DataSource.Config &&
+            config.entityIdFilterType === EntityFilterType.Exact
         ) {
             config.entityId = renderTemplate(
                 parsedMessage.entityId.value,
@@ -170,8 +178,8 @@ export default class WaitUntil extends InputOutputController<
         // it to timeout
         let timeout = Number(config.timeout);
         if (
-            parsedMessage.timeout.source === 'config' &&
-            this.node.config.timeoutType === 'jsonata'
+            parsedMessage.timeout.source === DataSource.Config &&
+            this.node.config.timeoutType === TypedInputTypes.JSONata
         ) {
             timeout = this.#jsonataService.evaluate(
                 parsedMessage.timeout.value,
@@ -192,7 +200,7 @@ export default class WaitUntil extends InputOutputController<
 
         this.#clientEvents.removeListeners();
         const eventTopic = `ha_events:state_changed${
-            config.entityIdFilterType === 'exact'
+            config.entityIdFilterType === EntityFilterType.Exact
                 ? `:${config.entityId.trim()}`
                 : ''
         }`;
@@ -203,37 +211,41 @@ export default class WaitUntil extends InputOutputController<
 
         this.#savedMessage = message;
         this.#active = true;
-        let statusText = 'waiting';
+        let statusText = 'ha-wait-until.status.waiting';
 
         if (timeout > 0) {
             statusText = getWaitStatusText(timeout, config.timeoutUnits);
             timeout = getTimeInMilliseconds(timeout, config.timeoutUnits);
 
-            this.#timeoutId = setTimeout(() => {
-                const state = Object.assign(
-                    {},
-                    this.#homeAssistant.websocket.getStates(
-                        config.entityId
-                    ) as HassEntity
-                );
+            this.#timeoutId = setTimeoutWithErrorHandling(
+                () => {
+                    const state = Object.assign(
+                        {},
+                        this.#homeAssistant.websocket.getStates(
+                            config.entityId
+                        ) as HassEntity
+                    );
 
-                state.timeSinceChangedMs =
-                    Date.now() - new Date(state.last_changed).getTime();
+                    state.timeSinceChangedMs =
+                        Date.now() - new Date(state.last_changed).getTime();
 
-                this.setCustomOutputs(
-                    this.node.config.outputProperties,
-                    message,
-                    {
-                        entity: state,
-                        config: this.node.config,
-                    }
-                );
+                    this.setCustomOutputs(
+                        this.node.config.outputProperties,
+                        message,
+                        {
+                            entity: state,
+                            config: this.node.config,
+                        }
+                    );
 
-                this.#active = false;
-                this.status.setFailed('timed out');
-                send([null, message]);
-                done();
-            }, timeout);
+                    this.#active = false;
+                    this.status.setFailed('ha-wait-until.status.timted_out');
+                    send([null, message]);
+                    done();
+                },
+                timeout,
+                { done, status: this.status }
+            );
         }
         this.status.setText(statusText);
         this.#savedConfig = config;
@@ -241,7 +253,7 @@ export default class WaitUntil extends InputOutputController<
         // Only check current state when filter type is exact
         if (
             config.checkCurrentState === true &&
-            config.entityIdFilterType === 'exact'
+            config.entityIdFilterType === EntityFilterType.Exact
         ) {
             const currentState = this.#homeAssistant.websocket.getStates(
                 config.entityId
@@ -254,6 +266,12 @@ export default class WaitUntil extends InputOutputController<
                 },
             });
         }
+    }
+
+    protected onClose(removed: boolean, done?: NodeDone): void {
+        this.#clientEvents.removeListeners();
+        clearTimeout(this.#timeoutId);
+        done?.();
     }
 
     #onResetInput(): boolean {

@@ -6,6 +6,11 @@
       "entity_location": "Entity location",
       "timeout": "Timeout",
       "wait_until": "Wait until"
+    },
+    "status": {
+      "timed_out": "timed out",
+      "true": "true",
+      "waiting": "waiting"
     }
   }
 }
