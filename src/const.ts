@@ -24,6 +24,7 @@ export const ZONE_ENTER = 'enter';
 export const ZONE_ENTER_OR_LEAVE = 'enter_leave';
 export const ZONE_LEAVE = 'leave';
 export const SERVER_ADD = '_ADD_';
+export const PRINT_TO_DEBUG_TOPIC = 'home-assistant-print-to-debug';
 
 export enum ComparatorType {
     Is = 'is',

@@ -16,6 +16,7 @@ export type NodeSend = (
 export type NodeDone = (err?: Error) => void;
 
 export interface NodeProperties extends NodeDef {
+    debugEnabled?: boolean;
     debugenabled?: boolean;
     version: number;
 }

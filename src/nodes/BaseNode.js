@@ -8,6 +8,7 @@ const TransformState = require('../common/TransformState').default;
 const {
     createControllerDependencies,
 } = require('../common/controllers/helpers');
+const { debugToClient } = require('../helpers/node');
 const { getHomeAssistant } = require('../homeAssistant');
 
 const DEFAULT_NODE_OPTIONS = {
@@ -133,18 +134,8 @@ class BaseNode {
         }
     }
 
-    // Hack to get around the fact that node-red only sends warn / error to the debug tab
-    debugToClient(debugMsg) {
-        if (!this.nodeConfig.debugenabled) return;
-        for (const msg of arguments) {
-            const debugMsgObj = {
-                id: this.node.id,
-                path: `${this.node.z}/${this.node.id}`,
-                name: this.node.name || '',
-                msg,
-            };
-            this.RED.comms.publish('debug', debugMsgObj);
-        }
+    debugToClient(debugMsg, topic = 'sent data') {
+        debugToClient(this.node, debugMsg, topic);
     }
 
     getCastValue(datatype, value) {

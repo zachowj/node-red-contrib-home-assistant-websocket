@@ -1,6 +1,7 @@
 import { compareVersions } from 'compare-versions';
 
 import { EntityType } from '../../const';
+import { debugToClient } from '../../helpers/node';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
 import { ClientEvent } from '../../homeAssistant/Websocket';
 import { DeviceConfigNode } from '../../nodes/device-config/index';
@@ -227,7 +228,7 @@ export default class UnidirectionalIntegration extends Integration {
             state: this.state,
         });
 
-        // this.node.debugToClient(payload);
+        this.debugToClient('register', payload);
 
         this.entityConfigNode.debug(
             `Registering ${this.entityConfigNode.config.entityType} with HA`
@@ -268,6 +269,8 @@ export default class UnidirectionalIntegration extends Integration {
             this.state.setLastPayload(lastPayload);
         }
 
+        this.debugToClient('update state', payload);
+
         return payload;
     }
 
@@ -279,6 +282,9 @@ export default class UnidirectionalIntegration extends Integration {
         const payload = this.entityConfigNode.integration.getDiscoveryPayload({
             remove: true,
         });
+
+        this.debugToClient('unregister', payload);
+
         await this.homeAssistant?.websocket.send(payload);
     }
 
@@ -303,5 +309,9 @@ export default class UnidirectionalIntegration extends Integration {
             type: MessageType.RemoveDevice,
             node_id: this.deviceConfigNode.id,
         });
+    }
+
+    protected debugToClient(topic: string, message: any) {
+        debugToClient(this.entityConfigNode, message, topic);
     }
 }

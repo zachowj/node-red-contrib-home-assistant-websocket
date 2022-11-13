@@ -14,8 +14,8 @@
         "connectivity": "connectivity",
         "current": "current",
         "date": "date",
-        "door": "door",
         "distance": "distance",
+        "door": "door",
         "duration": "duration",
         "energy": "energy",
         "frequency": "frequency",
@@ -66,8 +66,8 @@
         "volume": "volume",
         "water": "water",
         "weight": "weight",
-        "window": "window",
-        "wind_speed": "wind speed"
+        "wind_speed": "wind speed",
+        "window": "window"
       },
       "entity_category": "Category",
       "entity_category_options": {
@@ -77,6 +77,8 @@
       "icon": "Icon",
       "last_reset": "Last reset",
       "name": "Friendly name",
+      "output_debug": "Output debug information",
+      "resend": "Resend state and attributes",
       "state_class": "State class",
       "state_class_options": {
         "measurement": "measurement",

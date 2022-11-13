@@ -1,6 +1,6 @@
 import { EditorRED } from 'node-red';
 
-import { NodeType } from './const';
+import { NodeType, PRINT_TO_DEBUG_TOPIC } from './const';
 import {
     updateAreas,
     updateDevices,
@@ -11,6 +11,7 @@ import {
 } from './editor/data';
 import { setupEditors } from './editor/editors';
 import { updateIntegration } from './editor/exposenode';
+import { printToDebugPanel } from './editor/print-to-debug';
 import {
     onNodesAdd,
     onNodesRemove,
@@ -53,6 +54,7 @@ RED.comms.subscribe('homeassistant/entities/#', updateEntities);
 RED.comms.subscribe('homeassistant/integration/#', updateIntegration);
 RED.comms.subscribe('homeassistant/services/#', updateServices);
 RED.comms.subscribe('homeassistant/targetDomains/#', updateTargetDomains);
+RED.comms.subscribe(PRINT_TO_DEBUG_TOPIC, printToDebugPanel);
 setupMigrations();
 setupEditors();
 RED.events.on('nodes:add', onNodesAdd);

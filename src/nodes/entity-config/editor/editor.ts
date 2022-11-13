@@ -19,6 +19,7 @@ interface EntityConfigEditorNodeProperties extends EditorNodeProperties {
     entityType: string;
     haConfig: HaConfig[];
     resend: boolean;
+    debugEnabled: boolean;
 }
 
 const rows = {
@@ -47,6 +48,7 @@ const EntityConfigEditor: EditorNodeDef<EntityConfigEditorNodeProperties> = {
         },
         haConfig: { value: [] },
         resend: { value: false },
+        debugEnabled: { value: false },
     },
     label: function () {
         return this.name || `${this.entityType} ${this.id}`;

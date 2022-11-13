@@ -1,6 +1,7 @@
 import { NodeMessageInFlow } from 'node-red';
 
 import { RED } from '../../globals';
+import { debugToClient } from '../../helpers/node';
 import {
     BaseNode,
     NodeDone,
@@ -85,20 +86,8 @@ export default abstract class OutputController<T extends BaseNode = BaseNode> {
         }
     }
 
-    // Hack to get around the fact that node-red only sends warn / error to the debug tab
     protected debugToClient(message: any | any[]) {
-        if (!this.node.config.debugenabled) return;
-        if (Array.isArray(message)) {
-            message.forEach((msg) => this.node.debug(msg));
-        } else {
-            const debug = {
-                id: this.node.id,
-                path: `${this.node.z}/${this.node.id}`,
-                name: this.node.name ?? '',
-                message,
-            };
-            RED.comms.publish('debug', debug, false);
-        }
+        debugToClient(this.node, message);
     }
 
     protected setCustomOutputs(
