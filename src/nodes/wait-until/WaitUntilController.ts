@@ -239,7 +239,7 @@ export default class WaitUntil extends InputOutputController<
                     );
 
                     this.#active = false;
-                    this.status.setFailed('ha-wait-until.status.timted_out');
+                    this.status.setFailed('ha-wait-until.status.timed_out');
                     send([null, message]);
                     done();
                 },
