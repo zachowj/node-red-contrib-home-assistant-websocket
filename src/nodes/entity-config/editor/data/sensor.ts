@@ -60,7 +60,7 @@ export const sensorUnitOfMeasurement: Record<
     duration: ['d', 'h', 'min', 's'],
     energy: ['Wh', 'kWh', 'MWh', 'GJ'],
     frequency: ['Hz', 'kHz', 'MHz', 'GHz'],
-    gas: ['m³', 'ft³'],
+    gas: ['m³', 'ft³', 'GJ'],
     humidity: ['%'],
     illuminance: ['lx', 'lm'],
     moisture: ['%'],
