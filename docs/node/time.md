@@ -16,14 +16,14 @@ A Home Assistant entity to be used when scheduling the node.
 
 Which property of the entity to use to schedule the node.
 
-The node will accept any date string that the javascript object accepts as a valid date. It will also accept a 24-hour time format with the seconds place optional.
+The node expects a property of the entity object.
 
 examples:
 
-- <code>2020-12-31T02:47:54.837Z</code>
-- <code>1609382842709</code>
-- <code>13:40</code>
-- <code>23:59:02</code>
+- <code>entity_id</code>
+- <code>state</code>
+- <code>attributes.date</code>
+- <code>last_updated</code>
 
 ### Offset
 
