@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.47.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.47.0...v0.47.1) (2022-12-08)
+
+
+### Bug Fixes
+
+* **server:** Catch exception when access token is invalid ([3d3cf8d](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/3d3cf8d5332da22ed810bb04190b250a9e921950)), closes [#770](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/770)
+* **wait-until:** Fix typo in timed out status ([d46005c](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d46005c1e9c93fce2bd5f9c724360dd7b7f40834)), closes [#755](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/755)
+
 ## [0.47.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.46.2...v0.47.0) (2022-11-13)
 
 
