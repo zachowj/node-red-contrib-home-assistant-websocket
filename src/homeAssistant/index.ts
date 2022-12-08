@@ -80,7 +80,9 @@ export function createHomeAssistantClient(
         new EditorContext(node, clientEvents);
     }
 
-    homeAssistant.websocket.connect();
+    homeAssistant.websocket.connect().catch((e) => {
+        node.error(e);
+    });
 
     homeAssistantConnections.set(node.id, homeAssistant);
     return homeAssistant;
