@@ -1,5 +1,6 @@
 import { Connection, getCollection } from 'home-assistant-js-websocket';
 import { Store } from 'home-assistant-js-websocket/dist/store';
+import { throttle } from 'lodash';
 
 import {
     HassAreas,
@@ -17,10 +18,16 @@ export function subscribeAreaRegistry(
         });
 
     const subscribeUpdates = (conn: Connection, store: Store<HassAreas>) =>
-        conn.subscribeEvents(async () => {
-            const areas = await fetchAreaRegistry(conn);
-            store.setState(areas, true);
-        }, 'area_registry_updated');
+        conn.subscribeEvents(
+            throttle(
+                () =>
+                    fetchAreaRegistry(conn).then((areas) =>
+                        store.setState(areas, true)
+                    ),
+                500
+            ),
+            'area_registry_updated'
+        );
 
     const collection = getCollection(
         conn,
@@ -41,10 +48,16 @@ export function subscribeDeviceRegistry(
         });
 
     const subscribeUpdates = (conn: Connection, store: Store<HassDevices>) =>
-        conn.subscribeEvents(async () => {
-            const devices = await fetchDeviceRegistry(conn);
-            store.setState(devices, true);
-        }, 'device_registry_updated');
+        conn.subscribeEvents(
+            throttle(
+                () =>
+                    fetchDeviceRegistry(conn).then((devices) =>
+                        store.setState(devices, true)
+                    ),
+                500
+            ),
+            'device_registry_updated'
+        );
 
     const collection = getCollection(
         conn,
@@ -68,10 +81,16 @@ export function subscribeEntityRegistry(
         conn: Connection,
         store: Store<HassEntityRegistryEntry[]>
     ) =>
-        conn.subscribeEvents(async () => {
-            const devices = await fetchEntityRegistry(conn);
-            store.setState(devices, true);
-        }, 'entity_registry_updated');
+        conn.subscribeEvents(
+            throttle(
+                () =>
+                    fetchEntityRegistry(conn).then((devices) =>
+                        store.setState(devices, true)
+                    ),
+                500
+            ),
+            'entity_registry_updated'
+        );
 
     const collection = getCollection(
         conn,
