@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.47.2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.47.1...v0.47.2) (2022-12-21)
+
+
+### Bug Fixes
+
+* throttle registry lookups to 500 ms ([9fa2177](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/9fa21773f2bce4ad25cbd3acdba3c1cd3d269235))
+
 ## [0.47.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.47.0...v0.47.1) (2022-12-08)
 
 
