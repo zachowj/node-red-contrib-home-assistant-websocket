@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.48.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.47.2...v0.48.0) (2022-12-25)
+
+
+### Features
+
+* Enable message coalescing ([d235c35](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d235c3572ec5051cf11bc3bf26c9266f5ca9c659))
+
 ## [0.47.2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.47.1...v0.47.2) (2022-12-21)
 
 
