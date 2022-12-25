@@ -81,6 +81,16 @@ export default function createSocket({
                     socket.off('close', onClose);
                     socket.off('error', onClose);
                     socket.haVersion = message.ha_version;
+                    // enable coalesce messages if supported
+                    if (atLeastHaVersion(socket.haVersion, 2022, 9)) {
+                        socket.send(
+                            JSON.stringify({
+                                type: 'supported_features',
+                                id: 1,
+                                features: { coalesce_messages: 1 },
+                            })
+                        );
+                    }
                     promResolve(socket);
                     break;
 
@@ -117,4 +127,26 @@ export default function createSocket({
             connectionDelay !== false ? 5000 : 0
         );
     });
+}
+
+// https://github.com/home-assistant/home-assistant-js-websocket/blob/95f166b29a09fc1841bd0c1f312391ceb2812520/lib/util.ts#L45
+function atLeastHaVersion(
+    version: string,
+    major: number,
+    minor: number,
+    patch?: number
+): boolean {
+    const [haMajor, haMinor, haPatch] = version.split('.', 3);
+
+    return (
+        Number(haMajor) > major ||
+        (Number(haMajor) === major &&
+            (patch === undefined
+                ? Number(haMinor) >= minor
+                : Number(haMinor) > minor)) ||
+        (patch !== undefined &&
+            Number(haMajor) === major &&
+            Number(haMinor) === minor &&
+            Number(haPatch) >= patch)
+    );
 }
