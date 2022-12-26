@@ -114,7 +114,7 @@
     "eslint-plugin-n": "^15.2.4",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-promise": "^6.0.0",
-    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "eslint-plugin-simple-import-sort": "^8.0.0",
     "eslint-plugin-sort-requires": "^2.1.0",
     "eslint-plugin-standard": "^5.0.0",
     "gulp": "^4.0.2",
