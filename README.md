@@ -52,7 +52,7 @@ The add-on can be found here: <https://github.com/hassio-addons/addon-node-red#r
 
 [List of all contributors](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/graphs/contributors)
 
-[buildstatus-shield]: https://img.shields.io/github/workflow/status/zachowj/node-red-contrib-home-assistant-websocket/CI/main?label=main%20build&style=for-the-badge
+[buildstatus-shield]: https://img.shields.io/github/actions/workflow/status/zachowj/node-red-contrib-home-assistant-websocket/ci.yml?branch=main&style=for-the-badge
 [buildstatus-link]: https://github.com/zachowj/node-red-contrib-home-assistant-websocket/actions
 [license-shield]: https://img.shields.io/github/license/zachowj/node-red-contrib-home-assistant-websocket.svg?style=for-the-badge
 [release-link]: https://github.com/zachowj/node-red-contrib-home-assistant-websocket/releases
