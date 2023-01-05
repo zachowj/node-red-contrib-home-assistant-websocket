@@ -109,22 +109,24 @@ class Api extends BaseNode {
         let data;
         if (parsedMessage.dataType.value === 'jsonata') {
             try {
-                data = JSON.stringify(
-                    this.evaluateJSONata(parsedMessage.data.value, { message })
-                );
+                data = this.evaluateJSONata(parsedMessage.data.value, {
+                    message,
+                });
             } catch (e) {
                 this.status.setFailed('Error');
                 done(e.message);
                 return;
             }
         } else {
-            data = renderTemplate(
-                typeof parsedMessage.data.value === 'object'
-                    ? JSON.stringify(parsedMessage.data.value)
-                    : parsedMessage.data.value,
-                message,
-                this.node.context(),
-                this.homeAssistant.getStates()
+            data = JSON.parse(
+                renderTemplate(
+                    typeof parsedMessage.data.value === 'object'
+                        ? JSON.stringify(parsedMessage.data.value)
+                        : parsedMessage.data.value,
+                    message,
+                    this.node.context(),
+                    this.homeAssistant.getStates()
+                )
             );
         }
 
