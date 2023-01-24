@@ -50,7 +50,7 @@
     "bonjour": "3.5.0",
     "browser-sync": "^2.27.10",
     "compare-versions": "^5.0.1",
-    "cron": "2.1.0",
+    "cron": "2.2.0",
     "debug": "4.3.4",
     "flat": "5.0.2",
     "geolib": "3.3.3",
