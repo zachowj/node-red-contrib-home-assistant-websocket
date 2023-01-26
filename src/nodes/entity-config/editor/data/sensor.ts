@@ -46,7 +46,7 @@ const monetaryList = [
 ];
 
 export const sensorUnitOfMeasurement: Record<
-    typeof sensorDeviceClasses[number],
+    (typeof sensorDeviceClasses)[number],
     null | string[]
 > = {
     apparent_power: ['VA'],

@@ -573,10 +573,10 @@ describe('Comparator Service', function () {
                 });
             });
 
-            describe('is in a Home Assistnat group', function () {
-                it('should return true when entity id is in group');
-                it('should return false when entity id is not in group');
-            });
+            // describe('is in a Home Assistnat group', function () {
+            //     it('should return true when entity id is in group');
+            //     it('should return false when entity id is not in group');
+            // });
 
             describe('JSONata', function () {
                 afterEach(function () {

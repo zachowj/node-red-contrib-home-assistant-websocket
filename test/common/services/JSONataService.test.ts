@@ -160,52 +160,52 @@ describe('JSONata Service', function () {
             });
         });
 
-        describe('$entities()', function () {
-            const entities = {
-                'light.kitchen': {
-                    entity_id: 'light.kitchen',
-                    state: 'on',
-                    attributes: {},
-                    last_changed: '2019-01-01T00:00:00.000000Z',
-                    last_updated: '2019-01-01T00:00:00.000000Z',
-                    context: {
-                        id: 'c0b8f8f8-f8f8-f8f8-f8f8-f8f8f8f8f8f8',
-                        user_id: 'user_id',
-                        parent_id: '0000',
-                    },
-                },
-                'light.living_room': {
-                    entity_id: 'light.living_room',
-                    state: 'on',
-                    attributes: {},
-                    last_changed: '2019-01-01T00:00:00.000000Z',
-                    last_updated: '2019-01-01T00:00:00.000000Z',
-                    context: {
-                        id: 'c0b8f8f8-f8f8-f8f8-f8f8-f8f8f8f8f8f8',
-                        user_id: 'user_id',
-                        parent_id: '0000',
-                    },
-                },
-            };
-            it('should return all entities');
-            it('should return a single entity when passed an entitiy id');
-            // it('should return all entities', function () {
-            //     websocketStub.getStates.returns(entities);
-            //     homeAssistantStub.websocket = websocketStub;
-            //     const result = jsonataService.evaluate(`$entities()`);
-            //     console.log(homeAssistantStub.websocket.getStates());
-            //     expect(result).to.deep.equal(entities);
-            // });
+        // describe('$entities()', function () {
+        //     const entities = {
+        //         'light.kitchen': {
+        //             entity_id: 'light.kitchen',
+        //             state: 'on',
+        //             attributes: {},
+        //             last_changed: '2019-01-01T00:00:00.000000Z',
+        //             last_updated: '2019-01-01T00:00:00.000000Z',
+        //             context: {
+        //                 id: 'c0b8f8f8-f8f8-f8f8-f8f8-f8f8f8f8f8f8',
+        //                 user_id: 'user_id',
+        //                 parent_id: '0000',
+        //             },
+        //         },
+        //         'light.living_room': {
+        //             entity_id: 'light.living_room',
+        //             state: 'on',
+        //             attributes: {},
+        //             last_changed: '2019-01-01T00:00:00.000000Z',
+        //             last_updated: '2019-01-01T00:00:00.000000Z',
+        //             context: {
+        //                 id: 'c0b8f8f8-f8f8-f8f8-f8f8-f8f8f8f8f8f8',
+        //                 user_id: 'user_id',
+        //                 parent_id: '0000',
+        //             },
+        //         },
+        //     };
+        //     it('should return all entities');
+        //     it('should return a single entity when passed an entitiy id');
+        // it('should return all entities', function () {
+        //     websocketStub.getStates.returns(entities);
+        //     homeAssistantStub.websocket = websocketStub;
+        //     const result = jsonataService.evaluate(`$entities()`);
+        //     console.log(homeAssistantStub.websocket.getStates());
+        //     expect(result).to.deep.equal(entities);
+        // });
 
-            // it('should return a single entity when passed an entitiy id', function () {
-            //     websocketStub.getStates.returns(entities);
-            //     const result = jsonataService.evaluate(
-            //         `$entities("light.kitchen")`
-            //     );
+        // it('should return a single entity when passed an entitiy id', function () {
+        //     websocketStub.getStates.returns(entities);
+        //     const result = jsonataService.evaluate(
+        //         `$entities("light.kitchen")`
+        //     );
 
-            //     expect(result).to.deep.equal(entities['light.kitchen']);
-            // });
-        });
+        //     expect(result).to.deep.equal(entities['light.kitchen']);
+        // });
+        // });
 
         describe('lodash functions', function () {
             describe('randomNumber()', function () {

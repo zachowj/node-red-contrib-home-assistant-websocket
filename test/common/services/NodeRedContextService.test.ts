@@ -164,11 +164,11 @@ describe('Node-RED Context Service', function () {
                 expect(setObjectPropertyStub).to.not.have.been.called;
             });
         });
-        describe('flow', function () {
-            it('should set value in flow context');
-        });
-        describe('global', function () {
-            it('should set value in global context');
-        });
+        // describe('flow', function () {
+        //     it('should set value in flow context');
+        // });
+        // describe('global', function () {
+        //     it('should set value in global context');
+        // });
     });
 });
