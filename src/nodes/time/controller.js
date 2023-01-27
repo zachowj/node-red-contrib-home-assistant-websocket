@@ -130,7 +130,7 @@ class Time extends EventsHaNode {
 
         this.createCronjob(crontab);
 
-        const nextTime = this.formatDate(this.cronjob.nextDates().toDate());
+        const nextTime = this.formatDate(this.cronjob.nextDates());
         this.status.setText(this.RED._('ha-time.status.next_at', { nextTime }));
     }
 
@@ -154,7 +154,7 @@ class Time extends EventsHaNode {
 
         if (this.nodeConfig.repeatDaily) {
             const sentTime = this.formatDate(now);
-            const nextTime = this.formatDate(this.cronjob.nextDates().toDate());
+            const nextTime = this.formatDate(this.cronjob.nextDates());
             this.status.set({
                 text: this.RED._('ha-time.status.sent_and_next', {
                     sentTime,
