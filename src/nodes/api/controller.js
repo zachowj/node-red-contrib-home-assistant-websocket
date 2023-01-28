@@ -113,7 +113,12 @@ class Api extends BaseNode {
         );
         let data;
 
-        if (parsedMessage.data.value && parsedMessage.data.value.length > 0) {
+        if (parsedMessage.data.source === 'message') {
+            data = parsedMessage.data.value;
+        } else if (
+            parsedMessage.data.value &&
+            parsedMessage.data.value.length > 0
+        ) {
             try {
                 if (parsedMessage.dataType.value === 'jsonata') {
                     data = this.evaluateJSONata(parsedMessage.data.value, {
