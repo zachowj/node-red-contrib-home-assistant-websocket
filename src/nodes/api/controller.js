@@ -113,7 +113,7 @@ class Api extends BaseNode {
         );
         let data;
 
-        if (parsedMessage.data.value.length !== 0) {
+        if (parsedMessage.data.value && parsedMessage.data.value.length > 0) {
             try {
                 if (parsedMessage.dataType.value === 'jsonata') {
                     data = this.evaluateJSONata(parsedMessage.data.value, {
@@ -159,7 +159,7 @@ class Api extends BaseNode {
                 parsedMessage.responseType.value
             );
         } else {
-            if (!data.type) {
+            if (!data || !data.type) {
                 done(
                     `A WebSocket request requires a 'type' property in the data object.`
                 );
