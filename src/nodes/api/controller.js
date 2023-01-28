@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 const BaseNode = require('../BaseNode');
-const { renderTemplate } = require('../../helpers/mustache');
+const { generateRenderTemplate } = require('../../helpers/mustache');
 
 const nodeOptions = {
     config: {
@@ -106,40 +106,42 @@ class Api extends BaseNode {
             return;
         }
 
+        const renderTemplate = generateRenderTemplate(
+            message,
+            this.node.context(),
+            this.homeAssistant.getStates()
+        );
         let data;
-        if (parsedMessage.dataType.value === 'jsonata') {
+
+        if (parsedMessage.data.value.length !== 0) {
             try {
-                data = this.evaluateJSONata(parsedMessage.data.value, {
-                    message,
-                });
+                if (parsedMessage.dataType.value === 'jsonata') {
+                    data = this.evaluateJSONata(parsedMessage.data.value, {
+                        message,
+                    });
+                } else {
+                    data = JSON.parse(
+                        renderTemplate(
+                            typeof parsedMessage.data.value === 'object'
+                                ? JSON.stringify(parsedMessage.data.value)
+                                : parsedMessage.data.value
+                        )
+                    );
+                }
             } catch (e) {
                 this.status.setFailed('Error');
                 done(e.message);
                 return;
             }
-        } else {
-            data = JSON.parse(
-                renderTemplate(
-                    typeof parsedMessage.data.value === 'object'
-                        ? JSON.stringify(parsedMessage.data.value)
-                        : parsedMessage.data.value,
-                    message,
-                    this.node.context(),
-                    this.homeAssistant.getStates()
-                )
-            );
         }
 
-        const method = parsedMessage.method.value;
         let apiCall;
 
         if (parsedMessage.protocol.value === 'http') {
-            const path = renderTemplate(
-                parsedMessage.path.value,
-                message,
-                this.node.context(),
-                this.homeAssistant.getStates()
-            ).replace(/^\/(?:api\/)?/, '');
+            const path = renderTemplate(parsedMessage.path.value).replace(
+                /^\/(?:api\/)?/,
+                ''
+            );
 
             if (!path) {
                 done('HTTP request requires a valid path.');
@@ -147,6 +149,7 @@ class Api extends BaseNode {
                 return;
             }
 
+            const method = parsedMessage.method.value;
             this.debugToClient({ method, path, data });
 
             apiCall = this.homeAssistant[method].bind(
@@ -156,39 +159,28 @@ class Api extends BaseNode {
                 parsedMessage.responseType.value
             );
         } else {
-            try {
-                const json = JSON.parse(data);
-
-                if (!json.type) {
-                    done(
-                        `A WebSocket request requires a 'type' property in the data object.`
-                    );
-                    this.status.setFailed();
-                    return;
-                }
-
-                this.debugToClient(json);
-
-                apiCall = this.homeAssistant.send.bind(
-                    this.homeAssistant,
-                    json
+            if (!data.type) {
+                done(
+                    `A WebSocket request requires a 'type' property in the data object.`
                 );
-            } catch (e) {
-                done(e.message);
                 this.status.setFailed();
                 return;
             }
+
+            this.debugToClient(JSON.stringify(data));
+
+            apiCall = this.homeAssistant.send.bind(this.homeAssistant, data);
         }
 
         this.status.setSending();
 
         const results = await apiCall().catch((err) => {
-            done(
-                'API Error. ' + err.message
-                    ? `Error Message: ${err.message}`
-                    : ''
-            );
             this.status.setFailed('API Error');
+            done(
+                `API Error. ${
+                    err.message ? `Error Message: ${err.message}` : ''
+                }`
+            );
         });
 
         try {

@@ -66,10 +66,19 @@ const ApiEditor: EditorNodeDef<ApiEditorNodeProperties> = {
         ha.setup(this);
         haServer.init(this, '#node-input-server');
 
-        $('#node-input-data').typedInput({
-            types: ['json', 'jsonata'],
-            typeField: '#node-input-dataType',
-        });
+        $('#node-input-data')
+            .on('change', function () {
+                // hack to hide error border when data field is empty
+                const $this = $(this);
+                const val = $this.val() as string;
+                if (val.length === 0) {
+                    $this.next().removeClass('input-error');
+                }
+            })
+            .typedInput({
+                types: ['jsonata', 'json'],
+                typeField: '#node-input-dataType',
+            });
 
         $('#node-input-protocol')
             .on('change', function () {
