@@ -104,26 +104,16 @@ const EventsStateEditor: EditorNodeDef<EventsStateEditorNodeProperties> = {
     },
     oneditprepare: function () {
         ha.setup(this);
-        const $entityidfilter = $('#node-input-entityidfilter');
-
-        haServer.init(this, '#node-input-server', () => {
-            entitySelector.serverChanged();
+        haServer.init(this, '#node-input-server', (serverId) => {
+            entitySelector.serverChanged(serverId);
         });
         exposeNode.init(this);
         const entitySelector = new EntitySelector({
             filterTypeSelector: '#node-input-entityidfiltertype',
             entityId: this.entityidfilter,
+            serverId: haServer.getSelectedServerId(),
         });
         $('#dialog-form').data('entitySelector', entitySelector);
-
-        let availableEntities: string[] = [];
-        haServer.autocomplete('entities', (entities: string[]) => {
-            availableEntities = entities;
-            $entityidfilter.autocomplete({
-                source: availableEntities,
-                minLength: 0,
-            });
-        });
 
         ifState.init('#node-input-haltifstate', '#node-input-halt_if_compare');
 

@@ -90,6 +90,42 @@ async function getDeviceTriggerCapabilities(
     res.json(capabilities ?? []);
 }
 
+function getEntitiesSelect2(req: CustomRequest, res: Response): void {
+    const websocket = req?.homeAssistant?.websocket;
+
+    if (!websocket) {
+        res.json({ results: [] });
+        return;
+    }
+
+    const term = req.query.term?.toString().trim();
+    const states = Object.values(websocket.getStates());
+
+    const filteredEntities = !term
+        ? states
+        : states?.filter((entity) => {
+              const words = term.split(' ');
+              const friendlyName =
+                  entity.attributes.friendly_name?.toLowerCase();
+
+              return words.every(
+                  (word) =>
+                      friendlyName?.indexOf(word) !== -1 ||
+                      entity.entity_id?.indexOf(word) !== -1
+              );
+          });
+
+    const results = filteredEntities.map((e) => {
+        return {
+            id: e.entity_id,
+            text: e.attributes.friendly_name ?? e.entity_id,
+            title: e.entity_id,
+        };
+    });
+
+    res.json({ results });
+}
+
 function getEntities(req: CustomRequest, res: Response): void {
     const states = req?.homeAssistant?.getEntities();
     res.json(states ?? []);
@@ -112,23 +148,21 @@ function getProperties(req: CustomRequest, res: Response): void {
 
     const entity = req?.homeAssistant?.websocket.getStates(entityId);
 
-    if (!entity) {
+    if (Array.isArray(entity)) {
+        flat = Object.keys(flatten(entity)).filter(
+            (e) =>
+                req?.query?.term && e.indexOf(req.query.term.toString()) !== -1
+        );
+    } else {
         const entities = req.homeAssistant?.websocket.getStates();
         if (!entities) {
             res.json([]);
             return;
         }
-
         flat = Object.values(entities).map((entity) =>
             Object.keys(flatten(entity))
         );
-    } else {
-        flat = Object.keys(flatten(entity)).filter(
-            (e) =>
-                req?.query?.term && e.indexOf(req.query.term.toString()) !== -1
-        );
     }
-
     const uniqProperties = Array.from(
         new Set(([] as string[]).concat(...flat))
     );
@@ -214,6 +248,7 @@ export function createRoutes(): void {
         deviceTriggers: getDeviceTriggers,
         deviceTriggerCapabilities: getDeviceTriggerCapabilities,
         entities: getEntities,
+        entitiesSelect2: getEntitiesSelect2,
         properties: getProperties,
         services: getServices,
         states: getStates,

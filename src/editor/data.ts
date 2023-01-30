@@ -140,7 +140,7 @@ function sortFriendlyName(a: Record<string, any>, b: Record<string, any>) {
     return aName.localeCompare(bName);
 }
 
-export function getAreaNameById($serverId: string, areaId: string) {
+export function getAreaNameById($serverId: string, areaId?: string) {
     const areas = getAreas($serverId);
     if (areaId && areas?.length) {
         const area = areas.find((a) => a.area_id === areaId);

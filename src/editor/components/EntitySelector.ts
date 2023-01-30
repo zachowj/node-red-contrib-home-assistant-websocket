@@ -1,14 +1,10 @@
-import { HassEntity } from 'home-assistant-js-websocket';
-
-import { byPropertiesOf } from '../../helpers/sort';
 import { openEntityFilter } from '../editors/entity-filter';
 import { getEntities, getUiSettings } from '../haserver';
 import { disableSelect2OpenOnRemove } from '../utils';
 import {
-    createCustomIdListByProperty,
     createSelect2Options,
     isSelect2Initialized,
-    Select2Data,
+    Select2AjaxEndpoints,
     Tags,
 } from './select2';
 
@@ -18,17 +14,20 @@ export default class EntitySelector {
     #$filterType: JQuery<HTMLElement>;
     #$filterButton: JQuery<HTMLElement>;
     #entityId: string | string[];
-    #select2Data: Select2Data[];
+    #serverId?: string;
 
     constructor({
         filterTypeSelector,
         entityId,
+        serverId,
     }: {
         filterTypeSelector: string;
         entityId: string | string[];
+        serverId?: string;
     }) {
         this.#$filterType = $(filterTypeSelector);
         this.#entityId = entityId;
+        this.#serverId = serverId;
 
         this.#buildElements();
         this.init();
@@ -55,13 +54,40 @@ export default class EntitySelector {
         return id;
     }
 
+    #generateEntityList() {
+        const entities = getEntities();
+        const ids = !Array.isArray(this.#entityId)
+            ? [this.#entityId]
+            : this.#entityId;
+
+        const options = ids.reduce((acc: JQuery<HTMLElement>[], id: string) => {
+            const text =
+                getUiSettings().entitySelector === 'id'
+                    ? id
+                    : entities.find((e) => e.entity_id === id)?.attributes
+                          .friendly_name ?? id;
+            acc.push(
+                $('<option />', {
+                    value: id,
+                    text,
+                    selected: true,
+                })
+            );
+            return acc;
+        }, []);
+
+        return options;
+    }
+
     #buildElements() {
         const $formRow = this.#$filterType.parent();
         const $div = $('<div />', {
             class: 'ha-entity-selector',
         });
+        const filterType = this.#$filterType.val() as string;
         this.#$select = $(`<select />`, {
             id: 'ha-entity-selector',
+            multiple: filterType === 'list',
         });
         this.#$filter = $('<input />', {
             type: 'text',
@@ -75,10 +101,15 @@ export default class EntitySelector {
             $div.append([this.#$select, this.#$filter, this.#$filterButton])
         );
         this.#$filterType.appendTo($div);
+
+        // Populate select with selected ids
+        if (this.#entityId !== '') {
+            this.#$select.append(this.#generateEntityList());
+        }
     }
 
     init() {
-        this.#$filterType.on('change', this.#showHide.bind(this));
+        this.#$filterType.on('change', this.#showHideFilterOptions.bind(this));
 
         this.#$filterButton.on('click', () => {
             openEntityFilter({
@@ -91,12 +122,11 @@ export default class EntitySelector {
             });
         });
 
-        this.#generateEntityList();
         this.#initSelect2(Array.isArray(this.#entityId));
         this.#$filter.val(this.#entityId);
     }
 
-    #showHide() {
+    #showHideFilterOptions() {
         const filter = this.#$filterType.val() as string;
         switch (filter) {
             case 'exact':
@@ -114,41 +144,17 @@ export default class EntitySelector {
         }
     }
 
-    #generateEntityList() {
-        const entities = Object.values(getEntities());
-        const entityIds = !this.#select2Data
-            ? Array.isArray(this.#entityId)
-                ? this.#entityId
-                : [this.#entityId]
-            : this.#$select.select2('data').map((e) => e.id);
-
-        const data = entities
-            .map((e): Select2Data => {
-                return {
-                    id: e.entity_id,
-                    text: e.attributes.friendly_name ?? e.entity_id,
-                    title: e.entity_id,
-                    selected: entityIds.includes(e.entity_id),
-                };
-            })
-            .sort(byPropertiesOf<Select2Data>(['text']))
-            .concat(
-                createCustomIdListByProperty<HassEntity>(entityIds, entities, {
-                    property: 'entity_id',
-                    includeUnknownIds: true,
-                })
-            );
-        this.#select2Data = data;
-    }
-
     #initSelect2(multiple = false) {
         this.#$select
             .select2(
                 createSelect2Options({
-                    data: this.#select2Data.filter((e) => e.id?.length > 0),
                     tags: Tags.Custom,
                     multiple,
                     displayIds: getUiSettings().entitySelector === 'id',
+                    ajax: {
+                        endpoint: Select2AjaxEndpoints.Entities,
+                        serverId: this.#serverId,
+                    },
                 })
             )
             .maximizeSelect2Height();
@@ -163,9 +169,9 @@ export default class EntitySelector {
         }
     }
 
-    serverChanged() {
+    serverChanged(serverId: string) {
+        this.#serverId = serverId;
         this.#$select.empty();
-        this.#generateEntityList();
-        this.#showHide();
+        this.#showHideFilterOptions();
     }
 }

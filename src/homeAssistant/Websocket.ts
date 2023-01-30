@@ -532,6 +532,10 @@ export default class Websocket {
         this.#emitEvent('ha_client:close');
     }
 
+    getAreas(): HassAreas {
+        return this.areas;
+    }
+
     getDevices(): HassDevices {
         return this.devices;
     }
@@ -578,6 +582,10 @@ export default class Websocket {
         });
 
         return results.extra_fields;
+    }
+
+    getEntities() {
+        return this.entities;
     }
 
     getStates(): HassEntities;

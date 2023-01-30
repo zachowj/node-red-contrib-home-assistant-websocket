@@ -4,9 +4,13 @@ import { containsMustache, isNodeRedEnvVar } from '../../helpers/utils';
 import { isjQuery } from '../utils';
 
 export enum Tags {
-    Any,
-    Custom,
-    None,
+    Any = 'any',
+    Custom = 'custom',
+    None = 'none',
+}
+
+export enum Select2AjaxEndpoints {
+    Entities = 'entitiesSelect2',
 }
 
 export interface Select2Data {
@@ -14,6 +18,11 @@ export interface Select2Data {
     text: string;
     selected: boolean;
     title?: string;
+}
+
+interface Select2AjaxOptions {
+    endpoint: Select2AjaxEndpoints;
+    serverId?: string;
 }
 
 export const select2DefaultOptions: Options = {
@@ -53,12 +62,14 @@ export const createSelect2Options = ({
     customTags = [],
     displayIds = false,
     data,
+    ajax,
 }: {
     multiple?: boolean;
     tags?: Tags;
     customTags?: string[];
     displayIds?: boolean;
     data?: Select2Data[];
+    ajax?: Select2AjaxOptions;
 }) => {
     const opts = {
         ...select2DefaultOptions,
@@ -67,6 +78,13 @@ export const createSelect2Options = ({
         dropdownAutoWidth: true,
     };
 
+    if (ajax?.serverId) {
+        opts.ajax = {
+            url: `homeassistant/${ajax.endpoint}/${ajax.serverId}`,
+            dataType: 'json',
+            delay: 250,
+        };
+    }
     opts.tags = tags === Tags.Any || tags === Tags.Custom;
 
     if (tags === Tags.Custom) {
@@ -91,12 +109,15 @@ export const createSelect2Options = ({
                     text: params.term,
                 };
             }
+
+            return null;
         };
     }
 
     if (displayIds) {
         opts.templateSelection = (selection) => {
-            return selection.id.toString();
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            return selection.id!.toString();
         };
     }
 

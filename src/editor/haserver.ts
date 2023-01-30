@@ -27,7 +27,7 @@ function setDefault() {
 export function init(
     n: EditorNodeInstance<HassNodeProperties>,
     server: string,
-    onChange?: () => void
+    onChange?: (serverId: string) => void
 ) {
     $server = $(server);
     node = n;
@@ -40,9 +40,12 @@ export function init(
     setTimeout(() => {
         $server.on('change', () => {
             serverId = $server.val() as string;
-            onChange?.();
+            onChange?.(serverId);
         });
     }, 500);
+}
+export function getSelectedServerId() {
+    return serverId;
 }
 
 export function autocomplete(type: string, callback: (items: any) => void) {
@@ -112,7 +115,7 @@ export const getAreaById = (areaId: string): HassArea | undefined => {
     }
 };
 
-export const getAreaNameById = (areaId: string): string => {
+export const getAreaNameById = (areaId?: string): string => {
     return haData.getAreaNameById(serverId, areaId);
 };
 

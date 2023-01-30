@@ -70,12 +70,13 @@ const WaitUntilEditor: EditorNodeDef<WaitUntilEditorNodeProperties> = {
     },
     oneditprepare: function () {
         ha.setup(this);
-        haServer.init(this, '#node-input-server', () => {
-            entitySelector.serverChanged();
+        haServer.init(this, '#node-input-server', (serverId) => {
+            entitySelector.serverChanged(serverId);
         });
         const entitySelector = new EntitySelector({
             filterTypeSelector: '#node-input-entityIdFilterType',
             entityId: this.entityId,
+            serverId: haServer.getSelectedServerId(),
         });
         $('#dialog-form').data('entitySelector', entitySelector);
 

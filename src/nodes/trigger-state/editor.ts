@@ -116,12 +116,13 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
         const $constraintList = $('#constraint-list');
         const $outputList = $('#output-list');
 
-        haServer.init(this, '#node-input-server', () => {
-            entitySelector.serverChanged();
+        haServer.init(this, '#node-input-server', (serverId) => {
+            entitySelector.serverChanged(serverId);
         });
         const entitySelector = new EntitySelector({
             filterTypeSelector: '#node-input-entityidfiltertype',
             entityId: this.entityid,
+            serverId: haServer.getSelectedServerId(),
         });
         $('#dialog-form').data('entitySelector', entitySelector);
 
