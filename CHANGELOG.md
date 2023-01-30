@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.48.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.48.0...v0.48.1) (2023-01-30)
+
+
+### Bug Fixes
+
+* **api:** Allow data field to empty ([4e51506](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/4e515062c944b976d871311a80ff384ecff30f24))
+* **api:** Check for the type property ([e117475](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/e11747542f749dc5226f77d46d5eb0e18509e3af))
+* **api:** Don't render data when the source is from the message ([6a1c7df](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/6a1c7df481a447abe1b741005c735e2b1d0eaede))
+* Fix slow opening nodes and other issues with select2 ([ec97ddd](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ec97dddd0299e477078328f5c9070e77dbdd7621))
+* **time:** Fix usage of toDate, luxon doesn't support it ([ca9a81a](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ca9a81a0723d52e6ad7715746360ac40d9f38e6d))
+
 ## [0.48.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.47.2...v0.48.0) (2022-12-25)
 
 
