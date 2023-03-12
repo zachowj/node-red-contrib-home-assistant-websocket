@@ -26,6 +26,19 @@ The node id of an [entity config](/node/entity-config.md). This can be overridde
 
 All properties must be under `msg.payload` and will be ignored if not.
 
+### Example input
+
+Example of the `msg.payload` object.
+
+```json
+{
+  "id": "d9d27ac6b4ebf78f",
+  "icon": "mdi:lightbulb",
+  "name": "My Light",
+  "entityPicture": "/local/images/my_light.png"
+}
+```
+
 ### id
 
 - Type: `string`
@@ -44,6 +57,12 @@ The icon to use for the entity.
 
 The friendly name to use for the entity.
 
+### entityPicture
+
+- Type: `string`
+
+The entity picture to use for the entity.
+
 ## Examples
 
 <InfoPanelOnly>
@@ -61,3 +80,4 @@ The friendly name to use for the entity.
 @[code](@examples/node/update-config/use01.json)
 
 </DocsOnly>
+```

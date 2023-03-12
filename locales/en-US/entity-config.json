@@ -74,6 +74,7 @@
         "config": "config",
         "diagnostic": "diagnostic"
       },
+      "entity_picture": "Entity picture",
       "icon": "Icon",
       "last_reset": "Last reset",
       "name": "Friendly name",

@@ -43,6 +43,7 @@ export default class UpdateConfig<
             this.node.config.server!,
             parsedMessage.id.value ?? this.node.id,
             {
+                entity_picture: parsedMessage.entityPicture.value,
                 name: parsedMessage.name.value,
                 icon: parsedMessage.icon.value,
             }

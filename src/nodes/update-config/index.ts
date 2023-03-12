@@ -38,12 +38,16 @@ const inputs: NodeInputs = {
     icon: {
         messageProp: 'payload.icon',
     },
+    entityPicture: {
+        messageProp: 'payload.entityPicture',
+    },
 };
 
 const inputSchema: Joi.ObjectSchema = Joi.object({
     id: Joi.string().required(),
     name: Joi.string().allow(''),
     icon: Joi.string().allow(''),
+    entityPicture: Joi.string().allow(''),
 });
 
 export default function UpdateConfig(this: UpdateConfigNode, config: NodeDef) {

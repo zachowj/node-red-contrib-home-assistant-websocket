@@ -11,6 +11,7 @@ export const defaultHaConfigOptions = [
         type: 'select',
         values: ['', 'config', 'diagnostic'],
     },
+    { id: 'entity_picture', type: 'string' },
 ];
 
 export const haConfigOptions = {
