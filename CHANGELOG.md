@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.49.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.48.1...v0.49.0) (2023-03-13)
+
+
+### Features
+
+* Add entity picture to entity config ([132547f](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/132547f43901cd2fd17cf3755404a4ae4e3e83d0))
+
 ## [0.48.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.48.0...v0.48.1) (2023-01-30)
 
 
