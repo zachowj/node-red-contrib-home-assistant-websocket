@@ -50,7 +50,7 @@ export default function buttonNode(
         emitter: this,
     });
     const entityConfigEvents = new Events({
-        node: entityConfigNode,
+        node: this,
         emitter: entityConfigNode,
     });
     const controllerDeps = createControllerDependencies(this, homeAssistant);
