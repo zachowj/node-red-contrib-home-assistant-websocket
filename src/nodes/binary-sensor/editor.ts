@@ -1,6 +1,6 @@
 import { EditorNodeDef, EditorRED, EditorWidgetTypedInputType } from 'node-red';
 
-import { NodeType } from '../../const';
+import { EntityType, NodeType } from '../../const';
 import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
@@ -92,7 +92,7 @@ const BinarySensorEditor: EditorNodeDef<BinarySensorEditorNodeProperties> = {
             // @ts-expect-error - DefinitelyTyped is wrong typedInput can take a object as a parameter
             type: this.stateType,
         });
-        saveEntityType('binary_sensor');
+        saveEntityType(EntityType.BinarySensor);
 
         $('#attributes')
             .editableList({

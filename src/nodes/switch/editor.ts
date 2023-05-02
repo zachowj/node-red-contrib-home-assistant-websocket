@@ -1,6 +1,6 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
-import { NodeType } from '../../const';
+import { EntityType, NodeType } from '../../const';
 import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
@@ -68,7 +68,7 @@ const SwitchEditor: EditorNodeDef<SwitchEditorNodeProperties> = {
         ha.setup(this);
         exposeNode.init(this);
 
-        saveEntityType('switch');
+        saveEntityType(EntityType.Switch);
 
         haOutputs.createOutputs(this.outputProperties, {
             extraTypes: ['entityState'],
