@@ -1,6 +1,6 @@
 import { EditorRED } from 'node-red';
 
-import { sensorUnitOfMeasurement } from './data/sensor';
+import { EntityType } from '../../../const';
 
 declare const RED: EditorRED;
 
@@ -79,14 +79,14 @@ const createSelect = (
     return $select;
 };
 
-export const createSensorUom = (
+export const createUnitOfMeasurement = (
     id: string,
     selectedValue: string,
     data: { id: string; type?: any; values?: any }
 ) => {
     const deviceClass = $('#ha-config-device_class').val() as string;
-    const values = sensorUnitOfMeasurement[deviceClass];
-    if (deviceClass === '' || values === null) {
+    const units = data.values[deviceClass];
+    if (deviceClass === '' || units === null) {
         return createInput(id, selectedValue, data);
     }
 
@@ -97,7 +97,7 @@ export const createSensorUom = (
         'data-property': data.id,
     });
 
-    values.forEach((value) => {
+    units.forEach((value) => {
         $('<option />', {
             value,
             text: value,
@@ -134,8 +134,8 @@ export const createRow = (
         case 'select':
             $row.append(createSelect(id, value, data));
             break;
-        case 'sensor_uom': {
-            $row.append(createSensorUom(id, value, data));
+        case 'unit_of_measurement': {
+            $row.append(createUnitOfMeasurement(id, value, data));
             break;
         }
         case 'string':
@@ -146,9 +146,7 @@ export const createRow = (
     return $row;
 };
 
-export const saveEntityType = (
-    type: 'button' | 'binary_sensor' | 'sensor' | 'switch'
-) => {
+export const saveEntityType = (type: EntityType) => {
     $('#node-input-lookup-entityConfig').on('click', function () {
         if ($('#node-input-entityConfig').val() === '_ADD_') {
             $('body').data('haEntityType', type);

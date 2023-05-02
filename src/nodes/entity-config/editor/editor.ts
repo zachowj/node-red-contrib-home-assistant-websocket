@@ -1,6 +1,6 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
-import { NodeType } from '../../../const';
+import { EntityType, NodeType } from '../../../const';
 import ha, { NodeCategory } from '../../../editor/ha';
 import { defaultHaConfigOptions, haConfigOptions } from './data';
 import { createRow, setEntityType } from './helpers';
@@ -101,12 +101,18 @@ const EntityConfigEditor: EditorNodeDef<EntityConfigEditorNodeProperties> = {
                             (c) => c.property === 'unit_of_measurement'
                         )?.value ?? '';
 
+                    const values =
+                        mergedOptions.find(
+                            (i) => i.id === 'unit_of_measurement'
+                        )?.values ?? [];
+
                     $('#ha-config-unit_of_measurement')
                         .parent()
                         .replaceWith(
                             createRow(val, {
                                 id: 'unit_of_measurement',
-                                type: 'sensor_uom',
+                                type: 'unit_of_measurement',
+                                values,
                             })
                         );
                 });
@@ -141,7 +147,7 @@ const EntityConfigEditor: EditorNodeDef<EntityConfigEditorNodeProperties> = {
                     haConfig.push({ property: id, value });
                     break;
                 }
-                case 'sensor_uom': {
+                case 'unit_of_measurement': {
                     const $ele = $this.find('select, input');
                     const id = $ele.data('property') as string;
                     const value = $ele.val() as string;
