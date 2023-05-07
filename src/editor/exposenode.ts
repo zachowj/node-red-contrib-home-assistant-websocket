@@ -83,6 +83,9 @@ export function init(n: HassNodeProperties) {
                     renderAlert('1.0.4');
                 }
                 break;
+            case NodeType.Number:
+                renderAlert('1.3.0');
+                break;
             case NodeType.Device:
                 renderAlert('0.5.0');
                 break;

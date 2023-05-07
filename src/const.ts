@@ -44,6 +44,7 @@ export enum ComparatorType {
 export enum EntityType {
     BinarySensor = 'binary_sensor',
     Button = 'button',
+    Number = 'number',
     Sensor = 'sensor',
     Switch = 'switch',
 }
@@ -81,6 +82,7 @@ export enum NodeType {
 
     BinarySensor = 'ha-binary-sensor',
     Button = 'ha-button',
+    Number = 'ha-number',
     Sensor = 'ha-sensor',
     Switch = 'ha-switch',
     UpdateConfig = 'ha-update-config',

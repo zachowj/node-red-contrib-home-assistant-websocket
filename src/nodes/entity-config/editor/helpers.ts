@@ -57,6 +57,20 @@ const createInput = (
     }).attr('autocomplete', 'off');
 };
 
+const createNumber = (
+    id: string,
+    value: string,
+    data: { id: any; type?: any }
+) => {
+    return $('<input />', {
+        type: 'number',
+        name: 'value',
+        value,
+        id,
+        'data-property': data.id,
+    }).attr('autocomplete', 'off');
+};
+
 const createSelect = (
     id: string,
     selectedValue: string,
@@ -130,6 +144,9 @@ export const createRow = (
             break;
         case 'datetime':
             $row.append(createDateTime(id, value, data));
+            break;
+        case 'number':
+            $row.append(createNumber(id, value, data));
             break;
         case 'select':
             $row.append(createSelect(id, value, data));

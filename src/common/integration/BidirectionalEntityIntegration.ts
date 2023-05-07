@@ -77,14 +77,14 @@ export default class BidirectionalIntegration extends Integration {
         await super.unregisterEntity();
     }
 
-    public async updateHomeAssistant() {
+    public async updateHomeAssistant(state?: string | number | boolean) {
         if (!this.isIntegrationLoaded) return;
 
         const message: EntityMessage = {
             type: MessageType.Entity,
             server_id: this.entityConfigNode.config.server,
             node_id: this.entityConfigNode.id,
-            state: this.state.isEnabled(),
+            state: state ?? this.state.isEnabled(),
         };
 
         await this.homeAssistant.websocket.send(message);
@@ -123,6 +123,9 @@ export default class BidirectionalIntegration extends Integration {
         switch (this.entityConfigNode.config.entityType) {
             case EntityType.Switch:
                 data.state = state.isEnabled();
+                break;
+            case EntityType.Number:
+                data.state = state.getLastPayload();
                 break;
         }
 

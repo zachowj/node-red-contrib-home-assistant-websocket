@@ -33,6 +33,7 @@ import EventsStateEditor from './nodes/events-state/editor';
 import FireEventEditor from './nodes/fire-event/editor';
 import GetEntitiesEditor from './nodes/get-entities/editor';
 import GetHistoryEditor from './nodes/get-history/editor';
+import NumberEditor from './nodes/number/editor';
 import PollStateEditor from './nodes/poll-state/editor';
 import RenderTemplateEditor from './nodes/render-template/editor';
 import SensorEditor from './nodes/sensor/editor';
@@ -89,6 +90,7 @@ RED.nodes.registerType(NodeType.Zone, ZoneEditor);
 // entities nodes
 RED.nodes.registerType(NodeType.BinarySensor, BinarySensorEditor);
 RED.nodes.registerType(NodeType.Button, ButtonEditor);
+RED.nodes.registerType(NodeType.Number, NumberEditor);
 RED.nodes.registerType(NodeType.Sensor, SensorEditor);
 RED.nodes.registerType(NodeType.Switch, SwitchEditor);
 RED.nodes.registerType(NodeType.UpdateConfig, UpdateConfigEditor);

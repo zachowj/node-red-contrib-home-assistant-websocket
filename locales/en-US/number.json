@@ -1,0 +1,10 @@
+{
+  "ha-number": {
+    "error": {
+      "state_not_number": "The state is not a number"
+    },
+    "label": {
+      "value": "Value"
+    }
+  }
+}

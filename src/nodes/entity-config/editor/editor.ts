@@ -9,7 +9,7 @@ declare const RED: EditorRED;
 
 type HaConfig = {
     property: string;
-    value: string;
+    value: string | number;
 };
 
 interface EntityConfigEditorNodeProperties extends EditorNodeProperties {
@@ -93,8 +93,8 @@ const EntityConfigEditor: EditorNodeDef<EntityConfigEditorNodeProperties> = {
                 $container.append(createRow(val, o));
             });
 
-            // Sensor node changes unit of measurement based on the selected device class
-            if (value === 'sensor') {
+            // Sensor/number node changes unit of measurement based on the selected device class
+            if (value === EntityType.Number || value === EntityType.Sensor) {
                 $('#ha-config-device_class').on('change', function () {
                     const val =
                         self.haConfig.find(
@@ -132,6 +132,13 @@ const EntityConfigEditor: EditorNodeDef<EntityConfigEditorNodeProperties> = {
                     if (value === '') return;
                     const date = new Date(value);
                     haConfig.push({ property: id, value: date.toISOString() });
+                    break;
+                }
+                case 'number': {
+                    const id = $this.find('input').data('property') as string;
+                    const text = $this.find('input').val() as string;
+                    const value = text.length ? Number(text) : '';
+                    haConfig.push({ property: id, value });
                     break;
                 }
                 case 'string': {

@@ -19,6 +19,7 @@ import eventsStateNode from './nodes/events-state';
 import fireEventNode from './nodes/fire-event';
 import getEntitiesNode from './nodes/get-entities';
 import getHistoryNode from './nodes/get-history';
+import numberNode from './nodes/number';
 import pollStateNode from './nodes/poll-state';
 import renderTemplateNode from './nodes/render-template';
 import sensorNode from './nodes/sensor';
@@ -60,6 +61,7 @@ const nodes: Record<NodeType, any> = {
     // Entities
     [NodeType.BinarySensor]: binarySensorNode,
     [NodeType.Button]: buttonNode,
+    [NodeType.Number]: numberNode,
     [NodeType.Sensor]: sensorNode,
     [NodeType.Switch]: switchNode,
     [NodeType.UpdateConfig]: updateConfigNode,

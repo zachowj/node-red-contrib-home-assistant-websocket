@@ -77,6 +77,7 @@ const nodeMap = {
     'fire-event': { doc: 'fire-event', type: 'ha-fire-event' },
     'get-entities': { doc: 'get-entities', type: 'ha-get-entities' },
     'get-history': { doc: 'get-history', type: 'api-get-history' },
+    number: { doc: 'number', type: 'ha-number' },
     'poll-state': { doc: 'poll-state', type: 'poll-state' },
     'render-template': { doc: 'render-template', type: 'api-render-template' },
     sensor: { doc: 'sensor', type: 'ha-sensor' },

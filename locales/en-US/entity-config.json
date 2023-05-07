@@ -86,6 +86,14 @@
       "entity_picture": "Entity picture",
       "icon": "Icon",
       "last_reset": "Last reset",
+      "max_value": "Max value",
+      "min_value": "Min value",
+      "mode": "Mode",
+      "mode_options": {
+        "auto": "auto",
+        "box": "box",
+        "slider": "slider"
+      },
       "name": "Friendly name",
       "output_debug": "Output debug information",
       "resend": "Resend state and attributes",
@@ -95,6 +103,7 @@
         "total": "total",
         "total_increasing": "total increasing"
       },
+      "step_value": "Step",
       "type": "Type",
       "type_options": {
         "binary_sensor": "binary sensor",
