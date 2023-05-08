@@ -83,6 +83,7 @@ const nodeMap = {
     sensor: { doc: 'sensor', type: 'ha-sensor' },
     switch: { doc: 'switch', type: 'ha-switch' },
     tag: { doc: 'tag', type: 'ha-tag' },
+    text: { doc: 'text', type: 'ha-text' },
     time: { doc: 'time', type: 'ha-time' },
     'trigger-state': { doc: 'trigger-state', type: 'trigger-state' },
     'update-config': { doc: 'update-config', type: 'ha-update-config' },

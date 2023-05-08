@@ -114,18 +114,21 @@ export default class BidirectionalIntegration extends Integration {
     }
 
     protected getStateData(state?: State): Partial<EntityMessage> {
-        if (!state) {
+        const lastPayload = state?.getLastPayload();
+        if (!state || !lastPayload) {
             return {};
         }
 
-        const data: Partial<EntityMessage> = {};
+        let data: Partial<EntityMessage> = {};
 
         switch (this.entityConfigNode.config.entityType) {
+            case EntityType.Number:
+            case EntityType.Text: {
+                data = { ...lastPayload };
+                break;
+            }
             case EntityType.Switch:
                 data.state = state.isEnabled();
-                break;
-            case EntityType.Number:
-                data.state = state.getLastPayload();
                 break;
         }
 

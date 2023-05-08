@@ -86,16 +86,21 @@
       "entity_picture": "Entity picture",
       "icon": "Icon",
       "last_reset": "Last reset",
+      "max_length": "Max length",
       "max_value": "Max value",
+      "min_length": "Min length",
       "min_value": "Min value",
       "mode": "Mode",
       "mode_options": {
         "auto": "auto",
         "box": "box",
-        "slider": "slider"
+        "password": "password",
+        "slider": "slider",
+        "text": "text"
       },
       "name": "Friendly name",
       "output_debug": "Output debug information",
+      "pattern": "Pattern",
       "resend": "Resend state and attributes",
       "state_class": "State class",
       "state_class_options": {
@@ -110,7 +115,8 @@
         "button": "button",
         "number": "number",
         "sensor": "sensor",
-        "switch": "switch"
+        "switch": "switch",
+        "text": "text"
       },
       "unit_of_measurement": "Unit of measurement"
     }

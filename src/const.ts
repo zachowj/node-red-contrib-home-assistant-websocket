@@ -47,6 +47,7 @@ export enum EntityType {
     Number = 'number',
     Sensor = 'sensor',
     Switch = 'switch',
+    Text = 'text',
 }
 
 export enum EntityFilterType {
@@ -85,6 +86,7 @@ export enum NodeType {
     Number = 'ha-number',
     Sensor = 'ha-sensor',
     Switch = 'ha-switch',
+    Text = 'ha-text',
     UpdateConfig = 'ha-update-config',
 }
 

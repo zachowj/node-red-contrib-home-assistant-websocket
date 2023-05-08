@@ -61,7 +61,8 @@ export default function entityConfigNode(
         }
         case EntityType.Button:
         case EntityType.Number:
-        case EntityType.Switch: {
+        case EntityType.Switch:
+        case EntityType.Text: {
             this.integration = new BidirectionalIntegration(props);
             break;
         }

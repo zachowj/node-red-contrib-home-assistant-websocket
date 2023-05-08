@@ -314,4 +314,8 @@ export default class UnidirectionalIntegration extends Integration {
     protected debugToClient(topic: string, message: any) {
         debugToClient(this.entityConfigNode, message, topic);
     }
+
+    public getEntityConfigNode(): EntityConfigNode {
+        return this.entityConfigNode;
+    }
 }

@@ -25,6 +25,7 @@ import renderTemplateNode from './nodes/render-template';
 import sensorNode from './nodes/sensor';
 import switchNode from './nodes/switch';
 import tagNode from './nodes/tag';
+import textNode from './nodes/text';
 import timeNode from './nodes/time';
 import triggerStateNode from './nodes/trigger-state';
 import updateConfigNode from './nodes/update-config';
@@ -64,6 +65,7 @@ const nodes: Record<NodeType, any> = {
     [NodeType.Number]: numberNode,
     [NodeType.Sensor]: sensorNode,
     [NodeType.Switch]: switchNode,
+    [NodeType.Text]: textNode,
     [NodeType.UpdateConfig]: updateConfigNode,
 };
 

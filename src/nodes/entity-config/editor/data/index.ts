@@ -3,6 +3,7 @@ import button from './button';
 import number from './number';
 import sensor from './sensor';
 import switchData from './switch';
+import text from './text';
 
 export const defaultHaConfigOptions = [
     { id: 'name', type: 'string' },
@@ -21,4 +22,5 @@ export const haConfigOptions = {
     number,
     sensor,
     switch: switchData,
+    text,
 };
