@@ -7,6 +7,10 @@ export interface DeviceConfigNodeProperties extends BaseNodeProperties {
     manufacturer?: string;
     model?: string;
     swVersion?: string;
+    macIdentifier?: string;
+    bluetoothIdentifier?: string;
+    upnpIdentifier?: string;
+    zigbeeIdentiefier?: string;
 }
 
 export interface DeviceConfigNode extends BaseNode {
