@@ -98,7 +98,7 @@
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",
     "@vuepress/plugin-google-analytics": "2.0.0-beta.60",
-    "@vuepress/plugin-register-components": "2.0.0-beta.61",
+    "@vuepress/plugin-register-components": "2.0.0-beta.63",
     "@vuepress/plugin-search": "2.0.0-beta.60",
     "autoprefixer": "^10.4.7",
     "chai": "^4.3.6",
