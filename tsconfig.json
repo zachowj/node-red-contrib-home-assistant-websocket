@@ -11,7 +11,8 @@
     "noImplicitAny": true,
     "strict": true,
     "moduleResolution": "node",
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+    "skipLibCheck": true
   },
   "include": ["./src/**/*.js", "./src/**/*.ts"],
   "exclude": [
