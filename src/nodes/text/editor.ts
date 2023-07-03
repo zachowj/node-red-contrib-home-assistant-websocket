@@ -1,6 +1,11 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
-import { EntityType, NodeType } from '../../const';
+import {
+    EntityType,
+    NodeType,
+    TypedInputTypes,
+    ValueIntegrationMode,
+} from '../../const';
 import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
@@ -13,16 +18,17 @@ interface TextEditorNodeProperties extends EditorNodeProperties {
     version: number;
     debugenabled: boolean;
     entityConfig: any;
+    mode: ValueIntegrationMode;
     outputProperties: OutputProperty[];
 }
 
 const TextEditor: EditorNodeDef<TextEditorNodeProperties> = {
     category: NodeCategory.HomeAssistantEntities,
-    color: NodeColor.HaBlue,
-    inputs: 1,
+    color: NodeColor.Beta,
+    inputs: 0,
     outputs: 1,
     icon: 'font-awesome/fa-font',
-    align: 'right',
+    align: 'left',
     paletteLabel: 'text',
     label: function () {
         return this.name || 'text';
@@ -32,6 +38,8 @@ const TextEditor: EditorNodeDef<TextEditorNodeProperties> = {
         name: { value: '' },
         version: { value: RED.settings.get('haTextVersion', 0) },
         debugenabled: { value: false },
+        // @ts-expect-error - DefinitelyTyped is wrong inputs can be changed
+        inputs: { value: 0 },
         outputs: { value: 1 },
         entityConfig: {
             value: '',
@@ -40,15 +48,22 @@ const TextEditor: EditorNodeDef<TextEditorNodeProperties> = {
             filter: (config) => config.entityType === 'text',
             required: true,
         },
-        state: { value: 'payload' },
-        stateType: { value: 'msg' },
+        mode: { value: ValueIntegrationMode.In },
+        value: { value: 'payload' },
+        valueType: { value: TypedInputTypes.Message },
         outputProperties: {
             value: [
                 {
                     property: 'payload',
-                    propertyType: 'msg',
+                    propertyType: TypedInputTypes.Message,
                     value: '',
-                    valueType: 'entityState',
+                    valueType: TypedInputTypes.Value,
+                },
+                {
+                    property: 'previousValue',
+                    propertyType: TypedInputTypes.Message,
+                    value: '',
+                    valueType: TypedInputTypes.PreviousValue,
                 },
             ],
             validate: haOutputs.validate,
@@ -59,16 +74,31 @@ const TextEditor: EditorNodeDef<TextEditorNodeProperties> = {
         exposeNode.init(this);
 
         saveEntityType(EntityType.Text);
+        $('#dialog-form').prepend(ha.betaWarning(963));
 
-        $('#node-input-state').typedInput({
-            types: ['msg', 'flow', 'global', 'jsonata', 'num'],
-            typeField: '#node-input-stateType',
+        const $valueRow = $('#node-input-value').parent();
+        $('#node-input-mode').on('change', function (this: HTMLSelectElement) {
+            $valueRow.toggle(this.value === ValueIntegrationMode.Out);
+            $('#node-input-inputs').val(
+                this.value === ValueIntegrationMode.Out ? 1 : 0
+            );
+        });
+
+        $('#node-input-value').typedInput({
+            types: [
+                TypedInputTypes.Message,
+                TypedInputTypes.Flow,
+                TypedInputTypes.Global,
+                TypedInputTypes.JSONata,
+                TypedInputTypes.Number,
+            ],
+            typeField: '#node-input-valueType',
             // @ts-expect-error - DefinitelyTyped is wrong typedInput can take a object as a parameter
-            type: this.stateType,
+            type: this.valueType,
         });
 
         haOutputs.createOutputs(this.outputProperties, {
-            extraTypes: ['entityState'],
+            extraTypes: [TypedInputTypes.Value, TypedInputTypes.PreviousValue],
         });
     },
     oneditsave: function () {

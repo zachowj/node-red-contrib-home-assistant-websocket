@@ -156,16 +156,10 @@ export default class UnidirectionalIntegration extends Integration {
 
         let data: Partial<EntityMessage> = {};
 
-        switch (this.entityConfigNode.config.entityType) {
-            case EntityType.BinarySensor:
-            case EntityType.Sensor: {
-                if (this.entityConfigNode.config.resend && state) {
-                    const lastPayload = state.getLastPayload();
-                    if (lastPayload) {
-                        data = { ...lastPayload };
-                    }
-                }
-                break;
+        if (this.entityConfigNode.config.resend && state) {
+            const lastPayload = state.getLastPayload();
+            if (lastPayload) {
+                data = { ...lastPayload };
             }
         }
 
@@ -317,5 +311,13 @@ export default class UnidirectionalIntegration extends Integration {
 
     public getEntityConfigNode(): EntityConfigNode {
         return this.entityConfigNode;
+    }
+
+    public getEntityHomeAssistantConfigValue(
+        key: string
+    ): string | number | undefined {
+        return this.entityConfigNode.config.haConfig.find(
+            (config) => config.property === key
+        )?.value;
     }
 }

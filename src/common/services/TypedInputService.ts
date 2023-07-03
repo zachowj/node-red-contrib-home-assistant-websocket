@@ -85,9 +85,11 @@ export default class TypedInputService {
             case TypedInputTypes.EventData:
             case TypedInputTypes.Headers:
             case TypedInputTypes.Params:
-            case TypedInputTypes.TriggerId:
             case TypedInputTypes.PrevEntity:
+            case TypedInputTypes.PreviousValue:
             case TypedInputTypes.Results:
+            case TypedInputTypes.TriggerId:
+            case TypedInputTypes.Value:
                 val = props[valueType];
                 break;
             default:

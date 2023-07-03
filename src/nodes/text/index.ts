@@ -5,11 +5,11 @@ import Events from '../../common/events/Events';
 import InputService, { NodeInputs } from '../../common/services/InputService';
 import State from '../../common/State';
 import Status from '../../common/status/Status';
-import { TypedInputTypes } from '../../const';
+import { TypedInputTypes, ValueIntegrationMode } from '../../const';
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
 import { getConfigNodes } from '../../helpers/node';
-import { getHomeAssistant, HaEvent } from '../../homeAssistant/index';
+import { getHomeAssistant } from '../../homeAssistant/index';
 import {
     BaseNode,
     EntityBaseNodeProperties,
@@ -18,8 +18,9 @@ import {
 import TextController from './TextController';
 
 export interface TextNodeProperties extends EntityBaseNodeProperties {
-    state: string;
-    stateType: string;
+    mode: ValueIntegrationMode;
+    value: string;
+    valueType: string;
     outputProperties: OutputProperty[];
 }
 
@@ -28,21 +29,21 @@ export interface TextNode extends BaseNode {
 }
 
 export const inputs: NodeInputs = {
-    state: {
-        messageProp: 'payload.state',
-        configProp: 'state',
+    value: {
+        messageProp: 'payload.text',
+        configProp: 'value',
         default: 'payload',
     },
-    stateType: {
-        messageProp: 'payload.stateType',
-        configProp: 'stateType',
+    valueType: {
+        messageProp: 'payload.valueType',
+        configProp: 'valueType',
         default: TypedInputTypes.Message,
     },
 };
 
 export const inputSchema: Joi.ObjectSchema = Joi.object({
-    state: Joi.alternatives().try(Joi.string(), Joi.number()).required(),
-    stateType: Joi.string()
+    value: Joi.alternatives().try(Joi.string(), Joi.number()).required(),
+    valueType: Joi.string()
         .valid(
             TypedInputTypes.Message,
             TypedInputTypes.Flow,
@@ -53,10 +54,7 @@ export const inputSchema: Joi.ObjectSchema = Joi.object({
         .required(),
 });
 
-export default function textNode(
-    this: TextNode,
-    config: EntityBaseNodeProperties
-) {
+export default function textNode(this: TextNode, config: TextNodeProperties) {
     RED.nodes.createNode(this, config);
     this.config = migrate(config);
 
@@ -71,10 +69,6 @@ export default function textNode(
         state,
     });
 
-    const entityConfigEvents = new Events({
-        node: this,
-        emitter: entityConfigNode,
-    });
     const controllerDeps = createControllerDependencies(this, homeAssistant);
     const inputService = new InputService<TextNodeProperties>({
         inputs,
@@ -83,7 +77,8 @@ export default function textNode(
     });
 
     entityConfigNode.integration.setStatus(status);
-    const controller = new TextController({
+    // eslint-disable-next-line no-new
+    new TextController({
         inputService,
         integration: entityConfigNode.integration,
         node: this,
@@ -91,9 +86,4 @@ export default function textNode(
         ...controllerDeps,
         state,
     });
-
-    entityConfigEvents.addListener(
-        HaEvent.StateChanged,
-        controller.onValueChange.bind(controller)
-    );
 }

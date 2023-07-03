@@ -9,25 +9,44 @@ Creates a text entity in Home Assistant which can be manipulated from this node.
 
 ## Configuration
 
-### State <Badge text="required"/>
+### Text <Badge text="required"/>
 
-- Type: `text`
+- Type: `string`
 
-The state of the entity should be updated to
+The string of the entity should be updated to
 
 ## Inputs
 
 properties of `msg.payload`
 
-### state
+### Text
 
-- Type: `text`
+- Type: `string`
 
-The state of the text entity should be updated to
+The string of the text entity should be updated to
 
 ## Outputs
 
 Value types:
 
-- `entity state`: entity state of the text entity
-- `config`: config properties of the node
+- `value`: The text string of the entity
+- `previous value`: The previous text string of the entity
+- `config`: The config properties of the node
+
+## Examples
+
+<InfoPanelOnly>
+
+[link](https://zachowj.github.io/node-red-contrib-home-assistant-websocket/node/text.html#examples)
+
+</InfoPanelOnly>
+
+<DocsOnly>
+
+#### Usage example
+
+![screenshot](./images/text_01.png)
+
+@[code](@examples/node/text/text_usage.json)
+
+</DocsOnly>

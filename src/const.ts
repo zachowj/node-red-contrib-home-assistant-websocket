@@ -90,6 +90,11 @@ export enum NodeType {
     UpdateConfig = 'ha-update-config',
 }
 
+export enum ValueIntegrationMode {
+    In = 'in',
+    Out = 'out',
+}
+
 export enum TypedInputTypes {
     Message = 'msg',
     Flow = 'flow',
@@ -112,6 +117,8 @@ export enum TypedInputTypes {
     PrevEntity = 'prevEntity',
     Results = 'results',
     Regex = 're',
+    Value = 'value',
+    PreviousValue = 'previousValue',
 }
 
 export enum TimeUnit {

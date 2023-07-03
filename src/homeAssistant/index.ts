@@ -22,6 +22,7 @@ export enum HaEvent {
     ServicesUpdated = 'services_updated',
     StateChanged = 'state_changed',
     TagScanned = 'tag_scanned',
+    ValueChange = 'value_change',
 }
 
 export const SUPERVISOR_URL = 'http://supervisor/core';

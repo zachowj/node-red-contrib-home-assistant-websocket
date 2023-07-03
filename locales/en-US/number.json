@@ -1,10 +1,17 @@
 {
   "ha-number": {
     "error": {
-      "state_not_number": "The state is not a number"
+      "value_not_number": "The state is not a number"
     },
     "label": {
-      "value": "Value"
+      "name": "Name",
+      "entity_config": "Entity config",
+      "value": "Value",
+      "mode": "Mode",
+      "select": {
+        "in": "Listen for changes",
+        "out": "Set value"
+      }
     }
   }
 }

@@ -9,25 +9,44 @@ Creates a number in Home Assistant which can be manipulated from this node.
 
 ## Configuration
 
-### State <Badge text="required"/>
+### Value <Badge text="required"/>
 
 - Type: `number`
 
-The state of the entity should be updated to
+The value of the entity should be updated to
 
 ## Inputs
 
 properties of `msg.payload`
 
-### state
+### value
 
 - Type: `number`
 
-The state of the entity should be updated to
+The value of the entity should be updated to
 
 ## Outputs
 
 Value types:
 
-- `entity state`: entity state of the pressed button
-- `config`: config properties of the node
+- `value`: The value of the entity
+- `previous value`: The previous value of the entity
+- `config`: The config properties of the node
+
+## Examples
+
+<InfoPanelOnly>
+
+[link](https://zachowj.github.io/node-red-contrib-home-assistant-websocket/node/number.html#examples)
+
+</InfoPanelOnly>
+
+<DocsOnly>
+
+#### Usage example
+
+![screenshot](./images/number_01.png)
+
+@[code](@examples/node/number/number_usage.json)
+
+</DocsOnly>

@@ -56,4 +56,8 @@ export default class Events {
         });
         this.#listeners = [];
     }
+
+    emit(event: string | symbol, ...args: any[]): boolean {
+        return this.emitter.emit(event, ...args);
+    }
 }

@@ -8,6 +8,7 @@
       "invalid_auth": "Invalid access token for websocket",
       "invalid_state": "Invalid state",
       "no_connection": "No connection to Home Assistant",
+      "pattern_not_matched": "Pattern not matched",
       "user_not_admin": "User required to have admin privileges in Home Assistant"
     },
     "label": {

@@ -1,10 +1,9 @@
-import { EntityType } from '../../const';
 import { RED } from '../../globals';
 import { HaEvent } from '../../homeAssistant/index';
 import { SubscriptionUnsubscribe } from '../../types/home-assistant';
 import State from '../State';
 import { createHaConfig } from './helpers';
-import { MessageType } from './Integration';
+import { IntegrationEvent, MessageType } from './Integration';
 import Integration, { EntityMessage } from './UnidirectionalEntityIntegration';
 
 export interface TriggerPayload {
@@ -22,6 +21,11 @@ interface TriggerEvent {
 interface StateChangeEvent {
     type: HaEvent.StateChanged;
     state: boolean;
+}
+
+interface ValueChangedEvent {
+    type: HaEvent.ValueChange;
+    value: number;
 }
 
 export interface StateChangePayload {
@@ -90,12 +94,20 @@ export default class BidirectionalIntegration extends Integration {
         await this.homeAssistant.websocket.send(message);
     }
 
-    protected onHaEventMessage(evt: TriggerEvent | StateChangeEvent) {
+    protected onHaEventMessage(
+        evt: StateChangeEvent | TriggerEvent | ValueChangedEvent
+    ) {
         switch (evt.type) {
             case HaEvent.AutomationTriggered:
                 this.entityConfigNode.emit(
                     HaEvent.AutomationTriggered,
                     evt.data
+                );
+                break;
+            case HaEvent.ValueChange:
+                this.entityConfigNode.emit(
+                    IntegrationEvent.ValueChange,
+                    evt.value
                 );
                 break;
             case HaEvent.StateChanged:
@@ -119,18 +131,9 @@ export default class BidirectionalIntegration extends Integration {
             return {};
         }
 
-        let data: Partial<EntityMessage> = {};
-
-        switch (this.entityConfigNode.config.entityType) {
-            case EntityType.Number:
-            case EntityType.Text: {
-                data = { ...lastPayload };
-                break;
-            }
-            case EntityType.Switch:
-                data.state = state.isEnabled();
-                break;
-        }
+        const data: Partial<EntityMessage> = {
+            state: state.isEnabled(),
+        };
 
         return data;
     }

@@ -13,6 +13,7 @@ export enum IntegrationState {
 
 export enum IntegrationEvent {
     Trigger = 'trigger',
+    ValueChange = 'itegration_value_change',
 }
 
 export enum MessageType {

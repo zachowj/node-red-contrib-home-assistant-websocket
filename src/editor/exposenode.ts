@@ -98,9 +98,10 @@ export function init(n: HassNodeProperties) {
 
 function render() {
     switch (node.type as unknown) {
-        case NodeType.Webhook:
-        case NodeType.Entity:
-            renderAlert();
+        case NodeType.Button:
+            if ($('#node-input-entityConfig').val() !== '_ADD_') {
+                renderAlert('1.0.4');
+            }
             break;
         case NodeType.BinarySensor:
         case NodeType.Sensor:
@@ -109,10 +110,13 @@ function render() {
                 renderAlert('1.1.0');
             }
             break;
-        case NodeType.Button:
-            if ($('#node-input-entityConfig').val() !== '_ADD_') {
-                renderAlert('1.0.4');
-            }
+        case NodeType.Entity:
+        case NodeType.Webhook:
+            renderAlert();
+            break;
+        case NodeType.Number:
+        case NodeType.Text:
+            renderAlert('1.3.0');
             break;
         default:
             renderEventNode();

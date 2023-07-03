@@ -1,6 +1,7 @@
 import ClientEvents from '../../common/events/ClientEvents';
 import BidirectionalIntegration from '../../common/integration/BidirectionalEntityIntegration';
 import Integration from '../../common/integration/UnidirectionalEntityIntegration';
+import ValueEntityIntegration from '../../common/integration/ValueEntityIntegration';
 import State from '../../common/State';
 import { EntityType } from '../../const';
 import { HassExposedConfig } from '../../editor/types';
@@ -60,10 +61,13 @@ export default function entityConfigNode(
             break;
         }
         case EntityType.Button:
-        case EntityType.Number:
-        case EntityType.Switch:
-        case EntityType.Text: {
+        case EntityType.Switch: {
             this.integration = new BidirectionalIntegration(props);
+            break;
+        }
+        case EntityType.Number:
+        case EntityType.Text: {
+            this.integration = new ValueEntityIntegration(props);
             break;
         }
         default:

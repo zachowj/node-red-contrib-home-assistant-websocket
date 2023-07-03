@@ -1,5 +1,6 @@
 import { EditorWidgetTypedInputTypeDefinition } from 'node-red';
 
+import { TypedInputTypes } from '../../const';
 import { i18n } from '../i18n';
 import { HATypedInputTypeOptions, OutputProperty } from '../types';
 
@@ -25,12 +26,13 @@ const customTypes: { [key: string]: EditorWidgetTypedInputTypeDefinition } = {
         label: 'previous entity',
         hasValue: false,
     },
-    results: { value: 'results', label: 'results', hasValue: false },
-    receivedData: {
-        value: 'data',
-        label: 'received data',
+    previousValue: {
+        value: 'previousValue',
+        label: 'previous value',
         hasValue: false,
     },
+    results: { value: 'results', label: 'results', hasValue: false },
+    receivedData: { value: 'data', label: 'received data', hasValue: false },
     sentData: { value: 'data', label: 'sent data', hasValue: false },
     tagId: { value: 'triggerId', label: 'tag id', hasValue: false },
     timeSinceChangedMs: {
@@ -39,16 +41,17 @@ const customTypes: { [key: string]: EditorWidgetTypedInputTypeDefinition } = {
         hasValue: false,
     },
     triggerId: { value: 'triggerId', label: 'trigger id', hasValue: false },
+    value: { value: 'value', label: 'value', hasValue: false },
 };
 const defaultTypes: HATypedInputTypeOptions = [
     customTypes.config,
-    'flow',
-    'global',
-    'str',
-    'num',
-    'bool',
-    'date',
-    'jsonata',
+    TypedInputTypes.Flow,
+    TypedInputTypes.Global,
+    TypedInputTypes.String,
+    TypedInputTypes.Number,
+    TypedInputTypes.Boolean,
+    TypedInputTypes.Date,
+    TypedInputTypes.JSONata,
 ];
 
 export function createOutputs(
@@ -81,7 +84,13 @@ export function createOutputs(
             })
                 .css('width', '30%')
                 .appendTo($row)
-                .typedInput({ types: ['msg', 'flow', 'global'] });
+                .typedInput({
+                    types: [
+                        TypedInputTypes.Message,
+                        TypedInputTypes.Flow,
+                        TypedInputTypes.Global,
+                    ],
+                });
 
             $('<div/>', { style: 'display:inline-block; padding:0px 6px;' })
                 .text('=')
@@ -124,9 +133,9 @@ function getTypes(): HATypedInputTypeOptions {
     }, [] as HATypedInputTypeOptions);
 
     valueTypes = [...valueTypes, ...defaultTypes];
-    if (_extraTypes.includes('msg')) {
-        const index = valueTypes.indexOf('flow');
-        valueTypes.splice(index, 0, 'msg');
+    if (_extraTypes.includes(TypedInputTypes.Message)) {
+        const index = valueTypes.indexOf(TypedInputTypes.Flow);
+        valueTypes.splice(index, 0, TypedInputTypes.Message);
     }
 
     return valueTypes;
