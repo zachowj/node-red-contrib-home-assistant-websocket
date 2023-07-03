@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.50.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.49.1...v0.50.0) (2023-07-03)
+
+
+### Features
+
+* **number:** Add number node ([64d3ce6](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/64d3ce6509a6b96c1095d68e68227c5202e1e125))
+* **number:** Add output to node when value changes in HA ([ec51cab](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ec51cab9cf2e6e890f45ee857347c044aa390915))
+* **text:** Add output to node when value changes in HA ([ec51cab](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ec51cab9cf2e6e890f45ee857347c044aa390915))
+* **text:** Add text node ([2474a44](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/2474a448bde442d6acc482900bdce672c8e58f9e))
+
 ## [0.49.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.49.0...v0.49.1) (2023-04-07)
 
 
