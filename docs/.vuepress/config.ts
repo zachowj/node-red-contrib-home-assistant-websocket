@@ -142,6 +142,7 @@ export default defineUserConfig({
                         'button',
                         'entity',
                         'number',
+                        'select',
                         'sensor',
                         'switch',
                         'text',

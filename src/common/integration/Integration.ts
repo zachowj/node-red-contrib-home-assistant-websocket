@@ -62,7 +62,7 @@ export default class Integration {
     public async sendUpdateConfig(
         serverId: string,
         nodeId: string,
-        config: { name?: string; icon?: string; entity_picture?: string }
+        config: Record<string, string | string[] | number>
     ) {
         const payload = {
             type: MessageType.UpdateConfig,

@@ -99,6 +99,7 @@
         "text": "text"
       },
       "name": "Friendly name",
+      "options": "Options",
       "output_debug": "Output debug information",
       "pattern": "Pattern",
       "resend": "Resend state and attributes",
@@ -114,6 +115,7 @@
         "binary_sensor": "binary sensor",
         "button": "button",
         "number": "number",
+        "select": "select",
         "sensor": "sensor",
         "switch": "switch",
         "text": "text"

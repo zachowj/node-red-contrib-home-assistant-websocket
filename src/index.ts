@@ -22,6 +22,7 @@ import getHistoryNode from './nodes/get-history';
 import numberNode from './nodes/number';
 import pollStateNode from './nodes/poll-state';
 import renderTemplateNode from './nodes/render-template';
+import selectNode from './nodes/select';
 import sensorNode from './nodes/sensor';
 import switchNode from './nodes/switch';
 import tagNode from './nodes/tag';
@@ -63,6 +64,7 @@ const nodes: Record<NodeType, any> = {
     [NodeType.BinarySensor]: binarySensorNode,
     [NodeType.Button]: buttonNode,
     [NodeType.Number]: numberNode,
+    [NodeType.Select]: selectNode,
     [NodeType.Sensor]: sensorNode,
     [NodeType.Switch]: switchNode,
     [NodeType.Text]: textNode,

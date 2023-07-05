@@ -1,3 +1,4 @@
+import { HaConfigOption } from '.';
 import { DeviceClass, monetaryList } from './common';
 
 const sensorDeviceClasses = [
@@ -165,4 +166,4 @@ export default [
         values: ['', 'measurement', 'total', 'total_increasing'],
     },
     { id: 'last_reset', type: 'datetime' },
-];
+] as HaConfigOption[];

@@ -67,10 +67,6 @@ export function init(n: HassNodeProperties) {
 
     $('#node-input-server, #node-input-entityConfig').on('change', () => {
         switch (node.type as unknown) {
-            case NodeType.Webhook:
-            case NodeType.Entity:
-                renderAlert();
-                break;
             case NodeType.BinarySensor:
             case NodeType.Sensor:
             case NodeType.Switch:
@@ -83,11 +79,23 @@ export function init(n: HassNodeProperties) {
                     renderAlert('1.0.4');
                 }
                 break;
-            case NodeType.Number:
-                renderAlert('1.3.0');
-                break;
             case NodeType.Device:
                 renderAlert('0.5.0');
+                break;
+            case NodeType.Entity:
+            case NodeType.Webhook:
+                renderAlert();
+                break;
+            case NodeType.Number:
+            case NodeType.Text:
+                if ($('#node-input-entityConfig').val() !== '_ADD_') {
+                    renderAlert('1.3.0');
+                }
+                break;
+            case NodeType.Select:
+                if ($('#node-input-entityConfig').val() !== '_ADD_') {
+                    renderAlert('1.4.0');
+                }
                 break;
             default:
                 toggleExpose();
@@ -116,7 +124,14 @@ function render() {
             break;
         case NodeType.Number:
         case NodeType.Text:
-            renderAlert('1.3.0');
+            if ($('#node-input-entityConfig').val() !== '_ADD_') {
+                renderAlert('1.3.0');
+            }
+            break;
+        case NodeType.Select:
+            if ($('#node-input-entityConfig').val() !== '_ADD_') {
+                renderAlert('1.4.0');
+            }
             break;
         default:
             renderEventNode();

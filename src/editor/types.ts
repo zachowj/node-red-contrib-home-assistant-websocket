@@ -14,7 +14,7 @@ export type OutputProperty = {
 
 export interface HassExposedConfig {
     property: string;
-    value: string | number;
+    value: string | number | string[];
 }
 
 export type HATypedInputTypeOptions = Array<

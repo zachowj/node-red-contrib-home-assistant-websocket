@@ -4,6 +4,7 @@ import InputOutputController, {
 } from '../../common/controllers/InputOutputController';
 import InputError from '../../common/errors/InputError';
 import NoConnectionError from '../../common/errors/NoConnectionError';
+import UnidirectionalIntegration from '../../common/integration/UnidirectionalEntityIntegration';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
 import { UpdateConfigNode, UpdateConfigNodeProperties } from '.';
 
@@ -19,6 +20,7 @@ export default class UpdateConfig<
     P extends UpdateConfigNodeProperties
 > extends InputOutputController<T, P> {
     readonly #homeAssistant: HomeAssistant;
+    protected integration?: UnidirectionalIntegration;
 
     constructor(props: UpdateConfigControllerOptions<T, P>) {
         super(props);
@@ -37,17 +39,21 @@ export default class UpdateConfig<
             );
         }
 
+        const config = {
+            entity_picture: parsedMessage.entityPicture.value,
+            name: parsedMessage.name.value,
+            icon: parsedMessage.icon.value,
+            options: parsedMessage.options.value,
+        };
+
         this.status.setSending();
         await this.integration?.sendUpdateConfig(
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            this.node.config.server!,
+            this.integration.getEntityConfigNode().config.server!,
             parsedMessage.id.value ?? this.node.id,
-            {
-                entity_picture: parsedMessage.entityPicture.value,
-                name: parsedMessage.name.value,
-                icon: parsedMessage.icon.value,
-            }
+            config
         );
+        this.integration.saveHaConfigToContext(config);
         this.status.setSuccess('home-assistant.status.updated');
 
         this.setCustomOutputs(this.node.config.outputProperties, message, {

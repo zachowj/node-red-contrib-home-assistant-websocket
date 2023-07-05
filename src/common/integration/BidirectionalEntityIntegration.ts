@@ -67,7 +67,7 @@ export default class BidirectionalIntegration extends Integration {
             );
             return;
         }
-
+        this.saveHaConfigToContext(haConfig);
         this.status.forEach((status) =>
             status?.setSuccess(RED._('config-server.status.registered'))
         );

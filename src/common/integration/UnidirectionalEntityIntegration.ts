@@ -240,6 +240,7 @@ export default class UnidirectionalIntegration extends Integration {
             return;
         }
 
+        this.saveHaConfigToContext(config);
         this.status.forEach((status) => status?.setSuccess('Registered'));
 
         this.registered = true;
@@ -313,11 +314,29 @@ export default class UnidirectionalIntegration extends Integration {
         return this.entityConfigNode;
     }
 
+    /**
+     * Get the value of a Home Assistant configuration key for the entity.
+     * @param key - The key to retrieve the value for.
+     * @returns The value of the key, or undefined if it does not exist.
+     */
     public getEntityHomeAssistantConfigValue(
         key: string
-    ): string | number | undefined {
-        return this.entityConfigNode.config.haConfig.find(
-            (config) => config.property === key
-        )?.value;
+    ): string | number | string[] | undefined {
+        // Get the Home Assistant configuration from the context or the entity's config
+        const haConfig =
+            this.getHaConfigFromContext() ??
+            createHaConfig(this.entityConfigNode.config.haConfig);
+
+        return haConfig[key];
+    }
+
+    public saveHaConfigToContext(haConfig: Record<string, any>) {
+        this.entityConfigNode.context().set('haConfig', haConfig);
+    }
+
+    public getHaConfigFromContext(): Record<string, any> | undefined {
+        return this.entityConfigNode.context().get('haConfig') as
+            | Record<string, any>
+            | undefined;
     }
 }

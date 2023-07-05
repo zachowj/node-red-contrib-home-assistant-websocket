@@ -1,0 +1,36 @@
+<input type="hidden" id="node-input-version" />
+<input type="hidden" id="node-input-inputs" />
+
+<div class="form-row">
+    <label for="node-input-name">
+        <span data-i18n="ha-select.label.name"></span>
+    </label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+</div>
+
+<div class="form-row">
+    <label for="node-input-entityConfig">
+        <span data-i18n="ha-select.label.entity_config"></span>
+    </label>
+    <input type="text" id="node-input-entityConfig" />
+</div>
+
+<div class="form-row">
+    <label for="node-input-mode">
+        <span data-i18n="ha-select.label.mode"></span>
+    </label>
+    <select id="node-input-mode">
+        <option value="in" data-i18n="ha-select.label.select.in"></option>
+        <option value="out" data-i18n="ha-select.label.select.out"></option>
+    </select>
+</div>
+
+<div class="form-row">
+    <label for="node-input-value">
+        <span data-i18n="ha-select.label.value"></span>
+    </label>
+    <input type="text" id="node-input-value" style="width: 70%" />
+    <input type="hidden" id="node-input-valueType" />
+</div>
+
+<div class="form-row"><ol id="custom-outputs"></ol></div>

@@ -43,6 +43,30 @@ const createDateTime = (
     });
 };
 
+const createEditableList = (id: string, data: any[], defaults: any[]) => {
+    const $list = $('<ol />', { id });
+    const $div = $('<div />', {
+        style: 'width: 70%;display: inline-block;',
+    }).append($list);
+    $list.editableList({
+        addButton: true,
+        removable: true,
+        sortable: true,
+        height: 'auto',
+        addItem: function (container, _, data: string) {
+            $('<input />', {
+                type: 'text',
+                value: typeof data === 'string' ? data : '',
+                style: 'width: 95%',
+            }).appendTo(container);
+        },
+    });
+    // Use data from config if available, otherwise use defaults
+    $list.editableList('addItems', Array.isArray(data) ? data : defaults);
+
+    return $div;
+};
+
 const createInput = (
     id: string,
     value: string,
@@ -132,11 +156,10 @@ export const createRow = (
         'data-type': data.type,
     });
 
-    $('<label>', { for: id })
-        .text(RED._(`${packageName}ha-entity-config.label.${data.id}`))
-        .appendTo($row);
+    const labelText = RED._(`${packageName}ha-entity-config.label.${data.id}`);
 
-    $row.append(' ');
+    const $label = $('<label>', { for: id }).text(labelText);
+    $row.append($label, ' ');
 
     switch (data.type) {
         case 'date':
@@ -144,6 +167,10 @@ export const createRow = (
             break;
         case 'datetime':
             $row.append(createDateTime(id, value, data));
+            break;
+        case 'editableList':
+            $label.css({ verticalAlign: 'top' });
+            $row.append(createEditableList(id, value, data.values));
             break;
         case 'number':
             $row.append(createNumber(id, value, data));

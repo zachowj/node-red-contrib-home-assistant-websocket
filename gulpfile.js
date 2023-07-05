@@ -80,6 +80,7 @@ const nodeMap = {
     number: { doc: 'number', type: 'ha-number' },
     'poll-state': { doc: 'poll-state', type: 'poll-state' },
     'render-template': { doc: 'render-template', type: 'api-render-template' },
+    select: { doc: 'select', type: 'ha-select' },
     sensor: { doc: 'sensor', type: 'ha-sensor' },
     switch: { doc: 'switch', type: 'ha-switch' },
     tag: { doc: 'tag', type: 'ha-tag' },

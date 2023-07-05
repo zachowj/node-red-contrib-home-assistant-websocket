@@ -1,3 +1,5 @@
+import { HaConfigOption } from '.';
+
 export default [
     {
         id: 'mode',
@@ -16,4 +18,4 @@ export default [
         id: 'pattern',
         type: 'string',
     },
-];
+] as HaConfigOption[];

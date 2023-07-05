@@ -1,3 +1,4 @@
+import { HaConfigOption } from '.';
 import { DeviceClass, monetaryList } from './common';
 
 const numberDeviceClasses = [
@@ -169,4 +170,4 @@ export default [
         type: 'select',
         values: ['auto', 'box', 'slider'],
     },
-];
+] as HaConfigOption[];

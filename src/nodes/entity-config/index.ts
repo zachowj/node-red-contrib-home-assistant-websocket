@@ -66,6 +66,7 @@ export default function entityConfigNode(
             break;
         }
         case EntityType.Number:
+        case EntityType.Select:
         case EntityType.Text: {
             this.integration = new ValueEntityIntegration(props);
             break;

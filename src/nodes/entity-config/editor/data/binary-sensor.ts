@@ -1,3 +1,5 @@
+import { HaConfigOption } from '.';
+
 const binarySensorDeviceClasses = [
     'battery',
     'battery_charging',
@@ -35,4 +37,4 @@ export default [
         type: 'select',
         values: ['', ...binarySensorDeviceClasses],
     },
-];
+] as HaConfigOption[];

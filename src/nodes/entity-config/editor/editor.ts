@@ -2,14 +2,18 @@ import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
 import { EntityType, NodeType } from '../../../const';
 import ha, { NodeCategory } from '../../../editor/ha';
-import { defaultHaConfigOptions, haConfigOptions } from './data';
+import {
+    defaultHaConfigOptions,
+    HaConfigOption,
+    haConfigOptions,
+} from './data';
 import { createRow, setEntityType } from './helpers';
 
 declare const RED: EditorRED;
 
 type HaConfig = {
     property: string;
-    value: string | number;
+    value: string | number | string[];
 };
 
 interface EntityConfigEditorNodeProperties extends EditorNodeProperties {
@@ -46,7 +50,26 @@ const EntityConfigEditor: EditorNodeDef<EntityConfigEditorNodeProperties> = {
             value: 'binary_sensor',
             required: true,
         },
-        haConfig: { value: [] },
+        haConfig: {
+            value: [],
+            validate: function (v) {
+                // Options are required for select entity types
+                if ($('#node-config-input-entityType').val() === 'select') {
+                    const properties = v as unknown as HaConfig[];
+                    const options = properties.find(
+                        (c) => c.property === 'options'
+                    );
+                    if (
+                        !options ||
+                        !Array.isArray(options.value) ||
+                        !options.value.length
+                    ) {
+                        return false;
+                    }
+                }
+                return true;
+            },
+        },
         resend: { value: false },
         debugEnabled: { value: false },
     },
@@ -82,7 +105,7 @@ const EntityConfigEditor: EditorNodeDef<EntityConfigEditorNodeProperties> = {
                 }
             );
 
-            const mergedOptions = [
+            const mergedOptions: HaConfigOption[] = [
                 ...defaultHaConfigOptions,
                 ...haConfigOptions[value],
             ];
@@ -132,6 +155,18 @@ const EntityConfigEditor: EditorNodeDef<EntityConfigEditorNodeProperties> = {
                     if (value === '') return;
                     const date = new Date(value);
                     haConfig.push({ property: id, value: date.toISOString() });
+                    break;
+                }
+                case 'editableList': {
+                    const $ol = $this.find('ol');
+                    const $options = $ol.editableList('items');
+                    const options: string[] = [];
+                    $options.each(function () {
+                        const $text = $(this).find('input');
+                        options.push($text.val() as string);
+                    });
+
+                    haConfig.push({ property: 'options', value: options });
                     break;
                 }
                 case 'number': {
