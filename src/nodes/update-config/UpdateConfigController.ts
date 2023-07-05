@@ -48,8 +48,7 @@ export default class UpdateConfig<
 
         this.status.setSending();
         await this.integration?.sendUpdateConfig(
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            this.integration.getEntityConfigNode().config.server!,
+            this.integration.getEntityConfigNode().config.server,
             parsedMessage.id.value ?? this.node.id,
             config
         );
