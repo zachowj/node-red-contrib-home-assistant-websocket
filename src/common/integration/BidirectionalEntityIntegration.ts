@@ -91,7 +91,13 @@ export default class BidirectionalIntegration extends Integration {
             state: state ?? this.state.isEnabled(),
         };
 
-        await this.homeAssistant.websocket.send(message);
+        try {
+            await this.homeAssistant.websocket.send(message);
+        } catch (err) {
+            this.entityConfigNode.error(
+                `Error updating entity. Error Message: ${err}`
+            );
+        }
     }
 
     protected onHaEventMessage(

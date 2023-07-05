@@ -630,6 +630,9 @@ export default class Websocket {
     }
 
     send<Results>(data: MessageBase): Promise<Results> {
+        if (!this.isConnected) {
+            throw new Error('Client is not connected');
+        }
         debug(`Send: ${JSON.stringify(data)}`);
         return this.client?.sendMessagePromise(data);
     }
