@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.51.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.50.0...v0.51.0) (2023-07-05)
+
+
+### Features
+
+* **select:** Add select entity node ([e892060](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/e8920606391b07dc27fe8c17ddc0d49c43b2ddcb))
+
+
+### Bug Fixes
+
+* **text:** Fix schema for the input to allow strings ([32a5c4d](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/32a5c4de79c886c665ae3a63a6b7d11402d838b0))
+
 ## [0.50.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.49.1...v0.50.0) (2023-07-03)
 
 
