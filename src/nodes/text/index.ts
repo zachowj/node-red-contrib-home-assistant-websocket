@@ -49,7 +49,7 @@ export const inputSchema: Joi.ObjectSchema = Joi.object({
             TypedInputTypes.Flow,
             TypedInputTypes.Global,
             TypedInputTypes.JSONata,
-            TypedInputTypes.Number
+            TypedInputTypes.String
         )
         .required(),
 });

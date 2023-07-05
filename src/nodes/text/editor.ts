@@ -90,7 +90,7 @@ const TextEditor: EditorNodeDef<TextEditorNodeProperties> = {
                 TypedInputTypes.Flow,
                 TypedInputTypes.Global,
                 TypedInputTypes.JSONata,
-                TypedInputTypes.Number,
+                TypedInputTypes.String,
             ],
             typeField: '#node-input-valueType',
             // @ts-expect-error - DefinitelyTyped is wrong typedInput can take a object as a parameter
