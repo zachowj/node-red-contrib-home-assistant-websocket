@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.51.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.51.0...v0.51.1) (2023-07-06)
+
+
+### Bug Fixes
+
+* Fix integration not sending previous state when registering entity ([3cbe491](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/3cbe4919efd7f00539b94d892fa7c183ad5bd1f8)), closes [#973](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/973)
+* Handle promise rejections ([7c28dc7](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/7c28dc75459937de0d5423eb69de774f58e74299)), closes [#757](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/757)
+
 ## [0.51.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.50.0...v0.51.0) (2023-07-05)
 
 
