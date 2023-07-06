@@ -132,8 +132,7 @@ export default class BidirectionalIntegration extends Integration {
     }
 
     protected getStateData(state?: State): Partial<EntityMessage> {
-        const lastPayload = state?.getLastPayload();
-        if (!state || !lastPayload) {
+        if (!state) {
             return {};
         }
 
