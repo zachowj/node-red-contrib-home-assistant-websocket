@@ -83,7 +83,6 @@ export function init(n: HassNodeProperties) {
                 renderAlert('0.5.0');
                 break;
             case NodeType.Entity:
-            case NodeType.Webhook:
                 renderAlert();
                 break;
             case NodeType.Number:
@@ -102,7 +101,11 @@ export function init(n: HassNodeProperties) {
                     renderAlert('1.5.0');
                 }
                 break;
-
+            case NodeType.Webhook:
+                if ($('#node-input-server').val() !== '_ADD_') {
+                    renderAlert('1.6.0');
+                }
+                break;
             default:
                 toggleExpose();
                 break;
@@ -125,7 +128,6 @@ function render() {
             }
             break;
         case NodeType.Entity:
-        case NodeType.Webhook:
             renderAlert();
             break;
         case NodeType.Number:
@@ -144,6 +146,12 @@ function render() {
                 renderAlert('1.5.0');
             }
             break;
+        case NodeType.Webhook:
+            if ($('#node-input-server').val() !== '_ADD_') {
+                renderAlert('1.6.0');
+            }
+            break;
+
         default:
             renderEventNode();
     }
