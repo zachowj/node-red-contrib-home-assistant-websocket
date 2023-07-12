@@ -70,7 +70,7 @@ const SentenceEditor: EditorNodeDef<SentenceEditorNodeProperties> = {
                     $('<input />', {
                         type: 'text',
                         value: typeof data === 'string' ? data : '',
-                        style: 'width: 95%',
+                        style: 'width: 100%',
                     }).appendTo(container);
                 },
             })
