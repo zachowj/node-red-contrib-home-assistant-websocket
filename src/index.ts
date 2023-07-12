@@ -24,6 +24,7 @@ import pollStateNode from './nodes/poll-state';
 import renderTemplateNode from './nodes/render-template';
 import selectNode from './nodes/select';
 import sensorNode from './nodes/sensor';
+import sentenceNode from './nodes/sentence';
 import switchNode from './nodes/switch';
 import tagNode from './nodes/tag';
 import textNode from './nodes/text';
@@ -48,6 +49,7 @@ const nodes: Record<NodeType, any> = {
     [NodeType.GetHistory]: getHistoryNode,
     [NodeType.PollState]: pollStateNode,
     [NodeType.RenderTemplate]: renderTemplateNode,
+    [NodeType.Sentence]: sentenceNode,
     [NodeType.TriggerState]: triggerStateNode,
     [NodeType.Tag]: tagNode,
     [NodeType.Time]: timeNode,

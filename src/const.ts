@@ -72,6 +72,7 @@ export enum NodeType {
     PollState = 'poll-state',
     RenderTemplate = 'api-render-template',
     Select = 'ha-select',
+    Sentence = 'ha-sentence',
     TriggerState = 'trigger-state',
     Tag = 'ha-tag',
     Time = 'ha-time',

@@ -82,6 +82,7 @@ const nodeMap = {
     'render-template': { doc: 'render-template', type: 'api-render-template' },
     select: { doc: 'select', type: 'ha-select' },
     sensor: { doc: 'sensor', type: 'ha-sensor' },
+    sentence: { doc: 'sentence', type: 'ha-sentence' },
     switch: { doc: 'switch', type: 'ha-switch' },
     tag: { doc: 'tag', type: 'ha-tag' },
     text: { doc: 'text', type: 'ha-text' },

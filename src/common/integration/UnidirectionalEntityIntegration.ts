@@ -2,18 +2,15 @@ import { compareVersions } from 'compare-versions';
 
 import { EntityType } from '../../const';
 import { debugToClient } from '../../helpers/node';
-import HomeAssistant from '../../homeAssistant/HomeAssistant';
-import { ClientEvent } from '../../homeAssistant/Websocket';
 import { DeviceConfigNode } from '../../nodes/device-config/index';
 import { EntityConfigNode } from '../../nodes/entity-config/index';
 import { NodeDone } from '../../types/nodes';
-import ClientEvents from '../events/ClientEvents';
 import { NodeEvent } from '../events/Events';
 import State from '../State';
 import Status from '../status/Status';
 import { createHaConfig } from './helpers';
 import Integration, {
-    IntegrationState,
+    IntegrationConstructor,
     MessageBase,
     MessageType,
 } from './Integration';
@@ -43,26 +40,18 @@ export interface EntityMessage extends MessageBase {
     attributes?: Record<string, any>;
 }
 
-export interface UnidirectionalIntegrationConstructor {
-    clientEvents: ClientEvents;
+export interface UnidirectionalIntegrationConstructor
+    extends IntegrationConstructor {
     deviceConfigNode?: DeviceConfigNode;
     entityConfigNode: EntityConfigNode;
-    homeAssistant: HomeAssistant;
-    state: State;
 }
 
 export default class UnidirectionalIntegration extends Integration {
-    protected readonly clientEvents: ClientEvents;
     protected readonly deviceConfigNode?: DeviceConfigNode;
     protected readonly entityConfigNode: EntityConfigNode;
 
-    protected registered = false;
-    protected notInstallMessage =
-        'Node-RED custom integration needs to be installed in Home Assistant for this node to function correctly.';
-
     constructor(props: UnidirectionalIntegrationConstructor) {
         super(props);
-        this.clientEvents = props.clientEvents;
         this.deviceConfigNode = props.deviceConfigNode;
         this.entityConfigNode = props.entityConfigNode;
     }
@@ -76,28 +65,13 @@ export default class UnidirectionalIntegration extends Integration {
             NodeEvent.Close,
             this.onDeviceConfigNodeClose.bind(this)
         );
-        this.clientEvents.addListeners(this, [
-            [ClientEvent.Close, this.onHaEventsClose],
-            [ClientEvent.Integration, this.#onHaIntegration],
-        ]);
-
-        if (this.isIntegrationLoaded) {
-            await this.registerEntity();
-        }
-    }
-
-    get isIntegrationLoaded(): boolean {
-        return this.homeAssistant.isIntegrationLoaded;
-    }
-
-    get isRegistered(): boolean {
-        return this.registered;
+        super.init();
     }
 
     protected async onEntityConfigNodeClose(removed: boolean, done: NodeDone) {
         if (this.registered && this.isIntegrationLoaded && removed) {
             try {
-                await this.unregisterEntity();
+                await this.unregister();
             } catch (err) {
                 done(err as Error);
             }
@@ -114,22 +88,6 @@ export default class UnidirectionalIntegration extends Integration {
             }
         }
         done();
-    }
-
-    protected onHaEventsClose() {
-        this.registered = false;
-    }
-
-    async #onHaIntegration(type: IntegrationState) {
-        switch (type) {
-            case IntegrationState.Loaded:
-                await this.registerEntity();
-                break;
-            case IntegrationState.Unloaded:
-            case IntegrationState.NotLoaded:
-                this.registered = false;
-                break;
-        }
     }
 
     protected getDeviceInfo(): DeviceInfo | undefined {
@@ -204,9 +162,9 @@ export default class UnidirectionalIntegration extends Integration {
         };
     }
 
-    protected async registerEntity() {
+    protected async register() {
         if (!this.isIntegrationLoaded) {
-            this.entityConfigNode.error(this.notInstallMessage);
+            this.entityConfigNode.error(this.notInstalledMessage);
             this.status.forEach((status) =>
                 status.setFailed('home-assistant.status.error')
             );
@@ -241,7 +199,9 @@ export default class UnidirectionalIntegration extends Integration {
         }
 
         this.saveHaConfigToContext(config);
-        this.status.forEach((status) => status?.setSuccess('Registered'));
+        this.status.forEach((status) =>
+            status?.setSuccess('hpme-assistant.status.registered')
+        );
 
         this.registered = true;
     }
@@ -269,7 +229,7 @@ export default class UnidirectionalIntegration extends Integration {
         return payload;
     }
 
-    protected async unregisterEntity() {
+    protected async unregister() {
         this.entityConfigNode.debug(
             `Unregistering ${this.entityConfigNode.config.entityType} node from HA`
         );

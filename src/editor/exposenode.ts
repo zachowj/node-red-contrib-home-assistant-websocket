@@ -97,6 +97,12 @@ export function init(n: HassNodeProperties) {
                     renderAlert('1.4.0');
                 }
                 break;
+            case NodeType.Sentence:
+                if ($('#node-input-server').val() !== '_ADD_') {
+                    renderAlert('1.5.0');
+                }
+                break;
+
             default:
                 toggleExpose();
                 break;
@@ -131,6 +137,11 @@ function render() {
         case NodeType.Select:
             if ($('#node-input-entityConfig').val() !== '_ADD_') {
                 renderAlert('1.4.0');
+            }
+            break;
+        case NodeType.Sentence:
+            if ($('#node-input-server').val() !== '_ADD_') {
+                renderAlert('1.5.0');
             }
             break;
         default:

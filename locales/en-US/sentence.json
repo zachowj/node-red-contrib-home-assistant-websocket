@@ -1,0 +1,9 @@
+{
+  "ha-sentence": {
+    "label": {
+      "name": "Name",
+      "sentences": "Sentences",
+      "server": "Server"
+    }
+  }
+}

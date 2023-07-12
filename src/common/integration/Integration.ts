@@ -1,7 +1,9 @@
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
+import { ClientEvent } from '../../homeAssistant/Websocket';
 import HomeAssistantError, {
     isHomeAssistantApiError,
 } from '../errors/HomeAssistantError';
+import ClientEvents from '../events/ClientEvents';
 import State from '../State';
 import Status from '../status/Status';
 
@@ -21,6 +23,7 @@ export enum MessageType {
     Entity = 'nodered/entity',
     RemoveDevice = 'nodered/device/remove',
     UpdateConfig = 'nodered/entity/update_config',
+    SentenseTrigger = 'nodered/sentence',
 }
 
 export interface MessageBase {
@@ -30,21 +33,41 @@ export interface MessageBase {
 }
 
 export interface IntegrationConstructor {
+    clientEvents: ClientEvents;
     homeAssistant: HomeAssistant;
     state: State;
 }
 
-export default class Integration {
+export default abstract class Integration {
+    protected readonly clientEvents: ClientEvents;
     protected readonly homeAssistant: HomeAssistant;
-    public readonly state: State;
-    protected status: Status[] = [];
-
-    protected notInstallMessage =
+    protected notInstalledMessage =
         'Node-RED custom integration needs to be installed in Home Assistant for this node to function correctly.';
 
-    constructor({ homeAssistant, state }: IntegrationConstructor) {
+    protected registered = false;
+    protected status: Status[] = [];
+
+    public readonly state: State;
+
+    constructor({
+        clientEvents,
+        homeAssistant,
+        state,
+    }: IntegrationConstructor) {
+        this.clientEvents = clientEvents;
         this.homeAssistant = homeAssistant;
         this.state = state;
+    }
+
+    async init() {
+        this.clientEvents.addListeners(this, [
+            [ClientEvent.Close, this.#onHaClose],
+            [ClientEvent.Integration, this.#onHaIntegration],
+        ]);
+
+        if (this.isIntegrationLoaded) {
+            await this.register();
+        }
     }
 
     get isConnected(): boolean {
@@ -54,6 +77,30 @@ export default class Integration {
     get isIntegrationLoaded(): boolean {
         return this.homeAssistant.isIntegrationLoaded;
     }
+
+    get isRegistered(): boolean {
+        return this.registered;
+    }
+
+    #onHaClose() {
+        this.registered = false;
+    }
+
+    async #onHaIntegration(type: IntegrationState) {
+        switch (type) {
+            case IntegrationState.Loaded:
+                await this.register();
+                break;
+            case IntegrationState.Unloaded:
+            case IntegrationState.NotLoaded:
+                this.registered = false;
+                break;
+        }
+    }
+
+    protected abstract register(): Promise<void>;
+
+    protected abstract unregister(): Promise<void>;
 
     public setStatus(status: Status) {
         this.status.push(status);
