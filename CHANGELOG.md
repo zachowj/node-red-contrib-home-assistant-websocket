@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.53.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.53.0...v0.53.1) (2023-07-12)
+
+
+### Bug Fixes
+
+* **switch:** Change to strict checking of payload for onTrigger ([6c1a795](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/6c1a795ae4fdc14ba28c450764603b4245285b6a)), closes [#983](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/983)
+
 ## [0.53.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.52.0...v0.53.0) (2023-07-12)
 
 
