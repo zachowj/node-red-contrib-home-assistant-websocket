@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.53.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.52.0...v0.53.0) (2023-07-12)
+
+
+### Features
+
+* **webhook:** Add allowed methods to webhooks ([48ebdd8](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/48ebdd8008f56ae3bbd8d7b938a8a0ec53c60149))
+
+
+### Bug Fixes
+
+* **sentence:** Catch error from custom outputs ([867289a](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/867289a6bfb3bdc77adfa1756adc5489f30e6983))
+
 ## [0.52.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.51.1...v0.52.0) (2023-07-12)
 
 
