@@ -56,6 +56,10 @@ Get entities based on search criteria with 3 different output options
 
 Fetches HomeAssistant history on input
 
+## [Number](./number.md)
+
+Creates a number in Home Assistant which can be manipulated from this node.
+
 ## [Poll State](./poll-state.md)
 
 Outputs the state of an entity at regular intervals, optionally also at startup
@@ -65,9 +69,17 @@ and every time the entity changes if desired
 
 Allows rendering of templates on input
 
+## [Select](./select.md)
+
+Creates a select entity in Home Assistant which can be manipulated from this node.
+
 ## [Sensor](./sensor.md)
 
 Creates a sensor entity in Home Assistant that is controlled from with Node-RED.
+
+## [Sentence](./sentence.md)
+
+A sentence trigger fires when [Assist](https://www.home-assistant.io/voice_control/) matches a sentence from a voice assistant using the default [conversation agent](https://www.home-assistant.io/integrations/conversation/).
 
 ## [Server Config](./config-server.md)
 
@@ -80,6 +92,10 @@ Creates a switch entity in Home Assistant that is controlled from with Node-RED.
 ## [Tag](./tag.md)
 
 Outputs when Home Assistant receives a tag scanned event for a configured tag id
+
+## [Text](./text.md)
+
+Creates a text entity in Home Assistant which can be manipulated from this node.
 
 ## [Time](./time.md)
 
