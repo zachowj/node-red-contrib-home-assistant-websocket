@@ -56,6 +56,8 @@ const SentenceEditor: EditorNodeDef<SentenceEditorNodeProperties> = {
         haServer.init(this, '#node-input-server');
         exposeNode.init(this);
 
+        $('#dialog-form').prepend(ha.betaWarning(981));
+
         $('#node-input-sentences-container')
             .editableList({
                 addButton: true,
