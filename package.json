@@ -97,8 +97,8 @@
     "@types/ws": "^8.5.3",
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",
-    "@vuepress/plugin-google-analytics": "2.0.0-beta.63",
-    "@vuepress/plugin-register-components": "2.0.0-beta.63",
+    "@vuepress/plugin-google-analytics": "2.0.0-beta.64",
+    "@vuepress/plugin-register-components": "2.0.0-beta.64",
     "@vuepress/plugin-search": "2.0.0-beta.64",
     "autoprefixer": "^10.4.7",
     "chai": "^4.3.6",
@@ -156,8 +156,8 @@
     "tslib": "^2.4.0",
     "typescript": "^4.7.4",
     "vinyl-source-stream": "^2.0.0",
-    "vuepress": "^2.0.0-beta.63",
-    "vuepress-plugin-copy-code2": "2.0.0-beta.228"
+    "vuepress": "^2.0.0-beta.64",
+    "vuepress-plugin-copy-code2": "2.0.0-beta.231"
   },
   "lint-staged": {
     "*.{js,ts}": [
