@@ -37,7 +37,7 @@ Value types:
 
 <InfoPanelOnly>
 
-[link](https://zachowj.github.io/node-red-contrib-home-assistant-websocket/node/text.html#examples)
+[link](https://zachowj.github.io/node-red-contrib-home-assistant-websocket/node/select.html#examples)
 
 </InfoPanelOnly>
 
