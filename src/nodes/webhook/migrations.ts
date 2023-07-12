@@ -48,4 +48,19 @@ export default [
             return newSchema;
         },
     },
+    {
+        version: 2,
+        up: (schema: any) => {
+            const newSchema = {
+                ...schema,
+                version: 2,
+                method_post: true,
+                method_put: true,
+                method_get: false,
+                method_head: false,
+            };
+
+            return newSchema;
+        },
+    },
 ];

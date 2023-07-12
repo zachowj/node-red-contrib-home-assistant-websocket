@@ -67,6 +67,7 @@
       "off": "off",
       "on": "on",
       "pressed": "pressed",
+      "received": "received",
       "registered": "registered",
       "running": "running",
       "sending": "sending",

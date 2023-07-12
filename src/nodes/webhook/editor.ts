@@ -13,6 +13,10 @@ interface WebhookEditorNodeProperties extends EditorNodeProperties {
     server: string;
     version: number;
     webhookId: string;
+    method_get: boolean;
+    method_head: boolean;
+    method_post: boolean;
+    method_put: boolean;
     outputProperties: OutputProperty[];
 
     // deprecated but needed for imports
@@ -32,6 +36,12 @@ function generateId(length: number) {
     ).join('');
 }
 
+// Check that at least one method is enabled
+function validateMethods(): boolean {
+    const methods = ['method_post', 'method_get', 'method_put', 'method_head'];
+    return methods.some((method) => this[method]);
+}
+
 const WebhookEditor: EditorNodeDef<WebhookEditorNodeProperties> = {
     category: NodeCategory.HomeAssistant,
     color: NodeColor.HaBlue,
@@ -49,6 +59,10 @@ const WebhookEditor: EditorNodeDef<WebhookEditorNodeProperties> = {
         version: { value: RED.settings.get('haWebhookVersion', 0) },
         outputs: { value: 1 },
         webhookId: { value: generateId(32), required: true },
+        method_get: { value: false, validate: validateMethods },
+        method_head: { value: false, validate: validateMethods },
+        method_post: { value: true, validate: validateMethods },
+        method_put: { value: true, validate: validateMethods },
         outputProperties: {
             value: [
                 {
@@ -94,6 +108,19 @@ const WebhookEditor: EditorNodeDef<WebhookEditorNodeProperties> = {
         $('#refresh').on('click', function () {
             $webhookId.val(generateId(32));
         });
+
+        $('[id^=node-input-method_]')
+            .on('change', function () {
+                const isMethodSelected = $('[id^=node-input-method_]').is(
+                    ':checked'
+                );
+                if (!isMethodSelected) {
+                    $(this).closest('div').addClass('input-error');
+                } else {
+                    $(this).closest('div').removeClass('input-error');
+                }
+            })
+            .trigger('change');
 
         haOutputs.createOutputs(this.outputProperties, {
             extraTypes: ['receivedData', 'headers', 'params', 'triggerId'],

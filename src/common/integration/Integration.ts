@@ -22,8 +22,9 @@ export enum MessageType {
     Discovery = 'nodered/discovery',
     Entity = 'nodered/entity',
     RemoveDevice = 'nodered/device/remove',
-    UpdateConfig = 'nodered/entity/update_config',
     SentenseTrigger = 'nodered/sentence',
+    UpdateConfig = 'nodered/entity/update_config',
+    Webhook = 'nodered/webhook',
 }
 
 export interface MessageBase {
