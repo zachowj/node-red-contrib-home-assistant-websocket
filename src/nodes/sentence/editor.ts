@@ -32,7 +32,7 @@ const SentenceEditor: EditorNodeDef<SentenceEditorNodeProperties> = {
         server: { value: '', type: NodeType.Server, required: true },
         version: { value: RED.settings.get('haSentenceVersion', 0) },
         outputs: { value: 1 },
-        sentences: { value: [''] },
+        sentences: { value: [], validate: (s) => s.length > 0 },
         outputProperties: {
             value: [
                 {
@@ -74,7 +74,10 @@ const SentenceEditor: EditorNodeDef<SentenceEditorNodeProperties> = {
                     }).appendTo(container);
                 },
             })
-            .editableList('addItems', this.sentences as any);
+            .editableList(
+                'addItems',
+                (this.sentences.length ? this.sentences : ['']) as any
+            );
 
         haOutputs.createOutputs(this.outputProperties, {
             extraTypes: ['triggerId'],
