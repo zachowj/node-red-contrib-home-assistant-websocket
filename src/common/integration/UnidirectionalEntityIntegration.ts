@@ -22,6 +22,7 @@ export interface DeviceInfo {
     manufacturer?: string;
     model?: string;
     sw_version?: string;
+    connections?: Array<Array<string>>;
 }
 
 export interface DiscoveryMessage extends MessageBase {
@@ -96,6 +97,19 @@ export default class UnidirectionalIntegration extends Integration {
         }
 
         const config = this.deviceConfigNode.config;
+        const deviceConnections = [];
+        if (config.macIdentifier) {
+            deviceConnections.push(['mac', config.macIdentifier]);
+        }
+        if (config.bluetoothIdentifier) {
+            deviceConnections.push(['bluetooth', config.bluetoothIdentifier]);
+        }
+        if (config.upnpIdentifier) {
+            deviceConnections.push(['upnp', config.upnpIdentifier]);
+        }
+        if (config.zigbeeIdentiefier) {
+            deviceConnections.push(['zigbee', config.zigbeeIdentiefier]);
+        }
 
         return {
             id: config.id,
@@ -104,6 +118,7 @@ export default class UnidirectionalIntegration extends Integration {
             manufacturer: config.manufacturer,
             model: config.model,
             sw_version: config.swVersion,
+            connections: deviceConnections,
         };
     }
 

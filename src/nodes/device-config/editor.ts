@@ -10,6 +10,10 @@ export interface DeviceConfigEditorNodeProperties extends EditorNodeProperties {
     manufacturer: string;
     model: string;
     swVersion: string;
+    macIdentifier: string;
+    bluetoothIdentifier: string;
+    upnpIdentifier: string;
+    zigbeeIdentiefier: string;
 }
 
 const DeviceConfigEditor: EditorNodeDef<DeviceConfigEditorNodeProperties> = {
@@ -21,6 +25,10 @@ const DeviceConfigEditor: EditorNodeDef<DeviceConfigEditorNodeProperties> = {
         manufacturer: { value: 'Node-RED', required: false },
         model: { value: '', required: false },
         swVersion: { value: '', required: false },
+        macIdentifier: { value: '', required: false },
+        bluetoothIdentifier: { value: '', required: false },
+        upnpIdentifier: { value: '', required: false },
+        zigbeeIdentiefier: { value: '', required: false },
     },
     icon: 'font-awesome/fa-device',
     label: function (): string {

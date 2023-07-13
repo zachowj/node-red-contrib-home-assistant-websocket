@@ -31,3 +31,27 @@ The software version of the device
 - Type: `string`
 
 The hardware version of the device
+
+### MAC Address
+
+- Type: `string`
+
+The network MAC address of the device
+
+### Bluetooth Identifier
+
+- Type: `string`
+
+The Bluetooth identifier of the device
+
+### UPnP Identifier
+
+- Type: `string`
+
+The UPnP identifier of the device
+
+### Zigbee Identifier
+
+- Type: `string`
+
+The Zigbee identifier of the device

@@ -5,7 +5,11 @@
       "manufacturer": "Manufacturer",
       "model": "Model",
       "hw_version": "Hardware Version",
-      "sw_version": "Software Version"
+      "sw_version": "Software Version",
+      "macIdentifier": "MAC address",
+      "bluetoothIdentifier": "Bleutooth Identifier",
+      "upnpIdentifier": "UPnP Identifier",
+      "zigbeeIdentifier": "Zigbee Identifier"
     }
   }
 }
