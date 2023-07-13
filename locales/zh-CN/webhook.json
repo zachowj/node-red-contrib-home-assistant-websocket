@@ -1,0 +1,11 @@
+{
+  "ha-webhook": {
+    "label": {
+      "allowed_methods": "允许的方法",
+      "put": "PUT",
+      "post": "POST",
+      "get": "GET",
+      "head": "HEAD"
+    }
+  }
+}

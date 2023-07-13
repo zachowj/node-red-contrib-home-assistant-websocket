@@ -1,0 +1,9 @@
+{
+  "ha-sentence": {
+    "label": {
+      "name": "名称",
+      "sentences": "句子",
+      "server": "服务器"
+    }
+  }
+}
