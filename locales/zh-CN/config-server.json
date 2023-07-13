@@ -1,0 +1,58 @@
+{
+  "config-server": {
+    "errors": {
+      "empty_base_url": "需要设置 Home Assistant基本URL",
+      "invalid_base_url": "Home Assistant基本URL 无效: [__url__]",
+      "invalid_protocol": "Home Assistnat基本URL 需要以 http:// 或 https:// 开头",
+      "no_server_selected": "未选择和部署服务器。",
+      "server_deploy": "部署有效的服务器配置以自动完成从而显示结果。"
+    },
+    "label": {
+      "accept_all_certs": "接受未经授权的 SSL 证书",
+      "access_token": "访问令牌",
+      "area_selector": "区域选择",
+      "base_url": "基本URL",
+      "cache_autocomplete_results": "缓存自动完成结果",
+      "delay_connection_attempts": "延迟连接尝试",
+      "device_selector": "设备选择",
+      "enable_global_context_store": "启用全局上下文存储",
+      "enable_heartbeat": "启用心跳",
+      "entity_selector": "实体选择",
+      "friendly_name": "友好名称",
+      "heartbeat_interval": "心跳间隔",
+      "id": "ID",
+      "id_selector": "ID选择",
+      "seconds": "秒",
+      "state_boolean_list": "状态布尔值",
+      "status": {
+        "12_hour_format": "12小时制",
+        "24_hour_format": "24小时制",
+        "day": "日",
+        "default": "默认",
+        "hidden": "隐藏",
+        "hour_cycle": "小时周期",
+        "long": "长",
+        "month": "月",
+        "numeric": "数字",
+        "separator": "分隔符",
+        "short": "短",
+        "time_format": "时间格式",
+        "title": "状态日期格式",
+        "two_digit": "2 位数字",
+        "year": "年"
+      },
+      "ui_settings": "UI设置",
+      "using_add_on": "使用Home Assistant插件"
+    },
+    "status": {
+      "connected": "已连接",
+      "connecting": "正在连接",
+      "disabled": "禁用",
+      "disconnected": "断开连接",
+      "error": "错误",
+      "registered": "已注册",
+      "running": "运行中",
+      "triggered": "已触发"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "trigger-state": {
+    "label": {
+      "conditions": "条件",
+      "enable_input": "启用输入",
+      "output_on_connect": "连接时输出",
+      "select_option": {
+        "always": "总是发送",
+        "current_state": "当前状态",
+        "custom_message": "自定义消息",
+        "custom_payload": "自定义负载",
+        "default_message": "默认消息",
+        "entity_id": "实体id",
+        "if_prev_state": "如果之前的状态",
+        "if_property": "如果属性",
+        "if_state": "如果状态",
+        "previous_state": "之前的状态",
+        "property": "属性",
+        "this_entity": "本实体"
+      }
+    }
+  }
+}

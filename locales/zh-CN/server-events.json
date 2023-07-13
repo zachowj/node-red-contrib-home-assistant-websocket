@@ -1,0 +1,16 @@
+{
+  "server-events": {
+    "alert": "警报",
+    "alert_message": "将事件类型留空并侦听所有事件可能会使 websocket 消息队列过载。",
+    "error": {
+      "invalid_json": "事件数据不是有效的 JSON"
+    },
+    "label": {
+      "event_data": "事件数据",
+      "event_type": "事件类型",
+      "name": "名称",
+      "output_only_after_running": "仅在 Home Assistant 运行后输出",
+      "server": "服务器"
+    }
+  }
+}

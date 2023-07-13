@@ -1,0 +1,96 @@
+{
+  "home-assistant": {
+    "error": {
+      "cannot_connect": "无法连接到Home Assistant服务器",
+      "connection_lost": "连接丢失",
+      "hass_host_required": "服务器配置中未设置基本 URL",
+      "integration_not_loaded": "集成未加载",
+      "invalid_auth": "websocket访问令牌无效",
+      "invalid_state": "无效状态",
+      "no_connection": "没有连接到Home Assistant",
+      "pattern_not_matched": "模式不匹配",
+      "user_not_admin": "用户需要在 Home Assistant中拥有管理员权限"
+    },
+    "label": {
+      "cancel": "取消",
+      "device": "设备",
+      "done": "确定",
+      "entity": "实体",
+      "entity_config": "实体配置",
+      "entity_id": "实体ID",
+      "filter_results_label": "筛选",
+      "filter_results_title": "过滤结果",
+      "for": "为",
+      "if_state": "如果状态",
+      "label": "标志",
+      "name": "名称",
+      "no_matches_found": "未找到匹配项",
+      "output_debug": "输出调试信息",
+      "output_on_connect": "连接时输出",
+      "output_properties": "输出属性",
+      "select_option": {
+        "boolean": "布尔值",
+        "days": "天",
+        "exact": "精确",
+        "greater_than": ">",
+        "greater_than_equal": ">=",
+        "hours": "小时",
+        "in": "在",
+        "is": "是",
+        "is_not": "不是",
+        "jsonata": "JSON数据集",
+        "less_than": "<",
+        "less_than_equal": "<=",
+        "list": "列表",
+        "milliseconds": "毫秒",
+        "minutes": "分钟",
+        "not_in": "不在",
+        "number": "数值",
+        "regex": "正则表达式",
+        "seconds": "秒",
+        "string": "字符串",
+        "substring": "子字符串"
+      },
+      "server": "服务器",
+      "state_type": "状态类型",
+      "test": "测试"
+    },
+    "status": {
+      "connected": "已连接",
+      "connecting": "连接中",
+      "disabled": "禁用",
+      "disconnected": "断开连接",
+      "error": "错误",
+      "failed": "失败",
+      "jsonata_error": "jsonata错误",
+      "no_connection": "无连接",
+      "off": "关",
+      "on": "开",
+      "pressed": "按下",
+      "received": "已收到",
+      "registered": "已注册",
+      "running": "运行中",
+      "sending": "正在发送",
+      "state_change": "状态改变",
+      "success": "成功",
+      "triggered": "触发",
+      "updated": "更新",
+      "validation_error": "验证错误"
+    },
+    "ui": {
+      "migrations": {
+        "all_nodes_updated": "Home Assistant节点已更新。 部署以保存更改。",
+        "button_cancel": "取消",
+        "button_label": "更新Home Assistant节点",
+        "button_ok": "更新节点",
+        "message": "这会将所有 Home Assistant 节点更新为当前架构。 节点正常运行不需要这样做。\n带有黄色标签的节点需要更新才能编辑。 这可以通过在 Node-RED 编辑器中单独打开每个节点或运行。",
+        "node_schema_updated": "节点架构已更新",
+        "title": "更新Home Assistant节点",
+        "warning": "建议在更新所有Home Assistant节点之前备份您的流程。"
+      },
+      "notifications": {
+        "attention": "注意"
+      }
+    }
+  }
+}

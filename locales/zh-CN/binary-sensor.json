@@ -1,0 +1,16 @@
+{
+  "ha-binary-sensor": {
+    "error": {
+      "no_connection": "在未连接到服务器的情况下尝试更新传感器",
+      "integration_not_loaded": "集成未被加载或启用",
+      "invalid_state": "状态必须被定义",
+      "api_error": "API错误"
+    },
+    "label": {
+      "state": "状态",
+      "input_override": "输入覆盖",
+      "resend": "再次发送状态和属性",
+      "debug": "显示调试信息"
+    }
+  }
+}
