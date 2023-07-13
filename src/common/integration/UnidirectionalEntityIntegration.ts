@@ -189,7 +189,7 @@ export default class UnidirectionalIntegration extends Integration {
             await this.homeAssistant.websocket.send(payload);
         } catch (err) {
             this.status.forEach((status) =>
-                status.setFailed('Error registering')
+                status.setFailed('home-assistant.status.error_registering')
             );
             const message = err instanceof Error ? err.message : err;
             this.entityConfigNode.error(
@@ -200,7 +200,7 @@ export default class UnidirectionalIntegration extends Integration {
 
         this.saveHaConfigToContext(config);
         this.status.forEach((status) =>
-            status?.setSuccess('hpme-assistant.status.registered')
+            status?.setSuccess('home-assistant.status.registered')
         );
 
         this.registered = true;

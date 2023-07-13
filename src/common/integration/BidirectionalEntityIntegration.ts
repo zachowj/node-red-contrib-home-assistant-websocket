@@ -1,4 +1,3 @@
-import { RED } from '../../globals';
 import { HaEvent } from '../../homeAssistant/index';
 import { SubscriptionUnsubscribe } from '../../types/home-assistant';
 import State from '../State';
@@ -61,7 +60,7 @@ export default class BidirectionalIntegration extends UnidirectionalEntityIntegr
                 );
         } catch (err) {
             this.status.forEach((status) =>
-                status.setFailed('Error registering')
+                status.setFailed('home-assistant.status.error_registering')
             );
             const message = err instanceof Error ? err.message : err;
             this.entityConfigNode.error(
@@ -71,7 +70,7 @@ export default class BidirectionalIntegration extends UnidirectionalEntityIntegr
         }
         this.saveHaConfigToContext(haConfig);
         this.status.forEach((status) =>
-            status?.setSuccess(RED._('config-server.status.registered'))
+            status?.setSuccess('home-assistant.status.registered')
         );
 
         this.registered = true;

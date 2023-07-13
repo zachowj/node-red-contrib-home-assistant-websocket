@@ -61,6 +61,7 @@
       "disabled": "DISABLED",
       "disconnected": "disconnected",
       "error": "error",
+      "error_registering": "error registering",
       "failed": "failed",
       "jsonata_error": "jsonata error",
       "no_connection": "no connection",

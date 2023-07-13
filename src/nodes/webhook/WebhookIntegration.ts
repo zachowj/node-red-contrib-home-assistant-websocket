@@ -2,7 +2,7 @@ import BidirectionalIntegration, {
     DiscoveryBaseMessage,
 } from '../../common/integration/BidrectionalIntegration';
 import { MessageType } from '../../common/integration/Integration';
-import { WebhookNodeProperties } from '.';
+import { WebhookNode } from '.';
 
 export interface WebhookDiscoveryPayload extends DiscoveryBaseMessage {
     type: MessageType.Webhook;
@@ -12,10 +12,8 @@ export interface WebhookDiscoveryPayload extends DiscoveryBaseMessage {
     allowed_methods: string[];
 }
 
-export default class WebhookIntegration extends BidirectionalIntegration {
-    protected getDiscoveryPayload(
-        config: WebhookNodeProperties
-    ): WebhookDiscoveryPayload {
+export default class WebhookIntegration extends BidirectionalIntegration<WebhookNode> {
+    protected getDiscoveryPayload(): WebhookDiscoveryPayload {
         const methods = [
             'method_post',
             'method_get',
@@ -24,7 +22,7 @@ export default class WebhookIntegration extends BidirectionalIntegration {
         ] as const;
 
         const allowedMethods = methods.reduce((acc, method) => {
-            if (config[method]) {
+            if (this.node.config[method]) {
                 acc.push(method.replace('method_', '').toUpperCase());
             }
             return acc;
@@ -33,9 +31,9 @@ export default class WebhookIntegration extends BidirectionalIntegration {
         return {
             type: MessageType.Webhook,
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            server_id: config.server!,
-            webhook_id: config.webhookId,
-            name: config.id,
+            server_id: this.node.config.server!,
+            webhook_id: this.node.config.webhookId,
+            name: this.node.config.id,
             allowed_methods: allowedMethods,
         };
     }

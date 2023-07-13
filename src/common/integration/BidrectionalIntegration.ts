@@ -17,16 +17,19 @@ export interface ReceivedMessage {
     data: Record<string, any>;
 }
 
-interface BidirectionalIntegrationConstructor extends IntegrationConstructor {
-    node: BaseNode;
+interface BidirectionalIntegrationConstructor<T extends BaseNode>
+    extends IntegrationConstructor {
+    node: T;
 }
 
-export default abstract class BidirectionalIntegration extends Integration {
+export default abstract class BidirectionalIntegration<
+    T extends BaseNode
+> extends Integration {
     #unsubscribe?: SubscriptionUnsubscribe;
 
-    protected readonly node: BaseNode;
+    protected readonly node: T;
 
-    constructor(props: BidirectionalIntegrationConstructor) {
+    constructor(props: BidirectionalIntegrationConstructor<T>) {
         super(props);
 
         this.node = props.node;
@@ -44,7 +47,7 @@ export default abstract class BidirectionalIntegration extends Integration {
 
         if (this.isRegistered) return;
 
-        const payload = this.getDiscoveryPayload(this.node.config);
+        const payload = this.getDiscoveryPayload();
 
         this.debugToClient('register', payload);
 
@@ -52,12 +55,12 @@ export default abstract class BidirectionalIntegration extends Integration {
             this.#unsubscribe =
                 await this.homeAssistant.websocket.subscribeMessage(
                     this.onReceivedMessage.bind(this),
-                    this.getDiscoveryPayload(this.node.config),
+                    payload,
                     { resubscribe: false }
                 );
         } catch (err) {
             this.status.forEach((status) =>
-                status.setFailed('Error registering')
+                status.setFailed('home-assistant.status.error_registering')
             );
             const message = err instanceof Error ? err.message : err;
             this.node.error(
@@ -66,7 +69,9 @@ export default abstract class BidirectionalIntegration extends Integration {
             return;
         }
 
-        this.status.forEach((status) => status?.setSuccess('Registered'));
+        this.status.forEach((status) =>
+            status?.setSuccess('home-assistant.status.registered')
+        );
         this.registered = true;
     }
 
@@ -90,9 +95,7 @@ export default abstract class BidirectionalIntegration extends Integration {
         this.node.emit(IntegrationEvent.Trigger, message.data);
     }
 
-    protected abstract getDiscoveryPayload(
-        config: Record<string, any>
-    ): DiscoveryBaseMessage;
+    protected abstract getDiscoveryPayload(): DiscoveryBaseMessage;
 
     protected debugToClient(topic: string, message: any) {
         debugToClient(this.node, message, topic);
