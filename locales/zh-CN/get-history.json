@@ -1,7 +1,0 @@
-{
-  "get-history": {
-    "error": {
-      "invalid_relative_time": "相对时间无效"
-    }
-  }
-}

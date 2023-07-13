@@ -1,0 +1,543 @@
+{
+    "ha-binary-sensor": {
+        "error": {
+            "no_connection": "在未连接到服务器的情况下尝试更新传感器",
+            "integration_not_loaded": "集成未被加载或启用",
+            "invalid_state": "状态必须被定义",
+            "api_error": "API错误"
+        },
+        "label": {
+            "state": "状态",
+            "input_override": "输入覆盖",
+            "resend": "再次发送状态和属性",
+            "debug": "显示调试信息"
+        }
+    },
+    "api-call-service": {
+        "label": {
+            "alternate_tags": "对数据字段使用备用模板标签",
+            "area": "区域",
+            "data": "数据",
+            "device": "设备",
+            "domain": "范围",
+            "entity": "实体",
+            "load_example_data": "加载示例数据",
+            "merge_context": "合并上下文",
+            "queue": "队列",
+            "queue_all": "所有信息",
+            "queue_first": "仅第一条消息",
+            "queue_last": "仅最后一条消息",
+            "queue_none": "不要对消息进行排队",
+            "service": "服务",
+            "show_debug": "显示调试信息"
+        },
+        "error": {
+            "invalid_entity_id": "实体 ID 格式无效"
+        }
+    },
+    "home-assistant": {
+        "error": {
+            "cannot_connect": "无法连接到Home Assistant服务器",
+            "connection_lost": "连接丢失",
+            "hass_host_required": "服务器配置中未设置基本 URL",
+            "integration_not_loaded": "集成未加载",
+            "invalid_auth": "websocket访问令牌无效",
+            "invalid_state": "无效状态",
+            "no_connection": "没有连接到Home Assistant",
+            "pattern_not_matched": "模式不匹配",
+            "user_not_admin": "用户需要在 Home Assistant中拥有管理员权限"
+        },
+        "label": {
+            "cancel": "取消",
+            "device": "设备",
+            "done": "确定",
+            "entity": "实体",
+            "entity_config": "实体配置",
+            "entity_id": "实体ID",
+            "filter_results_label": "筛选",
+            "filter_results_title": "过滤结果",
+            "for": "为",
+            "if_state": "如果状态",
+            "label": "标志",
+            "name": "名称",
+            "no_matches_found": "未找到匹配项",
+            "output_debug": "输出调试信息",
+            "output_on_connect": "连接时输出",
+            "output_properties": "输出属性",
+            "select_option": {
+                "boolean": "布尔值",
+                "days": "天",
+                "exact": "精确",
+                "greater_than": ">",
+                "greater_than_equal": ">=",
+                "hours": "小时",
+                "in": "在",
+                "is": "是",
+                "is_not": "不是",
+                "jsonata": "JSON数据集",
+                "less_than": "<",
+                "less_than_equal": "<=",
+                "list": "列表",
+                "milliseconds": "毫秒",
+                "minutes": "分钟",
+                "not_in": "不在",
+                "number": "数值",
+                "regex": "正则表达式",
+                "seconds": "秒",
+                "string": "字符串",
+                "substring": "子字符串"
+            },
+            "server": "服务器",
+            "state_type": "状态类型",
+            "test": "测试"
+        },
+        "status": {
+            "connected": "已连接",
+            "connecting": "连接中",
+            "disabled": "禁用",
+            "disconnected": "断开连接",
+            "error": "错误",
+            "error_registering": "",
+            "failed": "失败",
+            "jsonata_error": "jsonata错误",
+            "no_connection": "无连接",
+            "off": "关",
+            "on": "开",
+            "pressed": "按下",
+            "received": "已收到",
+            "registered": "已注册",
+            "running": "运行中",
+            "sending": "正在发送",
+            "state_change": "状态改变",
+            "success": "成功",
+            "triggered": "触发",
+            "updated": "更新",
+            "validation_error": "验证错误"
+        },
+        "ui": {
+            "migrations": {
+                "all_nodes_updated": "Home Assistant节点已更新。 部署以保存更改。",
+                "button_cancel": "取消",
+                "button_label": "更新Home Assistant节点",
+                "button_ok": "更新节点",
+                "message": "这会将所有 Home Assistant 节点更新为当前架构。 节点正常运行不需要这样做。\n带有黄色标签的节点需要更新才能编辑。 这可以通过在 Node-RED 编辑器中单独打开每个节点或运行。",
+                "node_schema_updated": "节点架构已更新",
+                "title": "更新Home Assistant节点",
+                "warning": "建议在更新所有Home Assistant节点之前备份您的流程。"
+            },
+            "notifications": {
+                "attention": "注意"
+            }
+        }
+    },
+    "config-server": {
+        "errors": {
+            "empty_base_url": "需要设置 Home Assistant基本URL",
+            "invalid_base_url": "Home Assistant基本URL 无效: [__url__]",
+            "invalid_protocol": "Home Assistnat基本URL 需要以 http:\/\/ 或 https:\/\/ 开头",
+            "no_server_selected": "未选择和部署服务器。",
+            "server_deploy": "部署有效的服务器配置以自动完成从而显示结果。"
+        },
+        "label": {
+            "accept_all_certs": "接受未经授权的 SSL 证书",
+            "access_token": "访问令牌",
+            "area_selector": "区域选择",
+            "base_url": "基本URL",
+            "cache_autocomplete_results": "缓存自动完成结果",
+            "delay_connection_attempts": "延迟连接尝试",
+            "device_selector": "设备选择",
+            "enable_global_context_store": "启用全局上下文存储",
+            "enable_heartbeat": "启用心跳",
+            "entity_selector": "实体选择",
+            "friendly_name": "友好名称",
+            "heartbeat_interval": "心跳间隔",
+            "id": "ID",
+            "id_selector": "ID选择",
+            "seconds": "秒",
+            "state_boolean_list": "状态布尔值",
+            "status": {
+                "12_hour_format": "12小时制",
+                "24_hour_format": "24小时制",
+                "day": "日",
+                "default": "默认",
+                "hidden": "隐藏",
+                "hour_cycle": "小时周期",
+                "long": "长",
+                "month": "月",
+                "numeric": "数字",
+                "separator": "分隔符",
+                "short": "短",
+                "time_format": "时间格式",
+                "title": "状态日期格式",
+                "two_digit": "2 位数字",
+                "year": "年"
+            },
+            "ui_settings": "UI设置",
+            "using_add_on": "使用Home Assistant插件"
+        },
+        "status": {
+            "connected": "已连接",
+            "connecting": "正在连接",
+            "disabled": "禁用",
+            "disconnected": "断开连接",
+            "error": "错误",
+            "registered": "已注册",
+            "running": "运行中",
+            "triggered": "已触发"
+        }
+    },
+    "ha-device-config": {
+        "label": {
+            "name": "名称",
+            "manufacturer": "制造商",
+            "model": "模式",
+            "hw_version": "硬件版本",
+            "sw_version": "软件版本"
+        }
+    },
+    "ha-device": {
+        "label": {
+            "name": "名称",
+            "server": "服务器",
+            "type": "类型",
+            "trigger": "触发器",
+            "action": "动作",
+            "device": "设备",
+            "seconds": "秒",
+            "minutes": "分钟",
+            "hours": "小时"
+        },
+        "error": {
+            "invalid_device_config": "设备触发器配置无效",
+            "unknown_field_type": "未知字段类型: __type__",
+            "report": "报告t"
+        },
+        "ui": {
+            "no_area": "无区域"
+        }
+    },
+    "ha-entity-config": {
+        "label": {
+            "device_class": "设备类别",
+            "device_class_options": {
+                "apparent_power": "视在功率",
+                "aqi": "aqi",
+                "atmospheric_pressure": "气压",
+                "battery": "电池",
+                "battery_charging": "电池充电",
+                "carbon_dioxide": "二氧化碳",
+                "carbon_monoxide": "一氧化碳",
+                "co": "co",
+                "cold": "冷",
+                "connectivity": "连接性",
+                "current": "当前的",
+                "data_rate": "数据速率",
+                "data_size": "数据大小",
+                "date": "数据",
+                "distance": "距离",
+                "door": "门",
+                "duration": "持续时间",
+                "energy": "能量",
+                "energy_storage": "能量存储",
+                "frequency": "频率",
+                "garage_door": "车库门",
+                "gas": "气体",
+                "heat": "热",
+                "humidity": "湿度",
+                "illuminance": "照明度",
+                "irradiance": "辐照度",
+                "light": "灯",
+                "lock": "锁",
+                "moisture": "含水量",
+                "monetary": "货币",
+                "motion": "运动",
+                "moving": "移动",
+                "nitrogen_dioxide": "二氧化氮",
+                "nitrogen_monoxide": "一氧化氮",
+                "nitrous_oxide": "一氧化二氮",
+                "occupancy": "占用",
+                "opening": "开始",
+                "outlet": "出口",
+                "ozone": "臭氧",
+                "plug": "插头",
+                "pm1": "pm1",
+                "pm10": "pm10",
+                "pm25": "pm25",
+                "power": "功率",
+                "power_factor": "功率因数",
+                "precipitation": "降水",
+                "precipitation_intensity": "降水强度",
+                "presence": "出现",
+                "pressure": "压力",
+                "problem": "问题",
+                "reactive_power": "无功功率",
+                "restart": "重新启动",
+                "running": "运行",
+                "safety": "安全",
+                "signal_strength": "信号强度",
+                "smoke": "烟",
+                "sound": "声音",
+                "sound_pressure": "声压",
+                "speed": "速度",
+                "sulphur_dioxide": "二氧化硫",
+                "switch": "开关",
+                "tamper": "篡改",
+                "temperature": "温度",
+                "timestamp": "时间戳",
+                "update": "更新",
+                "vibration": "振动",
+                "volatile_organic_compounds": "挥发性有机化合物",
+                "voltage": "电压",
+                "volume": "卷",
+                "volume_storage": "卷存储",
+                "water": "水",
+                "weight": "重量",
+                "wind_speed": "风速",
+                "window": "窗户"
+            },
+            "entity_category": "类别",
+            "entity_category_options": {
+                "config": "配置",
+                "diagnostic": "诊断"
+            },
+            "entity_picture": "实体图片",
+            "icon": "图标",
+            "last_reset": "上次重置",
+            "max_length": "最大长度",
+            "max_value": "最大值",
+            "min_length": "最小长度",
+            "min_value": "最小值",
+            "mode": "模式",
+            "mode_options": {
+                "auto": "自动",
+                "box": "方框",
+                "password": "密码",
+                "slider": "滑块",
+                "text": "文本"
+            },
+            "name": "友好的名称",
+            "options": "选项",
+            "output_debug": "输出调试信息",
+            "pattern": "模式",
+            "resend": "重新发送状态和属性",
+            "state_class": "状态类别",
+            "state_class_options": {
+                "measurement": "尺寸",
+                "total": "总计",
+                "total_increasing": "总增加"
+            },
+            "step_value": "步骤",
+            "type": "类型",
+            "type_options": {
+                "binary_sensor": "二进制传感器",
+                "button": "按钮",
+                "number": "数量",
+                "select": "选择",
+                "sensor": "传感器",
+                "switch": "开关",
+                "text": "文本"
+            },
+            "unit_of_measurement": "尺寸单位"
+        }
+    },
+    "ha-entity": {
+        "label": {
+            "debug": "显示调试信息",
+            "input_override": "输入覆盖",
+            "name": "名称",
+            "on_state_change": "输出状态变化",
+            "output_location": "输出位置",
+            "payload": "负载",
+            "server": "服务器",
+            "state": "状态",
+            "type": "类型"
+        }
+    },
+    "get-history": {
+        "error": {
+            "invalid_relative_time": "相对时间无效"
+        }
+    },
+    "ha-number": {
+        "error": {
+            "value_not_number": "状态不是一个数值"
+        },
+        "label": {
+            "name": "名称",
+            "entity_config": "实体配置",
+            "value": "值",
+            "mode": "模式",
+            "select": {
+                "in": "监听变化",
+                "out": "设置值"
+            }
+        }
+    },
+    "poll-state": {
+        "errors": {
+            "jsonata_error": "JSON数据集错误: __message__",
+            "interval_nan": "偏移量不是数字: __offset__"
+        }
+    },
+    "ha-select": {
+        "label": {
+            "entity_config": "实体配置",
+            "mode": "模式",
+            "name": "名称",
+            "select": {
+                "in": "监听变化",
+                "out": "设定值"
+            },
+            "value": "值"
+        },
+        "error": {
+            "invalid_value": "选项值不存在于选项列表中"
+        }
+    },
+    "ha-sentence": {
+        "label": {
+            "name": "名称",
+            "sentences": "句子",
+            "server": "服务器"
+        }
+    },
+    "server-events": {
+        "alert": "警报",
+        "alert_message": "将事件类型留空并侦听所有事件可能会使 websocket 消息队列过载。",
+        "error": {
+            "invalid_json": "事件数据不是有效的 JSON"
+        },
+        "label": {
+            "event_data": "事件数据",
+            "event_type": "事件类型",
+            "name": "名称",
+            "output_only_after_running": "仅在 Home Assistant 运行后输出",
+            "server": "服务器"
+        }
+    },
+    "server-state-changed": {
+        "label": {
+            "ignore_current_state_unavailable": "当前状态不可用",
+            "ignore_current_state_unknown": "目前状态未知",
+            "ignore_header": "当以下时候忽略状态改变事件:",
+            "ignore_prev_state_null": "之前的状态不存在",
+            "ignore_prev_state_unavailable": "之前的状态不可用",
+            "ignore_prev_state_unknown": "之前的状态未知",
+            "output_on_connect": "连接时输出",
+            "output_only_on_state_change": "当前状态等于先前状态"
+        }
+    },
+    "ha-switch": {
+        "label": {
+            "enable_input": "启用输入",
+            "output_on_state_change": "状态改变时输出"
+        }
+    },
+    "ha-tag": {
+        "errors": {
+            "no_tags_found": "在Home Assistant找不到标签"
+        },
+        "label": {
+            "all_tags": "所有标签",
+            "device_id": "设备ID",
+            "devices": "设备",
+            "tag": "标签",
+            "tags": "标签",
+            "update_tag_list": "更新标签列表"
+        }
+    },
+    "ha-text": {
+        "label": {
+            "entity_config": "实体配置",
+            "mode": "模式",
+            "name": "名称",
+            "select": {
+                "in": "监听变化",
+                "out": "设定值"
+            },
+            "text": "文本"
+        }
+    },
+    "ha-time": {
+        "errors": {
+            "invalid_jsonata_payload": "发送实体状态作为有效负载的jsonata无效",
+            "jsonata_error": "JSONata错误: __message__",
+            "offset_nan": "偏移量不是数字: __offset__"
+        },
+        "status": {
+            "in_the_past": "在过去",
+            "invalid_date": "无效日期",
+            "invalid_property": "无效属性",
+            "next_at": "下一个时间为 __nextTime__",
+            "no_days_selected": "至少选择一周中的一天",
+            "sent": "发送",
+            "sent_and_next": "于 __sentTime__ 发送，下一步于 __nextTime__",
+            "unavailable": "不可用",
+            "error": "错误"
+        },
+        "label": {
+            "name": "名称",
+            "server": "服务器",
+            "entity_id": "实体Id",
+            "property": "属性",
+            "offset": "偏移量",
+            "seconds": "秒",
+            "minutes": "分钟",
+            "hours": "小时",
+            "randomize_offset": "在偏移内随机时间",
+            "payload": "负载",
+            "repeat_daily": "每日重复",
+            "monday": "星期一",
+            "tuesday": "星期二",
+            "wednesday": "星期三",
+            "thursday": "星期四",
+            "friday": "星期五",
+            "saturday": "星期六",
+            "sunday": "星期日"
+        }
+    },
+    "trigger-state": {
+        "label": {
+            "conditions": "条件",
+            "enable_input": "启用输入",
+            "output_on_connect": "连接时输出",
+            "select_option": {
+                "always": "总是发送",
+                "current_state": "当前状态",
+                "custom_message": "自定义消息",
+                "custom_payload": "自定义负载",
+                "default_message": "默认消息",
+                "entity_id": "实体id",
+                "if_prev_state": "如果之前的状态",
+                "if_property": "如果属性",
+                "if_state": "如果状态",
+                "previous_state": "之前的状态",
+                "property": "属性",
+                "this_entity": "本实体"
+            }
+        }
+    },
+    "ha-wait-until": {
+        "label": {
+            "block_input_overrides": "块输入覆盖",
+            "check_current_state": "检查当前状态",
+            "entity_location": "实体位置",
+            "timeout": "超时",
+            "wait_until": "等到"
+        },
+        "status": {
+            "timed_out": "超时",
+            "true": "真",
+            "waiting": "等待中"
+        }
+    },
+    "ha-webhook": {
+        "label": {
+            "allowed_methods": "允许的方法",
+            "put": "PUT",
+            "post": "POST",
+            "get": "GET",
+            "head": "HEAD"
+        }
+    }
+}

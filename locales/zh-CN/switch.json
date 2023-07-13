@@ -1,8 +1,0 @@
-{
-  "ha-switch": {
-    "label": {
-      "enable_input": "启用输入",
-      "output_on_state_change": "状态改变时输出"
-    }
-  }
-}

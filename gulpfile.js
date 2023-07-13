@@ -362,12 +362,19 @@ task('copyIcons', () => {
 });
 
 task('copyLocales', () => {
-    return src('locales/en-US/*')
+    return src('locales/**/*').pipe(dest(`${editorFilePath}/locales`));
+});
+
+task('buildLocalLocales', () => {
+    return src('src/**/locale.json')
         .pipe(mergeJson({ fileName: 'index.json' }))
         .pipe(dest(`${editorFilePath}/locales/en-US`));
 });
 
-task('copyAssetFiles', parallel(['copyIcons', 'copyLocales']));
+task(
+    'copyAssetFiles',
+    parallel(['copyIcons', series(['copyLocales', 'buildLocalLocales'])])
+);
 
 task(
     'buildAll',
@@ -444,12 +451,13 @@ module.exports = {
     start: series(
         'cleanAllFiles',
         'buildAll',
+        'copyLocales',
         runNodemonAndBrowserSync,
         function watcher(done) {
             watch(
                 [
                     'docs/node/*.md',
-                    'locales/**/*.json',
+                    'src/**/locale.json',
                     'src/nodes/**/editor/*',
                     'src/nodes/**/editor.*',
                     'src/nodes/**/migrations.ts',
@@ -458,7 +466,7 @@ module.exports = {
                 ],
                 series(
                     'cleanEditorFiles',
-                    parallel(['buildEditorFiles', 'copyLocales']),
+                    parallel(['buildEditorFiles', 'buildLocalLocales']),
                     restartNodemonAndBrowserSync
                 )
             );
@@ -467,11 +475,16 @@ module.exports = {
                 [
                     'src/**/*.js',
                     'src/**/*.ts',
+                    'src/**/locale.json',
                     '!src/nodes/**/editor.*',
                     '!src/nodes/**/editor/*',
                     '!src/editor.ts',
                 ],
-                series('cleanSourceFiles', 'buildSourceFiles', restartNodemon)
+                series(
+                    'cleanSourceFiles',
+                    parallel(['buildSourceFiles', 'buildLocalLocales']),
+                    restartNodemon
+                )
             );
             done();
         }
