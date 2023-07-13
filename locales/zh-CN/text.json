@@ -1,0 +1,14 @@
+{
+  "ha-text": {
+    "label": {
+      "entity_config": "实体配置",
+      "mode": "模式",
+      "name": "名称",
+      "select": {
+        "in": "监听变化",
+        "out": "设定值"
+      },
+      "text": "文本"
+    }
+  }
+}

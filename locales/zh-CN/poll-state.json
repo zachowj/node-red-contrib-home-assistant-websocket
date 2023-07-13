@@ -1,0 +1,8 @@
+{
+  "poll-state": {
+    "errors": {
+      "jsonata_error": "JSON数据集错误: __message__",
+      "interval_nan": "偏移量不是数字: __offset__"
+    }
+  }
+}

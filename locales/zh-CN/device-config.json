@@ -1,0 +1,11 @@
+{
+  "ha-device-config": {
+    "label": {
+      "name": "名称",
+      "manufacturer": "制造商",
+      "model": "模式",
+      "hw_version": "硬件版本",
+      "sw_version": "软件版本"
+    }
+  }
+}

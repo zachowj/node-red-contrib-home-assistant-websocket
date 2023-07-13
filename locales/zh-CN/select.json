@@ -1,0 +1,17 @@
+{
+  "ha-select": {
+    "label": {
+      "entity_config": "实体配置",
+      "mode": "模式",
+      "name": "名称",
+      "select": {
+        "in": "监听变化",
+        "out": "设定值"
+      },
+      "value": "值"
+    },
+    "error": {
+      "invalid_value": "选项值不存在于选项列表中"
+    }
+  }
+}

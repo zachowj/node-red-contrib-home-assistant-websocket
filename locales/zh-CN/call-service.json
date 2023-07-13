@@ -1,0 +1,24 @@
+{
+  "api-call-service": {
+    "label": {
+      "alternate_tags": "对数据字段使用备用模板标签",
+      "area": "区域",
+      "data": "数据",
+      "device": "设备",
+      "domain": "范围",
+      "entity": "实体",
+      "load_example_data": "加载示例数据",
+      "merge_context": "合并上下文",
+      "queue": "队列",
+      "queue_all": "所有信息",
+      "queue_first": "仅第一条消息",
+      "queue_last": "仅最后一条消息",
+      "queue_none": "不要对消息进行排队",
+      "service": "服务",
+      "show_debug": "显示调试信息"
+    },
+    "error": {
+      "invalid_entity_id": "实体 ID 格式无效"
+    }
+  }
+}

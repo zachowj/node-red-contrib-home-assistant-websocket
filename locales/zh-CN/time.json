@@ -1,0 +1,40 @@
+{
+  "ha-time": {
+    "errors": {
+      "invalid_jsonata_payload": "发送实体状态作为有效负载的jsonata无效",
+      "jsonata_error": "JSONata错误: __message__",
+      "offset_nan": "偏移量不是数字: __offset__"
+    },
+    "status": {
+      "in_the_past": "在过去",
+      "invalid_date": "无效日期",
+      "invalid_property": "无效属性",
+      "next_at": "下一个时间为 __nextTime__",
+      "no_days_selected": "至少选择一周中的一天",
+      "sent": "发送",
+      "sent_and_next": "于 __sentTime__ 发送，下一步于 __nextTime__",
+      "unavailable": "不可用",
+      "error": "错误"
+    },
+    "label": {
+      "name": "名称",
+      "server": "服务器",
+      "entity_id": "实体Id",
+      "property": "属性",
+      "offset": "偏移量",
+      "seconds": "秒",
+      "minutes": "分钟",
+      "hours": "小时",
+      "randomize_offset": "在偏移内随机时间",
+      "payload": "负载",
+      "repeat_daily": "每日重复",
+      "monday": "星期一",
+      "tuesday": "星期二",
+      "wednesday": "星期三",
+      "thursday": "星期四",
+      "friday": "星期五",
+      "saturday": "星期六",
+      "sunday": "星期日"
+    }
+  }
+}

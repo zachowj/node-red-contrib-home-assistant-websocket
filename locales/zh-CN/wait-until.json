@@ -1,0 +1,16 @@
+{
+  "ha-wait-until": {
+    "label": {
+      "block_input_overrides": "块输入覆盖",
+      "check_current_state": "检查当前状态",
+      "entity_location": "实体位置",
+      "timeout": "超时",
+      "wait_until": "等到"
+    },
+    "status": {
+      "timed_out": "超时",
+      "true": "真",
+      "waiting": "等待中"
+    }
+  }
+}
