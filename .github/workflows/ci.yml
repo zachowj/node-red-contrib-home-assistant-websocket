@@ -67,9 +67,9 @@ jobs:
       - run: |
           echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
         if: steps.publish.outputs.type != 'none'
-      - name: npm next release
-        uses: epeli/npm-release@v2
-        with:
-          type: prerelease
-          token: ${{ secrets.npm_token }}
-        if: ${{ !steps.release.outputs.release_created }}
+      # - name: npm next release
+      #   uses: epeli/npm-release@v2
+      #   with:
+      #     type: prerelease
+      #     token: ${{ secrets.npm_token }}
+      #   if: ${{ !steps.release.outputs.release_created }}
