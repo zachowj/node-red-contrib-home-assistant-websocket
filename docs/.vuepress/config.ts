@@ -126,6 +126,7 @@ export default defineUserConfig({
                         'get-history',
                         'poll-state',
                         'render-template',
+                        'sentence',
                         'tag',
                         'time',
                         'trigger-state',

@@ -4,7 +4,9 @@ import { SubscriptionUnsubscribe } from '../../types/home-assistant';
 import State from '../State';
 import { createHaConfig } from './helpers';
 import { IntegrationEvent, MessageType } from './Integration';
-import Integration, { EntityMessage } from './UnidirectionalEntityIntegration';
+import UnidirectionalEntityIntegration, {
+    EntityMessage,
+} from './UnidirectionalEntityIntegration';
 
 export interface TriggerPayload {
     entity_id?: string;
@@ -33,10 +35,10 @@ export interface StateChangePayload {
     changed: boolean;
 }
 
-export default class BidirectionalIntegration extends Integration {
+export default class BidirectionalIntegration extends UnidirectionalEntityIntegration {
     #unsubscribe?: SubscriptionUnsubscribe;
 
-    protected async registerEntity() {
+    protected async register() {
         if (!this.isIntegrationLoaded || this.isRegistered) {
             return;
         }
@@ -75,10 +77,10 @@ export default class BidirectionalIntegration extends Integration {
         this.registered = true;
     }
 
-    protected async unregisterEntity() {
+    protected async unregister() {
         await this.#unsubscribe?.();
         this.#unsubscribe = undefined;
-        await super.unregisterEntity();
+        await super.unregister();
     }
 
     public async updateHomeAssistant(state?: string | number | boolean) {

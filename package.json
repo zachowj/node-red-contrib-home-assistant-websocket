@@ -1,7 +1,7 @@
 {
   "name": "node-red-contrib-home-assistant-websocket",
   "description": "Node-RED integration with Home Assistant through websocket and REST API",
-  "version": "0.51.1",
+  "version": "0.53.1",
   "homepage": "https://zachowj.github.io/node-red-contrib-home-assistant-websocket/",
   "bugs": {
     "url": "https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues"
@@ -97,8 +97,8 @@
     "@types/ws": "^8.5.3",
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",
-    "@vuepress/plugin-google-analytics": "2.0.0-beta.63",
-    "@vuepress/plugin-register-components": "2.0.0-beta.63",
+    "@vuepress/plugin-google-analytics": "2.0.0-beta.64",
+    "@vuepress/plugin-register-components": "2.0.0-beta.64",
     "@vuepress/plugin-search": "2.0.0-beta.64",
     "autoprefixer": "^10.4.7",
     "chai": "^4.3.6",
@@ -156,8 +156,8 @@
     "tslib": "^2.4.0",
     "typescript": "^4.7.4",
     "vinyl-source-stream": "^2.0.0",
-    "vuepress": "^2.0.0-beta.63",
-    "vuepress-plugin-copy-code2": "2.0.0-beta.228"
+    "vuepress": "^2.0.0-beta.64",
+    "vuepress-plugin-copy-code2": "2.0.0-beta.231"
   },
   "lint-staged": {
     "*.{js,ts}": [

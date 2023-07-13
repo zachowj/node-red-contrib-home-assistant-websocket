@@ -6,32 +6,27 @@ import Status from '../../common/status/Status';
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
 import { getServerConfigNode } from '../../helpers/node';
-import { getHomeAssistant } from '../../homeAssistant';
+import { getHomeAssistant } from '../../homeAssistant/index';
 import {
     BaseNode,
     BaseNodeProperties,
     OutputProperty,
 } from '../../types/nodes';
-import WebhookController from './WebhookController';
-import WebhookIntegration from './WebhookIntegration';
+import SentenceController from './SentenceController';
+import SentenceIntegration from './SentenceIntegration';
 
-export interface WebhookNodeProperties extends BaseNodeProperties {
-    webhookId: string;
-    method_get: boolean;
-    method_head: boolean;
-    method_put: boolean;
-    method_post: boolean;
-    local_only: boolean;
+export interface SentenceNodeProperties extends BaseNodeProperties {
+    sentences: string[];
     outputProperties: OutputProperty[];
 }
 
-export interface WebhookNode extends BaseNode {
-    config: WebhookNodeProperties;
+export interface SentenceNode extends BaseNode {
+    config: SentenceNodeProperties;
 }
 
-export default function webhookNode(
-    this: WebhookNode,
-    config: WebhookNodeProperties
+export default function sentenceNode(
+    this: SentenceNode,
+    config: SentenceNodeProperties
 ) {
     RED.nodes.createNode(this, config);
     this.config = migrate(config);
@@ -52,7 +47,7 @@ export default function webhookNode(
     });
 
     const controllerDeps = createControllerDependencies(this, homeAssistant);
-    const integration = new WebhookIntegration({
+    const integration = new SentenceIntegration({
         node: this,
         clientEvents,
         homeAssistant,
@@ -60,7 +55,8 @@ export default function webhookNode(
     });
     integration.setStatus(status);
 
-    this.controller = new WebhookController({
+    // eslint-disable-next-line no-new
+    new SentenceController({
         node: this,
         status,
         ...controllerDeps,

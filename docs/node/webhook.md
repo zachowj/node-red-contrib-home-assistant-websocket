@@ -9,23 +9,17 @@ in Home Assistant for this node to function_
 
 ## Configuration
 
-### ID
+### ID <Badge text="required"/>
 
 - Type: `string`
 
 A string to be used for the webhook URL in Home Assistant.
 
-### Payload
+### Allowed Methods <Badge text="required"/>
 
-- Type: `string`
+- Type: `list`
 
-Customizable location for the webhook payload. Defaults to msg.payload
-
-### Headers
-
-- Type: `number`
-
-Customizable location for the webhook request headers.
+A list of allowed methods that Home Assistant will accept for the webhook. At least one method must be selected.
 
 ## Outputs
 
