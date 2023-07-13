@@ -98,7 +98,7 @@ export function init(n: HassNodeProperties) {
                 break;
             case NodeType.Sentence:
                 if ($('#node-input-server').val() !== '_ADD_') {
-                    renderAlert('1.5.0');
+                    renderAlert('2.0.0');
                 }
                 break;
             case NodeType.Webhook:
@@ -143,7 +143,7 @@ function render() {
             break;
         case NodeType.Sentence:
             if ($('#node-input-server').val() !== '_ADD_') {
-                renderAlert('1.5.0');
+                renderAlert('2.0.0');
             }
             break;
         case NodeType.Webhook:
