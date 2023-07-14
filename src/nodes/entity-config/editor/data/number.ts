@@ -49,7 +49,7 @@ const numberDeviceClasses = [
 ] as const;
 
 export const numberUnitOfMeasurement: Record<
-    (typeof numberDeviceClasses)[number],
+    typeof numberDeviceClasses[number],
     null | string[]
 > = {
     apparent_power: ['VA'],
