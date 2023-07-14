@@ -501,12 +501,8 @@ export default class Websocket {
     }
 
     onClientClose(): void {
-        this.integrationVersion = 0;
-        this.isHomeAssistantRunning = false;
-        this.connectionState = STATE_DISCONNECTED;
-        this.resetClient();
         debug('events connection closed, cleaning up connection');
-        this.#emitEvent('ha_client:close');
+        this.resetClient();
     }
 
     onClientError(data: unknown): void {
@@ -526,6 +522,8 @@ export default class Websocket {
     }
 
     resetClient(): void {
+        this.integrationVersion = 0;
+        this.isHomeAssistantRunning = false;
         this.#servicesLoaded = false;
         this.#statesLoaded = false;
         this.connectionState = STATE_DISCONNECTED;
