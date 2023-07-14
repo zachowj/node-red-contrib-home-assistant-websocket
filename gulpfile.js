@@ -371,14 +371,15 @@ task('buildLocalLocales', () => {
         .pipe(dest(`${editorFilePath}/locales/en-US`));
 });
 
-task(
-    'copyAssetFiles',
-    parallel(['copyIcons', series(['copyLocales', 'buildLocalLocales'])])
-);
+task('copyAssetFiles', parallel(['copyIcons', 'copyLocales']));
 
 task(
     'buildAll',
-    parallel(['buildEditorFiles', 'buildSourceFiles', 'copyAssetFiles'])
+    parallel([
+        'buildEditorFiles',
+        'buildSourceFiles',
+        series(['copyAssetFiles', 'buildLocalLocales']),
+    ])
 );
 
 // Clean generated files
@@ -464,7 +465,7 @@ module.exports = {
                 ],
                 series(
                     'cleanEditorFiles',
-                    parallel(['buildEditorFiles', 'buildLocalLocales']),
+                    'buildEditorFiles',
                     restartNodemonAndBrowserSync
                 )
             );
@@ -477,15 +478,11 @@ module.exports = {
                     '!src/nodes/**/editor/*',
                     '!src/editor.ts',
                 ],
-                series(
-                    'cleanSourceFiles',
-                    parallel(['buildSourceFiles', 'buildLocalLocales']),
-                    restartNodemon
-                )
+                series('cleanSourceFiles', 'buildSourceFiles', restartNodemon)
             );
             watch(
                 'src/**/locale.json',
-                series('buildLocalLocales', restartNodemon)
+                series('buildLocalLocales', restartNodemonAndBrowserSync)
             );
             done();
         }
