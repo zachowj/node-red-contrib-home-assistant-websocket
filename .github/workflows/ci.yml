@@ -60,7 +60,7 @@ jobs:
           cache: npm
       - run: npm ci
       - id: publish
-        uses: JS-DevTools/npm-publish@v1
+        uses: JS-DevTools/npm-publish@v2
         with:
           token: ${{ secrets.npm_token }}
         if: ${{ steps.release.outputs.release_created }}
