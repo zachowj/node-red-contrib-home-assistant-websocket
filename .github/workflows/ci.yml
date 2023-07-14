@@ -24,7 +24,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14, 16]
+        node-version: [16, 18]
 
     steps:
       - uses: actions/checkout@v3
@@ -56,20 +56,12 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 18
           cache: npm
       - run: npm ci
       - id: publish
         uses: JS-DevTools/npm-publish@v2
         with:
           token: ${{ secrets.npm_token }}
+          ignore-scripts: false
         if: ${{ steps.release.outputs.release_created }}
-      - run: |
-          echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
-        if: steps.publish.outputs.type != 'none'
-      # - name: npm next release
-      #   uses: epeli/npm-release@v2
-      #   with:
-      #     type: prerelease
-      #     token: ${{ secrets.npm_token }}
-      #   if: ${{ !steps.release.outputs.release_created }}
