@@ -6,6 +6,6 @@ Installation of custom integration can be done using [HACS](https://hacs.xyz/) o
 
 ## Tip
 
-Filling in the name field in the HA config of these new nodes before you first deploy will attempt to create it with that entity_id otherwise it will default to `sensor.nodered_79fba2c4_04342c`. Where the random string is the node id in Node-RED. The entity ids change be changed in HA after creating them in NR.
+Filling in the friendly name field in the entity config node before you first deploy will attempt to create it with that entity\*id otherwise it will default to `sensor.nodered_<node id>`. Where the random string is the node id in Node-RED. The entity id can be changed in Home Assistant after creating them in Node-RED.
 
 ![image|455x88](./images/tip.png)
