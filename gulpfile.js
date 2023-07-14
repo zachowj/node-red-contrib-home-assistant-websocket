@@ -451,13 +451,11 @@ module.exports = {
     start: series(
         'cleanAllFiles',
         'buildAll',
-        'copyLocales',
         runNodemonAndBrowserSync,
         function watcher(done) {
             watch(
                 [
                     'docs/node/*.md',
-                    'src/**/locale.json',
                     'src/nodes/**/editor/*',
                     'src/nodes/**/editor.*',
                     'src/nodes/**/migrations.ts',
@@ -475,7 +473,6 @@ module.exports = {
                 [
                     'src/**/*.js',
                     'src/**/*.ts',
-                    'src/**/locale.json',
                     '!src/nodes/**/editor.*',
                     '!src/nodes/**/editor/*',
                     '!src/editor.ts',
@@ -485,6 +482,10 @@ module.exports = {
                     parallel(['buildSourceFiles', 'buildLocalLocales']),
                     restartNodemon
                 )
+            );
+            watch(
+                'src/**/locale.json',
+                series('buildLocalLocales', restartNodemon)
             );
             done();
         }
