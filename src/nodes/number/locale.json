@@ -4,14 +4,14 @@
       "value_not_number": "The state is not a number"
     },
     "label": {
-      "name": "Name",
       "entity_config": "Entity config",
-      "value": "Value",
       "mode": "Mode",
-      "select": {
-        "in": "Listen for changes",
-        "out": "Set value"
-      }
+      "mode_option": {
+        "in": "listen for changes",
+        "out": "set value"
+      },
+      "name": "Name",
+      "value": "Value"
     }
   }
 }

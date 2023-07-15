@@ -1,0 +1,18 @@
+{
+  "api-get-history": {
+    "label": {
+      "max_results": "Max number of results",
+      "name": "Name",
+      "output_location": "Output location",
+      "output_type": "Output Type",
+      "output_type_option": {
+        "array": "array",
+        "count": "count",
+        "random": "random",
+        "split": "split"
+      },
+      "send_empty_results": "Send empty results",
+      "server": "Server"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "ha-api": {
+    "label": {
+      "data": "Data",
+      "method": "Method",
+      "method_option": {
+        "get": "GET",
+        "post": "POST"
+      },
+      "name": "Name",
+      "path": "Path",
+      "protocol": "Protocol",
+      "protocol_option": {
+        "http": "HTTP",
+        "websocket": "Websocket"
+      },
+      "response_type": "Return",
+      "response_type_option": {
+        "arraybuffer": "a binary buffer",
+        "json": "a parsed JSON object",
+        "text": "a UTF-8 string"
+      },
+      "server": "Server",
+      "show_debug": "Show debug information"
+    }
+  }
+}

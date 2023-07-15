@@ -5,7 +5,31 @@
       "jsonata_error": "JSONata Error: __message__",
       "offset_nan": "Offset is not a number: __offset__"
     },
+    "label": {
+      "entity_id": "Entity Id",
+      "friday": "Friday",
+      "monday": "Monday",
+      "name": "Name",
+      "offset": "Offset",
+      "offset_unit_option": {
+        "hours": "hours",
+        "minutes": "minutes",
+        "seconds": "seconds"
+      },
+      "payload": "Payload",
+      "property": "Property",
+      "randomize_offset": "Randomize time within the offset",
+      "repeat_daily": "Repeat Daily",
+      "saturday": "Saturday",
+      "server": "Server",
+      "show_debug": "Show Debug Information",
+      "sunday": "Sunday",
+      "thursday": "Thursday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday"
+    },
     "status": {
+      "error": "Error",
       "in_the_past": "In the past",
       "invalid_date": "Invalid date",
       "invalid_property": "Invalid property",
@@ -13,28 +37,7 @@
       "no_days_selected": "Select at least one day of the week",
       "sent": "Sent",
       "sent_and_next": "Sent at __sentTime__ Next at __nextTime__",
-      "unavailable": "Unavailable",
-      "error": "Error"
-    },
-    "label": {
-      "name": "Name",
-      "server": "Server",
-      "entity_id": "Entity Id",
-      "property": "Property",
-      "offset": "Offset",
-      "seconds": "seconds",
-      "minutes": "minutes",
-      "hours": "hours",
-      "randomize_offset": "Randomize time within the offset",
-      "payload": "Payload",
-      "repeat_daily": "Repeat Daily",
-      "monday": "Monday",
-      "tuesday": "Tuesday",
-      "wednesday": "Wednesday",
-      "thursday": "Thursday",
-      "friday": "Friday",
-      "saturday": "Saturday",
-      "sunday": "Sunday"
+      "unavailable": "Unavailable"
     }
   }
 }

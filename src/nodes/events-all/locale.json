@@ -11,6 +11,9 @@
       "name": "Name",
       "output_only_after_running": "Output only after Home Assistant is running",
       "server": "Server"
+    },
+    "placeholder": {
+      "all_events": "leave empty for all events"
     }
   }
 }

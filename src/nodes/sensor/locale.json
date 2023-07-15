@@ -1,0 +1,16 @@
+{
+  "ha-sensor": {
+    "label": {
+      "entity_config": "Entity config",
+      "input_override": "Input Override",
+      "input_override_option": {
+        "allow": "allow",
+        "block": "block",
+        "merge": "merge"
+      },
+      "name": "Name",
+      "resend": "Resend state and attributes",
+      "state": "State"
+    }
+  }
+}

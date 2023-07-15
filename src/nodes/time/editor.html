@@ -1,51 +1,45 @@
 <input type="hidden" id="node-input-version" />
 
 <div class="form-row">
-    <label for="node-input-name">
-        <i class="fa fa-tag"></i> <span data-i18n="ha-time.label.name"></span>
-    </label>
-    <input
-        type="text"
-        id="node-input-name"
-        data-i18n="[placeholder]ha-time.label.name"
-    />
+    <label for="node-input-name" data-i18n="ha-time.label.name"></label>
+    <input type="text" id="node-input-name" />
 </div>
 
 <div class="form-row">
-    <label for="node-input-server">
-        <i class="fa fa-server"></i>
-        <span data-i18n="ha-time.label.server"></span>
-    </label>
+    <label for="node-input-server" data-i18n="ha-time.label.server"></label>
     <input type="text" id="node-input-server" />
 </div>
 
 <div class="form-row">
-    <label for="node-input-entityId">
-        <i class="fa fa-cube"></i>
-        <span data-i18n="ha-time.label.entity_id"></span>
-    </label>
+    <label
+        for="node-input-entityId"
+        data-i18n="ha-time.label.entity_id"
+    ></label>
     <input type="text" id="node-input-entityId" />
 </div>
 
 <div class="form-row">
-    <label for="node-input-property">
-        <i class="fa fa-edit"></i>
-        <span data-i18n="ha-time.label.property"></span>
-    </label>
+    <label for="node-input-property" data-i18n="ha-time.label.property"></label>
     <input type="text" id="node-input-property" placeholder="state" />
 </div>
 
 <div class="form-row">
-    <label for="node-input-offset">
-        <i class="fa fa-clock-o"></i>
-        <span data-i18n="ha-time.label.offset"></span>
-    </label>
+    <label for="node-input-offset" data-i18n="ha-time.label.offset"></label>
     <input type="text" id="node-input-offset" style="width: 43%" />
     <input type="hidden" id="node-input-offsetType" />
     <select id="node-input-offsetUnits" style="width: 27%">
-        <option value="seconds" data-i18n="ha-time.label.seconds"></option>
-        <option value="minutes" data-i18n="ha-time.label.minutes"></option>
-        <option value="hours" data-i18n="ha-time.label.hours"></option>
+        <option
+            value="seconds"
+            data-i18n="ha-time.label.offset_unit_option.seconds"
+        ></option>
+        <option
+            value="minutes"
+            data-i18n="ha-time.label.offset_unit_option.minutes"
+        ></option>
+        <option
+            value="hours"
+            data-i18n="ha-time.label.offset_unit_option.hours"
+        ></option>
     </select>
 </div>
 
@@ -120,5 +114,8 @@
 
 <div class="form-row checkbox-option">
     <input type="checkbox" id="node-input-debugenabled" />
-    <label for="node-input-debugenabled"> Show Debug Information </label>
+    <label
+        for="node-input-debugenabled"
+        data-i18n="ha-time.label.show_debug"
+    ></label>
 </div>

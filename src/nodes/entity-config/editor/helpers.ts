@@ -5,6 +5,7 @@ import { EntityType } from '../../../const';
 declare const RED: EditorRED;
 
 const packageName = 'node-red-contrib-home-assistant-websocket/all:';
+const localePath = `${packageName}ha-entity-config.data.label`;
 
 const createDate = (
     id: string,
@@ -106,7 +107,7 @@ const createSelect = (
         style: 'width: 70%',
         'data-property': data.id,
     });
-    const i18n = `${packageName}ha-entity-config.label.${data.id}_options`;
+    const i18n = `${localePath}.${data.id}_options`;
     data.values.forEach((value) => {
         $('<option />', {
             value,
@@ -156,7 +157,7 @@ export const createRow = (
         'data-type': data.type,
     });
 
-    const labelText = RED._(`${packageName}ha-entity-config.label.${data.id}`);
+    const labelText = RED._(`${localePath}.${data.id}`);
 
     const $label = $('<label>', { for: id }).text(labelText);
     $row.append($label, ' ');

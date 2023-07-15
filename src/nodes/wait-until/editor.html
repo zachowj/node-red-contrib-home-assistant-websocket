@@ -1,45 +1,37 @@
 <input type="hidden" id="node-input-version" />
 
 <div class="form-row">
-    <label for="node-input-name" data-i18n="home-assistant.label.name"></label>
+    <label for="node-input-name" data-i18n="ha-wait-until.label.name"></label>
     <input type="text" id="node-input-name" />
 </div>
 
 <div class="form-row">
     <label
         for="node-input-server"
-        data-i18n="home-assistant.label.server"
+        data-i18n="ha-wait-until.label.server"
     ></label>
     <input type="text" id="node-input-server" />
 </div>
 
 <div class="form-row">
-    <label data-i18n="home-assistant.label.entity"></label>
+    <label data-i18n="ha-wait-until.label.entity"></label>
     <select id="node-input-entityIdFilterType">
         <option
             value="exact"
-            data-i18n="home-assistant.label.select_option.exact"
-        >
-            exact
-        </option>
+            data-i18n="ha-wait-until.label.entity_filter_type_option.exact"
+        ></option>
         <option
             value="list"
-            data-i18n="home-assistant.label.select_option.list"
-        >
-            list
-        </option>
+            data-i18n="ha-wait-until.label.entity_filter_type_option.list"
+        ></option>
         <option
             value="regex"
-            data-i18n="home-assistant.label.select_option.regex"
-        >
-            regex
-        </option>
+            data-i18n="ha-wait-until.label.entity_filter_type_option.regex"
+        ></option>
         <option
             value="substring"
-            data-i18n="home-assistant.label.select_option.substring"
-        >
-            substring
-        </option>
+            data-i18n="ha-wait-until.label.entity_filter_type_option.substring"
+        ></option>
     </select>
 </div>
 
@@ -48,7 +40,11 @@
         for="node-input-property"
         data-i18n="ha-wait-until.label.wait_until"
     ></label>
-    <input type="text" id="node-input-property" placeholder="property" />
+    <input
+        type="text"
+        id="node-input-property"
+        data-i18n="[placeholder]ha-wait-until.placeholder.property"
+    />
 </div>
 
 <div class="form-row">
@@ -57,43 +53,47 @@
         <select id="node-input-comparator">
             <option
                 value="is"
-                data-i18n="home-assistant.label.select_option.is"
+                data-i18n="ha-wait-until.label.comparator_option.is"
             ></option>
             <option
                 value="is_not"
-                data-i18n="home-assistant.label.select_option.is_not"
+                data-i18n="ha-wait-until.label.comparator_option.is_not"
             ></option>
             <option
                 value="lt"
-                data-i18n="home-assistant.label.select_option.less_than"
+                data-i18n="ha-wait-until.label.comparator_option.less_than"
             ></option>
             <option
                 value="lte"
-                data-i18n="home-assistant.label.select_option.less_than_equal"
+                data-i18n="ha-wait-until.label.comparator_option.less_than_or_equal_to"
             ></option>
             <option
                 value="gt"
-                data-i18n="home-assistant.label.select_option.greater_than"
+                data-i18n="ha-wait-until.label.comparator_option.greater_than"
             ></option>
             <option
                 value="gte"
-                data-i18n="home-assistant.label.select_option.greater_than_equal"
+                data-i18n="ha-wait-until.label.comparator_option.greater_than_or_equal_to"
             ></option>
             <option
                 value="includes"
-                data-i18n="home-assistant.label.select_option.in"
+                data-i18n="ha-wait-until.label.comparator_option.includes"
             ></option>
             <option
                 value="does_not_include"
-                data-i18n="home-assistant.label.select_option.not_in"
+                data-i18n="ha-wait-until.label.comparator_option.does_not_include"
             ></option>
             <option
                 value="jsonata"
-                data-i18n="home-assistant.label.select_option.jsonata"
+                data-i18n="ha-wait-until.label.comparator_option.jsonata"
             ></option>
         </select>
         <input id="node-input-valueType" type="hidden" />
-        <input id="node-input-value" type="text" placeholder="value" />
+        <input
+            id="node-input-value"
+            type="text"
+            data-i18n="[placeholder]ha-wait-until.placeholder.value"
+        />
     </div>
 </div>
 
@@ -109,22 +109,24 @@
         <select id="node-input-timeoutUnits">
             <option
                 value="milliseconds"
-                data-i18n="home-assistant.label.milliseconds"
-            >
-                milliseconds
-            </option>
-            <option value="seconds" data-i18n="home-assistant.label.seconds">
-                seconds
-            </option>
-            <option value="minutes" data-i18n="home-assistant.label.minutes">
-                minutes
-            </option>
-            <option value="hours" data-i18n="home-assistant.label.hours">
-                hours
-            </option>
-            <option value="days" data-i18n="home-assistant.label.days">
-                days
-            </option>
+                data-i18n="ha-wait-until.label.timeout_units_option.milliseconds"
+            ></option>
+            <option
+                value="seconds"
+                data-i18n="ha-wait-until.label.timeout_units_option.seconds"
+            ></option>
+            <option
+                value="minutes"
+                data-i18n="ha-wait-until.label.timeout_units_option.minutes"
+            ></option>
+            <option
+                value="hours"
+                data-i18n="ha-wait-until.label.timeout_units_option.hours"
+            ></option>
+            <option
+                value="days"
+                data-i18n="ha-wait-until.label.timeout_units_option.days"
+            ></option>
         </select>
     </div>
 </div>

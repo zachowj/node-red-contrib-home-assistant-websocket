@@ -13,36 +13,46 @@
       "area_selector": "Area Selector",
       "base_url": "Base URL",
       "cache_autocomplete_results": "Cache autocomplete results",
+      "date_option": {
+        "hidden": "hidden",
+        "long": "long",
+        "numeric": "numeric",
+        "short": "short",
+        "two_digit": "2-digit"
+      },
+      "day": "Day",
       "delay_connection_attempts": "Delay connection attempts",
       "device_selector": "Device Selector",
       "enable_global_context_store": "Enable global context store",
       "enable_heartbeat": "Enable heartbeat",
       "entity_selector": "Entity Selector",
-      "friendly_name": "friendly name",
       "heartbeat_interval": "Heartbeat interval",
-      "id": "ID",
-      "id_selector": "ID Selector",
-      "seconds": "Seconds",
-      "state_boolean_list": "State boolean",
-      "status": {
+      "hour_cycle": "Hour cycle",
+      "hour_cycle_option": {
         "12_hour_format": "12-hour format",
         "24_hour_format": "24-hour format",
-        "day": "Day",
-        "default": "default",
-        "hidden": "hidden",
-        "hour_cycle": "Hour cycle",
-        "long": "long",
-        "month": "Month",
-        "numeric": "numeric",
-        "separator": "Separator",
-        "short": "short",
-        "time_format": "Time format",
-        "title": "Status date format",
-        "two_digit": "2-digit",
-        "year": "Year"
+        "default": "default"
+      },
+      "id_selector": "ID Selector",
+      "month": "Month",
+      "name": "Name",
+      "seconds": "Seconds",
+      "selector_option": {
+        "friendly_name": "friendly name",
+        "id": "id"
+      },
+      "separator": "Separator",
+      "state_boolean_list": "State boolean",
+      "status_title": "Status date format",
+      "time_format": "Time format",
+      "time_format_option": {
+        "hour_min": "hours and minutes",
+        "hour_min_sec": "hours, minutes and seconds",
+        "hour_min_sec_ms": "hours, minutes, seconds and milliseconds"
       },
       "ui_settings": "UI Settings",
-      "using_add_on": "Using the Home Assistant Add-on"
+      "using_add_on": "Using the Home Assistant Add-on",
+      "year": "Year"
     },
     "status": {
       "connected": "connected",

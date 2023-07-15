@@ -3,9 +3,39 @@
     "label": {
       "block_input_overrides": "Block input overrides",
       "check_current_state": "Check against current state",
-      "entity_location": "Entity location",
+      "comparator_option": {
+        "does_not_include": "not in",
+        "greater_than": ">",
+        "greater_than_or_equal_to": ">=",
+        "includes": "in",
+        "is": "is",
+        "is_not": "is not",
+        "jsonata": "JSONata",
+        "less_than": "<",
+        "less_than_or_equal_to": "<="
+      },
+      "entity": "Entity",
+      "entity_filter_type_option": {
+        "exact": "exact",
+        "list": "list",
+        "regex": "regex",
+        "substring": "substring"
+      },
+      "name": "Name",
+      "server": "Server",
       "timeout": "Timeout",
+      "timeout_units_option": {
+        "days": "days",
+        "hours": "hours",
+        "milliseconds": "milliseconds",
+        "minutes": "minutes",
+        "seconds": "seconds"
+      },
       "wait_until": "Wait until"
+    },
+    "placeholder": {
+      "property": "property",
+      "value": "value"
     },
     "status": {
       "timed_out": "timed out",

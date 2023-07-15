@@ -1,0 +1,9 @@
+{
+  "ha-update-config": {
+    "label": {
+      "entity_config": "Entity Config",
+      "name": "Name",
+      "server": "Server"
+    }
+  }
+}

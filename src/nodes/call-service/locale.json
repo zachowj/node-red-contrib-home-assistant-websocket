@@ -1,5 +1,8 @@
 {
   "api-call-service": {
+    "error": {
+      "invalid_entity_id": "Invalid entity id format"
+    },
     "label": {
       "alternate_tags": "Use alternate template tags for the data field",
       "area": "Area",
@@ -9,16 +12,17 @@
       "entity": "Entity",
       "load_example_data": "Load example data",
       "merge_context": "Merge context",
+      "name": "Name",
       "queue": "Queue",
-      "queue_all": "all messages",
-      "queue_first": "first message only",
-      "queue_last": "last message only",
-      "queue_none": "don't queue messages",
+      "queue_option": {
+        "queue_all": "all messages",
+        "queue_first": "first message only",
+        "queue_last": "last message only",
+        "queue_none": "don't queue messages"
+      },
+      "server": "Server",
       "service": "Service",
       "show_debug": "Show debug information"
-    },
-    "error": {
-      "invalid_entity_id": "Invalid entity id format"
     }
   }
 }

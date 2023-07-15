@@ -3,7 +3,7 @@
 <div class="form-row">
     <label
         for="node-config-input-name"
-        data-i18n="home-assistant.label.name"
+        data-i18n="config-server.label.name"
     ></label>
     <input type="text" id="node-config-input-name" />
 </div>
@@ -116,6 +116,8 @@
     ></label>
 </div>
 
+<hr />
+
 <div class="form-row" data-i18n="config-server.label.ui_settings"></div>
 
 <div class="form-row checkbox-option">
@@ -137,10 +139,13 @@
         data-i18n="config-server.label.area_selector"
     ></label>
     <select id="node-config-input-areaSelector">
-        <option value="id" data-i18n="config-server.label.id"></option>
+        <option
+            value="id"
+            data-i18n="config-server.label.selector_option.id"
+        ></option>
         <option
             value="friendlyName"
-            data-i18n="config-server.label.friendly_name"
+            data-i18n="config-server.label.selector_option.friendly_name"
         ></option>
     </select>
 </div>
@@ -151,10 +156,13 @@
         data-i18n="config-server.label.device_selector"
     ></label>
     <select id="node-config-input-deviceSelector">
-        <option value="id" data-i18n="config-server.label.id"></option>
+        <option
+            value="id"
+            data-i18n="config-server.label.selector_option.id"
+        ></option>
         <option
             value="friendlyName"
-            data-i18n="config-server.label.friendly_name"
+            data-i18n="config-server.label.selector_option.friendly_name"
         ></option>
     </select>
 </div>
@@ -165,110 +173,120 @@
         data-i18n="config-server.label.entity_selector"
     ></label>
     <select id="node-config-input-entitySelector">
-        <option value="id" data-i18n="config-server.label.id"></option>
+        <option
+            value="id"
+            data-i18n="config-server.label.selector_option.id"
+        ></option>
         <option
             value="friendlyName"
-            data-i18n="config-server.label.friendly_name"
+            data-i18n="config-server.label.selector_option.friendly_name"
         ></option>
     </select>
 </div>
 
 <div class="form-row">
-    <span data-i18n="config-server.label.status.title"></span>
+    <span data-i18n="config-server.label.status_title"></span>
 </div>
 
 <div class="form-row">
-    <label data-i18n="config-server.label.status.separator"></label>
+    <label data-i18n="config-server.label.separator"></label>
     <input id="node-config-input-statusSeparator" type="text" />
 </div>
 
 <div class="form-row">
-    <label data-i18n="config-server.label.status.year"></label>
+    <label data-i18n="config-server.label.year"></label>
     <select id="node-config-input-statusYear">
         <option
             value="hidden"
-            data-i18n="config-server.label.status.hidden"
+            data-i18n="config-server.label.date_option.hidden"
         ></option>
         <option
             value="numeric"
-            data-i18n="config-server.label.status.numeric"
+            data-i18n="config-server.label.date_option.numeric"
         ></option>
         <option
             value="2-digit"
-            data-i18n="config-server.label.status.two_digit"
+            data-i18n="config-server.label.date_option.two_digit"
         ></option>
     </select>
 </div>
 
 <div class="form-row">
-    <label data-i18n="config-server.label.status.month"></label>
+    <label data-i18n="config-server.label.month"></label>
     <select id="node-config-input-statusMonth">
         <option
             value="hidden"
-            data-i18n="config-server.label.status.hidden"
+            data-i18n="config-server.label.date_option.hidden"
         ></option>
         <option
             value="numeric"
-            data-i18n="config-server.label.status.numeric"
+            data-i18n="config-server.label.date_option.numeric"
         ></option>
         <option
             value="2-digit"
-            data-i18n="config-server.label.status.two_digit"
+            data-i18n="config-server.label.date_option.two_digit"
         ></option>
         <option
             value="long"
-            data-i18n="config-server.label.status.long"
+            data-i18n="config-server.label.date_option.long"
         ></option>
         <option
             value="short"
-            data-i18n="config-server.label.status.short"
+            data-i18n="config-server.label.date_option.short"
         ></option>
     </select>
 </div>
 
 <div class="form-row">
-    <label data-i18n="config-server.label.status.day"></label>
+    <label data-i18n="config-server.label.day"></label>
     <select id="node-config-input-statusDay">
         <option
             value="hidden"
-            data-i18n="config-server.label.status.hidden"
+            data-i18n="config-server.label.date_option.hidden"
         ></option>
         <option
             value="numeric"
-            data-i18n="config-server.label.status.numeric"
+            data-i18n="config-server.label.date_option.numeric"
         ></option>
         <option
             value="2-digit"
-            data-i18n="config-server.label.status.two_digit"
+            data-i18n="config-server.label.date_option.two_digit"
         ></option>
     </select>
 </div>
 
 <div class="form-row">
-    <label data-i18n="config-server.label.status.hour_cycle"></label>
+    <label data-i18n="config-server.label.hour_cycle"></label>
     <select id="node-config-input-statusHourCycle">
         <option
             value="default"
-            data-i18n="config-server.label.status.default"
+            data-i18n="config-server.label.hour_cycle_option.default"
         ></option>
         <option
             value="h12"
-            data-i18n="config-server.label.status.12_hour_format"
+            data-i18n="config-server.label.hour_cycle_option.12_hour_format"
         ></option>
         <option
             value="h23"
-            data-i18n="config-server.label.status.24_hour_format"
+            data-i18n="config-server.label.hour_cycle_option.24_hour_format"
         ></option>
     </select>
 </div>
 
 <div class="form-row">
-    <label data-i18n="config-server.label.status.time_format"> </label>
+    <label data-i18n="config-server.label.time_format"> </label>
     <select id="node-config-input-statusTimeFormat">
-        <option value="h:m">hour and minutes</option>
-        <option value="h:m:s">hour, minutes, and seconds</option>
-        <option value="h:m:s.ms">
-            hour, minutes, seconds and milliseconds
-        </option>
+        <option
+            value="h:m"
+            data-i18n="config-server.label.time_format_option.hour_min"
+        ></option>
+        <option
+            value="h:m:s"
+            data-i18n="config-server.label.time_format_option.hour_min_sec"
+        ></option>
+        <option
+            value="h:m:s.ms"
+            data-i18n="config-server.label.time_format_option.hour_min_sec_ms"
+        ></option>
     </select>
 </div>

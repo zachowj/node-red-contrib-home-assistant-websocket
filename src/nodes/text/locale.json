@@ -3,11 +3,11 @@
     "label": {
       "entity_config": "Entity config",
       "mode": "Mode",
-      "name": "Name",
-      "select": {
-        "in": "Listen for changes",
-        "out": "Set value"
+      "mode_option": {
+        "in": "listen for changes",
+        "out": "set value"
       },
+      "name": "Name",
       "text": "Text"
     }
   }

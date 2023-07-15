@@ -1,21 +1,54 @@
 {
   "trigger-state": {
     "label": {
+      "comparator_option": {
+        "does_not_include": "not in",
+        "greater_than": ">",
+        "greater_than_or_equal_to": ">=",
+        "includes": "in",
+        "is": "is",
+        "is_not": "is not",
+        "jsonata": "JSONata",
+        "less_than": "<",
+        "less_than_or_equal_to": "<="
+      },
+      "comparator_property_value_option": {
+        "always": "always",
+        "if_prev_state": "if previous state",
+        "if_property": "if property",
+        "if_state": "if state"
+      },
       "conditions": "Conditions",
       "enable_input": "Enable input",
-      "output_on_connect": "Output on connect",
-      "select_option": {
-        "always": "send always",
-        "current_state": "current state",
-        "custom_message": "custom message",
+      "entity": "Entity",
+      "entity_filter_type_option": {
+        "exact": "exact",
+        "list": "list",
+        "regex": "regex",
+        "substring": "substring"
+      },
+      "message_value_option": {
+        "custom": "custom message",
         "custom_payload": "custom payload",
-        "default_message": "default message",
-        "entity_id": "entity id",
-        "if_prev_state": "If previous state",
-        "if_property": "If property",
-        "if_state": "If state",
+        "default": "default message"
+      },
+      "name": "Name",
+      "output_on_connect": "Output on connect",
+      "server": "Server",
+      "show_debug": "Show debug information",
+      "state_type": "State Type",
+      "state_type_option": {
+        "boolean": "boolean",
+        "number": "number",
+        "string": "string"
+      },
+      "target_type_option": {
+        "current_state": "current state",
         "previous_state": "previous state",
-        "property": "property",
+        "property": "property"
+      },
+      "target_value_option": {
+        "entity_id": "entity id",
         "this_entity": "this entity"
       }
     }

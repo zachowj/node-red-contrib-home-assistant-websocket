@@ -1,13 +1,8 @@
 {
-  "server-state-changed": {
+  "api-current-state": {
     "label": {
-      "entity": "Entity",
-      "entity_option": {
-        "exact": "exact",
-        "list": "list",
-        "regex": "regex",
-        "substring": "substring"
-      },
+      "block_input_overrides": "Block Input Overrides",
+      "entity_id": "Entity Id",
       "for": "For",
       "for_option": {
         "days": "days",
@@ -28,15 +23,7 @@
         "less_than": "<",
         "less_than_or_equal_to": "<="
       },
-      "ignore_current_state_unavailable": "Current state is unavailable",
-      "ignore_current_state_unknown": "Current state is unknown",
-      "ignore_prev_state_null": "Previous state doesn't exist",
-      "ignore_prev_state_unavailable": "Previous state is unavailable",
-      "ignore_prev_state_unknown": "Previous state is unknown",
-      "ignore_state_change_event_when": "Ignore state change event when:",
       "name": "Name",
-      "output_on_connect": "Output on Connect",
-      "output_only_on_state_change": "Current state equals previous state",
       "server": "Server",
       "state_type": "State Type",
       "state_type_option": {

@@ -1,24 +1,34 @@
 <input type="hidden" id="node-input-version" />
 
 <div class="form-row">
-    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-    <input type="text" id="node-input-name" placeholder="Name" />
+    <label for="node-input-name" data-i18n="api-get-history.label.name"></label>
+    <input type="text" id="node-input-name" />
 </div>
 
 <div class="form-row">
-    <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
+    <label
+        for="node-input-server"
+        data-i18n="api-get-history.label.server"
+    ></label>
     <input type="text" id="node-input-server" />
 </div>
 
 <!-- Comparator Selection -->
 <div class="form-row">
-    <label for="node-input-entityid">
-        <i class="fa fa-date"></i> Entity ID
-    </label>
+    <label
+        for="node-input-entityid"
+        data-i18n="api-get-history.label.entity_id"
+    ></label>
 
     <select type="text" id="node-input-entityidtype" style="width: 18%">
-        <option value="is">Is</option>
-        <option value="includes">Includes</option>
+        <option
+            value="is"
+            data-i18n="api-get-history.label.entity_id_option.is"
+        ></option>
+        <option
+            value="includes"
+            data-i18n="api-get-history.label.entity_id_option.includes"
+        ></option>
     </select>
 
     <input type="text" id="node-input-entityid" style="width: 52%" />
@@ -26,37 +36,49 @@
 
 <div class="form-row checkbox-option">
     <input type="checkbox" id="node-input-useRelativeTime" />
-    <label for="node-input-useRelativeTime"> Use Relative Time </label>
+    <label
+        for="node-input-useRelativeTime"
+        data-i18n="api-get-history.label.use_relative_time"
+    ></label>
 </div>
 
 <div class="form-row relative_row">
-    <label for="node-input-relativeTime">
-        <i class="fa fa-date"></i> In the Last
-    </label>
+    <label
+        for="node-input-relativeTime"
+        data-i18n="api-get-history.label.in_the_last"
+    ></label>
     <input
         type="text"
         id="node-input-relativeTime"
         autofocus="autofocus"
-        placeholder="20 minutes"
+        data-i18n="[placeholder]api-get-history.placeholder.relative_time"
+        .
     />
 </div>
 
 <div class="form-row date_row">
-    <label for="node-input-startdate">
-        <i class="fa fa-date"></i> Start Date
-    </label>
+    <label
+        for="node-input-startdate"
+        data-i18n="api-get-history.label.start_date"
+    ></label>
     <input type="text" id="node-input-startdate" autofocus="autofocus" />
 </div>
 
 <div class="form-row date_row">
-    <label for="node-input-enddate"><i class="fa fa-date"></i> End Date</label>
+    <label
+        for="node-input-enddate"
+        data-i18n="api-get-history.label.end_date"
+    ></label>
     <input type="text" id="node-input-enddate" />
 </div>
 
 <div class="form-row form-tips date_row">
     <ul>
-        <li>dates must be in ISO format</li>
-        <li>example: "2018-01-27T13:00:00+00:00"</li>
+        <li data-i18n="api-get-history.label.date_format"></li>
+        <li>
+            <span data-i18n="api-get-history.label.example"></span>:
+            "2018-01-27T13:00:00+00:00"
+        </li>
     </ul>
 </div>
 
@@ -88,19 +110,34 @@
 
 <div class="form-row checkbox-option">
     <input type="checkbox" id="node-input-flatten" />
-    <label for="node-input-flatten">Flatten Results</label>
+    <label
+        for="node-input-flatten"
+        data-i18n="api-get-history.label.flatten_results"
+    ></label>
 </div>
 
 <div class="form-row">
-    <label for="node-input-output_type">Output Type</label>
+    <label
+        for="node-input-output_type"
+        data-i18n="api-get-history.label.output_type"
+    ></label>
     <select id="node-input-output_type" style="width: 70%">
-        <option value="array">Array</option>
-        <option value="split">Split</option>
+        <option
+            value="array"
+            data-i18n="api-get-history.label.output_type_option.array"
+        ></option>
+        <option
+            value="split"
+            data-i18n="api-get-history.label.output_type_option.split"
+        ></option>
     </select>
 </div>
 
 <div class="form-row output-option" id="output_location">
-    <label for="node-input-output_location">Output Location</label>
+    <label
+        for="node-input-output_location"
+        data-i18n="api-get-history.label.output_location"
+    ></label>
     <input type="hidden" id="node-input-output_location_type" />
     <input type="text" id="node-input-output_location" style="width: 70%" />
 </div>

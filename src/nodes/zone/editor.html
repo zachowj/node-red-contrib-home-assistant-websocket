@@ -1,20 +1,23 @@
 <input type="hidden" id="node-input-version" />
 
 <div class="form-row">
-    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-    <input type="text" id="node-input-name" placeholder="Name" />
+    <label for="node-input-name" data-i18n="ha-zone.label.name"></label>
+    <input type="text" id="node-input-name" />
 </div>
 <div class="form-row">
-    <label for="node-input-server"><i class="fa fa-server"></i> Server</label>
+    <label for="node-input-server" data-i18n="ha-zone.label.server"></label>
     <input type="text" id="node-input-server" />
 </div>
 <div class="form-row"><ol id="entities"></ol></div>
 <div class="form-row">
-    <label for="node-input-event"><i class="fa fa-sign-in"></i> Event</label>
+    <label for="node-input-event" data-i18n="ha-zone.label.event"></label>
     <select id="node-input-event">
-        <option value="enter">Enter</option>
-        <option value="leave">Leave</option>
-        <option value="enter_leave">Enter or Leave</option>
+        <option value="enter" data-i18n="ha-zone.label.option.enter"></option>
+        <option value="leave" data-i18n="ha-zone.label.option.leave"></option>
+        <option
+            value="enter_leave"
+            data-i18n="ha-zone.label.option.enter_or_leave"
+        ></option>
     </select>
 </div>
 <div class="form-row"><ol id="zones"></ol></div>

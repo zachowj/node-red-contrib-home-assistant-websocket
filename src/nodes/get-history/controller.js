@@ -104,7 +104,7 @@ class GetHistory extends BaseNode {
                 endDate = new Date().toISOString();
             } catch (e) {
                 const errorMessage = this.RED._(
-                    'get-history.error.invalid_relative_time'
+                    'api-get-history.error.invalid_relative_time'
                 );
                 this.status.setFailed(errorMessage);
                 done(errorMessage);

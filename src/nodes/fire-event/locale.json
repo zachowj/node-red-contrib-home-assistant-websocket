@@ -1,0 +1,10 @@
+{
+  "ha-fire-event": {
+    "label": {
+      "data": "Data",
+      "event": "Event",
+      "name": "Name",
+      "server": "Server"
+    }
+  }
+}

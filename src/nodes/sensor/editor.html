@@ -2,21 +2,21 @@
 
 <div class="form-row">
     <label for="node-input-name">
-        <span data-i18n="home-assistant.label.name"></span>
+        <span data-i18n="ha-sensor.label.name"></span>
     </label>
-    <input type="text" id="node-input-name" placeholder="Name" />
+    <input type="text" id="node-input-name" />
 </div>
 
 <div class="form-row">
     <label for="node-input-entityConfig">
-        <span data-i18n="home-assistant.label.entity_config"></span>
+        <span data-i18n="ha-sensor.label.entity_config"></span>
     </label>
     <input type="text" id="node-input-entityConfig" />
 </div>
 
 <div class="form-row">
     <label for="node-input-state">
-        <span data-i18n="ha-binary-sensor.label.state"></span>
+        <span data-i18n="ha-sensor.label.state"></span>
     </label>
     <input type="text" id="node-input-state" style="width: 70%" />
     <input type="hidden" id="node-input-stateType" />
@@ -30,11 +30,20 @@
 
 <div class="form-row">
     <label for="node-input-inputOverride">
-        <span data-i18n="ha-binary-sensor.label.input_override"></span>
+        <span data-i18n="ha-sensor.label.input_override"></span>
     </label>
     <select id="node-input-inputOverride" style="width: 68%">
-        <option value="allow">Allow</option>
-        <option value="merge">Merge</option>
-        <option value="block">Block</option>
+        <option
+            value="allow"
+            data-i18n="ha-sensor.label.input_override_option.allow"
+        ></option>
+        <option
+            value="merge"
+            data-i18n="ha-sensor.label.input_override_option.block"
+        ></option>
+        <option
+            value="block"
+            data-i18n="ha-sensor.label.input_override_option.merge"
+        ></option>
     </select>
 </div>

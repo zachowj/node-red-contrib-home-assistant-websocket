@@ -7,6 +7,8 @@
       "all_tags": "ALL TAGS",
       "device_id": "Device ID",
       "devices": "Devices",
+      "name": "Name",
+      "server": "Server",
       "tag": "Tag",
       "tags": "Tags",
       "update_tag_list": "update tag list"

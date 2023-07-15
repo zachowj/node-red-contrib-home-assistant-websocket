@@ -1,0 +1,14 @@
+{
+  "ha-zone": {
+    "label": {
+      "event": "Event",
+      "name": "Name",
+      "option": {
+        "enter": "enter",
+        "enter_or_leave": "enter or leave",
+        "leave": "leave"
+      },
+      "server": "Server"
+    }
+  }
+}

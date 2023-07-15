@@ -2,43 +2,88 @@
 <input type="hidden" id="node-input-outputs" />
 
 <div class="form-row">
-    <label for="node-input-name">Name</label>
-    <input type="text" id="node-input-name" placeholder="Name" />
+    <label for="node-input-name" data-i18n="poll-state.label.name"></label>
+    <input type="text" id="node-input-name" />
 </div>
 
 <div class="form-row">
-    <label for="node-input-server">Server</label>
+    <label for="node-input-server" data-i18n="poll-state.label.server"></label>
     <input type="text" id="node-input-server" />
 </div>
 
 <div class="form-row">
-    <label for="node-input-entity_id">Entity ID </label>
+    <label
+        for="node-input-entity_id"
+        data-i18n="poll-state.label.entity_id"
+    ></label>
     <input type="text" id="node-input-entity_id" />
 </div>
 
 <div class="form-row">
-    <label for="node-input-updateinterval">Update Interval </label>
+    <label
+        for="node-input-updateinterval"
+        data-i18n="poll-state.label.if_state"
+    ></label>
     <input type="text" id="node-input-updateinterval" style="width: 43%" />
     <input type="hidden" id="node-input-updateIntervalType" />
     <select id="node-input-updateIntervalUnits" style="width: 27%">
-        <option value="seconds">seconds</option>
-        <option value="minutes">minutes</option>
-        <option value="hours">hours</option>
+        <option
+            value="seconds"
+            data-i18n="poll-state.label.if_state_option.seconds"
+        ></option>
+        <option
+            value="minutes"
+            data-i18n="poll-state.label.if_state_option.minutes"
+        ></option>
+        <option
+            value="hours"
+            data-i18n="poll-state.label.if_state_option.hours"
+        ></option>
     </select>
 </div>
 
 <div class="form-row">
-    <label for="node-input-halt_if_compare">If State </label>
+    <label
+        for="node-input-halt_if_compare"
+        data-i18n="poll-state.label.if_state"
+    ></label>
     <select type="text" id="node-input-halt_if_compare" style="width: 20%">
-        <option value="is">is</option>
-        <option value="is_not">is not</option>
-        <option value="lt">&lt;</option>
-        <option value="lte">&lt;=</option>
-        <option value="gt">&gt;</option>
-        <option value="gte">&gt;=</option>
-        <option value="includes">in</option>
-        <option value="does_not_include">not in</option>
-        <option value="jsonata">JSONata</option>
+        <option
+            value="is"
+            data-i18n="poll-state.label.if_state_option.is"
+        ></option>
+        <option
+            value="is_not"
+            data-i18n="poll-state.label.if_state_option.is_not"
+        ></option>
+        <option
+            value="lt"
+            data-i18n="poll-state.label.if_state_option.less_than"
+        ></option>
+        <option
+            value="lte"
+            data-i18n="poll-state.label.if_state_option.less_than_or_equal_to"
+        ></option>
+        <option
+            value="gt"
+            data-i18n="poll-state.label.if_state_option.greater_than"
+        ></option>
+        <option
+            value="gte"
+            data-i18n="poll-state.label.if_state_option.greater_than_or_equal_to"
+        ></option>
+        <option
+            value="includes"
+            data-i18n="poll-state.label.if_state_option.includes"
+        ></option>
+        <option
+            value="does_not_include"
+            data-i18n="poll-state.label.if_state_option.does_not_include"
+        ></option>
+        <option
+            value="jsonata"
+            data-i18n="poll-state.label.if_state_option.jsonata"
+        ></option>
     </select>
     <input type="text" id="node-input-halt_if" style="width: 50%" />
     <input type="hidden" id="node-input-halt_if_type" />
@@ -47,18 +92,33 @@
 <div class="form-row">
     <label for="node-input-state_type">State Type </label>
     <select type="text" id="node-input-state_type" style="width: auto">
-        <option value="str">String</option>
-        <option value="num">Number</option>
-        <option value="habool">Boolean</option>
+        <option
+            value="str"
+            data-i18n="poll-state.label.state_type_option.string"
+        ></option>
+        <option
+            value="num"
+            data-i18n="poll-state.label.state_type_option.number"
+        ></option>
+        <option
+            value="habool"
+            data-i18n="poll-state.label.state_type_option.boolean"
+        ></option>
     </select>
 </div>
 
 <div class="form-row checkbox-option">
     <input type="checkbox" id="node-input-outputonchanged" />
-    <label for="node-input-outputonchanged">Output on Changed </label>
+    <label
+        for="node-input-outputonchanged"
+        data-i18n="poll-state.label.output_on_change"
+    ></label>
 </div>
 
 <div class="form-row checkbox-option">
     <input type="checkbox" id="node-input-outputinitially" />
-    <label for="node-input-outputinitially">Output on Connect </label>
+    <label
+        for="node-input-outputinitially"
+        data-i18n="poll-state.label.output_on_connect"
+    ></label>
 </div>

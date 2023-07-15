@@ -2,14 +2,17 @@
 <input type="hidden" id="node-input-outputs" />
 
 <div class="form-row">
-    <label for="node-input-name" data-i18n="home-assistant.label.name"></label>
+    <label
+        for="node-input-name"
+        data-i18n="server-state-changed.label.name"
+    ></label>
     <input type="text" id="node-input-name" />
 </div>
 
 <div class="form-row">
     <label
         for="node-input-server"
-        data-i18n="home-assistant.label.server"
+        data-i18n="server-state-changed.label.server"
     ></label>
     <input type="text" id="node-input-server" />
 </div>
@@ -17,25 +20,25 @@
 <div class="form-row">
     <label
         for="node-input-entityidfilter"
-        data-i18n="home-assistant.label.entity"
+        data-i18n="server-state-changed.label.entity"
     >
     </label>
     <select type="text" id="node-input-entityidfiltertype">
         <option
             value="exact"
-            data-i18n="home-assistant.label.select_option.exact"
+            data-i18n="server-state-changed.label.entity_option.exact"
         ></option>
         <option
             value="list"
-            data-i18n="home-assistant.label.select_option.list"
+            data-i18n="server-state-changed.label.entity_option.list"
         ></option>
         <option
             value="regex"
-            data-i18n="home-assistant.label.select_option.regex"
+            data-i18n="server-state-changed.label.entity_option.regex"
         ></option>
         <option
             value="substring"
-            data-i18n="home-assistant.label.select_option.substring"
+            data-i18n="server-state-changed.label.entity_option.substring"
         ></option>
     </select>
 </div>
@@ -43,44 +46,44 @@
 <div class="form-row">
     <label
         for="node-input-haltifstate"
-        data-i18n="home-assistant.label.if_state"
+        data-i18n="server-state-changed.label.if_state"
     ></label>
     <select id="node-input-halt_if_compare" style="width: 20%">
         <option
             value="is"
-            data-i18n="home-assistant.label.select_option.is"
+            data-i18n="server-state-changed.label.if_state_option.is"
         ></option>
         <option
             value="is_not"
-            data-i18n="home-assistant.label.select_option.is_not"
+            data-i18n="server-state-changed.label.if_state_option.is_not"
         ></option>
         <option
             value="lt"
-            data-i18n="home-assistant.label.select_option.less_than"
+            data-i18n="server-state-changed.label.if_state_option.less_than"
         ></option>
         <option
             value="lte"
-            data-i18n="home-assistant.label.select_option.less_than_equal"
+            data-i18n="server-state-changed.label.if_state_option.less_than_or_equal_to"
         ></option>
         <option
             value="gt"
-            data-i18n="home-assistant.label.select_option.greater_than"
+            data-i18n="server-state-changed.label.if_state_option.greater_than"
         ></option>
         <option
             value="gte"
-            data-i18n="home-assistant.label.select_option.greater_than_equal"
+            data-i18n="server-state-changed.label.if_state_option.greater_than_or_equal_to"
         ></option>
         <option
             value="includes"
-            data-i18n="home-assistant.label.select_option.in"
+            data-i18n="server-state-changed.label.if_state_option.includes"
         ></option>
         <option
             value="does_not_include"
-            data-i18n="home-assistant.label.select_option.not_in"
+            data-i18n="server-state-changed.label.if_state_option.does_not_include"
         ></option>
         <option
             value="jsonata"
-            data-i18n="home-assistant.label.select_option.jsonata"
+            data-i18n="server-state-changed.label.if_state_option.jsonata"
         ></option>
     </select>
     <input type="text" id="node-input-haltifstate" style="width: 50%" />
@@ -88,7 +91,10 @@
 </div>
 
 <div class="form-row">
-    <label for="node-input-for" data-i18n="home-assistant.label.for"></label
+    <label
+        for="node-input-for"
+        data-i18n="server-state-changed.label.for"
+    ></label
     >&nbsp;
     <div class="ha-multi-item-row">
         <input type="text" id="node-input-for" />
@@ -96,23 +102,23 @@
         <select id="node-input-forUnits">
             <option
                 value="milliseconds"
-                data-i18n="home-assistant.label.select_option.milliseconds"
+                data-i18n="server-state-changed.label.for_option.milliseconds"
             ></option>
             <option
                 value="seconds"
-                data-i18n="home-assistant.label.select_option.seconds"
+                data-i18n="server-state-changed.label.for_option.seconds"
             ></option>
             <option
                 value="minutes"
-                data-i18n="home-assistant.label.select_option.minutes"
+                data-i18n="server-state-changed.label.for_option.minutes"
             ></option>
             <option
                 value="hours"
-                data-i18n="home-assistant.label.select_option.hours"
+                data-i18n="server-state-changed.label.for_option.hours"
             ></option>
             <option
                 value="days"
-                data-i18n="home-assistant.label.select_option.days"
+                data-i18n="server-state-changed.label.for_option.days"
             ></option>
         </select>
     </div>
@@ -121,21 +127,21 @@
 <div class="form-row">
     <label
         for="node-input-state_type"
-        data-i18n="home-assistant.label.state_type"
+        data-i18n="server-state-changed.label.state_type"
     >
     </label>
     <select type="text" id="node-input-state_type">
         <option
             value="str"
-            data-i18n="home-assistant.label.select_option.string"
+            data-i18n="server-state-changed.label.state_type_option.string"
         ></option>
         <option
             value="num"
-            data-i18n="home-assistant.label.select_option.number"
+            data-i18n="server-state-changed.label.state_type_option.number"
         ></option>
         <option
             value="habool"
-            data-i18n="home-assistant.label.select_option.boolean"
+            data-i18n="server-state-changed.label.state_type_option.boolean"
         ></option>
     </select>
 </div>
@@ -143,7 +149,9 @@
 <div class="form-row"><ol id="custom-outputs"></ol></div>
 
 <div class="form-row add-spacer">
-    <p data-i18n="server-state-changed.label.ignore_header"></p>
+    <p
+        data-i18n="server-state-changed.label.ignore_state_change_event_when"
+    ></p>
     <ul class="ha-ignore-state">
         <li>
             <input type="checkbox" id="node-input-ignorePrevStateNull" />

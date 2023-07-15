@@ -1,0 +1,10 @@
+{
+  "api-render-template": {
+    "label": {
+      "name": "Name",
+      "results": "Results",
+      "server": "Server",
+      "template": "Template"
+    }
+  }
+}

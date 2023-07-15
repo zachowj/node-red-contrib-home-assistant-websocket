@@ -1,8 +1,39 @@
 {
   "poll-state": {
     "errors": {
-      "jsonata_error": "JSONata Error: __message__",
-      "interval_nan": "Offset is not a number: __offset__"
+      "interval_nan": "Offset is not a number: __offset__",
+      "jsonata_error": "JSONata Error: __message__"
+    },
+    "label": {
+      "entity_id": "Entity Id",
+      "if_state": "If State",
+      "if_state_option": {
+        "does_not_include": "not in",
+        "greater_than": ">",
+        "greater_than_or_equal_to": ">=",
+        "includes": "in",
+        "is": "is",
+        "is_not": "is not",
+        "jsonata": "JSONata",
+        "less_than": "<",
+        "less_than_or_equal_to": "<="
+      },
+      "name": "Name",
+      "output_on_change": "Output on change",
+      "output_on_connect": "Output on connect",
+      "server": "Server",
+      "state_type": "State Type",
+      "state_type_option": {
+        "boolean": "boolean",
+        "number": "number",
+        "string": "string"
+      },
+      "update_interval": "Update Interval",
+      "update_interval_option": {
+        "hours": "hours",
+        "minutes": "minutes",
+        "seconds": "seconds"
+      }
     }
   }
 }

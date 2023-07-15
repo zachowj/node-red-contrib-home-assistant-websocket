@@ -1,20 +1,12 @@
 <input type="hidden" id="node-input-version" />
 
 <div class="form-row">
-    <label for="node-input-name" data-i18n="home-assistant.label.name">
-        <i class="fa fa-tag"></i>
-    </label>
-    <input
-        type="text"
-        id="node-input-name"
-        data-i18n="[placeholder]home-assistant.label.name"
-    />
+    <label for="node-input-name" data-i18n="ha-tag.label.name"></label>
+    <input type="text" id="node-input-name" />
 </div>
 
 <div class="form-row">
-    <label for="node-input-server" data-i18n="home-assistant.label.server">
-        <i class="fa fa-server"></i>
-    </label>
+    <label for="node-input-server" data-i18n="ha-tag.label.server"></label>
     <input type="text" id="node-input-server" />
 </div>
 
@@ -22,9 +14,7 @@
     id="no-tags-found"
     class="ui-state-error ha-alert-box"
     data-i18n="ha-tag.errors.no_tags_found"
->
-    <i class="fa fa-exclamation-triangle"></i>
-</div>
+></div>
 
 <div class="form-row"><ol id="tags"></ol></div>
 

@@ -4,7 +4,7 @@
 
 <!-- Name -->
 <div class="form-row">
-    <label for="node-input-name" data-i18n="home-assistant.label.label"></label>
+    <label for="node-input-name" data-i18n="trigger-state.label.name"></label>
     <input type="text" id="node-input-name" />
 </div>
 
@@ -12,7 +12,7 @@
 <div class="form-row">
     <label
         for="node-input-server"
-        data-i18n="home-assistant.label.server"
+        data-i18n="trigger-state.label.server"
     ></label>
     <input type="text" id="node-input-server" />
 </div>
@@ -21,24 +21,24 @@
 <div class="form-row">
     <label
         for="node-input-entityid"
-        data-i18n="home-assistant.label.entity"
+        data-i18n="trigger-state.label.entity"
     ></label>
     <select type="text" id="node-input-entityidfiltertype">
         <option
             value="exact"
-            data-i18n="home-assistant.label.select_option.exact"
+            data-i18n="trigger-state.label.entity_filter_type_option.exact"
         ></option>
         <option
             value="list"
-            data-i18n="home-assistant.label.select_option.list"
+            data-i18n="trigger-state.label.entity_filter_type_option.list"
         ></option>
         <option
             value="regex"
-            data-i18n="home-assistant.label.select_option.regex"
+            data-i18n="trigger-state.label.entity_filter_type_option.regex"
         ></option>
         <option
             value="substring"
-            data-i18n="home-assistant.label.select_option.substring"
+            data-i18n="trigger-state.label.entity_filter_type_option.substring"
         ></option>
     </select>
 </div>
@@ -46,20 +46,20 @@
 <div class="form-row">
     <label
         for="node-input-state_type"
-        data-i18n="home-assistant.label.state_type"
+        data-i18n="trigger-state.label.state_type"
     ></label>
     <select type="text" id="node-input-state_type">
         <option
             value="str"
-            data-i18n="home-assistant.label.select_option.string"
+            data-i18n="trigger-state.label.state_type_option.string"
         ></option>
         <option
             value="num"
-            data-i18n="home-assistant.label.select_option.number"
+            data-i18n="trigger-state.label.state_type_option.number"
         ></option>
         <option
             value="habool"
-            data-i18n="home-assistant.label.select_option.boolean"
+            data-i18n="trigger-state.label.state_type_option.boolean"
         ></option>
     </select>
 </div>
@@ -78,7 +78,7 @@
     <input type="checkbox" id="node-input-outputinitially" />
     <label
         for="node-input-outputinitially"
-        data-i18n="home-assistant.label.output_on_connect"
+        data-i18n="trigger-state.label.output_on_connect"
     ></label>
 </div>
 
@@ -94,7 +94,7 @@
     <input type="checkbox" id="node-input-debugenabled" />
     <label
         for="node-input-debugenabled"
-        data-i18n="home-assistant.label.output_debug"
+        data-i18n="trigger-state.label.show_debug"
     ></label>
 </div>
 
@@ -105,11 +105,11 @@
         <select type="text" class="target-type" style="width: 140px">
             <option
                 value="this_entity"
-                data-i18n="trigger-state.label.select_option.this_entity"
+                data-i18n="trigger-state.label.target_value_option.this_entity"
             ></option>
             <option
                 value="entity_id"
-                data-i18n="trigger-state.label.select_option.entity_id"
+                data-i18n="trigger-state.label.target_value_option.entity_id"
             ></option>
         </select>
 
@@ -122,15 +122,15 @@
         <select type="text" class="property-type" style="width: 140px">
             <option
                 value="current_state"
-                data-i18n="trigger-state.label.select_option.current_state"
+                data-i18n="trigger-state.label.target_type_option.current_state"
             ></option>
             <option
                 value="previous_state"
-                data-i18n="trigger-state.label.select_option.previous_state"
+                data-i18n="trigger-state.label.target_type_option.previous_state"
             ></option>
             <option
                 value="property"
-                data-i18n="trigger-state.label.select_option.property"
+                data-i18n="trigger-state.label.target_type_option.property"
             ></option>
         </select>
 
@@ -144,37 +144,37 @@
         <select type="text" class="comparator-type" style="width: 140px">
             <option
                 value="is"
-                data-i18n="home-assistant.label.select_option.is"
+                data-i18n="trigger-state.label.comparator_option.is"
             ></option>
             <option
                 value="is_not"
-                data-i18n="home-assistant.label.select_option.is_not"
+                data-i18n="trigger-state.label.comparator_option.is_not"
             ></option>
 
             <option
                 value=">"
-                data-i18n="home-assistant.label.select_option.greater_than"
+                data-i18n="trigger-state.label.comparator_option.greater_than"
             ></option>
             <option
                 value=">="
-                data-i18n="home-assistant.label.select_option.greater_than_equal"
+                data-i18n="trigger-state.label.comparator_option.greater_than_or_equal_to"
             ></option>
             <option
                 value="<"
-                data-i18n="home-assistant.label.select_option.less_than"
+                data-i18n="trigger-state.label.comparator_option.less_than"
             ></option>
             <option
                 value="<="
-                data-i18n="home-assistant.label.select_option.less_than_equal"
+                data-i18n="trigger-state.label.comparator_option.less_than_or_equal_to"
             ></option>
 
             <option
                 value="includes"
-                data-i18n="home-assistant.label.select_option.in"
+                data-i18n="trigger-state.label.comparator_option.includes"
             ></option>
             <option
                 value="does_not_include"
-                data-i18n="home-assistant.label.select_option.not_in"
+                data-i18n="trigger-state.label.comparator_option.does_not_include"
             ></option>
         </select>
 
@@ -189,15 +189,15 @@
         <select type="text" class="message-type" style="width: 140px">
             <option
                 value="default"
-                data-i18n="trigger-state.label.select_option.default_message"
+                data-i18n="trigger-state.label.message_value_option.default"
             ></option>
             <option
                 value="custom"
-                data-i18n="trigger-state.label.select_option.custom_message"
+                data-i18n="trigger-state.label.message_value_option.custom"
             ></option>
             <option
                 value="payload"
-                data-i18n="trigger-state.label.select_option.custom_payload"
+                data-i18n="trigger-state.label.message_value_option.custom_payload"
             ></option>
         </select>
 
@@ -213,19 +213,19 @@
         >
             <option
                 value="always"
-                data-i18n="trigger-state.label.select_option.awalys"
+                data-i18n="trigger-state.label.comparator_property_value_option.always"
             ></option>
             <option
                 value="current_state"
-                data-i18n="trigger-state.label.select_option.if_state"
+                data-i18n="trigger-state.label.comparator_property_value_option.if_state"
             ></option>
             <option
                 value="previous_state"
-                data-i18n="trigger-state.label.select_option.if_prev_state"
+                data-i18n="trigger-state.label.comparator_property_value_option.if_prev_state"
             ></option>
             <option
                 value="property"
-                data-i18n="trigger-state.label.select_option.if_property"
+                data-i18n="trigger-state.label.comparator_property_value_option.if_property"
             ></option>
         </select>
 
@@ -242,37 +242,37 @@
         >
             <option
                 value="is"
-                data-i18n="home-assistant.label.select_option.is"
+                data-i18n="trigger-state.label.comparator_option.is"
             ></option>
             <option
                 value="is_not"
-                data-i18n="home-assistant.label.select_option.is_not"
+                data-i18n="trigger-state.label.comparator_option.is_not"
             ></option>
 
             <option
                 value=">"
-                data-i18n="home-assistant.label.select_option.greater_than"
+                data-i18n="trigger-state.label.comparator_option.greater_than"
             ></option>
             <option
                 value=">="
-                data-i18n="home-assistant.label.select_option.greater_than_equal"
+                data-i18n="trigger-state.label.comparator_option.greater_than_or_equal_to"
             ></option>
             <option
                 value="<"
-                data-i18n="home-assistant.label.select_option.less_than"
+                data-i18n="trigger-state.label.comparator_option.less_than"
             ></option>
             <option
                 value="<="
-                data-i18n="home-assistant.label.select_option.less_than_equal"
+                data-i18n="trigger-state.label.comparator_option.less_than_or_equal_to"
             ></option>
 
             <option
                 value="includes"
-                data-i18n="home-assistant.label.select_option.in"
+                data-i18n="trigger-state.label.comparator_option.includes"
             ></option>
             <option
                 value="does_not_include"
-                data-i18n="home-assistant.label.select_option.not_in"
+                data-i18n="trigger-state.label.comparator_option.does_not_include"
             ></option>
         </select>
 

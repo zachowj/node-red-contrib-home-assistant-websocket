@@ -1,17 +1,17 @@
 {
   "ha-select": {
+    "error": {
+      "invalid_value": "Option value does not exist in the list of options"
+    },
     "label": {
       "entity_config": "Entity config",
       "mode": "Mode",
-      "name": "Name",
-      "select": {
-        "in": "Listen for changes",
-        "out": "Set value"
+      "mode_option": {
+        "in": "listen for changes",
+        "out": "set value"
       },
+      "name": "Name",
       "value": "Value"
-    },
-    "error": {
-      "invalid_value": "Option value does not exist in the list of options"
     }
   }
 }
