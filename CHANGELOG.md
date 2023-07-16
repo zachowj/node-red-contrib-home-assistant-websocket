@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.54.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.53.1...v0.54.0) (2023-07-16)
+
+
+### Features
+
+* **number:** Add get mode ([9e1493c](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/9e1493cb8b2d92a6027c067ff3a0c3311eea7d46))
+* **select:** Add get mode ([9e1493c](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/9e1493cb8b2d92a6027c067ff3a0c3311eea7d46))
+* **text:** Add get mode ([9e1493c](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/9e1493cb8b2d92a6027c067ff3a0c3311eea7d46))
+
+
+### Bug Fixes
+
+* Only log connected closed once ([59bae23](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/59bae23eca6e758ebb9d37042be41ab1c71966c1))
+
 ## [0.53.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.53.0...v0.53.1) (2023-07-12)
 
 
