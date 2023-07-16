@@ -9,6 +9,12 @@ Creates a select entity in Home Assistant which can be manipulated from this nod
 
 ## Configuration
 
+### Mode <Badge text="required"/>
+
+- Type: 'listen' | 'get' | 'set'
+
+The mode of the node
+
 ### value <Badge text="required"/>
 
 - Type: `string`

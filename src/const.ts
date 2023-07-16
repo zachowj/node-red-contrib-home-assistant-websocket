@@ -94,8 +94,9 @@ export enum NodeType {
 }
 
 export enum ValueIntegrationMode {
-    In = 'in',
-    Out = 'out',
+    Get = 'get',
+    Set = 'set',
+    Listen = 'listen',
 }
 
 export enum TypedInputTypes {

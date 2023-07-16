@@ -9,6 +9,12 @@ Creates a number in Home Assistant which can be manipulated from this node.
 
 ## Configuration
 
+### Mode <Badge text="required"/>
+
+- Type: 'listen' | 'get' | 'set'
+
+The mode of the node
+
 ### Value <Badge text="required"/>
 
 - Type: `number`

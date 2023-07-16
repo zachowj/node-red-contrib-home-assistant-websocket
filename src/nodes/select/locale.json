@@ -1,7 +1,8 @@
 {
   "ha-select": {
     "error": {
-      "invalid_value": "Option value does not exist in the list of options"
+      "invalid_value": "Option value does not exist in the list of options",
+      "mode_not_supported": "Mode not supported"
     },
     "label": {
       "entity_config": "Entity config",

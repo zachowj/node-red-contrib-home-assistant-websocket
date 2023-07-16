@@ -15,7 +15,7 @@ import {
     EntityBaseNodeProperties,
     OutputProperty,
 } from '../../types/nodes';
-import TextController from './SelectController';
+import SelectController from './SelectController';
 
 export interface SelectNodeProperties extends EntityBaseNodeProperties {
     mode: ValueIntegrationMode;
@@ -81,7 +81,7 @@ export default function selectNode(
 
     entityConfigNode.integration.setStatus(status);
     // eslint-disable-next-line no-new
-    new TextController({
+    new SelectController({
         inputService,
         integration: entityConfigNode.integration,
         node: this,

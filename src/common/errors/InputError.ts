@@ -6,7 +6,7 @@ export default class InputError extends BaseError {
 
     constructor(
         message: string,
-        statusMessage = 'home-assistant.error.failed'
+        statusMessage = 'home-assistant.status.failed'
     ) {
         super(message);
         this.name = 'InputError';

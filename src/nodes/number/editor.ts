@@ -48,7 +48,7 @@ const NumberEditor: EditorNodeDef<NumberEditorNodeProperties> = {
             filter: (config) => config.entityType === 'number',
             required: true,
         },
-        mode: { value: ValueIntegrationMode.In },
+        mode: { value: ValueIntegrationMode.Listen },
         value: { value: 'payload' },
         valueType: { value: TypedInputTypes.Message },
         outputProperties: {
@@ -78,9 +78,9 @@ const NumberEditor: EditorNodeDef<NumberEditorNodeProperties> = {
 
         const $valueRow = $('#node-input-value').parent();
         $('#node-input-mode').on('change', function (this: HTMLSelectElement) {
-            $valueRow.toggle(this.value === ValueIntegrationMode.Out);
+            $valueRow.toggle(this.value === ValueIntegrationMode.Set);
             $('#node-input-inputs').val(
-                this.value === ValueIntegrationMode.Out ? 1 : 0
+                this.value === ValueIntegrationMode.Listen ? 0 : 1
             );
         });
 

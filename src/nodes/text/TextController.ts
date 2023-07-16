@@ -7,22 +7,11 @@ import NoConnectionError from '../../common/errors/NoConnectionError';
 import { IntegrationEvent } from '../../common/integration/Integration';
 import ValueEntityIntegration from '../../common/integration/ValueEntityIntegration';
 import { ValueIntegrationMode } from '../../const';
-import {
-    EntityBaseNodeProperties,
-    NodeMessage,
-    OutputProperty,
-} from '../../types/nodes';
+import { NodeMessage } from '../../types/nodes';
 import { EntityConfigNode } from '../entity-config';
-import { TextNode } from '.';
+import { TextNode, TextNodeProperties } from '.';
 
-export interface TextNodeProperties extends EntityBaseNodeProperties {
-    mode: ValueIntegrationMode;
-    value: string;
-    valueType: string;
-    outputProperties: OutputProperty[];
-}
-
-type TextNodeOptions = InputOutputControllerOptions<
+type TextControllerConstructor = InputOutputControllerOptions<
     TextNode,
     TextNodeProperties
 >;
@@ -34,12 +23,12 @@ export default class TextController extends InputOutputController<
     protected integration?: ValueEntityIntegration;
     #entityConfigNode?: EntityConfigNode;
 
-    constructor(props: TextNodeOptions) {
+    constructor(props: TextControllerConstructor) {
         super(props);
         this.#entityConfigNode = this.integration?.getEntityConfigNode();
 
         // listen for value changes if we are in listening mode
-        if (this.node.config.mode === ValueIntegrationMode.In) {
+        if (this.node.config.mode === ValueIntegrationMode.Listen) {
             this.#entityConfigNode?.addListener(
                 IntegrationEvent.ValueChange,
                 this.#onValueChange.bind(this)
@@ -47,7 +36,22 @@ export default class TextController extends InputOutputController<
         }
     }
 
-    protected async onInput({
+    #onInputModeGet({ done, message, send }: InputProperties) {
+        const value = this.#entityConfigNode?.state?.getLastPayload()?.state as
+            | string
+            | undefined;
+
+        this.status.setSuccess(value);
+        this.setCustomOutputs(this.node.config.outputProperties, message, {
+            config: this.node.config,
+            value,
+        });
+
+        send(message);
+        done();
+    }
+
+    async #onInputModeSet({
         done,
         message,
         parsedMessage,
@@ -86,13 +90,22 @@ export default class TextController extends InputOutputController<
         done();
     }
 
-    public async onValueChange(value: string, previousValue?: string) {
-        if (typeof value !== 'string') return;
-
-        const message: NodeMessage = {};
-        await this.#prepareSend(message, value, previousValue);
-
-        this.node.send(message);
+    protected async onInput({
+        done,
+        message,
+        parsedMessage,
+        send,
+    }: InputProperties) {
+        if (this.node.config.mode === ValueIntegrationMode.Get) {
+            this.#onInputModeGet({ done, message, parsedMessage, send });
+        } else if (this.node.config.mode === ValueIntegrationMode.Set) {
+            await this.#onInputModeSet({ done, message, parsedMessage, send });
+        } else {
+            throw new InputError(
+                'ha-text.error.mode_not_supported',
+                'home-assistant.status.error'
+            );
+        }
     }
 
     #isValidValue(text: string): boolean {

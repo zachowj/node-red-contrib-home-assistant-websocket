@@ -13,11 +13,14 @@ import eventsState from '../nodes/events-state/migrations';
 import fireEvent from '../nodes/fire-event/migrations';
 import getEntities from '../nodes/get-entities/migrations';
 import getHistory from '../nodes/get-history/migrations';
+import number from '../nodes/number/migrations';
 import pollState from '../nodes/poll-state/migrations';
 import renderTemplate from '../nodes/render-template/migrations';
+import select from '../nodes/select/migrations';
 import sensor from '../nodes/sensor/migrations';
 import switchMigration from '../nodes/switch/migrations';
 import tag from '../nodes/tag/migrations';
+import text from '../nodes/text/migrations';
 import time from '../nodes/time/migrations';
 import triggerState from '../nodes/trigger-state/migrations';
 import waitUntil from '../nodes/wait-until/migrations';
@@ -44,12 +47,15 @@ const nodeTypeTranslation: Partial<Record<NodeType, Migration[]>> = {
     [NodeType.FireEvent]: fireEvent,
     [NodeType.GetEntities]: getEntities,
     [NodeType.GetHistory]: getHistory,
+    [NodeType.Number]: number,
     [NodeType.PollState]: pollState,
     [NodeType.RenderTemplate]: renderTemplate,
+    [NodeType.Select]: select,
     [NodeType.Sensor]: sensor,
     [NodeType.Switch]: switchMigration,
     [NodeType.TriggerState]: triggerState,
     [NodeType.Tag]: tag,
+    [NodeType.Text]: text,
     [NodeType.Time]: time,
     [NodeType.WaitUntil]: waitUntil,
     [NodeType.Webhook]: webhook,

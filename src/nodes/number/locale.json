@@ -1,7 +1,8 @@
 {
   "ha-number": {
     "error": {
-      "value_not_number": "The state is not a number"
+      "value_not_number": "The state is not a number",
+      "mode_not_supported": "Mode not supported"
     },
     "label": {
       "entity_config": "Entity config",

@@ -9,6 +9,12 @@ Creates a text entity in Home Assistant which can be manipulated from this node.
 
 ## Configuration
 
+### Mode <Badge text="required"/>
+
+- Type: 'listen' | 'get' | 'set'
+
+The mode of the node
+
 ### Text <Badge text="required"/>
 
 - Type: `string`
