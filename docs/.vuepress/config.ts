@@ -147,6 +147,7 @@ export default defineUserConfig({
                         'sensor',
                         'switch',
                         'text',
+                        { text: 'Time', link: 'time-entity' },
                         'update-config',
                     ],
                 },

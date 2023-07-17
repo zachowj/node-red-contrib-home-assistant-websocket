@@ -91,6 +91,11 @@ export function init(n: HassNodeProperties) {
                     renderAlert('1.3.0');
                 }
                 break;
+            case NodeType.TimeEntity:
+                if ($('#node-input-entityConfig').val() !== '_ADD_') {
+                    renderAlert('2.1.0');
+                }
+                break;
             case NodeType.Select:
                 if ($('#node-input-entityConfig').val() !== '_ADD_') {
                     renderAlert('1.4.0');
@@ -144,6 +149,11 @@ function render() {
         case NodeType.Sentence:
             if ($('#node-input-server').val() !== '_ADD_') {
                 renderAlert('2.0.0');
+            }
+            break;
+        case NodeType.TimeEntity:
+            if ($('#node-input-entityConfig').val() !== '_ADD_') {
+                renderAlert('2.1.0');
             }
             break;
         case NodeType.Webhook:

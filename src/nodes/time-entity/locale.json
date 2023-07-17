@@ -1,0 +1,17 @@
+{
+  "ha-time-entity": {
+    "error": {
+      "invalid_format": "Time value must be in 24-hour format HH:MM[:SS]"
+    },
+    "label": {
+      "entity_config": "Entity config",
+      "mode": "Mode",
+      "mode_option": {
+        "in": "listen for changes",
+        "out": "set value"
+      },
+      "name": "Name",
+      "value": "Value"
+    }
+  }
+}

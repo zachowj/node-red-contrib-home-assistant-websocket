@@ -107,7 +107,7 @@ const EntityConfigEditor: EditorNodeDef<EntityConfigEditorNodeProperties> = {
 
             const mergedOptions: HaConfigOption[] = [
                 ...defaultHaConfigOptions,
-                ...haConfigOptions[value],
+                ...(haConfigOptions[value] ?? []),
             ];
             mergedOptions.forEach((o) => {
                 const val =

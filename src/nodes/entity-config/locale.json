@@ -14,7 +14,8 @@
         "select": "select",
         "sensor": "sensor",
         "switch": "switch",
-        "text": "text"
+        "text": "text",
+        "time": "time"
       }
     }
   }

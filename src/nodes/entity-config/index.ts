@@ -67,7 +67,8 @@ export default function entityConfigNode(
         }
         case EntityType.Number:
         case EntityType.Select:
-        case EntityType.Text: {
+        case EntityType.Text:
+        case EntityType.Time: {
             this.integration = new ValueEntityIntegration(props);
             break;
         }

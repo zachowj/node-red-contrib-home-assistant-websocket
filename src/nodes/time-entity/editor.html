@@ -1,0 +1,40 @@
+<input type="hidden" id="node-input-version" />
+<input type="hidden" id="node-input-inputs" />
+
+<div class="form-row">
+    <label for="node-input-name">
+        <span data-i18n="ha-time-entity.label.name"></span>
+    </label>
+    <input type="text" id="node-input-name" />
+</div>
+
+<div class="form-row">
+    <label for="node-input-entityConfig">
+        <span data-i18n="ha-time-entity.label.entity_config"></span>
+    </label>
+    <input type="text" id="node-input-entityConfig" />
+</div>
+
+<div class="form-row">
+    <label for="node-input-mode">
+        <span data-i18n="ha-time-entity.label.mode"></span>
+    </label>
+    <select id="node-input-mode">
+        <option
+            value="listen"
+            data-i18n="ha-text.label.mode_option.listen"
+        ></option>
+        <option value="get" data-i18n="ha-text.label.mode_option.get"></option>
+        <option value="set" data-i18n="ha-text.label.mode_option.set"></option>
+    </select>
+</div>
+
+<div class="form-row">
+    <label for="node-input-value">
+        <span data-i18n="ha-time-entity.label.value"></span>
+    </label>
+    <input type="text" id="node-input-value" style="width: 70%" />
+    <input type="hidden" id="node-input-valueType" />
+</div>
+
+<div class="form-row"><ol id="custom-outputs"></ol></div>

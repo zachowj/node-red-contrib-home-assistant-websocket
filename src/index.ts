@@ -29,6 +29,7 @@ import switchNode from './nodes/switch';
 import tagNode from './nodes/tag';
 import textNode from './nodes/text';
 import timeNode from './nodes/time';
+import timeEntityNode from './nodes/time-entity';
 import triggerStateNode from './nodes/trigger-state';
 import updateConfigNode from './nodes/update-config';
 import waitUntilNode from './nodes/wait-until';
@@ -70,6 +71,7 @@ const nodes: Record<NodeType, any> = {
     [NodeType.Sensor]: sensorNode,
     [NodeType.Switch]: switchNode,
     [NodeType.Text]: textNode,
+    [NodeType.TimeEntity]: timeEntityNode,
     [NodeType.UpdateConfig]: updateConfigNode,
 };
 
