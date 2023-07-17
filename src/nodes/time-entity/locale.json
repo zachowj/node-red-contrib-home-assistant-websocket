@@ -7,8 +7,9 @@
       "entity_config": "Entity config",
       "mode": "Mode",
       "mode_option": {
-        "in": "listen for changes",
-        "out": "set value"
+        "get": "get value",
+        "listen": "listen for changes",
+        "set": "set value"
       },
       "name": "Name",
       "value": "Value"
