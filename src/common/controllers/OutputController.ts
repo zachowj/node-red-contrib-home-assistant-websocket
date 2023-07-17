@@ -50,7 +50,7 @@ export default abstract class OutputController<T extends BaseNode = BaseNode> {
         node.debug(`instantiated node, name: ${name}`);
     }
 
-    protected onClose?(removed: boolean, done?: (err?: Error) => void): void;
+    protected onClose?(removed: boolean): void;
 
     protected setEnabled(value: boolean) {
         this.state?.setEnabled(value);
