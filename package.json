@@ -53,7 +53,7 @@
     "cron": "2.2.0",
     "debug": "4.3.4",
     "flat": "5.0.2",
-    "geolib": "3.3.3",
+    "geolib": "3.3.4",
     "home-assistant-js-websocket": "8.0.1",
     "joi": "17.7.0",
     "lodash.clonedeep": "4.5.0",
