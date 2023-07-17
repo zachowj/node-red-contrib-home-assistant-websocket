@@ -26,14 +26,6 @@ export default class SelectController extends InputOutputController<
     constructor(props: SelectControllerConstructor) {
         super(props);
         this.#entityConfigNode = this.integration?.getEntityConfigNode();
-
-        // listen for value changes if we are in listening mode
-        if (this.node.config.mode === ValueIntegrationMode.Listen) {
-            this.#entityConfigNode?.addListener(
-                IntegrationEvent.ValueChange,
-                this.#onValueChange.bind(this)
-            );
-        }
     }
 
     async #onInputModeGet({ done, message, send }: InputProperties) {
@@ -108,15 +100,6 @@ export default class SelectController extends InputOutputController<
         }
     }
 
-    public async onValueChange(value: string, previousValue?: string) {
-        if (typeof value !== 'string') return;
-
-        const message: NodeMessage = {};
-        await this.#prepareSend(message, value, previousValue);
-
-        this.node.send(message);
-    }
-
     #isValidValue(option: string): boolean {
         const options = this.integration?.getEntityHomeAssistantConfigValue(
             'options'
@@ -154,7 +137,7 @@ export default class SelectController extends InputOutputController<
         });
     }
 
-    async #onValueChange(value: string, previousValue?: string) {
+    public async onValueChange(value: string, previousValue?: string) {
         const message: NodeMessage = {};
         await this.#prepareSend(message, value, previousValue);
 

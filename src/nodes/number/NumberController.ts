@@ -27,14 +27,6 @@ export default class NumberController extends InputOutputController<
     constructor(props: NumberControllerConstructor) {
         super(props);
         this.#entityConfigNode = this.integration?.getEntityConfigNode();
-
-        // listen for value changes if we are in listening mode
-        if (this.node.config.mode === ValueIntegrationMode.Listen) {
-            this.#entityConfigNode?.addListener(
-                IntegrationEvent.ValueChange,
-                this.#onValueChange.bind(this)
-            );
-        }
     }
 
     async #onInputModeGet({ done, message, send }: InputProperties) {
@@ -118,7 +110,7 @@ export default class NumberController extends InputOutputController<
         }
     }
 
-    async #onValueChange(value: number, previousValue?: number) {
+    public async onValueChange(value: number, previousValue?: number) {
         if (isNaN(value)) return;
 
         const message: NodeMessage = {};

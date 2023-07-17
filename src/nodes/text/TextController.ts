@@ -26,14 +26,6 @@ export default class TextController extends InputOutputController<
     constructor(props: TextControllerConstructor) {
         super(props);
         this.#entityConfigNode = this.integration?.getEntityConfigNode();
-
-        // listen for value changes if we are in listening mode
-        if (this.node.config.mode === ValueIntegrationMode.Listen) {
-            this.#entityConfigNode?.addListener(
-                IntegrationEvent.ValueChange,
-                this.#onValueChange.bind(this)
-            );
-        }
     }
 
     #onInputModeGet({ done, message, send }: InputProperties) {
@@ -150,7 +142,8 @@ export default class TextController extends InputOutputController<
         });
     }
 
-    async #onValueChange(value: string, previousValue?: string) {
+    public async onValueChange(value: string, previousValue?: string) {
+        console.log('onValueChange', value, previousValue);
         const message: NodeMessage = {};
         await this.#prepareSend(message, value, previousValue);
 

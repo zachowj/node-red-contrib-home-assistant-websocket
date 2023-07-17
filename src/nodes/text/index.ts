@@ -2,6 +2,7 @@ import Joi from 'joi';
 
 import { createControllerDependencies } from '../../common/controllers/helpers';
 import Events from '../../common/events/Events';
+import { IntegrationEvent } from '../../common/integration/Integration';
 import InputService, { NodeInputs } from '../../common/services/InputService';
 import State from '../../common/State';
 import Status from '../../common/status/Status';
@@ -77,8 +78,7 @@ export default function textNode(this: TextNode, config: TextNodeProperties) {
     });
 
     entityConfigNode.integration.setStatus(status);
-    // eslint-disable-next-line no-new
-    new TextController({
+    const controller = new TextController({
         inputService,
         integration: entityConfigNode.integration,
         node: this,
@@ -86,4 +86,16 @@ export default function textNode(this: TextNode, config: TextNodeProperties) {
         ...controllerDeps,
         state,
     });
+
+    if (this.config.mode === ValueIntegrationMode.Listen) {
+        const entityConfigEvents = new Events({
+            node: this,
+            emitter: entityConfigNode,
+        });
+
+        entityConfigEvents.addListener(
+            IntegrationEvent.ValueChange,
+            controller.onValueChange.bind(controller)
+        );
+    }
 }
