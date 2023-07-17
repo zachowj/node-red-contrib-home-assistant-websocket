@@ -143,7 +143,6 @@ export default class TextController extends InputOutputController<
     }
 
     public async onValueChange(value: string, previousValue?: string) {
-        console.log('onValueChange', value, previousValue);
         const message: NodeMessage = {};
         await this.#prepareSend(message, value, previousValue);
 
