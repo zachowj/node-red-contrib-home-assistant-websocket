@@ -32,7 +32,7 @@ const TimeEntityEditor: EditorNodeDef<TimeEntityEditorNodeProperties> = {
     align: 'left',
     paletteLabel: 'time',
     label: function () {
-        return this.name || 'time';
+        return this.name || 'time entity';
     },
     labelStyle: ha.labelStyle,
     defaults: {
