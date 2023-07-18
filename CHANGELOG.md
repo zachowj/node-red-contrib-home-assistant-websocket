@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.55.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.54.0...v0.55.0) (2023-07-18)
+
+
+### Features
+
+* **time-entity:** Add time entity node ([ae190fd](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ae190fd1561bd9affb516c1f5f7ac262b5be8cad))
+
+
+### Bug Fixes
+
+* **number:** Fix removing of entity listeners ([3cad0da](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/3cad0dab80313df1dfad190debf45784c328cd54))
+* **select:** Fix removing of entity listeners ([3cad0da](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/3cad0dab80313df1dfad190debf45784c328cd54))
+* **text:** Fix removing of entity listeners ([3cad0da](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/3cad0dab80313df1dfad190debf45784c328cd54))
+* **time-entity:** Fix mislabeled locale strings ([e898c6d](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/e898c6da65ed8f25c989ac2e0618858847ff58d7))
+
+
+### Performance Improvements
+
+* Use entity registry for display it has smaller payload ([d630751](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d630751c1274660150a85d8fa1d5243cc4096dc5))
+
 ## [0.54.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.53.1...v0.54.0) (2023-07-16)
 
 
