@@ -109,3 +109,31 @@ export interface HassEntityRegistryEntry {
     disabled_by: string | null;
     entity_category: 'config' | 'diagnostic' | null;
 }
+
+type HassEntityCategory = 'config' | 'diagnostic';
+
+export interface HassEntityRegistryDisplayEntryResponse {
+    entities: {
+        ei: string;
+        di?: string;
+        ai?: string;
+        ec?: number;
+        en?: string;
+        pl?: string;
+        tk?: string;
+        hb?: boolean;
+        dp?: number;
+    }[];
+    entity_categories: Record<number, HassEntityCategory>;
+}
+export interface HassEntityRegistryDisplayEntry {
+    entity_id: string;
+    name?: string;
+    device_id?: string;
+    area_id?: string;
+    hidden?: boolean;
+    entity_category?: HassEntityCategory;
+    translation_key?: string;
+    platform?: string;
+    display_precision?: number;
+}

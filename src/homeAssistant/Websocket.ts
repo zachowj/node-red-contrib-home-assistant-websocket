@@ -50,7 +50,8 @@ import {
     HassDeviceCapabilities,
     HassDevices,
     HassDeviceTriggers,
-    HassEntityRegistryEntry,
+    HassEntityRegistryDisplayEntry,
+    HassEntityRegistryDisplayEntryResponse,
     HassTags,
     HassTranslations,
     SubscriptionUnsubscribe,
@@ -59,7 +60,7 @@ import { Credentials } from './';
 import {
     subscribeAreaRegistry,
     subscribeDeviceRegistry,
-    subscribeEntityRegistry,
+    subscribeEntityRegistryDisplay,
 } from './collections';
 import createSocket from './createSocket';
 import { startHeartbeat, StopHeartbeat } from './heartbeat';
@@ -113,7 +114,7 @@ export default class Websocket {
     areas: HassAreas = [];
     client!: Connection;
     devices: HassDevices = [];
-    entities: HassEntityRegistryEntry[] = [];
+    entities: HassEntityRegistryDisplayEntry[] = [];
     connectionState = STATE_DISCONNECTED;
     integrationVersion: string | number = 0;
     isHomeAssistantRunning = false;
@@ -247,13 +248,33 @@ export default class Websocket {
                 entities: this.entities,
             });
         });
-        subscribeEntityRegistry(this.client, (entities) => {
-            this.entities = entities;
-            this.#emitEvent(HA_EVENT_REGISTRY_UPDATED, {
-                devices: this.devices,
-                entities: this.entities,
-            });
-        });
+        subscribeEntityRegistryDisplay(
+            this.client,
+            (entityReg: HassEntityRegistryDisplayEntryResponse) => {
+                const entities = entityReg.entities.map((entity) => {
+                    return {
+                        entity_id: entity.ei,
+                        device_id: entity.di,
+                        area_id: entity.ai,
+                        translation_key: entity.tk,
+                        platform: entity.pl,
+                        entity_category:
+                            entity.ec !== undefined
+                                ? entityReg.entity_categories[entity.ec]
+                                : undefined,
+                        name: entity.en,
+                        hidden: entity.hb,
+                        display_precision: entity.dp,
+                    };
+                });
+
+                this.entities = entities;
+                this.#emitEvent(HA_EVENT_REGISTRY_UPDATED, {
+                    devices: this.devices,
+                    entities: this.entities,
+                });
+            }
+        );
     }
 
     #onHomeAssistantRunning() {
