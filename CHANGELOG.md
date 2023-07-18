@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.55.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.55.0...v0.55.1) (2023-07-18)
+
+
+### Bug Fixes
+
+* **poll-state:** Fix i18n labels ([13c8ad8](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/13c8ad8b24868aa387650aef79461bc00b2cb928)), closes [#995](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/995)
+
 ## [0.55.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.54.0...v0.55.0) (2023-07-18)
 
 
