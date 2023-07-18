@@ -59,9 +59,7 @@ jobs:
           node-version: 18
           cache: npm
       - run: npm ci
-      - id: publish
-        uses: JS-DevTools/npm-publish@v2
-        with:
-          token: ${{ secrets.npm_token }}
-          ignore-scripts: false
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
         if: ${{ steps.release.outputs.release_created }}
