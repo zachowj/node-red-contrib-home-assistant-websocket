@@ -1,6 +1,7 @@
 import { createControllerDependencies } from '../../common/controllers/helpers';
 import ClientEvents from '../../common/events/ClientEvents';
 import Events from '../../common/events/Events';
+import { IntegrationEvent } from '../../common/integration/Integration';
 import State from '../../common/State';
 import Status from '../../common/status/Status';
 import { RED } from '../../globals';
@@ -60,12 +61,17 @@ export default function webhookNode(
     });
     integration.setStatus(status);
 
-    this.controller = new WebhookController({
+    const controller = new WebhookController({
         node: this,
         status,
         ...controllerDeps,
         state,
     });
+
+    nodeEvents.addListener(
+        IntegrationEvent.Trigger,
+        controller.onReceivedMessage.bind(controller)
+    );
 
     integration.init();
 }
