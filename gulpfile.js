@@ -296,8 +296,10 @@ task('buildEditorFiles', (done) => {
         '!_*.scss',
     ]).pipe(buildSass());
 
+    let cache;
     const js = rollupStream({
         input: 'src/editor.ts',
+        cache,
         output: {
             dir: editorFilePath,
             format: 'iife',
@@ -309,6 +311,9 @@ task('buildEditorFiles', (done) => {
         ],
         external: [],
     })
+        .on('bundle', (bundle) => {
+            cache = bundle;
+        })
         .pipe(source('editor.ts'))
         .pipe(buffer())
         .pipe(buildJs());
