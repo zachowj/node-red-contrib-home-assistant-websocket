@@ -1,7 +1,7 @@
 {
   "api-call-service": {
     "error": {
-      "invalid_entity_id": "Invalid entity id format"
+      "invalid_entity_id": "Invalid entity ID format"
     },
     "label": {
       "alternate_tags": "Use alternate template tags for the data field",

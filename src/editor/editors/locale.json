@@ -1,0 +1,10 @@
+{
+  "home-assistant": {
+    "label": {
+      "cancel": "Cancel",
+      "filter_results_title": "Filter results",
+      "no_matches_found": "No matches found",
+      "done": "Done"
+    }
+  }
+}

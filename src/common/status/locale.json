@@ -1,0 +1,27 @@
+{
+  "home-assistant": {
+    "status": {
+      "connected": "connected",
+      "connecting": "connecting",
+      "disabled": "DISABLED",
+      "disconnected": "disconnected",
+      "error": "error",
+      "error_registering": "error registering",
+      "failed": "failed",
+      "jsonata_error": "JSONata error",
+      "no_connection": "no connection",
+      "off": "off",
+      "on": "on",
+      "pressed": "pressed",
+      "received": "received",
+      "registered": "registered",
+      "running": "running",
+      "sending": "sending",
+      "state_change": "state change",
+      "success": "success",
+      "triggered": "triggered",
+      "updated": "updated",
+      "validation_error": "validation error"
+    }
+  }
+}

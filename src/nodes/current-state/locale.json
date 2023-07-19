@@ -2,7 +2,7 @@
   "api-current-state": {
     "label": {
       "block_input_overrides": "Block Input Overrides",
-      "entity_id": "Entity Id",
+      "entity_id": "Entity ID",
       "for": "For",
       "for_option": {
         "days": "days",

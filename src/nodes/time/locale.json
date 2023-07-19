@@ -1,12 +1,12 @@
 {
   "ha-time": {
     "errors": {
-      "invalid_jsonata_payload": "Invalid jsonata sending entity state as payload",
+      "invalid_jsonata_payload": "Invalid JSONata sending entity state as payload",
       "jsonata_error": "JSONata Error: __message__",
       "offset_nan": "Offset is not a number: __offset__"
     },
     "label": {
-      "entity_id": "Entity Id",
+      "entity_id": "Entity ID",
       "friday": "Friday",
       "monday": "Monday",
       "name": "Name",

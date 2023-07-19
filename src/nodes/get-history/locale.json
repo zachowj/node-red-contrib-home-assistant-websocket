@@ -6,7 +6,7 @@
     "label": {
       "date_format": "dates must be in ISO format",
       "end_date": "End date",
-      "entity_id": "Entity Id",
+      "entity_id": "Entity ID",
       "entity_id_option": {
         "includes": "includes",
         "is": "is"

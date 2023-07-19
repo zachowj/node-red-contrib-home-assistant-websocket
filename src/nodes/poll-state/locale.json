@@ -5,7 +5,7 @@
       "jsonata_error": "JSONata Error: __message__"
     },
     "label": {
-      "entity_id": "Entity Id",
+      "entity_id": "Entity ID",
       "if_state": "If State",
       "if_state_option": {
         "does_not_include": "not in",

@@ -12,7 +12,7 @@
       "protocol": "Protocol",
       "protocol_option": {
         "http": "HTTP",
-        "websocket": "Websocket"
+        "websocket": "WebSocket"
       },
       "response_type": "Return",
       "response_type_option": {
