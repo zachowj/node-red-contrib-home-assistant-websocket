@@ -45,10 +45,6 @@ export default function buttonNode(
         state,
     });
     clientEvents.setStatus(status);
-    const entityEvents = new Events({
-        node: this,
-        emitter: this,
-    });
     const entityConfigEvents = new Events({
         node: this,
         emitter: entityConfigNode,
@@ -57,7 +53,6 @@ export default function buttonNode(
 
     entityConfigNode.integration.setStatus(status);
     const controller = new ButtonController({
-        entityEvents,
         node: this,
         status,
         ...controllerDeps,
