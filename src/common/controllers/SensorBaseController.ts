@@ -59,20 +59,14 @@ export default abstract class SensorBase<
     T extends SensorBaseNode,
     P extends SensorBaseNodeProperties
 > extends InputOutputController<T, P> {
-    readonly #homeAssistant: HomeAssistant;
-    protected integration?: UnidirectionalEntityIntegration;
-
-    constructor(props: SensorBaseControllerOptions<T, P>) {
-        super(props);
-        this.#homeAssistant = props.homeAssistant;
-    }
+    protected readonly integration?: UnidirectionalEntityIntegration;
 
     async onInput({ parsedMessage, message, send, done }: InputProperties) {
-        if (!this.#homeAssistant.isConnected) {
+        if (!this.integration?.isConnected) {
             throw new NoConnectionError();
         }
 
-        if (!this.#homeAssistant.isIntegrationLoaded) {
+        if (!this.integration.isIntegrationLoaded) {
             throw new InputError(
                 'home-assistant.error.integration_not_loaded',
                 'home-assistant.error.error'

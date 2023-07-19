@@ -53,7 +53,6 @@ export default function Sensor(this: SensorNode, config: NodeDef) {
 
     // eslint-disable-next-line no-new
     new SensorController({
-        homeAssistant,
         inputService,
         node: this,
         status,

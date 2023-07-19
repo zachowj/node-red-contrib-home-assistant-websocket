@@ -119,7 +119,6 @@ export default function BinarySensor(this: BinarySensorNode, config: NodeDef) {
 
     // eslint-disable-next-line no-new
     new BinarySensorController({
-        homeAssistant,
         inputService,
         node: this,
         status,
