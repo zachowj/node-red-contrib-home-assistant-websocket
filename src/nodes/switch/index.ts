@@ -9,7 +9,7 @@ import SwitchEntityStatus from '../../common/status/SwitchEntityStatus';
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
 import { getConfigNodes } from '../../helpers/node';
-import { getHomeAssistant } from '../../homeAssistant';
+import { getHomeAssistant, HaEvent } from '../../homeAssistant';
 import {
     BaseNode,
     EntityBaseNodeProperties,
@@ -65,8 +65,7 @@ export default function switchNode(
     });
 
     entityConfigNode.integration.setStatus(status);
-    // eslint-disable-next-line no-new
-    new SwitchController({
+    const controller = new SwitchController({
         entityConfigEvents,
         entityConfigNode,
         inputService,
@@ -74,4 +73,9 @@ export default function switchNode(
         status,
         ...createControllerDependencies(this, homeAssistant),
     });
+
+    entityConfigEvents.addListeners(controller, [
+        [HaEvent.AutomationTriggered, controller.onTrigger],
+        [HaEvent.StateChanged, controller.onStateChange],
+    ]);
 }

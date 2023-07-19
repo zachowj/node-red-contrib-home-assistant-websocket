@@ -7,7 +7,6 @@ import BidirectionalIntegration, {
     StateChangePayload,
     TriggerPayload,
 } from '../../common/integration/BidirectionalEntityIntegration';
-import { HaEvent } from '../../homeAssistant';
 import { NodeMessage } from '../../types/nodes';
 import { EntityConfigNode } from '../entity-config';
 import { SwitchNode, SwitchNodeProperties } from '.';
@@ -17,7 +16,7 @@ enum OutputType {
     StateChange = 'stateChange',
 }
 
-interface SwitchNodeOptions
+interface SwitchNodeConstructor
     extends InputOutputControllerOptions<SwitchNode, SwitchNodeProperties> {
     entityConfigEvents: Events;
     entityConfigNode: EntityConfigNode;
@@ -30,16 +29,11 @@ export default class SwitchController extends InputOutputController<
     #entityConfigNode: EntityConfigNode;
     #integration: BidirectionalIntegration;
 
-    constructor(props: SwitchNodeOptions) {
+    constructor(props: SwitchNodeConstructor) {
         super(props);
         this.#entityConfigNode = props.entityConfigNode;
         this.#integration = this.#entityConfigNode
             .integration as BidirectionalIntegration;
-
-        props.entityConfigEvents.addListeners(this, [
-            [HaEvent.AutomationTriggered, this.onTrigger],
-            [HaEvent.StateChanged, this.onStateChange],
-        ]);
     }
 
     get #isSwitchEntityEnabled(): boolean {
@@ -50,7 +44,12 @@ export default class SwitchController extends InputOutputController<
         this.#entityConfigNode.state.setEnabled(value);
     }
 
-    async onInput({ message, parsedMessage, send, done }: InputProperties) {
+    protected async onInput({
+        message,
+        parsedMessage,
+        send,
+        done,
+    }: InputProperties) {
         if (typeof parsedMessage.enable.value === 'boolean') {
             this.#isSwitchEntityEnabled = parsedMessage.enable.value;
             try {
@@ -72,7 +71,7 @@ export default class SwitchController extends InputOutputController<
         }
     }
 
-    onStateChange(payload: StateChangePayload) {
+    public onStateChange(payload: StateChangePayload) {
         if (!payload.changed || !this.node.config.outputOnStateChange) return;
 
         const message: NodeMessage = {};
@@ -92,7 +91,7 @@ export default class SwitchController extends InputOutputController<
         }
     }
 
-    onTrigger(data: TriggerPayload) {
+    public onTrigger(data: TriggerPayload) {
         const message: NodeMessage = {
             topic: 'triggered',
         };
