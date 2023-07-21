@@ -15,7 +15,7 @@ import TypedInputService from '../services/TypedInputService';
 import State from '../State';
 import Status from '../status/Status';
 
-export interface OutputControllerOptions<T extends BaseNode> {
+export interface OutputControllerConstructor<T extends BaseNode> {
     nodeRedContextService: NodeRedContextService;
     node: T;
     status: Status;
@@ -37,7 +37,7 @@ export default abstract class OutputController<T extends BaseNode = BaseNode> {
         state,
         status,
         typedInputService,
-    }: OutputControllerOptions<T>) {
+    }: OutputControllerConstructor<T>) {
         this.contextService = nodeRedContextService;
         this.node = node;
         this.state = state;

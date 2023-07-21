@@ -83,7 +83,7 @@ export class Status {
             status = {
                 fill: STATUS_COLOR_GREY,
                 shape: STATUS_SHAPE_DOT,
-                text: 'config-server.status.disabled',
+                text: RED._('home-assistant.status.disabled'),
             };
         }
 
@@ -209,27 +209,30 @@ export class EventsStatus extends Status {
         const status: NodeStatus = {
             fill: STATUS_COLOR_RED,
             shape: STATUS_SHAPE_RING,
-            text: 'config-server.status.disconnected',
+            text: 'home-assistant.status.disconnected',
         };
 
         switch (this.#connectionState) {
             case STATE_CONNECTED:
                 status.fill = STATUS_COLOR_GREEN;
-                status.text = 'config-server.status.connected';
+                status.text = 'home-assistant.status.connected';
                 break;
             case STATE_CONNECTING:
                 status.fill = STATUS_COLOR_YELLOW;
-                status.text = 'config-server.status.connecting';
+                status.text = 'home-assistant.status.connecting';
                 break;
             case STATE_ERROR:
-                status.text = 'config-server.status.error';
+                status.text = 'home-assistant.status.error';
                 break;
             case STATE_RUNNING:
                 status.fill = STATUS_COLOR_GREEN;
-                status.text = 'config-server.status.running';
+                status.text = 'home-assistant.status.running';
                 break;
         }
 
+        if (status.text) {
+            status.text = RED._(status.text);
+        }
         return status;
     }
 

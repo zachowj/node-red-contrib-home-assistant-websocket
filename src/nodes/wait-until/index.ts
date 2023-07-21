@@ -3,10 +3,8 @@ import { NodeDef } from 'node-red';
 
 import { createControllerDependencies } from '../../common/controllers/helpers';
 import ClientEvents from '../../common/events/ClientEvents';
-import Events from '../../common/events/Events';
 import ComparatorService from '../../common/services/ComparatorService';
 import InputService from '../../common/services/InputService';
-import State from '../../common/State';
 import Status from '../../common/status/Status';
 import TransformState from '../../common/TransformState';
 import {
@@ -114,17 +112,13 @@ export default function waitUntilNode(this: WaitUntilNode, config: NodeDef) {
     this.config = migrate(config);
     const serverConfigNode = getServerConfigNode(this.config.server);
     const homeAssistant = getHomeAssistant(serverConfigNode);
-    const nodeEvents = new Events({ node: this, emitter: this });
     const clientEvents = new ClientEvents({
         node: this,
         emitter: homeAssistant.eventBus,
     });
-    const state = new State(this);
     const status = new Status({
         config: serverConfigNode.config,
         node: this,
-        nodeEvents,
-        state,
     });
     clientEvents.setStatus(status);
     const inputService = new InputService<WaitUntilNodeProperties>({

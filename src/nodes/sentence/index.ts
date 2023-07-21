@@ -42,9 +42,7 @@ export default function sentenceNode(
     const state = new State(this);
     const status = new Status({
         config: serverConfigNode.config,
-        nodeEvents,
         node: this,
-        state,
     });
 
     const controllerDeps = createControllerDependencies(this, homeAssistant);

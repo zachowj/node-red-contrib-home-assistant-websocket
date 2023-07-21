@@ -1,15 +1,14 @@
 import chai, { expect } from 'chai';
-import EventEmitter from 'events';
 import { NodeAPI } from 'node-red';
 import sinonChai from 'sinon-chai';
 import sinon, { StubbedInstance, stubInterface } from 'ts-sinon';
 
-import Events, { NodeEvent } from '../../../src/common/events/Events';
+import Events from '../../../src/common/events/Events';
 import State from '../../../src/common/State';
-import SwitchEntityStatus from '../../../src/common/status/SwitchEntityStatus';
 import { setRED } from '../../../src/globals';
 import { EntityConfigNode } from '../../../src/nodes/entity-config';
 import { SwitchNode, SwitchNodeProperties } from '../../../src/nodes/switch';
+import SwitchStatus from '../../../src/nodes/switch/SwitchStatus';
 import { ServerNodeConfig } from '../../../src/types/nodes';
 import { resetStubInterface } from '../../helpers';
 
@@ -26,9 +25,7 @@ describe('SwitchEntityStatus', function () {
     let stateStub: StubbedInstance<State>;
     let switchNodeConfigStub: StubbedInstance<SwitchNodeProperties>;
 
-    let status: SwitchEntityStatus;
-    let nodeEvents: Events;
-    let eventEmitter: EventEmitter;
+    let status: SwitchStatus;
 
     before(function () {
         entityConfigEvents = stubInterface<Events>();
@@ -58,19 +55,11 @@ describe('SwitchEntityStatus', function () {
 
         entityConfigNode.state = stateStub;
 
-        eventEmitter = new EventEmitter();
-        nodeEvents = new Events({
-            node: nodeStub,
-            emitter: eventEmitter,
-        });
-
-        status = new SwitchEntityStatus({
+        status = new SwitchStatus({
             entityConfigEvents,
             entityConfigNode,
             config: serverNodeConfigStub,
-            nodeEvents,
             node: nodeStub,
-            state: stateStub,
         });
     });
 
@@ -94,44 +83,6 @@ describe('SwitchEntityStatus', function () {
             expect(nodeStub.status).to.have.been.calledOnceWithExactly(
                 expectedStatus
             );
-        });
-    });
-    describe('Status for node status', function () {
-        it('should have shape dot and text on when node is enabled', function () {
-            stateStub.isEnabled.returns(true);
-            switchNodeConfigStub.outputOnStateChange = false;
-            // force status update
-            eventEmitter.emit(NodeEvent.StateChanged);
-            expect(nodeStub.status).to.have.been.calledOnce;
-            expect(nodeStub.status).to.have.been.calledWithExactly({
-                fill: 'yellow',
-                shape: 'dot',
-                text: 'home-assistant.status.on at Jan 12, 12:12',
-            });
-        });
-        it('should have shape ring and text off when node is disabled', function () {
-            stateStub.isEnabled.returns(false);
-            switchNodeConfigStub.outputOnStateChange = false;
-            // force status update
-            eventEmitter.emit(NodeEvent.StateChanged);
-            expect(nodeStub.status).to.have.been.calledOnce;
-            expect(nodeStub.status).to.have.been.calledWithExactly({
-                fill: 'yellow',
-                shape: 'ring',
-                text: 'home-assistant.status.off at Jan 12, 12:12',
-            });
-        });
-        it('should have color blue and "state change" as the text when outputOnStateChange is true', function () {
-            stateStub.isEnabled.returns(false);
-            switchNodeConfigStub.outputOnStateChange = true;
-            // force status update
-            eventEmitter.emit(NodeEvent.StateChanged);
-            expect(nodeStub.status).to.have.been.calledOnce;
-            expect(nodeStub.status).to.have.been.calledWithExactly({
-                fill: 'blue',
-                shape: 'ring',
-                text: 'home-assistant.status.state_change at Jan 12, 12:12',
-            });
         });
     });
 });

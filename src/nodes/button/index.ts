@@ -1,8 +1,6 @@
 import { createControllerDependencies } from '../../common/controllers/helpers';
-import ClientEvents from '../../common/events/ClientEvents';
 import Events from '../../common/events/Events';
-import State from '../../common/State';
-import EventsStatus from '../../common/status/EventStatus';
+import Status from '../../common/status/Status';
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
 import { getConfigNodes } from '../../helpers/node';
@@ -31,20 +29,10 @@ export default function buttonNode(
 
     const { entityConfigNode, serverConfigNode } = getConfigNodes(this);
     const homeAssistant = getHomeAssistant(serverConfigNode);
-    const clientEvents = new ClientEvents({
-        node: this,
-        emitter: homeAssistant.eventBus,
-    });
-    const nodeEvents = new Events({ node: this, emitter: this });
-    const state = new State(this);
-    const status = new EventsStatus({
+    const status = new Status({
         config: serverConfigNode.config,
-        clientEvents,
-        nodeEvents,
         node: this,
-        state,
     });
-    clientEvents.setStatus(status);
     const entityConfigEvents = new Events({
         node: this,
         emitter: entityConfigNode,

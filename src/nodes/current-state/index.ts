@@ -1,10 +1,8 @@
 import Joi from 'joi';
 
 import { createControllerDependencies } from '../../common/controllers/helpers';
-import Events from '../../common/events/Events';
 import ComparatorService from '../../common/services/ComparatorService';
 import InputService, { NodeInputs } from '../../common/services/InputService';
-import State from '../../common/State';
 import Status from '../../common/status/Status';
 import TransformState, { TransformType } from '../../common/TransformState';
 import { ComparatorType, TypedInputTypes } from '../../const';
@@ -56,14 +54,10 @@ export default function currentStateNode(
     this.config = migrate(config);
     const serverConfigNode = getServerConfigNode(this.config.server);
     const homeAssistant = getHomeAssistant(serverConfigNode);
-    const nodeEvents = new Events({ node: this, emitter: this });
 
-    const state = new State(this);
     const status = new Status({
         config: serverConfigNode.config,
         node: this,
-        nodeEvents,
-        state,
     });
     const inputService = new InputService<CurrentStateNodeProperties>({
         inputs,

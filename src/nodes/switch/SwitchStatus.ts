@@ -1,24 +1,24 @@
 import { NodeStatus } from 'node-red';
 
-import { RED } from '../../globals';
-import { EntityConfigNode } from '../../nodes/entity-config';
-import { SwitchNodeProperties } from '../../nodes/switch';
-import Events, { NodeEvent } from '../events/Events';
+import Events, { NodeEvent } from '../../common/events/Events';
 import Status, {
     StatusColor,
-    StatusConstructorProps,
+    StatusConstructor,
     StatusShape,
-} from './Status';
+} from '../../common/status/Status';
+import { RED } from '../../globals';
+import { EntityConfigNode } from '../../nodes/entity-config';
+import { SwitchNode } from '../../nodes/switch';
 
-interface SwitchEntityStateConstructor extends StatusConstructorProps {
+interface SwitchStatusConstructor extends StatusConstructor<SwitchNode> {
     entityConfigNode: EntityConfigNode;
     entityConfigEvents: Events;
 }
 
-export default class SwitchEntityStatus extends Status {
+export default class SwitchStatus extends Status<SwitchNode> {
     #entityConfigNode: EntityConfigNode;
 
-    constructor(props: SwitchEntityStateConstructor) {
+    constructor(props: SwitchStatusConstructor) {
         super(props);
         this.#entityConfigNode = props.entityConfigNode;
 
@@ -53,7 +53,7 @@ export default class SwitchEntityStatus extends Status {
                 ? 'home-assistant.status.on'
                 : 'home-assistant.status.off',
         };
-        if ((this.node.config as SwitchNodeProperties).outputOnStateChange) {
+        if (this.node.config.outputOnStateChange) {
             status.fill = StatusColor.Blue;
             status.text = RED._('home-assistant.status.state_change');
         }

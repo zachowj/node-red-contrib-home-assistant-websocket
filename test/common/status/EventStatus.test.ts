@@ -48,8 +48,6 @@ describe('EventsStatus', function () {
         new EventsStatus({
             node: nodeStub,
             config: serverNodeConfigStub,
-            state: stateStub,
-            nodeEvents: eventsStub,
             clientEvents,
         });
     });
@@ -70,8 +68,6 @@ describe('EventsStatus', function () {
             new EventsStatus({
                 node: nodeStub,
                 config: serverNodeConfigStub,
-                state: stateStub,
-                nodeEvents: eventsStub,
                 clientEvents: clientEventsStub,
             });
             expect(clientEventsStub.addListeners).to.be.called;

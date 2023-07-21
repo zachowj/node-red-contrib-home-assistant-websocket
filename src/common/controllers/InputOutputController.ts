@@ -12,12 +12,14 @@ import { inputErrorHandler } from '../errors/inputErrorHandler';
 import { NodeEvent } from '../events/Events';
 import Integration from '../integration/Integration';
 import InputService, { ParsedMessage } from '../services/InputService';
-import OutputController, { OutputControllerOptions } from './OutputController';
+import OutputController, {
+    OutputControllerConstructor,
+} from './OutputController';
 
 export interface InputOutputControllerOptions<
     T extends BaseNode,
     C extends NodeProperties
-> extends OutputControllerOptions<T> {
+> extends OutputControllerConstructor<T> {
     inputService: InputService<C>;
     integration?: Integration;
 }

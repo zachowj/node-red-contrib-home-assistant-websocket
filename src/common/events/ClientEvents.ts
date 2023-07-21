@@ -29,6 +29,7 @@ export default class ClientEvents extends Events {
         if (err?.message) this.node.error(err.message);
     }
 
+    // set status for error reporting
     setStatus(status: Status) {
         this.#status = status;
     }

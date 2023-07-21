@@ -1,23 +1,25 @@
 import { NodeStatus } from 'node-red';
 
-import { RED } from '../../globals';
+import { HaEvent } from '../../homeAssistant';
 import { ClientEvent, ClientState } from '../../homeAssistant/Websocket';
+import { EntityConfigNode } from '../../nodes/entity-config';
 import ClientEvents from '../events/ClientEvents';
-import Status, {
-    StatusColor,
-    StatusConstructorProps,
-    StatusShape,
-} from './Status';
+import Status, { StatusColor, StatusConstructor, StatusShape } from './Status';
 
-interface EventsStatusConstructorProps extends StatusConstructorProps {
+interface EventsStatusConstructor extends StatusConstructor {
     clientEvents: ClientEvents;
+    exposeAsEntityConfigNode?: EntityConfigNode;
 }
 
 export default class EventsStatus extends Status {
     #connectionState = ClientState.Disconnected;
+    readonly #exposeAsEntityConfigNode?: EntityConfigNode;
 
-    constructor(props: EventsStatusConstructorProps) {
+    protected lastStatus: NodeStatus = {};
+
+    constructor(props: EventsStatusConstructor) {
         super(props);
+        this.#exposeAsEntityConfigNode = props.exposeAsEntityConfigNode;
 
         props.clientEvents.addListeners(this, [
             [ClientEvent.Close, this.#onClientClose],
@@ -26,6 +28,27 @@ export default class EventsStatus extends Status {
             [ClientEvent.Open, this.#onClientOpen],
             [ClientEvent.Running, this.#onClientRunning],
         ]);
+
+        if (this.#exposeAsEntityConfigNode) {
+            const exposeAsConfigEvents = new ClientEvents({
+                node: this.node,
+                emitter: this.#exposeAsEntityConfigNode,
+            });
+
+            exposeAsConfigEvents?.addListener(
+                HaEvent.StateChanged,
+                this.#onStateChange.bind(this)
+            );
+        }
+    }
+
+    get isNodeEnabled(): boolean {
+        return this.#exposeAsEntityConfigNode?.state.isEnabled() ?? true;
+    }
+
+    #onClientError(): void {
+        this.#connectionState = ClientState.Error;
+        this.#updateConnectionStatus();
     }
 
     #onClientClose(): void {
@@ -35,11 +58,6 @@ export default class EventsStatus extends Status {
 
     #onClientConnecting(): void {
         this.#connectionState = ClientState.Connecting;
-        this.#updateConnectionStatus();
-    }
-
-    #onClientError(): void {
-        this.#connectionState = ClientState.Error;
         this.#updateConnectionStatus();
     }
 
@@ -53,14 +71,17 @@ export default class EventsStatus extends Status {
         this.#updateConnectionStatus();
     }
 
+    #onStateChange() {
+        this.updateStatus(this.lastStatus);
+    }
+
     #updateConnectionStatus(): void {
-        const status = this.#getConnectionStatus();
-        status.text = RED._(`${status.text}`);
+        const status = this.getConnectionStatus();
         this.lastStatus = status;
         this.updateStatus(status);
     }
 
-    #getConnectionStatus(): NodeStatus {
+    protected getConnectionStatus(): NodeStatus {
         const status: NodeStatus = {
             fill: StatusColor.Red,
             shape: StatusShape.Ring,
@@ -86,5 +107,24 @@ export default class EventsStatus extends Status {
         }
 
         return status;
+    }
+
+    protected updateStatus(status: NodeStatus): void {
+        if (this.isNodeEnabled === false) {
+            status = {
+                fill: StatusColor.Grey,
+                shape: StatusShape.Dot,
+                text: 'home-assistant.status.disabled',
+            };
+        }
+
+        this.node.status(status);
+    }
+
+    public set(status: NodeStatus = {}): void {
+        if (this.isNodeEnabled) {
+            this.lastStatus = status;
+        }
+        this.updateStatus(status);
     }
 }

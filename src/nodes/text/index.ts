@@ -61,13 +61,10 @@ export default function textNode(this: TextNode, config: TextNodeProperties) {
 
     const { entityConfigNode, serverConfigNode } = getConfigNodes(this);
     const homeAssistant = getHomeAssistant(serverConfigNode);
-    const nodeEvents = new Events({ node: this, emitter: this });
     const state = new State(this);
     const status = new Status({
         config: serverConfigNode.config,
-        nodeEvents,
         node: this,
-        state,
     });
 
     const controllerDeps = createControllerDependencies(this, homeAssistant);

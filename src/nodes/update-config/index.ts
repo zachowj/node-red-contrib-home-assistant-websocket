@@ -1,9 +1,7 @@
 import Joi from 'joi';
 
 import { createControllerDependencies } from '../../common/controllers/helpers';
-import Events from '../../common/events/Events';
 import InputService, { NodeInputs } from '../../common/services/InputService';
-import State from '../../common/State';
 import Status from '../../common/status/Status';
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
@@ -61,13 +59,9 @@ export default function UpdateConfig(
 
     const { entityConfigNode, serverConfigNode } = getConfigNodes(this);
     const homeAssistant = getHomeAssistant(serverConfigNode);
-    const nodeEvents = new Events({ node: this, emitter: this });
-    const state = new State(this);
     const status = new Status({
         config: serverConfigNode.config,
-        nodeEvents,
         node: this,
-        state,
     });
     const controllerDeps = createControllerDependencies(this, homeAssistant);
     const inputService = new InputService<UpdateConfigNodeProperties>({
