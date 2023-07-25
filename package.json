@@ -79,7 +79,7 @@
     "@types/express": "4.17.13",
     "@types/flat": "5.0.2",
     "@types/geolib": "2.0.23",
-    "@types/jquery": "3.5.14",
+    "@types/jquery": "3.5.16",
     "@types/jqueryui": "1.12.16",
     "@types/lodash.clonedeep": "4.5.7",
     "@types/lodash.merge": "4.6.7",
