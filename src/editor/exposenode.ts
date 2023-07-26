@@ -1,6 +1,6 @@
 import { EditorRED } from 'node-red';
 
-import { NodeType } from '../const';
+import { NO_VERSION, NodeType } from '../const';
 import { HassExposedConfig, HassNodeProperties } from './types';
 import * as haUtils from './utils';
 
@@ -44,19 +44,16 @@ function getServerId(): string | undefined {
 function getIntegrationVersion(): string {
     const serverId = getServerId();
 
-    if (serverId && version && version[serverId] && version[serverId] !== '0') {
+    if (serverId) {
         return version[serverId];
     }
 
-    return '0';
+    return NO_VERSION;
 }
 
 export function isIntegrationLoaded() {
-    const serverId = getServerId();
-
-    if (serverId && version[serverId] && version[serverId] !== '0') {
-        return true;
-    }
+    return getIntegrationVersion() !== NO_VERSION;
+}
 
     return false;
 }
