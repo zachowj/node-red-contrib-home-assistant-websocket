@@ -38,6 +38,7 @@ import {
     INTEGRATION_LOADED,
     INTEGRATION_NOT_LOADED,
     INTEGRATION_UNLOADED,
+    NO_VERSION,
     STATE_CONNECTED,
     STATE_CONNECTING,
     STATE_DISCONNECTED,
@@ -115,7 +116,7 @@ export default class Websocket {
     devices: HassDevices = [];
     entities: HassEntityRegistryEntry[] = [];
     connectionState = STATE_DISCONNECTED;
-    integrationVersion: string | number = 0;
+    integrationVersion = NO_VERSION;
     isHomeAssistantRunning = false;
     states: HassEntities = {};
     services: HassServices = {};
@@ -294,7 +295,7 @@ export default class Websocket {
         if (!this.isHomeAssistantRunning) {
             this.isHomeAssistantRunning = true;
             this.#emitEvent('ha_client:running');
-            if (this.integrationVersion === 0) {
+            if (this.integrationVersion === NO_VERSION) {
                 this.createIntegrationEvent(INTEGRATION_NOT_LOADED);
             }
         }
@@ -307,7 +308,7 @@ export default class Websocket {
                 this.integrationVersion = evt.data.version;
                 break;
             case INTEGRATION_UNLOADED:
-                this.integrationVersion = 0;
+                this.integrationVersion = NO_VERSION;
                 break;
             case INTEGRATION_NOT_LOADED:
                 this.#emitEvent(INTEGRATION_EVENT, evt.data.type);
@@ -477,7 +478,7 @@ export default class Websocket {
     async onClientConfigUpdate(config: HassConfig): Promise<void> {
         if (
             config.components.includes('nodered') &&
-            this.integrationVersion === 0
+            this.integrationVersion === NO_VERSION
         ) {
             try {
                 const version = await this.getIntegrationVersion();
@@ -521,7 +522,7 @@ export default class Websocket {
 
     onClientOpen(): void {
         this.onStatesLoadedAndRunning();
-        this.integrationVersion = 0;
+        this.integrationVersion = NO_VERSION;
         this.isHomeAssistantRunning = false;
         this.connectionState = STATE_CONNECTED;
         if (this.#config.heartbeatInterval) {
@@ -556,7 +557,7 @@ export default class Websocket {
     }
 
     resetClient(): void {
-        this.integrationVersion = 0;
+        this.integrationVersion = NO_VERSION;
         this.isHomeAssistantRunning = false;
         this.#servicesLoaded = false;
         this.#statesLoaded = false;

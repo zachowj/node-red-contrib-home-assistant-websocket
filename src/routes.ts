@@ -2,6 +2,7 @@ import bonjour from 'bonjour';
 import { NextFunction, Request, Response } from 'express';
 import flatten from 'flat';
 
+import { NO_VERSION } from './const';
 import { RED } from './globals';
 import { getServerConfigNode } from './helpers/node';
 import { Credentials, getHomeAssistant } from './homeAssistant';
@@ -215,9 +216,9 @@ async function getTranslations(
 }
 
 function getIntegrationVersion(req: CustomRequest, res: Response): void {
-    const data = { version: req?.homeAssistant?.integrationVersion ?? 0 };
-
-    res.json(data);
+    res.json({
+        version: req?.homeAssistant?.integrationVersion ?? NO_VERSION,
+    });
 }
 
 function findServers(req: CustomRequest, res: Response): void {

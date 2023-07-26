@@ -13,6 +13,7 @@ export const INTEGRATION_EVENT = 'integration';
 export const INTEGRATION_LOADED = 'loaded';
 export const INTEGRATION_NOT_LOADED = 'notloaded';
 export const INTEGRATION_UNLOADED = 'unloaded';
+export const NO_VERSION = '0.0.0';
 export const STATE_CONNECTING = 0;
 export const STATE_CONNECTED = 1;
 export const STATE_DISCONNECTED = 2;
