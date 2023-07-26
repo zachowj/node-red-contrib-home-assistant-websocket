@@ -58,7 +58,6 @@ export default function sentenceNode(
         node: this,
         status,
         ...controllerDeps,
-        state,
     });
 
     nodeEvents.addListener(

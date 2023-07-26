@@ -12,20 +12,17 @@ import {
 import { NodeEvent } from '../events/Events';
 import NodeRedContextService from '../services/NodeRedContextService';
 import TypedInputService from '../services/TypedInputService';
-import State from '../State';
 import Status from '../status/Status';
 
 export interface OutputControllerConstructor<T extends BaseNode> {
     nodeRedContextService: NodeRedContextService;
     node: T;
     status: Status;
-    state?: State;
     typedInputService: TypedInputService;
 }
 
 // export default abstract class OutputController<T extends BaseNode> {
 export default abstract class OutputController<T extends BaseNode = BaseNode> {
-    protected readonly state?: State;
     protected readonly contextService: NodeRedContextService;
     protected readonly node: T;
     protected readonly status: Status;
@@ -34,13 +31,11 @@ export default abstract class OutputController<T extends BaseNode = BaseNode> {
     constructor({
         nodeRedContextService,
         node,
-        state,
         status,
         typedInputService,
     }: OutputControllerConstructor<T>) {
         this.contextService = nodeRedContextService;
         this.node = node;
-        this.state = state;
         this.status = status;
         this.typedInputService = typedInputService;
 
@@ -51,10 +46,6 @@ export default abstract class OutputController<T extends BaseNode = BaseNode> {
     }
 
     protected onClose?(removed: boolean): void;
-
-    protected setEnabled(value: boolean) {
-        this.state?.setEnabled(value);
-    }
 
     protected sendSplit(
         message: Partial<NodeMessageInFlow>,

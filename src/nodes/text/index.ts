@@ -4,7 +4,6 @@ import { createControllerDependencies } from '../../common/controllers/helpers';
 import Events from '../../common/events/Events';
 import { IntegrationEvent } from '../../common/integration/Integration';
 import InputService, { NodeInputs } from '../../common/services/InputService';
-import State from '../../common/State';
 import Status from '../../common/status/Status';
 import { TypedInputTypes, ValueIntegrationMode } from '../../const';
 import { RED } from '../../globals';
@@ -61,7 +60,6 @@ export default function textNode(this: TextNode, config: TextNodeProperties) {
 
     const { entityConfigNode, serverConfigNode } = getConfigNodes(this);
     const homeAssistant = getHomeAssistant(serverConfigNode);
-    const state = new State(this);
     const status = new Status({
         config: serverConfigNode.config,
         node: this,
@@ -81,7 +79,6 @@ export default function textNode(this: TextNode, config: TextNodeProperties) {
         node: this,
         status,
         ...controllerDeps,
-        state,
     });
 
     if (this.config.mode === ValueIntegrationMode.Listen) {

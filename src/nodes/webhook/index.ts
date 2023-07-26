@@ -63,7 +63,6 @@ export default function webhookNode(
         node: this,
         status,
         ...controllerDeps,
-        state,
     });
 
     nodeEvents.addListener(
