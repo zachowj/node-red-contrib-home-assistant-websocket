@@ -2,6 +2,7 @@ import Debug from 'debug';
 import { EventEmitter } from 'events';
 import { HassEntities } from 'home-assistant-js-websocket';
 
+import { NO_VERSION } from '../const';
 import { HassTags } from '../types/home-assistant';
 import httpAPI from './Http';
 import websocketAPI, { ClientState } from './Websocket';
@@ -64,12 +65,12 @@ export default class HomeAssistant {
         return this.isConnected && this.websocket.isHomeAssistantRunning;
     }
 
-    get integrationVersion(): string | number {
+    get integrationVersion(): string {
         return this.websocket.integrationVersion;
     }
 
     get isIntegrationLoaded(): boolean {
-        return this.integrationVersion !== 0;
+        return this.integrationVersion !== NO_VERSION;
     }
 
     get connectionState(): number {
@@ -78,7 +79,7 @@ export default class HomeAssistant {
 
     get version(): string {
         const client = this?.websocket?.client;
-        return client?.haVersion ?? '0.0.0';
+        return client?.haVersion ?? NO_VERSION;
     }
 
     // TODO: remove after typescript conversion done
