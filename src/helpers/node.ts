@@ -71,6 +71,12 @@ export function getConfigNodes(node: EntityNode) {
     };
 }
 
+export function getExposeAsConfigNode(
+    nodeId?: string
+): EntityConfigNode | undefined {
+    return getNode<EntityConfigNode>(nodeId) as EntityConfigNode;
+}
+
 function isConfigNode(node: BaseNode | EntityNode): boolean {
     return (
         node.type === NodeType.DeviceConfig ||
