@@ -1,27 +1,30 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
-import { NodeType } from '../../const';
+import { EntityType, NodeType, TAGS_ALL } from '../../const';
 import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import {
     EditorWidgetEditableListOptions,
-    HassExposedConfig,
     OutputProperty,
 } from '../../editor/types';
 import { HassTag } from '../../types/home-assistant';
+import { saveEntityType } from '../entity-config/editor/helpers';
 
 declare const RED: EditorRED;
 
 interface TagEditorNodeProperties extends EditorNodeProperties {
     server: string;
     version: number;
-    exposeToHomeAssistant: boolean;
-    haConfig: HassExposedConfig[];
     tags: string[];
     devices?: string[];
     outputProperties: OutputProperty[];
+    exposeAsEntityConfig: string;
+
+    // deprecated
+    exposeToHomeAssistant: undefined;
+    haConfig: undefined;
 }
 
 const TagEditor: EditorNodeDef<TagEditorNodeProperties> = {
@@ -38,12 +41,12 @@ const TagEditor: EditorNodeDef<TagEditorNodeProperties> = {
         name: { value: '' },
         server: { value: '', type: NodeType.Server, required: true },
         version: { value: RED.settings.get('haTagVersion', 0) },
-        exposeToHomeAssistant: { value: false },
-        haConfig: {
-            value: [
-                { property: 'name', value: '' },
-                { property: 'icon', value: '' },
-            ],
+        exposeAsEntityConfig: {
+            value: '',
+            type: NodeType.EntityConfig,
+            // @ts-ignore - DefinitelyTyped is missing this property
+            filter: (config) => config.entityType === EntityType.Switch,
+            required: false,
         },
         tags: {
             value: [''],
@@ -72,23 +75,28 @@ const TagEditor: EditorNodeDef<TagEditorNodeProperties> = {
             ],
             validate: haOutputs.validate,
         },
+
+        // deprecated but still needed for imports of old flows
+        exposeToHomeAssistant: { value: undefined },
+        haConfig: { value: undefined },
     },
     oneditprepare: function () {
         ha.setup(this);
         exposeNode.init(this);
-        const ALL_TAGS = '__ALL_TAGS__';
         const $tags = $('#tags');
         const $devices = $('#devices');
         let tags: HassTag[] = [];
         const i18n = this._;
+
+        saveEntityType(EntityType.Switch, 'exposeAsEntityConfig');
 
         const buildSelect = (row: JQuery<HTMLElement>, data: string) => {
             const $select = $('<select>', { width: '70%' })
                 .append(
                     $('<option>')
                         .attr({
-                            value: ALL_TAGS,
-                            selected: data === ALL_TAGS,
+                            value: TAGS_ALL,
+                            selected: data === TAGS_ALL,
                         })
                         .text(i18n('ha-tag.label.all_tags'))
                 )
@@ -118,6 +126,7 @@ const TagEditor: EditorNodeDef<TagEditorNodeProperties> = {
 
             buttons: [
                 {
+                    id: 'ha-tag-update-tag-list',
                     label: i18n('ha-tag.label.update_tag_list'),
                     icon: 'fa fa-refresh',
                     click: () => {
@@ -127,7 +136,11 @@ const TagEditor: EditorNodeDef<TagEditorNodeProperties> = {
                     },
                 },
             ],
-        } as EditorWidgetEditableListOptions<string>);
+        } as unknown as EditorWidgetEditableListOptions<string>);
+        // Move update button to the right
+        $('#ha-tag-update-tag-list')
+            .css('float', 'right')
+            .css('margin-right', 'unset');
 
         const tagCountUpdate = () => {
             $('#no-tags-found').toggle(tags.length === 0);
@@ -150,7 +163,7 @@ const TagEditor: EditorNodeDef<TagEditorNodeProperties> = {
             });
             // Filter out tags that no longer exists
             const list = Array.from(currentTagData).filter((item) => {
-                if (item === ALL_TAGS) {
+                if (item === TAGS_ALL) {
                     return true;
                 }
 
@@ -218,7 +231,6 @@ const TagEditor: EditorNodeDef<TagEditorNodeProperties> = {
         this.tags = Array.from(tags);
         this.devices = Array.from(devices);
         this.outputProperties = haOutputs.getOutputs();
-        this.haConfig = exposeNode.getValues();
     },
 };
 
