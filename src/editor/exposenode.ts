@@ -17,10 +17,14 @@ export function updateIntegration(topic: string, msg: any) {
 
 function isEntityNode() {
     const nodes = [
-        NodeType.Button,
         NodeType.BinarySensor,
+        NodeType.Button,
+        NodeType.Number,
+        NodeType.Select,
         NodeType.Sensor,
         NodeType.Switch,
+        NodeType.Text,
+        NodeType.TimeEntity,
     ];
     return node?.type && nodes.includes(node.type);
 }
@@ -55,115 +59,76 @@ export function isIntegrationLoaded() {
     return getIntegrationVersion() !== NO_VERSION;
 }
 
-    return false;
+function isAddNodeSelected(selector: 'entityConfig' | 'server') {
+    return $(`#node-input-${selector}`).val() === '_ADD_';
 }
 
 export function init(n: HassNodeProperties) {
     node = n;
+    const type = node.type as unknown as NodeType;
     render();
 
     $('#node-input-server, #node-input-entityConfig').on('change', () => {
-        switch (node.type as unknown) {
+        switch (type) {
             case NodeType.BinarySensor:
+            case NodeType.Button:
+            case NodeType.Number:
+            case NodeType.Select:
             case NodeType.Sensor:
             case NodeType.Switch:
-                if ($('#node-input-entityConfig').val() !== '_ADD_') {
-                    renderAlert('1.1.0');
-                }
-                break;
-            case NodeType.Button:
-                if ($('#node-input-entityConfig').val() !== '_ADD_') {
-                    renderAlert('1.0.4');
+            case NodeType.Text:
+            case NodeType.TimeEntity:
+                if (!isAddNodeSelected('entityConfig')) {
+                    renderAlert(type);
                 }
                 break;
             case NodeType.Device:
-                renderAlert('0.5.0');
-                break;
-            case NodeType.Entity:
-                renderAlert();
-                break;
-            case NodeType.Number:
-            case NodeType.Text:
-                if ($('#node-input-entityConfig').val() !== '_ADD_') {
-                    renderAlert('1.3.0');
-                }
-                break;
-            case NodeType.TimeEntity:
-                if ($('#node-input-entityConfig').val() !== '_ADD_') {
-                    renderAlert('2.1.0');
-                }
-                break;
-            case NodeType.Select:
-                if ($('#node-input-entityConfig').val() !== '_ADD_') {
-                    renderAlert('1.4.0');
-                }
+                renderAlert(type);
                 break;
             case NodeType.Sentence:
-                if ($('#node-input-server').val() !== '_ADD_') {
-                    renderAlert('2.0.0');
-                }
-                break;
             case NodeType.Webhook:
-                if ($('#node-input-server').val() !== '_ADD_') {
-                    renderAlert('1.6.0');
+                if (!isAddNodeSelected('server')) {
+                    renderAlert(type);
                 }
                 break;
+            case NodeType.Tag:
             default:
-                toggleExpose();
+                toggleExposeAs();
                 break;
         }
     });
 }
 
 function render() {
-    switch (node.type as unknown) {
-        case NodeType.Button:
-            if ($('#node-input-entityConfig').val() !== '_ADD_') {
-                renderAlert('1.0.4');
-            }
-            break;
+    const type = node.type as unknown as NodeType;
+
+    switch (type) {
         case NodeType.BinarySensor:
+        case NodeType.Button:
+        case NodeType.Number:
+        case NodeType.Select:
         case NodeType.Sensor:
         case NodeType.Switch:
-            if ($('#node-input-entityConfig').val() !== '_ADD_') {
-                renderAlert('1.1.0');
-            }
-            break;
-        case NodeType.Entity:
-            renderAlert();
-            break;
-        case NodeType.Number:
         case NodeType.Text:
-            if ($('#node-input-entityConfig').val() !== '_ADD_') {
-                renderAlert('1.3.0');
-            }
-            break;
-        case NodeType.Select:
-            if ($('#node-input-entityConfig').val() !== '_ADD_') {
-                renderAlert('1.4.0');
+        case NodeType.TimeEntity:
+            if (!isAddNodeSelected('entityConfig')) {
+                renderAlert(type);
             }
             break;
         case NodeType.Sentence:
-            if ($('#node-input-server').val() !== '_ADD_') {
-                renderAlert('2.0.0');
-            }
-            break;
-        case NodeType.TimeEntity:
-            if ($('#node-input-entityConfig').val() !== '_ADD_') {
-                renderAlert('2.1.0');
-            }
-            break;
         case NodeType.Webhook:
-            if ($('#node-input-server').val() !== '_ADD_') {
-                renderAlert('1.6.0');
+            if (!isAddNodeSelected('server')) {
+                renderAlert(type);
             }
             break;
-
+        case NodeType.Tag:
+            break;
         default:
             renderEventNode();
     }
 }
 
+// TODO: Can be removed when all nodes are migrated to Typescript
 function renderEventNode() {
     const $row = $('<div />', {
         id: 'exposeToHa',
@@ -244,7 +209,23 @@ export function getValues() {
     return arr;
 }
 
-function renderAlert(minVersion?: string) {
+const NodeMinIntegraionVersion = {
+    [NodeType.BinarySensor]: '1.1.0',
+    [NodeType.Button]: '1.0.4',
+    [NodeType.Device]: '0.5.0',
+    [NodeType.Number]: '1.3.0',
+    [NodeType.Select]: '1.4.0',
+    [NodeType.Sentence]: '2.0.0',
+    [NodeType.Sensor]: '1.1.0',
+    [NodeType.Switch]: '1.1.0',
+    [NodeType.Tag]: '0.5.0',
+    [NodeType.Text]: '1.3.0',
+    [NodeType.TimeEntity]: '2.1.0',
+    [NodeType.Webhook]: '1.6.0',
+} as const;
+
+function renderAlert(type: NodeType) {
+    const minVersion = NodeMinIntegraionVersion[type];
     const satisfiesVersion =
         minVersion === undefined ||
         haUtils.compareVersion(minVersion, getIntegrationVersion());
@@ -252,7 +233,6 @@ function renderAlert(minVersion?: string) {
     if (!$('#integrationAlert').length) {
         const alertText = `
             <div id="integrationAlert" class="ui-state-error ha-alert-box">
-                <strong>Attention:</strong> 
                 This node requires <a href="https://github.com/zachowj/hass-node-red" target="_blank">Node-RED custom integration ${
                     satisfiesVersion ? '' : `version ${minVersion}+`
                 } <i class="fa fa-external-link external-link"></i></a> to be installed in Home Assistant for it to function.
@@ -262,7 +242,13 @@ function renderAlert(minVersion?: string) {
     $('#integrationAlert').toggle(!integartionValid);
 }
 
-function toggleExpose() {
+// TODO: Can be removed when all nodes are migrated to Typescript
+function toggleExposeAs() {
+    $('#node-input-exposeAsEntityConfig')
+        .closest('div.form-row')
+        .toggle(isIntegrationLoaded());
+
+    // TODO: remove after typescript conversion done
     if (!isIntegrationLoaded()) {
         $('#node-input-exposeToHomeAssistant')
             .prop('checked', false)
