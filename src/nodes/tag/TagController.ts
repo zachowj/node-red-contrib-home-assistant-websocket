@@ -1,19 +1,11 @@
 import cloneDeep from 'lodash.clonedeep';
 
-import ExposeAsController, {
-    ExposeAsControllerConstructor,
-} from '../../common/controllers/EposeAsController';
+import ExposeAsController from '../../common/controllers/EposeAsController';
 import { TriggerPayload } from '../../common/integration/BidirectionalEntityIntegration';
 import { TAGS_ALL } from '../../const';
-import HomeAssistant from '../../homeAssistant/HomeAssistant';
 import { HassEvent } from '../../types/home-assistant';
 import { NodeMessage } from '../../types/nodes';
 import { TagNode } from '.';
-
-interface TagControllerConstructor
-    extends ExposeAsControllerConstructor<TagNode> {
-    homeAssistant: HomeAssistant;
-}
 
 interface HassTagScannedEvent extends HassEvent {
     event: {
@@ -23,13 +15,6 @@ interface HassTagScannedEvent extends HassEvent {
 }
 
 export default class TagController extends ExposeAsController<TagNode> {
-    #homeAssistant: HomeAssistant;
-
-    constructor(props: TagControllerConstructor) {
-        super(props);
-        this.#homeAssistant = props.homeAssistant;
-    }
-
     #isValidTag(tag: string): boolean {
         return this.node.config.tags.some((t) => {
             return t === TAGS_ALL || t === tag;
@@ -42,7 +27,7 @@ export default class TagController extends ExposeAsController<TagNode> {
     }
 
     #getTagName(tagId: string): string | undefined {
-        return this.#homeAssistant.getTags().find((tag) => tag.tag_id === tagId)
+        return this.homeAssistant.getTags().find((tag) => tag.tag_id === tagId)
             ?.name;
     }
 
