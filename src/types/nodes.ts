@@ -68,8 +68,9 @@ export interface BaseNodeConfig extends NodeProperties {
     debugenabled?: boolean;
     server?: string;
     entityConfigNode?: string;
-    exposeToHomeAssistant?: boolean;
     outputs?: number;
+    // TODO: Can be removed when controllers are converted to TypeScript
+    exposeToHomeAssistant?: boolean;
 }
 
 export interface BaseNode extends Node {

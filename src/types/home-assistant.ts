@@ -88,6 +88,13 @@ export type HassEntity = Omit<HomeAssistantEntity, 'state'> & {
     timeSinceChangedMs: number;
 };
 
+export type HassEvent = HassEventBase & {
+    event_type: string;
+    event: {
+        [key: string]: any;
+    };
+};
+
 export type HassStateChangedEvent = HassEventBase & {
     event_type: string;
     entity_id: string;

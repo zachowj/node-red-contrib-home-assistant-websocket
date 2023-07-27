@@ -191,9 +191,14 @@ export const createRow = (
     return $row;
 };
 
-export const saveEntityType = (type: EntityType) => {
-    $('#node-input-lookup-entityConfig').on('click', function () {
-        if ($('#node-input-entityConfig').val() === '_ADD_') {
+type EntityTypeSelector = 'entityConfig' | 'exposeAsEntityConfig';
+
+export const saveEntityType = (
+    type: EntityType,
+    selector: EntityTypeSelector = 'entityConfig'
+) => {
+    $(`#node-input-lookup-${selector}`).on('click', function () {
+        if ($(`#node-input-${selector}`).val() === '_ADD_') {
             $('body').data('haEntityType', type);
         }
     });

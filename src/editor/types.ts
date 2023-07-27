@@ -40,9 +40,11 @@ export interface HassNodeProperties
     debugenabled?: boolean;
     server?: string;
     entityConfigNode?: string;
-    exposeToHomeAssistant?: boolean;
     outputs?: number | undefined;
     haConfig?: HassExposedConfig[];
+
+    // TODO: remove after controllers are converted to TypeScript
+    exposeToHomeAssistant?: boolean;
 }
 
 export interface HassTargetDomains {
