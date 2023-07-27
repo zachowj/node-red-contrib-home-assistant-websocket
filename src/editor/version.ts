@@ -2,7 +2,11 @@ import { EditorNodeInstance, EditorRED } from 'node-red';
 
 import { NodeType } from '../const';
 import { migrate } from '../helpers/migrate';
-import { convertEntityNode, EntityProperties } from './convert-entity';
+import {
+    convertEntityNode,
+    convertEventNode,
+    EntityProperties,
+} from './convert-entity';
 import { i18n } from './i18n';
 import { HassNodeProperties } from './types';
 
@@ -29,6 +33,8 @@ export function versionCheckOnEditPrepare(
 ) {
     if (!isHomeAssistantNode(node) || isCurrentVersion(node)) return;
 
+    node = migrateNode(node);
+
     // the close event will not fire if the editor was already opened
     if (!isHomeAssistantConfigNode(node)) {
         RED.events.on('editor:close', function reopen() {
@@ -36,18 +42,30 @@ export function versionCheckOnEditPrepare(
             RED.editor.edit(node);
         });
     }
-    migrateNode(node);
+
     RED.nodes.dirty(true);
     RED.tray.close();
     RED.notify(i18n('home-assistant.ui.migrations.node_schema_updated'));
 }
 
+const exposedEventNodes: NodeType[] = [];
+
 function migrateNode(node: EditorNodeInstance<HassNodeProperties>) {
-    const data = RED.nodes.convertNode(node, false);
+    let data = RED.nodes.convertNode(node, false);
+
+    // TODO: Remove for version 1.0
+    if (
+        exposedEventNodes.includes(node.type as unknown as NodeType) &&
+        node.exposeToHomeAssistant === true
+    ) {
+        const newId = convertEventNode(data as unknown as EntityProperties);
+        node = RED.nodes.node(newId) as EditorNodeInstance<HassNodeProperties>;
+        data = RED.nodes.convertNode(node, false);
+    }
 
     const migratedData: HassNodeProperties = migrate(data);
 
-    // TODO: Can be removed after ha-entity is removed
+    // TODO: Remove for version 1.0
     if (migratedData.type === NodeType.Entity) {
         convertEntityNode(migratedData as unknown as EntityProperties);
     }
@@ -70,6 +88,8 @@ function migrateNode(node: EditorNodeInstance<HassNodeProperties>) {
     if ($upgradeHaNode.is(':visible') && getOldNodeCount() === 0) {
         $upgradeHaNode.hide();
     }
+
+    return node;
 }
 
 function migrateAllNodes() {
