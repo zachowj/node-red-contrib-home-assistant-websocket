@@ -33,6 +33,13 @@ const VERSION_1 = {
         },
     ],
 };
+const VERSION_2 = {
+    ...VERSION_1,
+    version: 2,
+    exposeAsEntityConfig: '',
+    exposeToHomeAssistant: undefined,
+    haConfig: undefined,
+};
 
 describe('Migrations - Tag Node', function () {
     describe('Version 0', function () {
@@ -49,8 +56,15 @@ describe('Migrations - Tag Node', function () {
             expect(migratedSchema).to.eql(VERSION_1);
         });
     });
+    describe('Version 2', function () {
+        it('should update version 0 to version 2', function () {
+            const migrate = migrations.find((m) => m.version === 2);
+            const migratedSchema = migrate.up(VERSION_1);
+            expect(migratedSchema).to.eql(VERSION_2);
+        });
+    });
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_1);
+        expect(migratedSchema).to.eql(VERSION_2);
     });
 });
