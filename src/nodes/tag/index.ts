@@ -1,6 +1,5 @@
 import { createControllerDependencies } from '../../common/controllers/helpers';
 import ClientEvents from '../../common/events/ClientEvents';
-import Events from '../../common/events/Events';
 import EventsStatus from '../../common/status/EventStatus';
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
@@ -45,6 +44,7 @@ export default function tagNode(this: TagNode, config: TagNodeProperties) {
         node: this,
     });
     clientEvents.setStatus(status);
+    exposeAsConfigNode?.integration.setStatus(status);
     const controllerDeps = createControllerDependencies(this, homeAssistant);
 
     const controller = new TagController({
@@ -59,16 +59,4 @@ export default function tagNode(this: TagNode, config: TagNodeProperties) {
         HaEvent.TagScanned,
         controller.onTagScanned.bind(controller)
     );
-
-    if (exposeAsConfigNode) {
-        exposeAsConfigNode.integration.setStatus(status);
-        const exposeAsConfigEvents = new Events({
-            node: this,
-            emitter: exposeAsConfigNode,
-        });
-        exposeAsConfigEvents.addListener(
-            HaEvent.AutomationTriggered,
-            controller.onTriggered.bind(controller)
-        );
-    }
 }
