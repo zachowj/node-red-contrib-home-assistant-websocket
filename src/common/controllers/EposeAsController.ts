@@ -46,7 +46,7 @@ export default abstract class ExposeAsController<
     }
 
     get isEnabled(): boolean {
-        return this.exposeAsConfigNode?.state?.isEnabled() ?? false;
+        return this.exposeAsConfigNode?.state?.isEnabled() ?? true;
     }
 
     protected async validateTriggerMessage(

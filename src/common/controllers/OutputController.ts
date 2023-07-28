@@ -10,6 +10,7 @@ import {
     OutputProperty,
 } from '../../types/nodes';
 import { NodeEvent } from '../events/Events';
+import JSONataService from '../services/JSONataService';
 import NodeRedContextService from '../services/NodeRedContextService';
 import TypedInputService from '../services/TypedInputService';
 import Status from '../status/Status';
@@ -19,11 +20,13 @@ export interface OutputControllerConstructor<T extends BaseNode> {
     node: T;
     status: Status;
     typedInputService: TypedInputService;
+    jsonataService: JSONataService;
 }
 
 // export default abstract class OutputController<T extends BaseNode> {
 export default abstract class OutputController<T extends BaseNode = BaseNode> {
     protected readonly contextService: NodeRedContextService;
+    protected readonly jsonataService: JSONataService;
     protected readonly node: T;
     protected readonly status: Status;
     protected readonly typedInputService: TypedInputService;
@@ -31,10 +34,12 @@ export default abstract class OutputController<T extends BaseNode = BaseNode> {
     constructor({
         nodeRedContextService,
         node,
+        jsonataService,
         status,
         typedInputService,
     }: OutputControllerConstructor<T>) {
         this.contextService = nodeRedContextService;
+        this.jsonataService = jsonataService;
         this.node = node;
         this.status = status;
         this.typedInputService = typedInputService;
