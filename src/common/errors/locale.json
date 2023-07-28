@@ -9,6 +9,7 @@
       "invalid_state": "Invalid state",
       "no_connection": "No connection to Home Assistant",
       "pattern_not_matched": "Pattern not matched",
+      "unknown_error": "Unknown error",
       "user_not_admin": "User required to have admin privileges in Home Assistant"
     }
   }

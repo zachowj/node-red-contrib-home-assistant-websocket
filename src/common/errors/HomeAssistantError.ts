@@ -1,4 +1,4 @@
-import { RED } from '../../globals';
+import BaseError, { BaseErrorData } from './BaseError';
 
 interface HaError {
     code: string;
@@ -9,15 +9,12 @@ export function isHomeAssistantApiError(error: any): error is HaError {
     return error.code !== undefined && error.message !== undefined;
 }
 
-export default class HomeAssistantError extends Error {
-    readonly #statusMessage: string;
-
-    constructor(
-        haError: HaError,
-        statusMessage = 'home-assistant.error.error'
-    ) {
-        super(haError.message);
-        this.name = 'HomeAssistantError';
-        this.#statusMessage = RED._(statusMessage);
+export default class HomeAssistantError extends BaseError {
+    constructor(haError: HaError, statusMessage?: BaseErrorData) {
+        super({
+            data: haError.message,
+            statusMessage,
+            name: 'HomeAssistantError',
+        });
     }
 }

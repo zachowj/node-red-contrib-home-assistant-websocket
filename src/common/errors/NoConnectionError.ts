@@ -1,11 +1,12 @@
-import BaseError from './BaseError';
+import BaseError, { BaseErrorData } from './BaseError';
 
 export default class NoConnectionError extends BaseError {
-    constructor(
-        message = 'home-assistant.error.no_connection',
-        statusMessage = 'home-assistant.status.no_connection'
-    ) {
-        super(message, statusMessage);
-        this.name = 'NoConnectionError';
+    constructor(data?: BaseErrorData, statusMessage?: BaseErrorData) {
+        super({
+            data,
+            statusMessage,
+            name: 'NoConnectionError',
+            defaultStatusMessage: 'home-assistant.status.no_connection',
+        });
     }
 }
