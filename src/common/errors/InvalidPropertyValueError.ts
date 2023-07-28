@@ -1,11 +1,11 @@
-import BaseError from './BaseError';
+import BaseError, { BaseErrorData } from './BaseError';
 
 export default class InvalidPropertyValueError extends BaseError {
-    constructor(
-        message: string,
-        statusMessage = 'home-assistant.status.error'
-    ) {
-        super(message, statusMessage);
-        this.name = 'InvalidPropertyValueError';
+    constructor(data: BaseErrorData, statusMessage?: BaseErrorData) {
+        super({
+            data,
+            statusMessage,
+            name: 'InvalidPropertyValueError',
+        });
     }
 }
