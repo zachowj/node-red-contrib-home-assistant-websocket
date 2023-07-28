@@ -51,23 +51,22 @@ export function versionCheckOnEditPrepare(
 const exposedEventNodes: NodeType[] = [NodeType.Tag];
 
 function migrateNode(node: EditorNodeInstance<HassNodeProperties>) {
-    let data = RED.nodes.convertNode(node, false);
+    const data = RED.nodes.convertNode(node, false) as HassNodeProperties;
 
     // TODO: Remove for version 1.0
-    if (
+    const haConfig =
         exposedEventNodes.includes(node.type as unknown as NodeType) &&
         node.exposeToHomeAssistant === true
-    ) {
-        const newId = convertEventNode(data as unknown as EntityProperties);
-        node = RED.nodes.node(newId) as EditorNodeInstance<HassNodeProperties>;
-        data = RED.nodes.convertNode(node, false);
-    }
+            ? data.haConfig
+            : undefined;
 
     const migratedData: HassNodeProperties = migrate(data);
 
     // TODO: Remove for version 1.0
     if (migratedData.type === NodeType.Entity) {
         convertEntityNode(migratedData as unknown as EntityProperties);
+    } else if (haConfig) {
+        convertEventNode(migratedData as unknown as EntityProperties, haConfig);
     }
 
     let key: keyof HassNodeProperties;
