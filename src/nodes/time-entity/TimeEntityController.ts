@@ -31,11 +31,10 @@ export default class TimeEntityController extends InputOutputController<
 
     // Handles input messages when the node is in "get" mode
     async #onInputModeGet({ done, message, send }: InputProperties) {
-        const value = this.#entityConfigNode?.state?.getLastPayload()?.state as
-            | string
-            | undefined;
-
-        this.status.setSuccess(value);
+        const value = this.#entityConfigNode?.state?.getLastPayload()
+            ?.state as string;
+        // inject value so colons are not removed
+        this.status.setSuccess(['__value__', { value }]);
         this.setCustomOutputs(this.node.config.outputProperties, message, {
             config: this.node.config,
             value,
@@ -167,6 +166,7 @@ export default class TimeEntityController extends InputOutputController<
             state: value,
             attributes: {},
         });
-        this.status.setSuccess(value);
+        // inject value so colons are not removed
+        this.status.setSuccess(['__value__', { value }]);
     }
 }
