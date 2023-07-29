@@ -18,11 +18,8 @@ export default abstract class BaseError extends Error {
         defaultStatusMessage,
     }: BaseErrorConstructor) {
         const [key, params] = Array.isArray(data) ? data : [data, undefined];
-        const message = key
-            ? RED._(key, params)
-            : RED._('home-assistant.error.unknown');
+        const message = key ? RED._(key, params) : undefined;
         super(message);
-        this.message = message;
         this.name = name ?? 'BaseError';
 
         // Set status message
