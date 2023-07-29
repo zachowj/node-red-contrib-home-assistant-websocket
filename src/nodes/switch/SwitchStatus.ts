@@ -6,7 +6,6 @@ import Status, {
     StatusConstructor,
     StatusShape,
 } from '../../common/status/Status';
-import { RED } from '../../globals';
 import { EntityConfigNode } from '../../nodes/entity-config';
 import { SwitchNode } from '../../nodes/switch';
 
@@ -46,7 +45,7 @@ export default class SwitchStatus extends Status<SwitchNode> {
     }
 
     protected onNodeStateChange() {
-        const status: NodeStatus = {
+        const status = {
             fill: StatusColor.Yellow,
             shape: this.#isSwitchOn ? StatusShape.Dot : StatusShape.Ring,
             text: this.#isSwitchOn
@@ -55,11 +54,11 @@ export default class SwitchStatus extends Status<SwitchNode> {
         };
         if (this.node.config.outputOnStateChange) {
             status.fill = StatusColor.Blue;
-            status.text = RED._('home-assistant.status.state_change');
+            status.text = 'home-assistant.status.state_change';
         }
-        if (status.text) {
-            status.text = this.appendDateString(status.text);
-        }
+
+        status.text = this.translatedText(status.text);
+
         this.updateStatus(status);
     }
 
