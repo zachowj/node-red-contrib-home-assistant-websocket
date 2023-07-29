@@ -29,8 +29,7 @@ export default abstract class BaseError extends Error {
         let [statusKey, statusParams] = Array.isArray(statusMessage)
             ? statusMessage
             : [statusMessage, undefined];
-        statusKey ??=
-            defaultStatusMessage ?? 'home-assistant.status.unknown_error';
+        statusKey ??= defaultStatusMessage ?? 'home-assistant.status.error';
 
         this.#statusMessage = RED._(statusKey, statusParams);
     }
