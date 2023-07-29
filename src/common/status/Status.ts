@@ -2,6 +2,7 @@ import { NodeStatus } from 'node-red';
 
 import { RED } from '../../globals';
 import { formatDate } from '../../helpers/date';
+import { i18nKeyandParams } from '../../types/i18n';
 import { BaseNode, ServerNodeConfig } from '../../types/nodes';
 import { getStatusOptions } from './helpers';
 
@@ -32,18 +33,24 @@ export default class Status<T extends BaseNode = BaseNode> {
         this.node = props.node;
     }
 
-    protected updateStatus(status: NodeStatus): void {
-        this.node.status(status);
-    }
-
-    protected appendDateString(text: string): string {
+    protected get dateString(): string {
         const separator = this.config?.statusSeparator ?? '';
-        const dateString = formatDate({
+        const date = formatDate({
             options: getStatusOptions(this.config),
         });
 
-        // Translate now because text is not translated in the template
-        return `${RED._(`${text}`)} ${separator}${dateString}`;
+        return `${separator}${date}`;
+    }
+
+    protected translatedText(data: i18nKeyandParams): string {
+        const [key, params] = Array.isArray(data) ? data : [data, undefined];
+        const message = RED._(key, params);
+
+        return `${message} ${this.dateString}`;
+    }
+
+    protected updateStatus(status: NodeStatus): void {
+        this.node.status(status);
     }
 
     public set(status: NodeStatus = {}): void {
@@ -54,27 +61,43 @@ export default class Status<T extends BaseNode = BaseNode> {
         this.set({ text });
     }
 
-    public setSuccess(text = 'home-assistant.status.success'): void {
-        this.set({
-            fill: StatusColor.Green,
-            shape: StatusShape.Dot,
-            text: this.appendDateString(text),
-        });
-    }
-
-    public setSending(text = 'home-assistant.status.sending'): void {
-        this.set({
-            fill: StatusColor.Yellow,
-            shape: StatusShape.Dot,
-            text: this.appendDateString(text),
-        });
-    }
-
-    public setFailed(text = 'home-assistant.status.failed'): void {
+    public setError(
+        text: i18nKeyandParams = 'home-assistant.status.error'
+    ): void {
         this.set({
             fill: StatusColor.Red,
             shape: StatusShape.Ring,
-            text: this.appendDateString(text),
+            text: this.translatedText(text),
+        });
+    }
+
+    public setFailed(
+        text: i18nKeyandParams = 'home-assistant.status.failed'
+    ): void {
+        this.set({
+            fill: StatusColor.Red,
+            shape: StatusShape.Ring,
+            text: this.translatedText(text),
+        });
+    }
+
+    public setSending(
+        text: i18nKeyandParams = 'home-assistant.status.sending'
+    ): void {
+        this.set({
+            fill: StatusColor.Yellow,
+            shape: StatusShape.Dot,
+            text: this.translatedText(text),
+        });
+    }
+
+    public setSuccess(
+        text: i18nKeyandParams = 'home-assistant.status.success'
+    ): void {
+        this.set({
+            fill: StatusColor.Green,
+            shape: StatusShape.Dot,
+            text: this.translatedText(text),
         });
     }
 }

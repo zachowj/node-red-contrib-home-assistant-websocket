@@ -1,4 +1,5 @@
-import BaseError, { BaseErrorData } from './BaseError';
+import { i18nKeyandParams } from '../../types/i18n';
+import BaseError from './BaseError';
 
 interface HaError {
     code: string;
@@ -10,7 +11,7 @@ export function isHomeAssistantApiError(error: any): error is HaError {
 }
 
 export default class HomeAssistantError extends BaseError {
-    constructor(haError: HaError, statusMessage?: BaseErrorData) {
+    constructor(haError: HaError, statusMessage?: i18nKeyandParams) {
         super({
             data: haError.message,
             statusMessage,
