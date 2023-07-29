@@ -1,12 +1,11 @@
 import { RED } from '../../globals';
+import { i18nKeyandParams } from '../../types/i18n';
 
-export type BaseErrorDataParams = Record<string, string | number>;
-export type BaseErrorData = string | [string, BaseErrorDataParams];
 export interface BaseErrorConstructor {
-    data?: BaseErrorData;
+    data?: i18nKeyandParams;
     defaultStatusMessage?: string;
     name?: string;
-    statusMessage?: BaseErrorData;
+    statusMessage?: i18nKeyandParams;
 }
 
 export default abstract class BaseError extends Error {

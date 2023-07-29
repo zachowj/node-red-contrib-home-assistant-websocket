@@ -1,7 +1,8 @@
-import BaseError, { BaseErrorData } from './BaseError';
+import { i18nKeyandParams } from '../../types/i18n';
+import BaseError from './BaseError';
 
 export default class InputError extends BaseError {
-    constructor(data: BaseErrorData, statusMessage?: BaseErrorData) {
+    constructor(data: i18nKeyandParams, statusMessage?: i18nKeyandParams) {
         super({
             data,
             statusMessage,
