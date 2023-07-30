@@ -49,6 +49,7 @@ export function versionCheckOnEditPrepare(
 }
 
 const exposedEventNodes: NodeType[] = [
+    NodeType.EventsAll,
     NodeType.EventsState,
     NodeType.Tag,
     NodeType.Time,

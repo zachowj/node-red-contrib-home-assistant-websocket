@@ -97,6 +97,7 @@ export enum ClientEvent {
     Error = 'ha_client:error',
     Integration = 'integration',
     Open = 'ha_client:open',
+    Ready = 'ha_client:ready',
     Running = 'ha_client:running',
     ServicesLoaded = 'ha_client:services_loaded',
     StatesLoaded = 'ha_client:states_loaded',
