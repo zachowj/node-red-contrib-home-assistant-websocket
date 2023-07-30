@@ -91,6 +91,7 @@ export function init(n: HassNodeProperties) {
                     renderAlert(type);
                 }
                 break;
+            case NodeType.EventsAll:
             case NodeType.Tag:
             default:
                 toggleExposeAs();
@@ -121,6 +122,7 @@ function render() {
                 renderAlert(type);
             }
             break;
+        case NodeType.EventsAll:
         case NodeType.Tag:
             break;
         default:

@@ -1,29 +1,28 @@
 import { EditorNodeDef, EditorRED } from 'node-red';
 
-import { NodeType } from '../../const';
+import { EntityType, NodeType } from '../../const';
 import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
-import {
-    HassExposedConfig,
-    HassNodeProperties,
-    OutputProperty,
-} from '../../editor/types';
+import { HassNodeProperties, OutputProperty } from '../../editor/types';
+import { saveEntityType } from '../entity-config/editor/helpers';
 
 declare const RED: EditorRED;
 
 interface EventsAllEditorNodeProperties extends HassNodeProperties {
     server: string;
     version: number;
+    exposeAsEntityConfig: string;
     eventType: string;
-    exposeToHomeAssistant: boolean;
     eventData: Record<string, unknown>;
-    haConfig: HassExposedConfig[];
     waitForRunning: boolean;
     outputProperties: OutputProperty[];
+
     // Deprecated
-    event_type: string;
+    exposeToHomeAssistant: undefined;
+    haConfig: undefined;
+    event_type: undefined;
 }
 
 const EventsAllEditor: EditorNodeDef<EventsAllEditorNodeProperties> = {
@@ -33,15 +32,15 @@ const EventsAllEditor: EditorNodeDef<EventsAllEditorNodeProperties> = {
         name: { value: '' },
         server: { value: '', type: NodeType.Server, required: true },
         version: { value: RED.settings.get('serverEventsVersion', 0) },
-        eventType: { value: '', required: false },
-        exposeToHomeAssistant: { value: false },
-        eventData: { value: '', required: false },
-        haConfig: {
-            value: [
-                { property: 'name', value: '' },
-                { property: 'icon', value: '' },
-            ],
+        exposeAsEntityConfig: {
+            value: '',
+            type: NodeType.EntityConfig,
+            // @ts-ignore - DefinitelyTyped is missing this property
+            filter: (config) => config.entityType === EntityType.Switch,
+            required: false,
         },
+        eventType: { value: '', required: false },
+        eventData: { value: '', required: false },
         waitForRunning: { value: true },
         outputProperties: {
             value: [
@@ -62,7 +61,9 @@ const EventsAllEditor: EditorNodeDef<EventsAllEditorNodeProperties> = {
         },
 
         // Deprecated
-        event_type: { value: '', required: false },
+        event_type: { value: undefined },
+        exposeToHomeAssistant: { value: undefined },
+        haConfig: { value: undefined },
     },
     inputs: 0,
     outputs: 1,
@@ -76,6 +77,7 @@ const EventsAllEditor: EditorNodeDef<EventsAllEditorNodeProperties> = {
         ha.setup(this);
         haServer.init(this, '#node-input-server');
         exposeNode.init(this);
+        saveEntityType(EntityType.Switch, 'exposeAsEntityConfig');
 
         $('#node-input-eventData')
             .on('change input', function () {
@@ -104,7 +106,6 @@ const EventsAllEditor: EditorNodeDef<EventsAllEditorNodeProperties> = {
         });
     },
     oneditsave: function () {
-        this.haConfig = exposeNode.getValues();
         this.outputProperties = haOutputs.getOutputs();
     },
 };

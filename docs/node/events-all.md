@@ -36,9 +36,9 @@ A JSON object that will be compared to the event data. If this JSON is a subset 
 
 What until Home Assistant has reported its state as `running` before outputting events. Client events will always output.
 
-### Expose to Home Assistant
+### Expose as
 
-- Type: `boolean`
+- Type: `entity config`
 
 Creates a switch within Home Assistant to enable/disable this node. This feature
 requires [Node-RED custom integration](https://github.com/zachowj/hass-node-red)
