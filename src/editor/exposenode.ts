@@ -91,6 +91,7 @@ export function init(n: HassNodeProperties) {
                     renderAlert(type);
                 }
                 break;
+            case NodeType.EventsAll:
             case NodeType.EventsState:
             case NodeType.Tag:
             case NodeType.Zone:
@@ -124,7 +125,6 @@ function render() {
                 renderAlert(type);
             }
             break;
-        case NodeType.EventsState:
         case NodeType.Tag:
         case NodeType.Zone:
         case NodeType.Time:
