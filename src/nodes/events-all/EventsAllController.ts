@@ -51,7 +51,10 @@ export default class EventsAll extends ExposeAsController<EventsAllNode> {
     }
 
     protected onTriggered(data: TriggerPayload): void {
-        console.log('onTriggered', data);
+        if (!this.isEnabled) return;
+
+        this.status.setSuccess('home-assistant.status.triggered');
+        this.node.send({ payload: data.payload });
     }
 
     public onHaEventsAll(evt: HassEvent) {
