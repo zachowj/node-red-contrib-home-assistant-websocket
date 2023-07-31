@@ -26,10 +26,10 @@ export function byPropertiesOf<T extends object>(sortBy: Array<sortArg<T>>) {
             const strings =
                 typeof aValue === 'string' && typeof bValue === 'string';
             const result = strings
-                ? aValue.localeCompare(bValue)
-                : a[key] < b[key]
+                ? (aValue as string).localeCompare(bValue as string)
+                : aValue < bValue
                 ? -1
-                : a[key] > b[key]
+                : aValue > bValue
                 ? 1
                 : 0;
 
