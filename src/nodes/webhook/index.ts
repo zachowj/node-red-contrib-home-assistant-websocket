@@ -49,6 +49,7 @@ export default function webhookNode(
         config: serverConfigNode.config,
         node: this,
     });
+    nodeEvents.setStatus(status);
 
     const controllerDeps = createControllerDependencies(this, homeAssistant);
     const integration = new WebhookIntegration({

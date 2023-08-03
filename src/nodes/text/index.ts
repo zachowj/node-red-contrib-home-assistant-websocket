@@ -86,7 +86,7 @@ export default function textNode(this: TextNode, config: TextNodeProperties) {
             node: this,
             emitter: entityConfigNode,
         });
-
+        entityConfigEvents.setStatus(status);
         entityConfigEvents.addListener(
             IntegrationEvent.ValueChange,
             controller.onValueChange.bind(controller)

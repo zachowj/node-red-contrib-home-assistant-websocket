@@ -11,19 +11,12 @@ interface WebhookResponse {
 export default class WebhookController extends OutputController<WebhookNode> {
     public onReceivedMessage(data: WebhookResponse) {
         const message: NodeMessage = {};
-        try {
-            this.setCustomOutputs(this.node.config.outputProperties, message, {
-                config: this.node.config,
-                data: data.payload,
-                headers: data.headers,
-                params: data.params,
-            });
-        } catch (e) {
-            this.node.error(e);
-            this.status.setFailed('error');
-            return;
-        }
-
+        this.setCustomOutputs(this.node.config.outputProperties, message, {
+            config: this.node.config,
+            data: data.payload,
+            headers: data.headers,
+            params: data.params,
+        });
         this.status.setSuccess('home-assistant.status.received');
         this.node.send(message);
     }

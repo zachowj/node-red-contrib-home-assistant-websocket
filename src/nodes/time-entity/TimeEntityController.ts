@@ -154,7 +154,6 @@ export default class TimeEntityController extends InputOutputController<
         value = this.#getFormattedValue(value);
 
         await this.integration?.updateHomeAssistant(value);
-        this.status.setSuccess(value);
         if (!previousValue) {
             previousValue = this.#entityConfigNode?.state?.getLastPayload()
                 ?.state as string | undefined;
@@ -168,5 +167,6 @@ export default class TimeEntityController extends InputOutputController<
             state: value,
             attributes: {},
         });
+        this.status.setSuccess(value);
     }
 }

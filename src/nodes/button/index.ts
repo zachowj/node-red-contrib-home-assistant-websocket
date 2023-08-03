@@ -37,6 +37,7 @@ export default function buttonNode(
         node: this,
         emitter: entityConfigNode,
     });
+    entityConfigEvents.setStatus(status);
     const controllerDeps = createControllerDependencies(this, homeAssistant);
 
     entityConfigNode.integration.setStatus(status);

@@ -1,9 +1,14 @@
 import EventEmitter from 'events';
+import Joi from 'joi';
 import { Node } from 'node-red';
 
+import { RED } from '../../globals';
 import { NodeDone } from '../../types/nodes';
+import BaseError from '../errors/BaseError';
+import JSONataError from '../errors/JSONataError';
+import Status from '../status/Status';
 
-export type EventHandler = (...args: any[]) => void;
+type EventHandler = (...args: any[]) => void | Promise<void>;
 export type EventsList = [string | symbol, EventHandler][];
 
 export enum NodeEvent {
@@ -14,6 +19,8 @@ export enum NodeEvent {
 
 export default class Events {
     #listeners: EventsList = [];
+    #status?: Status;
+
     protected readonly node;
     protected readonly emitter;
 
@@ -22,42 +29,75 @@ export default class Events {
         this.emitter = emitter;
         emitter.setMaxListeners(0);
 
-        node.on(NodeEvent.Close, this.onClose.bind(this));
+        node.on(NodeEvent.Close, this.#onClose.bind(this));
     }
 
-    onClose(_removed: boolean, done: NodeDone) {
+    #errorHandler(callback: EventHandler) {
+        return async (...args: any) => {
+            try {
+                // eslint-disable-next-line n/no-callback-literal
+                await callback(...args);
+            } catch (e) {
+                let statusMessage = RED._('home-assistant.status.error');
+                let error = e;
+                if (e instanceof Joi.ValidationError) {
+                    error = new JSONataError(e);
+                    statusMessage = RED._(
+                        'home-assistant.status.validation_error'
+                    );
+                } else if (e instanceof BaseError) {
+                    statusMessage = e.statusMessage;
+                } else if (typeof e === 'string') {
+                    error = new Error(e);
+                } else {
+                    error = new Error(
+                        `Unrecognised error ${JSON.stringify(e)}`
+                    );
+                }
+                this.node.error(error);
+                this.#status?.setFailed(statusMessage);
+            }
+        };
+    }
+
+    #onClose(_removed: boolean, done: NodeDone) {
         this.removeListeners();
         done();
     }
 
-    addListener(
+    public addListener(
         event: string | symbol,
         handler: EventHandler,
         options = { once: false }
     ): void {
-        this.#listeners.push([event, handler]);
+        this.#listeners.push([event, this.#errorHandler(handler)]);
 
         if (options.once === true) {
-            this.emitter.once(event, handler);
+            this.emitter.once(event, this.#errorHandler(handler));
         } else {
-            this.emitter.on(event, handler);
+            this.emitter.on(event, this.#errorHandler(handler));
         }
     }
 
-    addListeners(bind: any, eventsList: EventsList) {
+    public addListeners(bind: unknown, eventsList: EventsList) {
         eventsList.forEach(([event, handler]) => {
             this.addListener(event, handler.bind(bind));
         });
     }
 
-    removeListeners() {
+    public removeListeners() {
         this.#listeners.forEach(([event, handler]) => {
             this.emitter.removeListener(event, handler);
         });
         this.#listeners = [];
     }
 
-    emit(event: string | symbol, ...args: any[]): boolean {
+    // set status for error reporting
+    public setStatus(status: Status) {
+        this.#status = status;
+    }
+
+    public emit(event: string | symbol, ...args: unknown[]): boolean {
         return this.emitter.emit(event, ...args);
     }
 }
