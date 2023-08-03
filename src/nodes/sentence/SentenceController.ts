@@ -4,6 +4,7 @@ import { SentenceNode } from '.';
 
 interface SentenceResponse {
     sentence: string;
+    result: Record<string, unknown>;
 }
 
 export default class SentenseController extends OutputController<SentenceNode> {
@@ -14,6 +15,7 @@ export default class SentenseController extends OutputController<SentenceNode> {
             this.setCustomOutputs(this.node.config.outputProperties, message, {
                 config: this.node.config,
                 triggerId: data.sentence,
+                results: data.result,
             });
         } catch (e) {
             this.node.error(e);

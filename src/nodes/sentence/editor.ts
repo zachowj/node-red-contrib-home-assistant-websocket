@@ -80,7 +80,7 @@ const SentenceEditor: EditorNodeDef<SentenceEditorNodeProperties> = {
             );
 
         haOutputs.createOutputs(this.outputProperties, {
-            extraTypes: ['triggerId'],
+            extraTypes: ['triggerId', 'results'],
         });
     },
     oneditsave: function () {
