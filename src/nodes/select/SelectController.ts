@@ -121,7 +121,6 @@ export default class SelectController extends InputOutputController<
         }
 
         await this.integration?.updateHomeAssistant(value);
-        this.status.setSuccess(value);
         if (!previousValue) {
             previousValue = this.#entityConfigNode?.state?.getLastPayload()
                 ?.state as string | undefined;
@@ -135,6 +134,7 @@ export default class SelectController extends InputOutputController<
             state: value,
             attributes: {},
         });
+        this.status.setSuccess(value);
     }
 
     public async onValueChange(value: string, previousValue?: string) {

@@ -89,7 +89,7 @@ export default function selectNode(
             node: this,
             emitter: entityConfigNode,
         });
-
+        entityConfigEvents.setStatus(status);
         entityConfigEvents.addListener(
             IntegrationEvent.ValueChange,
             controller.onValueChange.bind(controller)

@@ -89,7 +89,7 @@ export default function numberNode(
             node: this,
             emitter: entityConfigNode,
         });
-
+        entityConfigEvents.setStatus(status);
         entityConfigEvents.addListener(
             IntegrationEvent.ValueChange,
             controller.onValueChange.bind(controller)

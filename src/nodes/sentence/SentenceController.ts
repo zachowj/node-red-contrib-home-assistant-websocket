@@ -9,19 +9,13 @@ interface SentenceResponse {
 
 export default class SentenseController extends OutputController<SentenceNode> {
     public onReceivedMessage(data: SentenceResponse) {
-        this.status.setSuccess('home-assistant.status.triggered');
         const message: NodeMessage = {};
-        try {
-            this.setCustomOutputs(this.node.config.outputProperties, message, {
-                config: this.node.config,
-                triggerId: data.sentence,
-                results: data.result,
-            });
-        } catch (e) {
-            this.node.error(e);
-            this.status.setFailed('home-assistant.status.error');
-            return;
-        }
+        this.setCustomOutputs(this.node.config.outputProperties, message, {
+            config: this.node.config,
+            triggerId: data.sentence,
+            results: data.result,
+        });
+        this.status.setSuccess('home-assistant.status.triggered');
         this.node.send(message);
     }
 }

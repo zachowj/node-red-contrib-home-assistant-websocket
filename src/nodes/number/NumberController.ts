@@ -144,7 +144,6 @@ export default class NumberController extends InputOutputController<
         previousValue?: number
     ): Promise<void> {
         await this.integration?.updateHomeAssistant(value);
-        this.status.setSuccess(value.toString());
         if (!previousValue) {
             previousValue = this.#entityConfigNode?.state?.getLastPayload()
                 ?.state as number | undefined;
@@ -158,5 +157,6 @@ export default class NumberController extends InputOutputController<
             state: value,
             attributes: {},
         });
+        this.status.setSuccess(value.toString());
     }
 }
