@@ -2,8 +2,11 @@ import { NodeStatus } from 'node-red';
 
 import { RED } from '../../globals';
 import { formatDate } from '../../helpers/date';
+import { HaEvent } from '../../homeAssistant';
+import { EntityConfigNode } from '../../nodes/entity-config';
 import { i18nKeyandParams } from '../../types/i18n';
 import { BaseNode, ServerNodeConfig } from '../../types/nodes';
+import ClientEvents from '../events/ClientEvents';
 import { getStatusOptions } from './helpers';
 
 export enum StatusColor {
@@ -21,16 +24,41 @@ export enum StatusShape {
 
 export interface StatusConstructor<T extends BaseNode = BaseNode> {
     config: ServerNodeConfig;
+    exposeAsEntityConfigNode?: EntityConfigNode;
     node: T;
 }
 
 export default class Status<T extends BaseNode = BaseNode> {
+    readonly #exposeAsEntityConfigNode?: EntityConfigNode;
+
     protected readonly config: ServerNodeConfig;
+    protected lastStatus: NodeStatus = {};
     protected readonly node: T;
 
     constructor(props: StatusConstructor<T>) {
         this.config = props.config;
+        this.#exposeAsEntityConfigNode = props.exposeAsEntityConfigNode;
         this.node = props.node;
+
+        if (this.#exposeAsEntityConfigNode) {
+            const exposeAsConfigEvents = new ClientEvents({
+                node: this.node,
+                emitter: this.#exposeAsEntityConfigNode,
+            });
+
+            exposeAsConfigEvents?.addListener(
+                HaEvent.StateChanged,
+                this.#onStateChange.bind(this)
+            );
+        }
+    }
+
+    #onStateChange() {
+        this.updateStatus(this.lastStatus);
+    }
+
+    protected get isExposeAsEnabled(): boolean {
+        return this.#exposeAsEntityConfigNode?.state.isEnabled() ?? true;
     }
 
     protected get dateString(): string {
@@ -50,10 +78,22 @@ export default class Status<T extends BaseNode = BaseNode> {
     }
 
     protected updateStatus(status: NodeStatus): void {
+        if (this.isExposeAsEnabled === false) {
+            status = {
+                fill: StatusColor.Grey,
+                shape: StatusShape.Dot,
+                text: 'home-assistant.status.disabled',
+            };
+        }
+
         this.node.status(status);
     }
 
     public set(status: NodeStatus = {}): void {
+        if (this.isExposeAsEnabled) {
+            this.lastStatus = status;
+        }
+
         this.updateStatus(status);
     }
 
