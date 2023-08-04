@@ -1,19 +1,12 @@
-import Joi from 'joi';
-
 import { HaEvent } from '../../homeAssistant';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
 import { EntityConfigNode } from '../../nodes/entity-config';
-import { HassEntity, HassStateChangedEvent } from '../../types/home-assistant';
-import { BaseNode } from '../../types/nodes';
+import { BaseNode, NodeMessage } from '../../types/nodes';
 import Events from '../events/Events';
 import { TriggerPayload } from '../integration/BidirectionalEntityIntegration';
 import OutputController, {
     OutputControllerConstructor,
 } from './OutputController';
-
-interface TriggerEventValidationResult extends TriggerPayload {
-    entity: HassEntity;
-}
 
 export interface ExposeAsControllerConstructor<T extends BaseNode>
     extends OutputControllerConstructor<T> {
@@ -34,13 +27,13 @@ export default abstract class ExposeAsController<
         this.homeAssistant = props.homeAssistant;
 
         if (props.exposeAsConfigNode) {
-            const exposeAsConfigEvents = new Events({
+            this.exposeAsConfigEvents = new Events({
                 node: this.node,
                 emitter: props.exposeAsConfigNode,
             });
-            exposeAsConfigEvents.addListener(
+            this.exposeAsConfigEvents.addListener(
                 HaEvent.AutomationTriggered,
-                this.onTriggered.bind(this)
+                this.#onTriggered.bind(this)
             );
         }
     }
@@ -49,63 +42,54 @@ export default abstract class ExposeAsController<
         return this.exposeAsConfigNode?.state?.isEnabled() ?? true;
     }
 
-    protected async validateTriggerMessage(
-        data: TriggerPayload
-    ): Promise<TriggerEventValidationResult> {
-        const schema = Joi.object({
-            entity_id: Joi.string().allow(null),
-            skip_condition: Joi.boolean().default(false),
-            output_path: Joi.boolean().default(true),
-        });
-
-        const validatedData = await schema.validateAsync(data);
-
-        const entityId = validatedData.entity_id ?? this.getNodeEntityId();
-
-        if (!entityId) {
-            throw new Error(
-                'Entity filter type is not set to exact and no entity_id found in trigger data.'
-            );
+    // Find the number of outputs by looking at the number of wires
+    get #numberOfOutputs(): number {
+        if ('wires' in this.node && Array.isArray(this.node.wires)) {
+            return this.node.wires.length;
         }
 
-        const entity = this.homeAssistant.websocket.getStates(entityId);
+        return 0;
+    }
 
-        if (!entity) {
-            throw new Error(
-                `entity_id provided by trigger event not found in cache: ${entityId}`
-            );
+    #onTriggered(data: TriggerPayload) {
+        if (!this.isEnabled) return;
+
+        const outputCount = this.#numberOfOutputs;
+
+        // If there are no outputs, there is nothing to do
+        if (outputCount === 0) return;
+
+        // Remove any paths that are greater than the number of outputs
+        const paths = data.output_path
+            .split(',')
+            .map((path) => Number(path))
+            .filter((path) => path <= outputCount);
+
+        // If there are no paths, there is nothing to do
+        if (paths.length === 0) return;
+
+        let payload: NodeMessage | (NodeMessage | null)[];
+
+        // If there is only one path and it is 0 or 1, return the payload as is
+        if (paths.length === 1 && (paths.includes(0) || paths.includes(1))) {
+            payload = data.message;
+        } else if (paths.includes(0)) {
+            // create an array the size of the number of outputs and fill it with the payload
+            payload = new Array(outputCount).fill([data.message]);
+        } else {
+            // create an array and fill it with the message only if index exists in paths
+            payload = new Array(outputCount)
+                .fill(0)
+                .map((_, index) =>
+                    paths.includes(index + 1) ? data.message : null
+                );
         }
 
-        return {
-            ...validatedData,
-            payload: data.payload,
-            entity,
-        };
+        this.status.setSuccess('home-assistant.status.triggered');
+        this.node.send(payload);
     }
 
-    protected getEventPayload(
-        entity: HassEntity
-    ): Partial<HassStateChangedEvent> {
-        const payload = {
-            event_type: 'triggered',
-            entity_id: entity.entity_id,
-            event: {
-                entity_id: entity.entity_id,
-                old_state: entity,
-                new_state: entity,
-            },
-        };
-
-        return payload;
-    }
-
-    protected getNodeEntityId(): string | undefined {
-        return undefined;
-    }
-
-    protected abstract onTriggered(data: TriggerPayload): void;
-
-    public getexposeAsConfigEvents(): Events | undefined {
+    public getExposeAsConfigEvents(): Events | undefined {
         return this.exposeAsConfigEvents;
     }
 }
