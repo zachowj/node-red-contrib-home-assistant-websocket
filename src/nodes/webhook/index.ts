@@ -6,7 +6,7 @@ import State from '../../common/State';
 import Status from '../../common/status/Status';
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
-import { getServerConfigNode } from '../../helpers/node';
+import { getExposeAsConfigNode, getServerConfigNode } from '../../helpers/node';
 import { getHomeAssistant } from '../../homeAssistant';
 import {
     BaseNode,
@@ -24,6 +24,7 @@ export interface WebhookNodeProperties extends BaseNodeProperties {
     method_post: boolean;
     local_only: boolean;
     outputProperties: OutputProperty[];
+    exposeAsEntityConfig: string;
 }
 
 export interface WebhookNode extends BaseNode {
@@ -39,6 +40,9 @@ export default function webhookNode(
 
     const serverConfigNode = getServerConfigNode(this.config.server);
     const homeAssistant = getHomeAssistant(serverConfigNode);
+    const exposeAsConfigNode = getExposeAsConfigNode(
+        this.config.exposeAsEntityConfig
+    );
     const clientEvents = new ClientEvents({
         node: this,
         emitter: homeAssistant.eventBus,
@@ -47,9 +51,11 @@ export default function webhookNode(
     const state = new State(this);
     const status = new Status({
         config: serverConfigNode.config,
+        exposeAsEntityConfigNode: exposeAsConfigNode,
         node: this,
     });
     nodeEvents.setStatus(status);
+    exposeAsConfigNode?.integration.setStatus(status);
 
     const controllerDeps = createControllerDependencies(this, homeAssistant);
     const integration = new WebhookIntegration({
@@ -61,6 +67,8 @@ export default function webhookNode(
     integration.setStatus(status);
 
     const controller = new WebhookController({
+        exposeAsConfigNode,
+        homeAssistant,
         node: this,
         status,
         ...controllerDeps,

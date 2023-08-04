@@ -1,4 +1,4 @@
-import OutputController from '../../common/controllers/OutputController';
+import ExposeAsController from '../../common/controllers/EposeAsController';
 import { NodeMessage } from '../../types/nodes';
 import { WebhookNode } from '.';
 
@@ -8,8 +8,10 @@ interface WebhookResponse {
     params: Record<string, any>;
 }
 
-export default class WebhookController extends OutputController<WebhookNode> {
+export default class WebhookController extends ExposeAsController<WebhookNode> {
     public onReceivedMessage(data: WebhookResponse) {
+        if (!this.isEnabled) return;
+
         const message: NodeMessage = {};
         this.setCustomOutputs(this.node.config.outputProperties, message, {
             config: this.node.config,
