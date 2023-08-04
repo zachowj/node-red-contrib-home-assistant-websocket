@@ -1,11 +1,12 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
-import { NodeType, TypedInputTypes } from '../../const';
+import { EntityType, NodeType, TypedInputTypes } from '../../const';
 import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import { OutputProperty } from '../../editor/types';
+import { saveEntityType } from '../entity-config/editor/helpers';
 
 declare const RED: EditorRED;
 
@@ -15,6 +16,7 @@ interface SentenceEditorNodeProperties extends EditorNodeProperties {
     sentences: string[];
     response: string;
     outputProperties: OutputProperty[];
+    exposeAsEntityConfig: string;
 }
 
 const SentenceEditor: EditorNodeDef<SentenceEditorNodeProperties> = {
@@ -33,6 +35,13 @@ const SentenceEditor: EditorNodeDef<SentenceEditorNodeProperties> = {
         server: { value: '', type: NodeType.Server, required: true },
         version: { value: RED.settings.get('haSentenceVersion', 0) },
         outputs: { value: 1 },
+        exposeAsEntityConfig: {
+            value: '',
+            type: NodeType.EntityConfig,
+            // @ts-ignore - DefinitelyTyped is missing this property
+            filter: (config) => config.entityType === EntityType.Switch,
+            required: false,
+        },
         sentences: { value: [], validate: (s) => s.length > 0 },
         response: { value: '' },
         outputProperties: {
@@ -57,6 +66,7 @@ const SentenceEditor: EditorNodeDef<SentenceEditorNodeProperties> = {
         ha.setup(this);
         haServer.init(this, '#node-input-server');
         exposeNode.init(this);
+        saveEntityType(EntityType.Switch, 'exposeAsEntityConfig');
 
         $('#dialog-form').prepend(ha.betaWarning(981));
 
