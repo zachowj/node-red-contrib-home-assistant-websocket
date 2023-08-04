@@ -6,7 +6,7 @@ import State from '../../common/State';
 import Status from '../../common/status/Status';
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
-import { getServerConfigNode } from '../../helpers/node';
+import { getExposeAsConfigNode, getServerConfigNode } from '../../helpers/node';
 import { getHomeAssistant } from '../../homeAssistant/index';
 import {
     BaseNode,
@@ -20,6 +20,7 @@ export interface SentenceNodeProperties extends BaseNodeProperties {
     sentences: string[];
     response: string;
     outputProperties: OutputProperty[];
+    exposeAsEntityConfig: string;
 }
 
 export interface SentenceNode extends BaseNode {
@@ -35,6 +36,9 @@ export default function sentenceNode(
 
     const serverConfigNode = getServerConfigNode(this.config.server);
     const homeAssistant = getHomeAssistant(serverConfigNode);
+    const exposeAsConfigNode = getExposeAsConfigNode(
+        this.config.exposeAsEntityConfig
+    );
     const clientEvents = new ClientEvents({
         node: this,
         emitter: homeAssistant.eventBus,
@@ -42,6 +46,7 @@ export default function sentenceNode(
     const nodeEvents = new Events({ node: this, emitter: this });
     const state = new State(this);
     const status = new Status({
+        exposeAsEntityConfigNode: exposeAsConfigNode,
         config: serverConfigNode.config,
         node: this,
     });
@@ -56,6 +61,8 @@ export default function sentenceNode(
     integration.setStatus(status);
 
     const controller = new SentenceController({
+        exposeAsConfigNode,
+        homeAssistant,
         node: this,
         status,
         ...controllerDeps,

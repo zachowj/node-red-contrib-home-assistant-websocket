@@ -44,6 +44,7 @@ const VERSION_1 = {
     ...VERSION_0,
     version: 1,
     response: '',
+    exposeAsEntityConfig: '',
 };
 
 describe('Migrations - Sentense Node', function () {

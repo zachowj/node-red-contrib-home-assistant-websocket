@@ -15,6 +15,7 @@ export default [
             const newSchema = {
                 ...schema,
                 version: 1,
+                exposeAsEntityConfig: '',
                 response: '',
             };
             return newSchema;
