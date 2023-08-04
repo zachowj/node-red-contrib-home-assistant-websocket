@@ -21,6 +21,12 @@ A string to be used for the webhook URL in Home Assistant.
 
 A list of allowed methods that Home Assistant will accept for the webhook. At least one method must be selected.
 
+### Expose as
+
+- Type: `string`
+
+When an entity is selected a switch entity will be created in Home Assistant. Turning on and off this switch will disable/enable the nodes in Node-RED.
+
 ## Outputs
 
 Value types:
