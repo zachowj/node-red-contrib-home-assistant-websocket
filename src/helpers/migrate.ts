@@ -18,6 +18,7 @@ import pollState from '../nodes/poll-state/migrations';
 import renderTemplate from '../nodes/render-template/migrations';
 import select from '../nodes/select/migrations';
 import sensor from '../nodes/sensor/migrations';
+import sentence from '../nodes/sentence/migrations';
 import switchMigration from '../nodes/switch/migrations';
 import tag from '../nodes/tag/migrations';
 import text from '../nodes/text/migrations';
@@ -52,6 +53,7 @@ const nodeTypeTranslation: Partial<Record<NodeType, Migration[]>> = {
     [NodeType.RenderTemplate]: renderTemplate,
     [NodeType.Select]: select,
     [NodeType.Sensor]: sensor,
+    [NodeType.Sentence]: sentence,
     [NodeType.Switch]: switchMigration,
     [NodeType.TriggerState]: triggerState,
     [NodeType.Tag]: tag,

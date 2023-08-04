@@ -17,6 +17,12 @@ in Home Assistant for this node to function_
 
 A list of sentences to match. Sentences are allowed to use some basic template syntax. Check Home Assistant [documentation](https://www.home-assistant.io/docs/automation/trigger/#sentence-trigger) for more information.
 
+### Expose as
+
+- Type: `string`
+
+When an entity is selected a switch entity will be created in Home Assistant. Turning on and off this switch will disable/enable the nodes in Node-RED.
+
 ## Outputs
 
 Value types:
