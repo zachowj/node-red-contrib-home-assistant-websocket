@@ -1,11 +1,12 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
-import { NodeType } from '../../const';
+import { EntityType, NodeType } from '../../const';
 import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import { OutputProperty } from '../../editor/types';
+import { saveEntityType } from '../entity-config/editor/helpers';
 
 declare const RED: EditorRED;
 
@@ -18,6 +19,7 @@ interface WebhookEditorNodeProperties extends EditorNodeProperties {
     method_post: boolean;
     method_put: boolean;
     outputProperties: OutputProperty[];
+    exposeAsEntityConfig: string;
 
     // deprecated but needed for imports
     payloadLocation: any;
@@ -57,6 +59,13 @@ const WebhookEditor: EditorNodeDef<WebhookEditorNodeProperties> = {
         name: { value: '' },
         server: { value: '', type: NodeType.Server, required: true },
         version: { value: RED.settings.get('haWebhookVersion', 0) },
+        exposeAsEntityConfig: {
+            value: '',
+            type: NodeType.EntityConfig,
+            // @ts-ignore - DefinitelyTyped is missing this property
+            filter: (config) => config.entityType === EntityType.Switch,
+            required: false,
+        },
         outputs: { value: 1 },
         webhookId: { value: generateId(32), required: true },
         method_get: { value: false, validate: validateMethods },
@@ -92,6 +101,7 @@ const WebhookEditor: EditorNodeDef<WebhookEditorNodeProperties> = {
         haServer.init(this, '#node-input-server');
         exposeNode.init(this);
         const $webhookId = $('#node-input-webhookId');
+        saveEntityType(EntityType.Switch, 'exposeAsEntityConfig');
 
         $('#copyId').on('click', function () {
             const ele = $webhookId.get(0) as HTMLInputElement;
