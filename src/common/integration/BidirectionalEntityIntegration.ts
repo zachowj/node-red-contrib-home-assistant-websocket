@@ -8,10 +8,10 @@ import UnidirectionalEntityIntegration, {
 } from './UnidirectionalEntityIntegration';
 
 export interface TriggerPayload {
-    entity_id?: string;
-    skip_condition: boolean;
-    output_path: boolean;
-    payload?: boolean | string | number | Record<string, unknown>;
+    // 0 = all, 1 = first, 2 = second etc.
+    // comma separated list of numbers is also possible
+    output_path: string;
+    message: Record<string, unknown>;
 }
 
 interface TriggerEvent {

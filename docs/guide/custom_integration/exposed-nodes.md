@@ -8,34 +8,29 @@ state](../../node/trigger-state.md), and [poll state](../../node/poll-state.md) 
 will have the option to be exposed to Home Assistant, and when enabled, it will
 show up in Home Assistant as a switch. Turning on and off these switches will
 disable/enable the nodes in Node-RED. This should help people who find
-themselves having to make input_booleans in HA to enable/disable flows.
+themselves having to make input_booleans in HA to enable/disable flows. This is a much cleaner way to do it.
 
 ## Trigger an exposed event node from a service call `nodered.trigger`
 
-Event nodes that are triggered by a service call will have their status color
-blue when `skip_condition` is `true` and when `false` it will stay green with
-the text _(triggered)_ appended after the state in the status text.
+Exposed nodes can be triggered from a service call. The service call is
+`nodered.trigger` and it takes the following data properties:
 
-Data properties of the service call:
+### entity_id
 
-**entity_id**
+- Required
 
-The only data property of the service call that is required is an `entity_id` of
-the switch that is associated with a node in NR.
+The entity_id of the exposed node to trigger. This is the entity_id of the node in Home Assistant. For example, if the entity_id of the node in Home Assistant is `switch.my_node`, then the entity_id to use in the service call is `switch.my_node`.
 
-**trigger_entity_id**
+### output_path
 
-Will be the entity that triggers the node. It is optional and only required if
-the node entity filter is not set to `exact`.
+- Optional
+- Defaults to 0
+- Can be a comma separated list of output paths
 
-**skip_condition**
+The output path of the node to send the message through. When this value is set to 0, the message will be sent through all output paths. If this value is set to 1, the message will be sent through the first output path. When this value is set to 2, the message will be sent through the second output path, and so on.
 
-It can be used when you don't want the conditionals of the node to be check and
-just have it pass the entity through. Defaults to `false`
+### message
 
-For the trigger: state node custom output will not be evaluated.
+- Required
 
-**output_path**
-
-When `skip_condition` is `true` this allows you to choose which output to send
-the message through. Defaults to `true` the top output
+The message the triggered node will output. This can be any valid JSON object. For example, if the message is `{ "payload": "hello world" }`, then the message will be sent to the node as `msg.payload` with the value of `hello world`.

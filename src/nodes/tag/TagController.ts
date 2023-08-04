@@ -1,7 +1,6 @@
 import cloneDeep from 'lodash.clonedeep';
 
 import ExposeAsController from '../../common/controllers/EposeAsController';
-import { TriggerPayload } from '../../common/integration/BidirectionalEntityIntegration';
 import { TAGS_ALL } from '../../const';
 import { HassEvent } from '../../types/home-assistant';
 import { NodeMessage } from '../../types/nodes';
@@ -55,12 +54,5 @@ export default class TagController extends ExposeAsController<TagNode> {
 
         this.status.setSuccess(`${tagName || tagId} scanned`);
         this.node.send(msg);
-    }
-
-    public onTriggered(data: TriggerPayload): void {
-        if (!this.isEnabled) return;
-
-        this.status.setSuccess('home-assistant.status.triggered');
-        this.node.send({ payload: data.payload });
     }
 }
