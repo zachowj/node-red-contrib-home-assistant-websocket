@@ -112,4 +112,35 @@ export default [
             return newSchema;
         },
     },
+    {
+        version: 5,
+        up: (schema: any) => {
+            const newSchema = {
+                ...schema,
+                version: 5,
+                entityId: schema.entityidfilter,
+                entityIdType: schema.entityidfiltertype,
+                ifState: schema.haltifstate,
+                ifStateType: schema.halt_if_type,
+                ifStateOperator: schema.halt_if_compare,
+                outputInitially: schema.outputinitially,
+                stateType: schema.state_type,
+                outputOnlyOnStateChange: schema.output_only_on_state_change,
+                exposeAsEntityConfig: '',
+            };
+
+            newSchema.entityidfilter = undefined;
+            newSchema.entityidfiltertype = undefined;
+            newSchema.haltifstate = undefined;
+            newSchema.halt_if_type = undefined;
+            newSchema.halt_if_compare = undefined;
+            newSchema.outputinitially = undefined;
+            newSchema.state_type = undefined;
+            newSchema.output_only_on_state_change = undefined;
+            newSchema.exposeToHomeAssistant = undefined;
+            newSchema.haConfig = undefined;
+
+            return newSchema;
+        },
+    },
 ];

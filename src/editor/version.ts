@@ -48,7 +48,11 @@ export function versionCheckOnEditPrepare(
     RED.notify(i18n('home-assistant.ui.migrations.node_schema_updated'));
 }
 
-const exposedEventNodes: NodeType[] = [NodeType.Tag, NodeType.Zone];
+const exposedEventNodes: NodeType[] = [
+    NodeType.EventsState,
+    NodeType.Tag,
+    NodeType.Zone,
+];
 
 function migrateNode(node: EditorNodeInstance<HassNodeProperties>) {
     const data = RED.nodes.convertNode(node, false) as HassNodeProperties;
