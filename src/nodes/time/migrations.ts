@@ -63,4 +63,20 @@ export default [
             return newSchema;
         },
     },
+    {
+        version: 3,
+        up: (schema: any) => {
+            const newSchema = {
+                ...schema,
+                version: 3,
+                exposeAsEntityConfig: '',
+            };
+
+            newSchema.debugenabled = undefined;
+            newSchema.exposeToHomeAssistant = undefined;
+            newSchema.haConfig = undefined;
+
+            return newSchema;
+        },
+    },
 ];

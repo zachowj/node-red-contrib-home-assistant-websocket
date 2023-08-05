@@ -1,8 +1,11 @@
 {
   "ha-time": {
-    "errors": {
+    "error": {
+      "in_the_past": "Date is in the past: __date__",
+      "invalid_date": "Invalid date: __date__",
       "invalid_jsonata_payload": "Invalid JSONata sending entity state as payload",
       "jsonata_error": "JSONata Error: __message__",
+      "no_days_selected": "No days selected",
       "offset_nan": "Offset is not a number: __offset__"
     },
     "label": {
@@ -34,7 +37,6 @@
       "invalid_date": "Invalid date",
       "invalid_property": "Invalid property",
       "next_at": "Next at __nextTime__",
-      "no_days_selected": "Select at least one day of the week",
       "sent": "Sent",
       "sent_and_next": "Sent at __sentTime__ Next at __nextTime__",
       "unavailable": "Unavailable"

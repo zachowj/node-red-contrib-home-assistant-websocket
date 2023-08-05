@@ -1,22 +1,71 @@
-import { NodeDef } from 'node-red';
-
+import { createControllerDependencies } from '../../common/controllers/helpers';
+import ClientEvents from '../../common/events/ClientEvents';
+import EventsStatus from '../../common/status/EventStatus';
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
-import { EventsStatus } from '../../helpers/status';
-import { checkValidServerConfig } from '../../helpers/utils';
-import { BaseNode } from '../../types/nodes';
-import Time from './controller';
+import { getExposeAsConfigNode, getServerConfigNode } from '../../helpers/node';
+import { getHomeAssistant } from '../../homeAssistant/index';
+import {
+    BaseNode,
+    BaseNodeProperties,
+    OutputProperty,
+} from '../../types/nodes';
+import { startListener } from './events';
+import TimeController from './TimeController';
 
-export default function timeNode(this: BaseNode, config: NodeDef) {
+export interface TimeNodeProperties extends BaseNodeProperties {
+    entityId: string;
+    property: string;
+    offset: string;
+    offsetType: string;
+    offsetUnits: string;
+    randomOffset: boolean;
+    repeatDaily: boolean;
+    sunday: boolean;
+    monday: boolean;
+    tuesday: boolean;
+    wednesday: boolean;
+    thursday: boolean;
+    friday: boolean;
+    saturday: boolean;
+    outputProperties: OutputProperty[];
+    exposeAsEntityConfig: string;
+}
+
+export interface TimeNode extends BaseNode {
+    config: TimeNodeProperties;
+}
+
+export default function timeNode(this: TimeNode, config: TimeNodeProperties) {
     RED.nodes.createNode(this, config);
-
     this.config = migrate(config);
-    checkValidServerConfig(this, this.config.server);
-    const status = new EventsStatus(this);
-    this.controller = new Time({
+
+    const serverConfigNode = getServerConfigNode(this.config.server);
+    const homeAssistant = getHomeAssistant(serverConfigNode);
+    const exposeAsConfigNode = getExposeAsConfigNode(
+        this.config.exposeAsEntityConfig
+    );
+    const clientEvents = new ClientEvents({
         node: this,
-        config: this.config,
-        RED,
-        status,
+        emitter: homeAssistant.eventBus,
     });
+    const status = new EventsStatus({
+        clientEvents,
+        exposeAsEntityConfigNode: exposeAsConfigNode,
+        config: serverConfigNode.config,
+        node: this,
+    });
+    clientEvents.setStatus(status);
+
+    const controllerDeps = createControllerDependencies(this, homeAssistant);
+
+    const controller = new TimeController({
+        exposeAsConfigNode,
+        homeAssistant,
+        node: this,
+        status,
+        ...controllerDeps,
+    });
+
+    startListener(clientEvents, controller, homeAssistant, this, status);
 }

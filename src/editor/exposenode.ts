@@ -94,6 +94,7 @@ export function init(n: HassNodeProperties) {
             case NodeType.EventsState:
             case NodeType.Tag:
             case NodeType.Zone:
+            case NodeType.Time:
             default:
                 toggleExposeAs();
                 break;
@@ -126,6 +127,7 @@ function render() {
         case NodeType.EventsState:
         case NodeType.Tag:
         case NodeType.Zone:
+        case NodeType.Time:
             break;
         default:
             renderEventNode();
