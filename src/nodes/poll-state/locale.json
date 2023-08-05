@@ -1,8 +1,9 @@
 {
   "poll-state": {
-    "errors": {
-      "interval_nan": "Offset is not a number: __offset__",
-      "jsonata_error": "JSONata Error: __message__"
+    "error": {
+      "entity_id_not_found": "could not find entity with entity ID: __entity_id__",
+      "entity_id_required": "An entity ID is required",
+      "interval_not_a_number": "Interval is not a number: __interval__"
     },
     "label": {
       "entity_id": "Entity ID",
@@ -34,6 +35,10 @@
         "minutes": "minutes",
         "seconds": "seconds"
       }
+    },
+    "output_label": {
+      "if_state_false": "if state is false",
+      "if_state_true": "if state is true"
     }
   }
 }

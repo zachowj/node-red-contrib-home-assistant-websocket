@@ -1,30 +1,52 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
-import { NodeType } from '../../const';
+import { TransformType } from '../../common/TransformState';
+import {
+    ComparatorType,
+    EntityType,
+    NodeType,
+    TimeUnit,
+    TypedInputTypes,
+} from '../../const';
 import { hassAutocomplete } from '../../editor/components/hassAutocomplete';
 import * as ifState from '../../editor/components/ifstate';
+import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
-import { HassExposedConfig, StateType } from '../../editor/types';
+import { i18n } from '../../editor/i18n';
+import { OutputProperty } from '../../editor/types';
+import { saveEntityType } from '../entity-config/editor/helpers';
 
 declare const RED: EditorRED;
 
 interface PollStateEditorNodeProperties extends EditorNodeProperties {
     server: string;
     version: number;
-    exposeToHomeAssistant: boolean;
-    haConfig: HassExposedConfig[];
-    updateinterval: string;
-    updateIntervalType: 'num' | 'jsonata';
-    updateIntervalUnits: 'seconds' | 'minutes' | 'hours';
-    outputinitially: boolean;
-    outputonchanged: boolean;
-    entity_id: string;
-    state_type: StateType;
-    halt_if: string;
-    halt_if_type: string;
-    halt_if_compare: string;
+    exposeAsEntityConfig: string;
+    updateInterval: string;
+    updateIntervalType: TypedInputTypes.Number | TypedInputTypes.JSONata;
+    updateIntervalUnits: TimeUnit.Seconds | TimeUnit.Minutes | TimeUnit.Hours;
+    outputInitially: boolean;
+    outputOnChanged: boolean;
+    entityId: string;
+    stateType: TransformType;
+    ifState: string;
+    ifStateType: TypedInputTypes;
+    ifStateOperator: ComparatorType;
+    outputProperties: OutputProperty[];
+
+    // deprecated
+    exposeToHomeAssistant: undefined;
+    haConfig: undefined;
+    updateinterval: undefined;
+    outputinitially: undefined;
+    outputonchanged: undefined;
+    entity_id: undefined;
+    state_type: undefined;
+    halt_if: undefined;
+    halt_if_type: undefined;
+    halt_if_compare: undefined;
 }
 
 const PollStateEditor: EditorNodeDef<PollStateEditorNodeProperties> = {
@@ -32,53 +54,95 @@ const PollStateEditor: EditorNodeDef<PollStateEditorNodeProperties> = {
     color: NodeColor.HaBlue,
     inputs: 0,
     outputs: 1,
-    outputLabels: ["'If State' is true", "'If State' is false"],
+    outputLabels: [
+        i18n('poll-state.output_label.if_state_true'),
+        i18n('poll-state.output_label.if_state_false'),
+    ],
     icon: 'ha-poll-state.svg',
     paletteLabel: 'poll state',
     label: function () {
-        return this.name || `poll state: ${this.entity_id}`;
+        return this.name || `poll state: ${this.entityId}`;
     },
     labelStyle: ha.labelStyle,
     defaults: {
         name: { value: '' },
         server: { value: '', type: NodeType.Server, required: true },
         version: { value: RED.settings.get('pollStateVersion', 0) },
-        exposeToHomeAssistant: { value: false },
-        haConfig: {
-            value: [
-                { property: 'name', value: '' },
-                { property: 'icon', value: '' },
-            ],
+        exposeAsEntityConfig: {
+            value: '',
+            type: NodeType.EntityConfig,
+            // @ts-ignore - DefinitelyTyped is missing this property
+            filter: (config) => config.entityType === EntityType.Switch,
+            required: false,
         },
-        updateinterval: { value: '60' },
-        updateIntervalType: { value: 'num' },
-        updateIntervalUnits: { value: 'seconds' },
-        outputinitially: { value: false },
-        outputonchanged: { value: false },
-        entity_id: { value: '', required: true },
-        state_type: { value: 'str' },
-        halt_if: { value: '' },
-        halt_if_type: { value: 'str' },
-        halt_if_compare: { value: 'is' },
+        updateInterval: { value: '60' },
+        updateIntervalType: { value: TypedInputTypes.Number },
+        updateIntervalUnits: { value: TimeUnit.Seconds },
+        outputInitially: { value: false },
+        outputOnChanged: { value: false },
+        entityId: { value: '', required: true },
+        stateType: { value: TransformType.String },
+        ifState: { value: '' },
+        ifStateType: { value: TypedInputTypes.String },
+        ifStateOperator: { value: ComparatorType.Is },
         outputs: { value: 1 },
+        outputProperties: {
+            value: [
+                {
+                    property: 'payload',
+                    propertyType: TypedInputTypes.Message,
+                    value: '',
+                    valueType: 'entityState',
+                },
+                {
+                    property: 'data',
+                    propertyType: TypedInputTypes.Message,
+                    value: '',
+                    valueType: 'entity',
+                },
+                {
+                    property: 'topic',
+                    propertyType: TypedInputTypes.Message,
+                    value: '',
+                    valueType: 'triggerId',
+                },
+            ],
+            validate: haOutputs.validate,
+        },
+
+        // deprecated
+        exposeToHomeAssistant: { value: undefined },
+        haConfig: { value: undefined },
+        updateinterval: { value: undefined },
+        outputinitially: { value: undefined },
+        outputonchanged: { value: undefined },
+        entity_id: { value: undefined },
+        state_type: { value: undefined },
+        halt_if: { value: undefined },
+        halt_if_type: { value: undefined },
+        halt_if_compare: { value: undefined },
     },
     oneditprepare: function () {
         ha.setup(this);
         haServer.init(this, '#node-input-server');
         exposeNode.init(this);
-        hassAutocomplete({ root: '#node-input-entity_id' });
+        hassAutocomplete({ root: '#node-input-entityId' });
+        saveEntityType(EntityType.Switch, 'exposeAsEntityConfig');
 
-        $('#node-input-updateinterval').typedInput({
-            types: ['num', 'jsonata'],
+        $('#node-input-updateInterval').typedInput({
+            types: [TypedInputTypes.Number, TypedInputTypes.JSONata],
             typeField: '#node-input-updateIntervalType',
         });
 
-        ifState.init('#node-input-halt_if', '#node-input-halt_if_compare');
+        ifState.init('#node-input-ifState', '#node-input-ifStateOperator');
+        haOutputs.createOutputs(this.outputProperties, {
+            extraTypes: ['entity', 'entityId', 'entityState'],
+        });
     },
     oneditsave: function () {
-        const outputs = $('#node-input-halt_if').val() ? 2 : 1;
+        const outputs = $('#node-input-ifState').val() ? 2 : 1;
         $('#node-input-outputs').val(outputs);
-        this.haConfig = exposeNode.getValues();
+        this.outputProperties = haOutputs.getOutputs();
     },
 };
 
