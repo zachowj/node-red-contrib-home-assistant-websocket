@@ -49,6 +49,12 @@ The payload is fully customizable. The default will be a JSONata expression that
 
 If selected the node will only use the time portion of the date string to schedule the node and will trigger at that time each day. Otherwise, the node will only trigger once at the given day and time.
 
+### Expose as
+
+- Type: `string`
+
+When an entity is selected a switch entity will be created in Home Assistant. Turning on and off this switch will disable/enable the nodes in Node-RED.
+
 ## Outputs
 
 ### topic
