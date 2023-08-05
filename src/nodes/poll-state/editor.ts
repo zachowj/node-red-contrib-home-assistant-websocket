@@ -134,7 +134,11 @@ const PollStateEditor: EditorNodeDef<PollStateEditorNodeProperties> = {
             typeField: '#node-input-updateIntervalType',
         });
 
-        ifState.init('#node-input-ifState', '#node-input-ifStateOperator');
+        ifState.init(
+            '#node-input-ifState',
+            '#node-input-ifStateType',
+            '#node-input-ifStateOperator'
+        );
         haOutputs.createOutputs(this.outputProperties, {
             extraTypes: ['entity', 'entityId', 'entityState'],
         });
