@@ -92,6 +92,7 @@ export function init(n: HassNodeProperties) {
                 }
                 break;
             case NodeType.Tag:
+            case NodeType.Time:
             default:
                 toggleExposeAs();
                 break;
@@ -122,6 +123,7 @@ function render() {
             }
             break;
         case NodeType.Tag:
+        case NodeType.Time:
             break;
         default:
             renderEventNode();
