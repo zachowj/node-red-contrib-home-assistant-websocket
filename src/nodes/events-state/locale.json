@@ -1,5 +1,8 @@
 {
   "server-state-changed": {
+    "error": {
+      "invalid_for": "`Invalid value for 'for': __for__`"
+    },
     "label": {
       "entity": "Entity",
       "entity_option": {

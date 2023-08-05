@@ -66,6 +66,30 @@ const VERSION_4 = {
     ...VERSION_3,
     version: 4,
 };
+const VERSION_5 = {
+    ...VERSION_4,
+    version: 5,
+    entityId: VERSION_UNDEFINED.entityidfilter,
+    entityIdType: VERSION_UNDEFINED.entityidfiltertype,
+    ifState: VERSION_UNDEFINED.haltifstate,
+    ifStateType: VERSION_0.halt_if_type,
+    ifStateOperator: VERSION_0.halt_if_compare,
+    outputInitially: VERSION_UNDEFINED.outputinitially,
+    stateType: VERSION_0.state_type,
+    outputOnlyOnStateChange: VERSION_UNDEFINED.output_only_on_state_change,
+    exposeAsEntityConfig: '',
+
+    entityidfilter: undefined,
+    entityidfiltertype: undefined,
+    haltifstate: undefined,
+    halt_if_type: undefined,
+    halt_if_compare: undefined,
+    outputinitially: undefined,
+    state_type: undefined,
+    output_only_on_state_change: undefined,
+    exposeToHomeAssistant: undefined,
+    haConfig: undefined,
+};
 
 describe('Migrations - Events: State Node', function () {
     describe('Version 0', function () {
@@ -151,8 +175,16 @@ describe('Migrations - Events: State Node', function () {
             expect(migratedSchema.entityidfilter).to.have.lengthOf(1);
         });
     });
+    describe('Version 5', function () {
+        it('should update version 4 to version 5', function () {
+            const migrate = migrations.find((m) => m.version === 5);
+            const migratedSchema = migrate.up(VERSION_4);
+
+            expect(migratedSchema).to.eql(VERSION_5);
+        });
+    });
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_4);
+        expect(migratedSchema).to.eql(VERSION_5);
     });
 });
