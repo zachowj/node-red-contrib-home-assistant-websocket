@@ -93,6 +93,7 @@ const CurrentStateEditor: EditorNodeDef<CurrentStateEditorNodeProperties> = {
 
         ifState.init(
             '#node-input-halt_if',
+            '#node-input-halt_if_type',
             '#node-input-halt_if_compare',
             'currentState'
         );
