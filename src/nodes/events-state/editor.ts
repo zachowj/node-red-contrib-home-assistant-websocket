@@ -1,29 +1,35 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
-import { NodeType } from '../../const';
+import { TransformType } from '../../common/TransformState';
+import {
+    ComparatorType,
+    EntityType,
+    NodeType,
+    TypedInputTypes,
+} from '../../const';
 import EntitySelector from '../../editor/components/EntitySelector';
 import * as ifState from '../../editor/components/ifstate';
 import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
-import { HassExposedConfig, OutputProperty } from '../../editor/types';
+import { OutputProperty } from '../../editor/types';
+import { saveEntityType } from '../entity-config/editor/helpers';
 
 declare const RED: EditorRED;
 
 interface EventsStateEditorNodeProperties extends EditorNodeProperties {
     server: string;
     version: number;
-    exposeToHomeAssistant: boolean;
-    haConfig: HassExposedConfig[];
-    entityidfilter: string | string[];
-    entityidfiltertype: string;
-    outputinitially: boolean;
-    state_type: 'str' | 'num' | 'bool';
-    haltifstate: string;
-    halt_if_type: string;
-    halt_if_compare: string;
-    output_only_on_state_change: boolean;
+    exposeAsEntityConfig: string;
+    entityId: string | string[];
+    entityIdType: string;
+    outputInitially: boolean;
+    stateType: TransformType;
+    ifState: string;
+    ifStateType: TypedInputTypes;
+    ifStateOperator: string;
+    outputOnlyOnStateChange: boolean;
     for: string;
     forType: string;
     forUnits: string;
@@ -33,6 +39,16 @@ interface EventsStateEditorNodeProperties extends EditorNodeProperties {
     ignoreCurrentStateUnknown: boolean;
     ignoreCurrentStateUnavailable: boolean;
     outputProperties: OutputProperty[];
+
+    // deprecated but needed for migration
+    entityidfilter: undefined;
+    entityidfiltertype: undefined;
+    outputinitially: undefined;
+    state_type: undefined;
+    haltifstate: undefined;
+    halt_if_type: undefined;
+    halt_if_compare: undefined;
+    output_only_on_state_change: undefined;
 }
 
 const EventsStateEditor: EditorNodeDef<EventsStateEditorNodeProperties> = {
@@ -44,32 +60,29 @@ const EventsStateEditor: EditorNodeDef<EventsStateEditorNodeProperties> = {
     icon: 'ha-events-state-changed.svg',
     paletteLabel: 'events: state',
     label: function () {
-        return (
-            this.name ||
-            `state_changed: ${this.entityidfilter || 'all entities'}`
-        );
+        return this.name || `state_changed: ${this.entityId || 'all entities'}`;
     },
     labelStyle: ha.labelStyle,
     defaults: {
         name: { value: '' },
         server: { value: '', type: NodeType.Server, required: true },
         version: { value: RED.settings.get('serverStateChangedVersion', 0) },
-        exposeToHomeAssistant: { value: false },
-        haConfig: {
-            value: [
-                { property: 'name', value: '' },
-                { property: 'icon', value: '' },
-            ],
-        },
-        entityidfilter: { value: '', required: true },
-        entityidfiltertype: { value: 'exact' },
-        outputinitially: { value: false },
-        state_type: { value: 'str' },
-        haltifstate: { value: '' },
-        halt_if_type: { value: 'str' },
-        halt_if_compare: { value: 'is' },
         outputs: { value: 1 },
-        output_only_on_state_change: { value: true },
+        exposeAsEntityConfig: {
+            value: '',
+            type: NodeType.EntityConfig,
+            // @ts-ignore - DefinitelyTyped is missing this property
+            filter: (config) => config.entityType === EntityType.Switch,
+            required: false,
+        },
+        entityId: { value: '', required: true },
+        entityIdType: { value: 'exact' },
+        outputInitially: { value: false },
+        stateType: { value: TransformType.String },
+        ifState: { value: '' },
+        ifStateType: { value: TypedInputTypes.String },
+        ifStateOperator: { value: ComparatorType.Is },
+        outputOnlyOnStateChange: { value: true },
         for: { value: '0' },
         forType: { value: 'num' },
         forUnits: { value: 'minutes' },
@@ -82,25 +95,37 @@ const EventsStateEditor: EditorNodeDef<EventsStateEditorNodeProperties> = {
             value: [
                 {
                     property: 'payload',
-                    propertyType: 'msg',
+                    propertyType: TypedInputTypes.Message,
                     value: '',
                     valueType: 'entityState',
                 },
                 {
                     property: 'data',
-                    propertyType: 'msg',
+                    propertyType: TypedInputTypes.Message,
                     value: '',
                     valueType: 'eventData',
                 },
                 {
                     property: 'topic',
-                    propertyType: 'msg',
+                    propertyType: TypedInputTypes.Message,
                     value: '',
                     valueType: 'triggerId',
                 },
             ],
             validate: haOutputs.validate,
         },
+
+        // deprecated but needed for migration
+        exposeToHomeAssistant: { value: undefined },
+        haConfig: { value: undefined },
+        entityidfilter: { value: undefined },
+        entityidfiltertype: { value: undefined },
+        outputinitially: { value: undefined },
+        state_type: { value: undefined },
+        haltifstate: { value: undefined },
+        halt_if_type: { value: undefined },
+        halt_if_compare: { value: undefined },
+        output_only_on_state_change: { value: undefined },
     },
     oneditprepare: function () {
         ha.setup(this);
@@ -108,14 +133,20 @@ const EventsStateEditor: EditorNodeDef<EventsStateEditorNodeProperties> = {
             entitySelector.serverChanged(serverId);
         });
         exposeNode.init(this);
+        saveEntityType(EntityType.Switch, 'exposeAsEntityConfig');
+
         const entitySelector = new EntitySelector({
-            filterTypeSelector: '#node-input-entityidfiltertype',
-            entityId: this.entityidfilter,
+            filterTypeSelector: '#node-input-entityIdType',
+            entityId: this.entityId,
             serverId: haServer.getSelectedServerId(),
         });
         $('#dialog-form').data('entitySelector', entitySelector);
 
-        ifState.init('#node-input-haltifstate', '#node-input-halt_if_compare');
+        ifState.init(
+            '#node-input-ifState',
+            '#node-input-ifStateType',
+            '#node-input-ifStateOperator'
+        );
 
         $('#node-input-for').typedInput({
             default: 'num',
@@ -128,14 +159,13 @@ const EventsStateEditor: EditorNodeDef<EventsStateEditorNodeProperties> = {
         });
     },
     oneditsave: function () {
-        const outputs = $('#node-input-haltifstate').val() ? 2 : 1;
+        const outputs = $('#node-input-ifState').val() ? 2 : 1;
         $('#node-input-outputs').val(outputs);
-        this.haConfig = exposeNode.getValues();
         this.outputProperties = haOutputs.getOutputs();
         const entitySelector = $('#dialog-form').data(
             'entitySelector'
         ) as EntitySelector;
-        this.entityidfilter = entitySelector.entityId;
+        this.entityId = entitySelector.entityId;
         entitySelector.destroy();
     },
     oneditcancel: function () {
