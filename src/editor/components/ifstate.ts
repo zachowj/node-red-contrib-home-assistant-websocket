@@ -2,6 +2,7 @@ import { HATypedInputTypeOptions } from '../types';
 
 export const init = function (
     input: string,
+    type: string,
     compare: string,
     nodeName?: string
 ) {
@@ -32,7 +33,7 @@ export const init = function (
     $input.typedInput({
         default: 'str',
         types: defaultTypes,
-        typeField: '#node-input-halt_if_type',
+        typeField: type,
     });
 
     $compare.on('change', function () {
