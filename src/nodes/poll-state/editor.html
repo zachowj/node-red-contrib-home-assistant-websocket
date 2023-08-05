@@ -13,10 +13,10 @@
 
 <div class="form-row">
     <label
-        for="node-input-entity_id"
+        for="node-input-entityId"
         data-i18n="poll-state.label.entity_id"
     ></label>
-    <input type="text" id="node-input-entity_id" />
+    <input type="text" id="node-input-entityId" />
 </div>
 
 <div class="form-row">
@@ -24,7 +24,7 @@
         for="node-input-updateinterval"
         data-i18n="poll-state.label.update_interval"
     ></label>
-    <input type="text" id="node-input-updateinterval" style="width: 43%" />
+    <input type="text" id="node-input-updateInterval" style="width: 43%" />
     <input type="hidden" id="node-input-updateIntervalType" />
     <select id="node-input-updateIntervalUnits" style="width: 27%">
         <option
@@ -44,10 +44,10 @@
 
 <div class="form-row">
     <label
-        for="node-input-halt_if_compare"
+        for="node-input-ifStateOperator"
         data-i18n="poll-state.label.if_state"
     ></label>
-    <select type="text" id="node-input-halt_if_compare" style="width: 20%">
+    <select type="text" id="node-input-ifStateOperator" style="width: 20%">
         <option
             value="is"
             data-i18n="poll-state.label.if_state_option.is"
@@ -85,13 +85,16 @@
             data-i18n="poll-state.label.if_state_option.jsonata"
         ></option>
     </select>
-    <input type="text" id="node-input-halt_if" style="width: 50%" />
-    <input type="hidden" id="node-input-halt_if_type" />
+    <input type="text" id="node-input-ifState" style="width: 50%" />
+    <input type="hidden" id="node-input-ifStateType" />
 </div>
 
 <div class="form-row">
-    <label for="node-input-state_type">State Type </label>
-    <select type="text" id="node-input-state_type" style="width: auto">
+    <label
+        for="node-input-stateType"
+        data-i18n="poll-state.label.state_type"
+    ></label>
+    <select type="text" id="node-input-stateType" style="width: auto">
         <option
             value="str"
             data-i18n="poll-state.label.state_type_option.string"
@@ -108,17 +111,27 @@
 </div>
 
 <div class="form-row checkbox-option">
-    <input type="checkbox" id="node-input-outputonchanged" />
+    <input type="checkbox" id="node-input-outputOnChanged" />
     <label
-        for="node-input-outputonchanged"
+        for="node-input-outputOnChanged"
         data-i18n="poll-state.label.output_on_change"
     ></label>
 </div>
 
 <div class="form-row checkbox-option">
-    <input type="checkbox" id="node-input-outputinitially" />
+    <input type="checkbox" id="node-input-outputInitially" />
     <label
-        for="node-input-outputinitially"
+        for="node-input-outputInitially"
         data-i18n="poll-state.label.output_on_connect"
     ></label>
+</div>
+
+<div class="form-row"><ol id="custom-outputs"></ol></div>
+
+<div class="form-row" id="exposed-as-row">
+    <label
+        for="node-input-exposeAsEntityConfig"
+        data-i18n="ha-tag.label.expose_as"
+    ></label>
+    <input type="text" id="node-input-exposeAsEntityConfig" />
 </div>

@@ -36,6 +36,51 @@ const VERSION_2 = {
     version: 2,
     updateIntervalType: 'num',
 };
+const VERSION_3 = {
+    ...VERSION_2,
+    version: 3,
+    entityId: '',
+    exposeAsEntityConfig: '',
+    ifState: '',
+    ifStateType: 'str',
+    ifStateOperator: 'is',
+    outputInitially: false,
+    outputOnChanged: false,
+    outputProperties: [
+        {
+            property: 'payload',
+            propertyType: 'msg',
+            value: '',
+            valueType: 'entityState',
+        },
+        {
+            property: 'data',
+            propertyType: 'msg',
+            value: '',
+            valueType: 'entity',
+        },
+        {
+            property: 'topic',
+            propertyType: 'msg',
+            value: '',
+            valueType: 'triggerId',
+        },
+    ],
+    stateType: 'str',
+    updateInterval: '60',
+
+    // deprecated
+    entity_id: undefined,
+    updateinterval: undefined,
+    outputinitially: undefined,
+    outputonchanged: undefined,
+    state_type: undefined,
+    halt_if: undefined,
+    halt_if_type: undefined,
+    halt_if_compare: undefined,
+    exposeToHomeAssistant: undefined,
+    haConfig: undefined,
+};
 
 describe('Migrations - Poll State Node', function () {
     describe('Version 0', function () {
@@ -59,8 +104,15 @@ describe('Migrations - Poll State Node', function () {
             expect(migratedSchema).to.eql(VERSION_2);
         });
     });
+    describe('Version 3', function () {
+        it('should update version 2 to version 3 setting new defaults', function () {
+            const migrate = migrations.find((m) => m.version === 3);
+            const migratedSchema = migrate.up(VERSION_2);
+            expect(migratedSchema).to.eql(VERSION_3);
+        });
+    });
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_2);
+        expect(migratedSchema).to.eql(VERSION_3);
     });
 });

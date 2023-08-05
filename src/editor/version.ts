@@ -51,6 +51,7 @@ export function versionCheckOnEditPrepare(
 const exposedEventNodes: NodeType[] = [
     NodeType.EventsAll,
     NodeType.EventsState,
+    NodeType.PollState,
     NodeType.Tag,
     NodeType.Time,
     NodeType.Zone,
