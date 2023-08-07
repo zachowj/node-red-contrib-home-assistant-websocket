@@ -1,6 +1,7 @@
 {
   "server-state-changed": {
     "error": {
+      "entity_id_required": "Entity ID is required",
       "invalid_for": "`Invalid value for 'for': __for__`"
     },
     "label": {
