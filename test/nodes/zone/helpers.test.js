@@ -1,6 +1,9 @@
 const expect = require('chai').expect;
 
-const { getLocationData, getZoneData } = require('../../src/helpers/location');
+const {
+    getLocationData,
+    getZoneData,
+} = require('../../src/nodes/zone/helpers');
 
 describe('location', function () {
     describe('getLocationData', function () {
