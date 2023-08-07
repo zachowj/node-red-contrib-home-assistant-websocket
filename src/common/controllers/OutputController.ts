@@ -2,6 +2,7 @@ import { NodeMessageInFlow } from 'node-red';
 
 import { RED } from '../../globals';
 import { debugToClient } from '../../helpers/node';
+import HomeAssistant from '../../homeAssistant/HomeAssistant';
 import {
     BaseNode,
     NodeDone,
@@ -16,28 +17,32 @@ import TypedInputService from '../services/TypedInputService';
 import Status from '../status/Status';
 
 export interface OutputControllerConstructor<T extends BaseNode> {
+    homeAssistant: HomeAssistant;
+    jsonataService: JSONataService;
     nodeRedContextService: NodeRedContextService;
     node: T;
     status: Status;
     typedInputService: TypedInputService;
-    jsonataService: JSONataService;
 }
 
 // export default abstract class OutputController<T extends BaseNode> {
 export default abstract class OutputController<T extends BaseNode = BaseNode> {
     protected readonly contextService: NodeRedContextService;
+    protected readonly homeAssistant: HomeAssistant;
     protected readonly jsonataService: JSONataService;
     protected readonly node: T;
     protected readonly status: Status;
     protected readonly typedInputService: TypedInputService;
 
     constructor({
+        homeAssistant,
+        jsonataService,
         nodeRedContextService,
         node,
-        jsonataService,
         status,
         typedInputService,
     }: OutputControllerConstructor<T>) {
+        this.homeAssistant = homeAssistant;
         this.contextService = nodeRedContextService;
         this.jsonataService = jsonataService;
         this.node = node;

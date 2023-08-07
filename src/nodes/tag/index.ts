@@ -49,7 +49,6 @@ export default function tagNode(this: TagNode, config: TagNodeProperties) {
 
     const controller = new TagController({
         exposeAsConfigNode,
-        homeAssistant,
         node: this,
         status,
         ...controllerDeps,

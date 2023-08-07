@@ -144,7 +144,6 @@ export default function waitUntilNode(this: WaitUntilNode, config: NodeDef) {
     new WaitUntilController({
         comparatorService,
         clientEvents,
-        homeAssistant,
         inputService,
         node: this,
         status,
