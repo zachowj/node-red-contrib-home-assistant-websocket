@@ -86,7 +86,6 @@ export default function pollStateNode(
     const controller = new PollStateController({
         comparatorService,
         exposeAsConfigNode,
-        homeAssistant,
         node: this,
         status,
         transformState,
