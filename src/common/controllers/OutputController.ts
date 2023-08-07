@@ -25,8 +25,7 @@ export interface OutputControllerConstructor<T extends BaseNode> {
     typedInputService: TypedInputService;
 }
 
-// export default abstract class OutputController<T extends BaseNode> {
-export default abstract class OutputController<T extends BaseNode = BaseNode> {
+export default class OutputController<T extends BaseNode = BaseNode> {
     protected readonly contextService: NodeRedContextService;
     protected readonly homeAssistant: HomeAssistant;
     protected readonly jsonataService: JSONataService;
