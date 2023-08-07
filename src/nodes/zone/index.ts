@@ -45,7 +45,6 @@ export default function zoneNode(this: ZoneNode, config: ZoneNodeProperties) {
 
     const controller = new ZoneController({
         exposeAsConfigNode,
-        homeAssistant,
         node: this,
         status,
         ...controllerDeps,
