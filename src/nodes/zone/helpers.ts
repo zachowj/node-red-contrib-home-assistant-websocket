@@ -1,11 +1,7 @@
 import { isPointWithinRadius, isValidCoordinate } from 'geolib';
-import { HassEntity } from 'home-assistant-js-websocket';
 
-type locationData = {
-    latitude: number;
-    longitude: number;
-    radius?: number;
-};
+import { HassEntity } from '../../types/home-assistant';
+import { locationData } from './ZoneController';
 
 export function inZone(location: locationData, zone: locationData): boolean {
     const { radius = 0, ...zoneLatLog } = zone;
@@ -14,18 +10,18 @@ export function inZone(location: locationData, zone: locationData): boolean {
     return inZone;
 }
 
-export function getLocationData(entity: HassEntity): locationData | false {
+export function getLocationData(entity: HassEntity): locationData | undefined {
     const coord = {
         latitude: entity.attributes.latitude,
         longitude: entity.attributes.longitude,
     };
 
-    return isValidCoordinate(coord) ? coord : false;
+    return isValidCoordinate(coord) ? coord : undefined;
 }
 
-export function getZoneData(zone: HassEntity): locationData | boolean {
+export function getZoneData(zone: HassEntity): locationData | undefined {
     const data = getLocationData(zone);
-    if (data === false || zone?.attributes?.radius === undefined) return false;
+    if (data === undefined || zone?.attributes?.radius === undefined) return;
 
     data.radius = zone.attributes.radius;
 

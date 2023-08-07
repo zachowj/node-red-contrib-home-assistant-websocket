@@ -1,22 +1,25 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
-import { NodeType } from '../../const';
+import { EntityType, NodeType } from '../../const';
 import { hassAutocomplete } from '../../editor/components/hassAutocomplete';
 import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
-import { HassExposedConfig } from '../../editor/types';
+import { saveEntityType } from '../entity-config/editor/helpers';
 
 declare const RED: EditorRED;
 
 interface ZoneEditorNodeProperties extends EditorNodeProperties {
     server: string;
     version: number;
-    exposeToHomeAssistant: boolean;
-    haConfig: HassExposedConfig[];
     entities: string[];
     event: 'enter' | 'leave' | 'enter_leave';
     zones: string[];
+    exposeAsEntityConfig: string;
+
+    // deprecated but needed for migration
+    exposeToHomeAssistant: undefined;
+    haConfig: undefined;
 }
 
 const ZoneEditor: EditorNodeDef<ZoneEditorNodeProperties> = {
@@ -33,12 +36,12 @@ const ZoneEditor: EditorNodeDef<ZoneEditorNodeProperties> = {
         name: { value: '' },
         server: { value: '', type: NodeType.Server, required: true },
         version: { value: RED.settings.get('haZoneVersion', 0) },
-        exposeToHomeAssistant: { value: false },
-        haConfig: {
-            value: [
-                { property: 'name', value: '' },
-                { property: 'icon', value: '' },
-            ],
+        exposeAsEntityConfig: {
+            value: '',
+            type: NodeType.EntityConfig,
+            // @ts-ignore - DefinitelyTyped is missing this property
+            filter: (config) => config.entityType === EntityType.Switch,
+            required: false,
         },
         entities: {
             value: [''],
@@ -51,6 +54,10 @@ const ZoneEditor: EditorNodeDef<ZoneEditorNodeProperties> = {
             required: true,
             validate: (v) => !!v.length,
         },
+
+        // deprecated but still needed for imports of old flows
+        exposeToHomeAssistant: { value: undefined },
+        haConfig: { value: undefined },
     },
     oneditprepare: function () {
         ha.setup(this);
@@ -59,6 +66,7 @@ const ZoneEditor: EditorNodeDef<ZoneEditorNodeProperties> = {
 
         haServer.init(this, '#node-input-server');
         exposeNode.init(this);
+        saveEntityType(EntityType.Switch, 'exposeAsEntityConfig');
 
         $entities.editableList<string[]>({
             addButton: true,
@@ -136,7 +144,6 @@ const ZoneEditor: EditorNodeDef<ZoneEditorNodeProperties> = {
         });
         this.entities = Array.from(entities);
         this.zones = Array.from(zones);
-        this.haConfig = exposeNode.getValues();
     },
 };
 

@@ -9,4 +9,19 @@ export default [
             return newSchema;
         },
     },
+    {
+        version: 1,
+        up: (schema: any) => {
+            const newSchema = {
+                ...schema,
+                version: 1,
+                exposeAsEntityConfig: '',
+            };
+
+            newSchema.exposeToHomeAssistant = undefined;
+            newSchema.haConfig = undefined;
+
+            return newSchema;
+        },
+    },
 ];
