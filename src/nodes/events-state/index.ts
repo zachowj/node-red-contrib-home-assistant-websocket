@@ -52,7 +52,9 @@ export default function eventsStateNode(
     this.config = migrate(config);
 
     if (!this.config?.entityId) {
-        const error = new ConfigError('poll-state.error.entity_id_required');
+        const error = new ConfigError(
+            'server-state-changed.error.entity_id_required'
+        );
         this.status({
             fill: StatusColor.Red,
             shape: StatusShape.Ring,
@@ -92,7 +94,6 @@ export default function eventsStateNode(
     const controller = new EventsStateController({
         comparatorService,
         exposeAsConfigNode,
-        homeAssistant,
         node: this,
         status,
         transformState,
