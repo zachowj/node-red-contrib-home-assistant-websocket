@@ -1,9 +1,10 @@
 import { HassEntities } from 'home-assistant-js-websocket';
 import cloneDeep from 'lodash.clonedeep';
 
-import ExposeAsController, {
-    ExposeAsControllerConstructor,
-} from '../../common/controllers/EposeAsController';
+import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
+import OutputController, {
+    OutputControllerConstructor,
+} from '../../common/controllers/OutputController';
 import ConfigError from '../../common/errors/ConfigError';
 import ComparatorService from '../../common/services/ComparatorService';
 import TransformState, { TransformType } from '../../common/TransformState';
@@ -14,11 +15,13 @@ import {
 } from '../../helpers/utils';
 import { HassStateChangedEvent } from '../../types/home-assistant';
 import { NodeMessage } from '../../types/nodes';
+import { EntityConfigNode } from '../entity-config';
 import { EventsStateNode } from '.';
 
 interface EventsStateNodeConstructor
-    extends ExposeAsControllerConstructor<EventsStateNode> {
+    extends OutputControllerConstructor<EventsStateNode> {
     comparatorService: ComparatorService;
+    exposeAsConfigNode?: EntityConfigNode;
     transformState: TransformState;
 }
 
@@ -27,10 +30,12 @@ enum State {
     Unavailable = 'unavailable',
 }
 
-export default class EventsStateController extends ExposeAsController<EventsStateNode> {
+const ExposeAsController = ExposeAsMixin(OutputController<EventsStateNode>);
+export default class EventsStateController extends ExposeAsController {
     #comparatorService: ComparatorService;
     #timer: NodeJS.Timeout | undefined;
-    #topics: Record<string, { id?: NodeJS.Timeout; active: boolean }> = {};
+    #topics: Record<string, { timeoutId?: NodeJS.Timeout; active: boolean }> =
+        {};
 
     #transformState: TransformState;
     #updateinterval?: number;
@@ -170,10 +175,10 @@ export default class EventsStateController extends ExposeAsController<EventsStat
 
         this.status.setText(statusText);
 
-        clearTimeout(this.#topics[entityId].id);
+        clearTimeout(this.#topics[entityId].timeoutId);
         this.#topics[entityId] = {
             active: true,
-            id: setTimeout(
+            timeoutId: setTimeout(
                 this.output.bind(this, eventMessage, isIfState),
                 timeout
             ),
@@ -200,7 +205,7 @@ export default class EventsStateController extends ExposeAsController<EventsStat
 
         const statusMessage = `${eventMessage.event.new_state?.state}`;
 
-        clearTimeout(this.#topics[eventMessage.entity_id].id);
+        clearTimeout(this.#topics[eventMessage.entity_id].timeoutId);
 
         if (config.ifState && !condition) {
             this.status.setFailed(statusMessage);
