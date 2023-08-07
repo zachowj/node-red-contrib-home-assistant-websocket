@@ -41,7 +41,7 @@ interface OptionalInput {
     handler: OptionalInputHandler;
 }
 
-export default abstract class InputOutputController<
+export default class InputOutputController<
     T extends BaseNode,
     K extends NodeProperties
 > extends OutputController<T> {
@@ -99,7 +99,7 @@ export default abstract class InputOutputController<
         }
     }
 
-    protected abstract onInput?({
+    protected onInput?({
         done,
         message,
         parsedMessage,
