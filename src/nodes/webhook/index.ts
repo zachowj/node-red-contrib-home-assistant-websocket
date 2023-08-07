@@ -68,7 +68,6 @@ export default function webhookNode(
 
     const controller = new WebhookController({
         exposeAsConfigNode,
-        homeAssistant,
         node: this,
         status,
         ...controllerDeps,
