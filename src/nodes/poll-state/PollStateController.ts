@@ -1,23 +1,26 @@
-import ExposeAsController, {
-    ExposeAsControllerConstructor,
-} from '../../common/controllers/EposeAsController';
+import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
+import OutputController, {
+    OutputControllerConstructor,
+} from '../../common/controllers/OutputController';
 import ConfigError from '../../common/errors/ConfigError';
 import ComparatorService from '../../common/services/ComparatorService';
 import TransformState, { TransformType } from '../../common/TransformState';
 import { TypedInputTypes } from '../../const';
-import { RED } from '../../globals';
 import { getTimeInMilliseconds } from '../../helpers/utils';
 import { HassEntity } from '../../types/home-assistant';
 import { NodeMessage } from '../../types/nodes';
+import { EntityConfigNode } from '../entity-config';
 import { PollStateNode } from '.';
 
 interface PollStateNodeConstructor
-    extends ExposeAsControllerConstructor<PollStateNode> {
+    extends OutputControllerConstructor<PollStateNode> {
     comparatorService: ComparatorService;
+    exposeAsConfigNode?: EntityConfigNode;
     transformState: TransformState;
 }
 
-export default class PollStateController extends ExposeAsController<PollStateNode> {
+const ExposeAsController = ExposeAsMixin(OutputController<PollStateNode>);
+export default class PollStateController extends ExposeAsController {
     #comparatorService: ComparatorService;
     #timer: NodeJS.Timeout | undefined;
     #transformState: TransformState;
@@ -60,7 +63,7 @@ export default class PollStateController extends ExposeAsController<PollStateNod
         return this.node.config.entityId;
     }
 
-    public onTimer(triggered = false) {
+    public onTimer() {
         if (this.isEnabled === false) {
             return;
         }
@@ -97,12 +100,6 @@ export default class PollStateController extends ExposeAsController<PollStateNod
             }
         );
 
-        const statusMessage = `${entity.state}${
-            triggered === true
-                ? ` (${RED._('home-assistant.status.triggered')})`
-                : ''
-        }`;
-
         const message: NodeMessage = {};
         this.setCustomOutputs(this.node.config.outputProperties, message, {
             config: this.node.config,
@@ -110,6 +107,8 @@ export default class PollStateController extends ExposeAsController<PollStateNod
             entityState: entity.state,
             triggerId: this.node.config.entityId,
         });
+
+        const statusMessage = `${entity.state}`;
 
         // Check 'if state' and send to correct output
         if (this.node.config.ifState && !isIfState) {
@@ -136,9 +135,5 @@ export default class PollStateController extends ExposeAsController<PollStateNod
                 }
             }, this.#updateinterval);
         }
-    }
-
-    public onTriggered() {
-        this.onTimer(true);
     }
 }
