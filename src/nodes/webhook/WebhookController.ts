@@ -1,4 +1,5 @@
-import ExposeAsController from '../../common/controllers/EposeAsController';
+import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
+import OutputController from '../../common/controllers/OutputController';
 import { NodeMessage } from '../../types/nodes';
 import { WebhookNode } from '.';
 
@@ -8,7 +9,8 @@ interface WebhookResponse {
     params: Record<string, any>;
 }
 
-export default class WebhookController extends ExposeAsController<WebhookNode> {
+const ExposeAsController = ExposeAsMixin(OutputController<WebhookNode>);
+export default class WebhookController extends ExposeAsController {
     public onReceivedMessage(data: WebhookResponse) {
         if (!this.isEnabled) return;
 
