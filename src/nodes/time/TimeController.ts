@@ -1,7 +1,8 @@
 import { CronJob } from 'cron';
 import selectn from 'selectn';
 
-import ExposeAsController from '../../common/controllers/EposeAsController';
+import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
+import OutputController from '../../common/controllers/OutputController';
 import ConfigError from '../../common/errors/ConfigError';
 import { TypedInputTypes } from '../../const';
 import { RED } from '../../globals';
@@ -15,7 +16,8 @@ import { TimeNode, TimeNodeProperties } from '.';
 
 const DEFAULT_PROPERTY = 'state';
 
-export default class Timeontroller extends ExposeAsController<TimeNode> {
+const ExposeAsController = ExposeAsMixin(OutputController<TimeNode>);
+export default class TimeController extends ExposeAsController {
     #cronjob: CronJob | null = null;
 
     #createCronjob(crontab: string | Date) {
