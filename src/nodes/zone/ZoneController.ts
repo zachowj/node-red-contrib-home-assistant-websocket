@@ -1,6 +1,7 @@
 import cloneDeep from 'lodash.clonedeep';
 
-import ExposeAsController from '../../common/controllers/EposeAsController';
+import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
+import OutputController from '../../common/controllers/OutputController';
 import { HassEntity, HassStateChangedEvent } from '../../types/home-assistant';
 import { ZoneNode } from '.';
 import { getLocationData, getZoneData, inZone } from './helpers';
@@ -17,7 +18,8 @@ enum ZoneEvent {
     Leave = 'leave',
 }
 
-export default class Zone extends ExposeAsController<ZoneNode> {
+const ExposeAsController = ExposeAsMixin(OutputController<ZoneNode>);
+export default class Zone extends ExposeAsController {
     #getValidZones(fromState: HassEntity, toState: HassEntity) {
         const config = this.node.config;
         const fromLocationData = getLocationData(fromState);
@@ -54,10 +56,7 @@ export default class Zone extends ExposeAsController<ZoneNode> {
     }
 
     public onStateChanged(evt: HassStateChangedEvent) {
-        if (
-            this.isEnabled === false ||
-            !this.homeAssistant.isHomeAssistantRunning
-        ) {
+        if (this.isEnabled === false) {
             return;
         }
 
