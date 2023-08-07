@@ -62,7 +62,6 @@ export default function sentenceNode(
 
     const controller = new SentenceController({
         exposeAsConfigNode,
-        homeAssistant,
         node: this,
         status,
         ...controllerDeps,

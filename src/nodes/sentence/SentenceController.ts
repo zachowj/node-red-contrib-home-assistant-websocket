@@ -1,4 +1,5 @@
-import ExposeAsController from '../../common/controllers/EposeAsController';
+import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
+import OutputController from '../../common/controllers/OutputController';
 import { NodeMessage } from '../../types/nodes';
 import { SentenceNode } from '.';
 
@@ -7,7 +8,8 @@ interface SentenceResponse {
     result: Record<string, unknown>;
 }
 
-export default class SentenseController extends ExposeAsController<SentenceNode> {
+const ExposeAsController = ExposeAsMixin(OutputController<SentenceNode>);
+export default class SentenseController extends ExposeAsController {
     public onReceivedMessage(data: SentenceResponse) {
         if (!this.isEnabled) return;
 
