@@ -1,5 +1,4 @@
 import { HaEvent } from '../../homeAssistant';
-import HomeAssistant from '../../homeAssistant/HomeAssistant';
 import { EntityConfigNode } from '../../nodes/entity-config';
 import { BaseNode, NodeMessage } from '../../types/nodes';
 import Events from '../events/Events';
@@ -11,7 +10,6 @@ import OutputController, {
 export interface ExposeAsControllerConstructor<T extends BaseNode>
     extends OutputControllerConstructor<T> {
     exposeAsConfigNode?: EntityConfigNode;
-    homeAssistant: HomeAssistant;
 }
 
 export default abstract class ExposeAsController<
@@ -19,12 +17,10 @@ export default abstract class ExposeAsController<
 > extends OutputController<T> {
     protected exposeAsConfigEvents?: Events;
     protected readonly exposeAsConfigNode?: EntityConfigNode;
-    protected readonly homeAssistant: HomeAssistant;
 
     constructor(props: ExposeAsControllerConstructor<T>) {
         super(props);
         this.exposeAsConfigNode = props.exposeAsConfigNode;
-        this.homeAssistant = props.homeAssistant;
 
         if (props.exposeAsConfigNode) {
             this.exposeAsConfigEvents = new Events({

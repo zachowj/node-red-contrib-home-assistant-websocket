@@ -81,7 +81,6 @@ export default function currentStateNode(
     // eslint-disable-next-line no-new
     new CurrentStateController({
         comparatorService,
-        homeAssistant,
         inputService,
         node: this,
         status,

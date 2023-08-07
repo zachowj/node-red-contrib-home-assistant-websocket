@@ -72,7 +72,6 @@ export default function UpdateConfig(
 
     // eslint-disable-next-line no-new
     new UpdateConfigController({
-        homeAssistant,
         inputService,
         integration: entityConfigNode.integration,
         node: this,

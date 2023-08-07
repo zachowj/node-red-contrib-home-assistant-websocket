@@ -12,7 +12,7 @@ import TypedInputService from '../services/TypedInputService';
  */
 export function createControllerDependencies(
     node: BaseNode,
-    homeAssistant?: HomeAssistant
+    homeAssistant: HomeAssistant
 ) {
     const jsonataService = new JSONataService({
         homeAssistant,
@@ -26,6 +26,7 @@ export function createControllerDependencies(
     });
 
     return {
+        homeAssistant,
         jsonataService,
         nodeRedContextService,
         typedInputService,
