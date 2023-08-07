@@ -1,6 +1,7 @@
 import cloneDeep from 'lodash.clonedeep';
 
-import ExposeAsController from '../../common/controllers/EposeAsController';
+import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
+import OutputController from '../../common/controllers/OutputController';
 import { TAGS_ALL } from '../../const';
 import { HassEvent } from '../../types/home-assistant';
 import { NodeMessage } from '../../types/nodes';
@@ -13,7 +14,8 @@ interface HassTagScannedEvent extends HassEvent {
     };
 }
 
-export default class TagController extends ExposeAsController<TagNode> {
+const ExposeAsController = ExposeAsMixin(OutputController<TagNode>);
+export default class TagController extends ExposeAsController {
     #isValidTag(tag: string): boolean {
         return this.node.config.tags.some((t) => {
             return t === TAGS_ALL || t === tag;
