@@ -1,18 +1,23 @@
 import { isMatch } from 'lodash';
 
-import ExposeAsController, {
-    ExposeAsControllerConstructor,
-} from '../../common/controllers/EposeAsController';
+import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
+import OutputController, {
+    OutputControllerConstructor,
+} from '../../common/controllers/OutputController';
 import ConfigError from '../../common/errors/ConfigError';
-import { TriggerPayload } from '../../common/integration/BidirectionalEntityIntegration';
 import { ClientEvent } from '../../homeAssistant/Websocket';
 import { HassEvent } from '../../types/home-assistant';
 import { NodeMessage } from '../../types/nodes';
+import { EntityConfigNode } from '../entity-config';
 import { EventsAllNode, HA_CLIENT } from '.';
 
-type EventsAllNodeConstructor = ExposeAsControllerConstructor<EventsAllNode>;
+interface EventsAllNodeConstructor
+    extends OutputControllerConstructor<EventsAllNode> {
+    exposeAsConfigNode?: EntityConfigNode;
+}
 
-export default class EventsAll extends ExposeAsController<EventsAllNode> {
+const ExposeAsController = ExposeAsMixin(OutputController<EventsAllNode>);
+export default class EventsAll extends ExposeAsController {
     #eventData: Record<string, any> | undefined;
 
     constructor(props: EventsAllNodeConstructor) {
@@ -48,13 +53,6 @@ export default class EventsAll extends ExposeAsController<EventsAllNode> {
                 this.status.setSuccess(type);
             }
         }
-    }
-
-    protected onTriggered(data: TriggerPayload): void {
-        if (!this.isEnabled) return;
-
-        this.status.setSuccess('home-assistant.status.triggered');
-        this.node.send({ payload: data.payload });
     }
 
     public onHaEventsAll(evt: HassEvent) {

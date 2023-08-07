@@ -59,7 +59,6 @@ export default function eventsAllNode(
 
     const controller = new EventsAllController({
         exposeAsConfigNode,
-        homeAssistant,
         node: this,
         status,
         ...controllerDeps,
