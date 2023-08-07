@@ -61,7 +61,6 @@ export default function timeNode(this: TimeNode, config: TimeNodeProperties) {
 
     const controller = new TimeController({
         exposeAsConfigNode,
-        homeAssistant,
         node: this,
         status,
         ...controllerDeps,
