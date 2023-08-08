@@ -70,12 +70,14 @@ export default class Events {
         handler: EventHandler,
         options = { once: false }
     ): void {
-        this.#listeners.push([event, this.#errorHandler(handler)]);
+        const handlerWrapper = this.#errorHandler(handler);
+
+        this.#listeners.push([event, handlerWrapper]);
 
         if (options.once === true) {
-            this.emitter.once(event, this.#errorHandler(handler));
+            this.emitter.once(event, handlerWrapper);
         } else {
-            this.emitter.on(event, this.#errorHandler(handler));
+            this.emitter.on(event, handlerWrapper);
         }
     }
 
