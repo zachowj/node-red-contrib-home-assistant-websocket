@@ -48,7 +48,7 @@ function getServerId(): string | undefined {
 function getIntegrationVersion(): string {
     const serverId = getServerId();
 
-    if (serverId) {
+    if (serverId && version[serverId]) {
         return version[serverId];
     }
 
@@ -128,8 +128,8 @@ function render() {
             break;
         case NodeType.PollState:
         case NodeType.Tag:
-        case NodeType.Zone:
         case NodeType.Time:
+        case NodeType.Zone:
             break;
         default:
             renderEventNode();
@@ -223,7 +223,7 @@ const NodeMinIntegraionVersion = {
     [NodeType.Device]: '0.5.0',
     [NodeType.Number]: '1.3.0',
     [NodeType.Select]: '1.4.0',
-    [NodeType.Sentence]: '2.0.0',
+    [NodeType.Sentence]: '2.2.0',
     [NodeType.Sensor]: '1.1.0',
     [NodeType.Switch]: '1.1.0',
     [NodeType.Tag]: '0.5.0',
