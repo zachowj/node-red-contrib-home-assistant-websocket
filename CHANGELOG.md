@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.56.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.55.1...v0.56.0) (2023-08-09)
+
+
+### Features
+
+* **sentence:** Add response data for wildcards ([3f31af6](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/3f31af6a53f69f71535cd7af087dbc3c12c8a18b))
+* **sentense:** Add customizable response field ([c395a3f](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/c395a3f3a57a1877d1d2e8f2d481c9a4ad8b39b3))
+
+
+### Bug Fixes
+
+* Fix duplication of expose as trigger events ([53ac02e](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/53ac02eb54b2e1e43bc61a2459aed1aeea4d3cc6))
+* Use error handler for event class ([#1018](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1018)) ([b009362](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/b009362ea3b1fff44d0030d68cef335a04056bbe))
+
 ## [0.55.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.55.0...v0.55.1) (2023-07-18)
 
 
