@@ -100,14 +100,14 @@ export type HassStateChangedEvent = HassEventBase & {
 
 export interface HassEntityRegistryEntry {
     entity_id: string;
-    name: string | null;
-    icon: string | null;
-    platform: string;
-    config_entry_id: string | null;
-    device_id: string | null;
-    area_id: string | null;
-    disabled_by: string | null;
-    entity_category: 'config' | 'diagnostic' | null;
+    name?: string;
+    icon?: string;
+    platform?: string;
+    config_entry_id?: string;
+    device_id?: string;
+    area_id?: string;
+    disabled_by?: string;
+    entity_category?: 'config' | 'diagnostic';
 }
 
 type HassEntityCategory = 'config' | 'diagnostic';

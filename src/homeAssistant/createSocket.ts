@@ -130,7 +130,7 @@ export default function createSocket({
 }
 
 // https://github.com/home-assistant/home-assistant-js-websocket/blob/95f166b29a09fc1841bd0c1f312391ceb2812520/lib/util.ts#L45
-function atLeastHaVersion(
+export function atLeastHaVersion(
     version: string,
     major: number,
     minor: number,

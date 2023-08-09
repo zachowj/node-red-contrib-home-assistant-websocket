@@ -50,8 +50,7 @@ import {
     HassDeviceCapabilities,
     HassDevices,
     HassDeviceTriggers,
-    HassEntityRegistryDisplayEntry,
-    HassEntityRegistryDisplayEntryResponse,
+    HassEntityRegistryEntry,
     HassTags,
     HassTranslations,
     SubscriptionUnsubscribe,
@@ -60,9 +59,10 @@ import { Credentials } from './';
 import {
     subscribeAreaRegistry,
     subscribeDeviceRegistry,
+    subscribeEntityRegistry,
     subscribeEntityRegistryDisplay,
 } from './collections';
-import createSocket from './createSocket';
+import createSocket, { atLeastHaVersion } from './createSocket';
 import { startHeartbeat, StopHeartbeat } from './heartbeat';
 
 const debug = Debug('home-assistant:ws');
@@ -78,7 +78,6 @@ type HassTranslationsResponse = {
 };
 
 type HassDeviceCapabilitiesResponse = {
-    // eslint-disable-next-line camelcase
     extra_fields: HassDeviceCapabilities;
 };
 
@@ -114,7 +113,7 @@ export default class Websocket {
     areas: HassAreas = [];
     client!: Connection;
     devices: HassDevices = [];
-    entities: HassEntityRegistryDisplayEntry[] = [];
+    entities: HassEntityRegistryEntry[] = [];
     connectionState = STATE_DISCONNECTED;
     integrationVersion: string | number = 0;
     isHomeAssistantRunning = false;
@@ -224,6 +223,46 @@ export default class Websocket {
         );
     }
 
+    // the config/entity_registry/list_for_display endpoint was added in HA version 2023.3.0
+    // fallback to the config/entity_registry/list endpoint for older versions
+    // config/entity_registry/list outputs a larger payload, so we only want to use it if we have to
+    #subscribeEntityRegistry() {
+        if (atLeastHaVersion(this.client.haVersion, 2023, 3)) {
+            subscribeEntityRegistryDisplay(this.client, (entityReg) => {
+                const entities = entityReg.entities.map((entity) => {
+                    return {
+                        entity_id: entity.ei,
+                        device_id: entity.di,
+                        area_id: entity.ai,
+                        platform: entity.pl,
+                        entity_category:
+                            entity.ec !== undefined
+                                ? entityReg.entity_categories[entity.ec]
+                                : undefined,
+                        name: entity.en,
+                        config_entry_id: undefined,
+                        disabled_by: undefined,
+                        icon: undefined,
+                    };
+                });
+
+                this.entities = entities;
+                this.#emitEvent(HA_EVENT_REGISTRY_UPDATED, {
+                    devices: this.devices,
+                    entities: this.entities,
+                });
+            });
+        } else {
+            subscribeEntityRegistry(this.client, (entities) => {
+                this.entities = entities;
+                this.#emitEvent(HA_EVENT_REGISTRY_UPDATED, {
+                    devices: this.devices,
+                    entities: this.entities,
+                });
+            });
+        }
+    }
+
     async #haEvents() {
         // Home Assistant Events
         await this.client.subscribeEvents<HassEvent>(
@@ -248,33 +287,7 @@ export default class Websocket {
                 entities: this.entities,
             });
         });
-        subscribeEntityRegistryDisplay(
-            this.client,
-            (entityReg: HassEntityRegistryDisplayEntryResponse) => {
-                const entities = entityReg.entities.map((entity) => {
-                    return {
-                        entity_id: entity.ei,
-                        device_id: entity.di,
-                        area_id: entity.ai,
-                        translation_key: entity.tk,
-                        platform: entity.pl,
-                        entity_category:
-                            entity.ec !== undefined
-                                ? entityReg.entity_categories[entity.ec]
-                                : undefined,
-                        name: entity.en,
-                        hidden: entity.hb,
-                        display_precision: entity.dp,
-                    };
-                });
-
-                this.entities = entities;
-                this.#emitEvent(HA_EVENT_REGISTRY_UPDATED, {
-                    devices: this.devices,
-                    entities: this.entities,
-                });
-            }
-        );
+        this.#subscribeEntityRegistry();
     }
 
     #onHomeAssistantRunning() {
