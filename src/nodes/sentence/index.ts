@@ -18,6 +18,7 @@ import SentenceIntegration from './SentenceIntegration';
 
 export interface SentenceNodeProperties extends BaseNodeProperties {
     sentences: string[];
+    response: string;
     outputProperties: OutputProperty[];
 }
 

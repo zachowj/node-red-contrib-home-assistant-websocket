@@ -13,6 +13,7 @@ interface SentenceEditorNodeProperties extends EditorNodeProperties {
     server: string;
     version: number;
     sentences: string[];
+    response: string;
     outputProperties: OutputProperty[];
 }
 
@@ -33,6 +34,7 @@ const SentenceEditor: EditorNodeDef<SentenceEditorNodeProperties> = {
         version: { value: RED.settings.get('haSentenceVersion', 0) },
         outputs: { value: 1 },
         sentences: { value: [], validate: (s) => s.length > 0 },
+        response: { value: '' },
         outputProperties: {
             value: [
                 {

@@ -2,6 +2,7 @@
   "ha-sentence": {
     "label": {
       "name": "Name",
+      "response": "Response",
       "sentences": "Sentences",
       "server": "Server"
     }
