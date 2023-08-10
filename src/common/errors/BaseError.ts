@@ -8,8 +8,8 @@ export interface BaseErrorConstructor {
     statusMessage?: i18nKeyandParams;
 }
 
-export function isTranslationKey(key?: string): boolean {
-    if (!key) {
+export function isTranslationKey(key?: unknown): boolean {
+    if (typeof key !== 'string') {
         return false;
     }
 
