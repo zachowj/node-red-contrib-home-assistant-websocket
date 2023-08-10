@@ -1,10 +1,10 @@
 import BidirectionalIntegration, {
-    DiscoveryBaseMessage,
+    DiscoveryMessage,
 } from '../../common/integration/BidrectionalIntegration';
 import { MessageType } from '../../common/integration/Integration';
 import { SentenceNode } from '.';
 
-export interface SentenceDiscoveryPayload extends DiscoveryBaseMessage {
+export interface SentenceDiscoveryPayload extends DiscoveryMessage {
     type: MessageType.SentenseTrigger;
     sentences: string[];
     response?: string;

@@ -1,64 +1,127 @@
-import { Node, NodeDef } from 'node-red';
-
-import { HassExposedConfig } from '../../editor/types';
+import { createControllerDependencies } from '../../common/controllers/helpers';
+import ConfigError from '../../common/errors/ConfigError';
+import ClientEvents from '../../common/events/ClientEvents';
+import Events from '../../common/events/Events';
+import { IntegrationEvent } from '../../common/integration/Integration';
+import InputService from '../../common/services/InputService';
+import State from '../../common/State';
+import EventsStatus from '../../common/status/EventStatus';
+import Status from '../../common/status/Status';
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
-import { EventsStatus, Status } from '../../helpers/status';
-import { checkValidServerConfig } from '../../helpers/utils';
-import { Credentials } from '../../homeAssistant';
-import { BaseNode, ServerNode } from '../../types/nodes';
-import DeviceAction from './action-controller';
-import DeviceTrigger from './trigger-controller';
+import { getExposeAsConfigNode, getServerConfigNode } from '../../helpers/node';
+import { getHomeAssistant } from '../../homeAssistant';
+import {
+    HassDeviceCapability,
+    HassDeviceTrigger,
+} from '../../types/home-assistant';
+import {
+    BaseNode,
+    BaseNodeProperties,
+    OutputProperty,
+} from '../../types/nodes';
+import DeviceActionController from './DeviceActionController';
+import DeviceIntegration from './DeviceIntegration';
+import DeviceTriggerController from './DeviceTriggerController';
 
-interface BaseNodeDef extends NodeDef {
-    version: number;
-    debugenabled?: boolean;
-    server?: string;
-    entityConfigNode?: string;
-    exposeToHomeAssistant?: boolean;
-    outputs?: number;
-    haConfig?: HassExposedConfig[];
+enum DeviceType {
+    Action = 'action',
+    Trigger = 'trigger',
 }
 
-interface BaseNodeConfig {
-    debugenabled?: boolean;
-    name: string;
-    server?: ServerNode<Credentials>;
-    version: number;
+export interface DeviceNodeProperties extends BaseNodeProperties {
+    deviceType: DeviceType;
+    device: string;
+    event?: HassDeviceTrigger;
+    capabilities?: HassDeviceCapability[];
+    outputProperties: OutputProperty[];
+    exposeAsEntityConfig: string;
 }
 
-interface DeviceNodeConfig extends BaseNodeConfig {
-    deviceType: string;
+export interface DeviceNode extends BaseNode {
+    config: DeviceNodeProperties;
 }
 
-export interface DeviceNode extends Node {
-    config: DeviceNodeConfig;
-    controller: any;
-}
-
-export default function deviceNode(this: DeviceNode, config: BaseNodeDef) {
+export default function neviceNode(
+    this: DeviceNode,
+    config: DeviceNodeProperties
+) {
     RED.nodes.createNode(this, config);
 
     this.config = migrate(config);
-    checkValidServerConfig(this, config.server);
-    const params = {
+    const serverConfigNode = getServerConfigNode(this.config.server);
+    const homeAssistant = getHomeAssistant(serverConfigNode);
+    const exposeAsConfigNode = getExposeAsConfigNode(
+        this.config.exposeAsEntityConfig
+    );
+    const clientEvents = new ClientEvents({
         node: this,
-        config: this.config,
-        RED,
-    };
+        emitter: homeAssistant.eventBus,
+    });
+
+    const controllerDeps = createControllerDependencies(this, homeAssistant);
+
+    let controller: DeviceActionController | DeviceTriggerController;
+    let status: Status;
     switch (this.config.deviceType) {
-        case 'action': {
-            const status = new Status(this as unknown as BaseNode);
-            this.controller = new DeviceAction({ ...params, status });
+        case DeviceType.Action: {
+            status = new Status({
+                config: serverConfigNode.config,
+                exposeAsEntityConfigNode: exposeAsConfigNode,
+                node: this,
+            });
+
+            const inputService = new InputService<DeviceNodeProperties>({
+                nodeConfig: this.config,
+            });
+
+            controller = new DeviceActionController({
+                inputService,
+                node: this,
+                status,
+                ...controllerDeps,
+            });
+
             break;
         }
-        case 'trigger': {
-            const status = new EventsStatus(this as unknown as BaseNode);
-            this.controller = new DeviceTrigger({ ...params, status });
+        case DeviceType.Trigger: {
+            status = new EventsStatus({
+                clientEvents,
+                config: serverConfigNode.config,
+                exposeAsEntityConfigNode: exposeAsConfigNode,
+                node: this,
+            });
+            const nodeEvents = new Events({ node: this, emitter: this });
+            const integration = new DeviceIntegration({
+                node: this,
+                clientEvents,
+                homeAssistant,
+                state: new State(this),
+            });
+            integration.setStatus(status);
+
+            controller = new DeviceTriggerController({
+                exposeAsConfigNode,
+                node: this,
+                status,
+                ...controllerDeps,
+            });
+
+            nodeEvents.addListener(
+                IntegrationEvent.Trigger,
+                controller.onTrigger.bind(controller)
+            );
+
+            integration.init();
             break;
         }
         default:
-            this.status({ text: 'Error' });
-            throw new Error(`Invalid entity type: ${this.config.deviceType}`);
+            throw new ConfigError([
+                'ha-deivce.error.invalid_device_type',
+                { device_type: this.config.deviceType },
+            ]);
     }
+
+    clientEvents.setStatus(status);
+    exposeAsConfigNode?.integration.setStatus(status);
 }

@@ -8,8 +8,11 @@ import Integration, {
     MessageType,
 } from './Integration';
 
-export interface DiscoveryBaseMessage {
+export interface IntegrationMessage {
     type: MessageType;
+}
+
+export interface DiscoveryMessage extends IntegrationMessage {
     server_id: string;
 }
 
@@ -64,7 +67,9 @@ export default abstract class BidirectionalIntegration<
             );
             const message = err instanceof Error ? err.message : err;
             this.node.error(
-                `Error registering entity. Error Message: ${message}`
+                `Error registering entity. Error Message: ${JSON.stringify(
+                    message
+                )}`
             );
             return;
         }
@@ -95,7 +100,7 @@ export default abstract class BidirectionalIntegration<
         this.node.emit(IntegrationEvent.Trigger, message.data);
     }
 
-    protected abstract getDiscoveryPayload(): DiscoveryBaseMessage;
+    protected abstract getDiscoveryPayload(): IntegrationMessage;
 
     protected debugToClient(topic: string, message: any) {
         debugToClient(this.node, message, topic);

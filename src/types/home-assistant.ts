@@ -4,6 +4,8 @@ import {
     HassEventBase,
 } from 'home-assistant-js-websocket';
 
+import { DeviceCapabilityType } from '../const';
+
 export type HassArea = {
     area_id: string;
     name: string;
@@ -45,20 +47,22 @@ export type HassTranslation = {
 
 export type HassTranslations = HassTranslation[];
 
-export type HassDeviceCapability = {
+export interface HassDeviceCapability {
     name: string;
-    type: string;
-};
-
+    type: DeviceCapabilityType;
+    value: unknown;
+    unit: string;
+}
 export type HassDeviceCapabilities = HassDeviceCapability[];
 
-export type HassDeviceTrigger = {
+export interface HassDeviceTrigger {
     device_id: string;
     domain: string;
     entity_id: string;
-    platform: string;
+    metadata: Record<string, unknown>;
+    platform: 'device';
     type: string;
-};
+}
 
 export type HassDeviceTriggers = HassDeviceTrigger[];
 

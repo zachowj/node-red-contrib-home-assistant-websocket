@@ -19,6 +19,8 @@ export enum IntegrationEvent {
 }
 
 export enum MessageType {
+    DeviceAction = 'nodered/device_action',
+    DeviceTrigger = 'nodered/device_trigger',
     Discovery = 'nodered/discovery',
     Entity = 'nodered/entity',
     RemoveDevice = 'nodered/device/remove',
