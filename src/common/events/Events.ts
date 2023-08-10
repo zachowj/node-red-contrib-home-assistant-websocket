@@ -5,6 +5,9 @@ import { Node } from 'node-red';
 import { RED } from '../../globals';
 import { NodeDone } from '../../types/nodes';
 import BaseError from '../errors/BaseError';
+import HomeAssistantError, {
+    isHomeAssistantApiError,
+} from '../errors/HomeAssistantError';
 import JSONataError from '../errors/JSONataError';
 import Status from '../status/Status';
 
@@ -45,13 +48,15 @@ export default class Events {
                     statusMessage = RED._(
                         'home-assistant.status.validation_error'
                     );
+                } else if (isHomeAssistantApiError(e)) {
+                    error = new HomeAssistantError(e);
                 } else if (e instanceof BaseError) {
                     statusMessage = e.statusMessage;
                 } else if (typeof e === 'string') {
                     error = new Error(e);
                 } else {
                     error = new Error(
-                        `Unrecognised error ${JSON.stringify(e)}`
+                        `Unrecognized error ${JSON.stringify(e)}`
                     );
                 }
                 this.node.error(error);

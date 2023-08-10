@@ -14,7 +14,8 @@
     "error": {
       "invalid_device_config": "Invalid config for device trigger",
       "unknown_field_type": "Unknown field type: __type__",
-      "report": "Report"
+      "report": "Report",
+      "invalid_device_type": "Invalid device type: __type__"
     },
     "ui": {
       "no_area": "No Area"

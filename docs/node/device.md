@@ -29,6 +29,12 @@ Home Assistant object of the action
 
 - Type: `object`
 
+### Expose as
+
+- Type: `string`
+
+When an entity is selected a switch entity will be created in Home Assistant. Turning on and off this switch will disable/enable the nodes in Node-RED.
+
 ## Outputs
 
 Value types:

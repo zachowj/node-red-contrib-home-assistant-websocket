@@ -1,5 +1,4 @@
 export const ENTITY_SWITCH = 'switch';
-export const ENTITY_DEVICE_TRIGGER = 'device_trigger';
 export const HA_CLIENT_READY = 'ha_client:ready';
 export const HA_EVENT_AREA_REGISTRY_UPDATED = 'areas_updated';
 export const HA_EVENT_DEVICE_REGISTRY_UPDATED = 'devices_updated';
@@ -38,6 +37,15 @@ export enum ComparatorType {
     StartsWith = 'starts_with',
     InGroup = 'in_group',
     JSONata = 'jsonata',
+}
+
+export enum DeviceCapabilityType {
+    Boolean = 'boolean',
+    Float = 'float',
+    Integer = 'integer',
+    PositiveTimePeriod = 'positive_time_period_dict',
+    Select = 'select',
+    String = 'string',
 }
 
 export enum EntityType {

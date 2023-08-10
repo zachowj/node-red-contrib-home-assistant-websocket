@@ -120,6 +120,7 @@ function render() {
                 renderAlert(type);
             }
             break;
+        case NodeType.Device:
         case NodeType.Sentence:
         case NodeType.Webhook:
             if (!isAddNodeSelected('server')) {
@@ -220,7 +221,7 @@ export function getValues() {
 const NodeMinIntegraionVersion = {
     [NodeType.BinarySensor]: '1.1.0',
     [NodeType.Button]: '1.0.4',
-    [NodeType.Device]: '0.5.0',
+    [NodeType.Device]: '2.2.1',
     [NodeType.Number]: '1.3.0',
     [NodeType.Select]: '1.4.0',
     [NodeType.Sentence]: '2.2.0',

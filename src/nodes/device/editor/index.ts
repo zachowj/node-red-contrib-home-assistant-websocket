@@ -1,6 +1,6 @@
 import { EditorNodeDef, EditorRED } from 'node-red';
 
-import { NodeType } from '../../../const';
+import { EntityType, NodeType } from '../../../const';
 import * as haOutputs from '../../../editor/components/output-properties';
 import { select2DefaultOptions } from '../../../editor/components/select2';
 import * as haData from '../../../editor/data';
@@ -8,11 +8,7 @@ import * as exposeNode from '../../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../../editor/ha';
 import * as haServer from '../../../editor/haserver';
 import { i18n } from '../../../editor/i18n';
-import {
-    HassExposedConfig,
-    HassNodeProperties,
-    OutputProperty,
-} from '../../../editor/types';
+import { HassNodeProperties, OutputProperty } from '../../../editor/types';
 import * as haUtils from '../../../editor/utils';
 import {
     HassArea,
@@ -21,6 +17,7 @@ import {
     HassDeviceTrigger,
     HassTranslation,
 } from '../../../types/home-assistant';
+import { saveEntityType } from '../../entity-config/editor/helpers';
 import * as action from './action';
 import * as trigger from './trigger';
 import * as deviceUI from './ui';
@@ -56,13 +53,16 @@ const validateCapabilities = (capabilities: any) => {
 };
 
 interface DeviceEditorNodeProperties extends HassNodeProperties {
-    exposeToHomeAssistant: boolean;
-    haConfig: HassExposedConfig[];
     deviceType: string;
     device: string;
     event?: string;
     capabilities?: any[];
     outputProperties: OutputProperty[];
+    exposeAsEntityConfig: string;
+
+    // deprecated but still needed for migration
+    exposeToHomeAssistant: undefined;
+    haConfig: undefined;
 }
 
 const defaultOutputProperties: OutputProperty[] = [
@@ -95,13 +95,12 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
         name: { value: '' },
         server: { value: '', type: NodeType.Server, required: true },
         version: { value: RED.settings.get('haDeviceVersion', 0) },
-        debugenabled: { value: false },
-        exposeToHomeAssistant: { value: false },
-        haConfig: {
-            value: [
-                { property: 'name', value: '' },
-                { property: 'icon', value: '' },
-            ],
+        exposeAsEntityConfig: {
+            value: '',
+            type: NodeType.EntityConfig,
+            // @ts-ignore - DefinitelyTyped is missing this property
+            filter: (config) => config.entityType === EntityType.Switch,
+            required: false,
         },
         // @ts-ignore - DefinitelyTyped sets property to unchangable
         inputs: { value: 0 },
@@ -113,6 +112,10 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
             value: defaultOutputProperties,
             validate: haOutputs.validate,
         },
+
+        // deprecated but still needed for migration
+        exposeToHomeAssistant: { value: undefined },
+        haConfig: { value: undefined },
     },
     oneditprepare: function () {
         ha.setup(this);
@@ -125,6 +128,7 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
         const $event = $('#event');
         let event = getDevice($type.val() as string);
         let translations: HassTranslation;
+        saveEntityType(EntityType.Switch, 'exposeAsEntityConfig');
 
         $device.on('select2:select', function () {
             updateEvents($(this).val() as string);
@@ -229,7 +233,10 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
             haOutputs.loadData(defaultProperties);
 
             $('#event').prev().text(type);
-            $('#haConfigRow').toggle(type === 'trigger');
+
+            $('#node-input-exposeAsEntityConfig')
+                .closest('div.form-row')
+                .toggle(type === 'trigger');
         };
 
         $server.one('change', () => {
@@ -364,8 +371,6 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
         haOutputs.createOutputs(this.outputProperties, {
             extraTypes: getExtraTypes($type.val() as 'action' | 'trigger'),
         });
-        $('#haConfigRow').toggle($type.val() === 'trigger');
-        $('#exposeToHa').remove();
     },
     oneditsave: function () {
         const event = getDevice($('#node-input-deviceType').val() as string);
@@ -380,7 +385,6 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
             this.event = events[eventType];
             this.capabilities = deviceUI.getCapabilities(capabilities);
         }
-        this.haConfig = exposeNode.getValues();
         this.outputProperties = haOutputs.getOutputs();
     },
 };

@@ -49,6 +49,7 @@ export function versionCheckOnEditPrepare(
 }
 
 const exposedEventNodes: NodeType[] = [
+    NodeType.Device,
     NodeType.EventsAll,
     NodeType.EventsState,
     NodeType.PollState,
@@ -63,7 +64,8 @@ function migrateNode(node: EditorNodeInstance<HassNodeProperties>) {
     // TODO: Remove for version 1.0
     const haConfig =
         exposedEventNodes.includes(node.type as unknown as NodeType) &&
-        node.exposeToHomeAssistant === true
+        (node.exposeToHomeAssistant === true ||
+            (node.type === NodeType.Device && node.version < 1))
             ? data.haConfig
             : undefined;
 

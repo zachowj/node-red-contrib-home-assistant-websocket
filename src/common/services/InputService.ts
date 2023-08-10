@@ -31,7 +31,7 @@ export type ParsedMessage = Record<string, ParsedMessageValues>;
 export default class InputService<C extends NodeProperties> {
     readonly #inputs: NodeInputs;
     readonly #nodeConfig: C;
-    readonly #schema: Joi.ObjectSchema;
+    readonly #schema?: Joi.ObjectSchema;
     #allowInputOverrides = true;
 
     constructor({
@@ -39,11 +39,11 @@ export default class InputService<C extends NodeProperties> {
         nodeConfig,
         schema,
     }: {
-        inputs: NodeInputs;
+        inputs?: NodeInputs;
         nodeConfig: C;
-        schema: Joi.ObjectSchema;
+        schema?: Joi.ObjectSchema;
     }) {
-        this.#inputs = inputs;
+        this.#inputs = inputs ?? {};
         this.#nodeConfig = nodeConfig;
         this.#schema = schema;
     }
@@ -107,6 +107,8 @@ export default class InputService<C extends NodeProperties> {
     }
 
     validate(parsedMessage: ParsedMessage): boolean {
+        if (!this.#schema) return true;
+
         const schemaObject = this.#parsedMessageToSchemaObject(parsedMessage);
         return InputService.validateSchema(this.#schema, schemaObject);
     }

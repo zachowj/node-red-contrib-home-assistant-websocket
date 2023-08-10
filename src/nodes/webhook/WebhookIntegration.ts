@@ -1,10 +1,10 @@
 import BidirectionalIntegration, {
-    DiscoveryBaseMessage,
+    DiscoveryMessage,
 } from '../../common/integration/BidrectionalIntegration';
 import { MessageType } from '../../common/integration/Integration';
 import { WebhookNode } from '.';
 
-export interface WebhookDiscoveryPayload extends DiscoveryBaseMessage {
+export interface WebhookDiscoveryPayload extends DiscoveryMessage {
     type: MessageType.Webhook;
     server_id: string;
     webhook_id: string;
