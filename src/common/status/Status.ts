@@ -6,6 +6,7 @@ import { HaEvent } from '../../homeAssistant';
 import { EntityConfigNode } from '../../nodes/entity-config';
 import { i18nKeyandParams } from '../../types/i18n';
 import { BaseNode, ServerNodeConfig } from '../../types/nodes';
+import { isTranslationKey } from '../errors/BaseError';
 import ClientEvents from '../events/ClientEvents';
 import { getStatusOptions } from './helpers';
 
@@ -70,9 +71,9 @@ export default class Status<T extends BaseNode = BaseNode> {
         return `${separator}${date}`;
     }
 
-    protected translatedText(data: i18nKeyandParams): string {
+    protected translateText(data: i18nKeyandParams): string {
         const [key, params] = Array.isArray(data) ? data : [data, undefined];
-        const message = RED._(key, params);
+        const message = isTranslationKey(key) ? RED._(key, params) : key;
 
         return `${message} ${this.dateString}`;
     }
@@ -107,7 +108,7 @@ export default class Status<T extends BaseNode = BaseNode> {
         this.set({
             fill: StatusColor.Red,
             shape: StatusShape.Ring,
-            text: this.translatedText(text),
+            text: this.translateText(text),
         });
     }
 
@@ -117,7 +118,7 @@ export default class Status<T extends BaseNode = BaseNode> {
         this.set({
             fill: StatusColor.Red,
             shape: StatusShape.Ring,
-            text: this.translatedText(text),
+            text: this.translateText(text),
         });
     }
 
@@ -127,7 +128,7 @@ export default class Status<T extends BaseNode = BaseNode> {
         this.set({
             fill: StatusColor.Yellow,
             shape: StatusShape.Dot,
-            text: this.translatedText(text),
+            text: this.translateText(text),
         });
     }
 
@@ -137,7 +138,7 @@ export default class Status<T extends BaseNode = BaseNode> {
         this.set({
             fill: StatusColor.Green,
             shape: StatusShape.Dot,
-            text: this.translatedText(text),
+            text: this.translateText(text),
         });
     }
 }

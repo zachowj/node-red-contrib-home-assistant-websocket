@@ -8,6 +8,14 @@ export interface BaseErrorConstructor {
     statusMessage?: i18nKeyandParams;
 }
 
+export function isTranslationKey(key?: string): boolean {
+    if (!key) {
+        return false;
+    }
+
+    return !key.includes(' ') && key.includes('.');
+}
+
 export default abstract class BaseError extends Error {
     #statusMessage: string;
 
@@ -18,7 +26,10 @@ export default abstract class BaseError extends Error {
         defaultStatusMessage,
     }: BaseErrorConstructor) {
         const [key, params] = Array.isArray(data) ? data : [data, undefined];
-        const message = key ? RED._(key, params) : undefined;
+        let message: string | undefined;
+        if (key) {
+            message = isTranslationKey(key) ? RED._(key, params) : key;
+        }
         super(message);
         this.name = name ?? 'BaseError';
 

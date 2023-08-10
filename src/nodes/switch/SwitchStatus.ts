@@ -57,7 +57,7 @@ export default class SwitchStatus extends Status<SwitchNode> {
             status.text = 'home-assistant.status.state_change';
         }
 
-        status.text = this.translatedText(status.text);
+        status.text = this.translateText(status.text);
 
         this.updateStatus(status);
     }
