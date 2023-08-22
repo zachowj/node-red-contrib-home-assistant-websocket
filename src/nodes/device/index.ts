@@ -51,13 +51,6 @@ export default function neviceNode(
     this.config = migrate(config);
     const serverConfigNode = getServerConfigNode(this.config.server);
     const homeAssistant = getHomeAssistant(serverConfigNode);
-    const exposeAsConfigNode = getExposeAsConfigNode(
-        this.config.exposeAsEntityConfig
-    );
-    const clientEvents = new ClientEvents({
-        node: this,
-        emitter: homeAssistant.eventBus,
-    });
 
     const controllerDeps = createControllerDependencies(this, homeAssistant);
 
@@ -67,7 +60,6 @@ export default function neviceNode(
         case DeviceType.Action: {
             status = new Status({
                 config: serverConfigNode.config,
-                exposeAsEntityConfigNode: exposeAsConfigNode,
                 node: this,
             });
 
@@ -85,6 +77,13 @@ export default function neviceNode(
             break;
         }
         case DeviceType.Trigger: {
+            const clientEvents = new ClientEvents({
+                node: this,
+                emitter: homeAssistant.eventBus,
+            });
+            const exposeAsConfigNode = getExposeAsConfigNode(
+                this.config.exposeAsEntityConfig
+            );
             status = new EventsStatus({
                 clientEvents,
                 config: serverConfigNode.config,
@@ -98,7 +97,6 @@ export default function neviceNode(
                 homeAssistant,
                 state: new State(this),
             });
-            integration.setStatus(status);
 
             controller = new DeviceTriggerController({
                 exposeAsConfigNode,
@@ -112,6 +110,9 @@ export default function neviceNode(
                 controller.onTrigger.bind(controller)
             );
 
+            clientEvents.setStatus(status);
+            exposeAsConfigNode?.integration.setStatus(status);
+            integration.setStatus(status);
             integration.init();
             break;
         }
@@ -121,7 +122,4 @@ export default function neviceNode(
                 { device_type: this.config.deviceType },
             ]);
     }
-
-    clientEvents.setStatus(status);
-    exposeAsConfigNode?.integration.setStatus(status);
 }
