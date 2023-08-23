@@ -4,7 +4,7 @@ import { ClientEvent, ClientState } from '../../homeAssistant/Websocket';
 import ClientEvents from '../events/ClientEvents';
 import Status, { StatusColor, StatusConstructor, StatusShape } from './Status';
 
-interface EventsStatusConstructor extends StatusConstructor {
+export interface EventsStatusConstructor extends StatusConstructor {
     clientEvents: ClientEvents;
 }
 

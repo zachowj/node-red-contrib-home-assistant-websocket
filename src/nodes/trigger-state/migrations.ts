@@ -50,4 +50,30 @@ export default [
             return newSchema;
         },
     },
+    {
+        version: 3,
+        up: (schema: any) => {
+            const newSchema = {
+                ...schema,
+                version: 3,
+                entityId: schema.entityConfigNode,
+                entityIdType: schema.entityidfiltertypeentityConfigNode,
+                debugEnabled: schema.debugenabledentityConfigNode,
+                customOutputs: schema.customoutputsentityConfigNode,
+                outputInitially: schema.outputinitiallyentityConfigNode,
+                StateType: schema.state_typeentityConfigNode,
+                exposeAsEntityConfig: '',
+            };
+
+            newSchema.entityid = undefined;
+            newSchema.entityidfiltertype = undefined;
+            newSchema.debugenabled = undefined;
+            newSchema.customoutputs = undefined;
+            newSchema.outputinitially = undefined;
+            newSchema.state_type = undefined;
+            newSchema.enableInput = undefined;
+
+            return newSchema;
+        },
+    },
 ];

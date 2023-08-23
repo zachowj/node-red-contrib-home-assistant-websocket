@@ -83,6 +83,14 @@ export default function ExposeAsMixin<TBase extends Constructor>(Base: TBase) {
         public getExposeAsConfigEvents(): Events | undefined {
             return this.exposeAsConfigEvents;
         }
+
+        public enableExposeAs(enable = true) {
+            this.exposeAsConfigNode?.integration.updateStateAndAttributes(
+                enable,
+                {}
+            );
+            this.exposeAsConfigNode?.state.setEnabled(enable);
+        }
     };
 
     return Derived as MergeCtor<typeof Derived, TBase>;

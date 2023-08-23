@@ -95,6 +95,7 @@ export function init(n: HassNodeProperties) {
             case NodeType.EventsState:
             case NodeType.PollState:
             case NodeType.Tag:
+            case NodeType.TriggerState:
             case NodeType.Zone:
             case NodeType.Time:
             default:
@@ -130,6 +131,7 @@ function render() {
         case NodeType.PollState:
         case NodeType.Tag:
         case NodeType.Time:
+        case NodeType.TriggerState:
         case NodeType.Zone:
             break;
         default:
