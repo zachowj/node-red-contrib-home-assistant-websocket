@@ -1,5 +1,10 @@
 {
   "trigger-state": {
+    "error": {
+      "custom_output_message_needs_to_be_object": "Custom output message needs to be an key/value object",
+      "entity_id_not_found": "Entity \"__entity_id__\" not found",
+      "entity_id_required": "Entity ID is required"
+    },
     "label": {
       "comparator_option": {
         "does_not_include": "not in",

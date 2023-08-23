@@ -36,32 +36,32 @@ export default class ComparatorService {
         comparatorType: string, // is, is not, less, greater, less or equal, greater or equal
         comparatorValue: string, // user entered value
         actualValue: any, // value to compare against, state
-        comparatorValueDatatype: string, // datatype of the comparator value, str, num, bool
+        comparatorValueDataType: string, // datatype of the comparator value, str, num, bool
         {
             message,
             entity,
             prevEntity,
         }: {
             message?: NodeMessage;
-            entity?: HassEntity;
-            prevEntity?: HassEntity;
+            entity?: HassEntity | null;
+            prevEntity?: HassEntity | null;
         } = {}
-    ) {
+    ): boolean {
         let cValue;
-        if (isContextLocation(comparatorValueDatatype)) {
+        if (isContextLocation(comparatorValueDataType)) {
             cValue = this.#nodeRedContextService.get(
-                comparatorValueDatatype,
+                comparatorValueDataType,
                 comparatorValue,
                 message
             );
-        } else if (['entity', 'prevEntity'].includes(comparatorValueDatatype)) {
+        } else if (['entity', 'prevEntity'].includes(comparatorValueDataType)) {
             cValue = selectn(
                 comparatorValue,
-                comparatorValueDatatype === 'entity' ? entity : prevEntity
+                comparatorValueDataType === 'entity' ? entity : prevEntity
             );
         } else if (
             comparatorType !== 'jsonata' &&
-            comparatorValueDatatype === 'jsonata' &&
+            comparatorValueDataType === 'jsonata' &&
             comparatorValue
         ) {
             cValue = this.#jsonataService.evaluate(comparatorValue, {
@@ -69,18 +69,18 @@ export default class ComparatorService {
                 entity,
                 prevEntity,
             });
-        } else if (comparatorValueDatatype === 'bool') {
+        } else if (comparatorValueDataType === 'bool') {
             cValue = comparatorValue === 'true';
         } else {
             if (
                 comparatorType === 'includes' ||
                 comparatorType === 'does_not_include'
             ) {
-                comparatorValueDatatype = 'list';
+                comparatorValueDataType = 'list';
             }
 
             cValue = this.#transformState.transform(
-                comparatorValueDatatype as TransformType,
+                comparatorValueDataType as TransformType,
                 comparatorValue
             );
         }
@@ -91,7 +91,7 @@ export default class ComparatorService {
             case 'is_not': {
                 // Datatype might be num, bool, str, re (regular expression)
                 const isMatch =
-                    comparatorValueDatatype === 're'
+                    comparatorValueDataType === 're'
                         ? cValue.test(actualValue)
                         : cValue === actualValue;
                 return comparatorType === 'is' ? isMatch : !isMatch;
@@ -137,6 +137,8 @@ export default class ComparatorService {
                         prevEntity,
                     }) === true
                 );
+            default:
+                return Boolean(actualValue);
         }
     }
 }

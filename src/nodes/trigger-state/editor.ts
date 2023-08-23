@@ -1,49 +1,50 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
-import { NodeType } from '../../const';
+import { TransformType } from '../../common/TransformState';
+import {
+    ComparatorType,
+    EntityType,
+    NodeType,
+    TypedInputTypes,
+} from '../../const';
 import EntitySelector from '../../editor/components/EntitySelector';
 import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import { i18n } from '../../editor/i18n';
-import { HassExposedConfig } from '../../editor/types';
+import { saveEntityType } from '../entity-config/editor/helpers';
+import {
+    ComparatorPropertyType,
+    Constraint,
+    CustomOutput,
+    MessageType,
+    PropertyType,
+    TargetType,
+} from './const';
 
 declare const RED: EditorRED;
-
-interface Constraint {
-    targetType: string;
-    targetValue: string;
-    propertyType: string;
-    propertyValue: string;
-    comparatorType: string;
-    comparatorValueDatatype: string;
-    comparatorValue: string;
-}
-
-interface CustomOutput {
-    messageType: string;
-    messageValue: string;
-    messageValueType: string;
-    comparatorPropertyType: string;
-    comparatorPropertyValue: string;
-    comparatorType: string;
-    comparatorValue: string;
-    comparatorValueDataType: string;
-}
 
 interface TriggerStateEditorNodeProperties extends EditorNodeProperties {
     server: string;
     version: number;
-    exposeToHomeAssistant: boolean;
-    haConfig: HassExposedConfig[];
-    entityid: string | string[];
-    entityidfiltertype: string;
-    debugenabled: boolean;
+    entityId: string | string[];
+    entityIdType: string;
+    debugEnabled: boolean;
     constraints: Constraint[];
-    customoutputs: CustomOutput[];
-    outputinitially: boolean;
-    state_type: 'str' | 'num' | 'habool';
+    customOutputs: CustomOutput[];
+    outputInitially: boolean;
+    stateType: TransformType;
     enableInput: boolean;
+
+    // deprecated but still needed for migration
+    exposeToHomeAssistant: undefined;
+    haConfig: undefined;
+    entityid: undefined;
+    entityidfiltertype: undefined;
+    debugenabled: undefined;
+    customoutputs: undefined;
+    outputinitially: undefined;
+    state_type: undefined;
 }
 
 const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
@@ -58,9 +59,9 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
         if (index === 1) return 'blocked';
 
         // Get custom output by length minus default outputs
-        const co = this.customoutputs[index - NUM_DEFAULT_OUTPUTS];
+        const co = this.customOutputs[index - NUM_DEFAULT_OUTPUTS];
         let label;
-        if (co.comparatorPropertyType === 'always') {
+        if (co.comparatorPropertyType === ComparatorPropertyType.Always) {
             label = 'always sent';
         } else {
             label = `${co.comparatorPropertyType.replace(
@@ -73,43 +74,53 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
     icon: 'font-awesome/fa-map-signs',
     paletteLabel: 'trigger: state',
     label: function () {
-        return this.name || `trigger-state: ${this.entityid}`;
+        return this.name || `trigger-state: ${this.entityId}`;
     },
     labelStyle: ha.labelStyle,
     defaults: {
         name: { value: '' },
         server: { value: '', type: NodeType.Server, required: true },
         version: { value: RED.settings.get('triggerStateVersion', 0) },
-        exposeToHomeAssistant: { value: false },
-        haConfig: {
-            value: [
-                { property: 'name', value: '' },
-                { property: 'icon', value: '' },
-            ],
+        // @ts-ignore - DefinitelyTyped is wrong inputs can be changed
+        inputs: { value: 0 },
+        outputs: { value: 2 },
+        exposeAsEntityConfig: {
+            value: '',
+            type: NodeType.EntityConfig,
+            // @ts-ignore - DefinitelyTyped is missing this property
+            filter: (config) => config.entityType === EntityType.Switch,
+            required: false,
         },
-        entityid: { value: '', required: true },
-        entityidfiltertype: { value: 'exact' },
-        debugenabled: { value: false },
+        entityId: { value: '', required: true },
+        entityIdType: { value: 'exact' },
+        debugEnabled: { value: false },
         constraints: {
             value: [
                 {
-                    targetType: 'this_entity',
+                    targetType: TargetType.ThisEntity,
                     targetValue: '',
-                    propertyType: 'current_state',
+                    propertyType: PropertyType.CurrentState,
                     propertyValue: 'new_state.state',
-                    comparatorType: 'is',
-                    comparatorValueDatatype: 'str',
+                    comparatorType: ComparatorType.Is,
+                    comparatorValueDatatype: TypedInputTypes.String,
                     comparatorValue: '',
                 },
             ],
         },
-        // @ts-ignore - DefinitelyTyped is wrong inputs can be changed
-        inputs: { value: 0 },
-        outputs: { value: 2 },
-        customoutputs: { value: [] },
-        outputinitially: { value: false },
-        state_type: { value: 'str' },
+        customOutputs: { value: [] },
+        outputInitially: { value: false },
+        stateType: { value: TransformType.String },
         enableInput: { value: false },
+
+        // deprecated but still needed for migration
+        exposeToHomeAssistant: { value: undefined },
+        haConfig: { value: undefined },
+        entityid: { value: undefined },
+        entityidfiltertype: { value: undefined },
+        debugenabled: { value: undefined },
+        customoutputs: { value: undefined },
+        outputinitially: { value: undefined },
+        state_type: { value: undefined },
     },
     oneditprepare: function () {
         ha.setup(this);
@@ -119,9 +130,10 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
         haServer.init(this, '#node-input-server', (serverId) => {
             entitySelector.serverChanged(serverId);
         });
+        saveEntityType(EntityType.Switch, 'exposeAsEntityConfig');
         const entitySelector = new EntitySelector({
-            filterTypeSelector: '#node-input-entityidfiltertype',
-            entityId: this.entityid,
+            filterTypeSelector: '#node-input-entityIdType',
+            entityId: this.entityId,
             serverId: haServer.getSelectedServerId(),
         });
         $('#dialog-form').data('entitySelector', entitySelector);
@@ -163,7 +175,7 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
 
         $constraintList.on('change', '.target-type', function () {
             const $this = $(this);
-            const thisEntitySelected = $this.val() === 'this_entity';
+            const thisEntitySelected = $this.val() === TargetType.ThisEntity;
             const $parent = $this.parent().parent();
             const $targetValue = $this.next();
             const $propertyType = $parent.find('.property-type');
@@ -174,15 +186,20 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
                 $targetValue.removeAttr('disabled');
             }
             $propertyType
-                .find('option[value=previous_state]')
+                .find(`option[value=${PropertyType.PreviousState}]`)
                 .toggle(thisEntitySelected);
-            if ($propertyType.val() === 'previous_state') {
-                $propertyType.val('current_state').trigger('change');
+            if ($propertyType.val() === PropertyType.PreviousState) {
+                $propertyType.val(PropertyType.CurrentState).trigger('change');
             }
         });
         $constraintList.on('change', '.property-type', function (e) {
             const val = e.target.value;
-            if (val === 'current_state' || val === 'previous_state') {
+            if (
+                [
+                    PropertyType.CurrentState,
+                    PropertyType.PreviousState,
+                ].includes(val)
+            ) {
                 $(this).next().attr('disabled', 'disabled').val('');
             } else {
                 $(this).next().removeAttr('disabled');
@@ -241,7 +258,8 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
                 source: (req: any, cb: (entities: string[]) => void) => {
                     const term = req.term.toLowerCase();
                     const props =
-                        container.find('.target-type').val() === 'this_entity'
+                        container.find('.target-type').val() ===
+                        TargetType.ThisEntity
                             ? availablePropertiesPrefixed
                             : availableProperties;
                     const filiteredProps = props.filter((prop) =>
@@ -283,7 +301,7 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
                 .find('.property-type')
                 .val(data.propertyType)
                 .trigger('change');
-            if (data.propertyType === 'property') {
+            if (data.propertyType === PropertyType.Property) {
                 container.find('.property-value').val(data.propertyValue);
             }
             container.find('.comparator-type').val(data.comparatorType);
@@ -307,14 +325,14 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
         );
 
         $outputList.on('change', '.message-type', function (e) {
-            const val = e.target.value;
+            const val = e.target.value as MessageType;
             $(this)
                 .parent()
                 .find('.message-value')
                 .typedInput((val === 'default' ? 'hide' : 'show') as any);
         });
         $outputList.on('change', '.comparator-property-type', function (e) {
-            const val = e.target.value;
+            const val = e.target.value as ComparatorPropertyType;
             const $container = $(this).parent().parent();
             const $comparatorPropertyValue = $container.find(
                 '.comparator-property-value'
@@ -323,20 +341,20 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
             const $comparatorValue = $container.find('.comparator-value');
 
             switch (val) {
-                case 'always':
+                case ComparatorPropertyType.Always:
                     $comparatorPropertyValue.attr('disabled', 'disabled');
                     $comparatorType.attr('disabled', 'disabled');
                     $comparatorValue.typedInput('hide');
                     $comparatorPropertyValue.val('');
                     break;
-                case 'previous_state':
-                case 'current_state':
+                case ComparatorPropertyType.PreviousState:
+                case ComparatorPropertyType.CurrentState:
                     $comparatorPropertyValue.attr('disabled', 'disabled');
                     $comparatorType.removeAttr('disabled');
                     $comparatorValue.typedInput('show');
                     $comparatorPropertyValue.val('');
                     break;
-                case 'property':
+                case ComparatorPropertyType.Property:
                     $comparatorPropertyValue.removeAttr('disabled');
                     $comparatorType.removeAttr('disabled');
                     $comparatorValue.typedInput('show');
@@ -368,8 +386,14 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
                     whiteSpace: 'nowrap',
                 });
                 container.find('.message-value').typedInput({
-                    default: 'json',
-                    types: ['str', 'num', 'bool', 'json'],
+                    default: TypedInputTypes.JSON,
+                    types: [
+                        TypedInputTypes.String,
+                        TypedInputTypes.Number,
+                        TypedInputTypes.Boolean,
+                        TypedInputTypes.JSON,
+                        TypedInputTypes.JSONata,
+                    ],
                 });
                 container.find('.comparator-property-value').autocomplete({
                     source: (req: any, cb: (properties: string[]) => void) => {
@@ -384,13 +408,13 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
                     minLength: 0,
                 });
                 container.find('.comparator-value').typedInput({
-                    default: 'str',
+                    default: TypedInputTypes.String,
                     types: [
-                        'str',
-                        'num',
-                        'bool',
-                        're',
-                        'jsonata',
+                        TypedInputTypes.String,
+                        TypedInputTypes.Number,
+                        TypedInputTypes.Boolean,
+                        TypedInputTypes.Regex,
+                        TypedInputTypes.JSONata,
                         {
                             value: 'entity',
                             label: 'entity.',
@@ -458,7 +482,7 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
             },
         });
 
-        this.customoutputs.forEach((output, index) =>
+        this.customOutputs.forEach((output, index) =>
             $outputList.editableList('addItem', {
                 condition: output,
                 index: index + 2,
@@ -475,26 +499,25 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
             const $this = $(this);
             const $comparatorValue = $this.find('.comparator-value');
             const constraint: Constraint = {
-                targetType: $this.find('.target-type').val() as string,
+                targetType: $this.find('.target-type').val() as TargetType,
                 targetValue: $this.find('.target-value').val() as string,
-                propertyType: $this.find('.property-type').val() as string,
+                propertyType: $this
+                    .find('.property-type')
+                    .val() as PropertyType,
                 propertyValue: $this.find('.property-value').val() as string,
-                comparatorType: $this.find('.comparator-type').val() as string,
-                comparatorValueDatatype: $comparatorValue.typedInput('type'),
+                comparatorType: $this
+                    .find('.comparator-type')
+                    .val() as ComparatorType,
+                comparatorValueDatatype: $comparatorValue.typedInput(
+                    'type'
+                ) as TypedInputTypes,
                 comparatorValue: $comparatorValue.typedInput('value'),
             };
 
-            if (constraint.propertyType === 'current_state') {
+            if (constraint.propertyType === PropertyType.CurrentState) {
                 constraint.propertyValue = 'new_state.state';
-            } else if (constraint.propertyType === 'previous_state') {
+            } else if (constraint.propertyType === PropertyType.PreviousState) {
                 constraint.propertyValue = 'old_state.state';
-            }
-
-            if (
-                constraint.comparatorType === 'includes' ||
-                constraint.comparatorType === 'does_not_include'
-            ) {
-                constraint.comparatorValueDatatype = 'list';
             }
 
             constraints.push(constraint);
@@ -505,31 +528,36 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
             const $message = $this.find('.message-value');
             const $comparatorValue = $this.find('.comparator-value');
             const output: CustomOutput = {
-                messageType: $this.find('.message-type').val() as string,
+                messageType: $this.find('.message-type').val() as MessageType,
                 messageValue: $message.typedInput('value'),
-                messageValueType: $message.typedInput('type'),
+                messageValueType: $message.typedInput(
+                    'type'
+                ) as TypedInputTypes,
                 comparatorPropertyType: $this
                     .find('.comparator-property-type')
-                    .val() as string,
+                    .val() as ComparatorPropertyType,
                 comparatorPropertyValue: $this
                     .find('.comparator-property-value')
                     .val() as string,
-                comparatorType: $this.find('.comparator-type').val() as string,
+                comparatorType: $this
+                    .find('.comparator-type')
+                    .val() as ComparatorType,
                 comparatorValue: $comparatorValue.typedInput('value'),
-                comparatorValueDataType: $comparatorValue.typedInput('type'),
+                comparatorValueDataType: $comparatorValue.typedInput(
+                    'type'
+                ) as TypedInputTypes,
             };
 
-            if (output.comparatorPropertyType === 'current_state') {
-                output.comparatorPropertyValue = 'new_state.state';
-            } else if (output.comparatorPropertyType === 'previous_state') {
-                output.comparatorPropertyValue = 'old_state.state';
-            }
-
             if (
-                output.comparatorType === 'includes' ||
-                output.comparatorType === 'does_not_include'
+                output.comparatorPropertyType ===
+                ComparatorPropertyType.CurrentState
             ) {
-                output.comparatorValueDataType = 'list';
+                output.comparatorPropertyValue = 'new_state.state';
+            } else if (
+                output.comparatorPropertyType ===
+                ComparatorPropertyType.PreviousState
+            ) {
+                output.comparatorPropertyValue = 'old_state.state';
             }
 
             outputs.push(output);
@@ -540,12 +568,11 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
         );
 
         this.constraints = constraints;
-        this.customoutputs = outputs;
-        this.haConfig = exposeNode.getValues();
+        this.customOutputs = outputs;
         const entitySelector = $('#dialog-form').data(
             'entitySelector'
         ) as EntitySelector;
-        this.entityid = entitySelector.entityId;
+        this.entityId = entitySelector.entityId;
         entitySelector.destroy();
     },
     oneditcancel: function () {

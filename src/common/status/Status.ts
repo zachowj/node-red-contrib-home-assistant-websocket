@@ -30,36 +30,35 @@ export interface StatusConstructor<T extends BaseNode = BaseNode> {
 }
 
 export default class Status<T extends BaseNode = BaseNode> {
-    readonly #exposeAsEntityConfigNode?: EntityConfigNode;
-
     protected readonly config: ServerNodeConfig;
+    protected readonly exposeAsEntityConfigNode?: EntityConfigNode;
     protected lastStatus: NodeStatus = {};
     protected readonly node: T;
 
     constructor(props: StatusConstructor<T>) {
         this.config = props.config;
-        this.#exposeAsEntityConfigNode = props.exposeAsEntityConfigNode;
+        this.exposeAsEntityConfigNode = props.exposeAsEntityConfigNode;
         this.node = props.node;
 
-        if (this.#exposeAsEntityConfigNode) {
+        if (this.exposeAsEntityConfigNode) {
             const exposeAsConfigEvents = new ClientEvents({
                 node: this.node,
-                emitter: this.#exposeAsEntityConfigNode,
+                emitter: this.exposeAsEntityConfigNode,
             });
 
             exposeAsConfigEvents?.addListener(
                 HaEvent.StateChanged,
-                this.#onStateChange.bind(this)
+                this.onStateChange.bind(this)
             );
         }
     }
 
-    #onStateChange() {
+    protected onStateChange() {
         this.updateStatus(this.lastStatus);
     }
 
     protected get isExposeAsEnabled(): boolean {
-        return this.#exposeAsEntityConfigNode?.state.isEnabled() ?? true;
+        return this.exposeAsEntityConfigNode?.state.isEnabled() ?? true;
     }
 
     protected get dateString(): string {

@@ -34,7 +34,7 @@ export interface InputProperties {
 type OptionalInputHandler = (
     message: NodeMessageInFlow,
     send: NodeSend
-) => boolean;
+) => Promise<boolean> | boolean;
 
 interface OptionalInput {
     schema: Joi.ObjectSchema;
@@ -72,7 +72,7 @@ export default class InputOutputController<
 
                 if (validSchema) {
                     try {
-                        if (handler(message, send)) {
+                        if (await handler(message, send)) {
                             done();
                             return;
                         }
@@ -106,14 +106,14 @@ export default class InputOutputController<
         send,
     }: InputProperties): Promise<void>;
 
-    protected addOptionalInput(
+    public addOptionalInput(
         key: string,
         schema: Joi.ObjectSchema,
-        callback: () => boolean
+        handler: OptionalInputHandler
     ) {
         this.#optionalInputs.set(key, {
             schema,
-            handler: callback,
+            handler,
         });
     }
 
