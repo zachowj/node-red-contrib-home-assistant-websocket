@@ -41,6 +41,24 @@ const VERSION_2 = {
     ...VERSION_1,
     version: 2,
 };
+const VERSION_3 = {
+    ...VERSION_2,
+    version: 3,
+    entityId: 'entity.id',
+    entityIdType: 'exact',
+    debugEnabled: false,
+    customOutputs: [],
+    outputInitially: false,
+    StateType: 'str',
+    exposeAsEntityConfig: '',
+
+    entityid: undefined,
+    entityidfiltertype: undefined,
+    debugenabled: undefined,
+    customoutputs: undefined,
+    outputinitially: undefined,
+    state_type: undefined,
+};
 
 describe('Migrations - Trigger State Node', function () {
     describe('Version 0', function () {
@@ -90,8 +108,15 @@ describe('Migrations - Trigger State Node', function () {
             expect(migratedSchema.entityid).to.have.lengthOf(1);
         });
     });
+    describe('Version 3', function () {
+        it('should update version 2 to version 3', function () {
+            const migrate = migrations.find((m) => m.version === 3);
+            const migratedSchema = migrate.up(VERSION_2);
+            expect(migratedSchema).to.eql(VERSION_3);
+        });
+    });
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_2);
+        expect(migratedSchema).to.eql(VERSION_3);
     });
 });

@@ -56,12 +56,12 @@ export default [
             const newSchema = {
                 ...schema,
                 version: 3,
-                entityId: schema.entityConfigNode,
-                entityIdType: schema.entityidfiltertypeentityConfigNode,
-                debugEnabled: schema.debugenabledentityConfigNode,
-                customOutputs: schema.customoutputsentityConfigNode,
-                outputInitially: schema.outputinitiallyentityConfigNode,
-                StateType: schema.state_typeentityConfigNode,
+                entityId: schema.entityid,
+                entityIdType: schema.entityidfiltertype,
+                debugEnabled: schema.debugenabled,
+                customOutputs: schema.customoutputs,
+                outputInitially: schema.outputinitially,
+                StateType: schema.state_type,
                 exposeAsEntityConfig: '',
             };
 
@@ -71,7 +71,6 @@ export default [
             newSchema.customoutputs = undefined;
             newSchema.outputinitially = undefined;
             newSchema.state_type = undefined;
-            newSchema.enableInput = undefined;
 
             return newSchema;
         },
