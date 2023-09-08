@@ -6,7 +6,7 @@ jobs:
   prerelease:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Make prerelease to npm
         uses: epeli/npm-release@v2
         with:
