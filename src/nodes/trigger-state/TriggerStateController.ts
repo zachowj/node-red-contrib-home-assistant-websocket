@@ -260,13 +260,13 @@ export default class TriggerStateController extends ExposeAsController {
             actualValue,
         }: CustomOutputsComparatorResult,
         eventMessage: HassStateChangedEvent
-    ): Record<string, unknown> {
+    ): Record<string, unknown> | null {
         // If comparator did not match
         if (!comparatorMatched) {
             this.debugToClient(
                 `output comparator failed: property "${output.comparatorPropertyValue}" with value ${actualValue} failed "${output.comparatorType}" check against (${output.comparatorValueDataType}) ${output.comparatorValue}`
             );
-            return {};
+            return null;
         }
 
         let message: Record<string, unknown> = {
