@@ -19,12 +19,12 @@ export enum IntegrationEvent {
 }
 
 export enum MessageType {
-    DeviceAction = 'nodered/device_action',
-    DeviceTrigger = 'nodered/device_trigger',
+    DeviceAction = 'nodered/device/action',
+    DeviceTrigger = 'nodered/device/trigger',
     Discovery = 'nodered/discovery',
     Entity = 'nodered/entity',
     RemoveDevice = 'nodered/device/remove',
-    SentenseTrigger = 'nodered/sentence',
+    SentenceTrigger = 'nodered/sentence',
     UpdateConfig = 'nodered/entity/update_config',
     Webhook = 'nodered/webhook',
 }
