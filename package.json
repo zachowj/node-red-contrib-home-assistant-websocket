@@ -157,7 +157,7 @@
     "typescript": "5.1.6",
     "vinyl-source-stream": "2.0.0",
     "vuepress": "2.0.0-beta.64",
-    "vuepress-plugin-copy-code2": "2.0.0-beta.231"
+    "vuepress-plugin-copy-code2": "2.0.0-beta.237"
   },
   "lint-staged": {
     "*.{js,ts}": [
