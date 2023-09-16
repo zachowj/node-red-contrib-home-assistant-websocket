@@ -54,7 +54,7 @@ class FireEvent extends BaseNode {
         }
     }
 
-    onInput({ message, parsedMessage, send, done }) {
+    async onInput({ message, parsedMessage, send, done }) {
         if (!this.homeAssistant) {
             this.status.setFailed('No server');
             done('No valid Home Assistant server selected.');
@@ -71,7 +71,9 @@ class FireEvent extends BaseNode {
         if (parsedMessage.dataType.value === 'jsonata') {
             try {
                 eventData = JSON.stringify(
-                    this.evaluateJSONata(parsedMessage.data.value, { message })
+                    await this.evaluateJSONata(parsedMessage.data.value, {
+                        message,
+                    })
                 );
             } catch (e) {
                 this.status.setFailed('Error');

@@ -43,7 +43,7 @@ class CallService extends EventsNode {
         }
     }
 
-    onInput({ message, send, done }) {
+    async onInput({ message, send, done }) {
         const config = this.nodeConfig;
         if (!this.isConnected && config.queue === QUEUE_NONE) {
             this.status.setFailed('No Connection');
@@ -78,7 +78,7 @@ class CallService extends EventsNode {
         if (config.dataType === 'jsonata' && config.data) {
             try {
                 configData = JSON.stringify(
-                    this.evaluateJSONata(config.data, { message })
+                    await this.evaluateJSONata(config.data, { message })
                 );
             } catch (e) {
                 this.status.setFailed('Error');
@@ -274,10 +274,14 @@ class CallService extends EventsNode {
         this.status.setSuccess(`${apiDomain}.${apiService} called`);
 
         try {
-            this.setCustomOutputs(this.nodeConfig.outputProperties, message, {
-                config: this.nodeConfig,
-                data,
-            });
+            await this.setCustomOutputs(
+                this.nodeConfig.outputProperties,
+                message,
+                {
+                    config: this.nodeConfig,
+                    data,
+                }
+            );
         } catch (e) {
             this.status.setFailed('error');
             done(e.message);

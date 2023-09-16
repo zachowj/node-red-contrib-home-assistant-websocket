@@ -11,16 +11,20 @@ interface WebhookResponse {
 
 const ExposeAsController = ExposeAsMixin(OutputController<WebhookNode>);
 export default class WebhookController extends ExposeAsController {
-    public onReceivedMessage(data: WebhookResponse) {
+    public async onReceivedMessage(data: WebhookResponse) {
         if (!this.isEnabled) return;
 
         const message: NodeMessage = {};
-        this.setCustomOutputs(this.node.config.outputProperties, message, {
-            config: this.node.config,
-            data: data.payload,
-            headers: data.headers,
-            params: data.params,
-        });
+        await this.setCustomOutputs(
+            this.node.config.outputProperties,
+            message,
+            {
+                config: this.node.config,
+                data: data.payload,
+                headers: data.headers,
+                params: data.params,
+            }
+        );
         this.status.setSuccess('home-assistant.status.received');
         this.node.send(message);
     }

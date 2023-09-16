@@ -90,13 +90,13 @@ export default class OutputController<T extends BaseNode = BaseNode> {
         debugToClient(this.node, message);
     }
 
-    protected setCustomOutputs(
+    protected async setCustomOutputs(
         properties: OutputProperty[] = [],
         message: NodeMessage,
         extras: Record<string, any>
     ) {
-        properties.forEach((item) => {
-            const value = this.typedInputService.getValue(
+        for (const item of properties) {
+            const value = await this.typedInputService.getValue(
                 item.value,
                 item.valueType,
                 {
@@ -117,7 +117,7 @@ export default class OutputController<T extends BaseNode = BaseNode> {
                     `Custom Ouput Error (${item.propertyType}:${item.property}): ${e}`
                 );
             }
-        });
+        }
     }
 
     #preOnClose(removed: boolean, done: NodeDone) {

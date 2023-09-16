@@ -32,7 +32,7 @@ export default class ComparatorService {
         this.#transformState = transformState;
     }
 
-    getComparatorResult(
+    async getComparatorResult(
         comparatorType: string, // is, is not, less, greater, less or equal, greater or equal
         comparatorValue: string, // user entered value
         actualValue: any, // value to compare against, state
@@ -46,7 +46,7 @@ export default class ComparatorService {
             entity?: HassEntity | null;
             prevEntity?: HassEntity | null;
         } = {}
-    ): boolean {
+    ): Promise<boolean> {
         let cValue;
         if (isContextLocation(comparatorValueDataType)) {
             cValue = this.#nodeRedContextService.get(
@@ -64,7 +64,7 @@ export default class ComparatorService {
             comparatorValueDataType === 'jsonata' &&
             comparatorValue
         ) {
-            cValue = this.#jsonataService.evaluate(comparatorValue, {
+            cValue = await this.#jsonataService.evaluate(comparatorValue, {
                 message,
                 entity,
                 prevEntity,
@@ -127,16 +127,20 @@ export default class ComparatorService {
                     selectn('attributes.entity_id', ent) || [];
                 return groupEntities.includes(actualValue);
             }
-            case 'jsonata':
+            case 'jsonata': {
                 if (!cValue) return true;
 
-                return (
-                    this.#jsonataService.evaluate(cValue, {
+                const jsonataResult = await this.#jsonataService.evaluate(
+                    cValue,
+                    {
                         message,
                         entity,
                         prevEntity,
-                    }) === true
+                    }
                 );
+
+                return jsonataResult === true;
+            }
             default:
                 return Boolean(actualValue);
         }

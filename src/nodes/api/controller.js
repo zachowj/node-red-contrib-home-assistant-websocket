@@ -121,9 +121,12 @@ class Api extends BaseNode {
         ) {
             try {
                 if (parsedMessage.dataType.value === 'jsonata') {
-                    data = this.evaluateJSONata(parsedMessage.data.value, {
-                        message,
-                    });
+                    data = await this.evaluateJSONata(
+                        parsedMessage.data.value,
+                        {
+                            message,
+                        }
+                    );
                 } else {
                     data = JSON.parse(
                         renderTemplate(
@@ -189,7 +192,7 @@ class Api extends BaseNode {
         });
 
         try {
-            this.setCustomOutputs(
+            await this.setCustomOutputs(
                 parsedMessage.outputProperties.value,
                 message,
                 {

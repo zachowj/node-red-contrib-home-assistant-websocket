@@ -154,7 +154,7 @@ class BaseNode {
         this.nodeRedContextService.set(val, location, property, message);
     }
 
-    getComparatorResult(
+    async getComparatorResult(
         comparatorType,
         comparatorValue,
         actualValue,
@@ -170,20 +170,24 @@ class BaseNode {
         );
     }
 
-    evaluateJSONata(expression, objs = {}) {
+    async evaluateJSONata(expression, objs = {}) {
         return this.jsonataService.evaluate(expression, objs);
     }
 
-    getTypedInputValue(value, valueType, props = {}) {
+    async getTypedInputValue(value, valueType, props = {}) {
         return this.typedInputService.getValue(value, valueType, props);
     }
 
-    setCustomOutputs(properties = [], message, extras) {
-        properties.forEach((item) => {
-            const value = this.getTypedInputValue(item.value, item.valueType, {
-                message,
-                ...extras,
-            });
+    async setCustomOutputs(properties = [], message, extras) {
+        for (const item of properties) {
+            const value = await this.getTypedInputValue(
+                item.value,
+                item.valueType,
+                {
+                    message,
+                    ...extras,
+                }
+            );
 
             try {
                 this.nodeRedContextService.set(
@@ -197,7 +201,7 @@ class BaseNode {
                     `Custom Ouput Error (${item.propertyType}:${item.property}): ${e.message}`
                 );
             }
-        });
+        }
     }
 }
 

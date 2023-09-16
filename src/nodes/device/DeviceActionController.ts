@@ -33,10 +33,14 @@ export default class DeviceAction extends InputOutputController<
 
         await this.homeAssistant.websocket.send(payload);
 
-        this.setCustomOutputs(this.node.config.outputProperties, message, {
-            config: this.node.config,
-            data: payload,
-        });
+        await this.setCustomOutputs(
+            this.node.config.outputProperties,
+            message,
+            {
+                config: this.node.config,
+                data: payload,
+            }
+        );
 
         this.status.setSuccess(
             `${this.node.config.event?.domain}.${this.node.config.event?.type}`

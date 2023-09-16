@@ -32,10 +32,10 @@ export default class PollStateController extends ExposeAsController {
         this.#transformState = props.transformState;
     }
 
-    #getInterval() {
+    async #getInterval() {
         let interval = this.node.config.updateInterval || '0';
         if (this.node.config.updateIntervalType === TypedInputTypes.JSONata) {
-            interval = this.jsonataService.evaluate(interval);
+            interval = await this.jsonataService.evaluate(interval);
         }
 
         const intervalMs = getTimeInMilliseconds(
@@ -63,7 +63,7 @@ export default class PollStateController extends ExposeAsController {
         return this.node.config.entityId;
     }
 
-    public onTimer() {
+    public async onTimer() {
         if (this.isEnabled === false) {
             return;
         }
@@ -90,7 +90,7 @@ export default class PollStateController extends ExposeAsController {
             );
         }
 
-        const isIfState = this.#comparatorService.getComparatorResult(
+        const isIfState = await this.#comparatorService.getComparatorResult(
             this.node.config.ifStateOperator,
             this.node.config.ifState,
             entity.state,
@@ -101,12 +101,16 @@ export default class PollStateController extends ExposeAsController {
         );
 
         const message: NodeMessage = {};
-        this.setCustomOutputs(this.node.config.outputProperties, message, {
-            config: this.node.config,
-            entity,
-            entityState: entity.state,
-            triggerId: this.node.config.entityId,
-        });
+        await this.setCustomOutputs(
+            this.node.config.outputProperties,
+            message,
+            {
+                config: this.node.config,
+                entity,
+                entityState: entity.state,
+                triggerId: this.node.config.entityId,
+            }
+        );
 
         const statusMessage = `${entity.state}`;
 
@@ -121,15 +125,15 @@ export default class PollStateController extends ExposeAsController {
         this.node.send([message, null]);
     }
 
-    public onIntervalUpdate() {
-        const interval = this.#getInterval();
+    public async onIntervalUpdate() {
+        const interval = await this.#getInterval();
         // create new timer if interval changed
         if (interval !== this.#updateinterval) {
             clearInterval(this.#timer);
             this.#updateinterval = interval;
-            this.#timer = setInterval(() => {
+            this.#timer = setInterval(async () => {
                 try {
-                    this.onTimer();
+                    await this.onTimer();
                 } catch (e) {
                     this.node.error(e);
                 }

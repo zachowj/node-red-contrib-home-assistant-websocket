@@ -55,9 +55,13 @@ export default class UpdateConfig<
         this.integration.saveHaConfigToContext(config);
         this.status.setSuccess('home-assistant.status.updated');
 
-        this.setCustomOutputs(this.node.config.outputProperties, message, {
-            config: this.node.config,
-        });
+        await this.setCustomOutputs(
+            this.node.config.outputProperties,
+            message,
+            {
+                config: this.node.config,
+            }
+        );
         send(message);
         done();
     }

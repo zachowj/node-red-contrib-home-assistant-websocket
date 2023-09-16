@@ -1,9 +1,25 @@
+import { Expression } from 'jsonata';
 import { random, sampleSize } from 'lodash';
 import { Node } from 'node-red';
 
 import { RED } from '../../globals';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
 import JSONataError from '../errors/JSONataError';
+
+function evaluateJSONataExpression(
+    expr: Expression,
+    message: Record<string, any>
+) {
+    return new Promise<any>((resolve, reject) => {
+        RED.util.evaluateJSONataExpression(expr as any, message, (err, res) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(res);
+            }
+        });
+    });
+}
 
 function isJSONataError(error: unknown): error is JSONataError {
     if (typeof error !== 'object' || !error) return false;
@@ -31,7 +47,7 @@ export default class JSONataService {
         this.#node = node;
     }
 
-    evaluate(expression: string, objs: Record<string, any> = {}) {
+    async evaluate(expression: string, objs: Record<string, any> = {}) {
         const expr = RED.util.prepareJSONataExpression(expression, this.#node);
         const { entity, message, prevEntity } = objs;
 
@@ -58,7 +74,7 @@ export default class JSONataService {
         expr.assign('sampleSize', sampleSize);
 
         try {
-            return RED.util.evaluateJSONataExpression(expr, message);
+            return evaluateJSONataExpression(expr, message);
         } catch (err) {
             if (isJSONataError(err)) {
                 throw new JSONataError(err);

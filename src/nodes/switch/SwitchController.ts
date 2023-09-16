@@ -71,18 +71,22 @@ export default class SwitchController extends InputOutputController<
         }
     }
 
-    public onStateChange(payload: StateChangePayload) {
+    public async onStateChange(payload: StateChangePayload) {
         if (!payload.changed || !this.node.config.outputOnStateChange) return;
 
         const message: NodeMessage = {};
 
-        this.setCustomOutputs(this.node.config.outputProperties, message, {
-            config: this.node.config,
-            entity: {
-                state: this.#isSwitchEntityEnabled,
-            },
-            entityState: this.#isSwitchEntityEnabled,
-        });
+        await this.setCustomOutputs(
+            this.node.config.outputProperties,
+            message,
+            {
+                config: this.node.config,
+                entity: {
+                    state: this.#isSwitchEntityEnabled,
+                },
+                entityState: this.#isSwitchEntityEnabled,
+            }
+        );
 
         if (this.#isSwitchEntityEnabled) {
             this.node.send([message, null]);

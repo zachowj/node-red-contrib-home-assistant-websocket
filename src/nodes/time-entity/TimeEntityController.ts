@@ -35,10 +35,14 @@ export default class TimeEntityController extends InputOutputController<
             ?.state as string;
         // inject value so colons are not removed
         this.status.setSuccess(['__value__', { value }]);
-        this.setCustomOutputs(this.node.config.outputProperties, message, {
-            config: this.node.config,
-            value,
-        });
+        await this.setCustomOutputs(
+            this.node.config.outputProperties,
+            message,
+            {
+                config: this.node.config,
+                value,
+            }
+        );
 
         send(message);
         done();
@@ -61,7 +65,7 @@ export default class TimeEntityController extends InputOutputController<
             );
         }
 
-        const value = this.typedInputService.getValue(
+        const value = await this.typedInputService.getValue(
             parsedMessage.value.value,
             parsedMessage.valueType.value,
             {
@@ -157,11 +161,15 @@ export default class TimeEntityController extends InputOutputController<
             previousValue = this.#entityConfigNode?.state?.getLastPayload()
                 ?.state as string | undefined;
         }
-        this.setCustomOutputs(this.node.config.outputProperties, message, {
-            config: this.node.config,
-            value,
-            previousValue,
-        });
+        await this.setCustomOutputs(
+            this.node.config.outputProperties,
+            message,
+            {
+                config: this.node.config,
+                value,
+                previousValue,
+            }
+        );
         this.#entityConfigNode?.state?.setLastPayload({
             state: value,
             attributes: {},
