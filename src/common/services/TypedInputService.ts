@@ -24,7 +24,7 @@ export default class TypedInputService {
         this.#jsonata = jsonata;
     }
 
-    getValue(
+    async getValue(
         value: string,
         valueType: TypedInputTypes,
         props: Record<string, any> = {}
@@ -55,7 +55,7 @@ export default class TypedInputService {
                     val = undefined;
                     break;
                 }
-                val = this.#jsonata.evaluate(value, {
+                val = await this.#jsonata.evaluate(value, {
                     data: props.data,
                     entity: props.entity,
                     entityId: props.entityId,

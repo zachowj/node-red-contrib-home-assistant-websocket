@@ -119,7 +119,7 @@ class GetEntities extends BaseNode {
     }
 
     /* eslint-disable camelcase */
-    onInput({ message, parsedMessage, send, done }) {
+    async onInput({ message, parsedMessage, send, done }) {
         let noPayload = false;
 
         if (this.nodeConfig.server === null) {
@@ -135,7 +135,7 @@ class GetEntities extends BaseNode {
 
         let entities;
         try {
-            entities = Object.values(states).filter((entity) => {
+            entities = Object.values(states).reduce(async (acc, entity) => {
                 const rules = parsedMessage.rules.value;
 
                 entity.timeSinceChangedMs =
@@ -143,7 +143,7 @@ class GetEntities extends BaseNode {
 
                 for (const rule of rules) {
                     const value = selectn(rule.property, entity);
-                    const result = this.getComparatorResult(
+                    const result = await this.getComparatorResult(
                         rule.logic,
                         rule.value,
                         value,
@@ -157,12 +157,12 @@ class GetEntities extends BaseNode {
                         (rule.logic !== 'jsonata' && value === undefined) ||
                         !result
                     ) {
-                        return false;
+                        return acc;
                     }
                 }
 
-                return true;
-            });
+                return [...(await acc), entity];
+            }, []);
         } catch (e) {
             this.status.setFailed('Error');
             done(e.message);

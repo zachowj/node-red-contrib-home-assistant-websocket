@@ -86,7 +86,7 @@ export default abstract class SensorBase<
             stateType = 'str';
         }
 
-        state = this.typedInputService.getValue(state, stateType, {
+        state = await this.typedInputService.getValue(state, stateType, {
             message,
         });
 
@@ -100,7 +100,7 @@ export default abstract class SensorBase<
         const attributes = this.#getAttributes(parsedMessage);
         let attr: Record<string, any> = {};
         try {
-            attr = attributes.reduce((acc, cur) => {
+            attr = await attributes.reduce(async (acc, cur) => {
                 // Change string to lower-case and remove unwanted characters
                 const property = slugify(cur.property, {
                     replacement: '_',
@@ -108,7 +108,7 @@ export default abstract class SensorBase<
                     lower: true,
                 });
 
-                acc[property] = this.typedInputService.getValue(
+                acc[property] = await this.typedInputService.getValue(
                     cur.value,
                     cur.valueType,
                     { message }
@@ -138,10 +138,14 @@ export default abstract class SensorBase<
         }
 
         this.status.setSuccess(state);
-        this.setCustomOutputs(this.node.config.outputProperties, message, {
-            config: this.node.config,
-            data: payload,
-        });
+        await this.setCustomOutputs(
+            this.node.config.outputProperties,
+            message,
+            {
+                config: this.node.config,
+                data: payload,
+            }
+        );
         send(message);
         done();
     }

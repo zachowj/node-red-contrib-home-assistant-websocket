@@ -48,7 +48,7 @@ export default class TagController extends ExposeAsController {
         };
 
         const msg: NodeMessage = {};
-        this.setCustomOutputs(this.node.config.outputProperties, msg, {
+        await this.setCustomOutputs(this.node.config.outputProperties, msg, {
             config: this.node.config,
             eventData,
             triggerId: tagId,
