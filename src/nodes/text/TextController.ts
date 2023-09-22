@@ -28,16 +28,20 @@ export default class TextController extends InputOutputController<
         this.#entityConfigNode = this.integration?.getEntityConfigNode();
     }
 
-    #onInputModeGet({ done, message, send }: InputProperties) {
+    async #onInputModeGet({ done, message, send }: InputProperties) {
         const value = this.#entityConfigNode?.state?.getLastPayload()?.state as
             | string
             | undefined;
 
         this.status.setSuccess(value);
-        this.setCustomOutputs(this.node.config.outputProperties, message, {
-            config: this.node.config,
-            value,
-        });
+        await this.setCustomOutputs(
+            this.node.config.outputProperties,
+            message,
+            {
+                config: this.node.config,
+                value,
+            }
+        );
 
         send(message);
         done();
@@ -59,7 +63,7 @@ export default class TextController extends InputOutputController<
             );
         }
 
-        const value = this.typedInputService.getValue(
+        const value = await this.typedInputService.getValue(
             parsedMessage.value.value,
             parsedMessage.valueType.value,
             {
@@ -89,7 +93,7 @@ export default class TextController extends InputOutputController<
         send,
     }: InputProperties) {
         if (this.node.config.mode === ValueIntegrationMode.Get) {
-            this.#onInputModeGet({ done, message, parsedMessage, send });
+            await this.#onInputModeGet({ done, message, parsedMessage, send });
         } else if (this.node.config.mode === ValueIntegrationMode.Set) {
             await this.#onInputModeSet({ done, message, parsedMessage, send });
         } else {
@@ -130,11 +134,15 @@ export default class TextController extends InputOutputController<
             previousValue = this.#entityConfigNode?.state?.getLastPayload()
                 ?.state as string | undefined;
         }
-        this.setCustomOutputs(this.node.config.outputProperties, message, {
-            config: this.node.config,
-            value,
-            previousValue,
-        });
+        await this.setCustomOutputs(
+            this.node.config.outputProperties,
+            message,
+            {
+                config: this.node.config,
+                value,
+                previousValue,
+            }
+        );
         this.#entityConfigNode?.state?.setLastPayload({
             state: value,
             attributes: {},

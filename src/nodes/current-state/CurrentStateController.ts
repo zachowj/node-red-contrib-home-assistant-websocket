@@ -73,7 +73,7 @@ export default class CurrentStateController extends InputOutputController<
             );
         }
 
-        let isIfState = this.#comparatorService.getComparatorResult(
+        let isIfState = await this.#comparatorService.getComparatorResult(
             this.node.config.halt_if_compare,
             this.node.config.halt_if,
             entity.state as string,
@@ -85,18 +85,22 @@ export default class CurrentStateController extends InputOutputController<
         );
 
         if (this.#checkForDuration(isIfState)) {
-            const forDurationMs = this.#getForDurationMs(message);
+            const forDurationMs = await this.#getForDurationMs(message);
             if (forDurationMs > 0) {
                 isIfState = entity.timeSinceChangedMs > forDurationMs;
             }
         }
 
-        this.setCustomOutputs(this.node.config.outputProperties, message, {
-            config: this.node.config,
-            entity,
-            entityState: entity.state,
-            triggerId: entityId,
-        });
+        await this.setCustomOutputs(
+            this.node.config.outputProperties,
+            message,
+            {
+                config: this.node.config,
+                entity,
+                entityState: entity.state,
+                triggerId: entityId,
+            }
+        );
 
         if (this.node.config.halt_if && !isIfState) {
             this.status.setFailed(entity.state.toString());
@@ -123,9 +127,9 @@ export default class CurrentStateController extends InputOutputController<
         );
     }
 
-    #getForDurationMs(message: NodeMessage) {
+    async #getForDurationMs(message: NodeMessage) {
         if (this.node.config.for === '') return 0;
-        const value = this.typedInputService.getValue(
+        const value = await this.typedInputService.getValue(
             this.node.config.for,
             this.node.config.forType,
             { message }

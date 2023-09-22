@@ -9,16 +9,20 @@ interface DeviceTriggerEvent {
 
 const ExposeAsController = ExposeAsMixin(OutputController<DeviceNode>);
 export default class DeviceTriggerController extends ExposeAsController {
-    public onTrigger(data: DeviceTriggerEvent) {
+    public async onTrigger(data: DeviceTriggerEvent) {
         if (!this.isEnabled) return;
 
         const message: NodeMessage = {};
 
-        this.setCustomOutputs(this.node.config.outputProperties, message, {
-            config: this.node.config,
-            eventData: data,
-            triggerId: this.node.config.device,
-        });
+        await this.setCustomOutputs(
+            this.node.config.outputProperties,
+            message,
+            {
+                config: this.node.config,
+                eventData: data,
+                triggerId: this.node.config.device,
+            }
+        );
 
         this.status.setSuccess(data.description);
         this.node.send(message);

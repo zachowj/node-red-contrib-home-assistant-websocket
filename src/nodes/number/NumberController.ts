@@ -35,10 +35,14 @@ export default class NumberController extends InputOutputController<
             | undefined;
 
         this.status.setSuccess(value);
-        this.setCustomOutputs(this.node.config.outputProperties, message, {
-            config: this.node.config,
-            value,
-        });
+        await this.setCustomOutputs(
+            this.node.config.outputProperties,
+            message,
+            {
+                config: this.node.config,
+                value,
+            }
+        );
 
         send(message);
         done();
@@ -60,7 +64,7 @@ export default class NumberController extends InputOutputController<
             );
         }
 
-        let value = this.typedInputService.getValue(
+        let value = await this.typedInputService.getValue(
             parsedMessage.value.value,
             parsedMessage.valueType.value,
             {
@@ -148,11 +152,15 @@ export default class NumberController extends InputOutputController<
             previousValue = this.#entityConfigNode?.state?.getLastPayload()
                 ?.state as number | undefined;
         }
-        this.setCustomOutputs(this.node.config.outputProperties, message, {
-            config: this.node.config,
-            value,
-            previousValue,
-        });
+        await this.setCustomOutputs(
+            this.node.config.outputProperties,
+            message,
+            {
+                config: this.node.config,
+                value,
+                previousValue,
+            }
+        );
         this.#entityConfigNode?.state?.setLastPayload({
             state: value,
             attributes: {},

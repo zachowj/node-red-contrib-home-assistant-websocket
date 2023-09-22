@@ -46,9 +46,9 @@ export default class EventsStateController extends ExposeAsController {
         this.#transformState = props.transformState;
     }
 
-    #getTimerValue() {
+    async #getTimerValue() {
         if (this.node.config.for === '') return 0;
-        const timer = this.typedInputService.getValue(
+        const timer = await this.typedInputService.getValue(
             this.node.config.for,
             this.node.config.forType
         );
@@ -88,7 +88,10 @@ export default class EventsStateController extends ExposeAsController {
         return true;
     }
 
-    public onHaEventsStateChanged(evt: HassStateChangedEvent, runAll = false) {
+    public async onHaEventsStateChanged(
+        evt: HassStateChangedEvent,
+        runAll = false
+    ) {
         if (
             this.isEnabled === false ||
             !this.homeAssistant.isHomeAssistantRunning ||
@@ -130,7 +133,7 @@ export default class EventsStateController extends ExposeAsController {
         }
 
         // Get if state condition
-        const isIfState = this.#comparatorService.getComparatorResult(
+        const isIfState = await this.#comparatorService.getComparatorResult(
             config.ifStateOperator,
             config.ifState,
             newState,
@@ -144,7 +147,7 @@ export default class EventsStateController extends ExposeAsController {
         // Track multiple entity ids
         this.#topics[entityId] = this.#topics[entityId] || { active: false };
 
-        const timer = this.#getTimerValue();
+        const timer = await this.#getTimerValue();
 
         const validTimer = timer > 0;
 
@@ -166,7 +169,7 @@ export default class EventsStateController extends ExposeAsController {
         }
 
         if (!validTimer || (config.ifState && !isIfState)) {
-            this.output(eventMessage, isIfState);
+            await this.output(eventMessage, isIfState);
             return;
         }
 
@@ -185,10 +188,10 @@ export default class EventsStateController extends ExposeAsController {
         };
     }
 
-    output(eventMessage: HassStateChangedEvent, condition: boolean) {
+    async output(eventMessage: HassStateChangedEvent, condition: boolean) {
         const config = this.node.config;
         const message: NodeMessage = {};
-        this.setCustomOutputs(config.outputProperties, message, {
+        await this.setCustomOutputs(config.outputProperties, message, {
             config,
             entity: eventMessage.event.new_state,
             entityState: eventMessage.event.new_state?.state,

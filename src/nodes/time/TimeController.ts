@@ -23,9 +23,9 @@ export default class TimeController extends ExposeAsController {
     #createCronjob(crontab: string | Date) {
         this.#cronjob = new CronJob({
             cronTime: crontab,
-            onTick: () => {
+            onTick: async () => {
                 try {
-                    this.#onTimer();
+                    await this.#onTimer();
                 } catch (e) {
                     this.node.error(e);
                     this.status.setError();
@@ -76,10 +76,10 @@ export default class TimeController extends ExposeAsController {
         );
     }
 
-    #getOffset() {
+    async #getOffset() {
         let offset = this.node.config.offset || '0';
         if (this.node.config.offsetType === TypedInputTypes.JSONata) {
-            offset = this.jsonataService.evaluate(offset);
+            offset = await this.jsonataService.evaluate(offset);
         }
         const offsetMs = getTimeInMilliseconds(
             Number(offset),
@@ -130,14 +130,14 @@ export default class TimeController extends ExposeAsController {
         return selectedDays.length === 7 ? '*' : selectedDays.join(',');
     }
 
-    #onTimer() {
+    async #onTimer() {
         if (this.isEnabled === false) return;
 
         const now = new Date();
         const entity = this.#getEntity();
 
         const msg = {};
-        this.setCustomOutputs(this.node.config.outputProperties, msg, {
+        await this.setCustomOutputs(this.node.config.outputProperties, msg, {
             config: this.node.config,
             entity,
             entityState: entity?.state,
@@ -165,7 +165,7 @@ export default class TimeController extends ExposeAsController {
         this.#destoryCronjob();
     }
 
-    public onStateChanged() {
+    public async onStateChanged() {
         const property = this.node.config.property || DEFAULT_PROPERTY;
         const entity = this.#getEntity();
         const dateString = selectn(property, entity);
@@ -176,7 +176,7 @@ export default class TimeController extends ExposeAsController {
 
         // Validate inputs
         this.#checkValidDateString(dateString);
-        offset = this.#getOffset();
+        offset = await this.#getOffset();
         const digits = parseTime(dateString);
 
         // Doesn't match time format 00:00:00

@@ -94,7 +94,7 @@ export default class TriggerStateController extends ExposeAsController {
         return this.#state?.isEnabled() ?? true;
     }
 
-    #getConstraintComparatorResults(
+    async #getConstraintComparatorResults(
         constraints: Constraint[],
         eventMessage: HassStateChangedEvent
     ) {
@@ -117,7 +117,7 @@ export default class TriggerStateController extends ExposeAsController {
                 constraintTarget.state
             );
             const comparatorResult =
-                this.#comparatorService.getComparatorResult(
+                await this.#comparatorService.getComparatorResult(
                     comparatorType,
                     comparatorValue,
                     actualValue,
@@ -190,11 +190,11 @@ export default class TriggerStateController extends ExposeAsController {
         return targetData;
     }
 
-    #getCustomOutputsComparatorResults(
+    async #getCustomOutputsComparatorResults(
         outputs: CustomOutput[],
         eventMessage: HassStateChangedEvent
-    ) {
-        return outputs.reduce((acc, output) => {
+    ): Promise<CustomOutputsComparatorResult[]> {
+        return outputs.reduce(async (acc, output) => {
             const result: CustomOutputsComparatorResult = {
                 output,
                 comparatorMatched: true,
@@ -210,7 +210,7 @@ export default class TriggerStateController extends ExposeAsController {
                     eventMessage.event
                 );
                 result.comparatorMatched =
-                    this.#comparatorService.getComparatorResult(
+                    await this.#comparatorService.getComparatorResult(
                         output.comparatorType,
                         output.comparatorValue,
                         result.actualValue,
@@ -221,10 +221,9 @@ export default class TriggerStateController extends ExposeAsController {
                         }
                     );
             }
-            result.message = this.#getOutputMessage(result, eventMessage);
-            acc.push(result);
-            return acc;
-        }, [] as CustomOutputsComparatorResult[]);
+            result.message = await this.#getOutputMessage(result, eventMessage);
+            return [...(await acc), result];
+        }, [] as unknown as Promise<CustomOutputsComparatorResult[]>);
     }
 
     #getDefaultMessageOutputs(
@@ -253,14 +252,14 @@ export default class TriggerStateController extends ExposeAsController {
         return outputs;
     }
 
-    #getOutputMessage(
+    async #getOutputMessage(
         {
             output,
             comparatorMatched,
             actualValue,
         }: CustomOutputsComparatorResult,
         eventMessage: HassStateChangedEvent
-    ): Record<string, unknown> | null {
+    ): Promise<Record<string, unknown> | null> {
         // If comparator did not match
         if (!comparatorMatched) {
             this.debugToClient(
@@ -290,7 +289,7 @@ export default class TriggerStateController extends ExposeAsController {
                 );
             }
 
-            payload = this.typedInputService.getValue(
+            payload = await this.typedInputService.getValue(
                 payload,
                 output.messageValueType,
                 {
@@ -369,7 +368,7 @@ export default class TriggerStateController extends ExposeAsController {
         }
     }
 
-    public onEntityStateChanged(evt: HassStateChangedEvent) {
+    public async onEntityStateChanged(evt: HassStateChangedEvent) {
         if (
             this.isEnabled === false ||
             !this.homeAssistant.isHomeAssistantRunning
@@ -419,7 +418,7 @@ export default class TriggerStateController extends ExposeAsController {
             new Date(eventMessage.event.new_state.last_changed).getTime();
 
         const constraintComparatorResults =
-            this.#getConstraintComparatorResults(
+            await this.#getConstraintComparatorResults(
                 this.node.config.constraints,
                 eventMessage
             );
@@ -449,7 +448,7 @@ export default class TriggerStateController extends ExposeAsController {
         }
 
         const customOutputsComparatorResults =
-            this.#getCustomOutputsComparatorResults(
+            await this.#getCustomOutputsComparatorResults(
                 this.node.config.customOutputs,
                 eventMessage
             );

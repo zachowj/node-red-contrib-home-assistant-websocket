@@ -55,7 +55,7 @@ export default class EventsAll extends ExposeAsController {
         }
     }
 
-    public onHaEventsAll(evt: HassEvent) {
+    public async onHaEventsAll(evt: HassEvent) {
         if (this.isEnabled === false) return;
 
         if (
@@ -69,10 +69,14 @@ export default class EventsAll extends ExposeAsController {
         if (this.#eventData && !isMatch(evt.event, this.#eventData)) return;
 
         const message: NodeMessage = {};
-        this.setCustomOutputs(this.node.config.outputProperties, message, {
-            config: this.node.config,
-            eventData: evt,
-        });
+        await this.setCustomOutputs(
+            this.node.config.outputProperties,
+            message,
+            {
+                config: this.node.config,
+                eventData: evt,
+            }
+        );
 
         this.status.setSuccess(evt.event_type);
         this.node.send(message);

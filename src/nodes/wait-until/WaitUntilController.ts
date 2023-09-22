@@ -76,7 +76,7 @@ export default class WaitUntil extends InputOutputController<
         );
     }
 
-    #onEntityChange(evt: {
+    async #onEntityChange(evt: {
         event: {
             entity_id: string;
             new_state: HassEntity;
@@ -103,7 +103,7 @@ export default class WaitUntil extends InputOutputController<
             return;
         }
 
-        const result = this.#comparatorService.getComparatorResult(
+        const result = await this.#comparatorService.getComparatorResult(
             this.#savedConfig.comparator,
             this.#savedConfig.value,
             selectn(this.#savedConfig.property, event.new_state),
@@ -126,7 +126,7 @@ export default class WaitUntil extends InputOutputController<
         event.new_state.timeSinceChangedMs =
             Date.now() - new Date(event.new_state.last_changed).getTime();
 
-        this.setCustomOutputs(
+        await this.setCustomOutputs(
             this.node.config.outputProperties,
             this.#savedMessage ?? {},
             {
@@ -181,7 +181,7 @@ export default class WaitUntil extends InputOutputController<
             parsedMessage.timeout.source === DataSource.Config &&
             this.node.config.timeoutType === TypedInputTypes.JSONata
         ) {
-            timeout = this.#jsonataService.evaluate(
+            timeout = await this.#jsonataService.evaluate(
                 parsedMessage.timeout.value,
                 {
                     message,
@@ -218,7 +218,7 @@ export default class WaitUntil extends InputOutputController<
             timeout = getTimeInMilliseconds(timeout, config.timeoutUnits);
 
             this.#timeoutId = setTimeoutWithErrorHandling(
-                () => {
+                async () => {
                     const state = Object.assign(
                         {},
                         this.#homeAssistant.websocket.getStates(
@@ -229,7 +229,7 @@ export default class WaitUntil extends InputOutputController<
                     state.timeSinceChangedMs =
                         Date.now() - new Date(state.last_changed).getTime();
 
-                    this.setCustomOutputs(
+                    await this.setCustomOutputs(
                         this.node.config.outputProperties,
                         message,
                         {
