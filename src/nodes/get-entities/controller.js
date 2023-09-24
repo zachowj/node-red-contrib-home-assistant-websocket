@@ -135,34 +135,36 @@ class GetEntities extends BaseNode {
 
         let entities;
         try {
-            entities = Object.values(states).reduce(async (acc, entity) => {
-                const rules = parsedMessage.rules.value;
+            entities = await Object.values(states).reduce(
+                async (acc, entity) => {
+                    const rules = parsedMessage.rules.value;
 
-                entity.timeSinceChangedMs =
-                    Date.now() - new Date(entity.last_changed).getTime();
+                    entity.timeSinceChangedMs =
+                        Date.now() - new Date(entity.last_changed).getTime();
 
-                for (const rule of rules) {
-                    const value = selectn(rule.property, entity);
-                    const result = await this.getComparatorResult(
-                        rule.logic,
-                        rule.value,
-                        value,
-                        rule.valueType,
-                        {
-                            message,
-                            entity,
+                    for (const rule of rules) {
+                        const value = selectn(rule.property, entity);
+                        const result = await this.getComparatorResult(
+                            rule.logic,
+                            rule.value,
+                            value,
+                            rule.valueType,
+                            {
+                                message,
+                                entity,
+                            }
+                        );
+                        if (
+                            (rule.logic !== 'jsonata' && value === undefined) ||
+                            !result
+                        ) {
+                            return acc;
                         }
-                    );
-                    if (
-                        (rule.logic !== 'jsonata' && value === undefined) ||
-                        !result
-                    ) {
-                        return acc;
                     }
-                }
-
-                return [...(await acc), entity];
-            }, []);
+                    return [...(await acc), entity];
+                },
+                []
+            );
         } catch (e) {
             this.status.setFailed('Error');
             done(e.message);
