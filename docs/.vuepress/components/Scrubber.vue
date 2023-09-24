@@ -7,11 +7,18 @@
             </label>
             <span v-if="replaceServerId">
                 with
-                <input type="text" v-model="serverId" placeholder="xxxxxxxx.xxxxx" />
+                <input
+                    type="text"
+                    v-model="serverId"
+                    placeholder="xxxxxxxx.xxxxx"
+                />
             </span>
         </p>
 
-        <textarea v-model="before" placeholder="paste exported Node-RED flow here"></textarea>
+        <textarea
+            v-model="before"
+            placeholder="paste exported Node-RED flow here"
+        ></textarea>
 
         <button v-on:click="scrub">Scrub</button>
         <transition name="fade">
@@ -29,23 +36,39 @@
 
 <script>
 const haNodes = [
-    'server',
+    'ha-api',
+    'api-call-service',
+    'api-current-state',
+    'ha-device',
+    'ha-entity',
     'server-events',
     'server-state-changed',
-    'trigger-state',
-    'poll-state',
-    'ha-time',
-    'ha-webhook',
-    'ha-zone',
-    'api-call-service',
-    'ha-entity',
     'ha-fire-event',
-    'api-current-state',
     'ha-get-entities',
     'api-get-history',
+    'poll-state',
     'api-render-template',
+    'ha-select',
+    'ha-sentence',
+    'trigger-state',
+    'ha-tag',
+    'ha-time',
     'ha-wait-until',
-    'ha-api',
+    'ha-webhook',
+    'ha-zone',
+
+    'server',
+    'ha-device-config',
+    'ha-entity-config',
+
+    'ha-binary-sensor',
+    'ha-button',
+    'ha-number',
+    'ha-sensor',
+    'ha-switch',
+    'ha-text',
+    'ha-time-entity',
+    'ha-update-config',
 ];
 
 export default {
@@ -125,8 +148,8 @@ textarea {
 }
 
 button {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-        Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue",
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+        Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
         sans-serif;
     font-size: 16px !important;
     border-radius: 4px;
