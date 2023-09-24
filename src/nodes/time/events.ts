@@ -1,6 +1,4 @@
-import BaseError from '../../common/errors/BaseError';
 import ClientEvents from '../../common/events/ClientEvents';
-import Status from '../../common/status/Status';
 import { TypedInputTypes } from '../../const';
 import { getEntitiesFromJsonata } from '../../helpers/utils';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
@@ -11,19 +9,8 @@ export function startListener(
     clientEvents: ClientEvents,
     controller: TimeController,
     homeAssistant: HomeAssistant,
-    node: TimeNode,
-    status: Status
+    node: TimeNode
 ) {
-    if (homeAssistant.isHomeAssistantRunning) {
-        try {
-            controller.onStateChanged();
-        } catch (e) {
-            if (e instanceof BaseError) {
-                status.setError(e.message);
-            }
-            throw e;
-        }
-    }
     clientEvents.addListener(
         'ha_client:ready',
         controller.onStateChanged.bind(controller)
@@ -45,5 +32,9 @@ export function startListener(
                 controller.onStateChanged.bind(controller)
             );
         });
+    }
+
+    if (homeAssistant.isHomeAssistantRunning) {
+        clientEvents.emit(`ha_events:state_changed:${node.config.entityId}`);
     }
 }

@@ -66,5 +66,5 @@ export default function timeNode(this: TimeNode, config: TimeNodeProperties) {
         ...controllerDeps,
     });
 
-    startListener(clientEvents, controller, homeAssistant, this, status);
+    startListener(clientEvents, controller, homeAssistant, this);
 }
