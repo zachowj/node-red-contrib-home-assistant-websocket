@@ -128,6 +128,8 @@ function render() {
                 renderAlert(type);
             }
             break;
+        case NodeType.EventsAll:
+        case NodeType.EventsState:
         case NodeType.PollState:
         case NodeType.Tag:
         case NodeType.Time:
