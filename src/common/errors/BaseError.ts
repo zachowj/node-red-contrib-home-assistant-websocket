@@ -13,7 +13,7 @@ export function isTranslationKey(key?: unknown): boolean {
         return false;
     }
 
-    return !key.includes(' ') && key.includes('.');
+    return !key.includes(' ') && (key.includes('.') || key.includes('__'));
 }
 
 export default abstract class BaseError extends Error {
