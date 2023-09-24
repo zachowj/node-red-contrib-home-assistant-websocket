@@ -172,7 +172,7 @@ describe('Comparator Service', function () {
             });
 
             it('should return true when the JSONata value matches', function () {
-                jsonataServiceStub.evaluate.returns('bar');
+                jsonataServiceStub.evaluate.resolves('bar');
                 const entity = {
                     entity_id: 'light.light',
                 } as HassEntity;
@@ -595,7 +595,7 @@ describe('Comparator Service', function () {
                 });
 
                 it('should return true when the JSONata services returns true', function () {
-                    jsonataServiceStub.evaluate.returns(true);
+                    jsonataServiceStub.evaluate.resolves(true);
                     const entity = {
                         entity_id: 'light.light',
                     } as HassEntity;
@@ -624,7 +624,7 @@ describe('Comparator Service', function () {
                     expect(result).to.be.true;
                 });
                 it('should return false when the JSONata services returns false', function () {
-                    jsonataServiceStub.evaluate.returns(false);
+                    jsonataServiceStub.evaluate.resolves(false);
                     const result = comparatorService.getComparatorResult(
                         'jsonata',
                         'foo',

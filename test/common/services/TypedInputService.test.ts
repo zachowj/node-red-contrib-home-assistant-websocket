@@ -170,7 +170,7 @@ describe('Typed Input Service', function () {
                     prevEntity: { foo: 'bar4' },
                     results: 'hello',
                 };
-                jsonataServiceStub.evaluate.withArgs('foo').returns('bar');
+                jsonataServiceStub.evaluate.withArgs('foo').resolves('bar');
                 const results = typedInputService.getValue(
                     'foo',
                     TypedInputTypes.JSONata,
