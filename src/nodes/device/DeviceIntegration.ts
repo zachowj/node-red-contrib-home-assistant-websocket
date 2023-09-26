@@ -12,6 +12,7 @@ import { DeviceNode } from '.';
 
 interface DeviceIntegrationMessage extends IntegrationMessage {
     type: MessageType.DeviceTrigger;
+    node_id: string;
     device_trigger: unknown;
 }
 
@@ -52,6 +53,7 @@ export default class DeviceIntegration extends BidirectionalIntegration<DeviceNo
     protected getDiscoveryPayload(): DeviceIntegrationMessage {
         return {
             type: MessageType.DeviceTrigger,
+            node_id: this.node.id,
             device_trigger: this.#getTriggerData(),
         };
     }
