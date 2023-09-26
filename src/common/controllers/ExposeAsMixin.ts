@@ -59,10 +59,7 @@ export default function ExposeAsMixin<TBase extends Constructor>(Base: TBase) {
             let payload: NodeMessage | (NodeMessage | null)[];
 
             // If there is only one path and it is 0 or 1, return the payload as is
-            if (
-                paths.length === 1 &&
-                (paths.includes(0) || paths.includes(1))
-            ) {
+            if (paths.length === 1 && paths.includes(1)) {
                 payload = data.message;
             } else if (paths.includes(0)) {
                 // create an array the size of the number of outputs and fill it with the payload
