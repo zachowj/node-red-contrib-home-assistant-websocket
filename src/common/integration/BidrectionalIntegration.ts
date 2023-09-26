@@ -1,6 +1,7 @@
 import { debugToClient } from '../../helpers/node';
 import { SubscriptionUnsubscribe } from '../../types/home-assistant';
 import { BaseNode, NodeDone } from '../../types/nodes';
+import { isHomeAssistantApiError } from '../errors/HomeAssistantError';
 import { NodeEvent } from '../events/Events';
 import Integration, {
     IntegrationConstructor,
@@ -65,7 +66,10 @@ export default abstract class BidirectionalIntegration<
             this.status.forEach((status) =>
                 status.setFailed('home-assistant.status.error_registering')
             );
-            const message = err instanceof Error ? err.message : err;
+            const message =
+                err instanceof Error || isHomeAssistantApiError(err)
+                    ? err.message
+                    : err;
             this.node.error(
                 `Error registering entity. Error Message: ${JSON.stringify(
                     message
