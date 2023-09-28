@@ -55,7 +55,7 @@ export default function tagNode(this: TagNode, config: TagNodeProperties) {
     });
 
     clientEvents.addListener(
-        HaEvent.TagScanned,
+        `ha_events:${HaEvent.TagScanned}`,
         controller.onTagScanned.bind(controller)
     );
 }
