@@ -101,6 +101,7 @@ export default abstract class SensorBase<
         let attr: Record<string, any> = {};
         try {
             attr = await attributes.reduce(async (acc, cur) => {
+                acc = await acc;
                 // Change string to lower-case and remove unwanted characters
                 const property = slugify(cur.property, {
                     replacement: '_',
