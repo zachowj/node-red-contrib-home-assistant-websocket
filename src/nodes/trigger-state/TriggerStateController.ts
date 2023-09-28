@@ -223,7 +223,7 @@ export default class TriggerStateController extends ExposeAsController {
             }
             result.message = await this.#getOutputMessage(result, eventMessage);
             return [...(await acc), result];
-        }, [] as unknown as Promise<CustomOutputsComparatorResult[]>);
+        }, Promise.resolve([]) as Promise<CustomOutputsComparatorResult[]>);
     }
 
     #getDefaultMessageOutputs(

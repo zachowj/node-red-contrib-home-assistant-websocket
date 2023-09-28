@@ -101,7 +101,7 @@ export default abstract class SensorBase<
         let attr: Record<string, any> = {};
         try {
             attr = await attributes.reduce(async (acc, cur) => {
-                acc = await acc;
+                const attrs = await acc;
                 // Change string to lower-case and remove unwanted characters
                 const property = slugify(cur.property, {
                     replacement: '_',
@@ -109,13 +109,13 @@ export default abstract class SensorBase<
                     lower: true,
                 });
 
-                acc[property] = await this.typedInputService.getValue(
+                attrs[property] = await this.typedInputService.getValue(
                     cur.value,
                     cur.valueType,
                     { message }
                 );
-                return acc;
-            }, {} as Record<string, any>);
+                return attrs;
+            }, Promise.resolve({}) as Promise<Record<string, any>>);
         } catch (e) {
             if (e instanceof BaseError) {
                 throw e;
