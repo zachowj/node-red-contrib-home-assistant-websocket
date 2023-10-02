@@ -2,6 +2,66 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.57.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.56.1...v0.57.0) (2023-10-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* Rename websocket type for device action/trigger
+* Message type change for device actions. Requires updated companion component.
+* **device:** Expose as won't work until manually converted in the Node-RED UI. Device node requires minimum 2.2.1 of hass-node-red.
+* **poll-state:** drop support for entity.timeSinceChanged
+* **events-state:** Change expose as to use entity config
+* **events-state:** Expose as won't work until manually converted in the Node-RED UI
+* **zone:** Expose as won't work until manually converted in the Node-RED UI
+* Expose as trigger no longer handles condition validation. It will only pass on the message sent through the service call and which outputs are selected.
+
+### Features
+
+* Add expose as ([8c7991c](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/8c7991c5d5a69a2181db53af2ee7e251e22a1291))
+* Add expose as controller ([a50590c](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a50590c7ad45c5f571d4e5448b6b5d9579ae2451))
+* **poll-state:** Add output properties ([13de0d7](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/13de0d7ea9a59da1dd2021351afe07678f6309d1))
+* **webhook:** Add expose as ([8ee8ba4](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/8ee8ba4e7e29a667f35d3ee8f00da4a25d17db8c))
+
+
+### Bug Fixes
+
+* **binary-sensor:** Handle async for attributes ([240de61](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/240de610230d2fdbe57f56c9e607a24e47c21a77)), closes [#1079](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1079)
+* Change evaluateJSONataExpression  to use callback ([#1063](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1063)) ([5e74756](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/5e74756d9f9cc3f9e78a9d87856c53aa70bb1f14)), closes [#898](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/898)
+* Default isEnable to true ([39c8b03](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/39c8b03e345cd21a9b7155cf059ed9ccbea17f65))
+* Fix duplication of nodes when converting expose as ([39c8b03](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/39c8b03e345cd21a9b7155cf059ed9ccbea17f65))
+* Fix isTranslationKey to include __ ([ae14702](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ae14702aaa743c6c6bf185899590431167b0ec7c))
+* Fix trigger service so zero sends to all paths ([a2697b2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a2697b2e578d98bdd190dafa53a93dce6161e00a))
+* **get-entities:** Handle async reduce ([2652acb](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/2652acb0ae6099713a8337b6de5d3749b914f5c3))
+* Handle translation keys that aren't strings ([da96c65](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/da96c65eeebc363319e47a7e88cb3f65b5fcfc31))
+* Only render expose as when necessary ([6fbe53d](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/6fbe53d2c5ae0ca349d1dfc50e44523517113434))
+* Only translate when it is looks like a key ([a6f0f36](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a6f0f36dfe09f70ef76fa0a840128dc85ea025d1))
+* **scrubber:** Add all current HA nodes to scrubber ([4b12a49](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/4b12a4979ef6ce55b6c58bee171d63be86c60bf0))
+* **sensor:** Handle async for attributes ([240de61](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/240de610230d2fdbe57f56c9e607a24e47c21a77))
+* **sentence:** Sentence node requires hass-node-red v2.2+ ([4449d9b](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/4449d9b8460c4662a0c3d1077d4a23342ab60f33))
+* Show the correct error message not unknown ([e598b92](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/e598b92f8ca88d38a277fdbf3f1105fc7c044ff3))
+* **tag:** Listen for correct event ([0fc163d](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/0fc163de64bb820886395405d8ddd7939483c4d7))
+* **time:** Handle onStateChanged errors ([8365b5a](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/8365b5aa21ae091fad1c730eb3a8ab1b72c25409))
+* **time:** Stop status message from getting cut off ([855de64](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/855de642e581743f62b26029fab56c8a3b2b2e13))
+* **trigger-state:** Fix migrations for version 3 ([4cbbb46](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/4cbbb468b5c58a649b00db93bc1e68f0dda05d36))
+* **trigger-state:** Only output custom ouputs with valid conditions ([7d123fd](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/7d123fd25ed845ab9d6bf975ae36943b5784e241))
+
+
+### Miscellaneous Chores
+
+* Fix misspelling ([d4c4349](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d4c4349bd3d9251ecb50028f655bdcf1360113b9))
+* Rename websocket type for device action/trigger ([d4c4349](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d4c4349bd3d9251ecb50028f655bdcf1360113b9))
+
+
+### Code Refactoring
+
+* **device:** Change expose as to use entity config ([67756d1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/67756d17535349eb54065a747035c3408820c58c))
+* **events-state:** Change expose as to use entity config ([2013080](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/2013080dd99ec3105a0640c18bc3426b9590dad4))
+* **events-state:** Convert controller to Typescript ([2013080](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/2013080dd99ec3105a0640c18bc3426b9590dad4))
+* Expose as trigger only passes on a message payload ([#1019](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1019)) ([3774f8c](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/3774f8c6934f3d9985575d85a3e8f92e0326f43f))
+* **poll-state:** Convert controller to typescript ([13de0d7](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/13de0d7ea9a59da1dd2021351afe07678f6309d1))
+* **zone:** Convert controller to Typescript ([16bd3eb](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/16bd3eb25fa5734b3b23d33ca8bc3f34521de0d9))
+
 ## [0.56.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.56.0...v0.56.1) (2023-08-22)
 
 
