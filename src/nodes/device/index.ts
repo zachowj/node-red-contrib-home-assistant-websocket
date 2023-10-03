@@ -99,7 +99,6 @@ export default function neviceNode(
             });
 
             controller = new DeviceTriggerController({
-                exposeAsConfigNode,
                 node: this,
                 status,
                 ...controllerDeps,
@@ -113,6 +112,7 @@ export default function neviceNode(
             clientEvents.setStatus(status);
             exposeAsConfigNode?.integration.setStatus(status);
             integration.setStatus(status);
+            controller.setExposeAsConfigNode(exposeAsConfigNode);
             integration.init();
             break;
         }

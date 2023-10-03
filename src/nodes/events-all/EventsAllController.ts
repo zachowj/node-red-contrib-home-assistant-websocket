@@ -8,13 +8,9 @@ import ConfigError from '../../common/errors/ConfigError';
 import { ClientEvent } from '../../homeAssistant/Websocket';
 import { HassEvent } from '../../types/home-assistant';
 import { NodeMessage } from '../../types/nodes';
-import { EntityConfigNode } from '../entity-config';
 import { EventsAllNode, HA_CLIENT } from '.';
 
-interface EventsAllNodeConstructor
-    extends OutputControllerConstructor<EventsAllNode> {
-    exposeAsConfigNode?: EntityConfigNode;
-}
+type EventsAllNodeConstructor = OutputControllerConstructor<EventsAllNode>;
 
 const ExposeAsController = ExposeAsMixin(OutputController<EventsAllNode>);
 export default class EventsAll extends ExposeAsController {

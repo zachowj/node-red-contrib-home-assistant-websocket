@@ -67,11 +67,11 @@ export default function webhookNode(
     integration.setStatus(status);
 
     const controller = new WebhookController({
-        exposeAsConfigNode,
         node: this,
         status,
         ...controllerDeps,
     });
+    controller.setExposeAsConfigNode(exposeAsConfigNode);
 
     nodeEvents.addListener(
         IntegrationEvent.Trigger,

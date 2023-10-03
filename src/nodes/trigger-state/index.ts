@@ -118,7 +118,6 @@ export default function triggerState(
     });
     const controller = new TriggerStateController({
         comparatorService,
-        exposeAsConfigNode,
         inputService,
         node: this,
         state,
@@ -126,6 +125,7 @@ export default function triggerState(
         transformState,
         ...controllerDeps,
     });
+    controller.setExposeAsConfigNode(exposeAsConfigNode);
 
     // register custom inputs if inputs are enabled
     if (this.config.enableInput) {

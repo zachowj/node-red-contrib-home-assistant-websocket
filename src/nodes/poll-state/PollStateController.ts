@@ -9,13 +9,11 @@ import { TypedInputTypes } from '../../const';
 import { getTimeInMilliseconds } from '../../helpers/utils';
 import { HassEntity } from '../../types/home-assistant';
 import { NodeMessage } from '../../types/nodes';
-import { EntityConfigNode } from '../entity-config';
 import { PollStateNode } from '.';
 
 interface PollStateNodeConstructor
     extends OutputControllerConstructor<PollStateNode> {
     comparatorService: ComparatorService;
-    exposeAsConfigNode?: EntityConfigNode;
     transformState: TransformState;
 }
 

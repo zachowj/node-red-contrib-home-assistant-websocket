@@ -93,12 +93,12 @@ export default function eventsStateNode(
 
     const controller = new EventsStateController({
         comparatorService,
-        exposeAsConfigNode,
         node: this,
         status,
         transformState,
         ...controllerDeps,
     });
+    controller.setExposeAsConfigNode(exposeAsConfigNode);
 
     startListeners(controller, homeAssistant, this, clientEvents);
 }

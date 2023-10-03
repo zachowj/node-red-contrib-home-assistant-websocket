@@ -85,12 +85,12 @@ export default function pollStateNode(
 
     const controller = new PollStateController({
         comparatorService,
-        exposeAsConfigNode,
         node: this,
         status,
         transformState,
         ...controllerDeps,
     });
+    controller.setExposeAsConfigNode(exposeAsConfigNode);
 
     startListeners({
         clientEvents,

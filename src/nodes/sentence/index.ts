@@ -61,11 +61,11 @@ export default function sentenceNode(
     integration.setStatus(status);
 
     const controller = new SentenceController({
-        exposeAsConfigNode,
         node: this,
         status,
         ...controllerDeps,
     });
+    controller.setExposeAsConfigNode(exposeAsConfigNode);
 
     nodeEvents.addListener(
         IntegrationEvent.Trigger,

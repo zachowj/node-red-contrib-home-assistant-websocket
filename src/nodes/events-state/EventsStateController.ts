@@ -15,13 +15,11 @@ import {
 } from '../../helpers/utils';
 import { HassStateChangedEvent } from '../../types/home-assistant';
 import { NodeMessage } from '../../types/nodes';
-import { EntityConfigNode } from '../entity-config';
 import { EventsStateNode } from '.';
 
 interface EventsStateNodeConstructor
     extends OutputControllerConstructor<EventsStateNode> {
     comparatorService: ComparatorService;
-    exposeAsConfigNode?: EntityConfigNode;
     transformState: TransformState;
 }
 
@@ -33,12 +31,10 @@ enum State {
 const ExposeAsController = ExposeAsMixin(OutputController<EventsStateNode>);
 export default class EventsStateController extends ExposeAsController {
     #comparatorService: ComparatorService;
-    #timer: NodeJS.Timeout | undefined;
     #topics: Record<string, { timeoutId?: NodeJS.Timeout; active: boolean }> =
         {};
 
     #transformState: TransformState;
-    #updateinterval?: number;
 
     constructor(props: EventsStateNodeConstructor) {
         super(props);

@@ -15,7 +15,6 @@ import { containsMustache, shouldIncludeEvent } from '../../helpers/utils';
 import { HaEvent } from '../../homeAssistant';
 import { HassEntity, HassStateChangedEvent } from '../../types/home-assistant';
 import { NodeMessage } from '../../types/nodes';
-import { EntityConfigNode } from '../entity-config';
 import { TriggerStateNode, TriggerStateProperties } from '.';
 import {
     ComparatorPropertyType,
@@ -65,7 +64,6 @@ export interface TriggerStateControllerConstructor
         TriggerStateProperties
     > {
     comparatorService: ComparatorService;
-    exposeAsConfigNode?: EntityConfigNode;
     state?: State;
     transformState: TransformState;
 }

@@ -48,11 +48,11 @@ export default function tagNode(this: TagNode, config: TagNodeProperties) {
     const controllerDeps = createControllerDependencies(this, homeAssistant);
 
     const controller = new TagController({
-        exposeAsConfigNode,
         node: this,
         status,
         ...controllerDeps,
     });
+    controller.setExposeAsConfigNode(exposeAsConfigNode);
 
     clientEvents.addListener(
         `ha_events:${HaEvent.TagScanned}`,

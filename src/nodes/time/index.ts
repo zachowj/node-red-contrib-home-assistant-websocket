@@ -60,11 +60,11 @@ export default function timeNode(this: TimeNode, config: TimeNodeProperties) {
     const controllerDeps = createControllerDependencies(this, homeAssistant);
 
     const controller = new TimeController({
-        exposeAsConfigNode,
         node: this,
         status,
         ...controllerDeps,
     });
+    controller.setExposeAsConfigNode(exposeAsConfigNode);
 
     startListener(clientEvents, controller, homeAssistant, this);
 }

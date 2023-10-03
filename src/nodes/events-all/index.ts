@@ -58,11 +58,11 @@ export default function eventsAllNode(
     const controllerDeps = createControllerDependencies(this, homeAssistant);
 
     const controller = new EventsAllController({
-        exposeAsConfigNode,
         node: this,
         status,
         ...controllerDeps,
     });
+    controller.setExposeAsConfigNode(exposeAsConfigNode);
 
     startListeners(clientEvents, controller, homeAssistant, this);
 }

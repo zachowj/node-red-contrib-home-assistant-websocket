@@ -44,11 +44,11 @@ export default function zoneNode(this: ZoneNode, config: ZoneNodeProperties) {
     const controllerDeps = createControllerDependencies(this, homeAssistant);
 
     const controller = new ZoneController({
-        exposeAsConfigNode,
         node: this,
         status,
         ...controllerDeps,
     });
+    controller.setExposeAsConfigNode(exposeAsConfigNode);
 
     for (const entity of this.config.entities) {
         clientEvents.addListener(

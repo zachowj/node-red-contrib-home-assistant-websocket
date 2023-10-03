@@ -1,23 +1,25 @@
 import { HaEvent } from '../../homeAssistant';
 import { EntityConfigNode } from '../../nodes/entity-config';
-import { Constructor, MergeCtor } from '../../types/mixins';
+import { GConstructor } from '../../types/mixins';
 import { NodeMessage } from '../../types/nodes';
 import Events from '../events/Events';
 import { TriggerPayload } from '../integration/BidirectionalEntityIntegration';
+import OutputController from './OutputController';
 
-export default function ExposeAsMixin<TBase extends Constructor>(Base: TBase) {
-    const Derived = class ExposeAsController extends (Base as any) {
-        protected exposeAsConfigEvents?: Events;
-        protected readonly exposeAsConfigNode?: EntityConfigNode;
+export default function ExposeAsMixin<
+    TBase extends GConstructor<OutputController>
+>(Base: TBase) {
+    return class ExposeAsController extends Base {
+        public exposeAsConfigEvents?: Events;
+        public exposeAsConfigNode?: EntityConfigNode;
 
-        constructor(props: { exposeAsConfigNode?: EntityConfigNode }) {
-            super(props);
-            this.exposeAsConfigNode = props.exposeAsConfigNode;
+        setExposeAsConfigNode(exposeAsConfigNode?: EntityConfigNode) {
+            this.exposeAsConfigNode = exposeAsConfigNode;
 
-            if (props.exposeAsConfigNode) {
+            if (exposeAsConfigNode) {
                 this.exposeAsConfigEvents = new Events({
                     node: this.node,
-                    emitter: props.exposeAsConfigNode,
+                    emitter: exposeAsConfigNode,
                 });
                 this.exposeAsConfigEvents.addListener(
                     HaEvent.AutomationTriggered,
@@ -89,6 +91,4 @@ export default function ExposeAsMixin<TBase extends Constructor>(Base: TBase) {
             this.exposeAsConfigNode?.state.setEnabled(enable);
         }
     };
-
-    return Derived as MergeCtor<typeof Derived, TBase>;
 }
