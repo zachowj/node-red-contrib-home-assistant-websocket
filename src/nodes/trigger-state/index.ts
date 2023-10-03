@@ -16,6 +16,7 @@ import { getExposeAsConfigNode, getServerConfigNode } from '../../helpers/node';
 import { getHomeAssistant } from '../../homeAssistant';
 import { BaseNode, BaseNodeProperties } from '../../types/nodes';
 import { Constraint, CustomOutput, DISABLE, ENABLE } from './const';
+import { createStateChangeEvents } from './helpers';
 import TriggerStateController from './TriggerStateController';
 import TriggerStateStatus from './TriggerStateStatus';
 
@@ -155,14 +156,23 @@ export default function triggerState(
         controller.onEntityStateChanged.bind(controller)
     );
 
-    if (this.config.outputInitially) {
+    if (controller.isEnabled && this.config.outputInitially) {
+        const emitEvents = () => {
+            const events = createStateChangeEvents(homeAssistant);
+            events.forEach((event) => {
+                clientEvents.emit(
+                    `ha_events:state_changed:${event.entity_id}`,
+                    event
+                );
+            });
+        };
         // Here for when the node is deploy without the server config being deployed
         if (homeAssistant.isHomeAssistantRunning) {
-            controller.onDeploy();
+            emitEvents();
         } else {
             clientEvents.addListener(
                 'ha_client:initial_connection_ready',
-                controller.onStatesLoaded.bind(controller)
+                emitEvents
             );
         }
     }

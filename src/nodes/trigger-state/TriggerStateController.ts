@@ -1,4 +1,3 @@
-import { HassEntities } from 'home-assistant-js-websocket';
 import { cloneDeep } from 'lodash';
 import selectn from 'selectn';
 
@@ -164,7 +163,7 @@ export default class TriggerStateController extends ExposeAsController {
 
         if (entity === null) {
             throw new ConfigError([
-                'trigger-state.error.entity_not_found',
+                'trigger-state.error.entity_id_not_found',
                 { entity_id: entityId },
             ]);
         }
@@ -337,35 +336,6 @@ export default class TriggerStateController extends ExposeAsController {
             this.onEntityStateChanged(evt as HassStateChangedEvent);
         }
         return true;
-    }
-
-    public onDeploy() {
-        if (this.isEnabled === false) {
-            return;
-        }
-
-        const entities = this.homeAssistant.websocket.getStates();
-        this.onStatesLoaded(entities);
-    }
-
-    public onStatesLoaded(entities: HassEntities) {
-        if (this.isEnabled === false) {
-            return;
-        }
-
-        for (const entityId in entities) {
-            const eventMessage = {
-                event_type: HaEvent.StateChanged,
-                entity_id: entityId,
-                event: {
-                    entity_id: entityId,
-                    old_state: entities[entityId],
-                    new_state: entities[entityId],
-                },
-            };
-
-            this.onEntityStateChanged(eventMessage as HassStateChangedEvent);
-        }
     }
 
     public async onEntityStateChanged(evt: HassStateChangedEvent) {
