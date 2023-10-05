@@ -1,15 +1,11 @@
-import { HassEntities } from 'home-assistant-js-websocket';
-
 import { HaEvent } from '../../homeAssistant';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
+import { HassStateChangedEvent } from '../../types/home-assistant';
 
-export function createStateChangeEvents(
-    homeAssistant: HomeAssistant,
-    entities?: HassEntities
-) {
-    entities ??= homeAssistant.websocket.getStates();
+export function createStateChangeEvents(homeAssistant: HomeAssistant) {
+    const entities = homeAssistant.websocket.getStates();
 
-    const events = [];
+    const events: HassStateChangedEvent[] = [];
     for (const entityId in entities) {
         events.push({
             event_type: HaEvent.StateChanged,
@@ -19,7 +15,7 @@ export function createStateChangeEvents(
                 old_state: entities[entityId],
                 new_state: entities[entityId],
             },
-        });
+        } as HassStateChangedEvent);
     }
 
     return events;
