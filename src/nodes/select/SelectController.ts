@@ -71,10 +71,18 @@ export default class SelectController extends InputOutputController<
             }
         );
 
+        if (this.#isValidValue(value) === false) {
+            throw new InputError(
+                'ha-select.error.invalid_value',
+                'home-assistant.status.error'
+            );
+        }
+
         // get previous value before updating
         const previousValue = this.#entityConfigNode?.state?.getLastPayload()
             ?.state as string | undefined;
-        await this.#prepareSend(message, value);
+        await this.integration?.updateValue(value);
+
         // send value change to all number nodes
         this.#entityConfigNode?.emit(
             IntegrationEvent.ValueChange,
@@ -82,6 +90,16 @@ export default class SelectController extends InputOutputController<
             previousValue
         );
 
+        await this.setCustomOutputs(
+            this.node.config.outputProperties,
+            message,
+            {
+                config: this.node.config,
+                value,
+                previousValue,
+            }
+        );
+        this.status.setSuccess(value);
         send(message);
         done();
     }
@@ -112,23 +130,8 @@ export default class SelectController extends InputOutputController<
         return options.includes(option);
     }
 
-    async #prepareSend(
-        message: NodeMessage,
-        value: string,
-        previousValue?: string
-    ) {
-        if (this.#isValidValue(value) === false) {
-            throw new InputError(
-                'ha-select.error.invalid_value',
-                'home-assistant.status.error'
-            );
-        }
-
-        await this.integration?.updateHomeAssistant(value);
-        if (!previousValue) {
-            previousValue = this.#entityConfigNode?.state?.getLastPayload()
-                ?.state as string | undefined;
-        }
+    public async onValueChange(value: string, previousValue?: string) {
+        const message: NodeMessage = {};
         await this.setCustomOutputs(
             this.node.config.outputProperties,
             message,
@@ -138,17 +141,8 @@ export default class SelectController extends InputOutputController<
                 previousValue,
             }
         );
-        this.#entityConfigNode?.state?.setLastPayload({
-            state: value,
-            attributes: {},
-        });
+
         this.status.setSuccess(value);
-    }
-
-    public async onValueChange(value: string, previousValue?: string) {
-        const message: NodeMessage = {};
-        await this.#prepareSend(message, value, previousValue);
-
         this.node.send(message);
     }
 }

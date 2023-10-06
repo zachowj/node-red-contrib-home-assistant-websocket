@@ -80,11 +80,11 @@ export default class NumberController extends InputOutputController<
         }
 
         value = this.#getValidatedValue(value);
-
         // get previous value before updating
         const previousValue = this.#entityConfigNode?.state?.getLastPayload()
             ?.state as number | undefined;
-        await this.#prepareSend(message, value);
+        await this.integration?.updateValue(value);
+
         // send value change to all number nodes
         this.#entityConfigNode?.emit(
             IntegrationEvent.ValueChange,
@@ -92,6 +92,16 @@ export default class NumberController extends InputOutputController<
             previousValue
         );
 
+        await this.setCustomOutputs(
+            this.node.config.outputProperties,
+            message,
+            {
+                config: this.node.config,
+                value,
+                previousValue,
+            }
+        );
+        this.status.setSuccess(value.toString());
         send(message);
         done();
     }
@@ -118,8 +128,17 @@ export default class NumberController extends InputOutputController<
         if (isNaN(value)) return;
 
         const message: NodeMessage = {};
-        await this.#prepareSend(message, value, previousValue);
 
+        await this.setCustomOutputs(
+            this.node.config.outputProperties,
+            message,
+            {
+                config: this.node.config,
+                value,
+                previousValue,
+            }
+        );
+        this.status.setSuccess(value.toString());
         this.node.send(message);
     }
 
@@ -139,32 +158,5 @@ export default class NumberController extends InputOutputController<
         }
 
         return value;
-    }
-
-    // Take care of repetative code in onInput and #onValueChange
-    async #prepareSend(
-        message: NodeMessage,
-        value: number,
-        previousValue?: number
-    ): Promise<void> {
-        await this.integration?.updateHomeAssistant(value);
-        if (!previousValue) {
-            previousValue = this.#entityConfigNode?.state?.getLastPayload()
-                ?.state as number | undefined;
-        }
-        await this.setCustomOutputs(
-            this.node.config.outputProperties,
-            message,
-            {
-                config: this.node.config,
-                value,
-                previousValue,
-            }
-        );
-        this.#entityConfigNode?.state?.setLastPayload({
-            state: value,
-            attributes: {},
-        });
-        this.status.setSuccess(value.toString());
     }
 }

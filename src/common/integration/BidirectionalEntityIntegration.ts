@@ -2,7 +2,7 @@ import { HaEvent } from '../../homeAssistant/index';
 import { SubscriptionUnsubscribe } from '../../types/home-assistant';
 import State from '../State';
 import { createHaConfig } from './helpers';
-import { IntegrationEvent, MessageType } from './Integration';
+import { MessageType } from './Integration';
 import UnidirectionalEntityIntegration, {
     EntityMessage,
 } from './UnidirectionalEntityIntegration';
@@ -24,10 +24,15 @@ interface StateChangeEvent {
     state: boolean;
 }
 
-interface ValueChangedEvent {
+export interface ValueChangedEvent {
     type: HaEvent.ValueChange;
-    value: number;
+    value: number | string;
 }
+
+export type HaEventMessage =
+    | StateChangeEvent
+    | TriggerEvent
+    | ValueChangedEvent;
 
 export interface StateChangePayload {
     state: boolean;
@@ -101,9 +106,8 @@ export default class BidirectionalIntegration extends UnidirectionalEntityIntegr
         }
     }
 
-    protected onHaEventMessage(
-        evt: StateChangeEvent | TriggerEvent | ValueChangedEvent
-    ) {
+    protected onHaEventMessage(evt: HaEventMessage) {
+        evt.type ??= HaEvent.StateChanged; // no type prior to 0.20.0
         switch (evt.type) {
             case HaEvent.AutomationTriggered:
                 this.entityConfigNode.emit(
@@ -111,15 +115,7 @@ export default class BidirectionalIntegration extends UnidirectionalEntityIntegr
                     evt.data
                 );
                 break;
-            case HaEvent.ValueChange:
-                this.entityConfigNode.emit(
-                    IntegrationEvent.ValueChange,
-                    evt.value
-                );
-                break;
-            case HaEvent.StateChanged:
-            default: {
-                // no type prior to 0.20.0
+            case HaEvent.StateChanged: {
                 const previousState = this.state.isEnabled();
                 this.state.setEnabled(evt.state);
                 this.entityConfigNode.emit(HaEvent.StateChanged, {

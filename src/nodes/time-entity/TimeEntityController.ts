@@ -65,7 +65,7 @@ export default class TimeEntityController extends InputOutputController<
             );
         }
 
-        const value = await this.typedInputService.getValue(
+        let value = await this.typedInputService.getValue(
             parsedMessage.value.value,
             parsedMessage.valueType.value,
             {
@@ -73,10 +73,20 @@ export default class TimeEntityController extends InputOutputController<
             }
         );
 
+        if (this.#isValidValue(value) === false) {
+            throw new InputError(
+                'ha-time-entity.error.invalid_format',
+                'home-assistant.status.error'
+            );
+        }
+
+        value = this.#getFormattedValue(value);
+
         // get previous value before updating
         const previousValue = this.#entityConfigNode?.state?.getLastPayload()
             ?.state as string | undefined;
-        await this.#prepareSend(message, value);
+        await this.integration?.updateValue(value);
+
         // send value change to all time nodes
         this.#entityConfigNode?.emit(
             IntegrationEvent.ValueChange,
@@ -84,6 +94,17 @@ export default class TimeEntityController extends InputOutputController<
             previousValue
         );
 
+        await this.setCustomOutputs(
+            this.node.config.outputProperties,
+            message,
+            {
+                config: this.node.config,
+                value,
+                previousValue,
+            }
+        );
+        // inject value so colons are not removed
+        this.status.setSuccess(['__value__', { value }]);
         send(message);
         done();
     }
@@ -109,8 +130,18 @@ export default class TimeEntityController extends InputOutputController<
     // Triggers when a entity value changes in Home Assistant
     public async onValueChange(value: string, previousValue?: string) {
         const message: NodeMessage = {};
-        await this.#prepareSend(message, value, previousValue);
+        await this.setCustomOutputs(
+            this.node.config.outputProperties,
+            message,
+            {
+                config: this.node.config,
+                value,
+                previousValue,
+            }
+        );
 
+        // inject value so colons are not removed
+        this.status.setSuccess(['__value__', { value }]);
         this.node.send(message);
     }
 
@@ -139,42 +170,5 @@ export default class TimeEntityController extends InputOutputController<
         return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}:${
             seconds?.padStart(2, '0') ?? '00'
         }`;
-    }
-
-    // Take care of repetative code in onInput and onValueChange
-    async #prepareSend(
-        message: NodeMessage,
-        value: string,
-        previousValue?: string
-    ): Promise<void> {
-        if (this.#isValidValue(value) === false) {
-            throw new InputError(
-                'ha-time-entity.error.invalid_format',
-                'home-assistant.status.error'
-            );
-        }
-
-        value = this.#getFormattedValue(value);
-
-        await this.integration?.updateHomeAssistant(value);
-        if (!previousValue) {
-            previousValue = this.#entityConfigNode?.state?.getLastPayload()
-                ?.state as string | undefined;
-        }
-        await this.setCustomOutputs(
-            this.node.config.outputProperties,
-            message,
-            {
-                config: this.node.config,
-                value,
-                previousValue,
-            }
-        );
-        this.#entityConfigNode?.state?.setLastPayload({
-            state: value,
-            attributes: {},
-        });
-        // inject value so colons are not removed
-        this.status.setSuccess(['__value__', { value }]);
     }
 }
