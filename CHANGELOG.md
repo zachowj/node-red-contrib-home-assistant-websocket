@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.57.2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.57.1...v0.57.2) (2023-10-06)
+
+
+### Bug Fixes
+
+* **number:** Save changes made in HA ([9975266](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/99752666830c44579ee4654eb108c8cc4ca7f43c))
+* **select:** Save changes made in HA ([9975266](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/99752666830c44579ee4654eb108c8cc4ca7f43c)), closes [#1100](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1100)
+* **text:** Save changes made in HA ([9975266](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/99752666830c44579ee4654eb108c8cc4ca7f43c))
+* **time-entity:** Save changes made in HA ([9975266](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/99752666830c44579ee4654eb108c8cc4ca7f43c))
+
 ## [0.57.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.57.0...v0.57.1) (2023-10-03)
 
 
