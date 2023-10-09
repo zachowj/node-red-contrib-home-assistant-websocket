@@ -2,6 +2,7 @@ import Joi from 'joi';
 
 import { createControllerDependencies } from '../../common/controllers/helpers';
 import ConfigError from '../../common/errors/ConfigError';
+import { getErrorData } from '../../common/errors/inputErrorHandler';
 import ClientEvents from '../../common/events/ClientEvents';
 import Events from '../../common/events/Events';
 import ComparatorService from '../../common/services/ComparatorService';
@@ -157,22 +158,23 @@ export default function triggerState(
     );
 
     if (controller.isEnabled && this.config.outputInitially) {
-        const emitEvents = () => {
+        const generateStateChanges = async () => {
             const events = createStateChangeEvents(homeAssistant);
-            events.forEach((event) => {
-                clientEvents.emit(
-                    `ha_events:state_changed:${event.entity_id}`,
-                    event
-                );
-            });
+            for (const event of events) {
+                await controller.onEntityStateChanged(event).catch((e) => {
+                    const { error, statusMessage } = getErrorData(e);
+                    status.setError(statusMessage);
+                    this.error(error);
+                });
+            }
         };
         // Here for when the node is deploy without the server config being deployed
         if (homeAssistant.isHomeAssistantRunning) {
-            emitEvents();
+            generateStateChanges();
         } else {
             clientEvents.addListener(
                 'ha_client:initial_connection_ready',
-                emitEvents
+                generateStateChanges
             );
         }
     }

@@ -1,21 +1,27 @@
+import { getErrorData } from '../../common/errors/inputErrorHandler';
 import ClientEvents from '../../common/events/ClientEvents';
+import Status from '../../common/status/Status';
 import { HA_CLIENT_READY, HA_EVENTS, TypedInputTypes } from '../../const';
 import { getEntitiesFromJsonata } from '../../helpers/utils';
 import { HaEvent } from '../../homeAssistant';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
-import { PollStateNodeProperties } from '.';
+import { PollStateNode, PollStateNodeProperties } from '.';
 import PollStateController from './PollStateController';
 
-export function startListeners({
+export async function startListeners({
     config,
     clientEvents,
     controller,
     homeAssistant,
+    node,
+    status,
 }: {
     config: PollStateNodeProperties;
     clientEvents: ClientEvents;
     controller: PollStateController;
     homeAssistant: HomeAssistant;
+    node: PollStateNode;
+    status: Status;
 }) {
     if (config.outputOnChanged) {
         clientEvents.addListener(
@@ -26,7 +32,11 @@ export function startListeners({
 
     if (config.outputInitially) {
         if (homeAssistant.isHomeAssistantRunning) {
-            controller.onTimer();
+            await controller.onTimer().catch((e) => {
+                const { error, statusMessage } = getErrorData(e);
+                status.setError(statusMessage);
+                node.error(error);
+            });
         } else {
             clientEvents.addListener(
                 'ha_client:initial_connection_ready',
@@ -36,7 +46,11 @@ export function startListeners({
     }
 
     if (homeAssistant.isHomeAssistantRunning) {
-        controller.onIntervalUpdate();
+        await controller.onIntervalUpdate().catch((e) => {
+            const { error, statusMessage } = getErrorData(e);
+            status.setError(statusMessage);
+            node.error(error);
+        });
     } else {
         clientEvents.addListener(
             HA_CLIENT_READY,

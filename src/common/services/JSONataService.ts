@@ -26,9 +26,9 @@ function isJSONataError(error: unknown): error is JSONataError {
 
     return (
         'code' in error &&
-        'value' in error &&
+        'message' in error &&
         'stack' in error &&
-        'message' in error
+        'token' in error
     );
 }
 
@@ -48,7 +48,15 @@ export default class JSONataService {
     }
 
     async evaluate(expression: string, objs: Record<string, any> = {}) {
-        const expr = RED.util.prepareJSONataExpression(expression, this.#node);
+        let expr: Expression;
+        try {
+            expr = RED.util.prepareJSONataExpression(expression, this.#node);
+        } catch (err) {
+            if (isJSONataError(err)) {
+                throw new JSONataError(err);
+            }
+            throw err;
+        }
         const { entity, message, prevEntity } = objs;
 
         expr.assign('entity', () => entity);
@@ -74,7 +82,8 @@ export default class JSONataService {
         expr.assign('sampleSize', sampleSize);
 
         try {
-            return evaluateJSONataExpression(expr, message);
+            // await here to catch JSONataError
+            return await evaluateJSONataExpression(expr, message);
         } catch (err) {
             if (isJSONataError(err)) {
                 throw new JSONataError(err);

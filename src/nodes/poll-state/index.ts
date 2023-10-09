@@ -97,5 +97,7 @@ export default function pollStateNode(
         config: this.config,
         controller,
         homeAssistant,
+        node: this,
+        status,
     });
 }

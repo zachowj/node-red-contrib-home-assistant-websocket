@@ -1,13 +1,17 @@
+import { getErrorData } from '../../common/errors/inputErrorHandler';
 import ClientEvents from '../../common/events/ClientEvents';
+import Status from '../../common/status/Status';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
+import { createStateChangeEvents } from '../trigger-state/helpers';
 import { EventsStateNode } from '.';
 import EventsStateController from './EventsStateController';
 
 export function startListeners(
+    clientEvents: ClientEvents,
     controller: EventsStateController,
     homeAssistant: HomeAssistant,
     node: EventsStateNode,
-    clientEvents: ClientEvents
+    status: Status
 ) {
     let eventTopic = `ha_events:state_changed`;
 
@@ -22,13 +26,25 @@ export function startListeners(
     );
 
     if (node.config.outputInitially) {
+        const generateStateChanges = async () => {
+            const events = createStateChangeEvents(homeAssistant);
+            for (const event of events) {
+                await controller
+                    .onHaEventsStateChanged(event, true)
+                    .catch((e) => {
+                        const { error, statusMessage } = getErrorData(e);
+                        status.setError(statusMessage);
+                        node.error(error);
+                    });
+            }
+        };
         // Here for when the node is deploy without the server config being deployed
         if (homeAssistant.isHomeAssistantRunning) {
-            controller.onDeploy();
+            generateStateChanges();
         } else {
             clientEvents.addListener(
                 'ha_client:initial_connection_ready',
-                controller.onStatesLoaded.bind(controller)
+                generateStateChanges
             );
         }
     }

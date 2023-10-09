@@ -3,6 +3,7 @@ import OutputController, {
     OutputControllerConstructor,
 } from '../../common/controllers/OutputController';
 import ConfigError from '../../common/errors/ConfigError';
+import { getErrorData } from '../../common/errors/inputErrorHandler';
 import ComparatorService from '../../common/services/ComparatorService';
 import TransformState, { TransformType } from '../../common/TransformState';
 import { TypedInputTypes } from '../../const';
@@ -130,11 +131,11 @@ export default class PollStateController extends ExposeAsController {
             clearInterval(this.#timer);
             this.#updateinterval = interval;
             this.#timer = setInterval(async () => {
-                try {
-                    await this.onTimer();
-                } catch (e) {
-                    this.node.error(e);
-                }
+                await this.onTimer().catch((e) => {
+                    const { error, statusMessage } = getErrorData(e);
+                    this.status.setError(statusMessage);
+                    this.node.error(error);
+                });
             }, this.#updateinterval);
         }
     }

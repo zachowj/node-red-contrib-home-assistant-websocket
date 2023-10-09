@@ -100,5 +100,5 @@ export default function eventsStateNode(
     });
     controller.setExposeAsConfigNode(exposeAsConfigNode);
 
-    startListeners(controller, homeAssistant, this, clientEvents);
+    startListeners(clientEvents, controller, homeAssistant, this, status);
 }

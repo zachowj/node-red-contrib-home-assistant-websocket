@@ -52,7 +52,7 @@ export default class EventsStateController extends ExposeAsController {
         if (isNaN(timer) || timer < 0) {
             throw new ConfigError([
                 'server-state-changed.error.invalid_for',
-                { for: timer },
+                { for: timer, type: this.node.config.forType },
             ]);
         }
 

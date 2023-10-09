@@ -10,6 +10,7 @@
       "no_connection": "No connection to Home Assistant",
       "pattern_not_matched": "Pattern not matched",
       "unknown_error": "Unknown error",
+      "unrecognized_error": "Unrecognized error: __error__",
       "user_not_admin": "User required to have admin privileges in Home Assistant"
     }
   }

@@ -1,14 +1,8 @@
 import EventEmitter from 'events';
-import Joi from 'joi';
 import { Node } from 'node-red';
 
-import { RED } from '../../globals';
 import { NodeDone } from '../../types/nodes';
-import BaseError from '../errors/BaseError';
-import HomeAssistantError, {
-    isHomeAssistantApiError,
-} from '../errors/HomeAssistantError';
-import JSONataError from '../errors/JSONataError';
+import { getErrorData } from '../errors/inputErrorHandler';
 import Status from '../status/Status';
 
 type EventHandler = (...args: any[]) => void | Promise<void>;
@@ -41,24 +35,7 @@ export default class Events {
                 // eslint-disable-next-line n/no-callback-literal
                 await callback(...args);
             } catch (e) {
-                let statusMessage = RED._('home-assistant.status.error');
-                let error = e;
-                if (e instanceof Joi.ValidationError) {
-                    error = new JSONataError(e);
-                    statusMessage = RED._(
-                        'home-assistant.status.validation_error'
-                    );
-                } else if (isHomeAssistantApiError(e)) {
-                    error = new HomeAssistantError(e);
-                } else if (e instanceof BaseError) {
-                    statusMessage = e.statusMessage;
-                } else if (typeof e === 'string') {
-                    error = new Error(e);
-                } else {
-                    error = new Error(
-                        `Unrecognized error ${JSON.stringify(e)}`
-                    );
-                }
+                const { error, statusMessage } = getErrorData(e);
                 this.node.error(error);
                 this.#status?.setFailed(statusMessage);
             }
