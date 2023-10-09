@@ -152,7 +152,7 @@
     "sinon-chai": "3.7.0",
     "ts-node": "10.9.1",
     "ts-sinon": "2.0.2",
-    "tslib": "2.4.0",
+    "tslib": "2.6.2",
     "typescript": "5.1.6",
     "vinyl-source-stream": "2.0.0",
     "vuepress": "2.0.0-beta.64",
