@@ -59,3 +59,4 @@ jobs:
     needs: release-please
     if: ${{ needs.release-please.outputs.release_created }}
     uses: zachowj/node-red-contrib-home-assistant-websocket/.github/workflows/publish.yml@main
+    secrets: inherit
