@@ -61,7 +61,7 @@ export default [
                 debugEnabled: schema.debugenabled,
                 customOutputs: schema.customoutputs,
                 outputInitially: schema.outputinitially,
-                StateType: schema.state_type,
+                stateType: schema.state_type,
                 exposeAsEntityConfig: '',
             };
 
@@ -71,6 +71,21 @@ export default [
             newSchema.customoutputs = undefined;
             newSchema.outputinitially = undefined;
             newSchema.state_type = undefined;
+
+            return newSchema;
+        },
+    },
+    {
+        version: 4,
+        up: (schema: any) => {
+            const newSchema = {
+                ...schema,
+                version: 4,
+            };
+
+            if (schema.stateType === undefined) {
+                newSchema.stateType = 'str';
+            }
 
             return newSchema;
         },

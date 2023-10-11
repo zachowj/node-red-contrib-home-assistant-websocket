@@ -49,7 +49,7 @@ const VERSION_3 = {
     debugEnabled: false,
     customOutputs: [],
     outputInitially: false,
-    StateType: 'str',
+    stateType: 'str',
     exposeAsEntityConfig: '',
 
     entityid: undefined,
@@ -58,6 +58,11 @@ const VERSION_3 = {
     customoutputs: undefined,
     outputinitially: undefined,
     state_type: undefined,
+};
+const VERSION_4 = {
+    ...VERSION_3,
+    version: 4,
+    stateType: 'str',
 };
 
 describe('Migrations - Trigger State Node', function () {
@@ -115,8 +120,15 @@ describe('Migrations - Trigger State Node', function () {
             expect(migratedSchema).to.eql(VERSION_3);
         });
     });
+    describe('Version 4', function () {
+        it('should update version 3 to version 4', function () {
+            const migrate = migrations.find((m) => m.version === 4);
+            const migratedSchema = migrate.up(VERSION_3);
+            expect(migratedSchema).to.eql(VERSION_4);
+        });
+    });
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_3);
+        expect(migratedSchema).to.eql(VERSION_4);
     });
 });
