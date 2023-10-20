@@ -37,31 +37,22 @@ body:
       render: json
     validations:
       required: false
-  - type: input
+  - type: textarea
     attributes:
-      label: This package's version (not the Home Assistant add-on version)
-      placeholder: 0.33.1
-    validations:
-      required: true
-  - type: dropdown
-    attributes:
-      label: "Is Node-RED running in Docker?"
-      options:
-        - "Yes"
-        - "No"
-        - "Home Assistant add-on"
-    validations:
-      required: true
-  - type: input
-    attributes:
-      label: Node-RED version
-      placeholder: 1.3.5
-    validations:
-      required: true
-  - type: input
-    attributes:
-      label: Node.js version
-      placeholder: 14.17.1
+      label: Environment Information
+      description: Retrieve this information using the [diagnostic flow](https://zachowj.github.io/node-red-contrib-home-assistant-websocket/guide/diagnostics.html)
+      placeholder: |
+        Version: 
+
+        Home Assistant version:
+        Companion version:
+
+        Node-RED version:
+        Docker: no
+        Add-on: no
+
+        Node.js version:
+        OS:
     validations:
       required: true
   - type: textarea

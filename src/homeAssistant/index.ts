@@ -11,7 +11,7 @@ import HomeAssistant from './HomeAssistant';
 import HttpAPI, { HttpConfig } from './Http';
 import WebsocketAPI, { ClientEvent, WebsocketConfig } from './Websocket';
 
-const homeAssistantConnections = new Map<string, HomeAssistant>();
+export const homeAssistantConnections = new Map<string, HomeAssistant>();
 
 export enum HaEvent {
     AreaRegistryUpdated = 'areas_updated',

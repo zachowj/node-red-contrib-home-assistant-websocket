@@ -4,6 +4,7 @@ import flatten from 'flat';
 
 import { NO_VERSION } from './const';
 import { RED } from './globals';
+import { getEnvironmentData } from './helpers/diagnostics';
 import { getServerConfigNode } from './helpers/node';
 import { Credentials, getHomeAssistant } from './homeAssistant';
 import HomeAssistant from './homeAssistant/HomeAssistant';
@@ -274,4 +275,11 @@ export function createRoutes(): void {
     );
 
     RED.httpAdmin.get('/homeassistant/discover', findServers);
+    RED.httpAdmin.get(
+        '/homeassistant/diagnostics',
+        RED.auth.needsPermission('server.read'),
+        async (req: CustomRequest, res: Response) => {
+            res.send(await getEnvironmentData());
+        }
+    );
 }

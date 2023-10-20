@@ -84,6 +84,7 @@ export default defineUserConfig({
                         '/guide/conditionals',
                         '/guide/mustache-templates',
                         '/guide/jsonata',
+                        '/guide/diagnostics',
                     ],
                 },
                 {
