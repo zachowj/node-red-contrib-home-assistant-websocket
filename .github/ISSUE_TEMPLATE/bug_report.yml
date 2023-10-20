@@ -41,7 +41,7 @@ body:
     attributes:
       label: Environment Information
       description: Retrieve this information using the [diagnostic flow](https://zachowj.github.io/node-red-contrib-home-assistant-websocket/guide/diagnostics.html)
-      placeholder: |
+      value: |
         Version: 
 
         Home Assistant version:
