@@ -96,12 +96,7 @@ export default class SwitchController extends InputOutputController<
     }
 
     public onTrigger(data: TriggerPayload) {
-        const message: NodeMessage = {
-            topic: 'triggered',
-        };
-        if (data.message !== undefined) {
-            message.payload = data.message;
-        }
+        const message: NodeMessage = { topic: 'triggered', ...data.message };
 
         if (this.#isSwitchEntityEnabled) {
             this.status.setSuccess('triggered');
