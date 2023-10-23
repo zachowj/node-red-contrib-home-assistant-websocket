@@ -80,7 +80,7 @@
     "@types/geolib": "2.0.23",
     "@types/jquery": "3.5.22",
     "@types/jqueryui": "1.12.18",
-    "@types/lodash.clonedeep": "4.5.7",
+    "@types/lodash.clonedeep": "4.5.8",
     "@types/lodash.merge": "4.6.7",
     "@types/lowdb": "1.0.11",
     "@types/mocha": "10.0.1",
