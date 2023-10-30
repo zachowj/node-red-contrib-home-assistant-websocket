@@ -74,7 +74,7 @@
     "@rollup/stream": "3.0.0",
     "@types/bonjour": "3.5.12",
     "@types/chai": "4.3.6",
-    "@types/debug": "4.1.9",
+    "@types/debug": "4.1.10",
     "@types/express": "4.17.18",
     "@types/flat": "5.0.2",
     "@types/geolib": "2.0.23",
