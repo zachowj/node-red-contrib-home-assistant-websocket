@@ -15,11 +15,6 @@ export interface HaConfigOption {
 export const defaultHaConfigOptions: HaConfigOption[] = [
     { id: 'name', type: 'string' },
     { id: 'icon', type: 'string' },
-    {
-        id: 'entity_category',
-        type: 'select',
-        values: ['', 'config', 'diagnostic'],
-    },
     { id: 'entity_picture', type: 'string' },
 ];
 

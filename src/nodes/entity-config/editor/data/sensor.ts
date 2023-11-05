@@ -151,6 +151,11 @@ export const sensorUnitOfMeasurement: Record<
 
 export default [
     {
+        id: 'entity_category',
+        type: 'select',
+        values: ['', 'diagnostic'],
+    },
+    {
         id: 'device_class',
         type: 'select',
         values: ['', ...sensorDeviceClasses],
