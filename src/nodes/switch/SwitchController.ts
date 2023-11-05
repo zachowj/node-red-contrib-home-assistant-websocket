@@ -7,6 +7,7 @@ import BidirectionalIntegration, {
     StateChangePayload,
     TriggerPayload,
 } from '../../common/integration/BidirectionalEntityIntegration';
+import { RED } from '../../globals';
 import { NodeMessage } from '../../types/nodes';
 import { EntityConfigNode } from '../entity-config';
 import { SwitchNode, SwitchNodeProperties } from '.';
@@ -98,11 +99,12 @@ export default class SwitchController extends InputOutputController<
     public onTrigger(data: TriggerPayload) {
         const message: NodeMessage = { topic: 'triggered', ...data.message };
 
+        const status = RED._('ha-switch.status.triggered');
         if (this.#isSwitchEntityEnabled) {
-            this.status.setSuccess('triggered');
+            this.status.setSuccess(status);
             this.node.send(message);
         } else {
-            this.status.setFailed('triggered');
+            this.status.setFailed(status);
             this.node.send([null, message]);
         }
     }

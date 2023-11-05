@@ -5,6 +5,9 @@
       "entity_config": "Entity config",
       "name": "Name",
       "output_on_state_change": "Output on state change"
+    },
+    "status": {
+      "triggered": "triggered"
     }
   }
 }
