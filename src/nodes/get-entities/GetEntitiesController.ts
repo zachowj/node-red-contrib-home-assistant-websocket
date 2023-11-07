@@ -51,6 +51,7 @@ export default class GetEntitiesController extends InputOutputController<
             entity.timeSinceChangedMs =
                 Date.now() - new Date(entity.last_changed).getTime();
 
+            let entityMatched = true;
             for (const rule of rules) {
                 const value = selectn(rule.property, entity);
                 const result =
@@ -68,9 +69,12 @@ export default class GetEntitiesController extends InputOutputController<
                     (rule.logic !== 'jsonata' && value === undefined) ||
                     !result
                 ) {
-                    continue;
+                    entityMatched = false;
+                    break;
                 }
+            }
 
+            if (entityMatched) {
                 entities.push(entity);
             }
         }
