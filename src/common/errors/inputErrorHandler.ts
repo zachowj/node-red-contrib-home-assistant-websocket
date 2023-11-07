@@ -20,6 +20,8 @@ export function getErrorData(e: unknown) {
         e = new HomeAssistantError(e);
     } else if (e instanceof BaseError) {
         statusMessage = e.statusMessage;
+    } else if (e instanceof Error) {
+        statusMessage = e.name || statusMessage;
     } else if (typeof e === 'string') {
         e = new Error(e);
     } else {

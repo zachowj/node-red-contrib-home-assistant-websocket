@@ -1,33 +1,30 @@
-import {
-    EditorNodeDef,
-    EditorNodeProperties,
-    EditorRED,
-    EditorWidgetTypedInputType,
-} from 'node-red';
+import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
 import { NodeType } from '../../const';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import { HATypedInputTypeOptions } from '../../editor/types';
+import { OutputType } from './const';
+import { Rule } from './types';
 
 declare const RED: EditorRED;
-
-type Rule = {
-    property: string;
-    logic: string;
-    value: string;
-    valueType: EditorWidgetTypedInputType | string;
-};
 
 interface GetEntitiesEditorNodeProperties extends EditorNodeProperties {
     server: string;
     version: number;
     rules: Rule[];
-    output_type: string;
-    output_empty_results: boolean;
-    output_location_type: string;
-    output_location: string;
-    output_results_count: number;
+    outputType: OutputType;
+    outputEmptyResults: boolean;
+    outputLocationType: string;
+    outputLocation: string;
+    outputResultsCount: number;
+
+    // deprecated
+    output_type: undefined;
+    output_empty_results: undefined;
+    output_location_type: undefined;
+    output_location: undefined;
+    output_results_count: undefined;
 }
 
 const GetEntitiesEditor: EditorNodeDef<GetEntitiesEditorNodeProperties> = {
@@ -48,19 +45,26 @@ const GetEntitiesEditor: EditorNodeDef<GetEntitiesEditorNodeProperties> = {
         rules: {
             value: [{ property: '', logic: 'is', value: '', valueType: 'str' }],
         },
-        output_type: { value: 'array' },
-        output_empty_results: { value: false },
-        output_location_type: { value: 'msg' },
-        output_location: { value: 'payload' },
-        output_results_count: {
+        outputType: { value: OutputType.Array },
+        outputEmptyResults: { value: false },
+        outputLocationType: { value: 'msg' },
+        outputLocation: { value: 'payload' },
+        outputResultsCount: {
             value: 1,
             validate: function (v) {
-                if ($('#node-input-output_type').val() === 'random') {
+                if ($('#node-input-outputType').val() === OutputType.Random) {
                     return Number.isInteger(Number(v));
                 }
                 return true;
             },
         },
+
+        // deprecated
+        output_type: { value: undefined },
+        output_empty_results: { value: undefined },
+        output_location_type: { value: undefined },
+        output_location: { value: undefined },
+        output_results_count: { value: undefined },
     },
     oneditprepare: function () {
         ha.setup(this);
@@ -205,29 +209,29 @@ const GetEntitiesEditor: EditorNodeDef<GetEntitiesEditorNodeProperties> = {
         });
 
         $logic.editableList('addItems', this.rules);
-        $('#node-input-output_location').typedInput({
+        $('#node-input-outputLocation').typedInput({
             types: ['msg', 'flow', 'global'],
-            typeField: '#node-input-output_location_type',
+            typeField: '#node-input-outputLocationType',
         });
 
-        $('#node-input-output_results_count').spinner({ min: 1 });
+        $('#node-input-outputResultsCount').spinner({ min: 1 });
 
-        $('#node-input-output_type')
+        $('#node-input-outputType')
             .on('change', function () {
                 $('.output-option').hide();
                 switch ($(this).val() as string) {
-                    case 'array':
+                    case OutputType.Array:
                         $('#output_empty_results').show();
                         $('#output_location').show();
                         break;
-                    case 'count':
+                    case OutputType.Count:
                         $('#output_location').show();
                         break;
-                    case 'random':
+                    case OutputType.Random:
                         $('#output_results_count').show();
                         $('#output_location').show();
                         break;
-                    case 'split':
+                    case OutputType.Split:
                     default:
                         break;
                 }

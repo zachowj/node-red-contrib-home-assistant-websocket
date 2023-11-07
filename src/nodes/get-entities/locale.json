@@ -1,5 +1,5 @@
 {
-  "api-get-history": {
+  "ha-get-entities": {
     "label": {
       "max_results": "Max number of results",
       "name": "Name",
@@ -13,6 +13,11 @@
       },
       "send_empty_results": "Send empty results",
       "server": "Server"
+    },
+    "status": {
+      "no_results": "no results",
+      "number_of_results": "__count__ entities",
+      "number_of_random_resuls": "__count__ random"
     }
   }
 }
