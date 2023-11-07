@@ -257,12 +257,19 @@ export default class WaitUntil extends InputOutputController<
         ) {
             const currentState = this.#homeAssistant.websocket.getStates(
                 config.entityId
-            ) as HassEntity;
+            );
 
-            this.#onEntityChange({
+            if (!currentState) {
+                throw new InputError(
+                    `Entity (${config.entityId}) could not be found in cache`,
+                    'not found'
+                );
+            }
+
+            await this.#onEntityChange({
                 event: {
                     entity_id: config.entityId,
-                    new_state: currentState,
+                    new_state: currentState as HassEntity,
                 },
             });
         }
