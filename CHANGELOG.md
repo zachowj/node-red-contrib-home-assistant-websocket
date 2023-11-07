@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.58.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.57.4...v0.58.0) (2023-11-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* **switch:** When use the service nodered.trigger the message object will to merge at the top level. Before it was added at msg.payload
+
+### Bug Fixes
+
+* **get-entities:** Handle JSONata error in rules ([cbc1f48](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/cbc1f489ba82305bd10cc562f476d0eae29acef2)), closes [#1130](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1130)
+* Remove config from entity category ([19e16f2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/19e16f22221f66a2c4c16c3b0c57ac895af65848))
+* **switch:** Insert trigger message in top level not in payload ([5762f49](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/5762f49acfd1c924c7b778e1b1e181ad183e811d))
+* **wait-until:** Handle non existent entities ([a524e45](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a524e45df2cdb44345e25421aae561c32c5a2bf5)), closes [#1127](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1127)
+
 ## [0.57.4](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.57.3...v0.57.4) (2023-10-11)
 
 
