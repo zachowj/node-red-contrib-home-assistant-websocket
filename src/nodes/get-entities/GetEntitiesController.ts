@@ -5,6 +5,7 @@ import InputOutputController, {
     InputOutputControllerOptions,
     InputProperties,
 } from '../../common/controllers/InputOutputController';
+import SendSplitMixin from '../../common/controllers/SendSplitMixin';
 import ComparatorService from '../../common/services/ComparatorService';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
 import { HassEntity } from '../../types/home-assistant';
@@ -21,10 +22,10 @@ interface GetEntitiesControllerConstructor
     homeAssistant: HomeAssistant;
 }
 
-export default class GetEntitiesController extends InputOutputController<
-    GetEntitiesNode,
-    GetEntitiesNodeProperties
-> {
+const SendSplitController = SendSplitMixin(
+    InputOutputController<GetEntitiesNode, GetEntitiesNodeProperties>
+);
+export default class GetEntitiesController extends SendSplitController {
     #comparatorService: ComparatorService;
     #homeAssistant: HomeAssistant;
 

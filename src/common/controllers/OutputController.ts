@@ -1,13 +1,9 @@
-import { NodeMessageInFlow } from 'node-red';
-
-import { RED } from '../../globals';
 import { debugToClient } from '../../helpers/node';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
 import {
     BaseNode,
     NodeDone,
     NodeMessage,
-    NodeSend,
     OutputProperty,
 } from '../../types/nodes';
 import { NodeEvent } from '../events/Events';
@@ -55,36 +51,6 @@ export default class OutputController<T extends BaseNode = BaseNode> {
     }
 
     protected onClose?(removed: boolean): void;
-
-    protected sendSplit(
-        message: Partial<NodeMessageInFlow>,
-        data: any[],
-        send: NodeSend
-    ) {
-        if (!send) {
-            send = this.node.send;
-        }
-
-        delete message._msgid;
-        message.parts = {
-            id: RED.util.generateId(),
-            count: data.length,
-            index: 0,
-            // TODO: check if this works
-            // type: 'array',
-            // len: 1,
-        };
-
-        let pos = 0;
-        for (let i = 0; i < data.length; i++) {
-            message.payload = data.slice(pos, pos + 1)[0];
-            if (message.parts) {
-                message.parts.index = i;
-            }
-            pos += 1;
-            send(RED.util.cloneMessage(message));
-        }
-    }
 
     protected debugToClient(message: any | any[]) {
         debugToClient(this.node, message);
