@@ -123,9 +123,12 @@ export default class SelectController extends InputOutputController<
     }
 
     #isValidValue(option: string): boolean {
-        const options = this.integration?.getEntityHomeAssistantConfigValue(
-            'options'
-        ) as string;
+        const options =
+            this.integration?.getEntityHomeAssistantConfigValue('options');
+
+        if (!options || !Array.isArray(options)) {
+            return false;
+        }
 
         return options.includes(option);
     }
