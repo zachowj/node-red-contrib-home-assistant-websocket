@@ -275,9 +275,11 @@ export default class UnidirectionalIntegration extends Integration {
     }
 
     /**
-     * Get the value of a Home Assistant configuration key for the entity.
-     * @param key - The key to retrieve the value for.
-     * @returns The value of the key, or undefined if it does not exist.
+     * This method retrieves the value of a specific key from the Home Assistant configuration for the entity.
+     * If the key does not exist in the configuration, it returns undefined.
+     *
+     * @param key - The key for which to retrieve the value.
+     * @returns The value of the key from the Home Assistant configuration, or undefined if the key does not exist.
      */
     public getEntityHomeAssistantConfigValue(
         key: string
@@ -290,10 +292,34 @@ export default class UnidirectionalIntegration extends Integration {
         return haConfig[key];
     }
 
+    /**
+     * This method saves the Home Assistant (HA) configuration to the context.
+     * It first retrieves any existing HA configuration from the context.
+     * Then it removes any properties from the new HA configuration that have undefined values.
+     * Finally, it merges the existing and new HA configurations and saves the result back to the context.
+     *
+     * @param haConfig - The new HA configuration to save. Properties with undefined values will not be saved.
+     */
     public saveHaConfigToContext(haConfig: Record<string, any>) {
-        this.entityConfigNode.context().set('haConfig', haConfig);
+        const existingHaConfig = this.getHaConfigFromContext() ?? {};
+        // remove undefined values from haConfig
+        Object.keys(haConfig).forEach(
+            (key) => haConfig[key] === undefined && delete haConfig[key]
+        );
+
+        const mergedHaConfig = {
+            ...existingHaConfig,
+            ...haConfig,
+        };
+        this.entityConfigNode.context().set('haConfig', mergedHaConfig);
     }
 
+    /**
+     * This method retrieves the Home Assistant (HA) configuration from the context.
+     * If the HA configuration does not exist in the context, it returns undefined.
+     *
+     * @returns The HA configuration from the context, or undefined if it does not exist.
+     */
     public getHaConfigFromContext(): Record<string, any> | undefined {
         return this.entityConfigNode.context().get('haConfig') as
             | Record<string, any>
