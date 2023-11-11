@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.59.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.58.2...v0.59.0) (2023-11-11)
+
+
+### Features
+
+* Add area and device helpers to JSONata ([8875d0f](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/8875d0f9c011231b0336f3c103e8de4fe1602b50))
+
+
+### Bug Fixes
+
+* Merge existing HA settings before saving ([e44cfaf](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/e44cfaffd258d1187133682c95a682198a02f6bd)), closes [#1147](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1147)
+
 ## [0.58.2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.58.1...v0.58.2) (2023-11-10)
 
 
