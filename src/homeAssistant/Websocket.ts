@@ -46,7 +46,9 @@ import {
 } from '../const';
 import { RED } from '../globals';
 import {
+    HassArea,
     HassAreas,
+    HassDevice,
     HassDeviceActions,
     HassDeviceCapabilities,
     HassDevices,
@@ -566,11 +568,27 @@ export default class Websocket {
         this.#emitEvent('ha_client:close');
     }
 
-    getAreas(): HassAreas {
+    getAreas(areaId: string): HassArea;
+    getAreas(): HassAreas;
+    getAreas(areaId?: unknown): unknown {
+        if (areaId) {
+            return cloneDeep(
+                this.areas.find((area) => area.area_id === areaId)
+            );
+        }
+
         return this.areas;
     }
 
-    getDevices(): HassDevices {
+    getDevices(deviceId: string): HassDevice;
+    getDevices(): HassDevices;
+    getDevices(deviceId?: unknown): unknown {
+        if (deviceId) {
+            return cloneDeep(
+                this.devices.find((device) => device.id === deviceId)
+            );
+        }
+
         return this.devices;
     }
 
@@ -618,7 +636,15 @@ export default class Websocket {
         return results.extra_fields;
     }
 
-    getEntities() {
+    getEntities(): HassEntityRegistryEntry[];
+    getEntities(entityId?: string): HassEntityRegistryEntry;
+    getEntities(entityId?: unknown): unknown {
+        if (entityId) {
+            return cloneDeep(
+                this.entities.find((entity) => entity.entity_id === entityId)
+            );
+        }
+
         return this.entities;
     }
 

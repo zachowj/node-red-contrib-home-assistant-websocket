@@ -4,6 +4,11 @@ There are three functions added for JSONata expressions within the Home Assistan
 
 - `$entity()` returns the entity that triggered the node
 - `$prevEntity()` returns the previous state entity if the node is an event node
+- `$areaDevices(areaId)` returns all devices associated with a specific area ID.
+- `$areaEntities(areaId)` returns all entities associated with a specific area ID.
+- `$area(lookup)` returns an area based on a provided lookup value, or all areas if no lookup value is provided. The lookup value can be an area ID, an entity ID, or a device ID.
+- `$deviceEntities(device_id)` returns all entities associated with a specific device.
+- `$device(device_id)` returns a device based on a provided lookup value. The lookup value can be an entity ID or a device name.
 - `$entities()` returns all entities in the cache
 - `$entities(entity_id)` returns a single entity from cache matching passed in entity_id
 
