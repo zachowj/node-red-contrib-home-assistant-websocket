@@ -24,7 +24,7 @@ const DeviceConfigEditor: EditorNodeDef<DeviceConfigEditorNodeProperties> = {
     },
     icon: 'font-awesome/fa-device',
     label: function (): string {
-        return this.name || 'Devce Config';
+        return this.name || 'Device Config';
     },
     oneditprepare: function () {
         ha.setup(this);
