@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const merge = require('lodash.merge');
+const { merge } = require('lodash');
 
 const EventsNode = require('./EventsNode');
 const { INTEGRATION_UNLOADED, INTEGRATION_NOT_LOADED } = require('../const');

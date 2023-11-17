@@ -1,4 +1,4 @@
-const merge = require('lodash.merge');
+const { merge } = require('lodash');
 
 const EventsHaNode = require('./EventsHaNode');
 const { INTEGRATION_UNLOADED } = require('../const');

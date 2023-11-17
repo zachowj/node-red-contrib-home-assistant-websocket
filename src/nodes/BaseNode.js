@@ -1,5 +1,5 @@
-const merge = require('lodash.merge');
 const selectn = require('selectn');
+const { merge } = require('lodash');
 
 const ComparatorService =
     require('../common/services/ComparatorService').default;

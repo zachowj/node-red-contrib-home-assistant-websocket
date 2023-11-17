@@ -1,5 +1,5 @@
 import { HassEntities } from 'home-assistant-js-websocket';
-import cloneDeep from 'lodash.clonedeep';
+import { cloneDeep } from 'lodash';
 
 import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
 import OutputController, {

@@ -1,4 +1,4 @@
-const merge = require('lodash.merge');
+const { merge } = require('lodash');
 
 const BaseError = require('../common/errors/BaseError').default;
 const BaseNode = require('./BaseNode');

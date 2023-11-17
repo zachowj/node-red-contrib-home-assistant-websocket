@@ -1,10 +1,10 @@
 const selectn = require('selectn');
 
 const EventsNode = require('../EventsNode');
-const merge = require('lodash.merge');
 const { generateRenderTemplate } = require('../../helpers/mustache');
 const { HA_CLIENT_READY } = require('../../const');
 const { isNodeRedEnvVar } = require('../../helpers/utils');
+const { merge } = require('lodash');
 
 const QUEUE_NONE = 'none';
 const QUEUE_FIRST = 'first';

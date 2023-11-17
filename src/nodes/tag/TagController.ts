@@ -1,4 +1,4 @@
-import cloneDeep from 'lodash.clonedeep';
+import { cloneDeep } from 'lodash';
 
 import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
 import OutputController from '../../common/controllers/OutputController';
