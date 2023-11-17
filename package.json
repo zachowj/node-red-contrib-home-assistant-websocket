@@ -21,11 +21,11 @@
     "lint:fix": "eslint . --fix && prettier --write {docs,src,test}/**/*.{css,js,ts,md,html}",
     "prepare": "husky install",
     "prepublishOnly": "gulp build",
-    "test": "mocha -r ts-node/register test/**/*.test.[tj]s --exit",
+    "test": "mocha -r ts-node/register 'test/**/*.test.[tj]s' --exit",
     "test:coverage": "nyc npm run test",
     "test:single": "mocha -r ts-node/register --exit",
-    "test:watch": "mocha -r ts-node/register --watch --recursive",
-    "test:watch:single": "mocha -r ts-node/register --watch-files **/*.[tj]s --watch --exit"
+    "test:watch": "mocha -r ts-node/register 'test/**/*.test.[tj]s' --watch-files 'test/**/*.test.[tj]s' --watch --exit",
+    "test:watch:single": "mocha -r ts-node/register --watch-files 'test/**/*.test.[tj]s' --watch --exit"
   },
   "repository": {
     "type": "git",

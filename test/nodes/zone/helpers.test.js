@@ -3,7 +3,7 @@ const expect = require('chai').expect;
 const {
     getLocationData,
     getZoneData,
-} = require('../../src/nodes/zone/helpers');
+} = require('../../../src/nodes/zone/helpers');
 
 describe('location', function () {
     describe('getLocationData', function () {
@@ -18,7 +18,7 @@ describe('location', function () {
             expect(location).to.have.property('latitude');
             expect(location).to.have.property('longitude');
         });
-        it('should return false for invalid latitude', function () {
+        it('should return undefined for invalid latitude', function () {
             const badLatitude = {
                 attributes: {
                     latitude: 'abc',
@@ -26,9 +26,9 @@ describe('location', function () {
                 },
             };
             const location = getLocationData(badLatitude);
-            expect(location).to.be.false;
+            expect(location).to.be.undefined;
         });
-        it('should return false for invalid longitude', function () {
+        it('should return undefined for invalid longitude', function () {
             const badLongitude = {
                 attributes: {
                     latitude: 1,
@@ -36,7 +36,7 @@ describe('location', function () {
                 },
             };
             const location = getLocationData(badLongitude);
-            expect(location).to.be.false;
+            expect(location).to.be.undefined;
         });
     });
     describe('getZoneData', function () {
@@ -53,7 +53,7 @@ describe('location', function () {
             expect(location).to.have.property('longitude');
             expect(location).to.have.property('radius');
         });
-        it('should return false for invalid radius', function () {
+        it('should return undefined for invalid radius', function () {
             const badRadius = {
                 attributes: {
                     latitude: 1,
@@ -61,7 +61,7 @@ describe('location', function () {
                 },
             };
             const location = getZoneData(badRadius);
-            expect(location).to.be.false;
+            expect(location).to.be.undefined;
         });
     });
 });

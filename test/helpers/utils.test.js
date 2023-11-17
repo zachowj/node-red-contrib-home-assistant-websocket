@@ -1,8 +1,79 @@
 const expect = require('chai').expect;
-
-const { shouldIncludeEvent, parseTime } = require('../../src/helpers/utils');
+const {
+    toCamelCase,
+    getEntitiesFromJsonata,
+    validEntityId,
+    shouldIncludeEvent,
+    parseTime,
+    isNodeRedEnvVar,
+    containsMustache,
+} = require('../../src/helpers/utils');
 
 describe('utils', function () {
+    describe('containsMustache', function () {
+        it('should return true for strings containing mustache syntax', function () {
+            expect(containsMustache('{{hello}}')).to.be.true;
+            expect(containsMustache('Hello, {{name}}!')).to.be.true;
+            expect(containsMustache('{{firstName}} {{lastName}}')).to.be.true;
+        });
+
+        it('should return false for strings not containing mustache syntax', function () {
+            expect(containsMustache('Hello, world!')).to.be.false;
+            expect(containsMustache('{{hello')).to.be.false;
+            expect(containsMustache('hello}}')).to.be.false;
+        });
+    });
+
+    describe('getEntitiesFromJsonata', function () {
+        it('should return a set of entities from a JSONata expression', function () {
+            const jsonata =
+                '$entities("domain.service") + $entities("domain.service2")';
+            const result = getEntitiesFromJsonata(jsonata);
+            expect(result)
+                .to.be.a('set')
+                .to.have.lengthOf(2)
+                .to.include('domain.service')
+                .to.include('domain.service2');
+        });
+
+        it('should return an empty set if no entities are found', function () {
+            const jsonata = '2 + 2';
+            const result = getEntitiesFromJsonata(jsonata);
+            expect(result).to.be.empty;
+        });
+
+        it('should ignore invalid entity names', function () {
+            const jsonata =
+                '$entities("device.name") + $entities("invalid_entity")';
+            const result = getEntitiesFromJsonata(jsonata);
+            expect(result)
+                .to.be.a('set')
+                .to.have.lengthOf(1)
+                .to.include('device.name');
+        });
+    });
+
+    describe('isNodeRedEnvVar', function () {
+        it('should return true for valid Node-RED environment variables', function () {
+            // eslint-disable-next-line no-template-curly-in-string
+            expect(isNodeRedEnvVar('${env_var}')).to.be.true;
+            // eslint-disable-next-line no-template-curly-in-string
+            expect(isNodeRedEnvVar('${ENV_VAR}')).to.be.true;
+            // eslint-disable-next-line no-template-curly-in-string
+            expect(isNodeRedEnvVar('${envVar123}')).to.be.true;
+        });
+
+        it('should return false for invalid Node-RED environment variables', function () {
+            // eslint-disable-next-line no-template-curly-in-string
+            expect(isNodeRedEnvVar('${env-var}')).to.be.false;
+            // eslint-disable-next-line no-template-curly-in-string
+            expect(isNodeRedEnvVar('${123envVar}')).to.be.false;
+            expect(isNodeRedEnvVar('envVar')).to.be.false;
+            expect(isNodeRedEnvVar('${envVar')).to.be.false;
+            expect(isNodeRedEnvVar('envVar}')).to.be.false;
+        });
+    });
+
     describe('shouldIncludeEvent', function () {
         it('should return true when filter is empty', function () {
             expect(shouldIncludeEvent('test', '', 'exact')).to.be.true;
@@ -32,6 +103,25 @@ describe('utils', function () {
         it('should not match a string in a array', function () {
             expect(shouldIncludeEvent('test', ['abc', 'test2'], 'list')).to.be
                 .false;
+        });
+    });
+
+    describe('toCamelCase', function () {
+        it('should convert strings to camel case', function () {
+            expect(toCamelCase('Home Assistant')).to.be.equal('homeAssistant');
+            expect(toCamelCase('hello world')).to.be.equal('helloWorld');
+            expect(toCamelCase('HELLO WORLD')).to.be.equal('helloWorld');
+            expect(toCamelCase('HelloWorld')).to.be.equal('helloWorld');
+            expect(toCamelCase('hello_world')).to.be.equal('helloWorld');
+        });
+
+        it('should handle single word strings', function () {
+            expect(toCamelCase('hello')).to.be.equal('hello');
+            expect(toCamelCase('HELLO')).to.be.equal('hello');
+        });
+
+        it('should handle empty strings', function () {
+            expect(toCamelCase('')).to.be.equal('');
         });
     });
 
@@ -124,6 +214,22 @@ describe('utils', function () {
             const str = '10:10:1';
             const results = parseTime(str);
             expect(results).to.not.exist;
+        });
+    });
+
+    describe('validEntityId', function () {
+        it('should return true for valid entity IDs', function () {
+            expect(validEntityId('domain_1.entity_1')).to.be.true;
+            expect(validEntityId('domain_2.entity_2')).to.be.true;
+        });
+
+        it('should return false for invalid entity IDs', function () {
+            expect(validEntityId('domain..entity')).to.be.false;
+            expect(validEntityId('domain.entity.')).to.be.false;
+            expect(validEntityId('.domain.entity')).to.be.false;
+            expect(validEntityId('domain_.entity')).to.be.false;
+            expect(validEntityId('domain._entity')).to.be.false;
+            expect(validEntityId('domain.__entity')).to.be.false;
         });
     });
 });

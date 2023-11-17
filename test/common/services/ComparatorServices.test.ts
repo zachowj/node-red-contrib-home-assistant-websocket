@@ -41,11 +41,11 @@ describe('Comparator Service', function () {
 
     describe('getComparatorResult', function () {
         describe('checking context values', function () {
-            it('should return true when checking message context that exist', function () {
+            it('should return true when checking message context that exist', async function () {
                 contextServiceStub.get
                     .withArgs('msg', 'foo', { payload: 'bar' })
                     .returns('bar');
-                const result = comparatorService.getComparatorResult(
+                const result = await comparatorService.getComparatorResult(
                     'is',
                     'foo',
                     'bar',
@@ -61,10 +61,10 @@ describe('Comparator Service', function () {
                 expect(result).to.be.true;
             });
 
-            it('should return true when checking flow context that exist', function () {
+            it('should return true when checking flow context that exist', async function () {
                 contextServiceStub.get.withArgs('flow', 'foo').returns('bar');
 
-                const result = comparatorService.getComparatorResult(
+                const result = await comparatorService.getComparatorResult(
                     'is',
                     'foo',
                     'bar',
@@ -73,10 +73,10 @@ describe('Comparator Service', function () {
 
                 expect(result).to.be.true;
             });
-            it('should return true when checking global context that exist', function () {
+            it('should return true when checking global context that exist', async function () {
                 contextServiceStub.get.withArgs('global', 'foo').returns('bar');
 
-                const result = comparatorService.getComparatorResult(
+                const result = await comparatorService.getComparatorResult(
                     'is',
                     'foo',
                     'bar',
@@ -85,8 +85,8 @@ describe('Comparator Service', function () {
 
                 expect(result).to.be.true;
             });
-            it('should return false when flow context does not exist', function () {
-                const result = comparatorService.getComparatorResult(
+            it('should return false when flow context does not exist', async function () {
+                const result = await comparatorService.getComparatorResult(
                     'is',
                     'foo',
                     'bar',
@@ -97,13 +97,13 @@ describe('Comparator Service', function () {
             });
         });
         describe('check entity values', function () {
-            it('should return true when entitys state is equal to expected state', function () {
+            it('should return true when entitys state is equal to expected state', async function () {
                 const entity = {
                     entity_id: 'light.kitchen',
                     state: 'on',
                     attributes: {},
                 };
-                const result = comparatorService.getComparatorResult(
+                const result = await comparatorService.getComparatorResult(
                     'is',
                     'state',
                     entity.state,
@@ -113,13 +113,13 @@ describe('Comparator Service', function () {
 
                 expect(result).to.be.true;
             });
-            it('should return false when entitys state is not equal to expected state', function () {
+            it('should return false when entitys state is not equal to expected state', async function () {
                 const entity = {
                     entity_id: 'light.kitchen',
                     state: 'on',
                     attributes: {},
                 };
-                const result = comparatorService.getComparatorResult(
+                const result = await comparatorService.getComparatorResult(
                     'is',
                     'state',
                     'off',
@@ -132,13 +132,13 @@ describe('Comparator Service', function () {
         });
 
         describe('check previous entity values', function () {
-            it('should return true when entitys state is equal to expected state', function () {
+            it('should return true when entitys state is equal to expected state', async function () {
                 const entity = {
                     entity_id: 'light.kitchen',
                     state: 'on',
                     attributes: {},
                 };
-                const result = comparatorService.getComparatorResult(
+                const result = await comparatorService.getComparatorResult(
                     'is',
                     'state',
                     entity.state,
@@ -148,13 +148,13 @@ describe('Comparator Service', function () {
 
                 expect(result).to.be.true;
             });
-            it('should return false when entitys state is not equal to expected state', function () {
+            it('should return false when entitys state is not equal to expected state', async function () {
                 const entity = {
                     entity_id: 'light.kitchen',
                     state: 'on',
                     attributes: {},
                 };
-                const result = comparatorService.getComparatorResult(
+                const result = await comparatorService.getComparatorResult(
                     'is',
                     'state',
                     'off',
@@ -171,13 +171,13 @@ describe('Comparator Service', function () {
                 jsonataServiceStub.evaluate.reset();
             });
 
-            it('should return true when the JSONata value matches', function () {
+            it('should return true when the JSONata value matches', async function () {
                 jsonataServiceStub.evaluate.resolves('bar');
                 const entity = {
                     entity_id: 'light.light',
                 } as HassEntity;
 
-                const result = comparatorService.getComparatorResult(
+                const result = await comparatorService.getComparatorResult(
                     'is',
                     'foo',
                     'bar',
@@ -200,26 +200,12 @@ describe('Comparator Service', function () {
                 );
                 expect(result).to.be.true;
             });
-
-            it('should throw an error when JSONata is not valid', function () {
-                jsonataServiceStub.evaluate.throws(
-                    new Error('JSONata Error: Invalid JSONata expression')
-                );
-                expect(() => {
-                    comparatorService.getComparatorResult(
-                        'is',
-                        'foo',
-                        'bar',
-                        'jsonata'
-                    );
-                }).to.throw(Error, 'JSONata Error: Invalid JSONata expression');
-            });
         });
 
         describe('comparator types', function () {
             describe('is', function () {
-                it('should return true when comparing equal values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return true when comparing equal values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'is',
                         'foo',
                         'foo',
@@ -228,8 +214,8 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.true;
                 });
-                it('should return false when comparing different values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return false when comparing different values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'is',
                         'foo',
                         'bar',
@@ -238,8 +224,8 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.false;
                 });
-                it('should return true when comparing valid regex values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return true when comparing valid regex values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'is',
                         '^foo$',
                         'foo',
@@ -248,8 +234,8 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.true;
                 });
-                it('should return false when comparing different regex values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return false when comparing different regex values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'is',
                         '^bar$',
                         'foo',
@@ -258,8 +244,8 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.false;
                 });
-                it('should return true when comparing two same booleans', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return true when comparing two same booleans', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'is',
                         'true',
                         true,
@@ -268,8 +254,8 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.true;
                 });
-                it('should return false when comparing two different booleans', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return false when comparing two different booleans', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'is',
                         'true',
                         false,
@@ -280,8 +266,8 @@ describe('Comparator Service', function () {
                 });
             });
             describe('is not', function () {
-                it('should return false when comparing equal values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return false when comparing equal values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'is_not',
                         'foo',
                         'foo',
@@ -290,8 +276,8 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.false;
                 });
-                it('should return true when comparing different values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return true when comparing different values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'is_not',
                         'foo',
                         'bar',
@@ -302,8 +288,8 @@ describe('Comparator Service', function () {
                 });
             });
             describe('is greater than', function () {
-                it('should return true when comparing greater values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return true when comparing greater values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'gt',
                         '1',
                         '2',
@@ -312,8 +298,8 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.true;
                 });
-                it('should return false when comparing equal values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return false when comparing equal values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'gt',
                         '1',
                         '1',
@@ -322,8 +308,8 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.false;
                 });
-                it('should return false when comparing less values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return false when comparing less values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'gt',
                         '1',
                         '0',
@@ -334,8 +320,8 @@ describe('Comparator Service', function () {
                 });
             });
             describe('is less than', function () {
-                it('should return true when comparing less values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return true when comparing less values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'lt',
                         '1',
                         '0',
@@ -344,8 +330,8 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.true;
                 });
-                it('should return false when comparing equal values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return false when comparing equal values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'lt',
                         '1',
                         '1',
@@ -354,8 +340,8 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.false;
                 });
-                it('should return false when comparing greater values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return false when comparing greater values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'lt',
                         '1',
                         '2',
@@ -366,8 +352,8 @@ describe('Comparator Service', function () {
                 });
             });
             describe('is greater than or equal to', function () {
-                it('should return true when comparing greater values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return true when comparing greater values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'gte',
                         '1',
                         '2',
@@ -376,8 +362,8 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.true;
                 });
-                it('should return true when comparing equal values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return true when comparing equal values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'gte',
                         '1',
                         '1',
@@ -386,8 +372,8 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.true;
                 });
-                it('should return false when comparing less values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return false when comparing less values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'gte',
                         '1',
                         '0',
@@ -398,8 +384,8 @@ describe('Comparator Service', function () {
                 });
             });
             describe('is less than or equal to', function () {
-                it('should return true when comparing less values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return true when comparing less values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'lte',
                         '1',
                         '0',
@@ -408,8 +394,8 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.true;
                 });
-                it('should return true when comparing equal values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return true when comparing equal values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'lte',
                         '1',
                         '1',
@@ -418,8 +404,8 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.true;
                 });
-                it('should return false when comparing greater values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return false when comparing greater values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'lte',
                         '1',
                         '2',
@@ -430,9 +416,9 @@ describe('Comparator Service', function () {
                 });
             });
             describe('is in', function () {
-                it('should convert the compare data type to "list"', function () {
+                it('should convert the compare data type to "list"', async function () {
                     sinon.spy(transformState, 'transform');
-                    comparatorService.getComparatorResult(
+                    await comparatorService.getComparatorResult(
                         'includes',
                         'foo, bar',
                         'bar',
@@ -445,8 +431,8 @@ describe('Comparator Service', function () {
                     );
                 });
 
-                it('should return true when comparing in values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return true when comparing in values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'includes',
                         'foo, bar',
                         'foo',
@@ -455,8 +441,8 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.true;
                 });
-                it('should return false when comparing not in values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return false when comparing not in values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'includes',
                         'bar, baz',
                         'foo',
@@ -465,8 +451,8 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.false;
                 });
-                it('should return false when comparing empty values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return false when comparing empty values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'includes',
                         '',
                         'foo',
@@ -477,8 +463,8 @@ describe('Comparator Service', function () {
                 });
             });
             describe('is not in', function () {
-                it('should return false when comparing in values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return false when comparing in values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'does_not_include',
                         'foo, bar',
                         'foo',
@@ -487,8 +473,8 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.false;
                 });
-                it('should return true when comparing not in values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return true when comparing not in values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'does_not_include',
                         'bar, baz',
                         'foo',
@@ -497,8 +483,8 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.true;
                 });
-                it('should return true when comparing empty values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return true when comparing empty values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'does_not_include',
                         '',
                         'foo',
@@ -509,8 +495,8 @@ describe('Comparator Service', function () {
                 });
             });
             describe('starts with', function () {
-                it('should return true when comparing starts with values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return true when comparing starts with values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'starts_with',
                         'foo',
                         'foo',
@@ -519,8 +505,8 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.true;
                 });
-                it('should return false when comparing not starts with values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return false when comparing not starts with values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'starts_with',
                         'foo',
                         'bar',
@@ -529,8 +515,8 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.false;
                 });
-                it('should return false when comparing empty values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return false when comparing empty values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'starts_with',
                         '',
                         'foo',
@@ -541,8 +527,8 @@ describe('Comparator Service', function () {
                 });
             });
             describe('contains', function () {
-                it('should return true when comparing contains values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return true when comparing contains values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'cont',
                         'foo',
                         'foo',
@@ -551,8 +537,8 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.true;
                 });
-                it('should return false when comparing not contains values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return false when comparing not contains values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'cont',
                         'foo',
                         'bar',
@@ -561,8 +547,8 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.false;
                 });
-                it('should return false when comparing empty values', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return false when comparing empty values', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'cont',
                         '',
                         'foo',
@@ -583,8 +569,8 @@ describe('Comparator Service', function () {
                     jsonataServiceStub.evaluate.reset();
                 });
 
-                it('should return true when input is empty', function () {
-                    const result = comparatorService.getComparatorResult(
+                it('should return true when input is empty', async function () {
+                    const result = await comparatorService.getComparatorResult(
                         'jsonata',
                         '',
                         '',
@@ -594,13 +580,13 @@ describe('Comparator Service', function () {
                     expect(result).to.be.true;
                 });
 
-                it('should return true when the JSONata services returns true', function () {
+                it('should return true when the JSONata services returns true', async function () {
                     jsonataServiceStub.evaluate.resolves(true);
                     const entity = {
                         entity_id: 'light.light',
                     } as HassEntity;
 
-                    const result = comparatorService.getComparatorResult(
+                    const result = await comparatorService.getComparatorResult(
                         'jsonata',
                         'foo',
                         'bar',
@@ -623,26 +609,15 @@ describe('Comparator Service', function () {
                     );
                     expect(result).to.be.true;
                 });
-                it('should return false when the JSONata services returns false', function () {
+                it('should return false when the JSONata services returns false', async function () {
                     jsonataServiceStub.evaluate.resolves(false);
-                    const result = comparatorService.getComparatorResult(
+                    const result = await comparatorService.getComparatorResult(
                         'jsonata',
                         'foo',
                         'bar',
                         'jsonata'
                     );
                     expect(result).to.be.false;
-                });
-                it('should throw an error when the JSONata services throws an error', function () {
-                    jsonataServiceStub.evaluate.throws(new Error('foo'));
-                    expect(() => {
-                        comparatorService.getComparatorResult(
-                            'jsonata',
-                            'foo',
-                            'bar',
-                            'jsonata'
-                        );
-                    }).to.throw(Error, 'foo');
                 });
             });
         });

@@ -32,8 +32,9 @@ describe('JSONata Service', function () {
         };
         const evaluateJSONataExpressionFake = (
             expr: Expression,
-            msg: NodeMessage
-        ) => expr.evaluate(msg);
+            msg: NodeMessage,
+            callback: (err: Error | null, result: any) => void
+        ) => callback(null, expr.evaluate(msg));
 
         NodeApiStub.util.prepareJSONataExpression = sinon
             .stub()
@@ -54,9 +55,9 @@ describe('JSONata Service', function () {
             node: nodeStub,
             homeAssistant: homeAssistantStub,
         });
-        it('should call setup functions', function () {
-            const result = jsonataService.evaluate(`"test"`);
 
+        it('should call setup functions', async function () {
+            const result = await jsonataService.evaluate(`"test"`);
             expect(NodeApiStub.util.prepareJSONataExpression).to.have.been
                 .calledOnce;
             expect(NodeApiStub.util.evaluateJSONataExpression).to.have.been
@@ -64,23 +65,23 @@ describe('JSONata Service', function () {
             expect(result).to.equal('test');
         });
 
-        it('should return the correct value from an equation', function () {
-            const result = jsonataService.evaluate(`1 + 1`);
+        it('should return the correct value from an equation', async function () {
+            const result = await jsonataService.evaluate(`1 + 1`);
 
             expect(result).to.equal(2);
         });
 
         describe('should use the message object as the context', function () {
-            it('should be able to do math', function () {
-                const result = jsonataService.evaluate(`1 + payload`, {
+            it('should be able to do math', async function () {
+                const result = await jsonataService.evaluate(`1 + payload`, {
                     message: { payload: 1 },
                 });
 
                 expect(result).to.equal(2);
             });
 
-            it('should return message payload of type string', function () {
-                const result = jsonataService.evaluate(`payload`, {
+            it('should return message payload of type string', async function () {
+                const result = await jsonataService.evaluate(`payload`, {
                     message: { payload: 'hello' },
                 });
 
@@ -89,8 +90,8 @@ describe('JSONata Service', function () {
         });
 
         describe('$entity()', function () {
-            it('should output whole entity', function () {
-                const result = jsonataService.evaluate(`$entity()`, {
+            it('should output whole entity', async function () {
+                const result = await jsonataService.evaluate(`$entity()`, {
                     entity: {
                         entity_id: 'light.kitchen',
                         state: 'on',
@@ -104,16 +105,19 @@ describe('JSONata Service', function () {
                     attributes: {},
                 });
             });
-            it('should be able to output state', function () {
-                const result = jsonataService.evaluate(`$entity().state`, {
-                    entity: { entiy_id: 'light.kitchen', state: 'on' },
-                });
+            it('should be able to output state', async function () {
+                const result = await jsonataService.evaluate(
+                    `$entity().state`,
+                    {
+                        entity: { entiy_id: 'light.kitchen', state: 'on' },
+                    }
+                );
 
                 expect(result).to.equal('on');
             });
 
-            it('should be compare state', function () {
-                const result = jsonataService.evaluate(
+            it('should be compare state', async function () {
+                const result = await jsonataService.evaluate(
                     `$entity().state = "on"`,
                     {
                         entity: { entiy_id: 'light.kitchen', state: 'on' },
@@ -125,8 +129,8 @@ describe('JSONata Service', function () {
         });
 
         describe('$prevEntity()', function () {
-            it('should output whole prevEntity', function () {
-                const result = jsonataService.evaluate(`$prevEntity()`, {
+            it('should output whole prevEntity', async function () {
+                const result = await jsonataService.evaluate(`$prevEntity()`, {
                     prevEntity: {
                         entity_id: 'light.kitchen',
                         state: 'on',
@@ -140,16 +144,19 @@ describe('JSONata Service', function () {
                     attributes: {},
                 });
             });
-            it('should be able to output state', function () {
-                const result = jsonataService.evaluate(`$prevEntity().state`, {
-                    prevEntity: { entiy_id: 'light.kitchen', state: 'on' },
-                });
+            it('should be able to output state', async function () {
+                const result = await jsonataService.evaluate(
+                    `$prevEntity().state`,
+                    {
+                        prevEntity: { entiy_id: 'light.kitchen', state: 'on' },
+                    }
+                );
 
                 expect(result).to.equal('on');
             });
 
-            it('should be compare state of prevEntity', function () {
-                const result = jsonataService.evaluate(
+            it('should be compare state of prevEntity', async function () {
+                const result = await jsonataService.evaluate(
                     `$prevEntity().state = "on"`,
                     {
                         prevEntity: { entiy_id: 'light.kitchen', state: 'on' },
@@ -209,27 +216,28 @@ describe('JSONata Service', function () {
 
         describe('lodash functions', function () {
             describe('randomNumber()', function () {
-                it('should be able to call randomNumber', function () {
-                    const result =
-                        jsonataService.evaluate(`$randomNumber(5, 10)`);
-
+                it('should be able to call randomNumber', async function () {
+                    const result = await jsonataService.evaluate(
+                        `$randomNumber(5, 10)`
+                    );
                     expect(result).to.be.a('number');
                     expect(result).to.be.within(5, 10);
                 });
             });
 
             describe('sampleSize', function () {
-                it('should get a single results 1-3', function () {
-                    const result =
-                        jsonataService.evaluate(`$sampleSize([1,2,3])`);
+                it('should get a single results 1-3', async function () {
+                    const result = await jsonataService.evaluate(
+                        `$sampleSize([1,2,3])`
+                    );
 
                     expect(result).to.be.a('array');
                     expect(result).to.have.lengthOf(1);
                     expect(result[0]).to.be.a('number');
                     expect(result[0]).to.be.within(1, 3);
                 });
-                it('should get two results 5-7', function () {
-                    const result = jsonataService.evaluate(
+                it('should get two results 5-7', async function () {
+                    const result = await jsonataService.evaluate(
                         `$sampleSize([5,6,7], 2)`
                     );
 
@@ -244,12 +252,12 @@ describe('JSONata Service', function () {
         });
 
         describe('$outputData', function () {
-            it('should return all output data', function () {
+            it('should return all output data', async function () {
                 const outputData = {
                     one: { abc: 123 },
                     two: false,
                 };
-                const result = jsonataService.evaluate(
+                const result = await jsonataService.evaluate(
                     `$outputData()`,
                     outputData
                 );
@@ -257,7 +265,7 @@ describe('JSONata Service', function () {
                 expect(result).to.deep.equal(outputData);
             });
 
-            it('should return all output data except the message property', function () {
+            it('should return all output data except the message property', async function () {
                 const expectedResults = {
                     one: { abc: 123 },
                     two: false,
@@ -266,7 +274,7 @@ describe('JSONata Service', function () {
                     ...expectedResults,
                     message: { payload: 'hello' },
                 };
-                const result = jsonataService.evaluate(
+                const result = await jsonataService.evaluate(
                     `$outputData()`,
                     outputData
                 );
@@ -274,12 +282,12 @@ describe('JSONata Service', function () {
                 expect(result).to.deep.equal(expectedResults);
             });
 
-            it('should return a single output data', function () {
+            it('should return a single output data', async function () {
                 const outputData = {
                     one: { abc: 123 },
                     two: false,
                 };
-                const result = jsonataService.evaluate(
+                const result = await jsonataService.evaluate(
                     `$outputData().one`,
                     outputData
                 );

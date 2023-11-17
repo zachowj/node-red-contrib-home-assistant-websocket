@@ -1,4 +1,5 @@
 import EventEmitter from 'events';
+import { camelCase } from 'lodash';
 
 import { EventsList } from '../common/events/Events';
 import { RED } from '../globals';
@@ -53,10 +54,7 @@ export function shouldIncludeEvent(
 }
 
 export function toCamelCase(str: string): string {
-    return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) => {
-        if (+match === 0) return '';
-        return index === 0 ? match.toLowerCase() : match.toUpperCase();
-    });
+    return camelCase(str);
 }
 
 export function getWaitStatusText(
@@ -137,10 +135,16 @@ export function parseTime(time: string):
 }
 
 export function getEntitiesFromJsonata(jsonata: string): Set<string> {
-    const regex = /\$entities\("([a-z_]+\.[a-z0-9_]+)"\)/g;
+    // This regular expression matches the pattern $entities('...') or $entities("...") in a string.
+    // It is used to extract all entity names from a JSONata expression that uses the $entities function.
+    // The regular expression has a global flag (g) which means it will find all matches in the string, not just the first one.
+    const regex = /\$entities\((?:'([^']*)'|"([^"]*)")\)/g;
     const matches = jsonata.matchAll(regex);
-
-    return new Set(Array.from(matches, (m) => m[1] as string));
+    return new Set(
+        Array.from(matches)
+            .map((match) => match[1] || match[2])
+            .filter((entityId) => validEntityId(entityId))
+    );
 }
 
 export function addEventListeners(
