@@ -27,7 +27,6 @@ import triggerState from '../nodes/trigger-state/migrations';
 import waitUntil from '../nodes/wait-until/migrations';
 import webhook from '../nodes/webhook/migrations';
 import zone from '../nodes/zone/migrations';
-import { NodeProperties } from '../types/nodes';
 
 export interface Migration {
     version: number;
