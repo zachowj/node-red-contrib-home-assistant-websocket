@@ -1,5 +1,4 @@
 import EventEmitter from 'events';
-import { camelCase } from 'lodash';
 
 import { EventsList } from '../common/events/Events';
 import { RED } from '../globals';
@@ -53,10 +52,33 @@ export function shouldIncludeEvent(
     return eventId === filter;
 }
 
+/**
+ * Converts a string to camel case.
+ * @param str - The string to convert.
+ * @returns The camel case string.
+ */
 export function toCamelCase(str: string): string {
-    return camelCase(str);
+    const wordPattern =
+        /[A-Z][a-z]+|[A-Z]+(?=[A-Z][a-z])|[A-Z]+|[a-z]+|[0-9]+/g;
+
+    const upperFirst = (str: string): string =>
+        str.charAt(0).toUpperCase() + str.slice(1);
+
+    return (str.match(wordPattern) ?? [])
+        .map((word, index) =>
+            index === 0
+                ? word.toLocaleLowerCase()
+                : upperFirst(word.toLowerCase())
+        )
+        .join('');
 }
 
+/**
+ * Returns a string describing the wait status based on the provided timeout and units.
+ * @param timeout - The amount of time to wait.
+ * @param timeoutUnits - The units of time for the timeout (milliseconds, minutes, hours, or days).
+ * @returns A string describing the wait status.
+ */
 export function getWaitStatusText(
     timeout: number,
     timeoutUnits: string
@@ -76,6 +98,12 @@ export function getWaitStatusText(
     }
 }
 
+/**
+ * Converts a time value in various units to milliseconds.
+ * @param value - The time value to convert.
+ * @param valueUnits - The units of the time value.
+ * @returns The time value in milliseconds.
+ */
 export function getTimeInMilliseconds(
     value: number,
     valueUnits: string
