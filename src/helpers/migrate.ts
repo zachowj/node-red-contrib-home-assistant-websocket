@@ -27,8 +27,9 @@ import triggerState from '../nodes/trigger-state/migrations';
 import waitUntil from '../nodes/wait-until/migrations';
 import webhook from '../nodes/webhook/migrations';
 import zone from '../nodes/zone/migrations';
+import { NodeProperties } from '../types/nodes';
 
-interface Migration {
+export interface Migration {
     version: number;
     up: (node: any) => any;
 }
@@ -111,4 +112,23 @@ export function getCurrentVersion(nodeType: NodeTypeKey): number {
     }, 0);
 
     return currentVersion;
+}
+
+export function isMigrationArray(
+    migrations: unknown
+): migrations is Migration[] {
+    if (!Array.isArray(migrations)) {
+        throw new Error('Migrations must be an array');
+    }
+
+    return migrations.every((m) => {
+        if (typeof m.version !== 'number') {
+            throw new Error('Migration version must be a number');
+        }
+        if (typeof m.up !== 'function') {
+            throw new Error('Migration up must be a function');
+        }
+
+        return true;
+    });
 }

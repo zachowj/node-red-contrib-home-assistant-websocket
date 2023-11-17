@@ -1,13 +1,14 @@
-const expect = require('chai').expect;
-const {
-    toCamelCase,
-    getEntitiesFromJsonata,
-    validEntityId,
-    shouldIncludeEvent,
-    parseTime,
-    isNodeRedEnvVar,
+import { expect } from 'chai';
+
+import {
     containsMustache,
-} = require('../../src/helpers/utils');
+    getEntitiesFromJsonata,
+    isNodeRedEnvVar,
+    parseTime,
+    shouldIncludeEvent,
+    toCamelCase,
+    validEntityId,
+} from '../../src/helpers/utils';
 
 describe('utils', function () {
     describe('containsMustache', function () {
@@ -125,95 +126,43 @@ describe('utils', function () {
         });
     });
 
-    describe('timeRegex', function () {
-        it('should match hour and minutes', function () {
-            const str = '21:28';
-            const { hour, minutes, seconds } = parseTime(str);
-            expect(hour).to.be.equal(21);
-            expect(minutes).to.be.equal(28);
-            expect(seconds).to.be.equal(0);
+    describe('parseTime', function () {
+        it('should parse valid time strings', function () {
+            expect(parseTime('00:00')).to.deep.equal({
+                hour: 0,
+                minutes: 0,
+                seconds: 0,
+            });
+            expect(parseTime('01:30')).to.deep.equal({
+                hour: 1,
+                minutes: 30,
+                seconds: 0,
+            });
+            expect(parseTime('12:00:01')).to.deep.equal({
+                hour: 12,
+                minutes: 0,
+                seconds: 1,
+            });
+            expect(parseTime('23:59:59')).to.deep.equal({
+                hour: 23,
+                minutes: 59,
+                seconds: 59,
+            });
+            expect(parseTime('09:05:30')).to.deep.equal({
+                hour: 9,
+                minutes: 5,
+                seconds: 30,
+            });
         });
-        it('should match hour, minutes, and seconds', function () {
-            const str = '21:28:10';
-            const { hour, minutes, seconds } = parseTime(str);
-            expect(hour).to.be.equal(21);
-            expect(minutes).to.be.equal(28);
-            expect(seconds).to.be.equal(10);
-        });
-        it('should match hour with leading zero', function () {
-            const str = '01:58';
-            const { hour, minutes, seconds } = parseTime(str);
-            expect(hour).to.be.equal(1);
-            expect(minutes).to.be.equal(58);
-            expect(seconds).to.be.equal(0);
-        });
-        it('should match minute with leading zero', function () {
-            const str = '01:08';
-            const { hour, minutes, seconds } = parseTime(str);
-            expect(hour).to.be.equal(1);
-            expect(minutes).to.be.equal(8);
-            expect(seconds).to.be.equal(0);
-        });
-        it('should match seconds with leading zero', function () {
-            const str = '01:08:07';
-            const { hour, minutes, seconds } = parseTime(str);
-            expect(hour).to.be.equal(1);
-            expect(minutes).to.be.equal(8);
-            expect(seconds).to.be.equal(7);
-        });
-        it('should match midnight', function () {
-            const str = '0:00:00';
-            const { hour, minutes, seconds } = parseTime(str);
-            expect(hour).to.be.equal(0);
-            expect(minutes).to.be.equal(0);
-            expect(seconds).to.be.equal(0);
-        });
-        it('should match midnight leading zero for hour', function () {
-            const str = '00:00:00';
-            const { hour, minutes, seconds } = parseTime(str);
-            expect(hour).to.be.equal(0);
-            expect(minutes).to.be.equal(0);
-            expect(seconds).to.be.equal(0);
-        });
-        it('should not match time due to invalid hour', function () {
-            const str = '25:68';
-            const results = parseTime(str);
-            expect(results).to.not.exist;
-        });
-        it('should not match time due to invalid minutes', function () {
-            const str = '1:68';
-            const results = parseTime(str);
-            expect(results).to.not.exist;
-        });
-        it('should not match time due to invalid seconds', function () {
-            const str = '1:58:61';
-            const results = parseTime(str);
-            expect(results).to.not.exist;
-        });
-        it('should not match a empty string', function () {
-            const str = '';
-            const matches = parseTime(str);
-            expect(matches).to.not.exist;
-        });
-        it('should not match a single digit', function () {
-            const str = '0';
-            const results = parseTime(str);
-            expect(results).to.not.exist;
-        });
-        it('should not match all single zeros', function () {
-            const str = '0:0:0';
-            const results = parseTime(str);
-            expect(results).to.not.exist;
-        });
-        it('should not match single digit minutes', function () {
-            const str = '10:1:10';
-            const results = parseTime(str);
-            expect(results).to.not.exist;
-        });
-        it('should not match single digit seconds', function () {
-            const str = '10:10:1';
-            const results = parseTime(str);
-            expect(results).to.not.exist;
+
+        it('should return undefined for invalid time strings', function () {
+            expect(parseTime('')).to.be.undefined;
+            expect(parseTime('0:0')).to.be.undefined;
+            expect(parseTime('24:00')).to.be.undefined;
+            expect(parseTime('00:60')).to.be.undefined;
+            expect(parseTime('00:00:60')).to.be.undefined;
+            expect(parseTime('abc')).to.be.undefined;
+            expect(parseTime('12:34:56:78')).to.be.undefined;
         });
     });
 

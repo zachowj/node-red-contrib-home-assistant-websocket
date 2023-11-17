@@ -1,14 +1,15 @@
-const expect = require('chai').expect;
-const nock = require('nock');
+import { expect } from 'chai';
+import nock from 'nock';
 
-const HttpAPI = require('../../src/homeAssistant/Http').default;
+import HttpAPI from '../../src/homeAssistant/Http';
 
 describe('HTTP API', function () {
     const CREDS = {
         access_token: '123',
         host: 'http://homeassistant',
+        rejectUnauthorizedCerts: false,
     };
-    let httpApi = null;
+    let httpApi: HttpAPI;
     before(function () {
         httpApi = new HttpAPI(CREDS);
     });
@@ -19,20 +20,22 @@ describe('HTTP API', function () {
             nock(CREDS.host)
                 .matchHeader('authorization', `Bearer ${CREDS.access_token}`)
                 .get(`/api${path}`)
-                .reply(200, true);
+                .reply(200, 'request successful');
             const response = await httpApi.get(path);
 
-            expect(response).to.be.true;
+            expect(response).to.equal('request successful');
         });
     });
     describe('fireEvent', function () {
         it('should post to the correct endpoint', async function () {
             const event = 'test';
 
-            nock(CREDS.host).post(`/api/events/${event}`).reply(200, true);
+            nock(CREDS.host)
+                .post(`/api/events/${event}`)
+                .reply(200, 'request successful');
             const response = await httpApi.fireEvent(event);
 
-            expect(response).to.be.true;
+            expect(response).to.equal('request successful');
         });
         it('should post to correct endpoint with event data', async function () {
             const event = 'test';
@@ -40,19 +43,19 @@ describe('HTTP API', function () {
 
             nock(CREDS.host)
                 .post(`/api/events/${event}`, JSON.stringify(eventData))
-                .reply(200, true);
+                .reply(200, 'request successful');
             const response = await httpApi.fireEvent(event, eventData);
 
-            expect(response).to.be.true;
+            expect(response).to.equal('request successful');
         });
     });
 
     describe('get-history', function () {
         it('should use the correct endpoint with no data', async function () {
-            nock(CREDS.host).get('/api/history/period').reply(200, true);
+            nock(CREDS.host).get('/api/history/period').reply(200, []);
             const response = await httpApi.getHistory();
 
-            expect(response).to.be.true;
+            expect(response).to.eql([]);
         });
 
         it('should use the correct endpoint with an entity and timestamp', async function () {
@@ -65,13 +68,13 @@ describe('HTTP API', function () {
                 .get(
                     `/api/history/period/${data.timestamp}?filter_entity_id=${data.filterEntityId}`
                 )
-                .reply(200, true);
+                .reply(200, []);
             const response = await httpApi.getHistory(
                 data.timestamp,
                 data.filterEntityId
             );
 
-            expect(response).to.be.true;
+            expect(response).to.eql([]);
         });
 
         it('should use the correct endpoint with endTimestamp', async function () {
@@ -81,18 +84,18 @@ describe('HTTP API', function () {
 
             nock(CREDS.host)
                 .get(`/api/history/period?end_time=${data.endTimestamp}`)
-                .reply(200, true);
+                .reply(200, []);
             const response = await httpApi.getHistory(
                 null,
                 null,
                 data.endTimestamp
             );
 
-            expect(response).to.be.true;
+            expect(response).to.eql([]);
         });
 
         it('should return a sorted flatten array', async function () {
-            const createEntity = (num) => {
+            const createEntity = (num: number) => {
                 return {
                     last_updated: num,
                 };

@@ -94,6 +94,11 @@ export function getTimeInMilliseconds(
     }
 }
 
+/**
+ * Returns a formatted string representing a timeout date and time.
+ * @param milliseconds - The number of milliseconds until the timeout.
+ * @returns A string representing the timeout date and time in the format "MMM d, HH:mm:ss".
+ */
 function timeoutStatus(milliseconds = 0): string {
     const timeout = Date.now() + milliseconds;
     const timeoutStr = new Date(timeout).toLocaleDateString('en-US', {
@@ -108,11 +113,21 @@ function timeoutStatus(milliseconds = 0): string {
     return timeoutStr;
 }
 
+/**
+ * Checks if a given value is a valid date.
+ * @param val - The value to check.
+ * @returns True if the value is a valid date, false otherwise.
+ */
 export function isValidDate(val: string | number): boolean {
     const d = new Date(val);
     return d instanceof Date && !isNaN(d.getTime());
 }
 
+/**
+ * Parses a string representing a time in the format "HH:mm:ss" and returns an object with the hour, minutes, and seconds.
+ * @param time - The time string to parse.
+ * @returns An object with the hour, minutes, and seconds, or undefined if the input string is not in the correct format.
+ */
 export function parseTime(time: string):
     | {
           hour: number;

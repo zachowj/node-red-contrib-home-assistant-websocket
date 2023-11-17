@@ -1,7 +1,9 @@
-const { expect } = require('chai');
+import { expect } from 'chai';
 
-const migrations = require('../../src/nodes/get-history/migrations').default;
-const { migrate } = require('../../src/helpers/migrate');
+import { isMigrationArray, migrate } from '../../src/helpers/migrate';
+import migrations from '../../src/nodes/get-history/migrations';
+
+isMigrationArray(migrations);
 
 const VERSION_UNDEFINED = {
     id: 'node.id',
@@ -28,7 +30,7 @@ describe('Migrations - Get History Node', function () {
     describe('Version 0', function () {
         it('should add version 0 to schema when no version is defined', function () {
             const migrate = migrations.find((m) => m.version === 0);
-            const migratedSchema = migrate.up(VERSION_UNDEFINED);
+            const migratedSchema = migrate?.up(VERSION_UNDEFINED);
             expect(migratedSchema).to.eql(VERSION_0);
         });
     });

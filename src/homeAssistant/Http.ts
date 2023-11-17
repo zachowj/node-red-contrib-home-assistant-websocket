@@ -31,9 +31,9 @@ export default class Http {
     }
 
     async getHistory(
-        timestamp: string,
-        filterEntityId: string,
-        endTimestamp: string,
+        timestamp?: string | null,
+        filterEntityId?: string | null,
+        endTimestamp?: string | null,
         {
             include,
             exclude,
@@ -93,7 +93,7 @@ export default class Http {
         return results;
     }
 
-    fireEvent(event: string, data: { [key: string]: any }): Promise<unknown> {
+    fireEvent(event: string, data?: { [key: string]: any }): Promise<unknown> {
         return this.post(`events/${event}`, data);
     }
 

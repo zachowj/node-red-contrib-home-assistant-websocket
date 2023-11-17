@@ -24,8 +24,8 @@
     "test": "mocha -r ts-node/register 'test/**/*.test.[tj]s' --exit",
     "test:coverage": "nyc npm run test",
     "test:single": "mocha -r ts-node/register --exit",
-    "test:watch": "mocha -r ts-node/register 'test/**/*.test.[tj]s' --watch-files 'test/**/*.test.[tj]s' --watch --exit",
-    "test:watch:single": "mocha -r ts-node/register --watch-files 'test/**/*.test.[tj]s' --watch --exit"
+    "test:watch": "mocha -r ts-node/register 'test/**/*.test.ts' --watch-files 'test/**/*.test.[tj]s' --watch-files 'src/**/*' --watch --exit",
+    "test:watch:single": "mocha -r ts-node/register --watch-files 'test/**/*.test.ts' --watch-files 'src/**/*' --watch --exit"
   },
   "repository": {
     "type": "git",
@@ -56,6 +56,7 @@
     "geolib": "3.3.4",
     "home-assistant-js-websocket": "8.0.1",
     "joi": "17.11.0",
+    "lodash": "^4.17.21",
     "lodash.clonedeep": "4.5.0",
     "lodash.ismatch": "4.4.0",
     "lodash.merge": "4.6.2",

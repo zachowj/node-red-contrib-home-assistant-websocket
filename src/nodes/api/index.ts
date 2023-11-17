@@ -1,13 +1,11 @@
-import { NodeDef } from 'node-red';
-
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
 import { Status } from '../../helpers/status';
 import { checkValidServerConfig } from '../../helpers/utils';
-import { BaseNode } from '../../types/nodes';
+import { BaseNode, NodeProperties } from '../../types/nodes';
 import Api from './controller';
 
-export default function apiNode(this: BaseNode, config: NodeDef) {
+export default function apiNode(this: BaseNode, config: NodeProperties) {
     RED.nodes.createNode(this, config);
 
     this.config = migrate(config);

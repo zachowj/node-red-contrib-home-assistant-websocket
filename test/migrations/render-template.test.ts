@@ -1,8 +1,13 @@
-const { expect } = require('chai');
+import { expect } from 'chai';
 
-const migrations =
-    require('../../src/nodes/render-template/migrations').default;
-const { migrate } = require('../../src/helpers/migrate');
+import {
+    isMigrationArray,
+    migrate,
+    Migration,
+} from '../../src/helpers/migrate';
+import migrations from '../../src/nodes/render-template/migrations';
+
+isMigrationArray(migrations);
 
 const VERSION_UNDEFINED = {
     id: 'node.id',
@@ -22,12 +27,12 @@ const VERSION_0 = {
 
 describe('Migrations - Render Template Node', function () {
     describe('Version 0', function () {
-        let migrate = null;
+        let migrate: Migration | undefined;
         before(function () {
             migrate = migrations.find((m) => m.version === 0);
         });
         it('should add version 0 to schema when no version is defined', function () {
-            const migratedSchema = migrate.up(VERSION_UNDEFINED);
+            const migratedSchema = migrate?.up(VERSION_UNDEFINED);
             expect(migratedSchema).to.eql(VERSION_0);
         });
         it(`should only set defaults if property is undefined for templateLocationType and resultsLocationType`, function () {
@@ -45,7 +50,7 @@ describe('Migrations - Render Template Node', function () {
                 resultsLocationType: 'flow',
                 resultsLocation: 'payload2',
             };
-            const migratedSchema = migrate.up(schema);
+            const migratedSchema = migrate?.up(schema);
 
             expect(migratedSchema).to.eql(expectedSchema);
         });

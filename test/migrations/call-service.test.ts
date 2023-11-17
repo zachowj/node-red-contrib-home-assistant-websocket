@@ -1,7 +1,13 @@
-const { expect } = require('chai');
+import { expect } from 'chai';
 
-const migrations = require('../../src/nodes/call-service/migrations').default;
-const { migrate } = require('../../src/helpers/migrate');
+import {
+    isMigrationArray,
+    migrate,
+    Migration,
+} from '../../src/helpers/migrate';
+import migrations from '../../src/nodes/call-service/migrations';
+
+isMigrationArray(migrations);
 
 const VERSION_UNDEFINED = {
     type: 'api-call-service',
@@ -75,18 +81,18 @@ describe('Migrations - Call Service Node', function () {
     describe('Version 0', function () {
         it('should add version 0 to schema when no version is defined', function () {
             const migrate = migrations.find((m) => m.version === 0);
-            const migratedSchema = migrate.up(VERSION_UNDEFINED);
+            const migratedSchema = migrate?.up(VERSION_UNDEFINED);
 
             expect(migratedSchema).to.eql(VERSION_0);
         });
     });
     describe('Version 1', function () {
-        let migrate = null;
+        let migrate: Migration | undefined;
         before(function () {
             migrate = migrations.find((m) => m.version === 1);
         });
         it('should update version 0 to version 1', function () {
-            const migratedSchema = migrate.up(VERSION_0);
+            const migratedSchema = migrate?.up(VERSION_0);
             expect(migratedSchema).to.eql(VERSION_1);
         });
 
@@ -100,7 +106,7 @@ describe('Migrations - Call Service Node', function () {
                 entityId: 'hello',
                 data: '',
             };
-            const migratedSchema = migrate.up(schema);
+            const migratedSchema = migrate?.up(schema);
 
             expect(migratedSchema).to.eql(expectedSchema);
         });
@@ -118,7 +124,7 @@ describe('Migrations - Call Service Node', function () {
                 entityId: 'hello',
                 data: JSON.stringify({ brightness: 100, text: 'string' }),
             };
-            const migratedSchema = migrate.up(schema);
+            const migratedSchema = migrate?.up(schema);
 
             expect(migratedSchema).to.eql(expectedSchema);
         });
@@ -135,18 +141,18 @@ describe('Migrations - Call Service Node', function () {
                 entityId: '',
                 data: JSON.stringify({ brightness: 100, text: 'string' }),
             };
-            const migratedSchema = migrate.up(schema);
+            const migratedSchema = migrate?.up(schema);
 
             expect(migratedSchema).to.eql(expectedSchema);
         });
     });
     describe('Version 2', function () {
-        let migrate = null;
+        let migrate: Migration | undefined;
         before(function () {
             migrate = migrations.find((m) => m.version === 2);
         });
         it('should update version 1 to version 2', function () {
-            const migratedSchema = migrate.up(VERSION_1);
+            const migratedSchema = migrate?.up(VERSION_1);
 
             expect(migratedSchema).to.eql(VERSION_2);
         });
@@ -155,7 +161,7 @@ describe('Migrations - Call Service Node', function () {
                 ...VERSION_1,
                 output_location_type: 'none',
             };
-            const migratedSchema = migrate.up(schema);
+            const migratedSchema = migrate?.up(schema);
 
             expect(migratedSchema.outputProperties).to.eql([]);
         });
@@ -163,18 +169,18 @@ describe('Migrations - Call Service Node', function () {
     describe('Version 3', function () {
         it('should update version 2 to version 3', function () {
             const migrate = migrations.find((m) => m.version === 3);
-            const migratedSchema = migrate.up(VERSION_2);
+            const migratedSchema = migrate?.up(VERSION_2);
 
             expect(migratedSchema).to.eql(VERSION_3);
         });
     });
     describe('Version 4', function () {
-        let migrate = null;
+        let migrate: Migration | undefined;
         before(function () {
             migrate = migrations.find((m) => m.version === 4);
         });
         it('should update version 3 to version 4', function () {
-            const migratedSchema = migrate.up(VERSION_3);
+            const migratedSchema = migrate?.up(VERSION_3);
 
             expect(migratedSchema).to.eql(VERSION_4);
         });
@@ -184,7 +190,7 @@ describe('Migrations - Call Service Node', function () {
                     ...VERSION_4,
                     entityId: '',
                 };
-                const migratedSchema = migrate.up(schema);
+                const migratedSchema = migrate?.up(schema);
 
                 expect(migratedSchema.target.entityId).to.eql([]);
             });
@@ -193,7 +199,7 @@ describe('Migrations - Call Service Node', function () {
                     ...VERSION_4,
                     entityId: undefined,
                 };
-                const migratedSchema = migrate.up(schema);
+                const migratedSchema = migrate?.up(schema);
 
                 expect(migratedSchema.target.entityId).to.eql([]);
             });
@@ -202,19 +208,19 @@ describe('Migrations - Call Service Node', function () {
                     ...VERSION_4,
                     entityId: 'sun.sun',
                 };
-                const migratedSchema = migrate.up(schema);
+                const migratedSchema = migrate?.up(schema);
 
                 expect(migratedSchema.target.entityId).to.have.a.lengthOf(1);
             });
         });
     });
     describe('Version 5', function () {
-        let migrate = null;
+        let migrate: Migration | undefined;
         before(function () {
             migrate = migrations.find((m) => m.version === 5);
         });
         it('should update version 4 to version 5', function () {
-            const migratedSchema = migrate.up(VERSION_4);
+            const migratedSchema = migrate?.up(VERSION_4);
 
             expect(migratedSchema).to.eql(VERSION_5);
         });
@@ -227,7 +233,7 @@ describe('Migrations - Call Service Node', function () {
                     entityId: ['sun.sun'],
                 },
             };
-            const migratedSchema = migrate.up(schema);
+            const migratedSchema = migrate?.up(schema);
 
             expect(migratedSchema.areaId).to.eql(['living_room']);
             expect(migratedSchema.deviceId).to.eql(['1234']);

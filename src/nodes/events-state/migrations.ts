@@ -85,11 +85,7 @@ export default [
     },
     {
         version: 4,
-        up: (schema: {
-            version: number;
-            entityidfilter: string;
-            entityidfiltertype: 'exact' | 'substring' | 'regex';
-        }) => {
+        up: (schema: any) => {
             const newSchema: {
                 version: number;
                 entityidfilter: string | string[];
@@ -106,8 +102,8 @@ export default [
                 newSchema.entityidfiltertype = 'list';
                 newSchema.entityidfilter = schema.entityidfilter
                     .split(',')
-                    .map((e) => e.trim())
-                    .filter((e) => e.length > 0);
+                    .map((e: string) => e.trim())
+                    .filter((e: string) => e.length > 0);
             }
             return newSchema;
         },

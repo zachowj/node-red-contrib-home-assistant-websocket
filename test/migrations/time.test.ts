@@ -1,8 +1,14 @@
-const merge = require('lodash.merge');
-const { expect } = require('chai');
+import { expect } from 'chai';
+import { merge } from 'lodash';
 
-const migrations = require('../../src/nodes/time/migrations').default;
-const { migrate } = require('../../src/helpers/migrate');
+import {
+    isMigrationArray,
+    migrate,
+    Migration,
+} from '../../src/helpers/migrate';
+import migrations from '../../src/nodes/time/migrations';
+
+isMigrationArray(migrations);
 
 const VERSION_UNDEFINED = {
     id: 'node.id',
@@ -74,24 +80,24 @@ describe('Migrations - Time Node', function () {
     describe('Version 0', function () {
         it('should add version 0 to schema when no version is defined', function () {
             const migrate = migrations.find((m) => m.version === 0);
-            const migratedSchema = migrate.up(VERSION_UNDEFINED);
+            const migratedSchema = migrate?.up(VERSION_UNDEFINED);
             expect(migratedSchema).to.eql(VERSION_0);
         });
     });
     describe('Version 1', function () {
         it('should update version 0 to version 1', function () {
             const migrate = migrations.find((m) => m.version === 1);
-            const migratedSchema = migrate.up(VERSION_0);
+            const migratedSchema = migrate?.up(VERSION_0);
             expect(migratedSchema).to.eql(VERSION_1);
         });
     });
     describe('Version 2', function () {
-        let migrate = null;
+        let migrate: Migration | undefined;
         before(function () {
             migrate = migrations.find((m) => m.version === 2);
         });
         it('should update version 1 to version 2', function () {
-            const migratedSchema = migrate.up(VERSION_1);
+            const migratedSchema = migrate?.up(VERSION_1);
             expect(migratedSchema).to.eql(VERSION_2);
         });
         it('payload value should update to same value in outputProperties', function () {
@@ -110,7 +116,7 @@ describe('Migrations - Time Node', function () {
                     },
                 ],
             });
-            const migratedSchema = migrate.up(schema);
+            const migratedSchema = migrate?.up(schema);
             expect(migratedSchema).to.eql(expectedSchema);
         });
         it('payload number type should update to number type in outputProperties', function () {
@@ -129,14 +135,14 @@ describe('Migrations - Time Node', function () {
                     },
                 ],
             });
-            const migratedSchema = migrate.up(schema);
+            const migratedSchema = migrate?.up(schema);
             expect(migratedSchema).to.eql(expectedSchema);
         });
     });
     describe('Version 3', function () {
         it('should update version 2 to version 3', function () {
             const migrate = migrations.find((m) => m.version === 3);
-            const migratedSchema = migrate.up(VERSION_2);
+            const migratedSchema = migrate?.up(VERSION_2);
             expect(migratedSchema).to.eql(VERSION_3);
         });
     });

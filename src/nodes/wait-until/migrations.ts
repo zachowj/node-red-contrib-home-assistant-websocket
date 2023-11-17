@@ -22,11 +22,7 @@ export default [
     },
     {
         version: 1,
-        up: (schema: {
-            version: number;
-            entityId: string;
-            entityIdFilterType: 'exact' | 'substring' | 'regex';
-        }) => {
+        up: (schema: any) => {
             const newSchema: {
                 version: number;
                 entityId: string | string[];
@@ -43,8 +39,8 @@ export default [
                 newSchema.entityIdFilterType = 'list';
                 newSchema.entityId = schema.entityId
                     .split(',')
-                    .map((e) => e.trim())
-                    .filter((e) => e.length > 0);
+                    .map((e: string) => e.trim())
+                    .filter((e: string) => e.length > 0);
             }
             return newSchema;
         },

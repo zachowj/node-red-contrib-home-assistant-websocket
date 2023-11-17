@@ -1,14 +1,11 @@
-const expect = require('chai').expect;
+import { expect } from 'chai';
 
-const {
-    getLocationData,
-    getZoneData,
-} = require('../../../src/nodes/zone/helpers');
+import { getLocationData, getZoneData } from '../../../src/nodes/zone/helpers';
 
 describe('location', function () {
     describe('getLocationData', function () {
         it('should return coords', function () {
-            const goodEntity = {
+            const goodEntity: any = {
                 attributes: {
                     latitude: 1,
                     longitude: 1,
@@ -19,7 +16,7 @@ describe('location', function () {
             expect(location).to.have.property('longitude');
         });
         it('should return undefined for invalid latitude', function () {
-            const badLatitude = {
+            const badLatitude: any = {
                 attributes: {
                     latitude: 'abc',
                     longitude: 1,
@@ -29,7 +26,7 @@ describe('location', function () {
             expect(location).to.be.undefined;
         });
         it('should return undefined for invalid longitude', function () {
-            const badLongitude = {
+            const badLongitude: any = {
                 attributes: {
                     latitude: 1,
                     longitude: false,
@@ -41,7 +38,7 @@ describe('location', function () {
     });
     describe('getZoneData', function () {
         it('should return coords and radius', function () {
-            const goodZone = {
+            const goodZone: any = {
                 attributes: {
                     latitude: 1,
                     longitude: 1,
@@ -54,7 +51,7 @@ describe('location', function () {
             expect(location).to.have.property('radius');
         });
         it('should return undefined for invalid radius', function () {
-            const badRadius = {
+            const badRadius: any = {
                 attributes: {
                     latitude: 1,
                     longitude: 1,
