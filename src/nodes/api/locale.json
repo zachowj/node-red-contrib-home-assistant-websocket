@@ -22,6 +22,14 @@
       },
       "server": "Server",
       "show_debug": "Show debug information"
+    },
+    "error": {
+      "requires_type": "A WebSocket request requires a 'type' property in the data object.",
+      "requires_path": "HTTP request requires a valid path.",
+      "invalid_method": "Invalid API method __method__."
+    },
+    "status": {
+      "method_called": "__method__ called"
     }
   }
 }
