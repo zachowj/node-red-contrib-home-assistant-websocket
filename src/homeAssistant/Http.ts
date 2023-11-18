@@ -93,10 +93,6 @@ export default class Http {
         return results;
     }
 
-    fireEvent(event: string, data?: { [key: string]: any }): Promise<unknown> {
-        return this.post(`events/${event}`, data);
-    }
-
     renderTemplate(templateString: string): Promise<string> {
         return this.post<string>(
             'template',
