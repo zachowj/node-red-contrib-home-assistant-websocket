@@ -1,6 +1,11 @@
 import { expect } from 'chai';
 
-import { getLocationData, getZoneData } from '../../../src/nodes/zone/helpers';
+import {
+    getLocationData,
+    getZoneData,
+    inZone,
+} from '../../../src/nodes/zone/helpers';
+import { locationData } from '../../../src/nodes/zone/ZoneController';
 
 describe('location', function () {
     describe('getLocationData', function () {
@@ -59,6 +64,50 @@ describe('location', function () {
             };
             const location = getZoneData(badRadius);
             expect(location).to.be.undefined;
+        });
+    });
+
+    describe('inZone', function () {
+        it('should return true when location is within the zone radius', function () {
+            const location: locationData = {
+                latitude: 1,
+                longitude: 1,
+            };
+            const zone: locationData = {
+                latitude: 1,
+                longitude: 1,
+                radius: 100,
+            };
+            const result = inZone(location, zone);
+            expect(result).to.be.true;
+        });
+
+        it('should return false when location is outside the zone radius', function () {
+            const location: locationData = {
+                latitude: 2,
+                longitude: 2,
+            };
+            const zone: locationData = {
+                latitude: 1,
+                longitude: 1,
+                radius: 100,
+            };
+            const result = inZone(location, zone);
+            expect(result).to.be.false;
+        });
+
+        it('should return false when zone radius is 0', function () {
+            const location: locationData = {
+                latitude: 1,
+                longitude: 1,
+            };
+            const zone: locationData = {
+                latitude: 1,
+                longitude: 1,
+                radius: 0,
+            };
+            const result = inZone(location, zone);
+            expect(result).to.be.false;
         });
     });
 });
