@@ -5,6 +5,9 @@
       "results": "Results",
       "server": "Server",
       "template": "Template"
+    },
+    "status": {
+      "requesting": "Requesting"
     }
   }
 }

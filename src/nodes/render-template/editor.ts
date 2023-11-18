@@ -1,6 +1,6 @@
 import { EditorNodeDef, EditorRED } from 'node-red';
 
-import { NodeType } from '../../const';
+import { NodeType, TypedInputTypes } from '../../const';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import { HassNodeProperties } from '../../editor/types';
@@ -37,9 +37,9 @@ const RenderTemplateEditor: EditorNodeDef<RenderTemplateEditorNodeProperties> =
             version: { value: RED.settings.get('apiRenderTemplateVersion', 0) },
             template: { value: '' },
             resultsLocation: { value: 'payload' },
-            resultsLocationType: { value: 'msg' },
-            templateLocation: { value: 'template' },
-            templateLocationType: { value: 'msg' },
+            resultsLocationType: { value: TypedInputTypes.Message },
+            templateLocation: { value: '' },
+            templateLocationType: { value: TypedInputTypes.None },
         },
         oneditprepare: function () {
             ha.setup(this);
@@ -49,20 +49,23 @@ const RenderTemplateEditor: EditorNodeDef<RenderTemplateEditorNodeProperties> =
 
             $('#node-input-templateLocation').typedInput({
                 types: [
-                    'msg',
-                    'flow',
-                    'global',
-                    { value: 'none', label: 'none', hasValue: false },
+                    TypedInputTypes.Message,
+                    TypedInputTypes.Flow,
+                    TypedInputTypes.Global,
+                    {
+                        value: TypedInputTypes.None,
+                        label: 'none',
+                        hasValue: false,
+                    },
                 ],
                 typeField: '#node-input-templateLocationType',
             });
 
             $('#node-input-resultsLocation').typedInput({
                 types: [
-                    'msg',
-                    'flow',
-                    'global',
-                    { value: 'none', label: 'none', hasValue: false },
+                    TypedInputTypes.Message,
+                    TypedInputTypes.Flow,
+                    TypedInputTypes.Global,
                 ],
                 typeField: '#node-input-resultsLocationType',
             });
