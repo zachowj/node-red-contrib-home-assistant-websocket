@@ -26,29 +26,6 @@ describe('HTTP API', function () {
             expect(response).to.equal('request successful');
         });
     });
-    describe('fireEvent', function () {
-        it('should post to the correct endpoint', async function () {
-            const event = 'test';
-
-            nock(CREDS.host)
-                .post(`/api/events/${event}`)
-                .reply(200, 'request successful');
-            const response = await httpApi.fireEvent(event);
-
-            expect(response).to.equal('request successful');
-        });
-        it('should post to correct endpoint with event data', async function () {
-            const event = 'test';
-            const eventData = { abc: 1234 };
-
-            nock(CREDS.host)
-                .post(`/api/events/${event}`, JSON.stringify(eventData))
-                .reply(200, 'request successful');
-            const response = await httpApi.fireEvent(event, eventData);
-
-            expect(response).to.equal('request successful');
-        });
-    });
 
     describe('get-history', function () {
         it('should use the correct endpoint with no data', async function () {
@@ -113,9 +90,7 @@ describe('HTTP API', function () {
             ];
 
             nock(CREDS.host).get('/api/history/period').reply(200, arr);
-            const response = await httpApi.getHistory(null, null, null, {
-                flatten: true,
-            });
+            const response = await httpApi.getHistory(null, null, null, true);
 
             expect(response).to.eql(expectedResponse);
         });
