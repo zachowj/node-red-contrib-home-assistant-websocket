@@ -8,28 +8,22 @@ Fetches history from Home Assistant (all history for the past day by default)
 
 - Type: `string`
 
-Exact entity_id to fetch history for must be an exact match as is passed directly to the Home Assistant.
+The entity id to fetch history for. Can be a single entity id or a comma separated list of entity ids.
 
 ### Entity ID Type
 
 - Type: `string`
-- Values: `is` | `includes`
-- Default: `is`
+- Values: `==` | `regex`
 
-`is` or `includes` depending on the match type.
-
-::: warning
-`includes` fetches all history for the time period then filters according to the value,
-this will be less performant than exact `is` matching
-:::
+The type of entity id matching to use. `==` will do an exact match, `regex` will use a regular expression to match the entity ids.
 
 ### Start Date
 
 - Type: `string`
-- Values: ISO Format Date
+- Values: ISO Formattted Date
 - Default: 24 hours prior
 
-Date to start fetching history from. Will override the configuration if passed in
+Date to start fetching history from. Will override the configuration if passed in. If `relativetime` is used this will be ignored.
 
 **Also See:**
 
@@ -38,10 +32,10 @@ Date to start fetching history from. Will override the configuration if passed i
 ### End Date
 
 - Type: `string`
-- Values: ISO Format Date
+- Values: ISO Formattted Date
 - Default: 24 hours from start date
 
-The end date to fetch history too. Will override the configuration if passed in
+The end date to fetch history too. Will override the configuration if passed in. If `relativetime` is used this will be ignored.
 
 **Also See:**
 
@@ -50,9 +44,8 @@ The end date to fetch history too. Will override the configuration if passed in
 ### Use Relative Time
 
 - Type: `boolean`
-- Default: `false`
 
-A checkbox to use relative time or not.
+A checkbox to use relative time or not. If checked the `startdate` and `enddate` will be ignored and the `relativetime` will be used instead.
 
 ### In the Last
 
@@ -83,38 +76,37 @@ Instead of returning the data from home assistant ( array for each entity_id ) r
 - Values: `array` | `split`
 - Default: `array`
 
+The type of output to return. `array` will return an array of history objects. `split` will return an array of history objects for each entity id.
+
 ## Inputs
 
 All properties of `msg.payload`
 
-### entity_id
+### entityId
 
 - Type: `string`
-- Alias: `msg.entityid` <Badge type="warning" text="deprecated" />
 
-### startdate
+### entityIdType
 
-- Type: `string`
-- Values: ISO Format Date
-- Alias: `msg.startdate` <Badge type="warning" text="deprecated" />
+- Type: `equal` | `regex`
 
-### enddate
+### startDate
 
 - Type: `string`
-- Values: ISO Format Date
-- Alias: `msg.enddate` <Badge type="warning" text="deprecated" />
+- Values: ISO Formattted Date
 
-### relativetime
+### endDate
 
 - Type: `string`
-- Alias: `msg.relativetime` <Badge type="warning" text="deprecated" />
+- Values: ISO Formattted Date
 
-If `relativetime` exists `startdate` and `enddate` will be ignored.
+### relativeTime
+
+- Type: `string`
 
 ### flatten
 
 - Type: `boolean`
-- Alias: `msg.flatten` <Badge type="warning" text="deprecated" />
 
 ## Outputs
 
@@ -124,31 +116,10 @@ If `relativetime` exists `startdate` and `enddate` will be ignored.
 
 The history returned by home-assistant, which is an array of arrays where each array entry contains history objects for one particular entity
 
-### startdate
-
-- Type: `string`
-
-ISO date string used to fetch history
-
-### enddate
-
-- Type: `string`
-
-ISO date string used to fetch history
-
-### entity_id
-
-- Type: `string`
-
-The entity id string used during fetch history call
-
 Example output of `msg`:
 
 ```json
 {
-  "startdate": "2020-01-11T16:41:31.086Z",
-  "enddate": "2020-01-14T16:41:31.086Z",
-  "entityid": "light.kitchen_light",
   "payload": [
     {
       "attributes": {
@@ -185,6 +156,10 @@ Example output of `msg`:
   ]
 }
 ```
+
+## Examples
+
+[Check if an entity was a certain state in the last 24 hours](../cookbook/check-if-an-entity-was-turned-on-in-the-last-24-hours.md)
 
 ## References
 

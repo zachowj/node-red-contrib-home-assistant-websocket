@@ -16,22 +16,22 @@
 <!-- Comparator Selection -->
 <div class="form-row">
     <label
-        for="node-input-entityid"
+        for="node-input-entityId"
         data-i18n="api-get-history.label.entity_id"
     ></label>
 
-    <select type="text" id="node-input-entityidtype" style="width: 18%">
+    <select type="text" id="node-input-entityIdType" style="width: 18%">
         <option
-            value="is"
-            data-i18n="api-get-history.label.entity_id_option.is"
+            value="equals"
+            data-i18n="api-get-history.label.entity_id_option.equal"
         ></option>
         <option
-            value="includes"
-            data-i18n="api-get-history.label.entity_id_option.includes"
+            value="regex"
+            data-i18n="api-get-history.label.entity_id_option.regex"
         ></option>
     </select>
 
-    <input type="text" id="node-input-entityid" style="width: 52%" />
+    <input type="text" id="node-input-entityId" style="width: 52%" />
 </div>
 
 <div class="form-row checkbox-option">
@@ -50,7 +50,6 @@
     <input
         type="text"
         id="node-input-relativeTime"
-        autofocus="autofocus"
         data-i18n="[placeholder]api-get-history.placeholder.relative_time"
         .
     />
@@ -58,54 +57,18 @@
 
 <div class="form-row date_row">
     <label
-        for="node-input-startdate"
+        for="node-input-startDate"
         data-i18n="api-get-history.label.start_date"
     ></label>
-    <input type="text" id="node-input-startdate" autofocus="autofocus" />
+    <input type="datetime-local" id="node-input-startDate" />
 </div>
 
 <div class="form-row date_row">
     <label
-        for="node-input-enddate"
+        for="node-input-endDate"
         data-i18n="api-get-history.label.end_date"
     ></label>
-    <input type="text" id="node-input-enddate" />
-</div>
-
-<div class="form-row form-tips date_row">
-    <ul>
-        <li data-i18n="api-get-history.label.date_format"></li>
-        <li>
-            <span data-i18n="api-get-history.label.example"></span>:
-            "2018-01-27T13:00:00+00:00"
-        </li>
-    </ul>
-</div>
-
-<div class="form-row form-tips relative_row">
-    <p>
-        <code>timestring</code> will parse the following keywords into time
-        values:
-    </p>
-    <ol>
-        <li>
-            <code>ms, milli, millisecond, milliseconds</code> - will parse to
-            milliseconds
-        </li>
-        <li>
-            <code>s, sec, secs, second, seconds</code> - will parse to seconds
-        </li>
-        <li>
-            <code>m, min, mins, minute, minutes</code> - will parse to minutes
-        </li>
-        <li><code>h, hr, hrs, hour, hours</code> - will parse to hours</li>
-        <li><code>d, day, days</code> - will parse to days</li>
-        <li><code>w, week, weeks</code> - will parse to weeks</li>
-        <li>
-            <code>mon, mth, mths, month, months</code> - will parse to months
-        </li>
-        <li><code>y, yr, yrs, year, years</code> - will parse to years</li>
-    </ol>
+    <input type="datetime-local" id="node-input-endDate" />
 </div>
 
 <div class="form-row checkbox-option">
@@ -118,10 +81,10 @@
 
 <div class="form-row">
     <label
-        for="node-input-output_type"
+        for="node-input-outputType"
         data-i18n="api-get-history.label.output_type"
     ></label>
-    <select id="node-input-output_type" style="width: 70%">
+    <select id="node-input-outputType" style="width: 70%">
         <option
             value="array"
             data-i18n="api-get-history.label.output_type_option.array"
@@ -135,9 +98,9 @@
 
 <div class="form-row output-option" id="output_location">
     <label
-        for="node-input-output_location"
+        for="node-input-outputLocation"
         data-i18n="api-get-history.label.output_location"
     ></label>
-    <input type="hidden" id="node-input-output_location_type" />
-    <input type="text" id="node-input-output_location" style="width: 70%" />
+    <input type="hidden" id="node-input-outputLocationType" />
+    <input type="text" id="node-input-outputLocation" style="width: 70%" />
 </div>

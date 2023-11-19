@@ -3,7 +3,7 @@ import Debug from 'debug';
 import { HassEntity } from 'home-assistant-js-websocket';
 import https from 'https';
 
-import { shouldInclude } from '../helpers/utils';
+import HomeAssistantError from '../common/errors/HomeAssistantError';
 import { Credentials } from './';
 
 const debug = Debug('home-assistant:http');
@@ -34,18 +34,14 @@ export default class Http {
         timestamp?: string | null,
         filterEntityId?: string | null,
         endTimestamp?: string | null,
-        {
-            include,
-            exclude,
-            flatten,
-        }: { include?: RegExp; exclude?: RegExp; flatten?: boolean } = {}
+        flatten: boolean = false
     ): Promise<HassEntity[][] | HassEntity[]> {
         let path = 'history/period';
 
         if (timestamp) {
             path = `${path}/${timestamp}`;
         }
-        // eslint-disable-next-line camelcase
+
         const params: { filter_entity_id?: string; end_time?: string } = {};
         if (filterEntityId) {
             params.filter_entity_id = filterEntityId;
@@ -56,21 +52,6 @@ export default class Http {
 
         // History returns an array for each entity_id and that array contains objects for each history item
         const results = await this.get<HassEntity[][]>(path, params);
-
-        // Filter out results by regex, include/exclude should already be an instance of RegEx
-        if (include || exclude) {
-            return results.reduce(
-                (acc: HassEntity[][], entityArr: HassEntity[]) => {
-                    const entityId = entityArr[0]?.entity_id ?? null;
-
-                    if (entityId && shouldInclude(entityId, include, exclude)) {
-                        acc.push(entityArr);
-                    }
-                    return acc;
-                },
-                []
-            );
-        }
 
         // Instead of returning the data from home assistant ( array for each entity_id ) return one flattened array
         // of one item per history entry
@@ -112,6 +93,9 @@ export default class Http {
 
         const response = await this.#client.post(path, data).catch((err) => {
             debug(`POST: request error: ${err.toString()}`);
+            if (err.response?.data?.message) {
+                throw new HomeAssistantError(err.response.data);
+            }
             throw err;
         });
 
@@ -133,6 +117,9 @@ export default class Http {
             .request({ url: path, params })
             .catch((err) => {
                 debug(`GET: request error: ${err.toString()}`);
+                if (err.response?.data?.message) {
+                    throw new HomeAssistantError(err.response.data);
+                }
                 throw err;
             });
 

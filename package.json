@@ -86,6 +86,7 @@
     "@types/sinon": "17.0.0",
     "@types/sinon-chai": "3.2.10",
     "@types/string.prototype.matchall": "4.0.1",
+    "@types/timestring": "^6.0.5",
     "@types/ws": "8.5.6",
     "@typescript-eslint/eslint-plugin": "6.10.0",
     "@typescript-eslint/parser": "6.10.0",

@@ -1,25 +1,35 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
-import { NodeType } from '../../const';
+import { NodeType, TypedInputTypes } from '../../const';
 import { hassAutocomplete } from '../../editor/components/hassAutocomplete';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
+import { EntityFilterType, OutputType } from './const';
 
 declare const RED: EditorRED;
 
 interface GetHistoryEditorNodeProperties extends EditorNodeProperties {
     server: string;
     version: number;
-    startdate: string;
-    enddate: string;
-    entityid: string;
-    entityidtype: string;
+    startDate: string;
+    endDate: string;
+    entityId: string;
+    entityIdType: EntityFilterType;
     useRelativeTime: boolean;
     relativeTime: string;
     flatten: boolean;
-    output_type: string;
-    output_location_type: string;
-    output_location: string;
+    outputType: OutputType;
+    outputLocationType: TypedInputTypes;
+    outputLocation: string;
+
+    // deprecated
+    startdate: undefined;
+    enddate: undefined;
+    entityid: undefined;
+    entityidtype: undefined;
+    output_type: undefined;
+    output_location_type: undefined;
+    output_location: undefined;
 }
 
 const GetHistoryEditor: EditorNodeDef<GetHistoryEditorNodeProperties> = {
@@ -35,9 +45,9 @@ const GetHistoryEditor: EditorNodeDef<GetHistoryEditorNodeProperties> = {
         }
         if (this.useRelativeTime && this.relativeTime) {
             return this.relativeTime;
-        } else if (this.startdate) {
-            const startdate = new Date(this.startdate);
-            return `${startdate.toLocaleDateString()} ${startdate.toLocaleTimeString()}`;
+        } else if (this.startDate) {
+            const startDate = new Date(this.startDate);
+            return `${startDate.toLocaleDateString()} ${startDate.toLocaleTimeString()}`;
         }
         return 'get history';
     },
@@ -46,25 +56,31 @@ const GetHistoryEditor: EditorNodeDef<GetHistoryEditorNodeProperties> = {
         name: { value: '' },
         server: { value: '', type: NodeType.Server, required: true },
         version: { value: RED.settings.get('apiGetHistoryVersion', 0) },
-        startdate: { value: '' },
-        enddate: { value: '' },
-        entityid: { value: '' },
-        entityidtype: { value: '' },
-        useRelativeTime: { value: false },
+        startDate: { value: '' },
+        endDate: { value: '' },
+        entityId: { value: '' },
+        entityIdType: { value: EntityFilterType.Equals },
+        useRelativeTime: { value: true },
         relativeTime: { value: '' },
         flatten: { value: true },
-        output_type: { value: 'array' },
-        output_location_type: { value: 'msg' },
-        output_location: { value: 'payload' },
+        outputType: { value: OutputType.Array },
+        outputLocationType: { value: TypedInputTypes.Message },
+        outputLocation: { value: 'payload' },
+
+        // deprecated
+        startdate: { value: undefined },
+        enddate: { value: undefined },
+        entityid: { value: undefined },
+        entityidtype: { value: undefined },
+        output_type: { value: undefined },
+        output_location_type: { value: undefined },
+        output_location: { value: undefined },
     },
     oneditprepare: function () {
         ha.setup(this);
-        this.entityidtype = this.entityidtype || 'is';
-        $('#node-input-entityidtype').val(this.entityidtype);
-
         haServer.init(this, '#node-input-server');
 
-        hassAutocomplete({ root: '#node-input-entityid' });
+        hassAutocomplete({ root: '#node-input-entityId' });
 
         $('#node-input-useRelativeTime').on(
             'change',
@@ -79,15 +95,19 @@ const GetHistoryEditor: EditorNodeDef<GetHistoryEditorNodeProperties> = {
             }
         );
 
-        $('#node-input-output_location').typedInput({
-            types: ['msg', 'flow', 'global'],
-            typeField: '#node-input-output_location_type',
+        $('#node-input-outputLocation').typedInput({
+            types: [
+                TypedInputTypes.Message,
+                TypedInputTypes.Flow,
+                TypedInputTypes.Global,
+            ],
+            typeField: '#node-input-outputLocationType',
         });
 
-        $('#node-input-output_type')
+        $('#node-input-outputType')
             .on('change', (e) => {
                 const target = e.target as HTMLSelectElement;
-                $('.output-option').toggle(target.value === 'array');
+                $('.output-option').toggle(target.value === OutputType.Array);
             })
             .trigger('change');
     },
