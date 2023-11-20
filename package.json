@@ -141,7 +141,7 @@
     "nyc": "15.1.0",
     "postcss": "8.4.31",
     "prettier": "2.7.1",
-    "rollup": "2.77.0",
+    "rollup": "4.5.0",
     "rollup-plugin-sourcemaps": "0.6.3",
     "sinon-chai": "3.7.0",
     "ts-node": "10.9.1",
