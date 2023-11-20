@@ -81,7 +81,7 @@
     "@types/node": "18.18.7",
     "@types/node-red": "1.2.0",
     "@types/node-red-node-test-helper": "0.2.2",
-    "@types/select2": "4.0.60",
+    "@types/select2": "4.0.62",
     "@types/selectn": "1.1.0",
     "@types/sinon": "17.0.0",
     "@types/sinon-chai": "3.2.10",
