@@ -126,13 +126,17 @@ export const createSelect2Options = ({
 
 // Create select2 data list of ids that don't exist in the current list
 export const createCustomIdListByProperty = <T>(
-    ids: string | string[],
+    ids: string | string[] | undefined,
     list: T[],
     opts?: {
         property?: string;
         includeUnknownIds?: boolean;
     }
 ) => {
+    if (!ids) {
+        return [];
+    }
+
     return (Array.isArray(ids) ? ids : [ids]).reduce(
         (acc: Select2Data[], id: string) => {
             const propertyId = (item: T) =>

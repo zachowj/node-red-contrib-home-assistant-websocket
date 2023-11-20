@@ -34,6 +34,7 @@ interface CallServiceEditorNodeProperties extends EditorNodeProperties {
     mustacheAltTags: boolean;
     queue: string;
     outputProperties: OutputProperty[];
+
     // deprecated
     target: undefined;
     output_location?: string;
@@ -78,6 +79,7 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
             validate: haOutputs.validate,
         },
         queue: { value: 'none' },
+
         // deprecated
         target: { value: undefined },
         output_location: { value: undefined },
@@ -124,7 +126,7 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
                 )
                 .maximizeSelect2Height();
             if (!selectedId) {
-                $domainField.val(null).trigger('change');
+                $domainField.val(-1).trigger('change');
             }
         };
         const populateServices = (service?: string) => {
@@ -172,7 +174,7 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
                 )
                 .maximizeSelect2Height();
             if (!service) {
-                $serviceField.val(null).trigger('change');
+                $serviceField.val(-1).trigger('change');
             }
         };
 
@@ -215,7 +217,7 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
         });
 
         haOutputs.createOutputs(this.outputProperties, {
-            extraTypes: ['sentData', 'msg'],
+            extraTypes: ['sentData', 'results', 'msg'],
         });
     },
     oneditsave: function () {

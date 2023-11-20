@@ -1,7 +1,6 @@
 import Debug from 'debug';
 import { EventEmitter } from 'events';
 import {
-    callService,
     Connection,
     createConnection,
     ERR_CANNOT_CONNECT,
@@ -684,9 +683,20 @@ export default class Websocket {
         service: string,
         data?: { [key: string]: any },
         target?: HassServiceTarget
-    ): Promise<unknown> {
-        debug(`Call-Service: ${domain}.${service} ${JSON.stringify(data)}`);
-        return callService(this.client, domain, service, data, target);
+    ): Promise<Record<string, unknown>> {
+        const services = this.getServices();
+        const returnResponse = !!services[domain]?.[service]?.response;
+
+        const serviceCall = {
+            type: 'call_service',
+            domain,
+            service,
+            service_data: data,
+            target,
+            return_response: returnResponse,
+        };
+
+        return this.send(serviceCall);
     }
 
     send<Results>(data: MessageBase): Promise<Results> {
