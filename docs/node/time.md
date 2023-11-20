@@ -14,16 +14,21 @@ A Home Assistant entity to be used when scheduling the node.
 
 - Type: `string`
 
-Which property of the entity to use to schedule the node.
+Which property of the entity object to use to schedule the node.
 
-The node expects a property of the entity object.
-
-examples:
+example properties:
 
 - <code>entity_id</code>
 - <code>state</code>
 - <code>attributes.date</code>
 - <code>last_updated</code>
+
+example values for the property:
+
+- <code>2020-12-31T02:47:54.837Z</code>
+- <code>1609382842709</code>
+- <code>13:40</code>
+- <code>23:59:02</code>
 
 ### Offset
 
