@@ -14,11 +14,16 @@ A Home Assistant entity to be used when scheduling the node.
 
 - Type: `string`
 
-Which property of the entity to use to schedule the node.
+Which property of the entity object to use to schedule the node.
 
-The node will accept any date string that the javascript object accepts as a valid date. It will also accept a 24-hour time format with the seconds place optional.
+example properties:
 
-examples:
+- <code>entity_id</code>
+- <code>state</code>
+- <code>attributes.date</code>
+- <code>last_updated</code>
+
+example values for the property:
 
 - <code>2020-12-31T02:47:54.837Z</code>
 - <code>1609382842709</code>
