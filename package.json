@@ -72,7 +72,7 @@
     "@types/debug": "4.1.10",
     "@types/express": "4.17.18",
     "@types/flat": "5.0.2",
-    "@types/jquery": "3.5.25",
+    "@types/jquery": "3.5.29",
     "@types/jqueryui": "1.12.18",
     "@types/lodash": "4.14.201",
     "@types/lowdb": "1.0.11",
