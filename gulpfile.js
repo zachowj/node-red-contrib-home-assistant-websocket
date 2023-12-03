@@ -73,6 +73,7 @@ const nodeMap = {
     entity: { doc: 'entity', type: 'ha-entity' },
     'entity-config': { doc: 'entity-config', type: 'ha-entity-config' },
     'events-all': { doc: 'events-all', type: 'server-events' },
+    'events-calendar': { doc: 'events-calendar', type: 'ha-events-calendar' },
     'events-state': {
         doc: 'events-state',
         type: 'server-state-changed',
@@ -214,11 +215,10 @@ const buildHelp = lazypipe()
                             }
 
                             // opening tag
-                            return `<div class="home-assistant-custom-block ${
-                                m[1]
-                            }">\n<p class="custom-block-title">${md.utils.escapeHtml(
-                                m[2] || title
-                            )}</p>\n`;
+                            return `<div class="home-assistant-custom-block ${m[1]
+                                }">\n<p class="custom-block-title">${md.utils.escapeHtml(
+                                    m[2] || title
+                                )}</p>\n`;
                         } else {
                             // closing tag
                             return '</div>\n';

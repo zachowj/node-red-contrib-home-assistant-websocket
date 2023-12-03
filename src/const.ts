@@ -74,6 +74,7 @@ export enum NodeType {
     Device = 'ha-device',
     Entity = 'ha-entity',
     EventsAll = 'server-events',
+    EventsCalendar = 'ha-events-calendar',
     EventsState = 'server-state-changed',
     FireEvent = 'ha-fire-event',
     GetEntities = 'ha-get-entities',

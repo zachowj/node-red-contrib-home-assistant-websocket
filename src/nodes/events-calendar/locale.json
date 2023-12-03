@@ -1,0 +1,7 @@
+{
+    "ha-events-calendar": {
+        "error": {
+            "entity_id_required": "Entity ID is required"
+        }
+    }
+}

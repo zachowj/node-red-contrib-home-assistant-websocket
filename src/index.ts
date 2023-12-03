@@ -15,6 +15,7 @@ import deviceConfigNode from './nodes/device-config';
 import entityNode from './nodes/entity';
 import entityConfigNode from './nodes/entity-config';
 import eventsAllNode from './nodes/events-all';
+import eventsCalendarNode from './nodes/events-calendar';
 import eventsStateNode from './nodes/events-state';
 import fireEventNode from './nodes/fire-event';
 import getEntitiesNode from './nodes/get-entities';
@@ -44,6 +45,7 @@ const nodes: Record<NodeType, any> = {
     [NodeType.Device]: deviceNode,
     [NodeType.Entity]: entityNode,
     [NodeType.EventsAll]: eventsAllNode,
+    [NodeType.EventsCalendar]: eventsCalendarNode,
     [NodeType.EventsState]: eventsStateNode,
     [NodeType.FireEvent]: fireEventNode,
     [NodeType.GetEntities]: getEntitiesNode,
