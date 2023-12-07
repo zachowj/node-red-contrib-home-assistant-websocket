@@ -2,6 +2,38 @@
     "ha-events-calendar": {
         "error": {
             "entity_id_required": "Entity ID is required"
+        },
+        "label": {
+            "name": "Name",
+            "server": "Server",
+            "entity_id": "Calendar",
+            "event_type": "Relative To",
+            "start": "Start",
+            "end": "End",
+            "offset": "Offset",
+            "seconds": "seconds",
+            "minutes": "minutes",
+            "hours": "hours",
+            "target_value_option": {
+                "entity_id": "entity id",
+                "this_entity": "this entity"
+            },
+            "target_type_option": {
+                "current_state": "current state",
+                "previous_state": "previous state",
+                "property": "property"
+            },
+            "comparator_option": {
+                "does_not_include": "not in",
+                "greater_than": ">",
+                "greater_than_or_equal_to": ">=",
+                "includes": "in",
+                "is": "is",
+                "is_not": "is not",
+                "jsonata": "JSONata",
+                "less_than": "<",
+                "less_than_or_equal_to": "<="
+            }
         }
     }
 }

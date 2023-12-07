@@ -1,0 +1,132 @@
+<input type="hidden" id="node-input-version" />
+<input type="hidden" id="node-input-outputs" />
+
+<div class="form-row">
+    <label for="node-input-name" data-i18n="ha-events-calendar.label.name"></label>
+    <input type="text" id="node-input-name" />
+</div>
+
+<div class="form-row">
+    <label
+        for="node-input-server"
+        data-i18n="ha-events-calendar.label.server"
+    ></label>
+    <input type="text" id="node-input-server" />
+</div>
+
+<div class="form-row">
+    <label for="node-input-entityId">
+        <i class="fa fa-cube"></i>
+        <span data-i18n="ha-events-calendar.label.entity_id"></span>
+    </label>
+    <input type="text" id="node-input-entityId" />
+</div>
+
+<div class="form-row">
+    <label
+        for="node-input-event_type"
+        data-i18n="ha-events-calendar.label.event_type"
+    ></label>
+    <select type="text" id="node-input-event_type">
+        <option value="start" data-i18n="ha-events-calendar.label.start"></option>
+        <option value="end" data-i18n="ha-events-calendar.label.end"></option>
+    </select>
+</div>
+
+<div class="form-row">
+    <label for="node-input-offset" data-i18n="ha-events-calendar.label.offset"></label>
+    <input type="text" id="node-input-offset" style="width: 43%" />
+    <input type="hidden" id="node-input-offsetType" />
+    <select id="node-input-offsetUnits" style="width: 27%">
+        <option value="seconds" data-i18n="ha-events-calendar.label.seconds"></option>
+        <option value="minutes" data-i18n="ha-events-calendar.label.minutes"></option>
+        <option value="hours" data-i18n="ha-events-calendar.label.hours"></option>
+    </select>
+</div>
+
+<div id="constraint-template" style="display: none">
+    <!-- Target Selection -->
+    <div class="editable-list-row">
+        <!-- Type -->
+        <select type="text" class="target-type" style="width: 140px">
+            <option
+                value="this_entity"
+                data-i18n="ha-events-calendar.label.target_value_option.this_entity"
+            ></option>
+            <option
+                value="entity_id"
+                data-i18n="ha-events-calendar.label.target_value_option.entity_id"
+            ></option>
+        </select>
+
+        <!-- Value -->
+        <input type="text" class="target-value" disabled />
+    </div>
+    <!-- Property Selection -->
+    <div class="editable-list-row">
+        <!-- Type -->
+        <select type="text" class="property-type" style="width: 140px">
+            <option
+                value="current_state"
+                data-i18n="ha-events-calendar.label.target_type_option.current_state"
+            ></option>
+            <option
+                value="previous_state"
+                data-i18n="ha-events-calendar.label.target_type_option.previous_state"
+            ></option>
+            <option
+                value="property"
+                data-i18n="ha-events-calendar.label.target_type_option.property"
+            ></option>
+        </select>
+
+        <!-- Value -->
+        <input type="text" class="property-value" disabled />
+    </div>
+
+    <!-- Comparator Selection -->
+    <div class="editable-list-row">
+        <!-- Type -->
+        <select type="text" class="comparator-type" style="width: 140px">
+            <option
+                value="is"
+                data-i18n="ha-events-calendar.label.comparator_option.is"
+            ></option>
+            <option
+                value="is_not"
+                data-i18n="ha-events-calendar.label.comparator_option.is_not"
+            ></option>
+
+            <option
+                value=">"
+                data-i18n="ha-events-calendar.label.comparator_option.greater_than"
+            ></option>
+            <option
+                value=">="
+                data-i18n="ha-events-calendar.label.comparator_option.greater_than_or_equal_to"
+            ></option>
+            <option
+                value="<"
+                data-i18n="ha-events-calendar.label.comparator_option.less_than"
+            ></option>
+            <option
+                value="<="
+                data-i18n="ha-events-calendar.label.comparator_option.less_than_or_equal_to"
+            ></option>
+
+            <option
+                value="includes"
+                data-i18n="ha-events-calendar.label.comparator_option.includes"
+            ></option>
+            <option
+                value="does_not_include"
+                data-i18n="ha-events-calendar.label.comparator_option.does_not_include"
+            ></option>
+        </select>
+
+        <!-- Value -->
+        <input type="text" class="comparator-value" style="width: 65%" />
+    </div>
+</div>
+
+<div class="form-row"><ol id="custom-outputs"></ol></div>
