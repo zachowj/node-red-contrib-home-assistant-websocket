@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.60.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.59.0...v0.60.0) (2023-12-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* Require Home Assistant 2023.12+
+* **call-service:** Requests Home Assistant 2023.12+
+* **get-history:** All message inputs are required to be under msg.payload others have been removed. Current ones have been changed to camelcase to follow other nodes. Message ouputs msg.startdate, msg.enddate, msg.entity_id have been removed.
+
+### Features
+
+* **call-service:** Handle response data from service calls ([#1166](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1166)) ([31bfbe0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/31bfbe01cf584d47b490511c6ea21910c26f678a))
+
+
+### Bug Fixes
+
+* **get-history:** fix to work with regex entity ids ([3e3dc05](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/3e3dc0566a318a7d959a09c4fa6d05c96e070301)), closes [#924](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/924)
+
+
+### Miscellaneous Chores
+
+* Require Home Assistant 2023.12+ ([#1168](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1168)) ([e481b67](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/e481b67c1958b7ac881df9840744df88d20ea66b))
+
 ## [0.59.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.58.2...v0.59.0) (2023-11-11)
 
 
