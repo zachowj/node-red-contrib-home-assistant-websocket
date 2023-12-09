@@ -101,7 +101,7 @@ Sample input
 
 If the incoming message has a `payload` property with `domain`, `service` set it will override any config values if set.
 
-If the incoming message has a `payload.data` that is an object or parsable into an object these properties will be <strong>merged</strong> with any config values set.
+If the incoming message has a `payload.data` that is an object these properties will be <strong>merged</strong> with any config values set.
 
 If the node has a property value in its config for `Merge Context` then the `flow` and `global` contexts will be checked for this property which should be an object that will also be merged into the data payload.
 
@@ -140,8 +140,9 @@ Targets of the service call
 
 Value types:
 
-- `sent data`: data sent to Home Assistant
 - `config`: config properties of the node
+- `results`: response from Home Assistant
+- `sent data`: data sent to Home Assistant
 
 ## References
 

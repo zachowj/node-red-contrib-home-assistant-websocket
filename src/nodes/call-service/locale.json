@@ -1,7 +1,9 @@
 {
   "api-call-service": {
     "error": {
-      "invalid_entity_id": "Invalid entity ID format"
+      "invalid_entity_id": "Invalid entity ID format",
+      "invalid_json": "Invalid JSON: __json__",
+      "invalid_merge_context": "Invalid merge context: __context__"
     },
     "label": {
       "alternate_tags": "Use alternate template tags for the data field",
@@ -23,6 +25,9 @@
       "server": "Server",
       "service": "Service",
       "show_debug": "Show debug information"
+    },
+    "status": {
+      "service_called": "__domain__.__service__ called"
     }
   }
 }
