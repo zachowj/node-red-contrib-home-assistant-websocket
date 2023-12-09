@@ -51,7 +51,7 @@
     "compare-versions": "6.1.0",
     "cron": "2.4.0",
     "debug": "4.3.4",
-    "flat": "5.0.2",
+    "flat": "6.0.1",
     "geolib": "3.3.4",
     "home-assistant-js-websocket": "9.1.0",
     "joi": "17.11.0",
