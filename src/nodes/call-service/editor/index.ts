@@ -70,7 +70,14 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
         areaId: { value: [] },
         deviceId: { value: [] },
         entityId: { value: [] },
-        data: { value: '' },
+        data: {
+            value: '',
+            // @ts-expect-error - DefinitelyTyped is missing this property
+            validate: RED.validators.typedInput({
+                type: 'dateType',
+                allowBlank: true,
+            }),
+        },
         dataType: { value: 'jsonata' },
         mergeContext: { value: '' },
         mustacheAltTags: { value: false },
@@ -208,11 +215,6 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
             typeField: '#node-input-dataType',
         });
         $data.on('change', () => {
-            // hack to hide error border when data field is empty
-            const val = $data.val() as string;
-            if (val.length === 0) {
-                $data.next().removeClass('input-error');
-            }
             $('#mustacheAltTags').toggle($dataType.val() === 'json');
         });
 

@@ -42,7 +42,14 @@ const ApiEditor: EditorNodeDef<ApiEditorNodeProperties> = {
         protocol: { value: 'websocket' },
         method: { value: 'get' },
         path: { value: '' },
-        data: { value: '' },
+        data: {
+            value: '',
+            // @ts-expect-error - DefinitelyTyped is missing this property
+            validate: RED.validators.typedInput({
+                type: 'dateType',
+                allowBlank: true,
+            }),
+        },
         dataType: { value: 'jsonata' },
         responseType: { value: 'json' },
         outputProperties: {
@@ -66,19 +73,10 @@ const ApiEditor: EditorNodeDef<ApiEditorNodeProperties> = {
         ha.setup(this);
         haServer.init(this, '#node-input-server');
 
-        $('#node-input-data')
-            .on('change', function () {
-                // hack to hide error border when data field is empty
-                const $this = $(this);
-                const val = $this.val() as string;
-                if (val.length === 0) {
-                    $this.next().removeClass('input-error');
-                }
-            })
-            .typedInput({
-                types: ['jsonata', 'json'],
-                typeField: '#node-input-dataType',
-            });
+        $('#node-input-data').typedInput({
+            types: ['jsonata', 'json'],
+            typeField: '#node-input-dataType',
+        });
 
         $('#node-input-protocol')
             .on('change', function () {

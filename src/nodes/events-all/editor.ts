@@ -40,7 +40,13 @@ const EventsAllEditor: EditorNodeDef<EventsAllEditorNodeProperties> = {
             required: false,
         },
         eventType: { value: '', required: false },
-        eventData: { value: '', required: false },
+        eventData: {
+            value: '',
+            // @ts-expect-error - DefinitelyTyped is missing this property
+            validate: RED.validators.typedInput({
+                allowBlank: true,
+            }),
+        },
         waitForRunning: { value: true },
         outputProperties: {
             value: [
@@ -79,18 +85,9 @@ const EventsAllEditor: EditorNodeDef<EventsAllEditorNodeProperties> = {
         exposeNode.init(this);
         saveEntityType(EntityType.Switch, 'exposeAsEntityConfig');
 
-        $('#node-input-eventData')
-            .on('change input', function () {
-                // hack to hide error border when data field is empty
-                const $this = $(this);
-                const val = $this.val() as string;
-                if (val.length === 0) {
-                    $this.next().removeClass('input-error');
-                }
-            })
-            .typedInput({
-                types: ['json'],
-            });
+        $('#node-input-eventData').typedInput({
+            types: ['json'],
+        });
 
         $('#node-input-eventType').on(
             'change input',

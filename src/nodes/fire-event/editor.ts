@@ -31,7 +31,14 @@ const FireEventEditor: EditorNodeDef<FireEventEditorNodeProperties> = {
         server: { value: '', type: NodeType.Server, required: true },
         version: { value: RED.settings.get('haFireEventVersion', 0) },
         event: { value: '' },
-        data: { value: '' },
+        data: {
+            value: '',
+            // @ts-expect-error - DefinitelyTyped is missing this property
+            validate: RED.validators.typedInput({
+                type: 'dateType',
+                allowBlank: true,
+            }),
+        },
         dataType: { value: TypedInputTypes.JSONata },
     },
     oneditprepare: function () {
