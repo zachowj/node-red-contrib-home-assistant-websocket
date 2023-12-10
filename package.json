@@ -40,7 +40,7 @@
     "websocket"
   ],
   "node-red": {
-    "version": ">=3.0.0",
+    "version": ">=3.1.1",
     "nodes": {
       "all": "dist/index.js"
     }
