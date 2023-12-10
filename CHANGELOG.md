@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.60.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.60.0...v0.60.1) (2023-12-10)
+
+
+### Bug Fixes
+
+* Allow data fields to be empty ([885a310](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/885a310431e23b801bbd3b6395afc860eb61739b)), closes [#1183](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1183)
+
 ## [0.60.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.59.0...v0.60.0) (2023-12-09)
 
 
