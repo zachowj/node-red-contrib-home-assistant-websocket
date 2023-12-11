@@ -129,7 +129,7 @@
     "lazypipe": "1.0.2",
     "lint-staged": "15.0.1",
     "markdown-it": "13.0.2",
-    "markdown-it-container": "3.0.0",
+    "markdown-it-container": "4.0.0",
     "markdown-it-inline-comments": "1.0.1",
     "merge-stream": "2.0.0",
     "mocha": "10.2.0",
