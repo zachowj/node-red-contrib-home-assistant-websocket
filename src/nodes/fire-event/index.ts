@@ -40,7 +40,7 @@ const inputs: NodeInputs = {
 
 const inputSchema: Joi.ObjectSchema = Joi.object({
     event: Joi.string(),
-    data: Joi.string().empty(''),
+    data: Joi.alternatives().try(Joi.string().empty(''), Joi.object()),
     dataType: Joi.string().valid(TypedInputTypes.JSON, TypedInputTypes.JSONata),
 });
 
