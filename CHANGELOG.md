@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.62.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.61.1...v0.62.0) (2023-12-12)
+
+
+### Features
+
+* **sidebar:** Add Home Assistant sidebar ([2da26cb](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/2da26cb3ffc268b18068f0d73ed5ccd0c304606d))
+
 ## [0.61.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.61.0...v0.61.1) (2023-12-11)
 
 
