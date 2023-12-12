@@ -38,7 +38,10 @@ async function packageVersion() {
     if (packageVersionCached) return packageVersionCached;
 
     try {
-        const pkg = await fs.readFile('./package.json', 'utf8');
+        const pkg = await fs.readFile(
+            `${RED.settings.nodesDir}/node-red-contrib-home-assistant-websocket/package.json`,
+            'utf8'
+        );
         packageVersionCached = JSON.parse(pkg).version;
     } catch {
         packageVersionCached = 'unknown';
