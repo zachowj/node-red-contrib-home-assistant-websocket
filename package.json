@@ -141,7 +141,7 @@
     "nodemon": "3.0.1",
     "nyc": "15.1.0",
     "postcss": "8.4.31",
-    "prettier": "2.7.1",
+    "prettier": "3.1.1",
     "rollup": "4.5.0",
     "rollup-plugin-sourcemaps": "0.6.3",
     "sinon-chai": "3.7.0",
