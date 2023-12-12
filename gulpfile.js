@@ -51,11 +51,14 @@ const uiFormWrap =
     '<script type="text/html" data-template-name="<%= data.type %>"><%= data.contents %></script>';
 const uiHelpWrap =
     '<script type="text/html" data-help-name="<%= data.type %>"><%= data.contents %></script>';
+const uiHandlebarsWrap =
+    '<script type="text/html" id="handlebars-<%= data.id %>" data-template-name="<%= data.type %>"><%= data.contents %></script>';
 const resourcePath = 'resources/node-red-contrib-home-assistant-websocket';
 const resourceFiles = [
     `<script src="${resourcePath}/select2.full.min.js?v=4.1.0-rc.0"></script>`,
     `<link rel="stylesheet" href="${resourcePath}/select2.min.css?v=4.1.0-rc.0">`,
     `<script src="${resourcePath}/maximize-select2-height.min.js?v=1.0.4"></script>`,
+    `<script src="${resourcePath}/handlebars.min-v4.7.8.js"></script>`,
 ];
 
 const nodeMap = {
@@ -147,6 +150,35 @@ const buildEditor = lazypipe()
         wrap(
             uiFormWrap,
             { type: editorMap[currentFilename] },
+            { variable: 'data' }
+        )
+    );
+
+const buildSidebar = lazypipe()
+    .pipe(gulpHtmlmin, {
+        collapseWhitespace: true,
+        minifyCSS: true,
+    })
+    .pipe(() => wrap(uiFormWrap, { type: 'ha_sidebar' }, { variable: 'data' }));
+
+const buildSidebarToolbar = lazypipe()
+    .pipe(gulpHtmlmin, {
+        collapseWhitespace: true,
+        minifyCSS: true,
+    })
+    .pipe(() =>
+        wrap(uiFormWrap, { type: 'ha_sidebar_toolbar' }, { variable: 'data' })
+    );
+
+const buildHandlebars = lazypipe()
+    .pipe(gulpHtmlmin, {
+        collapseWhitespace: false,
+        minifyCSS: true,
+    })
+    .pipe(() =>
+        wrap(
+            uiHandlebarsWrap,
+            { id: currentFilename, type: 'x-tmpl-handlebars' },
             { variable: 'data' }
         )
     );
@@ -327,6 +359,33 @@ task('buildEditorFiles', (done) => {
         })
     );
 
+    const sidebarHtml = src(['src/editor/sidebar/index.html']).pipe(
+        flatmap((stream, file) => {
+            const [filename] = file.basename.split('.');
+
+            currentFilename = filename;
+            return stream.pipe(buildSidebar());
+        })
+    );
+
+    const sidebarToolbarHtml = src(['src/editor/sidebar/toolbar.html']).pipe(
+        flatmap((stream, file) => {
+            const [filename] = file.basename.split('.');
+
+            currentFilename = filename;
+            return stream.pipe(buildSidebarToolbar());
+        })
+    );
+
+    const handlebarsTemplates = src(['src/**/*.handlebars']).pipe(
+        flatmap((stream, file) => {
+            const [filename] = file.basename.split('.');
+
+            currentFilename = filename;
+            return stream.pipe(buildHandlebars());
+        })
+    );
+
     const html = src([
         'src/nodes/**/*.html',
         `docs/node/*.md`,
@@ -353,7 +412,15 @@ task('buildEditorFiles', (done) => {
         })
     );
 
-    return merge([css, js, html, editorsHtml])
+    return merge([
+        css,
+        js,
+        html,
+        editorsHtml,
+        sidebarHtml,
+        sidebarToolbarHtml,
+        handlebarsTemplates,
+    ])
         .pipe(concat('index.html'))
         .pipe(header(resourceFiles.join('')))
         .pipe(dest(editorFilePath + '/'));

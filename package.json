@@ -124,6 +124,7 @@
     "gulp-terser": "2.1.0",
     "gulp-typescript": "6.0.0-alpha.1",
     "gulp-wrap": "0.15.0",
+    "handlebars": "^4.7.8",
     "husky": "8.0.3",
     "jsonata": "1.8.6",
     "lazypipe": "1.0.2",

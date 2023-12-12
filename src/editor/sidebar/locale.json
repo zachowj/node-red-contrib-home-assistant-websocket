@@ -1,0 +1,19 @@
+{
+  "home-assistant": {
+    "sidebar": {
+      "diagnostics": {
+        "copy": "Copy to clipboard",
+        "close": "Close",
+        "fetching_data": "Fetching data...",
+        "environment_data": "Environment data",
+        "copied": "Copied!"
+      },
+      "stacks": {
+        "information": "Information",
+        "server": "Server",
+        "entity": "Entity",
+        "device": "Device"
+      }
+    }
+  }
+}

@@ -1,0 +1,65 @@
+.home-assistant-sidebar-container {
+    position: relative;
+    height: 100%;
+
+    .home-assistant-sidebar-stack {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        overflow-y: auto;
+
+        .ha-list-filter {
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .ha-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+
+            &-row {
+                display: flex;
+                justify-content: space-between;
+                color: var(--red-ui-node-label-color);
+                margin-left: 2px;
+                padding-bottom: 1px;
+                line-height: 8px;
+                font-size: 12px;
+
+                &-name {
+                    flex: 1;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    padding: 10px;
+                    cursor: pointer;
+                }
+                &-count {
+                    color: var(--red-ui-node-port-label-color);
+                    background-color: var(--red-ui-node-icon-background-color);
+                    padding: 10px;
+                    cursor: pointer;
+                    width: 3ch;
+                    text-align: center;
+                }
+            }
+
+            li {
+                &:nth-child(even) {
+                    background-color: var(
+                        --red-ui-form-input-background-disabled
+                    );
+                }
+            }
+        }
+    }
+}
+
+#home-assistant-stack-container {
+    position: relative;
+    height: 100%;
+}

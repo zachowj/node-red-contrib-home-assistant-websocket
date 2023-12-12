@@ -12,6 +12,7 @@ import {
 import { setupEditors } from './editor/editors';
 import { updateIntegration } from './editor/exposenode';
 import { printToDebugPanel } from './editor/print-to-debug';
+import { initSidebar } from './editor/sidebar';
 import {
     onNodesAdd,
     onNodesRemove,
@@ -65,6 +66,7 @@ setupEditors();
 RED.events.on('nodes:add', onNodesAdd);
 RED.events.on('nodes:remove', onNodesRemove);
 RED.events.on('editor:open', versionCheck);
+RED.events.on('runtime-state', initSidebar);
 
 // config nodes
 RED.nodes.registerType(NodeType.DeviceConfig, DeviceConfigEditor);
