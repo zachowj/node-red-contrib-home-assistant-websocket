@@ -1,6 +1,10 @@
 {
   "last-release-sha": "7de183dad56bf2006eb5b349295d602258de08b1",
-  "release-type": "node",
-  "bump-minor-pre-major": true,
-  "extra-files": ["src/version.ts"]
+  "packages": {
+    ".": {
+      "release-type": "node",
+      "bump-minor-pre-major": true,
+      "extra-files": ["src/version.ts"]
+    }
+  }
 }
