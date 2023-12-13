@@ -1,6 +1,7 @@
 {
   "last-release-sha": "7de183dad56bf2006eb5b349295d602258de08b1",
   "group-pull-request-title-pattern": "release v${version}",
+  "include-component-in-tag": false,
   "packages": {
     ".": {
       "release-type": "node",
