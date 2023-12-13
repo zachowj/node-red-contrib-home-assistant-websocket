@@ -33,6 +33,7 @@ import {
     HA_EVENT_STATE_CHANGED,
     HA_EVENT_TAG_SCANNED,
     HA_EVENTS,
+    HA_MIN_VERSION,
     INTEGRATION_EVENT,
     INTEGRATION_LOADED,
     INTEGRATION_NOT_LOADED,
@@ -191,6 +192,8 @@ export default class Websocket {
 
         // Check if user has admin privileges
         await this.#checkUserType();
+        // Check if Home Assistant version is supported
+        this.#checkHomeAssistantVersion();
 
         this.onClientOpen();
         // emit connected for only the first connection to the server
@@ -198,6 +201,20 @@ export default class Websocket {
         this.#emitEvent('ha_client:connected');
         this.#clientEvents();
         this.#haEvents();
+    }
+
+    #checkHomeAssistantVersion() {
+        const [major, minor, patch] = HA_MIN_VERSION.split('.').map(Number);
+        if (!atLeastHaVersion(this.client.haVersion, major, minor, patch)) {
+            this.connectionState = STATE_ERROR;
+            this.client.close();
+            throw new Error(
+                RED._('home-assistant.error.ha_version_not_supported', {
+                    version: this.client.haVersion,
+                    min_version: HA_MIN_VERSION,
+                })
+            );
+        }
     }
 
     async #checkUserType() {

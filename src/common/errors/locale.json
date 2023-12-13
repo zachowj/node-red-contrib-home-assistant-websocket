@@ -11,7 +11,8 @@
       "pattern_not_matched": "Pattern not matched",
       "unknown_error": "Unknown error",
       "unrecognized_error": "Unrecognized error: __error__",
-      "user_not_admin": "User required to have admin privileges in Home Assistant"
+      "user_not_admin": "User required to have admin privileges in Home Assistant",
+      "ha_version_not_supported": "Home Assistant version __version__ is not supported, please upgrade to __min_version__ or higher"
     }
   }
 }

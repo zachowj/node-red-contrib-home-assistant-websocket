@@ -8,6 +8,7 @@ export const HA_EVENT_INTEGRATION = 'nodered';
 export const HA_EVENT_STATE_CHANGED = 'state_changed';
 export const HA_EVENT_TAG_SCANNED = 'tag_scanned';
 export const HA_EVENTS = 'ha_events';
+export const HA_MIN_VERSION = '2023.12';
 export const INTEGRATION_EVENT = 'integration';
 export const INTEGRATION_LOADED = 'loaded';
 export const INTEGRATION_NOT_LOADED = 'notloaded';
