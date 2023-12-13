@@ -1,4 +1,5 @@
 {
+  "last-release-sha": "f29affe42109b6ae07b8bee831328c8f66bbec4d",
   "group-pull-request-title-pattern": "release v${version}",
   "include-component-in-tag": false,
   "packages": {
