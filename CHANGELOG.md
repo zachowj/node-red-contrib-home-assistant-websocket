@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.62.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/node-red-contrib-home-assistant-websocket-v0.62.0...node-red-contrib-home-assistant-websocket-v0.62.1) (2023-12-13)
+
+
+### Bug Fixes
+
+* Add a version file for diagnostics ([ad9f694](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ad9f6942dc0da52e6e0a7fc50a17a967b8a64792))
+* Use the correct package.json file for node version ([11abb05](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/11abb0507e1c99c2a6678f2aaa83b45de67318e1))
+
+
+### Miscellaneous Chores
+
+* release 0.62.0 ([d92d2d6](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d92d2d67006287f2ee3cfc60552793d69d2ed3b2))
+* release 0.62.1 ([9f50a91](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/9f50a91fac04e713955accb9a1144178c16e766d))
+
 ## [0.62.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.61.1...v0.62.0) (2023-12-12)
 
 
