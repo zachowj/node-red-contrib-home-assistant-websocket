@@ -1,12 +1,6 @@
 {
   "last-release-sha": "7de183dad56bf2006eb5b349295d602258de08b1",
-  "group-pull-request-title-pattern": "chore: release ${version}",
-  "packages": {
-    ".": {
-      "release-type": "node",
-      "bump-minor-pre-major": true,
-      "extra-files": ["src/version.ts"],
-      "pull-request-title-pattern": "chore: release ${version}"
-    }
-  }
+  "release-type": "node",
+  "bump-minor-pre-major": true,
+  "extra-files": ["src/version.ts"]
 }
