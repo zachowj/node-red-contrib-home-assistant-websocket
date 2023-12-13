@@ -4,10 +4,10 @@ import os from 'os';
 
 import { RED } from '../globals';
 import { homeAssistantConnections } from '../homeAssistant';
+import packageVersion from '../version';
 
 let addonVersionCached: string | undefined;
 let isDockerCached: boolean | undefined;
-let packageVersionCached: string | undefined;
 
 async function hasDockerEnv() {
     try {
@@ -32,22 +32,6 @@ async function isRunningInDocker() {
     isDockerCached ??= (await hasDockerEnv()) || (await hasDockerCGroup());
 
     return isDockerCached;
-}
-
-async function packageVersion() {
-    if (packageVersionCached) return packageVersionCached;
-
-    try {
-        const pkg = await fs.readFile(
-            `${RED.settings.nodesDir}/node-red-contrib-home-assistant-websocket/package.json`,
-            'utf8'
-        );
-        packageVersionCached = JSON.parse(pkg).version;
-    } catch {
-        packageVersionCached = 'unknown';
-    }
-
-    return packageVersionCached;
 }
 
 interface HomeAssistantDiagnostic {
@@ -126,7 +110,7 @@ async function getAddonVersion(): Promise<string> {
 
 export async function getEnvironmentData() {
     const content =
-        `Version: ${await packageVersion()}\n` +
+        `Version: ${packageVersion}\n` +
         `\n` +
         `${getHomeAssistantVersionText()}` +
         `\n` +

@@ -53,6 +53,8 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: node
           bump-minor-pre-major: true
+          extra-files: ["src/version.ts"]
+
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
   publish:
