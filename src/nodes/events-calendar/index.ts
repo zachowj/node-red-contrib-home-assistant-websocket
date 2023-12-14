@@ -11,6 +11,13 @@ import EventsCalendarController from './EventsCalendarController';
 
 export interface EventsCalendarNodeProperties extends BaseNodeProperties {
     exposeAsEntityConfig: string;
+    entityId: string;
+    filter?: string;
+    filterType: string;
+    eventType: string;
+    offset: number;
+    offsetType: string;
+    offsetUnits: string;
 }
 
 export interface EventsCalendarNode extends BaseNode {
