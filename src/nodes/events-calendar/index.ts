@@ -6,6 +6,7 @@ import { migrate } from '../../helpers/migrate';
 import { getExposeAsConfigNode, getServerConfigNode } from '../../helpers/node';
 import { getHomeAssistant } from '../../homeAssistant';
 import { BaseNode, BaseNodeProperties } from '../../types/nodes';
+import { startListeners } from './events';
 import EventsCalendarController from './EventsCalendarController';
 
 export interface EventsCalendarNodeProperties extends BaseNodeProperties {
@@ -50,5 +51,5 @@ export default function eventsCalendarNode(
     });
     controller.setExposeAsConfigNode(exposeAsConfigNode);
 
-    // TODO: start listeners
+    startListeners(clientEvents, controller, homeAssistant, this, status);
 }
