@@ -702,7 +702,9 @@ export default class Websocket {
         target?: HassServiceTarget
     ): Promise<Record<string, unknown>> {
         const services = this.getServices();
-        const returnResponse = !!services[domain]?.[service]?.response;
+        const returnResponse = atLeastHaVersion(this.client.haVersion, 2023, 12)
+            ? !!services[domain]?.[service]?.response
+            : undefined;
 
         const serviceCall = {
             type: 'call_service',
