@@ -177,7 +177,7 @@ export default class CallServiceController extends InputOutputController<
             const ctx = this.node.context();
             const flowVal = ctx.flow.get(this.node.config.mergeContext);
             const globalVal = ctx.global.get(this.node.config.mergeContext);
-            console.log(flowVal, globalVal);
+
             if (
                 !this.#isValidContextData(flowVal) ||
                 !this.#isValidContextData(globalVal)
