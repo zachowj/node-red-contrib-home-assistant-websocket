@@ -44,7 +44,8 @@ export default class EventsCalendarController extends ExposeAsController {
             });
         }
 
-        const offsetStart = start || new Date();
+        const now = new Date();
+        const offsetStart = start || now;
         const offsetEnd = new Date(offsetStart.getTime() + this.#windowTime);
 
         try {
@@ -56,7 +57,7 @@ export default class EventsCalendarController extends ExposeAsController {
             }
 
             // Create a timer for each matching item and place it in a queue cache
-            items.forEach((item) => this.queueCalendarItem(item));
+            items.forEach((item) => this.queueCalendarItem(item, now));
 
             if (items.length > 0) {
                 this.status.setSuccess(`queued ${items.length} items to send`);
@@ -98,15 +99,18 @@ export default class EventsCalendarController extends ExposeAsController {
         return items;
     }
 
-    async queueCalendarItem(item: CalendarItem) {
-        const timeToFireMs = await this.calcFireMs(
-            item.date(this.node.config.eventType)
+    private async queueCalendarItem(item: CalendarItem, now: Date) {
+        let timeToFireMs = await this.calcFireMs(
+            item.date(this.node.config.eventType),
+            now
         );
         if (timeToFireMs < 0) {
-            return;
+            // if the time has passed but we have an item to queue, perhaps we should just fire it now.
+            // TODO: add a bit of a sanity check to ensure this negative value is not crazy low
+            timeToFireMs = 0;
         }
 
-        // If the timer is already in the queue cache, then remove it
+        // If the timer is already in the queue cache, then remove it ready for replacement
         if (this.#queuedCalendarItemTimers[item.queueIndex()]) {
             clearTimeout(this.#queuedCalendarItemTimers[item.queueIndex()]);
         }
@@ -118,7 +122,7 @@ export default class EventsCalendarController extends ExposeAsController {
         );
     }
 
-    private async calcFireMs(eventTime: Date) {
+    private async calcFireMs(eventTime: Date, now: Date) {
         const offsetNum = await this.typedInputService.getValue(
             this.node.config.offset,
             this.node.config.offsetType
@@ -128,12 +132,11 @@ export default class EventsCalendarController extends ExposeAsController {
             this.node.config.offsetUnits
         );
         const fireMs = eventTime.getTime() - offsetMs;
-        const nowMs = Date.now();
-        const timeToFireMs = fireMs - nowMs;
+        const timeToFireMs = fireMs - now.getTime();
         return timeToFireMs;
     }
 
-    async fireCalendarItem(item: ICalendarItem) {
+    private async fireCalendarItem(item: ICalendarItem) {
         // Pull the item and timer off the queue cache so that it is only fired once
         const index = `${item.uid}${item.recurrence_id || ''}`;
         delete this.#queuedCalendarItemTimers[index];
