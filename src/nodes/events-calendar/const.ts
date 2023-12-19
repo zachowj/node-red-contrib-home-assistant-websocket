@@ -44,7 +44,7 @@ function isWithDate(obj: any): obj is WithDate {
 }
 
 // Function to handle the conversion at runtime
-export function toDate(obj: DateOrDateTime): Date {
+function toDate(obj: DateOrDateTime): Date {
     if (isWithDateTime(obj)) {
         return new Date(obj.dateTime);
     } else if (isWithDate(obj)) {
@@ -53,13 +53,42 @@ export function toDate(obj: DateOrDateTime): Date {
     throw new Error('Invalid object');
 }
 
-export interface CalendarItem {
+export interface ICalendarItem {
     start: DateOrDateTime;
     end: DateOrDateTime;
     summary: string;
     description: string;
-    location: string | null;
+    location?: string | null;
     uid: string;
-    recurrence_id: string | null;
-    rrule: string | null;
+    recurrence_id?: string | null;
+    rrule?: string | null;
+    queueIndex(): string;
+    date(eventType: string): Date;
+}
+
+export class CalendarItem implements ICalendarItem {
+    start!: DateOrDateTime;
+    end!: DateOrDateTime;
+    summary!: string;
+    description!: string;
+    location?: string | null;
+    uid!: string;
+    recurrence_id?: string | null;
+    rrule?: string | null;
+
+    constructor(data: ICalendarItem) {
+        Object.assign(this, data);
+    }
+
+    queueIndex() {
+        return `${this.uid}${this.recurrence_id || ''}`;
+    }
+
+    date(eventType: string): Date {
+        return eventType === 'start' ? toDate(this.start) : toDate(this.end);
+    }
+}
+
+export function createCalendarItem(data: ICalendarItem): CalendarItem {
+    return new CalendarItem(data);
 }
