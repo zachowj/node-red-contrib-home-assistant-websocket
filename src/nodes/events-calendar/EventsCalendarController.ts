@@ -104,9 +104,11 @@ export default class EventsCalendarController extends ExposeAsController {
             item.date(this.node.config.eventType),
             now
         );
-        if (timeToFireMs < 0) {
-            // if the time has passed but we have an item to queue, perhaps we should just fire it now.
-            // TODO: add a bit of a sanity check to ensure this negative value is not crazy low
+        if (timeToFireMs < 20) {
+            // if time has significantly passed for this item, then don't bother queuing it.
+            return;
+        } else if (timeToFireMs < 0) {
+            // if time has passed only a little bit but we have an item to queue, perhaps we should just fire it now.
             timeToFireMs = 0;
         }
 
