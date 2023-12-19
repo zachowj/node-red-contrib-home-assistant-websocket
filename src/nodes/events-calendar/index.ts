@@ -1,6 +1,7 @@
 import { createControllerDependencies } from '../../common/controllers/helpers';
 import ClientEvents from '../../common/events/ClientEvents';
 import EventsStatus from '../../common/status/EventStatus';
+import { TypedInputTypes } from '../../const';
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
 import { getExposeAsConfigNode, getServerConfigNode } from '../../helpers/node';
@@ -15,8 +16,8 @@ export interface EventsCalendarNodeProperties extends BaseNodeProperties {
     filter?: string;
     filterType: string;
     eventType: string;
-    offset: number;
-    offsetType: string;
+    offset: string;
+    offsetType: TypedInputTypes;
     offsetUnits: string;
 }
 
