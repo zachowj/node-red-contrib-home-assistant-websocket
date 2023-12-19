@@ -14,7 +14,7 @@ export interface EventsCalendarNodeProperties extends BaseNodeProperties {
     exposeAsEntityConfig: string;
     entityId: string;
     filter?: string;
-    filterType: string;
+    filterType: TypedInputTypes;
     eventType: string;
     offset: string;
     offsetType: TypedInputTypes;

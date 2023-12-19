@@ -17,13 +17,22 @@ export default class EventsCalendarController extends ExposeAsController {
         return true;
     }
 
-    #isInIntervalRange(
+    #calendarItemMatches(
         currentStart: Date,
         currentEnd: Date,
+        filter: string | undefined,
         calendarItem: CalendarItem
     ): boolean {
         const itemDate = calendarItem.date(this.node.config.eventType);
-        return itemDate >= currentStart && itemDate < currentEnd;
+        if (!(itemDate >= currentStart && itemDate < currentEnd)) {
+            return false;
+        }
+
+        if (filter && !calendarItem.summary.includes(filter)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -89,11 +98,23 @@ export default class EventsCalendarController extends ExposeAsController {
         if (!Array.isArray(rawItems)) {
             return;
         }
+        const filterText = this.node.config.filter
+            ? await this.typedInputService.getValue(
+                  this.node.config.filter,
+                  this.node.config.filterType
+              )
+            : undefined;
 
         const items = rawItems
             .map(createCalendarItem)
-            .filter(this.#isInIntervalRange.bind(this, offsetStart, offsetEnd));
-        // TODO: filter out items that don't match this.node.config.filter
+            .filter(
+                this.#calendarItemMatches.bind(
+                    this,
+                    offsetStart,
+                    offsetEnd,
+                    filterText
+                )
+            );
         // TODO: allow more customisable conditions for filtering
 
         return items;
