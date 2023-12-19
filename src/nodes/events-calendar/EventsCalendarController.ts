@@ -92,6 +92,8 @@ export default class EventsCalendarController extends ExposeAsController {
         const items = rawItems
             .map(createCalendarItem)
             .filter(this.#isInIntervalRange.bind(this, offsetStart, offsetEnd));
+        // TODO: filter out items that don't match this.node.config.filter
+        // TODO: allow more customisable conditions for filtering
 
         return items;
     }
@@ -145,6 +147,7 @@ export default class EventsCalendarController extends ExposeAsController {
         }
 
         // send the message including the calendar item
+        // TODO: allow the message object to be configured
         this.node.send({ payload: item });
         this.status.setSuccess(`${item.summary} sent`);
     }
