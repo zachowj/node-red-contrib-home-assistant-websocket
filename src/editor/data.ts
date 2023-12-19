@@ -66,7 +66,12 @@ export function getAutocomplete(serverId: string, type: any) {
     return list;
 }
 
-export type AutocompleteType = 'entities' | 'properties' | 'trackers' | 'zones' | 'calendars';
+export type AutocompleteType =
+    | 'entities'
+    | 'properties'
+    | 'trackers'
+    | 'zones'
+    | 'calendars';
 export function getAutocompleteData(serverId: string, type: AutocompleteType) {
     let list: { value: any; label: any }[] = [];
     switch (type) {
@@ -189,8 +194,8 @@ export function getProperties(serverId: string, entityId: string): string[] {
         entityId in entities[serverId]
             ? Object.keys(flatten(entities[serverId][entityId]))
             : Object.values(entities[serverId]).map((entity) =>
-                Object.keys(flatten(entity))
-            );
+                  Object.keys(flatten(entity))
+              );
     const uniqProperties = [
         ...new Set([].concat(...(flat as any))),
     ] as string[];
