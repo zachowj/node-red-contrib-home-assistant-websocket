@@ -1,9 +1,11 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
-import { NodeType } from '../../const';
+import { NodeType, TypedInputTypes } from '../../const';
 import { hassAutocomplete } from '../../editor/components/hassAutocomplete';
+import * as haOutputs from '../../editor/components/output-properties';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
+import { OutputProperty } from '../../editor/types';
 
 declare const RED: EditorRED;
 
@@ -17,6 +19,7 @@ interface EventsCalendarEditorNodeProperties extends EditorNodeProperties {
     offset: number;
     offsetType: string;
     offsetUnits: string;
+    outputProperties: OutputProperty[];
 }
 
 const EventsCalendarEditor: EditorNodeDef<EventsCalendarEditorNodeProperties> =
@@ -43,6 +46,17 @@ const EventsCalendarEditor: EditorNodeDef<EventsCalendarEditorNodeProperties> =
             offset: { value: 0, required: true },
             offsetType: { value: 'num', required: true },
             offsetUnits: { value: 'minutes', required: true },
+            outputProperties: {
+                value: [
+                    {
+                        property: 'payload',
+                        propertyType: TypedInputTypes.Message,
+                        value: '',
+                        valueType: 'calendarItem',
+                    },
+                ],
+                validate: haOutputs.validate,
+            },
         },
         oneditprepare: function () {
             ha.setup(this);
@@ -63,6 +77,13 @@ const EventsCalendarEditor: EditorNodeDef<EventsCalendarEditorNodeProperties> =
                 types: ['str', 'jsonata'],
                 typeField: '#node-input-filterType',
             });
+
+            haOutputs.createOutputs(this.outputProperties, {
+                extraTypes: ['calendarItem'],
+            });
+        },
+        oneditsave: function () {
+            this.outputProperties = haOutputs.getOutputs();
         },
     };
 

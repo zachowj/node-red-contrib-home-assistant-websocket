@@ -6,7 +6,11 @@ import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
 import { getExposeAsConfigNode, getServerConfigNode } from '../../helpers/node';
 import { getHomeAssistant } from '../../homeAssistant';
-import { BaseNode, BaseNodeProperties } from '../../types/nodes';
+import {
+    BaseNode,
+    BaseNodeProperties,
+    OutputProperty,
+} from '../../types/nodes';
 import { startListeners } from './events';
 import EventsCalendarController from './EventsCalendarController';
 
@@ -19,6 +23,7 @@ export interface EventsCalendarNodeProperties extends BaseNodeProperties {
     offset: string;
     offsetType: TypedInputTypes;
     offsetUnits: string;
+    outputProperties: OutputProperty[];
 }
 
 export interface EventsCalendarNode extends BaseNode {

@@ -176,9 +176,9 @@ export default class EventsCalendarController extends ExposeAsController {
         return nodeOffsetMs;
     }
 
-    private async fireCalendarItem(item: ICalendarItem) {
+    private async fireCalendarItem(item: CalendarItem) {
         // Pull the item and timer off the queue cache so that it is only fired once
-        const index = `${item.uid}${item.recurrence_id || ''}`;
+        const index = item.queueIndex();
         delete this.#queuedCalendarItemTimers[index];
 
         if (
@@ -191,7 +191,15 @@ export default class EventsCalendarController extends ExposeAsController {
 
         // send the message including the calendar item
         // TODO: allow the message object to be configured
-        this.node.send({ payload: item });
+        const message = {};
+        await this.setCustomOutputs(
+            this.node.config.outputProperties,
+            message,
+            {
+                calendarItem: item as ICalendarItem,
+            }
+        );
+        this.node.send(message);
         this.status.setSuccess(`${item.summary} sent`);
     }
 }
