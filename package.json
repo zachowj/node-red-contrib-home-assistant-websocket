@@ -49,7 +49,7 @@
     "axios": "1.6.0",
     "bonjour": "3.5.0",
     "compare-versions": "6.1.0",
-    "cron": "2.4.0",
+    "cron": "3.1.6",
     "debug": "4.3.4",
     "flat": "5.0.2",
     "geolib": "3.3.4",

@@ -21,7 +21,7 @@ export default class TimeController extends ExposeAsController {
     #cronjob: CronJob | null = null;
 
     #createCronjob(crontab: string | Date) {
-        this.#cronjob = new CronJob({
+        this.#cronjob = CronJob.from({
             cronTime: crontab,
             onTick: async () => {
                 try {
@@ -56,7 +56,7 @@ export default class TimeController extends ExposeAsController {
         }
     }
 
-    #formatDate(d: Date) {
+    #formatDate(d?: Date) {
         return formatDate({
             date: d,
             options: {
@@ -114,7 +114,7 @@ export default class TimeController extends ExposeAsController {
             thursday: 4,
             friday: 5,
             saturday: 6,
-        };
+        } as const;
 
         const selectedDays = Object.keys(days).reduce((acc, day) => {
             if (this.node.config[day as keyof TimeNodeProperties]) {
@@ -146,7 +146,10 @@ export default class TimeController extends ExposeAsController {
 
         if (this.node.config.repeatDaily) {
             const sentTime = this.#formatDate(now);
-            const nextTime = this.#formatDate(this.#cronjob?.nextDates());
+            // convert luxon to date
+            const nextTime = this.#formatDate(
+                this.#cronjob?.nextDate().toJSDate()
+            );
             this.status.setSuccess([
                 'ha-time.status.sent_and_next',
                 {
@@ -220,7 +223,7 @@ export default class TimeController extends ExposeAsController {
 
         this.#createCronjob(crontab);
 
-        const nextTime = this.#formatDate(this.#cronjob?.nextDates());
+        const nextTime = this.#formatDate(this.#cronjob?.nextDate().toJSDate());
         this.status.setText(RED._('ha-time.status.next_at', { nextTime }));
     }
 }
