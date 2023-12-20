@@ -80,8 +80,12 @@ export default class EventsCalendarController extends ExposeAsController {
             // Create a timer for each matching item and place it in a queue cache
             items.forEach((item) => this.queueCalendarItem(item, now));
 
-            if (items.length > 0) {
-                this.status.setSuccess(`queued ${items.length} items to send`);
+            if (items.length > 1) {
+                this.status.setSending(`queued ${items.length} events`);
+            } else if (items.length > 0) {
+                this.status.setSending(`queued 1 event`);
+            } else {
+                this.status.setSending(`no upcoming events queued`);
             }
         } catch (exc) {
             this.status.setFailed(
