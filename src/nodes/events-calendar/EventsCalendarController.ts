@@ -8,7 +8,8 @@ const ExposeAsController = ExposeAsMixin(OutputController<EventsCalendarNode>);
 export default class EventsCalendarController extends ExposeAsController {
     #nextUpcomingTimer: NodeJS.Timeout | undefined;
     #queuedCalendarItemTimers: { [index: string]: NodeJS.Timeout } = {};
-    #windowTime: number = 15 * 60000; // 15 minutes in milliseconds
+    #intervalLengthMs: number = 15 * 60000; // 15 minutes in milliseconds
+    #headStartMs: number = 20; // give the next queue 20 milliseconds head start
 
     #isItemValid(item?: ICalendarItem) {
         if (!item) {
@@ -54,12 +55,23 @@ export default class EventsCalendarController extends ExposeAsController {
         }
 
         const now = new Date();
-        const offsetStart = start || now;
-        const offsetEnd = new Date(offsetStart.getTime() + this.#windowTime);
+        const nextQueueTime = new Date(
+            now.getTime() + this.#intervalLengthMs - this.#headStartMs // Start the timer 20 milliseconds before the window ends just to give it a head start
+        );
+
+        const nodeOffsetMs = await this.getOffsetMs();
+        const offsetIntervalStart =
+            start || new Date(now.getTime() + nodeOffsetMs);
+        const offsetIntervalEnd = new Date(
+            offsetIntervalStart.getTime() + this.#intervalLengthMs
+        );
 
         try {
             const items: CalendarItem[] | undefined =
-                await this.retrieveCalendarItems(offsetStart, offsetEnd);
+                await this.retrieveCalendarItems(
+                    offsetIntervalStart,
+                    offsetIntervalEnd
+                );
 
             if (!Array.isArray(items)) {
                 return;
@@ -77,22 +89,22 @@ export default class EventsCalendarController extends ExposeAsController {
             );
         }
 
-        // Queue a timer for the next 15 minute window starting at offsetEnd.
+        // Queue a timer for the next interval starting at intervalEnd.
         this.#nextUpcomingTimer = setTimeout(
-            this.queueUpcomingCalendarEvents.bind(this, offsetEnd),
-            this.#windowTime - 20 // Start the timer 20 milliseconds before the window ends just to give it a head start
+            this.queueUpcomingCalendarEvents.bind(this, offsetIntervalEnd),
+            nextQueueTime.getTime() - now.getTime()
         );
     }
 
     private async retrieveCalendarItems(
-        offsetStart: Date,
-        offsetEnd: Date
+        intervalStart: Date,
+        intervalEnd: Date
     ): Promise<CalendarItem[] | undefined> {
         const rawItems: ICalendarItem[] = await this.homeAssistant.http.get(
             `/calendars/${this.node.config.entityId}`,
             {
-                start: offsetStart.toISOString(),
-                end: offsetEnd.toISOString(),
+                start: intervalStart.toISOString(),
+                end: intervalEnd.toISOString(),
             }
         );
         if (!Array.isArray(rawItems)) {
@@ -110,8 +122,8 @@ export default class EventsCalendarController extends ExposeAsController {
             .filter(
                 this.#calendarItemMatches.bind(
                     this,
-                    offsetStart,
-                    offsetEnd,
+                    intervalStart,
+                    intervalEnd,
                     filterText
                 )
             );
@@ -125,7 +137,7 @@ export default class EventsCalendarController extends ExposeAsController {
             item.date(this.node.config.eventType),
             now
         );
-        if (timeToFireMs < 20) {
+        if (timeToFireMs < 0 - this.#headStartMs) {
             // if time has significantly passed for this item, then don't bother queuing it.
             return;
         } else if (timeToFireMs < 0) {
@@ -146,17 +158,22 @@ export default class EventsCalendarController extends ExposeAsController {
     }
 
     private async calcFireMs(eventTime: Date, now: Date) {
+        const nodeOffsetMs = await this.getOffsetMs();
+        const fireMs = eventTime.getTime() - nodeOffsetMs;
+        const timeToFireMs = fireMs - now.getTime();
+        return timeToFireMs;
+    }
+
+    private async getOffsetMs() {
         const offsetNum = await this.typedInputService.getValue(
             this.node.config.offset,
             this.node.config.offsetType
         );
-        const offsetMs = getTimeInMilliseconds(
+        const nodeOffsetMs = getTimeInMilliseconds(
             offsetNum,
             this.node.config.offsetUnits
         );
-        const fireMs = eventTime.getTime() - offsetMs;
-        const timeToFireMs = fireMs - now.getTime();
-        return timeToFireMs;
+        return nodeOffsetMs;
     }
 
     private async fireCalendarItem(item: ICalendarItem) {
