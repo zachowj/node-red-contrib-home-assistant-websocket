@@ -56,15 +56,16 @@ export default class EventsCalendarController extends ExposeAsController {
         }
 
         const now = new Date();
-        const nextQueueTime = new Date(
-            now.getTime() + this.#intervalLengthMs - this.#headStartMs // Start the timer 20 milliseconds before the window ends just to give it a head start
-        );
 
         const nodeOffsetMs = await this.getOffsetMs();
         const offsetIntervalStart =
             start || new Date(now.getTime() + nodeOffsetMs);
         const offsetIntervalEnd = new Date(
             offsetIntervalStart.getTime() + this.#intervalLengthMs
+        );
+
+        const nextQueueTime = new Date(
+            offsetIntervalEnd.getTime() - this.#headStartMs // Start the timer 20 milliseconds before the window ends just to give it a head start
         );
 
         try {
