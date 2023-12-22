@@ -1,5 +1,6 @@
 import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
 import OutputController from '../../common/controllers/OutputController';
+import { RED } from '../../globals';
 import { getTimeInMilliseconds } from '../../helpers/utils';
 import { EventsCalendarNode } from '.';
 import { CalendarItem, createCalendarItem, ICalendarItem } from './const';
@@ -81,15 +82,26 @@ export default class EventsCalendarController extends ExposeAsController {
             items.forEach((item) => this.queueCalendarItem(item, now));
 
             if (items.length > 1) {
-                this.status.setSending(`queued ${items.length} events`);
+                this.status.setSending(
+                    RED._('ha-events-calendar.status.queued-multi', {
+                        count: items.length,
+                    })
+                );
             } else if (items.length > 0) {
-                this.status.setSending(`queued 1 event`);
+                this.status.setSending(
+                    RED._('ha-events-calendar.status.queued-one')
+                );
             } else {
-                this.status.setSending(`no upcoming events queued`);
+                this.status.setSending(
+                    RED._('ha-events-calendar.status.queued-none')
+                );
             }
-        } catch (exc) {
+        } catch (exc: any) {
             this.status.setFailed(
-                `calendar items could not be retrieved from entity_id "${this.node.config.entityId}", ${exc}`
+                RED._('ha-events-calendar.error.retrieval', {
+                    entity: this.node.config.entityId,
+                    error: exc.message,
+                })
             );
         }
 
@@ -194,7 +206,6 @@ export default class EventsCalendarController extends ExposeAsController {
         }
 
         // send the message including the calendar item
-        // TODO: allow the message object to be configured
         const message = {};
         await this.setCustomOutputs(
             this.node.config.outputProperties,
@@ -204,6 +215,8 @@ export default class EventsCalendarController extends ExposeAsController {
             }
         );
         this.node.send(message);
-        this.status.setSuccess(`${item.summary} sent`);
+        this.status.setSuccess(
+            RED._('ha-events-calendar.status.sent', { summary: item.summary })
+        );
     }
 }

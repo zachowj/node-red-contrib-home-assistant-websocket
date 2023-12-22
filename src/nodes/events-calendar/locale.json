@@ -12,6 +12,15 @@
             "minutes": "minutes",
             "hours": "hours",
             "filter": "Filter"
+        },
+        "error": {
+            "retrieval": "calendar items could not be retrieved from entity_id \"__entity__\", __error__"
+        },
+        "status": {
+            "sent": "__summary__ sent",
+            "queued-none": "no upcoming events queued",
+            "queued-one": "queued 1 upcoming event",
+            "queued-multi": "queued __count__ upcoming events"
         }
     }
 }
