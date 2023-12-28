@@ -150,7 +150,7 @@
     "tslib": "2.6.2",
     "typescript": "5.1.6",
     "vinyl-source-stream": "2.0.0",
-    "vuepress": "2.0.0-beta.64",
+    "vuepress": "2.0.0-rc.0",
     "vuepress-plugin-copy-code2": "2.0.0-beta.231"
   },
   "lint-staged": {
