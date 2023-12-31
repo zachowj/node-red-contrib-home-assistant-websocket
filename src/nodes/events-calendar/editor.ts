@@ -1,17 +1,20 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
-import { NodeType, TypedInputTypes } from '../../const';
+import { EntityType, NodeType, TypedInputTypes } from '../../const';
 import { hassAutocomplete } from '../../editor/components/hassAutocomplete';
 import * as haOutputs from '../../editor/components/output-properties';
+import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import { OutputProperty } from '../../editor/types';
+import { saveEntityType } from '../entity-config/editor/helpers';
 
 declare const RED: EditorRED;
 
 interface EventsCalendarEditorNodeProperties extends EditorNodeProperties {
     version: number;
     server: string;
+    exposeAsEntityConfig: string;
     entityId: string;
     filter?: string;
     filterType: string;
@@ -39,6 +42,13 @@ const EventsCalendarEditor: EditorNodeDef<EventsCalendarEditorNodeProperties> =
             name: { value: '' },
             version: { value: RED.settings.get('eventsCalendarVersion', 0) },
             server: { value: '', type: NodeType.Server, required: true },
+            exposeAsEntityConfig: {
+                value: '',
+                type: NodeType.EntityConfig,
+                // @ts-ignore - DefinitelyTyped is missing this property
+                filter: (config) => config.entityType === EntityType.Switch,
+                required: false,
+            },
             entityId: { value: '', required: true },
             filter: { value: '' },
             filterType: { value: 'str', required: true },
@@ -61,6 +71,8 @@ const EventsCalendarEditor: EditorNodeDef<EventsCalendarEditorNodeProperties> =
         oneditprepare: function () {
             ha.setup(this);
             haServer.init(this, '#node-input-server');
+            exposeNode.init(this);
+            saveEntityType(EntityType.Switch, 'exposeAsEntityConfig');
 
             hassAutocomplete({
                 root: '#node-input-entityId',
