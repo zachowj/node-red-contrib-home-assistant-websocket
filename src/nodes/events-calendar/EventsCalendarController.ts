@@ -3,7 +3,11 @@ import OutputController from '../../common/controllers/OutputController';
 import { RED } from '../../globals';
 import { getTimeInMilliseconds } from '../../helpers/utils';
 import { EventsCalendarNode } from '.';
-import { CalendarItem, createCalendarItem, ICalendarItem } from './const';
+import {
+    CalendarItem,
+    createCalendarItem,
+    ICalendarItem,
+} from './CalendarItem';
 
 const ExposeAsController = ExposeAsMixin(OutputController<EventsCalendarNode>);
 export default class EventsCalendarController extends ExposeAsController {
