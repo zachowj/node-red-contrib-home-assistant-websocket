@@ -123,9 +123,7 @@ export default class CallServiceController extends InputOutputController<
      * @param data - The data to be checked.
      * @returns A boolean indicating whether the data is valid or not.
      */
-    #isValidContextData(
-        data: unknown
-    ): data is Record<string, string> | undefined {
+    #isValidContextData(data: unknown): data is Record<string, string> {
         return (
             typeof data === 'object' &&
             !Array.isArray(data) &&
@@ -178,18 +176,13 @@ export default class CallServiceController extends InputOutputController<
             const flowVal = ctx.flow.get(this.node.config.mergeContext);
             const globalVal = ctx.global.get(this.node.config.mergeContext);
 
-            if (
-                !this.#isValidContextData(flowVal) ||
-                !this.#isValidContextData(globalVal)
-            ) {
-                throw new InputError([
-                    'api-call-service.error.invalid_merge_context',
-                    {
-                        context: this.node.config.mergeContext,
-                    },
-                ]);
+            if (this.#isValidContextData(flowVal)) {
+                contextData = flowVal;
             }
-            contextData = { ...globalVal, ...flowVal };
+
+            if (this.#isValidContextData(globalVal)) {
+                contextData = { ...contextData, ...globalVal };
+            }
         }
 
         return { ...configData, ...contextData, ...payload };
