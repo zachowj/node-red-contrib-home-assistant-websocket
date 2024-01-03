@@ -78,7 +78,7 @@ export function refreshConfigs() {
                 e.stopPropagation();
                 RED.editor.editConfig(
                     '',
-                    NodeType.EntityConfig,
+                    type,
                     $(this).parent().data('id'),
                     ''
                 );
