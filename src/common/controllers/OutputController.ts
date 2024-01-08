@@ -59,7 +59,7 @@ export default class OutputController<T extends BaseNode = BaseNode> {
     protected async setCustomOutputs(
         properties: OutputProperty[] = [],
         message: NodeMessage,
-        extras: Record<string, any>
+        extras: Record<string, any>,
     ) {
         for (const item of properties) {
             const value = await this.typedInputService.getValue(
@@ -68,7 +68,7 @@ export default class OutputController<T extends BaseNode = BaseNode> {
                 {
                     message,
                     ...extras,
-                }
+                },
             );
 
             try {
@@ -76,11 +76,11 @@ export default class OutputController<T extends BaseNode = BaseNode> {
                     value,
                     item.propertyType,
                     item.property,
-                    message
+                    message,
                 );
             } catch (e) {
                 this.node.warn(
-                    `Custom Ouput Error (${item.propertyType}:${item.property}): ${e}`
+                    `Custom Ouput Error (${item.propertyType}:${item.property}): ${e}`,
                 );
             }
         }
@@ -90,7 +90,7 @@ export default class OutputController<T extends BaseNode = BaseNode> {
         this.node.debug(
             `closing node. Reason: ${
                 removed ? 'node deleted' : 'node re-deployed'
-            }`
+            }`,
         );
         try {
             this.onClose?.(removed);

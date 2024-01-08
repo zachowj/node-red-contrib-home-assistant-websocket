@@ -22,7 +22,7 @@ export default class TriggerStateStatus extends EventsStatus {
 
         props.events.addListener(
             HaEvent.StateChanged,
-            this.onStateChange.bind(this)
+            this.onStateChange.bind(this),
         );
     }
 

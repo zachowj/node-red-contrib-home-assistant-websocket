@@ -271,7 +271,7 @@ describe('Input Service', function () {
 
             expect(() => inputService.validate(parsedMessage)).to.throw(
                 Joi.ValidationError,
-                '"foo" is required'
+                '"foo" is required',
             );
         });
     });
@@ -291,7 +291,7 @@ describe('Input Service', function () {
             });
             expect(() => InputService.validateSchema(schema, {})).to.throw(
                 Joi.ValidationError,
-                '"foo" is required'
+                '"foo" is required',
             );
         });
     });

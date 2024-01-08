@@ -11,7 +11,7 @@ import JSONataError from '../errors/JSONataError';
 
 function evaluateJSONataExpression(
     expr: Expression,
-    message: Record<string, any>
+    message: Record<string, any>,
 ) {
     return new Promise<any>((resolve, reject) => {
         RED.util.evaluateJSONataExpression(expr as any, message, (err, res) => {
@@ -68,18 +68,22 @@ export default class JSONataService {
         expr.assign('deviceEntities', this.deviceEntities.bind(this));
         expr.assign('device', this.device.bind(this));
         expr.assign('entity', () => entity);
-        expr.assign('entities', (val: string) =>
-            this.#homeAssistant?.websocket?.getStates(val)
+        expr.assign(
+            'entities',
+            (val: string) => this.#homeAssistant?.websocket?.getStates(val),
         );
         expr.assign('outputData', (obj: string) => {
             if (!obj) {
-                const filtered = Object.keys(objs).reduce((acc, key) => {
-                    // ignore message as it already accessable
-                    if (key !== 'message' && objs[key] !== undefined) {
-                        acc[key] = objs[key];
-                    }
-                    return acc;
-                }, {} as Record<string, any>);
+                const filtered = Object.keys(objs).reduce(
+                    (acc, key) => {
+                        // ignore message as it already accessable
+                        if (key !== 'message' && objs[key] !== undefined) {
+                            acc[key] = objs[key];
+                        }
+                        return acc;
+                    },
+                    {} as Record<string, any>,
+                );
                 return filtered;
             }
 
@@ -149,14 +153,14 @@ export default class JSONataService {
                 const devices = this.#homeAssistant?.websocket?.getDevices();
                 entityRegistry.forEach((entry) => {
                     const entity = this.#homeAssistant?.websocket?.getStates(
-                        entry.entity_id
+                        entry.entity_id,
                     );
                     if (entity) {
                         if (entry.area_id === areaId) {
                             entitiesInArea.push(entity);
                         } else {
                             const device = devices?.find(
-                                (device) => device.id === entry.device_id
+                                (device) => device.id === entry.device_id,
                             );
                             if (device?.area_id === areaId) {
                                 entitiesInArea.push(entity);
@@ -204,7 +208,7 @@ export default class JSONataService {
                 // check if entity has area id and return area name
                 if (entity.area_id) {
                     const area = areas?.find(
-                        (area) => area.area_id === entity.area_id
+                        (area) => area.area_id === entity.area_id,
                     );
 
                     if (area) {
@@ -215,12 +219,12 @@ export default class JSONataService {
                 // check if entity has device id and return area name
                 if (entity.device_id) {
                     const device = this.#homeAssistant?.websocket?.getDevices(
-                        entity.device_id
+                        entity.device_id,
                     );
                     if (device) {
                         if (device.area_id) {
                             const area = areas?.find(
-                                (area) => area.area_id === device.area_id
+                                (area) => area.area_id === device.area_id,
                             );
                             if (area) {
                                 return area;
@@ -237,7 +241,7 @@ export default class JSONataService {
         if (device) {
             if (device.area_id) {
                 const area = areas?.find(
-                    (area) => area.area_id === device.area_id
+                    (area) => area.area_id === device.area_id,
                 );
                 if (area) {
                     return area;
@@ -263,13 +267,14 @@ export default class JSONataService {
         if (entities) {
             if (devices) {
                 return devices.find(
-                    (device) => device.id === entities.device_id
+                    (device) => device.id === entities.device_id,
                 );
             }
         }
 
         const device = devices?.find(
-            (device) => device.name_by_user === lookup || device.name === lookup
+            (device) =>
+                device.name_by_user === lookup || device.name === lookup,
         );
         if (device) {
             return device;
@@ -297,7 +302,7 @@ export default class JSONataService {
                     if (entry.device_id === deviceId) {
                         const entity =
                             this.#homeAssistant?.websocket?.getStates(
-                                entry.entity_id
+                                entry.entity_id,
                             );
                         if (entity) {
                             acc.push(entity);

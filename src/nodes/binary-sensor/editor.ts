@@ -100,8 +100,8 @@ const BinarySensorEditor: EditorNodeDef<BinarySensorEditorNodeProperties> = {
                 addButton: 'add attribute',
                 header: $('<div>').append(
                     $.parseHTML(
-                        "<div style='width:40%; display: inline-grid'>Attribute Key</div><div style='display: inline-grid'>Value</div>"
-                    )
+                        "<div style='width:40%; display: inline-grid'>Attribute Key</div><div style='display: inline-grid'>Value</div>",
+                    ),
                 ),
                 addItem: function (container, _, data: EntityAttribute) {
                     const $row = $('<div />').appendTo(container);

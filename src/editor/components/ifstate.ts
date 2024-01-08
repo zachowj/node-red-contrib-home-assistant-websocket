@@ -4,7 +4,7 @@ export const init = function (
     input: string,
     type: string,
     compare: string,
-    nodeName?: string
+    nodeName?: string,
 ) {
     const $input = $(input);
     const $compare = $(compare);
@@ -26,7 +26,7 @@ export const init = function (
     }
 
     $input.after(
-        ' <a id="clearIfState" class="editor-button"><i class="fa fa-remove"></i></a>'
+        ' <a id="clearIfState" class="editor-button"><i class="fa fa-remove"></i></a>',
     );
     const $clearIfState = $('#clearIfState');
 

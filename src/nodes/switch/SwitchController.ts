@@ -86,7 +86,7 @@ export default class SwitchController extends InputOutputController<
                     state: this.#isSwitchEntityEnabled,
                 },
                 entityState: this.#isSwitchEntityEnabled,
-            }
+            },
         );
 
         if (this.#isSwitchEntityEnabled) {

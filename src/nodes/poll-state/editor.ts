@@ -137,7 +137,7 @@ const PollStateEditor: EditorNodeDef<PollStateEditorNodeProperties> = {
         ifState.init(
             '#node-input-ifState',
             '#node-input-ifStateType',
-            '#node-input-ifStateOperator'
+            '#node-input-ifStateOperator',
         );
         haOutputs.createOutputs(this.outputProperties, {
             extraTypes: ['entity', 'entityId', 'entityState'],

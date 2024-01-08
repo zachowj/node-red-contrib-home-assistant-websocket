@@ -81,7 +81,7 @@ const TimeEntityEditor: EditorNodeDef<TimeEntityEditorNodeProperties> = {
         $('#node-input-mode').on('change', function (this: HTMLSelectElement) {
             $valueRow.toggle(this.value === ValueIntegrationMode.Set);
             $('#node-input-inputs').val(
-                this.value === ValueIntegrationMode.Listen ? 0 : 1
+                this.value === ValueIntegrationMode.Listen ? 0 : 1,
             );
         });
 

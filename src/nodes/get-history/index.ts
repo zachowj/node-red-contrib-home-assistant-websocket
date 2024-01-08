@@ -69,7 +69,7 @@ const inputSchema: Joi.ObjectSchema = Joi.object({
 
 export default function getHistoryNode(
     this: GetHistoryNode,
-    config: GetHistoryNodeProperties
+    config: GetHistoryNodeProperties,
 ): void {
     RED.nodes.createNode(this, config);
 

@@ -44,7 +44,7 @@ export interface SensorBaseNode extends BaseNode {
 
 export interface SensorBaseControllerOptions<
     T extends SensorBaseNode,
-    P extends SensorBaseNodeProperties
+    P extends SensorBaseNodeProperties,
 > extends InputOutputControllerOptions<T, P> {
     homeAssistant: HomeAssistant;
 }
@@ -57,7 +57,7 @@ interface Attribute {
 
 export default abstract class SensorBase<
     T extends SensorBaseNode,
-    P extends SensorBaseNodeProperties
+    P extends SensorBaseNodeProperties,
 > extends InputOutputController<T, P> {
     protected readonly integration?: UnidirectionalEntityIntegration;
 
@@ -69,7 +69,7 @@ export default abstract class SensorBase<
         if (!this.integration.isIntegrationLoaded) {
             throw new InputError(
                 'home-assistant.error.integration_not_loaded',
-                'home-assistant.error.error'
+                'home-assistant.error.error',
             );
         }
 
@@ -93,29 +93,32 @@ export default abstract class SensorBase<
         if (state === undefined) {
             throw new InvalidPropertyValueError(
                 'home-assistant.error.invalid_state',
-                'home-assistant.error.error'
+                'home-assistant.error.error',
             );
         }
 
         const attributes = this.#getAttributes(parsedMessage);
         let attr: Record<string, any> = {};
         try {
-            attr = await attributes.reduce(async (acc, cur) => {
-                const attrs = await acc;
-                // Change string to lower-case and remove unwanted characters
-                const property = slugify(cur.property, {
-                    replacement: '_',
-                    remove: /[^A-Za-z0-9-_~ ]/,
-                    lower: true,
-                });
+            attr = await attributes.reduce(
+                async (acc, cur) => {
+                    const attrs = await acc;
+                    // Change string to lower-case and remove unwanted characters
+                    const property = slugify(cur.property, {
+                        replacement: '_',
+                        remove: /[^A-Za-z0-9-_~ ]/,
+                        lower: true,
+                    });
 
-                attrs[property] = await this.typedInputService.getValue(
-                    cur.value,
-                    cur.valueType,
-                    { message }
-                );
-                return attrs;
-            }, Promise.resolve({}) as Promise<Record<string, any>>);
+                    attrs[property] = await this.typedInputService.getValue(
+                        cur.value,
+                        cur.valueType,
+                        { message },
+                    );
+                    return attrs;
+                },
+                Promise.resolve({}) as Promise<Record<string, any>>,
+            );
         } catch (e) {
             if (e instanceof BaseError) {
                 throw e;
@@ -127,7 +130,7 @@ export default abstract class SensorBase<
         try {
             payload = await this.integration?.updateStateAndAttributes(
                 state,
-                attr
+                attr,
             );
             this.status.setSuccess(payload?.state);
         } catch (err) {
@@ -145,7 +148,7 @@ export default abstract class SensorBase<
             {
                 config: this.node.config,
                 data: payload,
-            }
+            },
         );
         send(message);
         done();
@@ -161,7 +164,7 @@ export default abstract class SensorBase<
         } else {
             if (this.node.config.inputOverride === 'merge') {
                 const keys = Object.keys(parsedMessage.attributes.value).map(
-                    (e) => e.toLowerCase()
+                    (e) => e.toLowerCase(),
                 );
                 this.node.config.attributes.forEach((ele) => {
                     if (!keys.includes(ele.property.toLowerCase())) {
@@ -170,7 +173,7 @@ export default abstract class SensorBase<
                 });
             }
             for (const [prop, val] of Object.entries(
-                parsedMessage.attributes.value
+                parsedMessage.attributes.value,
             )) {
                 attributes.push({
                     property: prop,

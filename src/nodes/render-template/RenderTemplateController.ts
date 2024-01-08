@@ -30,7 +30,7 @@ export default class RenderTemplateController extends InputOutputController<
         this.status.setSending('api-render-template.status.requesting');
 
         const results = await this.homeAssistant.http.renderTemplate(
-            template.value
+            template.value,
         );
 
         if (templateLocationType.value !== TypedInputTypes.None) {
@@ -38,14 +38,14 @@ export default class RenderTemplateController extends InputOutputController<
                 template.value,
                 templateLocationType.value,
                 templateLocation.value,
-                message
+                message,
             );
         }
         this.contextService.set(
             results,
             resultsLocationType.value,
             resultsLocation.value,
-            message
+            message,
         );
 
         send(message);

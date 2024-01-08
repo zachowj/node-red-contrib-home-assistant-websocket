@@ -112,7 +112,7 @@ class EventsHaNode extends EventsNode {
             this.subscription = await this.homeAssistant.subscribeMessage(
                 this.onHaEventMessage.bind(this),
                 payload,
-                { resubscribe: false }
+                { resubscribe: false },
             );
         } catch (e) {
             this.status.setFailed(this.RED._('config-server.status.error'));
@@ -122,7 +122,7 @@ class EventsHaNode extends EventsNode {
 
         if (status) {
             this.status.setSuccess(
-                this.RED._('config-server.status.registered')
+                this.RED._('config-server.status.registered'),
             );
         }
         this.registered = true;
@@ -165,7 +165,7 @@ class EventsHaNode extends EventsNode {
 
             if (!entityId) {
                 throw new Error(
-                    'Entity filter type is not set to exact and no entity_id found in trigger data.'
+                    'Entity filter type is not set to exact and no entity_id found in trigger data.',
                 );
             }
 
@@ -173,7 +173,7 @@ class EventsHaNode extends EventsNode {
 
             if (!entity) {
                 throw new Error(
-                    `entity_id provided by trigger event not found in cache: ${entityId}`
+                    `entity_id provided by trigger event not found in cache: ${entityId}`,
                 );
             }
         } catch (e) {
@@ -208,7 +208,7 @@ class EventsHaNode extends EventsNode {
         this.status.set({
             shape: conditionalValue ? STATUS_SHAPE_DOT : STATUS_SHAPE_RING,
             text: this.status.appendDateString(
-                eventMessage.event.new_state.state
+                eventMessage.event.new_state.state,
             ),
         });
         this.send(conditionalValue ? [msg, null] : [null, msg]);

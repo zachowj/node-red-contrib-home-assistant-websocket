@@ -219,13 +219,13 @@ export const convertEventNode = (node: any, haConfig: HassExposedConfig[]) => {
             importMap: {
                 [node.id]: 'replace',
             },
-        }
+        },
     );
     const newId = generateId();
     RED.nodes.import({ ...node, id: newId, exposeAsEntityConfig: node.id });
     addLinks(newId, wires);
     const entityNode = RED.nodes.node(
-        newId
+        newId,
     ) as EditorNodeInstance<HassNodeProperties>;
     if (entityNode) {
         RED.nodes.moveNodeToTab(entityNode, node.z);

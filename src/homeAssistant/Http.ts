@@ -34,7 +34,7 @@ export default class Http {
         timestamp?: string | null,
         filterEntityId?: string | null,
         endTimestamp?: string | null,
-        flatten: boolean = false
+        flatten: boolean = false,
     ): Promise<HassEntity[][] | HassEntity[]> {
         let path = 'history/period';
 
@@ -78,14 +78,14 @@ export default class Http {
         return this.post<string>(
             'template',
             { template: templateString },
-            'text'
+            'text',
         );
     }
 
     async post<T>(
         path: string,
         data: any = {},
-        responseType: ResponseType = 'json'
+        responseType: ResponseType = 'json',
     ): Promise<T> {
         debug(`HTTP POST: ${this.#client.defaults.baseURL}/${path}`);
 
@@ -107,7 +107,7 @@ export default class Http {
     async get<T>(
         path: string,
         params: any = {},
-        responseType: ResponseType = 'json'
+        responseType: ResponseType = 'json',
     ): Promise<T> {
         debug(`HTTP GET: ${this.#client.defaults.baseURL}/${path}`);
 

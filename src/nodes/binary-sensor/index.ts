@@ -51,7 +51,7 @@ export const inputSchema: Joi.ObjectSchema = Joi.object({
             TypedInputTypes.JSONata,
             TypedInputTypes.String,
             TypedInputTypes.Number,
-            TypedInputTypes.Boolean
+            TypedInputTypes.Boolean,
         )
         .required(),
     attributes: Joi.alternatives().try(
@@ -69,10 +69,10 @@ export const inputSchema: Joi.ObjectSchema = Joi.object({
                         TypedInputTypes.String,
                         TypedInputTypes.Number,
                         TypedInputTypes.Boolean,
-                        TypedInputTypes.Date
+                        TypedInputTypes.Date,
                     )
                     .required(),
-            })
+            }),
         ),
         // schema for message attributes
         Joi.object().pattern(/.*/, [
@@ -81,7 +81,7 @@ export const inputSchema: Joi.ObjectSchema = Joi.object({
             Joi.boolean(),
             Joi.object(),
             Joi.array(),
-        ])
+        ]),
     ),
 });
 

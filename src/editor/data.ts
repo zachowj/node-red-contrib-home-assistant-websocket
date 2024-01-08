@@ -43,7 +43,7 @@ export function updateServices(topic: string, data: HassServices): void {
 
 export function updateTargetDomains(
     topic: string,
-    data: HassTargetDomains
+    data: HassTargetDomains,
 ): void {
     const serverId = parseServerId(topic);
     targetDomains[serverId] = data;
@@ -102,7 +102,7 @@ export function getAutocompleteData(serverId: string, type: AutocompleteType) {
                 .filter(
                     (item) =>
                         item.entity_id.startsWith('person.') ||
-                        item.entity_id.startsWith('device_tracker.')
+                        item.entity_id.startsWith('device_tracker.'),
                 )
                 .map((item) => {
                     return {
@@ -175,7 +175,7 @@ export function getProperties(serverId: string, entityId: string): string[] {
         entityId in entities[serverId]
             ? Object.keys(flatten(entities[serverId][entityId]))
             : Object.values(entities[serverId]).map((entity) =>
-                  Object.keys(flatten(entity))
+                  Object.keys(flatten(entity)),
               );
     const uniqProperties = [
         ...new Set([].concat(...(flat as any))),

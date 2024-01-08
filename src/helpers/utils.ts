@@ -8,7 +8,7 @@ import { BaseNode } from '../types/nodes';
 export function shouldInclude(
     targetString: string,
     includeRegex: RegExp | undefined,
-    excludeRegex: RegExp | undefined
+    excludeRegex: RegExp | undefined,
 ): boolean {
     if (!targetString || (!includeRegex && !excludeRegex)) {
         return true;
@@ -32,7 +32,7 @@ export function shouldInclude(
 export function shouldIncludeEvent(
     eventId: string,
     filter: string | string[],
-    filterType: string
+    filterType: string,
 ): boolean {
     if (!filter) return true;
 
@@ -68,7 +68,7 @@ export function toCamelCase(str: string): string {
         .map((word, index) =>
             index === 0
                 ? word.toLocaleLowerCase()
-                : upperFirst(word.toLowerCase())
+                : upperFirst(word.toLowerCase()),
         )
         .join('');
 }
@@ -81,7 +81,7 @@ export function toCamelCase(str: string): string {
  */
 export function getWaitStatusText(
     timeout: number,
-    timeoutUnits: string
+    timeoutUnits: string,
 ): string {
     const timeoutMs = getTimeInMilliseconds(timeout, timeoutUnits);
     switch (timeoutUnits) {
@@ -93,7 +93,7 @@ export function getWaitStatusText(
         case 'minutes':
         default:
             return `waiting for ${timeout} ${timeoutUnits}: ${timeoutStatus(
-                timeoutMs
+                timeoutMs,
             )}`;
     }
 }
@@ -106,7 +106,7 @@ export function getWaitStatusText(
  */
 export function getTimeInMilliseconds(
     value: number,
-    valueUnits: string
+    valueUnits: string,
 ): number {
     switch (valueUnits) {
         case 'milliseconds':
@@ -186,13 +186,13 @@ export function getEntitiesFromJsonata(jsonata: string): Set<string> {
     return new Set(
         Array.from(matches)
             .map((match) => match[1] || match[2])
-            .filter((entityId) => validEntityId(entityId))
+            .filter((entityId) => validEntityId(entityId)),
     );
 }
 
 export function addEventListeners(
     eventListeners: EventsList,
-    emitter?: EventEmitter
+    emitter?: EventEmitter,
 ): void {
     if (!emitter) return;
 
@@ -203,7 +203,7 @@ export function addEventListeners(
 
 export function removeEventListeners(
     eventListeners: EventsList,
-    emitter?: EventEmitter
+    emitter?: EventEmitter,
 ): void {
     if (!emitter) return;
 
@@ -215,7 +215,7 @@ export function removeEventListeners(
 // https://github.com/home-assistant/core/blob/77ee72cbb9fed55779b0ee58443c3f41e5b35f5a/homeassistant/core.py#L125
 export function validEntityId(entityId: string): boolean {
     return /^(?!.+__)(?!_)[\da-z_]+(?<!_)\.(?!_)[\da-z_]+(?<!_)$/.test(
-        entityId
+        entityId,
     );
 }
 
@@ -226,7 +226,7 @@ export function isNodeRedEnvVar(envVar: string) {
 
 export function checkValidServerConfig(
     node: BaseNode | DeviceNode,
-    serverNodeId?: string
+    serverNodeId?: string,
 ): boolean {
     const serverConfigNode = RED.nodes.getNode(serverNodeId ?? '');
 

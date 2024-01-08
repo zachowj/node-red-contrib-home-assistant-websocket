@@ -23,7 +23,7 @@ class EntityNode extends EventsHaNode {
 
         if (type === INTEGRATION_UNLOADED) {
             this.node.error(
-                'Node-RED custom integration has been removed from Home Assistant it is needed for this node to function.'
+                'Node-RED custom integration has been removed from Home Assistant it is needed for this node to function.',
             );
             this.status.setFailed('Error');
         }

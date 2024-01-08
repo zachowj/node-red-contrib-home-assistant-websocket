@@ -47,7 +47,7 @@ class BaseNode {
 
                 return acc;
             },
-            {}
+            {},
         );
 
         node.on('input', this._eventHandlers.preOnInput.bind(this));
@@ -57,7 +57,7 @@ class BaseNode {
         const { jsonataService, nodeRedContextService, typedInputService } =
             createControllerDependencies(this.node, this.homeAssistant);
         const transformState = new TransformState(
-            this.server?.config?.ha_boolean
+            this.server?.config?.ha_boolean,
         );
         this.comparatorService = new ComparatorService({
             jsonataService,
@@ -159,14 +159,14 @@ class BaseNode {
         comparatorValue,
         actualValue,
         comparatorValueDatatype,
-        { message, entity, prevEntity }
+        { message, entity, prevEntity },
     ) {
         return this.comparatorService.getComparatorResult(
             comparatorType,
             comparatorValue,
             actualValue,
             comparatorValueDatatype,
-            { message, entity, prevEntity }
+            { message, entity, prevEntity },
         );
     }
 
@@ -186,7 +186,7 @@ class BaseNode {
                 {
                     message,
                     ...extras,
-                }
+                },
             );
 
             try {
@@ -194,11 +194,11 @@ class BaseNode {
                     value,
                     item.propertyType,
                     item.property,
-                    message
+                    message,
                 );
             } catch (e) {
                 this.node.warn(
-                    `Custom Ouput Error (${item.propertyType}:${item.property}): ${e.message}`
+                    `Custom Ouput Error (${item.propertyType}:${item.property}): ${e.message}`,
                 );
             }
         }
@@ -216,7 +216,7 @@ const _internals = {
             const messageProp = Array.isArray(fieldConfig.messageProp)
                 ? fieldConfig.messageProp.reduce(
                       (val, cur) => val || selectn(cur, msg),
-                      undefined
+                      undefined,
                   )
                 : selectn(fieldConfig.messageProp, msg);
 
@@ -256,7 +256,7 @@ const _internals = {
                     result.value,
                     {
                         convert: true,
-                    }
+                    },
                 );
                 if (error && fieldConfig.validation.haltOnFail) throw error;
                 result.validation = {
@@ -279,7 +279,7 @@ const _eventHandlers = {
             const parsedMessage = _internals.parseInputMessage.call(
                 this,
                 this.options.input,
-                message
+                message,
             );
 
             this.onInput({
@@ -303,7 +303,7 @@ const _eventHandlers = {
         this.node.debug(
             `closing node. Reason: ${
                 removed ? 'node deleted' : 'node re-deployed'
-            }`
+            }`,
         );
         try {
             await this.onClose(removed);

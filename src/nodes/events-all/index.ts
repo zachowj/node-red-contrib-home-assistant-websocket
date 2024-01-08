@@ -30,7 +30,7 @@ export const HA_CLIENT = 'home_assistant_client';
 
 export default function eventsAllNode(
     this: EventsAllNode,
-    config: EventsAllNodeProperties
+    config: EventsAllNodeProperties,
 ) {
     RED.nodes.createNode(this, config);
 
@@ -41,7 +41,7 @@ export default function eventsAllNode(
     const serverConfigNode = getServerConfigNode(this.config.server);
     const homeAssistant = getHomeAssistant(serverConfigNode);
     const exposeAsConfigNode = getExposeAsConfigNode(
-        this.config.exposeAsEntityConfig
+        this.config.exposeAsEntityConfig,
     );
     const clientEvents = new ClientEvents({
         node: this,

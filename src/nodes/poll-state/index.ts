@@ -39,7 +39,7 @@ export interface PollStateNode extends BaseNode {
 
 export default function pollStateNode(
     this: PollStateNode,
-    config: PollStateNodeProperties
+    config: PollStateNodeProperties,
 ) {
     RED.nodes.createNode(this, config);
 
@@ -58,7 +58,7 @@ export default function pollStateNode(
     const serverConfigNode = getServerConfigNode(this.config.server);
     const homeAssistant = getHomeAssistant(serverConfigNode);
     const exposeAsConfigNode = getExposeAsConfigNode(
-        this.config.exposeAsEntityConfig
+        this.config.exposeAsEntityConfig,
     );
     const clientEvents = new ClientEvents({
         node: this,
@@ -74,7 +74,7 @@ export default function pollStateNode(
     clientEvents.setStatus(status);
     const controllerDeps = createControllerDependencies(this, homeAssistant);
     const transformState = new TransformState(
-        serverConfigNode.config.ha_boolean
+        serverConfigNode.config.ha_boolean,
     );
     const comparatorService = new ComparatorService({
         nodeRedContextService: controllerDeps.nodeRedContextService,

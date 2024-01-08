@@ -29,7 +29,7 @@ export interface EntityConfigNode extends BaseNode {
 
 export default function entityConfigNode(
     this: EntityConfigNode,
-    config: EntityConfigNodeProperties
+    config: EntityConfigNodeProperties,
 ) {
     RED.nodes.createNode(this, config);
 
@@ -42,7 +42,7 @@ export default function entityConfigNode(
         emitter: homeAssistant.eventBus,
     });
     const deviceConfigNode = getNode<DeviceConfigNode>(
-        this.config.deviceConfig
+        this.config.deviceConfig,
     );
     this.state = new State(this);
 

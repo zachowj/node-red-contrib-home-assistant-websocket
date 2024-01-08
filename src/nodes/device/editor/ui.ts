@@ -2,18 +2,18 @@ import { i18n as haI18n } from '../../../editor/i18n';
 
 export function createDeviceExtraFields(
     fields: any[] = [],
-    capabilities: any[] = []
+    capabilities: any[] = [],
 ) {
     const elements: JQuery[] = [];
     fields.forEach((field) => {
         const selectedCapabilities = capabilities.find(
-            (i) => i.name === field.name
+            (i) => i.name === field.name,
         );
         switch (field.type) {
             case 'boolean': {
                 const element = createDeviceBoolean(
                     field,
-                    selectedCapabilities
+                    selectedCapabilities,
                 );
                 elements.push($(element));
                 break;
@@ -26,7 +26,7 @@ export function createDeviceExtraFields(
             case 'integer': {
                 const element = createDeviceInteger(
                     field,
-                    selectedCapabilities
+                    selectedCapabilities,
                 );
                 elements.push(element);
                 break;
@@ -34,7 +34,7 @@ export function createDeviceExtraFields(
             case 'positive_time_period_dict': {
                 const element = createDeviceDuration(
                     field,
-                    selectedCapabilities
+                    selectedCapabilities,
                 );
                 elements.push($(element));
                 break;
@@ -97,8 +97,8 @@ function createDeviceInteger(field: any, store: any) {
         <div class="range-row">
             <input type="checkbox" />
             <input type="range" id="${id}" max="${field.valueMax}" min="${
-        field.valueMin ?? 0
-    }" value="${value}" />
+                field.valueMin ?? 0
+            }" value="${value}" />
             <input type="text" value="${value}" />
         </div>
         `);
@@ -155,11 +155,11 @@ function createDeviceDuration(field: Record<string, any>, store: any) {
         <input type="text" id="${id}" style="width: 35%" value="${value}"/>
         <select id="${id}Units" style="width: 35%">
             <option value="seconds" ${selected('seconds')}>${
-        i18n.seconds
-    }</option>
+                i18n.seconds
+            }</option>
             <option value="minutes" ${selected('minutes')}>${
-        i18n.minutes
-    }</option>
+                i18n.minutes
+            }</option>
             <option value="hours" ${selected('hours')}>${i18n.hours}</option>
         </select>`;
     return wrapWithRow(html);
@@ -167,7 +167,7 @@ function createDeviceDuration(field: Record<string, any>, store: any) {
 
 function createDeviceSelect(
     field: Record<string, any>,
-    store: Record<string, any> = {}
+    store: Record<string, any> = {},
 ) {
     const id = `deviceExtra-${field.name}`;
     const options = field.options.reduce(
@@ -176,7 +176,7 @@ function createDeviceSelect(
             acc.push(`<option value="${val}" ${selected}>${str}</option>`);
             return acc;
         },
-        []
+        [],
     );
 
     const html = `
@@ -190,7 +190,7 @@ function createDeviceSelect(
 
 function createDeviceString(
     field: Record<any, string>,
-    store: Record<any, string>
+    store: Record<any, string>,
 ) {
     const id = `deviceExtra-${field.name}`;
     const value = store ? store.value : '';
@@ -213,7 +213,7 @@ function wrapWithRow(ele: string, cls?: string[]): string;
 function wrapWithRow(ele: unknown, cls: string[] = ['deviceExtra']): unknown {
     if (ele instanceof $) {
         return $(`<div class="form-row ${cls.join(' ')}"></div>`).append(
-            ele as JQuery
+            ele as JQuery,
         );
     }
     return `<div class="form-row ${cls.join(' ')}">${ele}</div>`;

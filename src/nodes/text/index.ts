@@ -49,7 +49,7 @@ export const inputSchema: Joi.ObjectSchema = Joi.object({
             TypedInputTypes.Flow,
             TypedInputTypes.Global,
             TypedInputTypes.JSONata,
-            TypedInputTypes.String
+            TypedInputTypes.String,
         )
         .required(),
 });
@@ -89,7 +89,7 @@ export default function textNode(this: TextNode, config: TextNodeProperties) {
         entityConfigEvents.setStatus(status);
         entityConfigEvents.addListener(
             IntegrationEvent.ValueChange,
-            controller.onValueChange.bind(controller)
+            controller.onValueChange.bind(controller),
         );
     }
 }

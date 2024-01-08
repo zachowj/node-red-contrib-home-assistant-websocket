@@ -13,5 +13,5 @@ export type Constructor = new (...args: any[]) => any;
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type GConstructor<T = {}> = new (...args: any[]) => T;
 export type MergeCtor<A, B> = new (
-    props: GetProps<A> & GetProps<B>
+    props: GetProps<A> & GetProps<B>,
 ) => GetInstance<A> & GetInstance<B>;

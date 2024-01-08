@@ -55,27 +55,27 @@ export default class BidirectionalIntegration extends UnidirectionalEntityIntegr
                 state: this.state,
             });
             this.entityConfigNode.debug(
-                `Registering ${this.entityConfigNode.config.entityType} node with Home Assistant`
+                `Registering ${this.entityConfigNode.config.entityType} node with Home Assistant`,
             );
             this.#unsubscribe =
                 await this.homeAssistant.websocket.subscribeMessage(
                     this.onHaEventMessage.bind(this),
                     payload,
-                    { resubscribe: false }
+                    { resubscribe: false },
                 );
         } catch (err) {
             this.status.forEach((status) =>
-                status.setFailed('home-assistant.status.error_registering')
+                status.setFailed('home-assistant.status.error_registering'),
             );
             const message = err instanceof Error ? err.message : err;
             this.entityConfigNode.error(
-                `Error registering entity. Error Message: ${message}`
+                `Error registering entity. Error Message: ${message}`,
             );
             return;
         }
         this.saveHaConfigToContext(haConfig);
-        this.status.forEach((status) =>
-            status?.setSuccess('home-assistant.status.registered')
+        this.status.forEach(
+            (status) => status?.setSuccess('home-assistant.status.registered'),
         );
 
         this.registered = true;
@@ -101,7 +101,7 @@ export default class BidirectionalIntegration extends UnidirectionalEntityIntegr
             await this.homeAssistant.websocket.send(message);
         } catch (err) {
             this.entityConfigNode.error(
-                `Error updating entity. Error Message: ${err}`
+                `Error updating entity. Error Message: ${err}`,
             );
         }
     }
@@ -112,7 +112,7 @@ export default class BidirectionalIntegration extends UnidirectionalEntityIntegr
             case HaEvent.AutomationTriggered:
                 this.entityConfigNode.emit(
                     HaEvent.AutomationTriggered,
-                    evt.data
+                    evt.data,
                 );
                 break;
             case HaEvent.StateChanged: {

@@ -21,7 +21,7 @@ export default class DeviceTriggerController extends ExposeAsController {
                 config: this.node.config,
                 eventData: data,
                 triggerId: this.node.config.device,
-            }
+            },
         );
 
         this.status.setSuccess(data.description);

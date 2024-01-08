@@ -50,13 +50,13 @@ describe('Comparator Service', function () {
                     'foo',
                     'bar',
                     'msg',
-                    { message: { payload: 'bar' } }
+                    { message: { payload: 'bar' } },
                 );
 
                 expect(contextServiceStub.get).to.have.been.calledWith(
                     'msg',
                     'foo',
-                    { payload: 'bar' }
+                    { payload: 'bar' },
                 );
                 expect(result).to.be.true;
             });
@@ -68,7 +68,7 @@ describe('Comparator Service', function () {
                     'is',
                     'foo',
                     'bar',
-                    'flow'
+                    'flow',
                 );
 
                 expect(result).to.be.true;
@@ -80,7 +80,7 @@ describe('Comparator Service', function () {
                     'is',
                     'foo',
                     'bar',
-                    'global'
+                    'global',
                 );
 
                 expect(result).to.be.true;
@@ -90,7 +90,7 @@ describe('Comparator Service', function () {
                     'is',
                     'foo',
                     'bar',
-                    'flow'
+                    'flow',
                 );
 
                 expect(result).to.be.false;
@@ -108,7 +108,7 @@ describe('Comparator Service', function () {
                     'state',
                     entity.state,
                     'entity',
-                    { entity: entity as HassEntity }
+                    { entity: entity as HassEntity },
                 );
 
                 expect(result).to.be.true;
@@ -124,7 +124,7 @@ describe('Comparator Service', function () {
                     'state',
                     'off',
                     'entity',
-                    { entity: entity as HassEntity }
+                    { entity: entity as HassEntity },
                 );
 
                 expect(result).to.be.false;
@@ -143,7 +143,7 @@ describe('Comparator Service', function () {
                     'state',
                     entity.state,
                     'prevEntity',
-                    { prevEntity: entity as HassEntity }
+                    { prevEntity: entity as HassEntity },
                 );
 
                 expect(result).to.be.true;
@@ -159,7 +159,7 @@ describe('Comparator Service', function () {
                     'state',
                     'off',
                     'prevEntity',
-                    { prevEntity: entity as HassEntity }
+                    { prevEntity: entity as HassEntity },
                 );
 
                 expect(result).to.be.false;
@@ -188,7 +188,7 @@ describe('Comparator Service', function () {
                         },
                         entity,
                         prevEntity: entity,
-                    }
+                    },
                 );
                 expect(jsonataServiceStub.evaluate).to.have.been.calledWith(
                     'foo',
@@ -196,7 +196,7 @@ describe('Comparator Service', function () {
                         message: { payload: 'bar' },
                         entity,
                         prevEntity: entity,
-                    }
+                    },
                 );
                 expect(result).to.be.true;
             });
@@ -209,7 +209,7 @@ describe('Comparator Service', function () {
                         'is',
                         'foo',
                         'foo',
-                        'str'
+                        'str',
                     );
 
                     expect(result).to.be.true;
@@ -219,7 +219,7 @@ describe('Comparator Service', function () {
                         'is',
                         'foo',
                         'bar',
-                        'str'
+                        'str',
                     );
 
                     expect(result).to.be.false;
@@ -229,7 +229,7 @@ describe('Comparator Service', function () {
                         'is',
                         '^foo$',
                         'foo',
-                        're'
+                        're',
                     );
 
                     expect(result).to.be.true;
@@ -239,7 +239,7 @@ describe('Comparator Service', function () {
                         'is',
                         '^bar$',
                         'foo',
-                        're'
+                        're',
                     );
 
                     expect(result).to.be.false;
@@ -249,7 +249,7 @@ describe('Comparator Service', function () {
                         'is',
                         'true',
                         true,
-                        'bool'
+                        'bool',
                     );
 
                     expect(result).to.be.true;
@@ -259,7 +259,7 @@ describe('Comparator Service', function () {
                         'is',
                         'true',
                         false,
-                        'bool'
+                        'bool',
                     );
 
                     expect(result).to.be.false;
@@ -271,7 +271,7 @@ describe('Comparator Service', function () {
                         'is_not',
                         'foo',
                         'foo',
-                        'str'
+                        'str',
                     );
 
                     expect(result).to.be.false;
@@ -281,7 +281,7 @@ describe('Comparator Service', function () {
                         'is_not',
                         'foo',
                         'bar',
-                        'str'
+                        'str',
                     );
 
                     expect(result).to.be.true;
@@ -293,7 +293,7 @@ describe('Comparator Service', function () {
                         'gt',
                         '1',
                         '2',
-                        'num'
+                        'num',
                     );
 
                     expect(result).to.be.true;
@@ -303,7 +303,7 @@ describe('Comparator Service', function () {
                         'gt',
                         '1',
                         '1',
-                        'num'
+                        'num',
                     );
 
                     expect(result).to.be.false;
@@ -313,7 +313,7 @@ describe('Comparator Service', function () {
                         'gt',
                         '1',
                         '0',
-                        'num'
+                        'num',
                     );
 
                     expect(result).to.be.false;
@@ -325,7 +325,7 @@ describe('Comparator Service', function () {
                         'lt',
                         '1',
                         '0',
-                        'num'
+                        'num',
                     );
 
                     expect(result).to.be.true;
@@ -335,7 +335,7 @@ describe('Comparator Service', function () {
                         'lt',
                         '1',
                         '1',
-                        'num'
+                        'num',
                     );
 
                     expect(result).to.be.false;
@@ -345,7 +345,7 @@ describe('Comparator Service', function () {
                         'lt',
                         '1',
                         '2',
-                        'num'
+                        'num',
                     );
 
                     expect(result).to.be.false;
@@ -357,7 +357,7 @@ describe('Comparator Service', function () {
                         'gte',
                         '1',
                         '2',
-                        'num'
+                        'num',
                     );
 
                     expect(result).to.be.true;
@@ -367,7 +367,7 @@ describe('Comparator Service', function () {
                         'gte',
                         '1',
                         '1',
-                        'num'
+                        'num',
                     );
 
                     expect(result).to.be.true;
@@ -377,7 +377,7 @@ describe('Comparator Service', function () {
                         'gte',
                         '1',
                         '0',
-                        'num'
+                        'num',
                     );
 
                     expect(result).to.be.false;
@@ -389,7 +389,7 @@ describe('Comparator Service', function () {
                         'lte',
                         '1',
                         '0',
-                        'num'
+                        'num',
                     );
 
                     expect(result).to.be.true;
@@ -399,7 +399,7 @@ describe('Comparator Service', function () {
                         'lte',
                         '1',
                         '1',
-                        'num'
+                        'num',
                     );
 
                     expect(result).to.be.true;
@@ -409,7 +409,7 @@ describe('Comparator Service', function () {
                         'lte',
                         '1',
                         '2',
-                        'num'
+                        'num',
                     );
 
                     expect(result).to.be.false;
@@ -422,12 +422,12 @@ describe('Comparator Service', function () {
                         'includes',
                         'foo, bar',
                         'bar',
-                        'str'
+                        'str',
                     );
 
                     expect(transformState.transform).to.have.been.calledWith(
                         'list',
-                        'foo, bar'
+                        'foo, bar',
                     );
                 });
 
@@ -436,7 +436,7 @@ describe('Comparator Service', function () {
                         'includes',
                         'foo, bar',
                         'foo',
-                        'str'
+                        'str',
                     );
 
                     expect(result).to.be.true;
@@ -446,7 +446,7 @@ describe('Comparator Service', function () {
                         'includes',
                         'bar, baz',
                         'foo',
-                        'str'
+                        'str',
                     );
 
                     expect(result).to.be.false;
@@ -456,7 +456,7 @@ describe('Comparator Service', function () {
                         'includes',
                         '',
                         'foo',
-                        'str'
+                        'str',
                     );
 
                     expect(result).to.be.false;
@@ -468,7 +468,7 @@ describe('Comparator Service', function () {
                         'does_not_include',
                         'foo, bar',
                         'foo',
-                        'str'
+                        'str',
                     );
 
                     expect(result).to.be.false;
@@ -478,7 +478,7 @@ describe('Comparator Service', function () {
                         'does_not_include',
                         'bar, baz',
                         'foo',
-                        'str'
+                        'str',
                     );
 
                     expect(result).to.be.true;
@@ -488,7 +488,7 @@ describe('Comparator Service', function () {
                         'does_not_include',
                         '',
                         'foo',
-                        'str'
+                        'str',
                     );
 
                     expect(result).to.be.true;
@@ -500,7 +500,7 @@ describe('Comparator Service', function () {
                         'starts_with',
                         'foo',
                         'foo',
-                        'str'
+                        'str',
                     );
 
                     expect(result).to.be.true;
@@ -510,7 +510,7 @@ describe('Comparator Service', function () {
                         'starts_with',
                         'foo',
                         'bar',
-                        'str'
+                        'str',
                     );
 
                     expect(result).to.be.false;
@@ -520,7 +520,7 @@ describe('Comparator Service', function () {
                         'starts_with',
                         '',
                         'foo',
-                        'str'
+                        'str',
                     );
 
                     expect(result).to.be.false;
@@ -532,7 +532,7 @@ describe('Comparator Service', function () {
                         'cont',
                         'foo',
                         'foo',
-                        'str'
+                        'str',
                     );
 
                     expect(result).to.be.true;
@@ -542,7 +542,7 @@ describe('Comparator Service', function () {
                         'cont',
                         'foo',
                         'bar',
-                        'str'
+                        'str',
                     );
 
                     expect(result).to.be.false;
@@ -552,7 +552,7 @@ describe('Comparator Service', function () {
                         'cont',
                         '',
                         'foo',
-                        'str'
+                        'str',
                     );
 
                     expect(result).to.be.false;
@@ -574,7 +574,7 @@ describe('Comparator Service', function () {
                         'jsonata',
                         '',
                         '',
-                        'jsonata'
+                        'jsonata',
                     );
 
                     expect(result).to.be.true;
@@ -597,7 +597,7 @@ describe('Comparator Service', function () {
                             },
                             entity,
                             prevEntity: entity,
-                        }
+                        },
                     );
                     expect(jsonataServiceStub.evaluate).to.have.been.calledWith(
                         'foo',
@@ -605,7 +605,7 @@ describe('Comparator Service', function () {
                             message: { payload: 'bar' },
                             entity,
                             prevEntity: entity,
-                        }
+                        },
                     );
                     expect(result).to.be.true;
                 });
@@ -615,7 +615,7 @@ describe('Comparator Service', function () {
                         'jsonata',
                         'foo',
                         'bar',
-                        'jsonata'
+                        'jsonata',
                     );
                     expect(result).to.be.false;
                 });

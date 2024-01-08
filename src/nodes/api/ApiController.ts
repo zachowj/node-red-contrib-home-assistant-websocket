@@ -25,7 +25,7 @@ export default class ApiController extends InputOutputController<
         const renderTemplate = generateRenderTemplate(
             message,
             this.node.context(),
-            this.homeAssistant.websocket.getStates()
+            this.homeAssistant.websocket.getStates(),
         );
 
         let data;
@@ -37,15 +37,15 @@ export default class ApiController extends InputOutputController<
                     parsedMessage.data.value,
                     {
                         message,
-                    }
+                    },
                 );
             } else {
                 data = JSON.parse(
                     renderTemplate(
                         typeof parsedMessage.data.value === 'object'
                             ? JSON.stringify(parsedMessage.data.value)
-                            : parsedMessage.data.value
-                    )
+                            : parsedMessage.data.value,
+                    ),
                 );
             }
         }
@@ -54,7 +54,7 @@ export default class ApiController extends InputOutputController<
         if (parsedMessage.protocol.value === ApiProtocol.Http) {
             const path = renderTemplate(parsedMessage.path.value).replace(
                 /^\/(?:api\/)?/,
-                ''
+                '',
             );
 
             if (!path) {
@@ -76,13 +76,13 @@ export default class ApiController extends InputOutputController<
                 results = await this.homeAssistant.http.get(
                     path,
                     data,
-                    parsedMessage.responseType.value
+                    parsedMessage.responseType.value,
                 );
             } else {
                 results = await this.homeAssistant.http.post(
                     path,
                     data,
-                    parsedMessage.responseType.value
+                    parsedMessage.responseType.value,
                 );
             }
         } else {
@@ -102,7 +102,7 @@ export default class ApiController extends InputOutputController<
             {
                 results,
                 config: this.node.config,
-            }
+            },
         );
 
         this.status.setSuccess([

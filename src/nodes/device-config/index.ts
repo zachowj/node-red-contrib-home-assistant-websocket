@@ -15,7 +15,7 @@ export interface DeviceConfigNode extends BaseNode {
 
 export default function deviceConfigNode(
     this: DeviceConfigNode,
-    config: DeviceConfigNodeProperties
+    config: DeviceConfigNodeProperties,
 ) {
     RED.nodes.createNode(this, config);
     this.config = migrate(config);

@@ -28,7 +28,7 @@ export const updateServiceSelection = () => {
             tRows.push(
                 `<tr><td><code>${k}</code></td><td>${
                     fields[k].description ?? ''
-                }</td><td>${fields[k].example ?? ''}</td></tr>`
+                }</td><td>${fields[k].example ?? ''}</td></tr>`,
             );
             return tRows;
         }, [] as string[]);
@@ -40,13 +40,13 @@ export const updateServiceSelection = () => {
             $('#service-data-table').show();
             $loadExampleData.show();
             $serviceDataTableBody.html(
-                tableRows.length > 0 ? tableRows.join('') : ''
+                tableRows.length > 0 ? tableRows.join('') : '',
             );
         } else {
             $('#service-data-table').hide();
             $loadExampleData.hide();
             $serviceDescDiv.append(
-                '<p>No fields documented by Home Assistant<p>'
+                '<p>No fields documented by Home Assistant<p>',
             );
         }
         $unknownServiceDiv.hide();
@@ -73,37 +73,40 @@ export const loadExampleData = () => {
         if (serviceData) {
             const fields = serviceData.fields;
             // TODO: rework to use fields data and not have to guess at parsing the example data
-            const exampleData = Object.keys(fields).reduce((acc, key) => {
-                const val = fields[key].example;
-                if (key === 'entity_id') {
-                    if (val?.toString()) {
-                        $entityIdField.val();
-                    }
-                    return acc;
-                }
-                if (val === undefined) {
-                    return acc;
-                }
-                if (typeof val === 'string') {
-                    if (val[0] === '[' && val[val.length - 1] === ']') {
-                        try {
-                            acc[key] = JSON.parse(val);
-                        } catch (e) {}
-                    } else {
-                        if (val[0] === '"' && val[val.length - 1] === '"') {
-                            acc[key] = val.substring(1, val.length - 1);
-                        } else {
-                            acc[key] = val;
+            const exampleData = Object.keys(fields).reduce(
+                (acc, key) => {
+                    const val = fields[key].example;
+                    if (key === 'entity_id') {
+                        if (val?.toString()) {
+                            $entityIdField.val();
                         }
+                        return acc;
                     }
-                } else if (typeof val === 'number' && !isNaN(val)) {
-                    acc[key] = Number(val);
-                } else if (val) {
-                    acc[key] = val;
-                }
+                    if (val === undefined) {
+                        return acc;
+                    }
+                    if (typeof val === 'string') {
+                        if (val[0] === '[' && val[val.length - 1] === ']') {
+                            try {
+                                acc[key] = JSON.parse(val);
+                            } catch (e) {}
+                        } else {
+                            if (val[0] === '"' && val[val.length - 1] === '"') {
+                                acc[key] = val.substring(1, val.length - 1);
+                            } else {
+                                acc[key] = val;
+                            }
+                        }
+                    } else if (typeof val === 'number' && !isNaN(val)) {
+                        acc[key] = Number(val);
+                    } else if (val) {
+                        acc[key] = val;
+                    }
 
-                return acc;
-            }, {} as Record<string, any>);
+                    return acc;
+                },
+                {} as Record<string, any>,
+            );
             if (Object.keys(exampleData).length) {
                 $data.typedInput('value', JSON.stringify(exampleData));
             }

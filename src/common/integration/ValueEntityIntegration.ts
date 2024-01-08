@@ -18,7 +18,7 @@ export default class ValueEntityIntegration extends BidirectionalEntityIntegrati
             this.entityConfigNode.emit(
                 IntegrationEvent.ValueChange,
                 value,
-                previousValue
+                previousValue,
             );
         }
     }

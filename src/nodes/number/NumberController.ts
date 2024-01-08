@@ -41,7 +41,7 @@ export default class NumberController extends InputOutputController<
             {
                 config: this.node.config,
                 value,
-            }
+            },
         );
 
         send(message);
@@ -60,7 +60,7 @@ export default class NumberController extends InputOutputController<
         if (!this.integration?.isIntegrationLoaded) {
             throw new InputError(
                 'home-assistant.error.integration_not_loaded',
-                'home-assistant.status.error'
+                'home-assistant.status.error',
             );
         }
 
@@ -69,13 +69,13 @@ export default class NumberController extends InputOutputController<
             parsedMessage.valueType.value,
             {
                 message,
-            }
+            },
         );
 
         if (typeof value !== 'number') {
             throw new InputError(
                 'ha-number.error.value_not_number',
-                'home-assistant.status.error'
+                'home-assistant.status.error',
             );
         }
 
@@ -89,7 +89,7 @@ export default class NumberController extends InputOutputController<
         this.#entityConfigNode?.emit(
             IntegrationEvent.ValueChange,
             value,
-            previousValue
+            previousValue,
         );
 
         await this.setCustomOutputs(
@@ -99,7 +99,7 @@ export default class NumberController extends InputOutputController<
                 config: this.node.config,
                 value,
                 previousValue,
-            }
+            },
         );
         this.status.setSuccess(value.toString());
         send(message);
@@ -119,7 +119,7 @@ export default class NumberController extends InputOutputController<
         } else {
             throw new InputError(
                 'ha-text.error.mode_not_supported',
-                'home-assistant.status.error'
+                'home-assistant.status.error',
             );
         }
     }
@@ -136,7 +136,7 @@ export default class NumberController extends InputOutputController<
                 config: this.node.config,
                 value,
                 previousValue,
-            }
+            },
         );
         this.status.setSuccess(value.toString());
         this.node.send(message);
@@ -145,10 +145,10 @@ export default class NumberController extends InputOutputController<
     // keep the number in range if min/max is set in the entity config
     #getValidatedValue(value: number): number {
         const min = Number(
-            this.integration?.getEntityHomeAssistantConfigValue('min_value')
+            this.integration?.getEntityHomeAssistantConfigValue('min_value'),
         );
         const max = Number(
-            this.integration?.getEntityHomeAssistantConfigValue('max_value')
+            this.integration?.getEntityHomeAssistantConfigValue('max_value'),
         );
         if (min && value < min) {
             value = min;

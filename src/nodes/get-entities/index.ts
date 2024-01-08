@@ -67,7 +67,7 @@ const inputSchema: Joi.ObjectSchema = Joi.object({
         .valid(
             TypedInputTypes.Message,
             TypedInputTypes.Flow,
-            TypedInputTypes.Global
+            TypedInputTypes.Global,
         )
         .label('outputLocationType'),
     outputLocation: Joi.string().label('outputLocation'),
@@ -91,7 +91,7 @@ const inputSchema: Joi.ObjectSchema = Joi.object({
                     ComparatorType.DoesNotInclude,
                     ComparatorType.StartsWith,
                     ComparatorType.InGroup,
-                    ComparatorType.JSONata
+                    ComparatorType.JSONata,
                 ),
                 value: Joi.string(),
                 valueType: Joi.string().valid(
@@ -103,16 +103,16 @@ const inputSchema: Joi.ObjectSchema = Joi.object({
                     TypedInputTypes.Message,
                     TypedInputTypes.Flow,
                     TypedInputTypes.Global,
-                    TypedInputTypes.Entity
+                    TypedInputTypes.Entity,
                 ),
-            })
+            }),
         )
         .label('rules'),
 });
 
 export default function getEntitiesNode(
     this: GetEntitiesNode,
-    config: GetEntitiesNodeProperties
+    config: GetEntitiesNodeProperties,
 ): void {
     RED.nodes.createNode(this, config);
 
@@ -131,7 +131,7 @@ export default function getEntitiesNode(
     });
     const controllerDeps = createControllerDependencies(this, homeAssistant);
     const transformState = new TransformState(
-        serverConfigNode.config.ha_boolean
+        serverConfigNode.config.ha_boolean,
     );
     const comparatorService = new ComparatorService({
         nodeRedContextService: controllerDeps.nodeRedContextService,

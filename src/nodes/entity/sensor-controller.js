@@ -78,7 +78,7 @@ class Sensor extends EntityNode {
             this.node.error(
                 `Error registering entity. ${
                     err.message ? ` Error Message: ${err.message}` : ''
-                }`
+                }`,
             );
         }
     }
@@ -95,7 +95,7 @@ class Sensor extends EntityNode {
                 remove: true,
             };
             this.node.debug(
-                `Unregistering ${this.nodeConfig.entityType} from HA`
+                `Unregistering ${this.nodeConfig.entityType} from HA`,
             );
             this.homeAssistant.send(payload);
         }
@@ -188,7 +188,7 @@ class Sensor extends EntityNode {
                         payload,
                         this.nodeConfig.outputLocationType || 'msg',
                         this.nodeConfig.outputLocation || 'payload',
-                        message
+                        message,
                     );
                 }
 
@@ -200,7 +200,7 @@ class Sensor extends EntityNode {
                 done(
                     `Entity API error. ${
                         err.message ? ` Error Message: ${err.message}` : ''
-                    }`
+                    }`,
                 );
             });
     }
@@ -215,7 +215,7 @@ class Sensor extends EntityNode {
         } else {
             if (this.nodeConfig.inputOverride === 'merge') {
                 const keys = Object.keys(parsedMessage.attributes.value).map(
-                    (e) => e.toLowerCase()
+                    (e) => e.toLowerCase(),
                 );
                 this.nodeConfig.attributes.forEach((ele) => {
                     if (!keys.includes(ele.property.toLowerCase())) {
@@ -224,7 +224,7 @@ class Sensor extends EntityNode {
                 });
             }
             for (const [prop, val] of Object.entries(
-                parsedMessage.attributes.value
+                parsedMessage.attributes.value,
             )) {
                 attributes.push({
                     property: prop,

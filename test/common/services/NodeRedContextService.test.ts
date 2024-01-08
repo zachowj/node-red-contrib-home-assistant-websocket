@@ -60,7 +60,7 @@ describe('Node-RED Context Service', function () {
                 const result = nodeRedContextService.get(
                     'msg',
                     'payload',
-                    message
+                    message,
                 );
 
                 expect(result).to.equal(message.payload);
@@ -76,7 +76,7 @@ describe('Node-RED Context Service', function () {
                 const result = nodeRedContextService.get(
                     'msg',
                     'topic',
-                    message
+                    message,
                 );
 
                 expect(result).to.be.undefined;
@@ -147,19 +147,19 @@ describe('Node-RED Context Service', function () {
                     'foo',
                     ContextLocation.Msg,
                     'payload',
-                    message
+                    message,
                 );
                 expect(setObjectPropertyStub).to.have.been.calledOnceWith(
                     message,
                     'payload',
-                    'foo'
+                    'foo',
                 );
             });
             it('should not set message property if message is not provided', function () {
                 nodeRedContextService.set(
                     'msg',
                     ContextLocation.Msg,
-                    'payload'
+                    'payload',
                 );
                 expect(setObjectPropertyStub).to.not.have.been.called;
             });

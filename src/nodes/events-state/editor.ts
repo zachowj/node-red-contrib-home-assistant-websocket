@@ -145,7 +145,7 @@ const EventsStateEditor: EditorNodeDef<EventsStateEditorNodeProperties> = {
         ifState.init(
             '#node-input-ifState',
             '#node-input-ifStateType',
-            '#node-input-ifStateOperator'
+            '#node-input-ifStateOperator',
         );
 
         $('#node-input-for').typedInput({
@@ -163,14 +163,14 @@ const EventsStateEditor: EditorNodeDef<EventsStateEditorNodeProperties> = {
         $('#node-input-outputs').val(outputs);
         this.outputProperties = haOutputs.getOutputs();
         const entitySelector = $('#dialog-form').data(
-            'entitySelector'
+            'entitySelector',
         ) as EntitySelector;
         this.entityId = entitySelector.entityId;
         entitySelector.destroy();
     },
     oneditcancel: function () {
         const entitySelector = $('#dialog-form').data(
-            'entitySelector'
+            'entitySelector',
         ) as EntitySelector;
         entitySelector.destroy();
     },

@@ -76,7 +76,7 @@ const SentenceEditor: EditorNodeDef<SentenceEditorNodeProperties> = {
                 removable: true,
                 height: 'auto',
                 header: $('<div>').append(
-                    this._('ha-sentence.label.sentences')
+                    this._('ha-sentence.label.sentences'),
                 ),
                 addItem: function (container, _, data: string) {
                     $('<input />', {
@@ -88,7 +88,7 @@ const SentenceEditor: EditorNodeDef<SentenceEditorNodeProperties> = {
             })
             .editableList(
                 'addItems',
-                (this.sentences.length ? this.sentences : ['']) as any
+                (this.sentences.length ? this.sentences : ['']) as any,
             );
 
         haOutputs.createOutputs(this.outputProperties, {

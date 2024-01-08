@@ -24,7 +24,7 @@ export default class DeviceAction extends InputOutputController<
                 acc[cap.name] = cap.value;
                 return acc;
             },
-            {} as Record<string, unknown>
+            {} as Record<string, unknown>,
         );
         const payload = {
             type: MessageType.DeviceAction,
@@ -39,11 +39,11 @@ export default class DeviceAction extends InputOutputController<
             {
                 config: this.node.config,
                 data: payload,
-            }
+            },
         );
 
         this.status.setSuccess(
-            `${this.node.config.event?.domain}.${this.node.config.event?.type}`
+            `${this.node.config.event?.domain}.${this.node.config.event?.type}`,
         );
         send(message);
         done();

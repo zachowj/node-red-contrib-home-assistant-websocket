@@ -11,7 +11,7 @@ import {
 
 export function subscribeAreaRegistry(
     conn: Connection,
-    cb: (state: HassAreas) => void
+    cb: (state: HassAreas) => void,
 ): void {
     const fetchAreaRegistry = (conn: Connection) =>
         conn.sendMessagePromise<HassAreas>({
@@ -23,25 +23,25 @@ export function subscribeAreaRegistry(
             throttle(
                 () =>
                     fetchAreaRegistry(conn).then((areas) =>
-                        store.setState(areas, true)
+                        store.setState(areas, true),
                     ),
-                500
+                500,
             ),
-            'area_registry_updated'
+            'area_registry_updated',
         );
 
     const collection = getCollection(
         conn,
         '_areas',
         fetchAreaRegistry,
-        subscribeUpdates
+        subscribeUpdates,
     );
     collection.subscribe(cb);
 }
 
 export function subscribeDeviceRegistry(
     conn: Connection,
-    cb: (state: HassDevices) => void
+    cb: (state: HassDevices) => void,
 ): void {
     const fetchDeviceRegistry = (conn: Connection) =>
         conn.sendMessagePromise<HassDevices>({
@@ -53,25 +53,25 @@ export function subscribeDeviceRegistry(
             throttle(
                 () =>
                     fetchDeviceRegistry(conn).then((devices) =>
-                        store.setState(devices, true)
+                        store.setState(devices, true),
                     ),
-                500
+                500,
             ),
-            'device_registry_updated'
+            'device_registry_updated',
         );
 
     const collection = getCollection(
         conn,
         '_devices',
         fetchDeviceRegistry,
-        subscribeUpdates
+        subscribeUpdates,
     );
     collection.subscribe(cb);
 }
 
 export function subscribeEntityRegistry(
     conn: Connection,
-    cb: (state: HassEntityRegistryEntry[]) => void
+    cb: (state: HassEntityRegistryEntry[]) => void,
 ): void {
     const fetchEntityRegistry = (conn: Connection) =>
         conn.sendMessagePromise<HassEntityRegistryEntry[]>({
@@ -80,31 +80,31 @@ export function subscribeEntityRegistry(
 
     const subscribeUpdates = (
         conn: Connection,
-        store: Store<HassEntityRegistryEntry[]>
+        store: Store<HassEntityRegistryEntry[]>,
     ) =>
         conn.subscribeEvents(
             throttle(
                 () =>
                     fetchEntityRegistry(conn).then((devices) =>
-                        store.setState(devices, true)
+                        store.setState(devices, true),
                     ),
-                500
+                500,
             ),
-            'entity_registry_updated'
+            'entity_registry_updated',
         );
 
     const collection = getCollection(
         conn,
         '_entity',
         fetchEntityRegistry,
-        subscribeUpdates
+        subscribeUpdates,
     );
     collection.subscribe(cb);
 }
 
 export function subscribeEntityRegistryDisplay(
     conn: Connection,
-    cb: (state: HassEntityRegistryDisplayEntryResponse) => void
+    cb: (state: HassEntityRegistryDisplayEntryResponse) => void,
 ): void {
     const fetchEntityRegistry = (conn: Connection) =>
         conn.sendMessagePromise<HassEntityRegistryDisplayEntryResponse>({
@@ -113,24 +113,24 @@ export function subscribeEntityRegistryDisplay(
 
     const subscribeUpdates = (
         conn: Connection,
-        store: Store<HassEntityRegistryDisplayEntryResponse>
+        store: Store<HassEntityRegistryDisplayEntryResponse>,
     ) =>
         conn.subscribeEvents(
             throttle(
                 () =>
                     fetchEntityRegistry(conn).then((devices) =>
-                        store.setState(devices, true)
+                        store.setState(devices, true),
                     ),
-                500
+                500,
             ),
-            'entity_registry_updated'
+            'entity_registry_updated',
         );
 
     const collection = getCollection(
         conn,
         '_entityRegistryDisplay',
         fetchEntityRegistry,
-        subscribeUpdates
+        subscribeUpdates,
     );
     collection.subscribe(cb);
 }

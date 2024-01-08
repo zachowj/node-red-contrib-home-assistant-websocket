@@ -92,7 +92,7 @@ const GetHistoryEditor: EditorNodeDef<GetHistoryEditorNodeProperties> = {
                     $('.relative_row').hide();
                     $('.date_row').show();
                 }
-            }
+            },
         );
 
         $('#node-input-outputLocation').typedInput({

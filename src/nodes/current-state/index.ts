@@ -47,7 +47,7 @@ const inputSchema: Joi.ObjectSchema = Joi.object({
 
 export default function currentStateNode(
     this: CurrentStateNode,
-    config: CurrentStateNodeProperties
+    config: CurrentStateNodeProperties,
 ): void {
     RED.nodes.createNode(this, config);
 
@@ -69,7 +69,7 @@ export default function currentStateNode(
     }
     const controllerDeps = createControllerDependencies(this, homeAssistant);
     const transformState = new TransformState(
-        serverConfigNode.config.ha_boolean
+        serverConfigNode.config.ha_boolean,
     );
     const comparatorService = new ComparatorService({
         nodeRedContextService: controllerDeps.nodeRedContextService,

@@ -33,7 +33,7 @@ export interface WebhookNode extends BaseNode {
 
 export default function webhookNode(
     this: WebhookNode,
-    config: WebhookNodeProperties
+    config: WebhookNodeProperties,
 ) {
     RED.nodes.createNode(this, config);
     this.config = migrate(config);
@@ -41,7 +41,7 @@ export default function webhookNode(
     const serverConfigNode = getServerConfigNode(this.config.server);
     const homeAssistant = getHomeAssistant(serverConfigNode);
     const exposeAsConfigNode = getExposeAsConfigNode(
-        this.config.exposeAsEntityConfig
+        this.config.exposeAsEntityConfig,
     );
     const clientEvents = new ClientEvents({
         node: this,
@@ -75,7 +75,7 @@ export default function webhookNode(
 
     nodeEvents.addListener(
         IntegrationEvent.Trigger,
-        controller.onReceivedMessage.bind(controller)
+        controller.onReceivedMessage.bind(controller),
     );
 
     integration.init();

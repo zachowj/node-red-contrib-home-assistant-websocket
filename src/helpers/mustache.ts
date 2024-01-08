@@ -36,7 +36,7 @@ class CustomContext extends Context {
         view: any,
         parentContext: CustomContext | undefined,
         nodeContext: NodeContext,
-        entities: HassEntities
+        entities: HassEntities,
     ) {
         super(view, parentContext);
         this.#nodeContext = nodeContext;
@@ -63,7 +63,7 @@ class CustomContext extends Context {
                 // try state entities
                 // version 0.10.3 changed from states.domain.entity to entity.d.e
                 const match = /^(?:states|entity)\.(\w+\.\w+)(?:\.(.+))?/.exec(
-                    name
+                    name,
                 );
                 if (match) {
                     const entityId = match[1];
@@ -92,7 +92,7 @@ export function renderTemplate(
     message: NodeMessage,
     nodeContext: NodeContext,
     entities: HassEntities,
-    altTags = false
+    altTags = false,
 ): string {
     if (
         str &&
@@ -103,7 +103,7 @@ export function renderTemplate(
             str,
             new CustomContext(message, undefined, nodeContext, entities),
             undefined,
-            altTags === true ? ['<%', '%>'] : undefined
+            altTags === true ? ['<%', '%>'] : undefined,
         );
     }
 
@@ -113,7 +113,7 @@ export function renderTemplate(
 export function generateRenderTemplate(
     message: NodeMessage,
     context: NodeContext,
-    states: HassEntities
+    states: HassEntities,
 ) {
     return (template: string, altTags = false) =>
         renderTemplate(template, message, context, states, altTags);

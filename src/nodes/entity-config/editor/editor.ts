@@ -57,7 +57,7 @@ const EntityConfigEditor: EditorNodeDef<EntityConfigEditorNodeProperties> = {
                 if ($('#node-config-input-entityType').val() === 'select') {
                     const properties = v as unknown as HaConfig[];
                     const options = properties.find(
-                        (c) => c.property === 'options'
+                        (c) => c.property === 'options',
                     );
                     if (
                         !options ||
@@ -99,10 +99,10 @@ const EntityConfigEditor: EditorNodeDef<EntityConfigEditorNodeProperties> = {
                     const id = $this.attr('id');
                     if (id && $this.hasClass('ha-optional-row')) {
                         $this.toggle(
-                            rows[value]?.includes(id.replace(/-row$/, ''))
+                            rows[value]?.includes(id.replace(/-row$/, '')),
                         );
                     }
-                }
+                },
             );
 
             const mergedOptions: HaConfigOption[] = [
@@ -121,12 +121,12 @@ const EntityConfigEditor: EditorNodeDef<EntityConfigEditorNodeProperties> = {
                 $('#ha-config-device_class').on('change', function () {
                     const val =
                         self.haConfig.find(
-                            (c) => c.property === 'unit_of_measurement'
+                            (c) => c.property === 'unit_of_measurement',
                         )?.value ?? '';
 
                     const values =
                         mergedOptions.find(
-                            (i) => i.id === 'unit_of_measurement'
+                            (i) => i.id === 'unit_of_measurement',
                         )?.values ?? [];
 
                     $('#ha-config-unit_of_measurement')
@@ -136,7 +136,7 @@ const EntityConfigEditor: EditorNodeDef<EntityConfigEditorNodeProperties> = {
                                 id: 'unit_of_measurement',
                                 type: 'unit_of_measurement',
                                 values,
-                            })
+                            }),
                         );
                 });
             }

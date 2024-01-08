@@ -21,7 +21,7 @@ async function hasDockerEnv() {
 async function hasDockerCGroup() {
     try {
         return (await fs.readFile('/proc/self/cgroup', 'utf8')).includes(
-            'docker'
+            'docker',
         );
     } catch {
         return false;
@@ -99,7 +99,7 @@ async function getAddonVersion(): Promise<string> {
                 headers: {
                     Authorization: `Bearer ${process.env.SUPERVISOR_TOKEN}`,
                 },
-            }
+            },
         );
         addonVersionCached = response.data.version;
         return addonVersionCached;

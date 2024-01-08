@@ -11,11 +11,11 @@ export function initSidebar() {
     // The html content of the sidebar has been specified below as a data-template, from where it can be loaded:
     const content = $(
         // @ts-expect-error - DefinitelyTyped is wrong
-        $('script[data-template-name="ha_sidebar"]').i18n().html()
+        $('script[data-template-name="ha_sidebar"]').i18n().html(),
     );
     const toolbar = $(
         // @ts-expect-error - DefinitelyTyped is wrong
-        $('script[data-template-name="ha_sidebar_toolbar"]').i18n().html()
+        $('script[data-template-name="ha_sidebar_toolbar"]').i18n().html(),
     );
 
     initStacks(content);

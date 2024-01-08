@@ -45,7 +45,7 @@ export interface EventsStateNode extends BaseNode {
 
 export default function eventsStateNode(
     this: EventsStateNode,
-    config: EventsStateNodeProperties
+    config: EventsStateNodeProperties,
 ) {
     RED.nodes.createNode(this, config);
 
@@ -53,7 +53,7 @@ export default function eventsStateNode(
 
     if (!this.config?.entityId) {
         const error = new ConfigError(
-            'server-state-changed.error.entity_id_required'
+            'server-state-changed.error.entity_id_required',
         );
         this.status({
             fill: StatusColor.Red,
@@ -66,7 +66,7 @@ export default function eventsStateNode(
     const serverConfigNode = getServerConfigNode(this.config.server);
     const homeAssistant = getHomeAssistant(serverConfigNode);
     const exposeAsConfigNode = getExposeAsConfigNode(
-        this.config.exposeAsEntityConfig
+        this.config.exposeAsEntityConfig,
     );
     const clientEvents = new ClientEvents({
         node: this,
@@ -82,7 +82,7 @@ export default function eventsStateNode(
     clientEvents.setStatus(status);
     const controllerDeps = createControllerDependencies(this, homeAssistant);
     const transformState = new TransformState(
-        serverConfigNode.config.ha_boolean
+        serverConfigNode.config.ha_boolean,
     );
     const comparatorService = new ComparatorService({
         nodeRedContextService: controllerDeps.nodeRedContextService,

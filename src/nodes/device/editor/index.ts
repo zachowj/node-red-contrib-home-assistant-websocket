@@ -266,7 +266,7 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
         const updateEvents = async (
             deviceId: string,
             selected?: string,
-            capabilities?: any
+            capabilities?: any,
         ) => {
             if (!deviceId) return;
             const data = await event.getEventList(deviceId);
@@ -285,14 +285,14 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
                 for (let index = 0; index < data.length; index++) {
                     const str = await localizeDeviceEvent(
                         deviceType,
-                        data[index]
+                        data[index],
                     );
                     options.push(new Option(str, index.toString()));
                 }
                 $event.append(options);
 
                 selectedIndex = data.findIndex((item) =>
-                    haUtils.compareObjects(selected, item)
+                    haUtils.compareObjects(selected, item),
                 );
                 selectedIndex = selectedIndex === -1 ? 0 : selectedIndex;
                 updateCapabilities(data[selectedIndex], capabilities);
@@ -302,7 +302,7 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
 
         const updateCapabilities = async (
             action: HassDeviceTrigger | HassDeviceAction,
-            capabilities?: HassDeviceCapabilities
+            capabilities?: HassDeviceCapabilities,
         ) => {
             clearDeviceExtras();
             const data = await event.getCapabilitiesList(action);
@@ -310,7 +310,7 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
                 $event.data('capabilities', data);
                 const html = deviceUI.createDeviceExtraFields(
                     data,
-                    capabilities
+                    capabilities,
                 );
                 $event.parent().after(html);
             }
@@ -318,7 +318,7 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
 
         const localizeDeviceEvent = async (
             eventType: string,
-            event: Record<string, any>
+            event: Record<string, any>,
         ) => {
             const translateKey = (type = 'type') =>
                 `component.${event.domain}.device_automation.${eventType}_${type}.${event[type]}`;
@@ -334,7 +334,7 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
 
                     const entity = haData.getEntity(
                         $server.val() as string,
-                        event.entity_id
+                        event.entity_id,
                     );
 
                     if (!entity) return '';

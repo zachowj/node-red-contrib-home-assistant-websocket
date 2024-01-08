@@ -66,7 +66,7 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
         } else {
             label = `${co.comparatorPropertyType.replace(
                 '_',
-                ' '
+                ' ',
             )} ${co.comparatorType.replace('_', '')} ${co.comparatorValue}`;
         }
         return label;
@@ -212,7 +212,7 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
             const $type = $container.find('.comparator-type');
             const $value = $container.find('.comparator-value');
             const $propertyValue = $container.find(
-                '.comparator-property-value'
+                '.comparator-property-value',
             );
 
             switch (val) {
@@ -240,7 +240,7 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
         const constraintListAddItem = (
             container: JQuery<HTMLElement>,
             index: number,
-            data: Constraint
+            data: Constraint,
         ) => {
             $('#constraint-template').children().clone().appendTo(container);
 
@@ -248,7 +248,7 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
                 source: (req: any, cb: (entities: string[]) => void) => {
                     const term = req.term.toLowerCase();
                     const filiteredEntities = availableEntities.filter(
-                        (entity) => entity.includes(term)
+                        (entity) => entity.includes(term),
                     );
                     cb(filiteredEntities);
                 },
@@ -263,7 +263,7 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
                             ? availablePropertiesPrefixed
                             : availableProperties;
                     const filiteredProps = props.filter((prop) =>
-                        prop.includes(term)
+                        prop.includes(term),
                     );
 
                     cb(filiteredProps);
@@ -321,7 +321,7 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
 
         $constraintList.editableList(
             'addItems',
-            this.constraints.length ? this.constraints : []
+            this.constraints.length ? this.constraints : [],
         );
 
         $outputList.on('change', '.message-type', function (e) {
@@ -335,7 +335,7 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
             const val = e.target.value as ComparatorPropertyType;
             const $container = $(this).parent().parent();
             const $comparatorPropertyValue = $container.find(
-                '.comparator-property-value'
+                '.comparator-property-value',
             );
             const $comparatorType = $container.find('.comparator-type');
             const $comparatorValue = $container.find('.comparator-value');
@@ -375,7 +375,7 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
                 const data = opt.condition;
                 if (!opt.hasOwnProperty('index')) {
                     opt._index = Math.floor(
-                        (0x99999 - 0x10000) * Math.random()
+                        (0x99999 - 0x10000) * Math.random(),
                     ).toString();
                 }
 
@@ -400,7 +400,7 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
                         const term = req.term.toLowerCase();
                         const props = availablePropertiesPrefixed;
                         const filiteredProps = props.filter((prop) =>
-                            prop.includes(term)
+                            prop.includes(term),
                         );
 
                         cb(filiteredProps);
@@ -462,7 +462,7 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
                 $comparatorValue.typedInput('value', data.comparatorValue);
                 $comparatorValue.typedInput(
                     'type',
-                    data.comparatorValueDataType
+                    data.comparatorValueDataType,
                 );
             },
             removeItem: function (opt) {
@@ -486,7 +486,7 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
             $outputList.editableList('addItem', {
                 condition: output,
                 index: index + 2,
-            })
+            }),
         );
     },
     oneditsave: function () {
@@ -509,7 +509,7 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
                     .find('.comparator-type')
                     .val() as ComparatorType,
                 comparatorValueDatatype: $comparatorValue.typedInput(
-                    'type'
+                    'type',
                 ) as TypedInputTypes,
                 comparatorValue: $comparatorValue.typedInput('value'),
             };
@@ -531,7 +531,7 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
                 messageType: $this.find('.message-type').val() as MessageType,
                 messageValue: $message.typedInput('value'),
                 messageValueType: $message.typedInput(
-                    'type'
+                    'type',
                 ) as TypedInputTypes,
                 comparatorPropertyType: $this
                     .find('.comparator-property-type')
@@ -544,7 +544,7 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
                     .val() as ComparatorType,
                 comparatorValue: $comparatorValue.typedInput('value'),
                 comparatorValueDataType: $comparatorValue.typedInput(
-                    'type'
+                    'type',
                 ) as TypedInputTypes,
             };
 
@@ -564,20 +564,20 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
         });
 
         $('#node-input-inputs').val(
-            $('#node-input-enableInput').is(':checked') ? 1 : 0
+            $('#node-input-enableInput').is(':checked') ? 1 : 0,
         );
 
         this.constraints = constraints;
         this.customOutputs = outputs;
         const entitySelector = $('#dialog-form').data(
-            'entitySelector'
+            'entitySelector',
         ) as EntitySelector;
         this.entityId = entitySelector.entityId;
         entitySelector.destroy();
     },
     oneditcancel: function () {
         const entitySelector = $('#dialog-form').data(
-            'entitySelector'
+            'entitySelector',
         ) as EntitySelector;
         entitySelector.destroy();
     },

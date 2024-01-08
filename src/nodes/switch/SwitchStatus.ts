@@ -23,7 +23,7 @@ export default class SwitchStatus extends Status<SwitchNode> {
 
         props.entityConfigEvents.addListener(
             NodeEvent.StateChanged,
-            this.onNodeStateChange.bind(this)
+            this.onNodeStateChange.bind(this),
         );
     }
 

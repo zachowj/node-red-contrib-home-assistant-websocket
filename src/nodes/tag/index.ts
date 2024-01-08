@@ -30,7 +30,7 @@ export default function tagNode(this: TagNode, config: TagNodeProperties) {
     const serverConfigNode = getServerConfigNode(this.config.server);
     const homeAssistant = getHomeAssistant(serverConfigNode);
     const exposeAsConfigNode = getExposeAsConfigNode(
-        this.config.exposeAsEntityConfig
+        this.config.exposeAsEntityConfig,
     );
     const clientEvents = new ClientEvents({
         node: this,
@@ -56,6 +56,6 @@ export default function tagNode(this: TagNode, config: TagNodeProperties) {
 
     clientEvents.addListener(
         `ha_events:${HaEvent.TagScanned}`,
-        controller.onTagScanned.bind(controller)
+        controller.onTagScanned.bind(controller),
     );
 }

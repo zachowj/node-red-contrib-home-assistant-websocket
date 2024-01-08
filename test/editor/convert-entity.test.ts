@@ -262,7 +262,7 @@ describe('convert-entity', function () {
             const data = { ...NODE_DATA, entityType: EntityType.Switch };
             convertEntityNode(data);
             expect(RED.nodes.import).to.have.been.calledWith(
-                EXPECTED_SWITCH_NODE
+                EXPECTED_SWITCH_NODE,
             );
         });
         it('should set outputOnStateChange to true', function () {

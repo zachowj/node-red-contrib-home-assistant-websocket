@@ -131,7 +131,7 @@ export default class Websocket {
 
         this.#eventBus.on(
             'ha_client:connecting',
-            this.onClientConnecting.bind(this)
+            this.onClientConnecting.bind(this),
         );
         this.onStatesLoadedAndRunning('initial_connection_ready');
     }
@@ -212,7 +212,7 @@ export default class Websocket {
                 RED._('home-assistant.error.ha_version_not_supported', {
                     version: this.client.haVersion,
                     min_version: HA_MIN_VERSION,
-                })
+                }),
             );
         }
     }
@@ -235,11 +235,11 @@ export default class Websocket {
         this.client.addEventListener('ready', this.onClientOpen.bind(this));
         this.client.addEventListener(
             'disconnected',
-            this.onClientClose.bind(this)
+            this.onClientClose.bind(this),
         );
         this.client.addEventListener(
             'reconnect-error',
-            this.onClientError.bind(this)
+            this.onClientError.bind(this),
         );
     }
 
@@ -287,10 +287,10 @@ export default class Websocket {
         // Home Assistant Events
         await this.client.subscribeEvents<HassEvent>(
             (evt) => this.#integrationEvent(evt),
-            HA_EVENT_INTEGRATION
+            HA_EVENT_INTEGRATION,
         );
         subscribeConfig(this.client, (config) =>
-            this.onClientConfigUpdate(config)
+            this.onClientConfigUpdate(config),
         );
         subscribeEntities(this.client, this.onClientStates.bind(this));
         subscribeServices(this.client, this.onClientServices.bind(this));
@@ -359,7 +359,7 @@ export default class Websocket {
             // subscribe to all event and save unsubscribe callback
             this.#unsubCallback.__ALL__ =
                 await this.client.subscribeEvents<HassEvent>((ent) =>
-                    this.onClientEvents(ent)
+                    this.onClientEvents(ent),
                 );
 
             this.#subscribedEvents.add('__ALL__');
@@ -371,10 +371,10 @@ export default class Websocket {
         currentEvents.add(HA_EVENT_TAG_SCANNED);
 
         const add = new Set(
-            [...currentEvents].filter((x) => !this.#subscribedEvents.has(x))
+            [...currentEvents].filter((x) => !this.#subscribedEvents.has(x)),
         );
         const remove = new Set(
-            [...this.#subscribedEvents].filter((x) => !currentEvents.has(x))
+            [...this.#subscribedEvents].filter((x) => !currentEvents.has(x)),
         );
 
         // Create new subscription list
@@ -394,7 +394,7 @@ export default class Websocket {
             this.#unsubCallback[type] =
                 await this.client.subscribeEvents<HassEvent>(
                     (ent) => this.onClientEvents(ent),
-                    type
+                    type,
                 );
         }
     }
@@ -402,12 +402,12 @@ export default class Websocket {
     subscribeMessage<Result>(
         callback: (result: Result) => void,
         subscribeMessage: MessageBase,
-        options: { resubscribe?: boolean }
+        options: { resubscribe?: boolean },
     ): Promise<SubscriptionUnsubscribe> {
         return this.client.subscribeMessage(
             callback,
             subscribeMessage,
-            options
+            options,
         );
     }
 
@@ -473,8 +473,8 @@ export default class Websocket {
             } else {
                 debug(
                     `Not processing ${HA_EVENT_STATE_CHANGED} event: ${JSON.stringify(
-                        event
-                    )}`
+                        event,
+                    )}`,
                 );
                 return;
             }
@@ -548,7 +548,7 @@ export default class Websocket {
             this.#stopHeartbeat = startHeartbeat(
                 this.client,
                 this.#config.heartbeatInterval,
-                this.#config.host
+                this.#config.host,
             );
         }
         this.#emitEvent('ha_client:open');
@@ -589,7 +589,7 @@ export default class Websocket {
     getAreas(areaId?: unknown): unknown {
         if (areaId) {
             return cloneDeep(
-                this.areas.find((area) => area.area_id === areaId)
+                this.areas.find((area) => area.area_id === areaId),
             );
         }
 
@@ -601,7 +601,7 @@ export default class Websocket {
     getDevices(deviceId?: unknown): unknown {
         if (deviceId) {
             return cloneDeep(
-                this.devices.find((device) => device.id === deviceId)
+                this.devices.find((device) => device.id === deviceId),
             );
         }
 
@@ -657,7 +657,7 @@ export default class Websocket {
     getEntities(entityId?: unknown): unknown {
         if (entityId) {
             return cloneDeep(
-                this.entities.find((entity) => entity.entity_id === entityId)
+                this.entities.find((entity) => entity.entity_id === entityId),
             );
         }
 
@@ -682,7 +682,7 @@ export default class Websocket {
 
     async getTranslations(
         category: string,
-        language: string
+        language: string,
     ): Promise<HassTranslations> {
         if (!this.isConnected || !category) return [];
 
@@ -699,7 +699,7 @@ export default class Websocket {
         domain: string,
         service: string,
         data?: { [key: string]: any },
-        target?: HassServiceTarget
+        target?: HassServiceTarget,
     ): Promise<Record<string, unknown>> {
         const services = this.getServices();
         const returnResponse = atLeastHaVersion(this.client.haVersion, 2023, 12)

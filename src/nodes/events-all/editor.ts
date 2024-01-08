@@ -95,7 +95,7 @@ const EventsAllEditor: EditorNodeDef<EventsAllEditorNodeProperties> = {
                 const type = ($(this).val() as string).trim();
                 $('#eventAlert').toggle(type.length === 0);
                 this.value = type;
-            }
+            },
         );
 
         haOutputs.createOutputs(this.outputProperties, {

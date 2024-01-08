@@ -41,7 +41,7 @@ export default class TimeEntityController extends InputOutputController<
             {
                 config: this.node.config,
                 value,
-            }
+            },
         );
 
         send(message);
@@ -61,7 +61,7 @@ export default class TimeEntityController extends InputOutputController<
         if (!this.integration?.isIntegrationLoaded) {
             throw new InputError(
                 'home-assistant.error.integration_not_loaded',
-                'home-assistant.status.error'
+                'home-assistant.status.error',
             );
         }
 
@@ -70,13 +70,13 @@ export default class TimeEntityController extends InputOutputController<
             parsedMessage.valueType.value,
             {
                 message,
-            }
+            },
         );
 
         if (this.#isValidValue(value) === false) {
             throw new InputError(
                 'ha-time-entity.error.invalid_format',
-                'home-assistant.status.error'
+                'home-assistant.status.error',
             );
         }
 
@@ -91,7 +91,7 @@ export default class TimeEntityController extends InputOutputController<
         this.#entityConfigNode?.emit(
             IntegrationEvent.ValueChange,
             value,
-            previousValue
+            previousValue,
         );
 
         await this.setCustomOutputs(
@@ -101,7 +101,7 @@ export default class TimeEntityController extends InputOutputController<
                 config: this.node.config,
                 value,
                 previousValue,
-            }
+            },
         );
         // inject value so colons are not removed
         this.status.setSuccess(['__value__', { value }]);
@@ -122,7 +122,7 @@ export default class TimeEntityController extends InputOutputController<
         } else {
             throw new InputError(
                 'ha-text.error.mode_not_supported',
-                'home-assistant.status.error'
+                'home-assistant.status.error',
             );
         }
     }
@@ -137,7 +137,7 @@ export default class TimeEntityController extends InputOutputController<
                 config: this.node.config,
                 value,
                 previousValue,
-            }
+            },
         );
 
         // inject value so colons are not removed

@@ -45,19 +45,19 @@ export default class ComparatorService {
             message?: NodeMessage;
             entity?: HassEntity | null;
             prevEntity?: HassEntity | null;
-        } = {}
+        } = {},
     ): Promise<boolean> {
         let cValue;
         if (isContextLocation(comparatorValueDataType)) {
             cValue = this.#nodeRedContextService.get(
                 comparatorValueDataType,
                 comparatorValue,
-                message
+                message,
             );
         } else if (['entity', 'prevEntity'].includes(comparatorValueDataType)) {
             cValue = selectn(
                 comparatorValue,
-                comparatorValueDataType === 'entity' ? entity : prevEntity
+                comparatorValueDataType === 'entity' ? entity : prevEntity,
             );
         } else if (
             comparatorType !== 'jsonata' &&
@@ -81,7 +81,7 @@ export default class ComparatorService {
 
             cValue = this.#transformState.transform(
                 comparatorValueDataType as TransformType,
-                comparatorValue
+                comparatorValue,
             );
         }
 
@@ -136,7 +136,7 @@ export default class ComparatorService {
                         message,
                         entity,
                         prevEntity,
-                    }
+                    },
                 );
 
                 return jsonataResult === true;

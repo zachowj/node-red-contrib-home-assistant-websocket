@@ -7,7 +7,7 @@ import { TriggerPayload } from '../integration/BidirectionalEntityIntegration';
 import OutputController from './OutputController';
 
 export default function ExposeAsMixin<
-    TBase extends GConstructor<OutputController>
+    TBase extends GConstructor<OutputController>,
 >(Base: TBase) {
     return class ExposeAsController extends Base {
         public exposeAsConfigEvents?: Events;
@@ -23,7 +23,7 @@ export default function ExposeAsMixin<
                 });
                 this.exposeAsConfigEvents.addListener(
                     HaEvent.AutomationTriggered,
-                    this.#onTriggered.bind(this)
+                    this.#onTriggered.bind(this),
                 );
             }
         }
@@ -71,7 +71,7 @@ export default function ExposeAsMixin<
                 payload = new Array(outputCount)
                     .fill(0)
                     .map((_, index) =>
-                        paths.includes(index + 1) ? data.message : null
+                        paths.includes(index + 1) ? data.message : null,
                     );
             }
 
@@ -86,7 +86,7 @@ export default function ExposeAsMixin<
         public enableExposeAs(enable = true) {
             this.exposeAsConfigNode?.integration.updateStateAndAttributes(
                 enable,
-                {}
+                {},
             );
             this.exposeAsConfigNode?.state.setEnabled(enable);
         }

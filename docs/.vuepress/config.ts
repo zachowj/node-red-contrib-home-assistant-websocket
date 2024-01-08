@@ -30,7 +30,7 @@ export default defineUserConfig({
             handleImportPath: (str) =>
                 str.replace(
                     /^@examples/,
-                    path.resolve(__dirname, '../../examples')
+                    path.resolve(__dirname, '../../examples'),
                 ),
         },
     },

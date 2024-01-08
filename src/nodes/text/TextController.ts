@@ -40,7 +40,7 @@ export default class TextController extends InputOutputController<
             {
                 config: this.node.config,
                 value,
-            }
+            },
         );
 
         send(message);
@@ -59,7 +59,7 @@ export default class TextController extends InputOutputController<
         if (!this.integration?.isIntegrationLoaded) {
             throw new InputError(
                 'home-assistant.error.integration_not_loaded',
-                'home-assistant.status.error'
+                'home-assistant.status.error',
             );
         }
 
@@ -68,13 +68,13 @@ export default class TextController extends InputOutputController<
             parsedMessage.valueType.value,
             {
                 message,
-            }
+            },
         );
 
         if (this.#isValidValue(value) === false) {
             throw new InputError(
                 'home-assistant.error.pattern_not_matched',
-                'home-assistant.status.error'
+                'home-assistant.status.error',
             );
         }
 
@@ -87,7 +87,7 @@ export default class TextController extends InputOutputController<
         this.#entityConfigNode?.emit(
             IntegrationEvent.ValueChange,
             value,
-            previousValue
+            previousValue,
         );
 
         await this.setCustomOutputs(
@@ -97,7 +97,7 @@ export default class TextController extends InputOutputController<
                 config: this.node.config,
                 value,
                 previousValue,
-            }
+            },
         );
         this.status.setSuccess(value);
         send(message);
@@ -117,14 +117,14 @@ export default class TextController extends InputOutputController<
         } else {
             throw new InputError(
                 'ha-text.error.mode_not_supported',
-                'home-assistant.status.error'
+                'home-assistant.status.error',
             );
         }
     }
 
     #isValidValue(text: string): boolean {
         const pattern = this.integration?.getEntityHomeAssistantConfigValue(
-            'pattern'
+            'pattern',
         ) as string;
 
         if (pattern) {
@@ -145,7 +145,7 @@ export default class TextController extends InputOutputController<
                 config: this.node.config,
                 value,
                 previousValue,
-            }
+            },
         );
         this.status.setSuccess(value);
         this.node.send(message);

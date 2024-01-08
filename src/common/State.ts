@@ -29,7 +29,7 @@ export default class State {
     async setEnabled(state: boolean) {
         this.#enabled = state;
         await Storage.saveNodeData(this.#node.id, 'isEnabled', state).catch(
-            this.#node.error
+            this.#node.error,
         );
         this.#emitChange();
     }
@@ -37,7 +37,7 @@ export default class State {
     async setLastPayload(payload: LastPayloadData) {
         this.#lastPayload = payload;
         await Storage.saveNodeData(this.#node.id, 'lastPayload', payload).catch(
-            this.#node.error
+            this.#node.error,
         );
         this.#emitChange();
     }

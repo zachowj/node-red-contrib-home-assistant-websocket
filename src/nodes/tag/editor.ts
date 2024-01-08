@@ -98,7 +98,7 @@ const TagEditor: EditorNodeDef<TagEditorNodeProperties> = {
                             value: TAGS_ALL,
                             selected: data === TAGS_ALL,
                         })
-                        .text(i18n('ha-tag.label.all_tags'))
+                        .text(i18n('ha-tag.label.all_tags')),
                 )
                 .appendTo(row);
             tags.forEach((tag) => {

@@ -14,7 +14,7 @@ export interface ExposedNodes {
 
 export default function configServerNode(
     this: ServerNode<Credentials>,
-    config: ServerNodeConfig
+    config: ServerNodeConfig,
 ) {
     RED.nodes.createNode(this, config);
     this.config = migrate(config);

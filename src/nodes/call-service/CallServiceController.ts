@@ -39,7 +39,7 @@ export default class CallServiceController extends InputOutputController<
         const render = generateRenderTemplate(
             message,
             this.node.context(),
-            states
+            states,
         );
         const domain = render(parsedMessage.domain.value);
         const service = render(parsedMessage.service.value);
@@ -48,7 +48,7 @@ export default class CallServiceController extends InputOutputController<
         const mergedData = await this.#mergeContextData(
             selectn('payload.data', message),
             message,
-            render
+            render,
         );
 
         const queueItem: QueueItem = {
@@ -81,7 +81,7 @@ export default class CallServiceController extends InputOutputController<
                     service,
                     target,
                     data: mergedData,
-                })}`
+                })}`,
             );
             this.status.setText(`${this.#queue.length} queued`);
             return;
@@ -144,7 +144,7 @@ export default class CallServiceController extends InputOutputController<
     async #mergeContextData(
         payload: Record<string, string> = {},
         message: NodeMessage,
-        render: (template: string, altTags?: boolean) => string
+        render: (template: string, altTags?: boolean) => string,
     ) {
         let configData: Record<string, unknown> = {};
         if (this.node.config.data.length) {
@@ -154,15 +154,15 @@ export default class CallServiceController extends InputOutputController<
                         this.node.config.data,
                         {
                             message,
-                        }
+                        },
                     );
                     break;
                 case TypedInputTypes.JSON:
                     configData = this.#parseJSON(
                         render(
                             this.node.config.data,
-                            this.node.config.mustacheAltTags
-                        )
+                            this.node.config.mustacheAltTags,
+                        ),
                     );
 
                     break;
@@ -198,7 +198,7 @@ export default class CallServiceController extends InputOutputController<
         const render = generateRenderTemplate(
             message,
             this.node.context(),
-            this.homeAssistant.websocket.getStates()
+            this.homeAssistant.websocket.getStates(),
         );
 
         const map: Record<string, string> = {
@@ -227,10 +227,10 @@ export default class CallServiceController extends InputOutputController<
                                       target,
                                       'env',
                                       this.node,
-                                      message
+                                      message,
                                   )
                                 : render(target);
-                        }
+                        },
                     );
                     // If prop has a length of 1 convert it to a string
                     if (configTarget[prop].length === 1) {
@@ -246,9 +246,9 @@ export default class CallServiceController extends InputOutputController<
                             acc.concat(
                                 curr.indexOf(',')
                                     ? curr.split(',').map((e) => e.trim())
-                                    : curr
+                                    : curr,
                             ),
-                        []
+                        [],
                     );
                 }
             }
@@ -256,7 +256,7 @@ export default class CallServiceController extends InputOutputController<
         const targets = merge(configTarget, payload);
         // remove undefined values
         Object.keys(targets).forEach(
-            (key) => targets[key] === undefined && delete targets[key]
+            (key) => targets[key] === undefined && delete targets[key],
         );
 
         return targets;
@@ -274,7 +274,7 @@ export default class CallServiceController extends InputOutputController<
             domain,
             service,
             data,
-            target
+            target,
         );
 
         this.status.setSuccess([
@@ -289,7 +289,7 @@ export default class CallServiceController extends InputOutputController<
                 config: this.node.config,
                 data,
                 results: response?.response,
-            }
+            },
         );
 
         send(message);

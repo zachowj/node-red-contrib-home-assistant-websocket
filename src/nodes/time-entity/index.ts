@@ -49,14 +49,14 @@ export const inputSchema: Joi.ObjectSchema = Joi.object({
             TypedInputTypes.Flow,
             TypedInputTypes.Global,
             TypedInputTypes.JSONata,
-            TypedInputTypes.String
+            TypedInputTypes.String,
         )
         .required(),
 });
 
 export default function timeEntityNode(
     this: TimeEntityNode,
-    config: TimeEntityNodeProperties
+    config: TimeEntityNodeProperties,
 ) {
     RED.nodes.createNode(this, config);
     this.config = migrate(config);
@@ -93,7 +93,7 @@ export default function timeEntityNode(
         entityConfigEvents.setStatus(status);
         entityConfigEvents.addListener(
             IntegrationEvent.ValueChange,
-            controller.onValueChange.bind(controller)
+            controller.onValueChange.bind(controller),
         );
     }
 }

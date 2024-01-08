@@ -91,7 +91,7 @@ const defaultInputSchema = Joi.object({
     entityId: Joi.alternatives().try(
         Joi.array().items(Joi.string()),
         Joi.string(),
-        Joi.object().instance(RegExp)
+        Joi.object().instance(RegExp),
     ),
     entityIdFilterType: Joi.string().valid(...Object.values(EntityFilterType)),
     property: Joi.string(),
@@ -131,7 +131,7 @@ export default function waitUntilNode(this: WaitUntilNode, config: NodeDef) {
     }
     const controllerDeps = createControllerDependencies(this, homeAssistant);
     const transformState = new TransformState(
-        serverConfigNode.config.ha_boolean
+        serverConfigNode.config.ha_boolean,
     );
     const comparatorService = new ComparatorService({
         nodeRedContextService: controllerDeps.nodeRedContextService,

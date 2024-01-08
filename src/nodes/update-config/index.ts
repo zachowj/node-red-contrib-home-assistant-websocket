@@ -51,7 +51,7 @@ const inputSchema: Joi.ObjectSchema = Joi.object({
 
 export default function UpdateConfig(
     this: UpdateConfigNode,
-    config: UpdateConfigNodeProperties
+    config: UpdateConfigNodeProperties,
 ) {
     RED.nodes.createNode(this, config);
 

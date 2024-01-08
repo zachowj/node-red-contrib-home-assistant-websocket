@@ -11,7 +11,7 @@ export function startListeners(
     controller: EventsStateController,
     homeAssistant: HomeAssistant,
     node: EventsStateNode,
-    status: Status
+    status: Status,
 ) {
     let eventTopic = `ha_events:state_changed`;
 
@@ -22,7 +22,7 @@ export function startListeners(
 
     clientEvents.addListener(
         eventTopic,
-        controller.onHaEventsStateChanged.bind(controller)
+        controller.onHaEventsStateChanged.bind(controller),
     );
 
     if (node.config.outputInitially) {
@@ -44,7 +44,7 @@ export function startListeners(
         } else {
             clientEvents.addListener(
                 'ha_client:initial_connection_ready',
-                generateStateChanges
+                generateStateChanges,
             );
         }
     }

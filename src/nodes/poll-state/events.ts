@@ -26,7 +26,7 @@ export async function startListeners({
     if (config.outputOnChanged) {
         clientEvents.addListener(
             `${HA_EVENTS}:${HaEvent.StateChanged}:${config.entityId}`,
-            controller.onTimer.bind(controller)
+            controller.onTimer.bind(controller),
         );
     }
 
@@ -40,7 +40,7 @@ export async function startListeners({
         } else {
             clientEvents.addListener(
                 'ha_client:initial_connection_ready',
-                controller.onTimer.bind(controller)
+                controller.onTimer.bind(controller),
             );
         }
     }
@@ -54,7 +54,7 @@ export async function startListeners({
     } else {
         clientEvents.addListener(
             HA_CLIENT_READY,
-            controller.onIntervalUpdate.bind(controller)
+            controller.onIntervalUpdate.bind(controller),
         );
     }
 
@@ -66,7 +66,7 @@ export async function startListeners({
         ids.forEach((id) => {
             clientEvents.addListener(
                 `${HA_EVENTS}:${HaEvent.StateChanged}:${id}`,
-                controller.onIntervalUpdate.bind(controller)
+                controller.onIntervalUpdate.bind(controller),
             );
         });
     }

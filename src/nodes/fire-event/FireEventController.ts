@@ -24,7 +24,7 @@ export default class FireEventController extends InputOutputController<
             parsedMessage.event.value,
             message,
             this.node.context(),
-            this.homeAssistant.websocket.getStates()
+            this.homeAssistant.websocket.getStates(),
         );
         let eventData: any;
         if (parsedMessage.data.value) {
@@ -33,7 +33,7 @@ export default class FireEventController extends InputOutputController<
                     parsedMessage.data.value,
                     {
                         message,
-                    }
+                    },
                 );
             } else {
                 const dataString = renderTemplate(
@@ -42,7 +42,7 @@ export default class FireEventController extends InputOutputController<
                         : parsedMessage.data.value,
                     message,
                     this.node.context(),
-                    this.homeAssistant.websocket.getStates()
+                    this.homeAssistant.websocket.getStates(),
                 );
                 try {
                     eventData = JSON.parse(dataString);

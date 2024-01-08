@@ -9,16 +9,16 @@ export function startListener(
     clientEvents: ClientEvents,
     controller: TimeController,
     homeAssistant: HomeAssistant,
-    node: TimeNode
+    node: TimeNode,
 ) {
     clientEvents.addListener(
         'ha_client:ready',
-        controller.onStateChanged.bind(controller)
+        controller.onStateChanged.bind(controller),
     );
 
     clientEvents.addListener(
         `ha_events:state_changed:${node.config.entityId}`,
-        controller.onStateChanged.bind(controller)
+        controller.onStateChanged.bind(controller),
     );
 
     if (
@@ -29,7 +29,7 @@ export function startListener(
         ids.forEach((id) => {
             clientEvents.addListener(
                 `ha_events:state_changed:${id}`,
-                controller.onStateChanged.bind(controller)
+                controller.onStateChanged.bind(controller),
             );
         });
     }

@@ -9,7 +9,7 @@ declare const Handlebars: typeof import('handlebars');
 
 const listTemplate = Handlebars.compile($('#handlebars-sidebar-list').html());
 const filterTemplate = Handlebars.compile(
-    $('#handlebars-sidebar-filter').html()
+    $('#handlebars-sidebar-filter').html(),
 );
 
 type ListData = {
@@ -80,7 +80,7 @@ export function refreshConfigs() {
                     '',
                     type,
                     $(this).parent().data('id'),
-                    ''
+                    '',
                 );
             })
             .on('click', '.ha-list-row-count', function (e) {

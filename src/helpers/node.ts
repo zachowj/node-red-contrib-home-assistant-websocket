@@ -46,7 +46,7 @@ export function getConfigNodes(node: EntityNode) {
     };
 
     const entityConfigNode = getNode<EntityConfigNode>(
-        node.config.entityConfig
+        node.config.entityConfig,
     ) as EntityConfigNode;
 
     if (!entityConfigNode) {
@@ -55,7 +55,7 @@ export function getConfigNodes(node: EntityNode) {
     }
 
     const serverConfigNode = getServerConfigNode(
-        entityConfigNode.config.server
+        entityConfigNode.config.server,
     );
 
     if (!serverConfigNode) {
@@ -72,7 +72,7 @@ export function getConfigNodes(node: EntityNode) {
 }
 
 export function getExposeAsConfigNode(
-    nodeId?: string
+    nodeId?: string,
 ): EntityConfigNode | undefined {
     return getNode<EntityConfigNode>(nodeId) as EntityConfigNode;
 }
@@ -88,7 +88,7 @@ function isConfigNode(node: BaseNode | EntityNode): boolean {
 export function debugToClient(
     node: BaseNode | EntityNode,
     message: any,
-    topic?: string
+    topic?: string,
 ) {
     if (!node.config.debugenabled && !node.config.debugEnabled) return;
 

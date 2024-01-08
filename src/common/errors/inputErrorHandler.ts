@@ -28,7 +28,7 @@ export function getErrorData(e: unknown) {
         e = new Error(
             RED._('home-assistant.error.unrecognized_error', {
                 error: JSON.stringify(e),
-            })
+            }),
         );
     }
 
@@ -45,7 +45,7 @@ export function inputErrorHandler(e: unknown, deps?: Dependencies) {
 export function setTimeoutWithErrorHandling(
     callback: (...args: any[]) => void,
     timeout: number,
-    deps?: Dependencies
+    deps?: Dependencies,
 ): NodeJS.Timeout {
     const timeoutId = setTimeout(() => {
         try {

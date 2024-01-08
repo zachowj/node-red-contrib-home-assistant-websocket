@@ -49,13 +49,13 @@ describe('Typed Input Service', function () {
                 TypedInputTypes.Message,
                 {
                     message,
-                }
+                },
             );
 
             expect(contextServiceStub.get).to.have.been.calledOnceWithExactly(
                 'msg',
                 'payload',
-                message
+                message,
             );
             expect(results).to.equal('bar');
         });
@@ -63,7 +63,7 @@ describe('Typed Input Service', function () {
             contextServiceStub.get.withArgs('flow', 'payload').returns('bar');
             const results = await typedInputService.getValue(
                 'payload',
-                TypedInputTypes.Flow
+                TypedInputTypes.Flow,
             );
 
             expect(results).to.equal('bar');
@@ -72,7 +72,7 @@ describe('Typed Input Service', function () {
             contextServiceStub.get.withArgs('global', 'payload').returns('bar');
             const results = await typedInputService.getValue(
                 'payload',
-                TypedInputTypes.Global
+                TypedInputTypes.Global,
             );
 
             expect(results).to.equal('bar');
@@ -81,21 +81,21 @@ describe('Typed Input Service', function () {
             it('should return true when type is set to bool and value "true"', async function () {
                 const results = await typedInputService.getValue(
                     'true',
-                    TypedInputTypes.Boolean
+                    TypedInputTypes.Boolean,
                 );
                 expect(results).to.be.true;
             });
             it('should return false when type is set to bool and value "false"', async function () {
                 const results = await typedInputService.getValue(
                     'false',
-                    TypedInputTypes.Boolean
+                    TypedInputTypes.Boolean,
                 );
                 expect(results).to.be.false;
             });
             it('should return false when type is set to bool and value is not "true"', async function () {
                 const results = await typedInputService.getValue(
                     'foo',
-                    TypedInputTypes.Boolean
+                    TypedInputTypes.Boolean,
                 );
                 expect(results).to.be.false;
             });
@@ -104,14 +104,14 @@ describe('Typed Input Service', function () {
             it('should return the value of the json property', async function () {
                 const results = await typedInputService.getValue(
                     '{"foo": "bar"}',
-                    TypedInputTypes.JSON
+                    TypedInputTypes.JSON,
                 );
                 expect(results).to.deep.equal({ foo: 'bar' });
             });
             it('should catch errors silently when parsing the json', async function () {
                 const results = await typedInputService.getValue(
                     '{"foo": "bar"',
-                    TypedInputTypes.JSON
+                    TypedInputTypes.JSON,
                 );
                 expect(results).to.be.undefined;
             });
@@ -120,7 +120,7 @@ describe('Typed Input Service', function () {
             const clock = sinon.useFakeTimers(Date.now());
             const results = await typedInputService.getValue(
                 '',
-                TypedInputTypes.Date
+                TypedInputTypes.Date,
             );
             expect(results).to.equal(clock.now);
             clock.restore();
@@ -128,21 +128,21 @@ describe('Typed Input Service', function () {
         it('should return a number', async function () {
             const results = await typedInputService.getValue(
                 '1',
-                TypedInputTypes.Number
+                TypedInputTypes.Number,
             );
             expect(results).to.equal(1);
         });
         it('should return undefined when type set to "none"', async function () {
             const results = await typedInputService.getValue(
                 '',
-                TypedInputTypes.None
+                TypedInputTypes.None,
             );
             expect(results).to.be.undefined;
         });
         it('should retun a string', async function () {
             const results = await typedInputService.getValue(
                 'foo',
-                TypedInputTypes.String
+                TypedInputTypes.String,
             );
             expect(results).to.equal('foo');
         });
@@ -150,7 +150,7 @@ describe('Typed Input Service', function () {
             it('should return undefined when value is empty', async function () {
                 const results = await typedInputService.getValue(
                     '',
-                    TypedInputTypes.JSONata
+                    TypedInputTypes.JSONata,
                 );
                 expect(results).to.be.undefined;
             });
@@ -168,11 +168,11 @@ describe('Typed Input Service', function () {
                 const results = await typedInputService.getValue(
                     'foo',
                     TypedInputTypes.JSONata,
-                    objs
+                    objs,
                 );
 
                 expect(
-                    jsonataServiceStub.evaluate
+                    jsonataServiceStub.evaluate,
                 ).to.have.been.calledOnceWithExactly('foo', objs);
                 expect(results).to.equal('bar');
             });
@@ -181,21 +181,21 @@ describe('Typed Input Service', function () {
             it('should return the id value of the config', async function () {
                 const results = await typedInputService.getValue(
                     'id',
-                    TypedInputTypes.Config
+                    TypedInputTypes.Config,
                 );
                 expect(results).to.equal('test');
             });
             it('should return the name value of the config', async function () {
                 const results = await typedInputService.getValue(
                     'name',
-                    TypedInputTypes.Config
+                    TypedInputTypes.Config,
                 );
                 expect(results).to.equal('test node');
             });
             it('should return the complete config when value is empty', async function () {
                 const results = await typedInputService.getValue(
                     '',
-                    TypedInputTypes.Config
+                    TypedInputTypes.Config,
                 );
                 expect(results).to.deep.equal({
                     id: 'test',
@@ -222,7 +222,7 @@ describe('Typed Input Service', function () {
                     const results = await typedInputService.getValue(
                         '',
                         prop,
-                        props
+                        props,
                     );
                     expect(results).to.equal(prop + '_value');
                 }

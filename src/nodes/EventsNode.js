@@ -40,7 +40,7 @@ class EventsNode extends BaseNode {
             [INTEGRATION_EVENT]: this.onHaIntegration,
         };
         Object.entries(events).forEach(([event, callback]) =>
-            this.addEventClientListener(event, callback.bind(this))
+            this.addEventClientListener(event, callback.bind(this)),
         );
     }
 
@@ -55,7 +55,7 @@ class EventsNode extends BaseNode {
                     this.node.error(err);
                 } else {
                     this.status.setFailed(
-                        this.RED._('home-assistant.status.error')
+                        this.RED._('home-assistant.status.error'),
                     );
                     this.node.error(err.message);
                 }

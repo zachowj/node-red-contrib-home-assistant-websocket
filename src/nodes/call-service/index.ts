@@ -68,7 +68,7 @@ const inputSchema: Joi.ObjectSchema = Joi.object({
 
 export default function callServiceNode(
     this: CallServiceNode,
-    config: CallServiceNodeProperties
+    config: CallServiceNodeProperties,
 ): void {
     RED.nodes.createNode(this, config);
 
@@ -111,7 +111,7 @@ export default function callServiceNode(
 
         clientEvents.addListener(
             ClientEvent.Ready,
-            controller.onClientReady.bind(controller)
+            controller.onClientReady.bind(controller),
         );
     }
 }

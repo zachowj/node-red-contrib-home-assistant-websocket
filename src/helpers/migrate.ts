@@ -68,7 +68,7 @@ type NodeTypeKey = keyof typeof nodeTypeTranslation;
 
 export function migrate(schema: any): any {
     const currentVersion = getCurrentVersion(
-        schema.type as unknown as NodeTypeKey
+        schema.type as unknown as NodeTypeKey,
     );
     if (schema.version !== undefined && schema.version >= currentVersion) {
         return schema;
@@ -76,7 +76,7 @@ export function migrate(schema: any): any {
 
     const currentMigration = findMigration(
         schema.type as unknown as NodeTypeKey,
-        schema.version
+        schema.version,
     )?.up;
 
     if (currentMigration) {
@@ -90,11 +90,11 @@ export function migrate(schema: any): any {
 
 function findMigration(
     nodeType: NodeTypeKey,
-    version = -1
+    version = -1,
 ): Migration | undefined {
     const migrations = getMigrationsByType(nodeType);
     const migration = migrations?.find(
-        (m) => m.version === Number(version) + 1
+        (m) => m.version === Number(version) + 1,
     );
 
     return migration;
@@ -114,7 +114,7 @@ export function getCurrentVersion(nodeType: NodeTypeKey): number {
 }
 
 export function isMigrationArray(
-    migrations: unknown
+    migrations: unknown,
 ): migrations is Migration[] {
     if (!Array.isArray(migrations)) {
         throw new Error('Migrations must be an array');

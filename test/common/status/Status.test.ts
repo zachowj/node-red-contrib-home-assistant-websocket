@@ -34,7 +34,7 @@ describe('Status', function () {
             status.set();
 
             expect(nodeStub.status).to.have.been.calledOnceWithExactly(
-                expectedStatus
+                expectedStatus,
             );
         });
     });
@@ -49,7 +49,7 @@ describe('Status', function () {
             status.setText(expectedStatus.text);
 
             expect(nodeStub.status).to.have.been.calledOnceWithExactly(
-                expectedStatus
+                expectedStatus,
             );
         });
     });

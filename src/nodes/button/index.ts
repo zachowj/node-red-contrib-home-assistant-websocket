@@ -22,7 +22,7 @@ export interface ButtonNode extends BaseNode {
 
 export default function buttonNode(
     this: ButtonNode,
-    config: EntityBaseNodeProperties
+    config: EntityBaseNodeProperties,
 ) {
     RED.nodes.createNode(this, config);
     this.config = migrate(config);
@@ -49,6 +49,6 @@ export default function buttonNode(
 
     entityConfigEvents.addListener(
         HaEvent.AutomationTriggered,
-        controller.onTrigger.bind(controller)
+        controller.onTrigger.bind(controller),
     );
 }

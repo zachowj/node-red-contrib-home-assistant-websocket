@@ -31,7 +31,7 @@ export const select2DefaultOptions: Options = {
         return $(
             `<div>${item.text}${
                 item.title ? `<p class="sublabel">${item.title}</p>` : ''
-            }</div>`
+            }</div>`,
         );
     },
     matcher: (params: any, data: any) => {
@@ -131,7 +131,7 @@ export const createCustomIdListByProperty = <T>(
     opts?: {
         property?: string;
         includeUnknownIds?: boolean;
-    }
+    },
 ) => {
     if (!ids) {
         return [];
@@ -155,12 +155,12 @@ export const createCustomIdListByProperty = <T>(
             }
             return acc;
         },
-        []
+        [],
     );
 };
 
 export const isSelect2Initialized = (
-    selector: JQuery<HTMLElement> | string
+    selector: JQuery<HTMLElement> | string,
 ): boolean => {
     const $selector = (
         isjQuery(selector) ? selector : $(selector as string)

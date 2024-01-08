@@ -71,7 +71,7 @@ export default class EventsAll extends ExposeAsController {
             {
                 config: this.node.config,
                 eventData: evt,
-            }
+            },
         );
 
         this.status.setSuccess(evt.event_type);

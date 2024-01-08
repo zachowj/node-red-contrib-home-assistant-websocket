@@ -169,7 +169,7 @@ export class EventsStatus extends Status {
 
         Object.entries(events).forEach(([event, callback]) => {
             this.#eventListeners.push(() =>
-                homeAssistant.removeListener(event, callback)
+                homeAssistant.removeListener(event, callback),
             );
             homeAssistant.addListener(event, callback.bind(this));
         });

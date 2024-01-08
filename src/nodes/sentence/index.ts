@@ -29,7 +29,7 @@ export interface SentenceNode extends BaseNode {
 
 export default function sentenceNode(
     this: SentenceNode,
-    config: SentenceNodeProperties
+    config: SentenceNodeProperties,
 ) {
     RED.nodes.createNode(this, config);
     this.config = migrate(config);
@@ -37,7 +37,7 @@ export default function sentenceNode(
     const serverConfigNode = getServerConfigNode(this.config.server);
     const homeAssistant = getHomeAssistant(serverConfigNode);
     const exposeAsConfigNode = getExposeAsConfigNode(
-        this.config.exposeAsEntityConfig
+        this.config.exposeAsEntityConfig,
     );
     const clientEvents = new ClientEvents({
         node: this,
@@ -69,7 +69,7 @@ export default function sentenceNode(
 
     nodeEvents.addListener(
         IntegrationEvent.Trigger,
-        controller.onReceivedMessage.bind(controller)
+        controller.onReceivedMessage.bind(controller),
     );
 
     integration.init();

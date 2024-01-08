@@ -40,7 +40,7 @@ export default class SelectController extends InputOutputController<
             {
                 config: this.node.config,
                 value,
-            }
+            },
         );
 
         send(message);
@@ -59,7 +59,7 @@ export default class SelectController extends InputOutputController<
         if (!this.integration?.isIntegrationLoaded) {
             throw new InputError(
                 'home-assistant.error.integration_not_loaded',
-                'home-assistant.status.error'
+                'home-assistant.status.error',
             );
         }
 
@@ -68,13 +68,13 @@ export default class SelectController extends InputOutputController<
             parsedMessage.valueType.value,
             {
                 message,
-            }
+            },
         );
 
         if (this.#isValidValue(value) === false) {
             throw new InputError(
                 'ha-select.error.invalid_value',
-                'home-assistant.status.error'
+                'home-assistant.status.error',
             );
         }
 
@@ -87,7 +87,7 @@ export default class SelectController extends InputOutputController<
         this.#entityConfigNode?.emit(
             IntegrationEvent.ValueChange,
             value,
-            previousValue
+            previousValue,
         );
 
         await this.setCustomOutputs(
@@ -97,7 +97,7 @@ export default class SelectController extends InputOutputController<
                 config: this.node.config,
                 value,
                 previousValue,
-            }
+            },
         );
         this.status.setSuccess(value);
         send(message);
@@ -117,7 +117,7 @@ export default class SelectController extends InputOutputController<
         } else {
             throw new InputError(
                 'ha-text.error.mode_not_supported',
-                'home-assistant.status.error'
+                'home-assistant.status.error',
             );
         }
     }
@@ -142,7 +142,7 @@ export default class SelectController extends InputOutputController<
                 config: this.node.config,
                 value,
                 previousValue,
-            }
+            },
         );
 
         this.status.setSuccess(value);

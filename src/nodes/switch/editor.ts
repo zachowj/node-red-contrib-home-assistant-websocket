@@ -81,7 +81,7 @@ const SwitchEditor: EditorNodeDef<SwitchEditorNodeProperties> = {
     oneditsave: function () {
         this.outputProperties = haOutputs.getOutputs();
         $('#node-input-inputs').val(
-            $('#node-input-enableInput').is(':checked') ? 1 : 0
+            $('#node-input-enableInput').is(':checked') ? 1 : 0,
         );
     },
 };

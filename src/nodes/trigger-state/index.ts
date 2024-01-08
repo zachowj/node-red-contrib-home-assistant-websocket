@@ -55,7 +55,7 @@ const enableSchema = Joi.object({
 
 export default function triggerState(
     this: TriggerStateNode,
-    config: TriggerStateProperties
+    config: TriggerStateProperties,
 ) {
     RED.nodes.createNode(this, config);
 
@@ -68,7 +68,7 @@ export default function triggerState(
     const serverConfigNode = getServerConfigNode(this.config.server);
     const homeAssistant = getHomeAssistant(serverConfigNode);
     const exposeAsConfigNode = getExposeAsConfigNode(
-        this.config.exposeAsEntityConfig
+        this.config.exposeAsEntityConfig,
     );
 
     const clientEvents = new ClientEvents({
@@ -106,7 +106,7 @@ export default function triggerState(
     exposeAsConfigNode?.integration.setStatus(status);
     const controllerDeps = createControllerDependencies(this, homeAssistant);
     const transformState = new TransformState(
-        serverConfigNode.config.ha_boolean
+        serverConfigNode.config.ha_boolean,
     );
     const comparatorService = new ComparatorService({
         nodeRedContextService: controllerDeps.nodeRedContextService,
@@ -133,12 +133,12 @@ export default function triggerState(
         controller.addOptionalInput(
             'enable',
             enableSchema,
-            controller.onInputEnabled.bind(controller)
+            controller.onInputEnabled.bind(controller),
         );
         controller.addOptionalInput(
             'testing',
             testingSchema,
-            controller.onInputTesting.bind(controller)
+            controller.onInputTesting.bind(controller),
         );
     }
 
@@ -154,7 +154,7 @@ export default function triggerState(
 
     clientEvents.addListener(
         eventTopic,
-        controller.onEntityStateChanged.bind(controller)
+        controller.onEntityStateChanged.bind(controller),
     );
 
     if (controller.isEnabled && this.config.outputInitially) {
@@ -174,7 +174,7 @@ export default function triggerState(
         } else {
             clientEvents.addListener(
                 'ha_client:initial_connection_ready',
-                generateStateChanges
+                generateStateChanges,
             );
         }
     }

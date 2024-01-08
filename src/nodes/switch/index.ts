@@ -36,7 +36,7 @@ const inputSchema: Joi.ObjectSchema = Joi.object();
 
 export default function switchNode(
     this: SwitchNode,
-    config: EntityBaseNodeProperties
+    config: EntityBaseNodeProperties,
 ) {
     RED.nodes.createNode(this, config);
     this.config = migrate(config);

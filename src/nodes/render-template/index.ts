@@ -52,20 +52,20 @@ const inputSchema: Joi.ObjectSchema = Joi.object({
     resultsLocationType: Joi.string().valid(
         TypedInputTypes.Message,
         TypedInputTypes.Flow,
-        TypedInputTypes.Global
+        TypedInputTypes.Global,
     ),
     templateLocation: Joi.string().empty(''),
     templateLocationType: Joi.string().valid(
         TypedInputTypes.Message,
         TypedInputTypes.Flow,
         TypedInputTypes.Global,
-        TypedInputTypes.None
+        TypedInputTypes.None,
     ),
 });
 
 export default function renderTemplateNode(
     this: RenderTemplateNode,
-    config: RenderTemplateNodeProperties
+    config: RenderTemplateNodeProperties,
 ): void {
     RED.nodes.createNode(this, config);
 

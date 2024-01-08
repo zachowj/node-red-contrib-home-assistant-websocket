@@ -115,7 +115,7 @@ export default class HomeAssistant {
     addListener(
         event: string,
         handler: { (): void },
-        options = { once: false }
+        options = { once: false },
     ): void {
         if (options.once === true) {
             this.eventBus.once(event, handler);

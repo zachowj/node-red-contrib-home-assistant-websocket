@@ -45,7 +45,7 @@ export class Storage {
             fs.accessSync(path, fs.constants.R_OK | fs.constants.W_OK);
         } catch (err) {
             throw new Error(
-                'Cannot read/write to storage file for Home Assistant nodes'
+                'Cannot read/write to storage file for Home Assistant nodes',
             );
         }
 
@@ -71,7 +71,7 @@ export class Storage {
     public async saveNodeData(
         nodeId: string,
         key: keyof NodeData,
-        value: boolean | LastPayloadData
+        value: boolean | LastPayloadData,
     ): Promise<void> {
         if (!this.#DB) {
             throw new Error('cannot save node data without a db');
@@ -85,14 +85,14 @@ export class Storage {
 
     public getNodeData(
         nodeId: string,
-        key?: 'lastPayload'
+        key?: 'lastPayload',
     ): LastPayloadData | undefined;
 
     public getNodeData(nodeId: string): NodeData;
 
     public getNodeData(
         nodeId: string,
-        key?: keyof NodeData
+        key?: keyof NodeData,
     ): boolean | LastPayloadData | NodeData | undefined {
         if (!this.#DB) {
             throw new Error('cannot get node data without a db');

@@ -46,7 +46,7 @@ export default class EventsStateController extends ExposeAsController {
         if (this.node.config.for === '') return 0;
         const timer = await this.typedInputService.getValue(
             this.node.config.for,
-            this.node.config.forType
+            this.node.config.forType,
         );
 
         if (isNaN(timer) || timer < 0) {
@@ -66,7 +66,7 @@ export default class EventsStateController extends ExposeAsController {
             !shouldIncludeEvent(
                 evt.entity_id,
                 this.node.config.entityId,
-                this.node.config.entityIdType
+                this.node.config.entityIdType,
             ) ||
             (this.node.config.ignorePrevStateNull && !evt.event.old_state) ||
             (this.node.config.ignorePrevStateUnknown &&
@@ -86,7 +86,7 @@ export default class EventsStateController extends ExposeAsController {
 
     public async onHaEventsStateChanged(
         evt: HassStateChangedEvent,
-        runAll = false
+        runAll = false,
     ) {
         if (
             this.isEnabled === false ||
@@ -106,14 +106,14 @@ export default class EventsStateController extends ExposeAsController {
             oldEntity.original_state = oldEntity.state as string;
             oldEntity.state = this.#transformState.transform(
                 this.node.config.stateType,
-                oldEntity.state as string
+                oldEntity.state as string,
             );
         }
         if (newEntity && this.node.config.stateType !== TransformType.String) {
             newEntity.original_state = newEntity.state as string;
             newEntity.state = this.#transformState.transform(
                 this.node.config.stateType,
-                newEntity.state as string
+                newEntity.state as string,
             );
         }
         const oldState = oldEntity ? oldEntity.state : undefined;
@@ -137,7 +137,7 @@ export default class EventsStateController extends ExposeAsController {
             {
                 entity: newEntity ?? undefined,
                 prevEntity: oldEntity ?? undefined,
-            }
+            },
         );
 
         // Track multiple entity ids
@@ -179,7 +179,7 @@ export default class EventsStateController extends ExposeAsController {
             active: true,
             timeoutId: setTimeout(
                 this.output.bind(this, eventMessage, isIfState),
-                timeout
+                timeout,
             ),
         };
     }
@@ -237,7 +237,7 @@ export default class EventsStateController extends ExposeAsController {
 
             this.onHaEventsStateChanged(
                 eventMessage as HassStateChangedEvent,
-                true
+                true,
             );
         }
     }

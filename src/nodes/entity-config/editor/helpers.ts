@@ -10,7 +10,7 @@ const localePath = `${packageName}ha-entity-config.data.label`;
 const createDate = (
     id: string,
     value: string,
-    data: { id: any; type?: any }
+    data: { id: any; type?: any },
 ) => {
     return $('<input />', {
         type: 'date',
@@ -24,14 +24,14 @@ const createDate = (
 const createDateTime = (
     id: string,
     value: string,
-    data: { id: any; type?: any }
+    data: { id: any; type?: any },
 ) => {
     // Convert ISO format date to local datetime
     const date = new Date(value);
     const pad = (n: number) => (n < 10 ? '0' + n : n);
     const dateString = value
         ? `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
-              date.getDate()
+              date.getDate(),
           )}T${pad(date.getHours())}:${pad(date.getMinutes())}`
         : '';
 
@@ -71,7 +71,7 @@ const createEditableList = (id: string, data: any[], defaults: any[]) => {
 const createInput = (
     id: string,
     value: string,
-    data: { id: any; type?: any }
+    data: { id: any; type?: any },
 ) => {
     return $('<input />', {
         type: 'text',
@@ -85,7 +85,7 @@ const createInput = (
 const createNumber = (
     id: string,
     value: string,
-    data: { id: any; type?: any }
+    data: { id: any; type?: any },
 ) => {
     return $('<input />', {
         type: 'number',
@@ -99,7 +99,7 @@ const createNumber = (
 const createSelect = (
     id: string,
     selectedValue: string,
-    data: { id: string; type?: any; values?: any }
+    data: { id: string; type?: any; values?: any },
 ) => {
     const $select = $('<select />', {
         name: 'value',
@@ -121,7 +121,7 @@ const createSelect = (
 export const createUnitOfMeasurement = (
     id: string,
     selectedValue: string,
-    data: { id: string; type?: any; values?: any }
+    data: { id: string; type?: any; values?: any },
 ) => {
     const deviceClass = $('#ha-config-device_class').val() as string;
     const units = data.values[deviceClass];
@@ -149,7 +149,7 @@ export const createUnitOfMeasurement = (
 
 export const createRow = (
     value: any,
-    data: { id: string; type: any; values?: any }
+    data: { id: string; type: any; values?: any },
 ) => {
     const id = `ha-config-${data.id}`;
     const $row = $('<div />', {
@@ -195,7 +195,7 @@ type EntityTypeSelector = 'entityConfig' | 'exposeAsEntityConfig';
 
 export const saveEntityType = (
     type: EntityType,
-    selector: EntityTypeSelector = 'entityConfig'
+    selector: EntityTypeSelector = 'entityConfig',
 ) => {
     $(`#node-input-lookup-${selector}`).on('click', function () {
         if ($(`#node-input-${selector}`).val() === '_ADD_') {

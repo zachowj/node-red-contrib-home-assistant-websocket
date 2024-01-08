@@ -29,7 +29,7 @@ export function versionCheck() {
 // This is used when nodes are opened in the editor from sources other than the workspace
 // e.g. search results, configuration list
 export function versionCheckOnEditPrepare(
-    node: EditorNodeInstance<HassNodeProperties>
+    node: EditorNodeInstance<HassNodeProperties>,
 ) {
     if (!isHomeAssistantNode(node) || isCurrentVersion(node)) return;
 
@@ -144,9 +144,9 @@ function capitalizeNodeType(type: string) {
         .reduce(
             (acc: string[], cur, index) =>
                 acc.concat(
-                    `${index ? cur[0].toUpperCase() : cur[0]}${cur.slice(1)}`
+                    `${index ? cur[0].toUpperCase() : cur[0]}${cur.slice(1)}`,
                 ),
-            []
+            [],
         )
         .join('');
 
@@ -156,7 +156,7 @@ function capitalizeNodeType(type: string) {
 export function isCurrentVersion(node: EditorNodeInstance<HassNodeProperties>) {
     const currentVersion = RED.settings.get<number>(
         capitalizeNodeType(node.type as unknown as string),
-        -1
+        -1,
     );
 
     // coonfig nodes don't have default vaules set yet at this point
@@ -170,16 +170,16 @@ export function isCurrentVersion(node: EditorNodeInstance<HassNodeProperties>) {
 }
 
 export function isHomeAssistantNode(
-    node: EditorNodeInstance<HassNodeProperties>
+    node: EditorNodeInstance<HassNodeProperties>,
 ) {
     const nodeSet = RED.nodes.registry.getNodeSetForType(
-        node.type as unknown as string
+        node.type as unknown as string,
     ) as { module?: string } | undefined;
     return nodeSet?.module === 'node-red-contrib-home-assistant-websocket';
 }
 
 function isHomeAssistantConfigNode(
-    node: EditorNodeInstance<HassNodeProperties>
+    node: EditorNodeInstance<HassNodeProperties>,
 ) {
     return (
         node?.type &&
@@ -239,10 +239,10 @@ function createElements() {
         `<div id="ha-dialog-confirm" title="${title}">
             ${message}
             <div class="ui-state-error ha-alert-box"><strong>${attention}:</strong> ${warning}</div>
-        </div>`
+        </div>`,
     );
     const $buttonHtml = $.parseHTML(
-        `<li><button id="upgrade-ha-node"><i class="fa fa-refresh"></i> ${buttonLabel}</button></li>`
+        `<li><button id="upgrade-ha-node"><i class="fa fa-refresh"></i> ${buttonLabel}</button></li>`,
     );
     $('body').append($dialogHtml);
     $('#red-ui-header .red-ui-header-toolbar').prepend($buttonHtml);

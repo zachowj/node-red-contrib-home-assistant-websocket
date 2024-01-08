@@ -127,7 +127,7 @@ const ZoneEditor: EditorNodeDef<ZoneEditorNodeProperties> = {
         entityList.each(function () {
             const val = ($(this).find('.input-entity').val() as string).replace(
                 /\s/g,
-                ''
+                '',
             );
             if (val.length) {
                 entities.add(val);
@@ -136,7 +136,7 @@ const ZoneEditor: EditorNodeDef<ZoneEditorNodeProperties> = {
         zoneList.each(function () {
             const val = ($(this).find('.input-zone').val() as string).replace(
                 /\s/g,
-                ''
+                '',
             );
             if (val.length) {
                 zones.add(val);

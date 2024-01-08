@@ -59,7 +59,7 @@ export function createOutputs(
     {
         element = customOutputElement,
         extraTypes = [],
-    }: { element?: string; extraTypes?: string[] } = {}
+    }: { element?: string; extraTypes?: string[] } = {},
 ) {
     $outputs = $(element);
     _extraTypes = extraTypes;
@@ -70,7 +70,7 @@ export function createOutputs(
         sortable: true,
         height: 'auto',
         header: $('<div>').append(
-            i18n('home-assistant.label.output_properties')
+            i18n('home-assistant.label.output_properties'),
         ),
         addItem: function (container, _, data: OutputProperty) {
             container.css({

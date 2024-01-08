@@ -33,7 +33,7 @@ function getServerId(): string | undefined {
     let selectedServer: string = $('#node-input-server').val() as string;
     if (isEntityNode()) {
         const entity: Record<string, any> = RED.nodes.node(
-            $('#node-input-entityConfig').val() as string
+            $('#node-input-entityConfig').val() as string,
         ) as Record<string, any>;
         selectedServer = entity?.server;
     }
@@ -156,7 +156,7 @@ function renderEventNode() {
     })
         .on('change', function () {
             $('#haConfigRow').toggle(
-                $('#node-input-exposeToHomeAssistant').is(':checked') === true
+                $('#node-input-exposeToHomeAssistant').is(':checked') === true,
             );
         })
         .appendTo($row);

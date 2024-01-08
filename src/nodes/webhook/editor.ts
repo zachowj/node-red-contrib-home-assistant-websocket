@@ -34,7 +34,7 @@ function generateId(length: number) {
 
     return Array.from(
         { length },
-        () => possible[Math.floor(Math.random() * possible.length)]
+        () => possible[Math.floor(Math.random() * possible.length)],
     ).join('');
 }
 
@@ -122,7 +122,7 @@ const WebhookEditor: EditorNodeDef<WebhookEditorNodeProperties> = {
         $('[id^=node-input-method_]')
             .on('change', function () {
                 const isMethodSelected = $('[id^=node-input-method_]').is(
-                    ':checked'
+                    ':checked',
                 );
                 if (!isMethodSelected) {
                     $(this).closest('div').addClass('input-error');

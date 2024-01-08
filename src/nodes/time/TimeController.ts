@@ -51,7 +51,7 @@ export default class TimeController extends ExposeAsController {
             throw new ConfigError(
                 str === 'unavailable'
                     ? 'ha-time.status.unavailable'
-                    : 'ha-time.status.invalid_property'
+                    : 'ha-time.status.invalid_property',
             );
         }
     }
@@ -72,7 +72,7 @@ export default class TimeController extends ExposeAsController {
 
     #getEntity() {
         return this.homeAssistant.websocket.getStates(
-            this.node.config.entityId
+            this.node.config.entityId,
         );
     }
 
@@ -83,7 +83,7 @@ export default class TimeController extends ExposeAsController {
         }
         const offsetMs = getTimeInMilliseconds(
             Number(offset),
-            this.node.config.offsetUnits
+            this.node.config.offsetUnits,
         );
 
         if (isNaN(offsetMs)) {
@@ -148,7 +148,7 @@ export default class TimeController extends ExposeAsController {
             const sentTime = this.#formatDate(now);
             // convert luxon to date
             const nextTime = this.#formatDate(
-                this.#cronjob?.nextDate().toJSDate()
+                this.#cronjob?.nextDate().toJSDate(),
             );
             this.status.setSuccess([
                 'ha-time.status.sent_and_next',
@@ -187,7 +187,7 @@ export default class TimeController extends ExposeAsController {
             if (!isValidDate(dateString)) {
                 throw new ConfigError(
                     ['ha-time.error.invalid_date', { date: dateString }],
-                    'ha-time.status.invalid_date'
+                    'ha-time.status.invalid_date',
                 );
             }
             crontab = new Date(dateString);
@@ -215,7 +215,7 @@ export default class TimeController extends ExposeAsController {
             this.node.warn(
                 RED._('ha-time.error.in_the_past', {
                     date: dateString,
-                })
+                }),
             );
             this.status.setFailed('ha-time.status.in_the_past');
             return;

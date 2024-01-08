@@ -27,7 +27,7 @@ export default class TypedInputService {
     async getValue(
         value: string,
         valueType: TypedInputTypes,
-        props: Record<string, any> = {}
+        props: Record<string, any> = {},
     ) {
         let val;
         switch (valueType) {
@@ -75,7 +75,7 @@ export default class TypedInputService {
                 val = cloneDeep(
                     value.length
                         ? selectn(value, this.#nodeConfig)
-                        : this.#nodeConfig
+                        : this.#nodeConfig,
                 );
                 break;
             }

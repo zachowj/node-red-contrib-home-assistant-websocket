@@ -27,7 +27,7 @@ interface BidirectionalIntegrationConstructor<T extends BaseNode>
 }
 
 export default abstract class BidirectionalIntegration<
-    T extends BaseNode
+    T extends BaseNode,
 > extends Integration {
     #unsubscribe?: SubscriptionUnsubscribe;
 
@@ -44,7 +44,7 @@ export default abstract class BidirectionalIntegration<
         if (!this.isIntegrationLoaded) {
             this.node.error(this.notInstalledMessage);
             this.status.forEach((status) =>
-                status.setFailed('home-assistant.status.error')
+                status.setFailed('home-assistant.status.error'),
             );
             return;
         }
@@ -60,11 +60,11 @@ export default abstract class BidirectionalIntegration<
                 await this.homeAssistant.websocket.subscribeMessage(
                     this.onReceivedMessage.bind(this),
                     payload,
-                    { resubscribe: false }
+                    { resubscribe: false },
                 );
         } catch (err) {
             this.status.forEach((status) =>
-                status.setFailed('home-assistant.status.error_registering')
+                status.setFailed('home-assistant.status.error_registering'),
             );
             const message =
                 err instanceof Error || isHomeAssistantApiError(err)
@@ -72,14 +72,14 @@ export default abstract class BidirectionalIntegration<
                     : err;
             this.node.error(
                 `Error registering entity. Error Message: ${JSON.stringify(
-                    message
-                )}`
+                    message,
+                )}`,
             );
             return;
         }
 
-        this.status.forEach((status) =>
-            status?.setSuccess('home-assistant.status.registered')
+        this.status.forEach(
+            (status) => status?.setSuccess('home-assistant.status.registered'),
         );
         this.registered = true;
     }

@@ -9,7 +9,7 @@ export function setupDiagnosticButton() {
     $('#home-assistant-diagnostics-button').on('click', function (e) {
         e.preventDefault();
         const fetchingData = i18n(
-            'home-assistant.sidebar.diagnostics.fetching_data'
+            'home-assistant.sidebar.diagnostics.fetching_data',
         );
         const dialog = $(`
             <div id="home-assistant-diagnostics-dialog">
@@ -44,12 +44,12 @@ export function setupDiagnosticButton() {
                     click: function () {
                         // copy the text to the clipboard
                         const ele = document.getElementById(
-                            'home-assistant-diagnostics-textarea'
+                            'home-assistant-diagnostics-textarea',
                         ) as HTMLInputElement;
                         clipboard(ele.value);
 
                         RED.notify(
-                            i18n('home-assistant.sidebar.diagnostics.copied')
+                            i18n('home-assistant.sidebar.diagnostics.copied'),
                         );
                         $(this).dialog('close');
                     },

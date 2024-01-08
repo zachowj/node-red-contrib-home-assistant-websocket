@@ -33,7 +33,7 @@ describe('JSONata Service', function () {
         const evaluateJSONataExpressionFake = (
             expr: Expression,
             msg: NodeMessage,
-            callback: (err: Error | null, result: any) => void
+            callback: (err: Error | null, result: any) => void,
         ) => callback(null, expr.evaluate(msg));
 
         NodeApiStub.util.prepareJSONataExpression = sinon
@@ -110,7 +110,7 @@ describe('JSONata Service', function () {
                     `$entity().state`,
                     {
                         entity: { entiy_id: 'light.kitchen', state: 'on' },
-                    }
+                    },
                 );
 
                 expect(result).to.equal('on');
@@ -121,7 +121,7 @@ describe('JSONata Service', function () {
                     `$entity().state = "on"`,
                     {
                         entity: { entiy_id: 'light.kitchen', state: 'on' },
-                    }
+                    },
                 );
 
                 expect(result).to.equal(true);
@@ -149,7 +149,7 @@ describe('JSONata Service', function () {
                     `$prevEntity().state`,
                     {
                         prevEntity: { entiy_id: 'light.kitchen', state: 'on' },
-                    }
+                    },
                 );
 
                 expect(result).to.equal('on');
@@ -160,7 +160,7 @@ describe('JSONata Service', function () {
                     `$prevEntity().state = "on"`,
                     {
                         prevEntity: { entiy_id: 'light.kitchen', state: 'on' },
-                    }
+                    },
                 );
 
                 expect(result).to.equal(true);
@@ -217,9 +217,8 @@ describe('JSONata Service', function () {
         describe('lodash functions', function () {
             describe('randomNumber()', function () {
                 it('should be able to call randomNumber', async function () {
-                    const result = await jsonataService.evaluate(
-                        `$randomNumber(5, 10)`
-                    );
+                    const result =
+                        await jsonataService.evaluate(`$randomNumber(5, 10)`);
                     expect(result).to.be.a('number');
                     expect(result).to.be.within(5, 10);
                 });
@@ -227,9 +226,8 @@ describe('JSONata Service', function () {
 
             describe('sampleSize', function () {
                 it('should get a single results 1-3', async function () {
-                    const result = await jsonataService.evaluate(
-                        `$sampleSize([1,2,3])`
-                    );
+                    const result =
+                        await jsonataService.evaluate(`$sampleSize([1,2,3])`);
 
                     expect(result).to.be.a('array');
                     expect(result).to.have.lengthOf(1);
@@ -238,7 +236,7 @@ describe('JSONata Service', function () {
                 });
                 it('should get two results 5-7', async function () {
                     const result = await jsonataService.evaluate(
-                        `$sampleSize([5,6,7], 2)`
+                        `$sampleSize([5,6,7], 2)`,
                     );
 
                     expect(result).to.be.a('array');
@@ -259,7 +257,7 @@ describe('JSONata Service', function () {
                 };
                 const result = await jsonataService.evaluate(
                     `$outputData()`,
-                    outputData
+                    outputData,
                 );
 
                 expect(result).to.deep.equal(outputData);
@@ -276,7 +274,7 @@ describe('JSONata Service', function () {
                 };
                 const result = await jsonataService.evaluate(
                     `$outputData()`,
-                    outputData
+                    outputData,
                 );
 
                 expect(result).to.deep.equal(expectedResults);
@@ -289,7 +287,7 @@ describe('JSONata Service', function () {
                 };
                 const result = await jsonataService.evaluate(
                     `$outputData().one`,
-                    outputData
+                    outputData,
                 );
 
                 expect(result).to.deep.equal(outputData.one);

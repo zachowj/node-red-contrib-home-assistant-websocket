@@ -168,7 +168,7 @@ const WaitUntilEditor: EditorNodeDef<WaitUntilEditorNodeProperties> = {
         const $filterType = $('#node-input-entityIdFilterType');
         $filterType.on('change', function () {
             $('.exact-only').toggle(
-                $filterType.val() === EntityFilterType.Exact
+                $filterType.val() === EntityFilterType.Exact,
             );
         });
         haOutputs.createOutputs(this.outputProperties, {
@@ -178,14 +178,14 @@ const WaitUntilEditor: EditorNodeDef<WaitUntilEditorNodeProperties> = {
     oneditsave: function () {
         this.outputProperties = haOutputs.getOutputs();
         const entitySelector = $('#dialog-form').data(
-            'entitySelector'
+            'entitySelector',
         ) as EntitySelector;
         this.entityId = entitySelector.entityId;
         entitySelector.destroy();
     },
     oneditcancel: function () {
         const entitySelector = $('#dialog-form').data(
-            'entitySelector'
+            'entitySelector',
         ) as EntitySelector;
         entitySelector.destroy();
     },

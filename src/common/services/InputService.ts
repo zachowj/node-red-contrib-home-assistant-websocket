@@ -67,7 +67,7 @@ export default class InputService<C extends NodeProperties> {
                     : [fieldConfig.messageProp];
                 const messageProp = props.reduce(
                     (val, cur) => val ?? selectn(cur, msg),
-                    undefined
+                    undefined,
                 );
 
                 result = {
@@ -81,7 +81,7 @@ export default class InputService<C extends NodeProperties> {
             if (result.value === undefined && fieldConfig.configProp) {
                 result.value = selectn(
                     fieldConfig.configProp,
-                    this.#nodeConfig
+                    this.#nodeConfig,
                 );
                 result.source = DataSource.Config;
             }
@@ -114,7 +114,7 @@ export default class InputService<C extends NodeProperties> {
     }
 
     #parsedMessageToSchemaObject(
-        parsedMessage: ParsedMessage
+        parsedMessage: ParsedMessage,
     ): Record<string, any> {
         const schemaObject: Record<string, any> = {};
         for (const [key, value] of Object.entries(parsedMessage)) {

@@ -49,14 +49,14 @@ export const inputSchema: Joi.ObjectSchema = Joi.object({
             TypedInputTypes.Flow,
             TypedInputTypes.Global,
             TypedInputTypes.JSONata,
-            TypedInputTypes.Number
+            TypedInputTypes.Number,
         )
         .required(),
 });
 
 export default function numberNode(
     this: NumberNode,
-    config: NumberNodeProperties
+    config: NumberNodeProperties,
 ) {
     RED.nodes.createNode(this, config);
     this.config = migrate(config);
@@ -92,7 +92,7 @@ export default function numberNode(
         entityConfigEvents.setStatus(status);
         entityConfigEvents.addListener(
             IntegrationEvent.ValueChange,
-            controller.onValueChange.bind(controller)
+            controller.onValueChange.bind(controller),
         );
     }
 }

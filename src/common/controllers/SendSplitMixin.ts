@@ -6,13 +6,13 @@ import { NodeSend } from '../../types/nodes';
 import OutputController from './OutputController';
 
 export default function sendSplitMixin<
-    TBase extends GConstructor<OutputController>
+    TBase extends GConstructor<OutputController>,
 >(Base: TBase) {
     return class SendSplitController extends Base {
         protected sendSplit(
             message: Partial<NodeMessageInFlow>,
             data: any[],
-            send?: NodeSend
+            send?: NodeSend,
         ) {
             if (!send) {
                 send = this.node.send;

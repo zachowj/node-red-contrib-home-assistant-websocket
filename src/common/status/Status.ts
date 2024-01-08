@@ -48,7 +48,7 @@ export default class Status<T extends BaseNode = BaseNode> {
 
             exposeAsConfigEvents?.addListener(
                 HaEvent.StateChanged,
-                this.onStateChange.bind(this)
+                this.onStateChange.bind(this),
             );
         }
     }
@@ -102,7 +102,7 @@ export default class Status<T extends BaseNode = BaseNode> {
     }
 
     public setError(
-        text: i18nKeyandParams = 'home-assistant.status.error'
+        text: i18nKeyandParams = 'home-assistant.status.error',
     ): void {
         this.set({
             fill: StatusColor.Red,
@@ -112,7 +112,7 @@ export default class Status<T extends BaseNode = BaseNode> {
     }
 
     public setFailed(
-        text: i18nKeyandParams = 'home-assistant.status.failed'
+        text: i18nKeyandParams = 'home-assistant.status.failed',
     ): void {
         this.set({
             fill: StatusColor.Red,
@@ -122,7 +122,7 @@ export default class Status<T extends BaseNode = BaseNode> {
     }
 
     public setSending(
-        text: i18nKeyandParams = 'home-assistant.status.sending'
+        text: i18nKeyandParams = 'home-assistant.status.sending',
     ): void {
         this.set({
             fill: StatusColor.Yellow,
@@ -132,7 +132,7 @@ export default class Status<T extends BaseNode = BaseNode> {
     }
 
     public setSuccess(
-        text: i18nKeyandParams = 'home-assistant.status.success'
+        text: i18nKeyandParams = 'home-assistant.status.success',
     ): void {
         this.set({
             fill: StatusColor.Green,

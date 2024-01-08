@@ -136,7 +136,7 @@ const ConfigServerEditor: EditorNodeDef<
             'change',
             function (this: HTMLInputElement) {
                 $('#heartbeatIntervalRow').toggle(this.checked);
-            }
+            },
         );
 
         $('#node-config-input-statusHourCycle')
@@ -192,7 +192,7 @@ const ConfigServerEditor: EditorNodeDef<
 
             // Save the inverse of the checkbox
             this.rejectUnauthorizedCerts = !$(
-                '#accept_unauthorized_certs'
+                '#accept_unauthorized_certs',
             ).prop('checked');
             this.connectionDelay = false;
         }

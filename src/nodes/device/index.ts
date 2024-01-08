@@ -44,7 +44,7 @@ export interface DeviceNode extends BaseNode {
 
 export default function neviceNode(
     this: DeviceNode,
-    config: DeviceNodeProperties
+    config: DeviceNodeProperties,
 ) {
     RED.nodes.createNode(this, config);
 
@@ -82,7 +82,7 @@ export default function neviceNode(
                 emitter: homeAssistant.eventBus,
             });
             const exposeAsConfigNode = getExposeAsConfigNode(
-                this.config.exposeAsEntityConfig
+                this.config.exposeAsEntityConfig,
             );
             status = new EventsStatus({
                 clientEvents,
@@ -106,7 +106,7 @@ export default function neviceNode(
 
             nodeEvents.addListener(
                 IntegrationEvent.Trigger,
-                controller.onTrigger.bind(controller)
+                controller.onTrigger.bind(controller),
             );
 
             clientEvents.setStatus(status);

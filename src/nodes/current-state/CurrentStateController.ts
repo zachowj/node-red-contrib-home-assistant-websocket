@@ -48,16 +48,16 @@ export default class CurrentStateController extends InputOutputController<
             parsedMessage.entityId.value,
             message,
             this.node.context(),
-            this.#homeAssistant.websocket.getStates()
+            this.#homeAssistant.websocket.getStates(),
         );
 
         const entity = this.#homeAssistant.websocket.getStates(
-            entityId
+            entityId,
         ) as HassEntity;
         if (!entity) {
             throw new InputError(
                 `Entity could not be found in cache for entityId: ${entityId}`,
-                'not found'
+                'not found',
             );
         }
 
@@ -69,7 +69,7 @@ export default class CurrentStateController extends InputOutputController<
             entity.original_state = entity.state as string;
             entity.state = this.#transformState.transform(
                 this.node.config.state_type,
-                entity.state as string
+                entity.state as string,
             );
         }
 
@@ -81,7 +81,7 @@ export default class CurrentStateController extends InputOutputController<
             {
                 message,
                 entity,
-            }
+            },
         );
 
         if (this.#checkForDuration(isIfState)) {
@@ -99,7 +99,7 @@ export default class CurrentStateController extends InputOutputController<
                 entity,
                 entityState: entity.state,
                 triggerId: entityId,
-            }
+            },
         );
 
         if (this.node.config.halt_if && !isIfState) {
@@ -132,13 +132,13 @@ export default class CurrentStateController extends InputOutputController<
         const value = await this.typedInputService.getValue(
             this.node.config.for,
             this.node.config.forType,
-            { message }
+            { message },
         );
 
         if (isNaN(value) || value < 0) {
             throw new InputError(
                 `Invalid for value: ${value}`,
-                'home-assistant.status.error'
+                'home-assistant.status.error',
             );
         }
 

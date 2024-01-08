@@ -190,7 +190,7 @@ const GetEntitiesEditor: EditorNodeDef<GetEntitiesEditorNodeProperties> = {
                     $logicField.append(
                         $('<option></option>')
                             .val(operators[d].value)
-                            .text(operators[d].text)
+                            .text(operators[d].text),
                     );
                 }
 

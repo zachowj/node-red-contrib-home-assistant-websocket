@@ -30,7 +30,7 @@ export function hassAutocomplete({
         .autocomplete({
             source: (
                 request: { term: string },
-                response: (arg0: { value: any; label: any }[]) => void
+                response: (arg0: { value: any; label: any }[]) => void,
             ) => {
                 const term = request.term.toLowerCase();
                 const data = haData
@@ -48,11 +48,11 @@ export function hassAutocomplete({
         // @ts-ignore - DefinitelyTyped is missing this method
         .autocomplete('instance')._renderItem = (
         ul: JQuery,
-        item: { label: string; value: string }
+        item: { label: string; value: string },
     ) => {
         return $('<li>')
             .append(
-                `<div>${item.label}<p class="sublabel">${item.value}</p></div>`
+                `<div>${item.label}<p class="sublabel">${item.value}</p></div>`,
             )
             .appendTo(ul);
     };

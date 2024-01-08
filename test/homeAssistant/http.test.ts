@@ -43,12 +43,12 @@ describe('HTTP API', function () {
 
             nock(CREDS.host)
                 .get(
-                    `/api/history/period/${data.timestamp}?filter_entity_id=${data.filterEntityId}`
+                    `/api/history/period/${data.timestamp}?filter_entity_id=${data.filterEntityId}`,
                 )
                 .reply(200, []);
             const response = await httpApi.getHistory(
                 data.timestamp,
-                data.filterEntityId
+                data.filterEntityId,
             );
 
             expect(response).to.eql([]);
@@ -65,7 +65,7 @@ describe('HTTP API', function () {
             const response = await httpApi.getHistory(
                 null,
                 null,
-                data.endTimestamp
+                data.endTimestamp,
             );
 
             expect(response).to.eql([]);

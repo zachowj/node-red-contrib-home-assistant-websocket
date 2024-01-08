@@ -11,7 +11,7 @@ export interface NodeMessage extends NodeMessageBase {
 }
 
 export type NodeSend = (
-    msg: NodeMessage | Array<NodeMessage | NodeMessage[] | null>
+    msg: NodeMessage | Array<NodeMessage | NodeMessage[] | null>,
 ) => void;
 export type NodeDone = (err?: Error) => void;
 

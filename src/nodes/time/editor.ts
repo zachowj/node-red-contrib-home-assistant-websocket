@@ -125,7 +125,7 @@ const TimeEditor: EditorNodeDef<TimeEditorNodeProperties> = {
             source: (request: any, response: any) => {
                 const properties = haData.getProperties(
                     $server.val() as string,
-                    $entityId.val() as string
+                    $entityId.val() as string,
                 );
                 response($.ui.autocomplete.filter(properties, request.term));
             },

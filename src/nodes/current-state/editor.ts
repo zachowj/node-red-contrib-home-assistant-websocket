@@ -95,7 +95,7 @@ const CurrentStateEditor: EditorNodeDef<CurrentStateEditorNodeProperties> = {
             '#node-input-halt_if',
             '#node-input-halt_if_type',
             '#node-input-halt_if_compare',
-            'currentState'
+            'currentState',
         );
 
         $('#node-input-halt_if_compare').on(
@@ -108,7 +108,7 @@ const CurrentStateEditor: EditorNodeDef<CurrentStateEditorNodeProperties> = {
                     'does_not_include',
                 ].includes(this.value);
                 $('#for-row').toggle(show);
-            }
+            },
         );
 
         $('#node-input-for').typedInput({

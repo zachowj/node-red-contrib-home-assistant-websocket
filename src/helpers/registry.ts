@@ -10,7 +10,7 @@ export function getAreaNameByEntityId(
     entityId: string,
     areas: HassAreas,
     devices: HassDevices,
-    entities: HassEntityRegistryEntry[]
+    entities: HassEntityRegistryEntry[],
 ) {
     const areaId = getAreaIdByEntityId(entityId, areas, devices, entities);
     return getAreaNameByAreaId(areaId, areas);
@@ -31,7 +31,7 @@ function getAreaIdByEntityId(
     entityId: string,
     areas: HassAreas,
     devices: HassDevices,
-    entities: HassEntityRegistryEntry[]
+    entities: HassEntityRegistryEntry[],
 ) {
     const entity = getEntityById(entityId, entities);
 
@@ -56,7 +56,7 @@ function getAreaIdByEntityId(
 function getDeviceByEntityId(
     entityId: string,
     devices: HassDevices,
-    entities: HassEntityRegistryEntry[]
+    entities: HassEntityRegistryEntry[],
 ) {
     const entity = getEntityById(entityId, entities);
 
@@ -72,7 +72,7 @@ function getDeviceByEntityId(
 
 function getEntityById(
     entityId: string,
-    entities: HassEntityRegistryEntry[]
+    entities: HassEntityRegistryEntry[],
 ): HassEntityRegistryEntry | null {
     if (entityId && entities) {
         return entities.find((e) => e.entity_id === entityId) ?? null;

@@ -69,7 +69,7 @@ export interface TriggerStateControllerConstructor
 }
 
 const ExposeAsController = ExposeAsMixin(
-    InputOutputController<TriggerStateNode, TriggerStateProperties>
+    InputOutputController<TriggerStateNode, TriggerStateProperties>,
 );
 export default class TriggerStateController extends ExposeAsController {
     #comparatorService: ComparatorService;
@@ -93,7 +93,7 @@ export default class TriggerStateController extends ExposeAsController {
 
     async #getConstraintComparatorResults(
         constraints: Constraint[],
-        eventMessage: HassStateChangedEvent
+        eventMessage: HassStateChangedEvent,
     ) {
         const comparatorResults: ComparatorResult[] = [];
 
@@ -107,11 +107,11 @@ export default class TriggerStateController extends ExposeAsController {
             } = constraint;
             const constraintTarget = this.#getConstraintTargetData(
                 constraint,
-                eventMessage.event
+                eventMessage.event,
             );
             const actualValue = selectn(
                 constraint.propertyValue,
-                constraintTarget.state
+                constraintTarget.state,
             );
             const comparatorResult =
                 await this.#comparatorService.getComparatorResult(
@@ -122,11 +122,11 @@ export default class TriggerStateController extends ExposeAsController {
                     {
                         entity: eventMessage.event.new_state,
                         prevEntity: eventMessage.event.old_state,
-                    }
+                    },
                 );
             if (comparatorResult === false) {
                 this.debugToClient(
-                    `constraint comparator: failed entity "${constraintTarget.entityId}" property "${propertyValue}" with value ${actualValue} failed "${comparatorType}" check against (${comparatorValueDatatype}) ${comparatorValue}`
+                    `constraint comparator: failed entity "${constraintTarget.entityId}" property "${propertyValue}" with value ${actualValue} failed "${comparatorType}" check against (${comparatorValueDatatype}) ${comparatorValue}`,
                 );
             }
 
@@ -138,7 +138,7 @@ export default class TriggerStateController extends ExposeAsController {
             });
         }
         const failedComparators = comparatorResults.filter(
-            (res) => !res.comparatorResult
+            (res) => !res.comparatorResult,
         );
         return {
             all: comparatorResults,
@@ -148,7 +148,7 @@ export default class TriggerStateController extends ExposeAsController {
 
     #getConstraintTargetData(
         constraint: Constraint,
-        triggerEvent: TriggerEvent
+        triggerEvent: TriggerEvent,
     ) {
         const isTargetThisEntity =
             constraint.targetType === TargetType.ThisEntity;
@@ -179,7 +179,7 @@ export default class TriggerStateController extends ExposeAsController {
                 entity_id: entityId,
                 old_state: null,
                 new_state: this.homeAssistant.websocket.getStates(
-                    entityId
+                    entityId,
                 ) as HassEntity,
             };
         }
@@ -189,43 +189,50 @@ export default class TriggerStateController extends ExposeAsController {
 
     async #getCustomOutputsComparatorResults(
         outputs: CustomOutput[],
-        eventMessage: HassStateChangedEvent
+        eventMessage: HassStateChangedEvent,
     ): Promise<CustomOutputsComparatorResult[]> {
-        return outputs.reduce(async (acc, output) => {
-            const result: CustomOutputsComparatorResult = {
-                output,
-                comparatorMatched: true,
-                actualValue: null,
-                message: null,
-            };
+        return outputs.reduce(
+            async (acc, output) => {
+                const result: CustomOutputsComparatorResult = {
+                    output,
+                    comparatorMatched: true,
+                    actualValue: null,
+                    message: null,
+                };
 
-            if (
-                output.comparatorPropertyType !== ComparatorPropertyType.Always
-            ) {
-                result.actualValue = selectn(
-                    output.comparatorPropertyValue,
-                    eventMessage.event
-                );
-                result.comparatorMatched =
-                    await this.#comparatorService.getComparatorResult(
-                        output.comparatorType,
-                        output.comparatorValue,
-                        result.actualValue,
-                        output.comparatorValueDataType,
-                        {
-                            entity: eventMessage.event.new_state,
-                            prevEntity: eventMessage.event.old_state,
-                        }
+                if (
+                    output.comparatorPropertyType !==
+                    ComparatorPropertyType.Always
+                ) {
+                    result.actualValue = selectn(
+                        output.comparatorPropertyValue,
+                        eventMessage.event,
                     );
-            }
-            result.message = await this.#getOutputMessage(result, eventMessage);
-            return [...(await acc), result];
-        }, Promise.resolve([]) as Promise<CustomOutputsComparatorResult[]>);
+                    result.comparatorMatched =
+                        await this.#comparatorService.getComparatorResult(
+                            output.comparatorType,
+                            output.comparatorValue,
+                            result.actualValue,
+                            output.comparatorValueDataType,
+                            {
+                                entity: eventMessage.event.new_state,
+                                prevEntity: eventMessage.event.old_state,
+                            },
+                        );
+                }
+                result.message = await this.#getOutputMessage(
+                    result,
+                    eventMessage,
+                );
+                return [...(await acc), result];
+            },
+            Promise.resolve([]) as Promise<CustomOutputsComparatorResult[]>,
+        );
     }
 
     #getDefaultMessageOutputs(
         comparatorResults: any,
-        eventMessage: HassStateChangedEvent
+        eventMessage: HassStateChangedEvent,
     ) {
         const { entity_id: entityId, event } = eventMessage;
 
@@ -238,7 +245,7 @@ export default class TriggerStateController extends ExposeAsController {
 
         if (comparatorResults.failed.length) {
             this.debugToClient(
-                'constraint comparator: one or more comparators failed to match constraints, message will send on the failed output'
+                'constraint comparator: one or more comparators failed to match constraints, message will send on the failed output',
             );
 
             msg.failedComparators = comparatorResults.failed;
@@ -255,12 +262,12 @@ export default class TriggerStateController extends ExposeAsController {
             comparatorMatched,
             actualValue,
         }: CustomOutputsComparatorResult,
-        eventMessage: HassStateChangedEvent
+        eventMessage: HassStateChangedEvent,
     ): Promise<Record<string, unknown> | null> {
         // If comparator did not match
         if (!comparatorMatched) {
             this.debugToClient(
-                `output comparator failed: property "${output.comparatorPropertyValue}" with value ${actualValue} failed "${output.comparatorType}" check against (${output.comparatorValueDataType}) ${output.comparatorValue}`
+                `output comparator failed: property "${output.comparatorPropertyValue}" with value ${actualValue} failed "${output.comparatorType}" check against (${output.comparatorValueDataType}) ${output.comparatorValue}`,
             );
             return null;
         }
@@ -282,7 +289,7 @@ export default class TriggerStateController extends ExposeAsController {
                     output.messageValue,
                     eventMessage.event as NodeMessage,
                     this.node.context(),
-                    this.homeAssistant.websocket.getStates()
+                    this.homeAssistant.websocket.getStates(),
                 );
             }
 
@@ -291,13 +298,13 @@ export default class TriggerStateController extends ExposeAsController {
                 output.messageValueType,
                 {
                     eventData: eventMessage,
-                }
+                },
             );
 
             if (output.messageType === MessageType.Custom) {
                 if (!isRecord(payload)) {
                     throw new ConfigError(
-                        'trigger-state.error.custom_output_message_needs_to_be_object'
+                        'trigger-state.error.custom_output_message_needs_to_be_object',
                     );
                 }
                 message = payload;
@@ -351,7 +358,7 @@ export default class TriggerStateController extends ExposeAsController {
             !shouldIncludeEvent(
                 eventMessage.entity_id,
                 this.node.config.entityId,
-                this.node.config.entityIdType
+                this.node.config.entityIdType,
             )
         ) {
             return;
@@ -366,7 +373,7 @@ export default class TriggerStateController extends ExposeAsController {
                 .old_state.state as string;
             eventMessage.event.old_state.state = this.#transformState.transform(
                 this.node.config.stateType,
-                eventMessage.event.old_state.state as string
+                eventMessage.event.old_state.state as string,
             );
         }
         if (
@@ -377,7 +384,7 @@ export default class TriggerStateController extends ExposeAsController {
                 .new_state.state as string;
             eventMessage.event.new_state.state = this.#transformState.transform(
                 this.node.config.stateType,
-                eventMessage.event.new_state.state as string
+                eventMessage.event.new_state.state as string,
             );
         }
 
@@ -388,13 +395,13 @@ export default class TriggerStateController extends ExposeAsController {
         const constraintComparatorResults =
             await this.#getConstraintComparatorResults(
                 this.node.config.constraints,
-                eventMessage
+                eventMessage,
             );
 
         let outputs: (DefaultMessage | Record<string, unknown> | null)[] =
             this.#getDefaultMessageOutputs(
                 constraintComparatorResults,
-                eventMessage
+                eventMessage,
             );
 
         const stateString = eventMessage.event.new_state.state.toString();
@@ -418,10 +425,10 @@ export default class TriggerStateController extends ExposeAsController {
         const customOutputsComparatorResults =
             await this.#getCustomOutputsComparatorResults(
                 this.node.config.customOutputs,
-                eventMessage
+                eventMessage,
             );
         const customOutputMessages = customOutputsComparatorResults.map(
-            (r) => r.message
+            (r) => r.message,
         );
 
         outputs = outputs.concat(customOutputMessages);

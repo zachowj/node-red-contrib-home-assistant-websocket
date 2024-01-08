@@ -72,7 +72,7 @@ export default class WaitUntil extends InputOutputController<
         this.addOptionalInput(
             'reset',
             resetSchema,
-            this.#onResetInput.bind(this)
+            this.#onResetInput.bind(this),
         );
     }
 
@@ -97,7 +97,7 @@ export default class WaitUntil extends InputOutputController<
             !shouldIncludeEvent(
                 event.entity_id,
                 this.#savedConfig.entityId,
-                this.#savedConfig.entityIdFilterType
+                this.#savedConfig.entityIdFilterType,
             )
         ) {
             return;
@@ -111,7 +111,7 @@ export default class WaitUntil extends InputOutputController<
             {
                 message: this.#savedMessage,
                 entity: event.new_state,
-            }
+            },
         );
 
         if (!result) {
@@ -132,7 +132,7 @@ export default class WaitUntil extends InputOutputController<
             {
                 entity: event.new_state,
                 config: this.node.config,
-            }
+            },
         );
 
         send([this.#savedMessage, null]);
@@ -170,7 +170,7 @@ export default class WaitUntil extends InputOutputController<
                 parsedMessage.entityId.value,
                 message,
                 this.node.context(),
-                this.#homeAssistant.websocket.getStates()
+                this.#homeAssistant.websocket.getStates(),
             );
         }
 
@@ -185,7 +185,7 @@ export default class WaitUntil extends InputOutputController<
                 parsedMessage.timeout.value,
                 {
                     message,
-                }
+                },
             );
             config.timeout = timeout.toString();
         }
@@ -194,7 +194,7 @@ export default class WaitUntil extends InputOutputController<
         if (isNaN(timeout) || timeout < 0) {
             throw new InputError(
                 `Invalid value for 'timeout': ${timeout}`,
-                'homassistant.error.error'
+                'homassistant.error.error',
             );
         }
 
@@ -206,7 +206,7 @@ export default class WaitUntil extends InputOutputController<
         }`;
         this.#clientEvents.addListener(
             eventTopic,
-            this.#onEntityChange.bind(this)
+            this.#onEntityChange.bind(this),
         );
 
         this.#savedMessage = message;
@@ -222,8 +222,8 @@ export default class WaitUntil extends InputOutputController<
                     const state = Object.assign(
                         {},
                         this.#homeAssistant.websocket.getStates(
-                            config.entityId
-                        ) as HassEntity
+                            config.entityId,
+                        ) as HassEntity,
                     );
 
                     state.timeSinceChangedMs =
@@ -235,7 +235,7 @@ export default class WaitUntil extends InputOutputController<
                         {
                             entity: state,
                             config: this.node.config,
-                        }
+                        },
                     );
 
                     this.#active = false;
@@ -244,7 +244,7 @@ export default class WaitUntil extends InputOutputController<
                     done();
                 },
                 timeout,
-                { done, status: this.status }
+                { done, status: this.status },
             );
         }
         this.status.setText(statusText);
@@ -256,13 +256,13 @@ export default class WaitUntil extends InputOutputController<
             config.entityIdFilterType === EntityFilterType.Exact
         ) {
             const currentState = this.#homeAssistant.websocket.getStates(
-                config.entityId
+                config.entityId,
             );
 
             if (!currentState) {
                 throw new InputError(
                     `Entity (${config.entityId}) could not be found in cache`,
-                    'not found'
+                    'not found',
                 );
             }
 

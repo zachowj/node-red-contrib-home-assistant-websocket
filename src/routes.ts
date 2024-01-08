@@ -22,7 +22,7 @@ function disableCache(req: Request, res: Response, next: NextFunction): void {
         res.setHeader('Surrogate-Control', 'no-store');
         res.setHeader(
             'Cache-Control',
-            'no-store, no-cache, must-revalidate, proxy-revalidate'
+            'no-store, no-cache, must-revalidate, proxy-revalidate',
         );
         res.setHeader('Pragma', 'no-cache');
         res.setHeader('Expires', '0');
@@ -34,7 +34,7 @@ function disableCache(req: Request, res: Response, next: NextFunction): void {
 function checkHomeAssistant(
     req: CustomRequest,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
 ): void {
     try {
         const node = getServerConfigNode(req.params.serverId);
@@ -50,18 +50,17 @@ function checkHomeAssistant(
 
 async function getDeviceActions(
     req: CustomRequest,
-    res: Response
+    res: Response,
 ): Promise<void> {
     const deviceId = req.query.deviceId?.toString();
-    const actions = await req?.homeAssistant?.websocket.getDeviceActions(
-        deviceId
-    );
+    const actions =
+        await req?.homeAssistant?.websocket.getDeviceActions(deviceId);
     res.json(actions ?? []);
 }
 
 async function getDeviceActionCapabilities(
     req: CustomRequest,
-    res: Response
+    res: Response,
 ): Promise<void> {
     const action = req.query.action as { [key: string]: any };
     const capabilities =
@@ -71,23 +70,22 @@ async function getDeviceActionCapabilities(
 
 async function getDeviceTriggers(
     req: CustomRequest,
-    res: Response
+    res: Response,
 ): Promise<void> {
     const deviceId = req.query.deviceId?.toString();
-    const triggers = await req?.homeAssistant?.websocket.getDeviceTriggers(
-        deviceId
-    );
+    const triggers =
+        await req?.homeAssistant?.websocket.getDeviceTriggers(deviceId);
     res.json(triggers ?? []);
 }
 
 async function getDeviceTriggerCapabilities(
     req: CustomRequest,
-    res: Response
+    res: Response,
 ): Promise<void> {
     const trigger = req.query.trigger as { [key: string]: any };
     const capabilities =
         await req?.homeAssistant?.websocket.getDeviceTriggerCapabilities(
-            trigger
+            trigger,
         );
     res.json(capabilities ?? []);
 }
@@ -113,7 +111,7 @@ function getEntitiesSelect2(req: CustomRequest, res: Response): void {
               return words.every(
                   (word) =>
                       friendlyName?.indexOf(word) !== -1 ||
-                      entity.entity_id?.indexOf(word) !== -1
+                      entity.entity_id?.indexOf(word) !== -1,
               );
           });
 
@@ -153,7 +151,7 @@ function getProperties(req: CustomRequest, res: Response): void {
     if (Array.isArray(entity)) {
         flat = Object.keys(flatten(entity)).filter(
             (e) =>
-                req?.query?.term && e.indexOf(req.query.term.toString()) !== -1
+                req?.query?.term && e.indexOf(req.query.term.toString()) !== -1,
         );
     } else {
         const entities = req.homeAssistant?.websocket.getStates();
@@ -162,11 +160,11 @@ function getProperties(req: CustomRequest, res: Response): void {
             return;
         }
         flat = Object.values(entities).map((entity) =>
-            Object.keys(flatten(entity))
+            Object.keys(flatten(entity)),
         );
     }
     const uniqProperties = Array.from(
-        new Set(([] as string[]).concat(...flat))
+        new Set(([] as string[]).concat(...flat)),
     );
     const sortedProperties = uniqProperties.sort((a, b) => {
         if (!a.includes('.') && b.includes('.')) return -1;
@@ -198,7 +196,7 @@ async function getTags(req: CustomRequest, res: Response): Promise<void> {
 
 async function getTranslations(
     req: CustomRequest,
-    res: Response
+    res: Response,
 ): Promise<void> {
     const category = req.query.cat?.toString();
     const language = req.query.lang?.toString() ?? 'en';
@@ -210,7 +208,7 @@ async function getTranslations(
 
     const results = await req?.homeAssistant?.websocket.getTranslations(
         category,
-        language
+        language,
     );
 
     res.json(results ?? []);
@@ -263,15 +261,15 @@ export function createRoutes(): void {
             RED.auth.needsPermission('server.read'),
             disableCache,
             checkHomeAssistant,
-            value
-        )
+            value,
+        ),
     );
 
     RED.httpAdmin.get(
         `/homeassistant/version/:serverId`,
         RED.auth.needsPermission('server.read'),
         checkHomeAssistant,
-        getIntegrationVersion
+        getIntegrationVersion,
     );
 
     RED.httpAdmin.get('/homeassistant/discover', findServers);
@@ -280,6 +278,6 @@ export function createRoutes(): void {
         RED.auth.needsPermission('server.read'),
         async (req: CustomRequest, res: Response) => {
             res.send(await getEnvironmentData());
-        }
+        },
     );
 }

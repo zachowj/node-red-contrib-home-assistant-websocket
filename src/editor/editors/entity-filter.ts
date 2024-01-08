@@ -14,7 +14,7 @@ declare global {
 const filterIds = (
     entities: HassEntity[],
     filter: string,
-    filterType: 'regex' | 'substring'
+    filterType: 'regex' | 'substring',
 ) => {
     let results: HassEntity[];
     if (filterType === 'regex') {
@@ -78,7 +78,7 @@ export const entityFilter = {
                     $body,
                     'dialog-form',
                     'ha_entity_filter',
-                    'node-red-contrib-home-assistant-websocket/all'
+                    'node-red-contrib-home-assistant-websocket/all',
                 );
                 tray.i18n();
                 $('#dialog-form').addClass('home-assistant');
@@ -90,7 +90,7 @@ export const entityFilter = {
                         const results = filterIds(
                             options.entities,
                             e.target.value,
-                            options.filterType
+                            options.filterType,
                         );
                         filterString = e.target.value;
                         $body.find('ul').html(buildResults(results));

@@ -37,7 +37,7 @@ export function hasCredentials(credentials: Credentials): boolean {
 }
 
 export function createHomeAssistantClient(
-    node: ServerNode<Credentials>
+    node: ServerNode<Credentials>,
 ): HomeAssistant {
     let homeAssistant = homeAssistantConnections.get(node.id);
 
@@ -70,7 +70,7 @@ export function createHomeAssistantClient(
         homeAssistant.subscribeEvents.bind(homeAssistant),
         {
             once: true,
-        }
+        },
     );
     // eslint-disable-next-line no-new
     new Comms(node.id, homeAssistant, clientEvents);
@@ -91,7 +91,7 @@ export function createHomeAssistantClient(
 
 function createCredentials(
     credentials: Credentials,
-    config: ServerNodeConfig
+    config: ServerNodeConfig,
 ): Credentials {
     let host;
     if (!credentials) {
@@ -123,7 +123,7 @@ function createCredentials(
 
 function createHttpConfig(
     credentials: Credentials,
-    config: ServerNodeConfig
+    config: ServerNodeConfig,
 ): HttpConfig {
     return {
         access_token: credentials.access_token,
@@ -137,7 +137,7 @@ function createWebsocketConfig(
     config: Partial<ServerNodeConfig> = {
         rejectUnauthorizedCerts: true,
         connectionDelay: true,
-    }
+    },
 ): WebsocketConfig {
     const connectionDelay =
         credentials.host !== SUPERVISOR_URL
@@ -182,7 +182,7 @@ function validateBaseUrl(baseUrl: string): string | void {
 }
 
 export function getHomeAssistant(
-    serverNode: ServerNode<Credentials>
+    serverNode: ServerNode<Credentials>,
 ): HomeAssistant {
     return (
         homeAssistantConnections.get(serverNode.id) ??

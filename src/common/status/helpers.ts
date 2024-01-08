@@ -2,7 +2,7 @@ import { DateTimeFormatOptions } from '../../types/DateTimeFormatOptions';
 import { ServerNodeConfig } from '../../types/nodes';
 
 export function getStatusOptions(
-    config: Partial<ServerNodeConfig>
+    config: Partial<ServerNodeConfig>,
 ): DateTimeFormatOptions {
     const options: DateTimeFormatOptions = {
         year: config?.statusYear === 'hidden' ? undefined : config?.statusYear,

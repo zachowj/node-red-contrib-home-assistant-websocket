@@ -11,13 +11,13 @@ export function startListeners(
     clientEvents: ClientEvents,
     controller: EventsAllController,
     homeAssistant: HomeAssistant,
-    node: EventsAllNode
+    node: EventsAllNode,
 ) {
     const config = node.config;
 
     clientEvents.addListener(
         `${HA_EVENTS}:${config.eventType || 'all'}`,
-        controller.onHaEventsAll.bind(controller)
+        controller.onHaEventsAll.bind(controller),
     );
 
     if (config.eventType === '' || config.eventType === HA_CLIENT) {

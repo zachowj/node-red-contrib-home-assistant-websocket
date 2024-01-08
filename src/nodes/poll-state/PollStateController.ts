@@ -39,7 +39,7 @@ export default class PollStateController extends ExposeAsController {
 
         const intervalMs = getTimeInMilliseconds(
             Number(interval),
-            this.node.config.updateIntervalUnits
+            this.node.config.updateIntervalUnits,
         );
         if (isNaN(intervalMs)) {
             throw new ConfigError([
@@ -68,7 +68,7 @@ export default class PollStateController extends ExposeAsController {
         }
 
         const entity = this.homeAssistant.websocket.getStates(
-            this.node.config.entityId
+            this.node.config.entityId,
         ) as HassEntity;
         if (!entity) {
             throw new ConfigError([
@@ -85,7 +85,7 @@ export default class PollStateController extends ExposeAsController {
             entity.original_state = entity.state as string;
             entity.state = this.#transformState.transform(
                 this.node.config.stateType as TransformType,
-                entity.state as string
+                entity.state as string,
             );
         }
 
@@ -96,7 +96,7 @@ export default class PollStateController extends ExposeAsController {
             this.node.config.ifStateType,
             {
                 entity,
-            }
+            },
         );
 
         const message: NodeMessage = {};
@@ -108,7 +108,7 @@ export default class PollStateController extends ExposeAsController {
                 entity,
                 entityState: entity.state,
                 triggerId: this.node.config.entityId,
-            }
+            },
         );
 
         const statusMessage = `${entity.state}`;

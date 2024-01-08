@@ -39,7 +39,7 @@ class Switch extends EntityNode {
                 payload = this.getTypedInputValue(
                     this.nodeConfig.outputPayload,
                     this.nodeConfig.outputPayloadType,
-                    { entity }
+                    { entity },
                 );
             } catch (e) {
                 this.status.setFailed('Error');

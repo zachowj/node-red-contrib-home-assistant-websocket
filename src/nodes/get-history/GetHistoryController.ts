@@ -12,7 +12,7 @@ import { GetHistoryNode, GetHistoryNodeProperties } from '.';
 import { EntityFilterType, OutputType } from './const';
 
 const SendSplitController = SendSplitMixin(
-    InputOutputController<GetHistoryNode, GetHistoryNodeProperties>
+    InputOutputController<GetHistoryNode, GetHistoryNodeProperties>,
 );
 export default class GetHistoryController extends SendSplitController {
     protected async onInput({
@@ -39,12 +39,12 @@ export default class GetHistoryController extends SendSplitController {
                 parsedMessage.entityId.value,
                 message,
                 this.node.context(),
-                this.homeAssistant.websocket.getStates()
+                this.homeAssistant.websocket.getStates(),
             );
         }
         if (parsedMessage.entityIdType.value === EntityFilterType.Regex) {
             const entities = Object.keys(
-                this.homeAssistant.websocket.getStates()
+                this.homeAssistant.websocket.getStates(),
             );
             const regex = new RegExp(entityId);
             entityId = entities
@@ -52,7 +52,7 @@ export default class GetHistoryController extends SendSplitController {
                 .join(',');
             if (!entityId) {
                 throw new InputError(
-                    'api-get-history.error.no_entity_ids_matched'
+                    'api-get-history.error.no_entity_ids_matched',
                 );
             }
         }
@@ -68,7 +68,7 @@ export default class GetHistoryController extends SendSplitController {
                 endDate = new Date();
             } catch (e) {
                 throw new InputError(
-                    'api-get-history.error.invalid_relative_time'
+                    'api-get-history.error.invalid_relative_time',
                 );
             }
         }
@@ -78,7 +78,7 @@ export default class GetHistoryController extends SendSplitController {
             isNaN(startDate.getTime()) ? '' : startDate.toISOString(),
             entityId,
             isNaN(endDate.getTime()) ? '' : endDate.toISOString(),
-            flatten
+            flatten,
         );
 
         switch (this.node.config.outputType) {
@@ -106,7 +106,7 @@ export default class GetHistoryController extends SendSplitController {
                     results,
                     this.node.config.outputLocationType,
                     this.node.config.outputLocation,
-                    message
+                    message,
                 );
                 send(message);
                 break;

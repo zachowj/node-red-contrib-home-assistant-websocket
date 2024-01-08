@@ -120,8 +120,8 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
                         Object.keys(services),
                         {
                             includeUnknownIds: true,
-                        }
-                    )
+                        },
+                    ),
                 );
             $domainField
                 .empty()
@@ -129,7 +129,7 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
                     createSelect2Options({
                         tags: Tags.Custom,
                         data: domains,
-                    })
+                    }),
                 )
                 .maximizeSelect2Height();
             if (!selectedId) {
@@ -150,8 +150,8 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
                       new Set(
                           Object.values(services)
                               .map((service) => Object.keys(service))
-                              .flat()
-                      )
+                              .flat(),
+                      ),
                   )
                 : Object.keys(services[domainNormalized]);
             const domainServices = filteredServices
@@ -167,8 +167,8 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
                         filteredServices,
                         {
                             includeUnknownIds: true,
-                        }
-                    )
+                        },
+                    ),
                 );
 
             $serviceField
@@ -177,7 +177,7 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
                     createSelect2Options({
                         data: domainServices,
                         tags: Tags.Custom,
-                    })
+                    }),
                 )
                 .maximizeSelect2Height();
             if (!service) {

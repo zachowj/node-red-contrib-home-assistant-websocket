@@ -71,7 +71,7 @@ export default class EntitySelector {
                     value: id,
                     text,
                     selected: true,
-                })
+                }),
             );
             return acc;
         }, []);
@@ -98,7 +98,7 @@ export default class EntitySelector {
             </a>`);
 
         $formRow.append(
-            $div.append([this.#$select, this.#$filter, this.#$filterButton])
+            $div.append([this.#$select, this.#$filter, this.#$filterButton]),
         );
         this.#$filterType.appendTo($div);
 
@@ -155,7 +155,7 @@ export default class EntitySelector {
                         endpoint: Select2AjaxEndpoints.Entities,
                         serverId: this.#serverId,
                     },
-                })
+                }),
             )
             .maximizeSelect2Height();
         if (multiple) {

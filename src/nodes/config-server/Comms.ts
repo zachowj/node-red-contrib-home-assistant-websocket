@@ -28,7 +28,7 @@ export default class Comms {
     constructor(
         serverId: string,
         homeAssistant: HomeAssistant,
-        clientEvents: ClientEvents
+        clientEvents: ClientEvents,
     ) {
         this.#clientEvents = clientEvents;
         this.#homeAssistant = homeAssistant;
@@ -53,7 +53,7 @@ export default class Comms {
         RED.comms.publish(
             `homeassistant/${type}/${this.#serverId}`,
             data,
-            retain
+            retain,
         );
     }
 
@@ -87,7 +87,7 @@ export default class Comms {
                     deviceDomains[entity.device_id] = new Set<string>();
                 }
                 deviceDomains[entity.device_id].add(
-                    entity.entity_id.split('.')[0]
+                    entity.entity_id.split('.')[0],
                 );
             }
         });

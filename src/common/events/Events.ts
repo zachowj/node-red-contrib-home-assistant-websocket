@@ -50,7 +50,7 @@ export default class Events {
     public addListener(
         event: string | symbol,
         handler: EventHandler,
-        options = { once: false }
+        options = { once: false },
     ): void {
         const handlerWrapper = this.#errorHandler(handler);
 

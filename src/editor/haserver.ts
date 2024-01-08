@@ -27,7 +27,7 @@ function setDefault() {
 export function init(
     n: EditorNodeInstance<HassNodeProperties>,
     server: string,
-    onChange?: (serverId: string) => void
+    onChange?: (serverId: string) => void,
 ) {
     $server = $(server);
     node = n;
@@ -85,7 +85,7 @@ function getItems(type: string, callback: (items: any) => void) {
 export function getJSON(
     callback: (results: any) => void,
     type: string,
-    { params = {} }
+    { params = {} },
 ) {
     let url = `homeassistant/${type}/${$server.val()}`;
     if (!$.isEmptyObject(params)) {
@@ -141,7 +141,7 @@ export const getTargetDomains = (): HassTargetDomains => {
 
 export const getUiSettings = () => {
     const node = RED.nodes.node(
-        serverId
+        serverId,
     ) as EditorNodeInstance<ConfigServerEditorNodeProperties>;
 
     return {

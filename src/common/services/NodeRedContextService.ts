@@ -9,7 +9,7 @@ export enum ContextLocation {
 }
 
 export function isContextLocation(
-    location: string | ContextLocation
+    location: string | ContextLocation,
 ): location is ContextLocation {
     return Object.values(ContextLocation).includes(location as ContextLocation);
 }
@@ -24,7 +24,7 @@ export default class NodeRedContextService {
     get(
         location: keyof NodeContext | 'msg',
         property: string,
-        message?: NodeMessage
+        message?: NodeMessage,
     ) {
         if (location === 'msg') {
             if (!message) return;
@@ -46,7 +46,7 @@ export default class NodeRedContextService {
         val: any,
         location: ContextLocation,
         property: string,
-        message?: NodeMessage
+        message?: NodeMessage,
     ) {
         const { key, store } = RED.util.parseContextStore(property);
 

@@ -28,10 +28,10 @@ export function byPropertiesOf<T extends object>(sortBy: Array<sortArg<T>>) {
             const result = strings
                 ? (aValue as string).localeCompare(bValue as string)
                 : aValue < bValue
-                ? -1
-                : aValue > bValue
-                ? 1
-                : 0;
+                  ? -1
+                  : aValue > bValue
+                    ? 1
+                    : 0;
 
             return result * sortOrder;
         };

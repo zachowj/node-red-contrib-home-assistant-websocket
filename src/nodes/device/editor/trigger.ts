@@ -6,14 +6,14 @@ import {
 export const inputCount = 0;
 
 export const getCapabilitiesList = async (
-    trigger: any
+    trigger: any,
 ): Promise<HassDeviceCapabilities> =>
     await haServer.fetch('deviceTriggerCapabilities', {
         trigger,
     });
 
 export const getEventList = async (
-    deviceId: string
+    deviceId: string,
 ): Promise<HassDeviceTriggers> =>
     await haServer.fetch('deviceTriggers', {
         deviceId,

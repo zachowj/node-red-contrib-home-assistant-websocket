@@ -11,7 +11,7 @@ const MIN_HEARTBEAT_INTERVAL = 10000;
 export function startHeartbeat(
     client: Connection,
     interval: number,
-    host: string
+    host: string,
 ): StopHeartbeat {
     let beatTimeoutId: NodeJS.Timeout;
 
@@ -30,7 +30,7 @@ export function startHeartbeat(
             } catch (e) {}
         },
         // mininum of a 10 second heartbeat
-        Math.max(MIN_HEARTBEAT_INTERVAL, interval * 1000)
+        Math.max(MIN_HEARTBEAT_INTERVAL, interval * 1000),
     );
 
     return () => {

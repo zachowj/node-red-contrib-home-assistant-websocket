@@ -64,7 +64,7 @@ const populateEntities = ({
             createCustomIdListByProperty<HassEntity>(entityIds, entities, {
                 property: 'entity_id',
                 includeUnknownIds: true,
-            })
+            }),
         );
     $entityIdField
         .select2(
@@ -73,7 +73,7 @@ const populateEntities = ({
                 multiple: true,
                 tags: Tags.Any,
                 displayIds: haServer.getUiSettings().entitySelector === 'id',
-            })
+            }),
         )
         .maximizeSelect2Height();
     disableSelect2OpenOnRemove($entityIdField);
@@ -103,7 +103,7 @@ const populateAreas = ({
             createCustomIdListByProperty<HassArea>(areaIds, areas, {
                 property: 'area_id',
                 includeUnknownIds: true,
-            })
+            }),
         );
     $areaId
         .select2(
@@ -112,7 +112,7 @@ const populateAreas = ({
                 multiple: true,
                 tags: Tags.Custom,
                 displayIds: haServer.getUiSettings().areaSelector === 'id',
-            })
+            }),
         )
         .maximizeSelect2Height();
     disableSelect2OpenOnRemove($areaId);
@@ -143,7 +143,7 @@ const populateDevices = ({
             createCustomIdListByProperty<HassDevice>(deviceIds, devices, {
                 property: 'id',
                 includeUnknownIds: true,
-            })
+            }),
         );
     $deviceId
         .select2(
@@ -152,7 +152,7 @@ const populateDevices = ({
                 multiple: true,
                 tags: Tags.Custom,
                 displayIds: haServer.getUiSettings().deviceSelector === 'id',
-            })
+            }),
         )
         .maximizeSelect2Height();
     disableSelect2OpenOnRemove($deviceId);
@@ -200,7 +200,7 @@ const entitiesByServiceTarget = (): Filter<HassEntity> | undefined => {
 // TODO: for devices check integration, manufacturer, model
 const ByServiceTarget = (
     target: 'areas' | 'devices',
-    targetId: 'id' | 'area_id'
+    targetId: 'id' | 'area_id',
 ) => {
     const targets = haServer.getTargetDomains()[target];
     const services = haServer.getServices();
@@ -217,7 +217,7 @@ const ByServiceTarget = (
 export const displayValidTargets = () => {
     const validTargets = getValidTargets();
     const $ids = $(
-        `${areaIdSelector}, ${deviceIdSelector}, ${entityIdSelector}`
+        `${areaIdSelector}, ${deviceIdSelector}, ${entityIdSelector}`,
     );
     if (validTargets === ValidTargetNone) {
         $ids.parent().hide();

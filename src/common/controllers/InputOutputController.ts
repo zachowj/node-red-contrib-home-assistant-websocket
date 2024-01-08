@@ -18,7 +18,7 @@ import OutputController, {
 
 export interface InputOutputControllerOptions<
     T extends BaseNode,
-    C extends NodeProperties
+    C extends NodeProperties,
 > extends OutputControllerConstructor<T> {
     inputService: InputService<C>;
     integration?: Integration;
@@ -33,7 +33,7 @@ export interface InputProperties {
 
 type OptionalInputHandler = (
     message: NodeMessageInFlow,
-    send: NodeSend
+    send: NodeSend,
 ) => Promise<boolean> | boolean;
 
 interface OptionalInput {
@@ -43,7 +43,7 @@ interface OptionalInput {
 
 export default class InputOutputController<
     T extends BaseNode,
-    K extends NodeProperties
+    K extends NodeProperties,
 > extends OutputController<T> {
     #optionalInputs = new Map<string, OptionalInput>();
 
@@ -60,7 +60,7 @@ export default class InputOutputController<
     async #preOnInput(
         message: NodeMessageInFlow,
         send: NodeSend,
-        done: NodeDone
+        done: NodeDone,
     ) {
         // Run optional inputs
         if (this.#optionalInputs.size) {
@@ -109,7 +109,7 @@ export default class InputOutputController<
     public addOptionalInput(
         key: string,
         schema: Joi.ObjectSchema,
-        handler: OptionalInputHandler
+        handler: OptionalInputHandler,
     ) {
         this.#optionalInputs.set(key, {
             schema,

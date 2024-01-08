@@ -23,7 +23,7 @@ interface GetEntitiesControllerConstructor
 }
 
 const SendSplitController = SendSplitMixin(
-    InputOutputController<GetEntitiesNode, GetEntitiesNodeProperties>
+    InputOutputController<GetEntitiesNode, GetEntitiesNodeProperties>,
 );
 export default class GetEntitiesController extends SendSplitController {
     #comparatorService: ComparatorService;
@@ -64,7 +64,7 @@ export default class GetEntitiesController extends SendSplitController {
                         {
                             message,
                             entity,
-                        }
+                        },
                     );
                 if (
                     (rule.logic !== 'jsonata' && value === undefined) ||
@@ -153,7 +153,7 @@ export default class GetEntitiesController extends SendSplitController {
             payload,
             parsedMessage.outputLocationType.value,
             parsedMessage.outputLocation.value,
-            message
+            message,
         );
 
         send(message);

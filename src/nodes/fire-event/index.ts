@@ -46,7 +46,7 @@ const inputSchema: Joi.ObjectSchema = Joi.object({
 
 export default function fireEventNode(
     this: FireEventNode,
-    config: FireEventNodeProperties
+    config: FireEventNodeProperties,
 ): void {
     RED.nodes.createNode(this, config);
 

@@ -112,7 +112,7 @@ export default abstract class Integration {
     public async sendUpdateConfig(
         serverId: string,
         nodeId: string,
-        config: Record<string, string | string[] | number>
+        config: Record<string, string | string[] | number>,
     ) {
         const payload = {
             type: MessageType.UpdateConfig,

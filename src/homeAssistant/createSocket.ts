@@ -41,7 +41,7 @@ export default function createSocket({
 
     function connect(
         promResolve: (socket: HaWebSocket) => void,
-        promReject: (err: Error) => void
+        promReject: (err: Error) => void,
     ) {
         debug('[Auth Phase] New connection', url);
         eventBus.emit('ha_client:connecting');
@@ -88,7 +88,7 @@ export default function createSocket({
                                 type: 'supported_features',
                                 id: 1,
                                 features: { coalesce_messages: 1 },
-                            })
+                            }),
                         );
                     }
                     promResolve(socket);
@@ -124,7 +124,7 @@ export default function createSocket({
         // https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/76
         setTimeout(
             () => connect(resolve, reject),
-            connectionDelay !== false ? 5000 : 0
+            connectionDelay !== false ? 5000 : 0,
         );
     });
 }
@@ -134,7 +134,7 @@ export function atLeastHaVersion(
     version: string,
     major: number,
     minor: number,
-    patch?: number
+    patch?: number,
 ): boolean {
     const [haMajor, haMinor, haPatch] = version.split('.', 3);
 

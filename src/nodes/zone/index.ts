@@ -26,7 +26,7 @@ export default function zoneNode(this: ZoneNode, config: ZoneNodeProperties) {
     const serverConfigNode = getServerConfigNode(this.config.server);
     const homeAssistant = getHomeAssistant(serverConfigNode);
     const exposeAsConfigNode = getExposeAsConfigNode(
-        this.config.exposeAsEntityConfig
+        this.config.exposeAsEntityConfig,
     );
     const clientEvents = new ClientEvents({
         node: this,
@@ -53,7 +53,7 @@ export default function zoneNode(this: ZoneNode, config: ZoneNodeProperties) {
     for (const entity of this.config.entities) {
         clientEvents.addListener(
             `ha_events:state_changed:${entity}`,
-            controller.onStateChanged.bind(controller)
+            controller.onStateChanged.bind(controller),
         );
     }
 }

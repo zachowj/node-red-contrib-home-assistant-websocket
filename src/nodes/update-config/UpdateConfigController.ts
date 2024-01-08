@@ -10,14 +10,14 @@ import { UpdateConfigNode, UpdateConfigNodeProperties } from '.';
 
 export interface UpdateConfigControllerOptions<
     T extends UpdateConfigNode,
-    P extends UpdateConfigNodeProperties
+    P extends UpdateConfigNodeProperties,
 > extends InputOutputControllerOptions<T, P> {
     homeAssistant: HomeAssistant;
 }
 
 export default class UpdateConfig<
     T extends UpdateConfigNode,
-    P extends UpdateConfigNodeProperties
+    P extends UpdateConfigNodeProperties,
 > extends InputOutputController<T, P> {
     readonly #homeAssistant: HomeAssistant;
     protected integration?: UnidirectionalIntegration;
@@ -35,7 +35,7 @@ export default class UpdateConfig<
         if (!this.integration?.isIntegrationLoaded) {
             throw new InputError(
                 'home-assistant.error.integration_not_loaded',
-                'home-assistant.error.error'
+                'home-assistant.error.error',
             );
         }
 
@@ -50,7 +50,7 @@ export default class UpdateConfig<
         await this.integration?.sendUpdateConfig(
             this.integration.getEntityConfigNode().config.server,
             parsedMessage.id.value ?? this.node.id,
-            config
+            config,
         );
         this.integration.saveHaConfigToContext(config);
         this.status.setSuccess('home-assistant.status.updated');
@@ -60,7 +60,7 @@ export default class UpdateConfig<
             message,
             {
                 config: this.node.config,
-            }
+            },
         );
         send(message);
         done();

@@ -59,11 +59,11 @@ export default class UnidirectionalIntegration extends Integration {
     async init() {
         this.entityConfigNode.on(
             NodeEvent.Close,
-            this.onEntityConfigNodeClose.bind(this)
+            this.onEntityConfigNodeClose.bind(this),
         );
         this.deviceConfigNode?.on(
             NodeEvent.Close,
-            this.onDeviceConfigNodeClose.bind(this)
+            this.onDeviceConfigNodeClose.bind(this),
         );
         super.init();
     }
@@ -151,7 +151,7 @@ export default class UnidirectionalIntegration extends Integration {
 
     protected getEntityPayload(
         state?: State,
-        attributes?: Record<string, any>
+        attributes?: Record<string, any>,
     ): EntityMessage {
         return {
             type: MessageType.Entity,
@@ -166,7 +166,7 @@ export default class UnidirectionalIntegration extends Integration {
         if (!this.isIntegrationLoaded) {
             this.entityConfigNode.error(this.notInstalledMessage);
             this.status.forEach((status) =>
-                status.setFailed('home-assistant.status.error')
+                status.setFailed('home-assistant.status.error'),
             );
             return;
         }
@@ -183,24 +183,24 @@ export default class UnidirectionalIntegration extends Integration {
         this.debugToClient('register', payload);
 
         this.entityConfigNode.debug(
-            `Registering ${this.entityConfigNode.config.entityType} with HA`
+            `Registering ${this.entityConfigNode.config.entityType} with HA`,
         );
         try {
             await this.homeAssistant.websocket.send(payload);
         } catch (err) {
             this.status.forEach((status) =>
-                status.setFailed('home-assistant.status.error_registering')
+                status.setFailed('home-assistant.status.error_registering'),
             );
             const message = err instanceof Error ? err.message : err;
             this.entityConfigNode.error(
-                `Error registering entity. Error Message: ${message}`
+                `Error registering entity. Error Message: ${message}`,
             );
             return;
         }
 
         this.saveHaConfigToContext(config);
-        this.status.forEach((status) =>
-            status?.setSuccess('home-assistant.status.registered')
+        this.status.forEach(
+            (status) => status?.setSuccess('home-assistant.status.registered'),
         );
 
         this.registered = true;
@@ -212,7 +212,7 @@ export default class UnidirectionalIntegration extends Integration {
 
     public async updateStateAndAttributes(
         state: any,
-        attributes: Record<string, any>
+        attributes: Record<string, any>,
     ) {
         const payload = this.getEntityPayload(state, attributes);
         await this.homeAssistant.websocket.send(payload);
@@ -231,7 +231,7 @@ export default class UnidirectionalIntegration extends Integration {
 
     protected async unregister() {
         this.entityConfigNode.debug(
-            `Unregistering ${this.entityConfigNode.config.entityType} node from HA`
+            `Unregistering ${this.entityConfigNode.config.entityType} node from HA`,
         );
 
         const payload = this.entityConfigNode.integration.getDiscoveryPayload({
@@ -248,7 +248,7 @@ export default class UnidirectionalIntegration extends Integration {
         return (
             compareVersions(
                 `${this.homeAssistant.websocket.integrationVersion}`,
-                '1.1'
+                '1.1',
             ) >= 0
         );
     }
@@ -257,7 +257,7 @@ export default class UnidirectionalIntegration extends Integration {
         if (!this.deviceConfigNode || !this.#isValidVersionforDevices()) return;
 
         this.deviceConfigNode.debug(
-            `Removing device from Home Assistant: ${this.deviceConfigNode.config.name}`
+            `Removing device from Home Assistant: ${this.deviceConfigNode.config.name}`,
         );
 
         await this.homeAssistant?.websocket.send({
@@ -282,7 +282,7 @@ export default class UnidirectionalIntegration extends Integration {
      * @returns The value of the key from the Home Assistant configuration, or undefined if the key does not exist.
      */
     public getEntityHomeAssistantConfigValue(
-        key: string
+        key: string,
     ): string | number | string[] | undefined {
         // Get the Home Assistant configuration from the context or the entity's config
         const haConfig =
@@ -304,7 +304,7 @@ export default class UnidirectionalIntegration extends Integration {
         const existingHaConfig = this.getHaConfigFromContext() ?? {};
         // remove undefined values from haConfig
         Object.keys(haConfig).forEach(
-            (key) => haConfig[key] === undefined && delete haConfig[key]
+            (key) => haConfig[key] === undefined && delete haConfig[key],
         );
 
         const mergedHaConfig = {

@@ -21,7 +21,7 @@ export default class SentenseController extends ExposeAsController {
                 config: this.node.config,
                 triggerId: data.sentence,
                 results: data.result,
-            }
+            },
         );
         this.status.setSuccess('home-assistant.status.triggered');
         this.node.send(message);

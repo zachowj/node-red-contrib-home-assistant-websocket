@@ -23,7 +23,7 @@ export default class WebhookController extends ExposeAsController {
                 data: data.payload,
                 headers: data.headers,
                 params: data.params,
-            }
+            },
         );
         this.status.setSuccess('home-assistant.status.received');
         this.node.send(message);

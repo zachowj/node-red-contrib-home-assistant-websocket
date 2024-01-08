@@ -91,7 +91,7 @@ const inputSchema: Joi.ObjectSchema = Joi.object({
         TypedInputTypes.Message,
         TypedInputTypes.Flow,
         TypedInputTypes.Global,
-        TypedInputTypes.None
+        TypedInputTypes.None,
     ),
     responseType: Joi.string().valid('json', 'text', 'arraybuffer'),
     outputProperties: Joi.array().items(),
@@ -99,7 +99,7 @@ const inputSchema: Joi.ObjectSchema = Joi.object({
 
 export default function apiNode(
     this: ApiNode,
-    config: ApiNodeProperties
+    config: ApiNodeProperties,
 ): void {
     RED.nodes.createNode(this, config);
 
