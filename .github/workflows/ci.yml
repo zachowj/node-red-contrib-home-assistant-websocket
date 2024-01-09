@@ -60,9 +60,29 @@ jobs:
         id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
+
+  upload-assets:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          cache: npm
+      - name: npm install
+        run: npm ci
+      - name: Upload release asset
+        uses: actions/upload-release-asset@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: node-red-contrib-home-assistant-websocket-*.tgz
+          tag: ${{ github.ref }}
+          overwrite: true
+          file_glob: true
+
   publish:
     needs: release-please
     if: ${{ needs.release-please.outputs.release_created }}
