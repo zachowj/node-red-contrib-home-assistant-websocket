@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.62.3](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.62.2...v0.62.3) (2024-01-09)
+
+
+### Bug Fixes
+
+* **call-service:** Allow call service to work prior to HA 2023.12 ([92c7a3f](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/92c7a3f723faa2138de03d914f3b16f42921a210))
+* **call-service:** Allow the call-service input to accept strings in target properties ([f86e2c6](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f86e2c67b96379165809254cc49a0fae916fbb88)), closes [#1247](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1247)
+* **call-service:** Don't throw error if mergeContext is undefined ([7388c45](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/7388c45f8698fda1fb65fd96363076d5352ec751))
+* **call-service:** Fix merge context merge order ([e2f2ac8](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/e2f2ac80112d1d38c65d74b7cc0e8d6554e46d65))
+* **call-service:** Merge target data into service data before sending to HA ([60f55f2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/60f55f24844d2c617323232b04be8084dbfd0943)), closes [#1248](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1248) [#1245](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1245)
+* Fix TS types ([b805cf8](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/b805cf881a60e41729afeea9e7d5b356c3c5a2d0))
+* **get-history:** Fix input validation so relativeTime can be empty ([05e519f](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/05e519f8475bf1fafb0581eb3133ae88fbe57c01)), closes [#1239](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1239)
+* **sidebar:** Use correct editor type for config node ([007627f](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/007627fd2e9daf5dadc6a4dd9e6f2037fe70b97f)), closes [#1237](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1237)
+* **time:** Fix breaking changes from cron package ([5cf6d5b](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/5cf6d5b4f2e8f06cccb8ebde8acceb7ccee1382e))
+
 ## [0.62.2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.62.1...v0.62.2) (2023-12-13)
 
 
