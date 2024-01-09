@@ -75,7 +75,7 @@ jobs:
       - name: npm install
         run: npm ci
       - name: Upload release asset
-        uses: actions/upload-release-asset@v2
+        uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: node-red-contrib-home-assistant-websocket-*.tgz
