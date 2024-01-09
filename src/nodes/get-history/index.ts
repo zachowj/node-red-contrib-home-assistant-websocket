@@ -63,7 +63,7 @@ const inputSchema: Joi.ObjectSchema = Joi.object({
     entityIdType: Joi.string()
         .valid(...Object.values(EntityFilterType))
         .optional(),
-    relativeTime: Joi.string().optional(),
+    relativeTime: Joi.string().optional().allow(''),
     flatten: Joi.boolean().optional(),
 });
 
