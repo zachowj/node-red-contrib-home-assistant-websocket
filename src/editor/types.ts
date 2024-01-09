@@ -34,17 +34,17 @@ export interface EditorWidgetEditableListOptions<T>
     buttons: EditorWidgetEditableListButton[];
 }
 
-export interface HassNodeProperties
-    extends Omit<EditorNodeProperties, 'outputs' | 'inputs'> {
+export interface HassNodeProperties extends EditorNodeProperties {
     version: number;
     debugenabled?: boolean;
     server?: string;
     entityConfigNode?: string;
+    exposeAsEntityConfig?: string;
     outputs?: number | undefined;
-    haConfig?: HassExposedConfig[];
 
     // TODO: remove after controllers are converted to TypeScript
     exposeToHomeAssistant?: boolean;
+    haConfig?: HassExposedConfig[];
 }
 
 export interface HassTargetDomains {

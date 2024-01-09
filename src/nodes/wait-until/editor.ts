@@ -1,4 +1,4 @@
-import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
+import { EditorNodeDef, EditorRED } from 'node-red';
 
 import {
     ComparatorType,
@@ -10,13 +10,15 @@ import EntitySelector from '../../editor/components/EntitySelector';
 import * as haOutputs from '../../editor/components/output-properties';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
-import { HATypedInputTypeOptions, OutputProperty } from '../../editor/types';
+import {
+    HassNodeProperties,
+    HATypedInputTypeOptions,
+    OutputProperty,
+} from '../../editor/types';
 
 declare const RED: EditorRED;
 
-interface WaitUntilEditorNodeProperties extends EditorNodeProperties {
-    server: string;
-    version: number;
+interface WaitUntilEditorNodeProperties extends HassNodeProperties {
     entityId: string | string[];
     entityIdFilterType: string;
     property: string;

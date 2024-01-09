@@ -1,4 +1,4 @@
-import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
+import { EditorNodeDef, EditorRED } from 'node-red';
 
 import { TransformType } from '../../common/TransformState';
 import {
@@ -12,6 +12,7 @@ import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import { i18n } from '../../editor/i18n';
+import { HassNodeProperties } from '../../editor/types';
 import { saveEntityType } from '../entity-config/editor/helpers';
 import {
     ComparatorPropertyType,
@@ -24,12 +25,9 @@ import {
 
 declare const RED: EditorRED;
 
-interface TriggerStateEditorNodeProperties extends EditorNodeProperties {
-    server: string;
-    version: number;
+interface TriggerStateEditorNodeProperties extends HassNodeProperties {
     entityId: string | string[];
     entityIdType: string;
-    debugEnabled: boolean;
     constraints: Constraint[];
     customOutputs: CustomOutput[];
     outputInitially: boolean;
@@ -81,7 +79,6 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
         name: { value: '' },
         server: { value: '', type: NodeType.Server, required: true },
         version: { value: RED.settings.get('triggerStateVersion', 0) },
-        // @ts-ignore - DefinitelyTyped is wrong inputs can be changed
         inputs: { value: 0 },
         outputs: { value: 2 },
         exposeAsEntityConfig: {

@@ -16,7 +16,7 @@ const filterIds = (
     filter: string,
     filterType: 'regex' | 'substring',
 ) => {
-    let results: HassEntity[];
+    let results: HassEntity[] = [];
     if (filterType === 'regex') {
         try {
             const regex = new RegExp(filter);
@@ -98,7 +98,8 @@ export const entityFilter = {
                     .trigger('input');
             },
         };
-        RED.tray.show(trayOptions);
+        // TODO: Fix types find a way to get the type of the trayOptions object
+        RED.tray.show(trayOptions as any);
     },
 };
 
@@ -114,6 +115,7 @@ export const openEntityFilter = ({
     complete: (filter: string) => void;
 }) => {
     RED.editor.showTypeEditor('ha_entity_filter', {
+        // @ts-expect-error - filter is an acceptable argument, DefinitelyTyped is wrong
         filter,
         filterType,
         entities,

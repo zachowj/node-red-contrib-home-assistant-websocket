@@ -72,7 +72,7 @@ function migrateNode(node: EditorNodeInstance<HassNodeProperties>) {
     const migratedData: HassNodeProperties = migrate(data);
 
     // TODO: Remove for version 1.0
-    if (migratedData.type === NodeType.Entity) {
+    if ('type' in migratedData && migratedData.type === NodeType.Entity) {
         convertEntityNode(migratedData as unknown as EntityProperties);
     } else if (haConfig) {
         convertEventNode(migratedData as unknown as EntityProperties, haConfig);
@@ -187,7 +187,7 @@ function isHomeAssistantConfigNode(
             NodeType.Server,
             NodeType.EntityConfig,
             NodeType.DeviceConfig,
-        ].includes(node.type)
+        ].includes(node.type as unknown as NodeType)
     );
 }
 

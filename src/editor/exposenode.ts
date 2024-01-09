@@ -26,7 +26,9 @@ function isEntityNode() {
         NodeType.Text,
         NodeType.TimeEntity,
     ];
-    return node?.type && nodes.includes(node.type);
+    return (
+        'type' in node && node?.type && nodes.includes(node.type as NodeType)
+    );
 }
 
 function getServerId(): string | undefined {
@@ -65,7 +67,7 @@ function isAddNodeSelected(selector: 'entityConfig' | 'server') {
 
 export function init(n: HassNodeProperties) {
     node = n;
-    const type = node.type as unknown as NodeType;
+    const type = 'type' in node && (node.type as unknown as NodeType);
     render();
 
     $('#node-input-server, #node-input-entityConfig').on('change', () => {
@@ -106,7 +108,7 @@ export function init(n: HassNodeProperties) {
 }
 
 function render() {
-    const type = node.type as unknown as NodeType;
+    const type = 'type' in node && (node.type as unknown as NodeType);
 
     switch (type) {
         case NodeType.BinarySensor:
@@ -146,7 +148,7 @@ function renderEventNode() {
     const $row = $('<div />', {
         id: 'exposeToHa',
         class: `form-row checkbox-option${
-            node.type === 'trigger-state' ? '-left' : ''
+            'type' in node && node.type === 'trigger-state' ? '-left' : ''
         }`,
     });
     $('<input />', {

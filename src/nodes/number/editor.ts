@@ -1,4 +1,4 @@
-import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
+import { EditorNodeDef, EditorRED } from 'node-red';
 
 import {
     EntityType,
@@ -9,14 +9,12 @@ import {
 import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
-import { OutputProperty } from '../../editor/types';
+import { HassNodeProperties, OutputProperty } from '../../editor/types';
 import { saveEntityType } from '../entity-config/editor/helpers';
 
 declare const RED: EditorRED;
 
-interface NumberEditorNodeProperties extends EditorNodeProperties {
-    version: number;
-    debugenabled: boolean;
+interface NumberEditorNodeProperties extends HassNodeProperties {
     entityConfig: any;
     mode: ValueIntegrationMode;
     outputProperties: OutputProperty[];
@@ -38,7 +36,6 @@ const NumberEditor: EditorNodeDef<NumberEditorNodeProperties> = {
         name: { value: '' },
         version: { value: RED.settings.get('haNumberVersion', 0) },
         debugenabled: { value: false },
-        // @ts-expect-error - DefinitelyTyped is wrong inputs can be changed
         inputs: { value: 0 },
         outputs: { value: 1 },
         entityConfig: {

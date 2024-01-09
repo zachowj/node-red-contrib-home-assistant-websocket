@@ -24,7 +24,7 @@ export function initSidebar() {
         id: 'ha_sidebar',
         label: 'Home Assistant',
         name: 'Home Assistant',
-        content,
+        content: content.get(0),
         closeable: true,
         disableOnEdit: true,
         iconClass: 'fa fa-home',
