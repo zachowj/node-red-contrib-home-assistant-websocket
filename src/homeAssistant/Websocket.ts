@@ -710,8 +710,8 @@ export default class Websocket {
             type: 'call_service',
             domain,
             service,
-            service_data: data,
-            target,
+            // Merging target data with service data because the service call validation will change entity_id from a string to an array and not all services support that
+            service_data: { ...data, ...target },
             return_response: returnResponse,
         };
 
