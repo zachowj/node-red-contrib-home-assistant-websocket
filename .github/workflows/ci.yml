@@ -24,8 +24,15 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16, 18, 20]
+        node-version:
+          - 16
+          - 18
+          - 20
+        node-red-version:
+          - "^3"
+          - "3.1.1"
 
+    name: Tests (Node ${{ matrix.node-version }} - node-red ${{ matrix.node-red-version }})
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
@@ -35,6 +42,8 @@ jobs:
           cache: npm
       - name: npm install
         run: npm ci
+      - name: Install exact version of node-red
+        run: npm install --save-dev node-red@${{ matrix.node-red-version }}
       - name: npm lint
         run: npm run lint
       - name: npm test
