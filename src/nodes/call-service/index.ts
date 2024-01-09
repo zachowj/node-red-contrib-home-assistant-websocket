@@ -60,9 +60,9 @@ const inputSchema: Joi.ObjectSchema = Joi.object({
     service: Joi.string().required(),
     data: Joi.alternatives(Joi.string().allow(''), Joi.object()).required(),
     target: Joi.object().keys({
-        area_id: Joi.array().optional(),
-        device_id: Joi.array().optional(),
-        entity_id: Joi.array().optional(),
+        area_id: Joi.alternatives(Joi.string(), Joi.array().optional()),
+        device_id: Joi.alternatives(Joi.string(), Joi.array().optional()),
+        entity_id: Joi.alternatives(Joi.string(), Joi.array().optional()),
     }),
 });
 
