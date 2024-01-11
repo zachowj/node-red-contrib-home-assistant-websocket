@@ -216,7 +216,7 @@ Where functions _explicitly_ require an array, passing singletons will generate 
 
 ## Writing JSONata code
 
-JSONata can be directly entered into any node where the UI field entry type is **J: expression**. The Node-RED editor permits expansion of the simple box using the '...' field at the end of the line. This editor provides more space, the ability to select and insert JSONata functions from a pick list, a formatting option, and a tab for testing. However, this can be limited and the [try JSONata](https://try.jsonata.org/website) website is easier to use.
+JSONata can be directly entered into any node where the UI field entry type is **J: expression**. The Node-RED editor permits expansion of the simple box using the '...' field at the end of the line. This editor provides more space, the ability to select and insert JSONata functions from a pick list, a formatting option, and a tab for testing. However, this can be limited and the [try JSONata](https://try.jsonata.org) website is easier to use.
 
 Use a debug node set to output "complete message", copy this object and paste over the left hand side JSON input object (there is a useful formatter option). Test JSONata code can be written in the top right hand window, and the result appears immediately below. Useful output messages indicated where no result is generated or an error has occurred.
 
