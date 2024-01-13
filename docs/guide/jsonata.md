@@ -39,12 +39,12 @@ In the **Home Assistant nodes**, JSONata can be used to set entity states, set o
 **Examples of using JSONata in the Home Assistant Nodes:**
 
 1. Call a service using JSONata to build the data object
-2. Read the state value of an entity
+2. Read the current state value of an entity
 3. Listen for entity state or attribute changes
 4. Trigger a flow from complex state change conditions
 5. Write state and attribute values to an HA sensor
 6. Route flow (switch node) based on computed outcomes
-7. Read state history and process JSON (change node)
+7. Read state history and process the return JSON (change node)
 
 There are several _additional_ Home Assistant functions added for use in JSONata expressions, and these can only be used within the Home Assistant nodes.
 
