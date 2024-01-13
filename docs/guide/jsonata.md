@@ -11,30 +11,30 @@ JSONata is very different to Mustache templates, and the use of {{msg.payload}} 
 
 In the **Home Assistant nodes**, JSONata can be used to set entity states, set output property values, generate UI parameters, or as conditional tests (both generating the test value, and as an evaluated predicate expression).
 
-| HA Nodes           | Set output property | Set state value | Construct data field | Conditional test value | Conditional Boolean | UI setting parameter | Example |
+| HA Nodes           | Set output property | Set state value | Construct data field | Conditional test value | Conditional Boolean | UI setting parameter | Example (e) set |
 |--------------------|:-------------------:|:---------------:|:--------------------:|:----------------------:|:-------------------:|:--------------------:|:-------:|
 | API                | X                   |                 | X                    |                        |                     |                      |         |
-| call service       | X                   |                 | Xe                   |                        |                     |                      | 1       |
-| current state      | Xe                  |                 |                      | Xe                     | Xe                  | Xe                   | 2       |
-| events: all        | X                   |                 |                      |                        |                     |                      |         |
-| events: state      | Xe                  |                 |                      | X                      | X                   | X                    | 3       |
-| fire event         |                     |                 | X                    |                        |                     |                      |         |
-| get entities       |                     |                 |                      | X                      | X                   |                      |         |
-| poll state         | X                   |                 |                      | X                      | X                   | X                    |         |
-| tag                | X                   |                 |                      |                        |                     |                      |         |
-| time               | X                   |                 |                      |                        |                     | X                    |         |
-| trigger: state     | Xe                  |                 |                      | Xe                     |                     |                      | 4       |
-| wait until         | X                   |                 |                      | X                      | X                   | X                    |         |
-| webhook            | X                   |                 |                      |                        |                     |                      |         |
+| Call service       | X                   |                 | Xe                   |                        |                     |                      | 1       |
+| Current state      | Xe                  |                 |                      | Xe                     | Xe                  | Xe                   | 2       |
+| Events: all        | X                   |                 |                      |                        |                     |                      |         |
+| Events: state      | Xe                  |                 |                      | X                      | X                   | X                    | 3       |
+| Fire event         |                     |                 | X                    |                        |                     |                      |         |
+| Get entities       |                     |                 |                      | X                      | X                   |                      |         |
+| Poll state         | X                   |                 |                      | X                      | X                   | X                    |         |
+| Tag                | X                   |                 |                      |                        |                     |                      |         |
+| Time               | X                   |                 |                      |                        |                     | X                    |         |
+| Trigger: state     | Xe                  |                 |                      | Xe                     |                     |                      | 4       |
+| Wait until         | X                   |                 |                      | X                      | X                   | X                    |         |
+| Webhook            | X                   |                 |                      |                        |                     |                      |         |
 | **Entity Nodes**   |                     |                 |                      |                        |                     |                      |         |
-| binary sensor      | X                   | X               |                      |                        |                     |                      |         |
-| button             | X                   |                 |                      |                        |                     |                      |         |
-| sensor             | X                   | Xe              |                      |                        |                     |                      | 5       |
-| update config      | X                   |                 |                      |                        |                     |                      |         |
+| Binary sensor      | X                   | X               |                      |                        |                     |                      |         |
+| Button             | X                   |                 |                      |                        |                     |                      |         |
+| Sensor             | X                   | Xe              |                      |                        |                     |                      | 5       |
+| Update config      | X                   |                 |                      |                        |                     |                      |         |
 | **Standard Nodes** |                     |                 |                      |                        |                     |                      |         |
-| inject             | X                   |                 |                      |                        |                     |                      |         |
-| switch             |                     |                 |                      | Xe                     | Xe                  | Xe                   | 6       |
-| change             | Xe                  |                 |                      |                        |                     |                      | 7       |
+| Inject             | X                   |                 |                      |                        |                     |                      |         |
+| Switch             |                     |                 |                      | Xe                     | Xe                  | Xe                   | 6       |
+| Change             | Xe                  |                 |                      |                        |                     |                      | 7       |
 
 **Examples of using JSONata in the Home Assistant Nodes:**
 

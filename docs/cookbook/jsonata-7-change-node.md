@@ -1,34 +1,109 @@
-# JSONata Examples 7 - Change Node
+# JSONata Example 7 - Change Node
 
 **Using JSONata for more complex tasks:**
 
-Many automations can be coded using a simple JSONata expression at some convenient point in the flow. Where the data is a more complex structure, then JSONata is a powerful tool for manipulating JSON.
+Many automations can be coded using a simple JSONata expression at some convenient point in the flow, often directly within one of the WebSocket nodes. Where the data involved is a more complex structure, then JSONata is a powerful tool for manipulating JSON objects and array.
 
 ## Read a person state history for the past week
 
-Since Home Assistant stores state history for a default 10 days, it is possible to read historic state records. The **Get History** node can do this for any given entity, and using relative time it is easy to obtain an array of past _state-change_ events.
+Since Home Assistant stores state history for a default 10 days, it is possible to read historic state records. The **Get History** node can do this for any given entity, and using _relative time_ it is easy to obtain an array of past _state-change_ events.
 
-There are no opportunities to use JSONata within this simple node, however JSONata can be used to manipulate the returned array. In this example, JSONata is used extensively to
+There are no opportunities to use JSONata within this simple node itself, however JSONata can be used both to setup the node parameters and to manipulate the returned array. In this example, JSONata is used extensively to
 
 - set the input parameters for the time period required
-- capture the current state for 'now' and the given entity ID
+- read the current state for 'now' and the given entity ID
 - add an 'event' for 'now' and an 'event' for the earliest history-period time
-- calculate the time interval between events
-- filter out any events less than, say, 50 minutes or state 'unknown'
-- combine now-sequential equal-state events into one longer period
+- calculate the time interval between state changes and create 'event-periods'
+- filter out any event periods less than, say, 50 minutes or for state 'unknown'
+- compact now-sequential equal-state events into one longer period
 
-This now returns a filtered array of entity states, the time that state started and the time it ended, and the duration in minutes. The need for extensive data processing here comes from the way 'person' sensors report, giving rise to short periods of 'unknown' or 'away' because WiFi signal or a smart phone has gone 'off-line'.
+This returns a filtered array of entity states, the time that state started and the time it ended, and the duration in minutes. The need for extensive data processing here comes from the way 'person' sensors report, giving rise to short periods of 'unknown' or 'away' because WiFi signal or a smart phone has gone 'off-line'.
+
+![screenshot](./images/jsonata_7_1.png)
+
+@[example code](@examples/cookbook/jsonata-new/read-person-history.json)
+
+
+```json
+(
+/* FILTER parameters */
+    $fMins:=50;
+
+/* get current state from entity 'data', and set the 'last_changed' to now */
+    $first:= data~>|$|{"last_changed": $now()}|;
+
+/* add this to far end of history payload array, then sort by reverse time order */
+    $x:=$append(payload, $first)^(>last_changed,>last_updated);
+
+/* copy the oldest state value, and add in as the first record at start of history */
+/* we now have a 'now' and 'start of history' record, even if payload was empty    */    
+    $x:=$append($x,{"state": $x[0].state, "last_changed": startAt});
+
+/* create array of state changes, with how long they have been in that state */
+/* remove any zero periods and unknown states FILTER OUT AS REQUIRED         */
+    $events:=$x#$i.(
+        $prior:= $i>0 ? $x[$i-1] : {"first": $now()};
+        {"index": $i,
+         "state": state,
+         "from": last_changed,
+         "upto": $prior.last_changed,
+         "dmins": ($toMillis($prior.last_changed)-$toMillis(last_changed))/60000~>$round(0)
+        }
+    )[dmins>$fMins and state!="unknown"];
+
+/* merge consecutive records with the same state into one longer period */
+/* get each event position as 'start - middle - end' or 'only'          */
+
+    $temp:=$events#$v.(
+        $back:= $v<1 ? false : state = $events[$v-1].state;
+        $next:= state = $events[$v+1].state;
+        $position:=( $back ? ($next ? "middle" : "end") : ($next ? "start" : "only") );
+        $~>|$|{"index": $v, "position": $position}|
+    );
+
+/* get start and end indexes, and zip into a sequence array of [start, end]  */
+/* map this array of sequences to an array of objects, one for each sequence */
+/* where the object is the combination of a run of the same state value      */
+
+    $chain:=$zip($temp[position="start"].index, $temp[position="end"].index);
+
+    $array:=$map($chain, function($item) {(
+        $recA:=$events[$item[0]];
+        $recB:=$events[$item[1]];
+        {"state": $recA.state,
+        "from": $recB.from,
+        "upto":  $recA.upto,
+        "dmins": ($toMillis($recA.upto)-$toMillis($recB.from))/60000~>$round(0),
+        "position": "merged"}
+        )
+    });
+
+/* combine the 'only' single events with the now-merged sequences, and sort by time */
+    $append($temp[position="only"], $array)^(>from);
+
+)
+```
+**Notes:**
+
+The Inject Node uses JSONata to create msg.payload as a data object, setting the relative time parameter for the Get History node, and also setting the timestamp for the effective start of this time period.
+
+The Current State node uses JSONata in the output to retain msg.payload and also merge in the _entityId_ using `$entity().entity_id`. This now sets msg.payload with the required input parameters for the Get History node (which therefore requires no UI settings). Full entity details are also captured in msg.data as usual. 
+
+::: caution
+This code has been tested but person sensors can go 'off line' for long periods
+and the exact nature of the output data should be checked by experimentation.
+:::
 
 ## Report only those periods when 'not home' during the day
 
-Once state history has been manipulated like this into an event-array, it is easy to ask questions, such as
+Once state history has been manipulated like this into an event-array, it is easy to ask questions, such as "how many times has this person been away this week?"
 
-- how long was the period when this person was last away?
-- how many times has this person been away this week?
-- was this person away overnight in the past week?
-- was this person out after 23:00, and if so, what time did they return home?
+The question "when was this person away during the day?" for example, can be answered by filtering the state event array, to look for 'not home' and for the event period (both start and end) to be entirely on the same date.
 
-The question 'when was this person away during the day' for example, can be answered by filtering the state event array, to look for 'not home' and for the event period (both start and end) to be entirely on the same date.
+```json
+payload[state="not_home" and ($substringBefore(from,"T") = $substringBefore(upto,"T") ) ]
+```
+
 
 **Note on history records:**
 
