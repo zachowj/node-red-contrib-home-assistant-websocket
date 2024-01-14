@@ -1,14 +1,39 @@
 # JSONata Examples 1 - Call Service
 
-## Increase lights brightness with remote
+Integrations in Home Assistant provide service calls that can be used, for example, to set target temperature on heaters and air-conditioning units. All service calls can be found and tested within Home Assistant Developer toolbox, and it is also useful to check the integration documentation to identify exactly what is required for a successful service call.
 
-A remote with a button that when clicked it increases the brightness of a given light by an amount that is set from an input_number inside Home Assistant.
+**All service calls require:**
 
-![screenshot](./images/jsonata_1.png)
+- a domain (integration platform) such as 'climate'
+- a service call within this domain, such as 'set_temperature'
+- a target entity or entities (or area or device containing entities) to apply the service to
+- a data _object_, containing any additional required and optional parameters
 
-@[code](@examples/cookbook/jsonata/increase-lights-brightness-with-remote.json)
+The data object will vary, depending on the integration and service call, from an empty object `{}` to something much more complex. Constructing this data object is key to a successful service call, and JSONata should ideally be used to achieve this rather than mustache templating.
 
-JSONata expression in the call-service node
+**JSONata and the Service Call node:**
+
+For all Node-RED flows with a Service Call node, there are three locations where the data object can be defined.
+
+- directly in the Service Call node UI field 'Data', using the JSONata option
+- in a preceeding Change Node, passing the Service Call settings in a msg.payload object
+- in flow trigger nodes, such as Event: State nodes, as an output msg.payload object
+
+There are advantages and drawbacks to each approach.
+
+![screenshot](./images/jsonata_1_1.png)
+
+Here are three examples, each using JSONata to set the required data object, and one example of using JSONata to process service call return data.
+
+@[code](@examples/cookbook/jsonata-new/service-call.json)
+
+## Setting the Data field
+
+### Increase lights brightness with remote
+
+A remote with a button that when clicked increases the brightness of a given light by an amount that is set from an input_number inside Home Assistant.
+
+JSONata expression in the Call Service node UI Data field - note that nothing special is required as input to this node.
 
 ```json
 {
@@ -20,47 +45,77 @@ JSONata expression in the call-service node
 }
 ```
 
-## Notification of lights left on when leaving home
+### Setting target temperature on air-conditioning unit
 
-Get notified when light or switch is left on when you leave. This a remake of Example #1 from this [post](https://community.home-assistant.io/t/examples-for-using-the-new-get-entities-node/85777) showing how to manipulate entities and get the desired output.
-
-![screenshot](./images/jsonata_2.png)
-
-@[code](@examples/cookbook/jsonata/notification-of-lights-on-when-leaving-home.json)
-
-This is the same as above but uses an event:state node and shows how to use the `$entity()` and `$prevEntity()` functions to compare states.
-
-![screenshot](./images/jsonata_3.png)
-
-@[code](@examples/cookbook/jsonata/notification-of-lights-on-when-leaving-home_02.json)
-
-Event-State Node:
-`$entity().state != $prevEntity().state`
-
-Call-Service Node:
+Here a Change Node is used to build a larger msg.payload object. In a Change Node, the special `$entity()` and `$entities()` functions are _not_ available, however we can still do things like read from global context using the Node-RED `$globalContext()` function.
 
 ```json
 {
-     "message": "The " & $join($entities().*[state = "on" and entity_id ~> /^light|^switch/].attributes.friendly_name, ", ") & " are on.",
-     "title": "Left On"
+   "target": {"entity_id": $globalContext("AClist")},
+   "data": {
+       "temperature": payload,
+       "hvac_mode": payload>20 ? "heat" : "cool"
+   }
 }
 ```
 
-## OR conditional for the events: state node
+The Call Service node can accept parameters in msg.payload, and where given these take precedence over any UI settings. Default settings can therefore be set in the UI, and then be over-riden by the input message, including from Inject Nodes as shown in the example.
+
+### Notification of lights left on when leaving home
+
+Get notified when lights or switches are left on when you leave. This example uses JSONata in two places in the Event: State node. The state value test is a JSONata expression that should return true to output a message. This code selects an array of all entity states for entities starting with 'person', and will return `true` if this contains any with state "home". Since we are looking for a state change where all person entities are _not_ home, we can use the lower (failure) output.
+
+```json
+"home" in $entities().*[$substringBefore(entity_id,".")="person"].state
+```
+
+
+JSONata is then used in the output properties, to create the required object for a notification service call. It uses `$entities().*` with a filter looking for those with "light" or "switch" in the entity_id and state "on", then selecting the friendly_name, and joining into a list in the message.
+
+The title uses `$entity().attributes.friendly_name` to add the name of the person who just left home to the message title.
+
+```json
+{
+    "data": {
+        "message": "The " & 
+          $join($entities().*[state = "on" and entity_id ~>
+          /^light|^switch/].attributes.friendly_name, ", ") &
+          " are on.",
+        "title": "Things Left On " & $entity().attributes.friendly_name
+    }
+}
+```
+
+In this example all the work is performed in the Event: State node, and the Service Call node accepts setting parameters in the input msg.payload object.
+
+### OR conditional for the events: state node
 
 The trigger-state node is great if you have several conditions you want to check for but it doesn't allow you to use OR checks. Using a JSONata expression with an event:state node will allow you to fill this gap.
 
 Motion sensor at the front door triggers and have a text to speech notification be sent if at least one person is home.
 
-![screenshot](./images/jsonata_3.png)
 
-@[code](@examples/cookbook/jsonata/or-conditional-for-the-events-state-node.json)
+
 
 ```json
 $entity().state = "on" and (
    $entities("person.person1").state = "home" or $entities("person.person2").state = "home"
 )
 ```
+
+## Processing a service call return
+
+Home Assistant service calls can now provide data as a result of the call, and JSONata is an ideal tool to manage complex JSON object and array structures. This example uses JSONata to extract and manipulate weather forecasts, providing a summary in a different format.
+
+```json
+results.*.forecast{
+   "time": $[0].datetime,
+   "temp": $.temperature,
+   "cloud": $.cloud_coverage,
+   "rain": $.precipitation
+}
+```
+The forecast service call now returns an array of forecasts. Here JSONata is used to itterate over all forecast, returning an new object for each, with a time and arrays for tempeature, cloud coverage, and precipitation only.
 
 **Also see:**
 

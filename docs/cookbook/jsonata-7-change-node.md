@@ -21,7 +21,7 @@ This returns a filtered array of entity states, the time that state started and 
 
 ![screenshot](./images/jsonata_7_1.png)
 
-@[example code](@examples/cookbook/jsonata-new/read-person-history.json)
+@[code](@examples/cookbook/jsonata-new/read-person-history.json)
 
 
 ```json
