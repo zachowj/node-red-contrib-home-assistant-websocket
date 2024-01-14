@@ -46,6 +46,12 @@ In the **Home Assistant nodes**, JSONata can be used to set entity states, set o
 6. Route flow (switch node) based on computed outcomes
 7. Read state history and process the return JSON (change node)
 
+
+- [Increase lights brightness with remote](../cookbook/jsonata.html#increase-lights-brightness-with-remote)
+- [Notification of lights left on when leaving home](../cookbook/jsonata.html#notification-of-lights-left-on-when-leaving-home)
+- [OR conditional for the events: state node](../cookbook/jsonata.html#or-conditional-for-the-events-state-node)
+
+
 There are several _additional_ Home Assistant functions added for use in JSONata expressions, and these can only be used within the Home Assistant nodes.
 
 - `$entity()` returns the entity that triggered the node
@@ -69,17 +75,9 @@ Expose [Lodash](https://lodash.com/) functions
 
   Produces a random number between the inclusive lower and upper bounds. If only one argument is provided a number between 0 and the given number is returned. If floating is true, or either lower or upper are floats, a floating-point number is returned instead of an integer.
 
-When JSONata appears in the conditional dropdown it expects the expression to return a boolean, true or false.
 
-![screenshot](./images/jsonata_1.png)
 
-When it is chosen with a conditional, not JSONata it will return a value of the evaluated expression that will be checked against the conditional chosen.
 
-![screenshot](./images/jsonata_2.png)
-
-- [Increase lights brightness with remote](../cookbook/jsonata.html#increase-lights-brightness-with-remote)
-- [Notification of lights left on when leaving home](../cookbook/jsonata.html#notification-of-lights-left-on-when-leaving-home)
-- [OR conditional for the events: state node](../cookbook/jsonata.html#or-conditional-for-the-events-state-node)
 
 **Also see:**
 

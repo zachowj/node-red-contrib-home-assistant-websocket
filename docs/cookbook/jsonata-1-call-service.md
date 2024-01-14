@@ -88,21 +88,6 @@ The title uses `$entity().attributes.friendly_name` to add the name of the perso
 
 In this example all the work is performed in the Event: State node, and the Service Call node accepts setting parameters in the input msg.payload object.
 
-### OR conditional for the events: state node
-
-The trigger-state node is great if you have several conditions you want to check for but it doesn't allow you to use OR checks. Using a JSONata expression with an event:state node will allow you to fill this gap.
-
-Motion sensor at the front door triggers and have a text to speech notification be sent if at least one person is home.
-
-
-
-
-```json
-$entity().state = "on" and (
-   $entities("person.person1").state = "home" or $entities("person.person2").state = "home"
-)
-```
-
 ## Processing a service call return
 
 Home Assistant service calls can now provide data as a result of the call, and JSONata is an ideal tool to manage complex JSON object and array structures. This example uses JSONata to extract and manipulate weather forecasts, providing a summary in a different format.
