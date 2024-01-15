@@ -17,7 +17,7 @@ In the **Home Assistant nodes**, JSONata can be used to set entity states, set o
 | Call service       | X                   |                 | Xe                   |                        |                     |                      | 1       |
 | Current state      | Xe                  |                 |                      | Xe                     | Xe                  | Xe                   | 2       |
 | Events: all        | X                   |                 |                      |                        |                     |                      |         |
-| Events: state      | Xe                  |                 |                      | X                      | X                   | X                    | 3       |
+| Events: state      | Xe                  |                 |                      | Xe                     | Xe                 | X                    | 3       |
 | Fire event         |                     |                 | X                    |                        |                     |                      |         |
 | Get entities       |                     |                 |                      | X                      | X                   |                      |         |
 | Poll state         | X                   |                 |                      | X                      | X                   | X                    |         |
@@ -38,13 +38,24 @@ In the **Home Assistant nodes**, JSONata can be used to set entity states, set o
 
 **Examples of using JSONata in the Home Assistant Nodes:**
 
-1. Call a service using JSONata to build the data object
-2. Read the current state value of an entity
-3. Listen for entity state or attribute changes
+1. [Call a service using JSONata to build the data object](../cookbook/jsonata-1-call-service.md)
+    - Increase light brightness with remote
+    - Set A/C target temperature and mode
+    - Send lights on notification when leaving home
+    - Extract weather forecast details from call return
+2. [Read the current state or attribute value of an entity](../cookbook/jsonata-2-current-state.md)
+    - Report A/C current and target temperature difference
+    - Has A/C been left on after 15:00 and for more than 10 minutes
+    - Is A/C in heat or cool mode and before 09:00 or after 17:00
+3. [Listen for entity state or attribute changes](../cookbook/jsonata-3-events-state.md)
+    - Motion detection start, and ending also before 08:30 and after 17:30
+    - Switch turned off, and has been on for less than three minutes
+    - Motion detection only before dawn and after dusk, with dusk and dawn times output
 4. Trigger a flow from complex state change conditions
 5. Write state and attribute values to an HA sensor
 6. Route flow (switch node) based on computed outcomes
-7. Read state history and process the return JSON (change node)
+7. [Read state history and process the return JSON (change node)](../cookbook/jsonata-7-change-node.md)
+    - Obtain weather forecast data in a different format
 
 
 - [Increase lights brightness with remote](../cookbook/jsonata.html#increase-lights-brightness-with-remote)
