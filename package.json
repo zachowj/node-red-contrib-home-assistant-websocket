@@ -95,7 +95,7 @@
     "@vuepress/plugin-search": "2.0.0-rc.0",
     "autoprefixer": "10.4.16",
     "browser-sync": "3.0.2",
-    "chai": "4.3.10",
+    "chai": "4.4.1",
     "cheerio": "1.0.0-rc.12",
     "cssnano": "6.0.3",
     "del": "6.1.1",
