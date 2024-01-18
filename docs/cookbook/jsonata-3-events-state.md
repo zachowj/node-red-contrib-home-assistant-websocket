@@ -77,3 +77,16 @@ The Events: State node receives state change events for one or more entities, an
 )
 
 ```
+
+
+### OR conditional for the events: state node
+
+The **trigger-state** node is great if you have several conditions you want to check for but it doesn't allow use of OR conditions. Using a JSONata expression with an **event:state** node will allow you to fill this gap.
+
+Motion sensor at the front door triggers and have a text to speech notification be sent if at least one person is home.
+
+```json
+$entity().state = "on" and (
+   $entities("person.person1").state = "home" or $entities("person.person2").state = "home"
+)
+```
