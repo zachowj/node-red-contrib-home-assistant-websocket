@@ -93,7 +93,7 @@ The message title uses `$entity().attributes.friendly_name` to add the name of t
 
 In this example all the parameter setup is performed in the Events: state node, and the Call Service node accepts all the required parameters from the input msg.payload object.
 
-## Processing a service call return
+## Processing a service call _return_
 
 Home Assistant service calls can provide data returned as a result of the call, and JSONata is an ideal tool to manage any resulting JSON object and array structures. This example uses JSONata to extract and manipulate weather forecasts, providing a summary in a modified format.
 

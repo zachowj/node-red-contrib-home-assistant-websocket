@@ -45,11 +45,11 @@ In the **Home Assistant nodes**, JSONata can be used to set entity states, set o
     - Extract weather forecast details from call return
 2. [Read the current state or attribute value of an entity](../cookbook/jsonata-2-current-state.md)
     - Report A/C current and target temperature difference
-    - Has A/C been left on after 15:00 and for more than 10 minutes
-    - Is A/C in heat or cool mode and before 09:00 or after 17:00
+    - Has A/C been cooling for more than 2 hours and before 17:00
+    - Report if A/C unit is running outside of 'office hours'
 3. [Listen for entity state or attribute changes](../cookbook/jsonata-3-events-state.md)
-    - Motion detection start, and ending also before 08:30 and after 17:30
-    - Switch turned off, and has been on for less than three minutes
+    - Motion detection start, and also motion ending before 08:30 and after 17:30
+    - Switch just turned off, and has been on for less than three minutes
     - Motion detection only before dawn and after dusk, with dusk and dawn times output
 4. Trigger a flow from complex state change conditions
 5. Write state and attribute values to an HA sensor
