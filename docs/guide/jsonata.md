@@ -52,15 +52,16 @@ In the **Home Assistant nodes**, JSONata can be used to set entity states, set o
     - Switch just turned off, and has been on for less than three minutes
     - Motion detection only before dawn and after dusk, with dusk and dawn times output
 4. Trigger a flow from complex state change conditions
-5. Write state and attribute values to an HA sensor
+5. [Write state and attribute values to an HA sensor](../cookbook/jsonata-5-sensor.md)
+    - Count the number of lights on, and list then in an array
 6. Route flow (switch node) based on computed outcomes
 7. [Read state history and process the return JSON (change node)](../cookbook/jsonata-7-change-node.md)
     - Obtain weather forecast data in a different format
+8. [Using the additional $entity() functions in JSONata](../cookbook/jsonata-8-functions.md)
+    - Reading entity state and attributes
+    - Reading all Home Assistant entities
+    - Reading Areas, Devices, and their entities
 
-
-- [Increase lights brightness with remote](../cookbook/jsonata.html#increase-lights-brightness-with-remote)
-- [Notification of lights left on when leaving home](../cookbook/jsonata.html#notification-of-lights-left-on-when-leaving-home)
-- [OR conditional for the events: state node](../cookbook/jsonata.html#or-conditional-for-the-events-state-node)
 
 
 There are several _additional_ Home Assistant functions added for use in JSONata expressions, and these can only be used within the Home Assistant nodes.

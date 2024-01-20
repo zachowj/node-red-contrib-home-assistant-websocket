@@ -2,10 +2,11 @@
 
 The **Events: state** node receives state change events for one or more entities, and will output a message in response. The message output can be optionally controlled by a test condition on the state value, and also by a test on the length of time the state remains at that value. Both the _state test condition_ and the _state time duration_ can use JSONata. This node can also provide _output message properties_, again with the ability to use JSONata.
 
-
 ![screenshot](./images/jsonata_3_1.png)
 
-@[code](@examples/cookbook/jsonata-new/event-state.json)
+Here are three examples, showing how to use JSONata to perform **If-State conditional tests**, and to build **output properties**.
+
+@[code](@examples/cookbook/jsonata-examples/event-state.json)
 
 ### Providing a conditional test value (JSONata expression as a _value_)
 
