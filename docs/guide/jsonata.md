@@ -11,7 +11,7 @@ JSONata is very different to Mustache templates, and the use of {{msg.payload}} 
 
 In the **Home Assistant nodes**, JSONata can be used to set entity states, set output property values, generate UI parameters, or as conditional tests (both generating the test value, and as an evaluated predicate expression).
 
-| HA Nodes           | Set output property | Set state value | Construct data field | Conditional test value | Conditional Boolean | UI setting parameter | Example (e) set |
+| HA Nodes           | Set output property | Set state value | Construct data field | Conditional test value | Conditional Boolean | UI setting parameter | Example set (Xe) |
 |--------------------|:-------------------:|:---------------:|:--------------------:|:----------------------:|:-------------------:|:--------------------:|:-------:|
 | API                | X                   |                 | X                    |                        |                     |                      |         |
 | Call service       | X                   |                 | Xe                   |                        |                     |                      | 1       |
@@ -45,18 +45,23 @@ In the **Home Assistant nodes**, JSONata can be used to set entity states, set o
     - Extract weather forecast details from call return
 2. [Read the current state or attribute value of an entity](../cookbook/jsonata-2-current-state.md)
     - Report A/C current and target temperature difference
-    - Has A/C been cooling for more than 2 hours and before 17:00
+    - Has A/C been cooling for more than 2 hours before 17:00
     - Report if A/C unit is running outside of 'office hours'
 3. [Listen for entity state or attribute changes](../cookbook/jsonata-3-events-state.md)
-    - Motion detection start, and also motion ending before 08:30 and after 17:30
+    - Motion detection start, and motion ending only before 08:30 and after 17:30
     - Switch just turned off, and has been on for less than three minutes
     - Motion detection only before dawn and after dusk, with dusk and dawn times output
 4. Trigger a flow from complex state change conditions
+    - Blah blah blah
+    - Blah blah blah
 5. [Write state and attribute values to an HA sensor](../cookbook/jsonata-5-sensor.md)
-    - Count the number of lights on, and list then in an array
-6. Route flow (switch node) based on computed outcomes
+    - Provide a sensor with a count of the number of lights that are on
+    - Provide an array (list) of the lights that are on
+    - Since I last looked, which lights have been turned on, or off
+6. [Route flow (switch node) based on computed outcomes](../cookbook/jsonata-6-switch-node.md)
+    - Select flow routing depending on 'last changed ms' period in minutes
 7. [Read state history and process the return JSON (change node)](../cookbook/jsonata-7-change-node.md)
-    - Obtain weather forecast data in a different format
+    - When, and for how long, have I not been at home in the past week?
 8. [Using the additional $entity() functions in JSONata](../cookbook/jsonata-8-functions.md)
     - Reading entity state and attributes
     - Reading all Home Assistant entities

@@ -7,7 +7,7 @@ Integrations in Home Assistant provide _service calls_ that can be used, for exa
 - a domain (integration platform) such as 'climate',
 - a service call within this domain, such as 'set_temperature',
 - a target entity or entities (or area or device containing entities) to apply the service to,
-- a _data object_, containing any additional required and optional parameters.
+- a JSON _data object_, containing any additional required and optional parameters.
 
 The data object will vary, depending on the integration and service call, from an empty object `{}` to something much more complex. Constructing this data object correctly is key to a successful service call, and **JSONata** rather than mustache templating should ideally be used to achieve this.
 
