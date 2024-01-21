@@ -65,6 +65,7 @@ export default defineUserConfig({
                         'jsonata-5-sensor',
                         'jsonata-6-switch-node',
                         'jsonata-7-change-node',
+                        'jsonata-8-functions',
                         'motion-triggered-light',
                         'saving-and-restoring-states',
                         'get-state_changed-events-based-on-area',
@@ -90,7 +91,7 @@ export default defineUserConfig({
                         '/guide/conditionals',
                         '/guide/mustache-templates',
                         '/guide/jsonata',
-                        '/guide/jasonata-primer'
+                        '/guide/jasonata-primer',
                         '/guide/diagnostics',
                     ],
                 },

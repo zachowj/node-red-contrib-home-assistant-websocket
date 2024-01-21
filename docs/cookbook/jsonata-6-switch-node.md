@@ -1,9 +1,8 @@
 # JSONata Example 6 - Switch Node
 
-The **Switch** node and the **Change** node are standard Node-RED nodes that provide conditional routing (selection) and data manipulation respectively for flow messages. Many of the WebSocket nodes, when using JSONata, can provide some output property data manipulation, and a few nodes also offer simple binary message routing. However, much more can be acheived using the Switch and Change nodes.
+The _Switch_ node and the _Change_ node are standard Node-RED nodes that provide conditional routing (selection) and data manipulation respectively for flow messages. Many of the WebSocket nodes, when using JSONata, can provide some output property data manipulation, and a few nodes also offer simple binary message routing. However, much more can be acheived using the Switch and Change nodes.
 
 ![screenshot](./images/jsonata_6_1.png)
-
 
 This example shows how to use JSONata within the standard Switch node.
 

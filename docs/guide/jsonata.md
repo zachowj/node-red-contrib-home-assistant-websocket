@@ -40,12 +40,12 @@ In the **Home Assistant nodes**, JSONata can be used to set entity states, set o
 
 1. [Call a service using JSONata to build the data object](../cookbook/jsonata-1-call-service.md)
     - Increase light brightness with remote
-    - Set A/C target temperature and mode
-    - Send lights on notification when leaving home
+    - Set A/C target temperature and hvac mode
+    - Send 'lights on' notification when leaving home
     - Extract weather forecast details from call return
 2. [Read the current state or attribute value of an entity](../cookbook/jsonata-2-current-state.md)
-    - Report A/C current and target temperature difference
-    - Has A/C been cooling for more than 2 hours before 17:00
+    - Report difference between A/C current and target temperatures
+    - Report if A/C been cooling for more than 2 hours before 17:00
     - Report if A/C unit is running outside of 'office hours'
 3. [Listen for entity state or attribute changes](../cookbook/jsonata-3-events-state.md)
     - Motion detection start, and motion ending only before 08:30 and after 17:30
@@ -56,23 +56,21 @@ In the **Home Assistant nodes**, JSONata can be used to set entity states, set o
     - Blah blah blah
 5. [Write state and attribute values to an HA sensor](../cookbook/jsonata-5-sensor.md)
     - Provide a sensor with a count of the number of lights that are on
-    - Provide an array (list) of the lights that are on
-    - Since I last looked, which lights have been turned on, or off
+    - Provide an attribute array (list) of the lights that are on
+    - Since I last looked, list which lights have been turned on, or off
 6. [Route flow (switch node) based on computed outcomes](../cookbook/jsonata-6-switch-node.md)
-    - Select flow routing depending on 'last changed ms' period in minutes
+    - Select flow routing depending on state 'last changed ms' period in minutes
 7. [Read state history and process the return JSON (change node)](../cookbook/jsonata-7-change-node.md)
-    - When, and for how long, have I not been at home in the past week?
+    - Calculate when, and for how long, I have not been at home in the past week
 8. [Using the additional $entity() functions in JSONata](../cookbook/jsonata-8-functions.md)
-    - Reading entity state and attributes
+    - Reading node entity states and attributes
     - Reading all Home Assistant entities
-    - Reading Areas, Devices, and their entities
-
-
+    - Reading Areas, Devices, and their Entities
 
 There are several _additional_ Home Assistant functions added for use in JSONata expressions, and these can only be used within the Home Assistant nodes.
 
 - `$entity()` returns the entity that triggered the node
-- `$prevEntity()` returns the previous state entity if the node is an event or trigger node
+- `$prevEntity()` returns the previous state entity if the node is an event node
 
 - `$areaDevices(areaId)` returns all devices associated with a specific area ID.
 - `$areaEntities(areaId)` returns all entities associated with a specific area ID.

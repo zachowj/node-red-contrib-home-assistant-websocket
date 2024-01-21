@@ -2,7 +2,7 @@
 
 The **Current State** node has several opportunites to use JSONata. This example demonstrates all of these, using a node to fetch the current state of a climate air-conditioning unit.
 
-The default output values for this node include setting **msg.payload** to the _state_ (which for an A/C unit will be "off", "heat", "cool" or more, depending on the integration) as well as **msg.data** to the entire _entity data object_. This holds values for the last changed timestamp as well as attributes such as the friendly name and other integration dependent settings.
+The default output values for this node include setting _msg.payload_ to the _state_ (which for an A/C unit will be "off", "heat", "cool" or more, depending on the integration) as well as _msg.data_ to the entire _entity data object_. This holds values for the last changed timestamp as well as attributes such as the friendly name and other integration dependent settings.
 
 ![screenshot](./images/jsonata_2_1.png)
 
