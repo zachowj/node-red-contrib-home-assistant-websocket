@@ -65,7 +65,7 @@
   },
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "1.0.2",
-    "@rollup/plugin-typescript": "11.1.5",
+    "@rollup/plugin-typescript": "11.1.6",
     "@rollup/stream": "3.0.1",
     "@types/bonjour": "3.5.13",
     "@types/chai": "4.3.11",
