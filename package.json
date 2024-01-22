@@ -141,7 +141,7 @@
     "nodemon": "3.0.2",
     "nyc": "15.1.0",
     "postcss": "8.4.33",
-    "prettier": "3.1.1",
+    "prettier": "3.2.4",
     "rollup": "4.9.4",
     "sinon-chai": "3.7.0",
     "ts-node": "10.9.2",
