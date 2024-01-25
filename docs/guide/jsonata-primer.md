@@ -2,7 +2,7 @@
 
 This is a _simple introduction_ highlighting the _key aspects_ of this language. Full details can be found at the online [JSONata documentation](https://docs.jsonata.org/overview)
 
-**JSONata** code can be written as either a _single line expression_, or as a _code block_ `( )` containing multiple lines.
+**JSONata** code can be written as either a _single line expression_, or as multiple line expressions in a _code block_ `( )`.
 Expressions are evaluated against a _JSON object. In Node-RED this object is the node input message.
 
 A single line expression is evaluated left to right _by operator_, and the result returned is the final evaluation.
@@ -15,7 +15,7 @@ A single line expression is evaluated left to right _by operator_, and the resul
   - `.` is the mapping (iteration) operator
   - `[ ]` is the filter (selection) operator
   - `{ }` is the reduce (aggregation) operator
-  - `^( )` is the sorting operator
+  - `^( )` is the sorting (ordering) operator
 
 **Context:**
 At the start of a line expression, the _context_ is the entire top level message. Each path operator takes input from the current context, with the final result of each operation passed as output context to the next operator. Available context therefore changes as the evaluation proceeds. The current context at a specific point can be referred to using `$`. An additional operator `$$` can be used to refer to the top level context at any point, and `%` can be used to refer to the parent context (back one level) but only where this is possible to determine.
@@ -36,11 +36,11 @@ Within a path expression, `*` can be used to select all fields in an object, and
 
 The path expression may generate an array of arrays for the evaluation sequence list. In this case, the list will always first be flattened to just one array. This flattening also occurs for output when the result is an arrays of arrays.
 
-If payload is an array of objects, `payload.$keys()` returns an array, listing the keys names for each array object. For an array of nested objects, `payload.**.$keys()` returns a flattened array of all keys. To remove duplicates, the `$distinct()` function can be used, thus `$distinct(payload.**.$keys())` returns an array of every key in message payload to any depth.
+If payload is an array of objects then `payload.$keys()` returns an array, listing the keys names for each array object. For an array of nested objects, `payload.**.$keys()` returns a flattened array of all keys. To remove duplicates, the `$distinct()` function can be used, thus `$distinct(payload.**.$keys())` returns an array of every key in message payload to any depth.
 
 ## The filter (selection) operator `[ ]`
 
-This operator has several applications.
+The `[ ]` operator has several applications.
 
 - If the operator encloses an _integer_, this acts as **array index addressing**, where `payload[0]` returns the first item in the array, `[-1]` the last item. Note that the index can be an integer, or any number expression that returns or rounds down to an integer.
 - If the operator encloses an _array of integers_, these act as a **selection list**, thus `payload[0, -1]` returns the first and last items from payload array.

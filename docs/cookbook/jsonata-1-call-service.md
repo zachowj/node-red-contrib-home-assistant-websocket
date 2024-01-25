@@ -11,6 +11,14 @@ Integrations in Home Assistant provide _service calls_ that can be used, for exa
 
 The data object will vary, depending on the integration and service call, from an empty object `{}` to something much more complex. Constructing this data object correctly is key to a successful service call, and **JSONata** rather than mustache templating should ideally be used to achieve this.
 
+**Note:** The data field used in a service call must be a valid JSON object.
+
+- Mustache templates are delimited with '{{msg.payload}}'. This is _invalid_ syntax in JSONata expressions and must not be used.
+- Home Assistant uses YAML constructs, containing space-tabulation for objects and '-' for arrays. This format is incompatible with both JSON and JSONata, but YAML can be converted to JSON.
+- The data UI field option typically offers two input methods:
+    - `{}` for JSON - this _must_ be strict JSON formed with all literals and string keys. Mustache templates _may_ work successfully in simple strings.
+    - `J:` for JSONata (expression) - this must _evaluate_ to strict JSON, but can be formed with expressions in both the object keys (evaluating as strings) and the object values. Literals evaluate as themselves, so the JSONata option can accept JSON literal, but the JSON option cannot accept anything other than literals and Mustache templates.
+
 **JSONata and the Call Service node:**
 
 For Node-RED flows with a **Call Service** node there are three locations where the _data object_ can be defined.

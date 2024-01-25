@@ -23,7 +23,7 @@ In the **Home Assistant nodes**, JSONata can be used to set entity states, set o
 | Poll state         | X                   |                 |                      | X                      | X                   | X                    |         |
 | Tag                | X                   |                 |                      |                        |                     |                      |         |
 | Time               | X                   |                 |                      |                        |                     | X                    |         |
-| Trigger: state     | Xe                  |                 |                      | Xe                     |                     |                      | 4       |
+| Trigger: state     | Xe                  |                 |                      | Xe                     |                     |  X                    | 4       |
 | Wait until         | X                   |                 |                      | X                      | X                   | X                    |         |
 | Webhook            | X                   |                 |                      |                        |                     |                      |         |
 | **Entity Nodes**   |                     |                 |                      |                        |                     |                      |         |

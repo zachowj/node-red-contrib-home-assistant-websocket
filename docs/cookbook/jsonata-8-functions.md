@@ -21,13 +21,13 @@ In nodes with _output properties_, some properties are typically set by default,
 
 This provides useful message values in the flow _following_ the node, however these values can be obtained within the node itself using the appropriate functions.
 
-`$entity()` returns an object containing the entity details, relating to the entity that is the subject of the node. This means that:
+`$entity()` returns an object containing the entity details, relating to the entity that is the subject of the node. This means that the selection options are equivalalent to JSONata expressions:
 
 - 'entity' = $entity()
 - 'entity state' = $entity().state
 - 'entity id' = $entity().entity_id
 
-For the **Events:** nodes (Events: all and Events: state) the node triggers from an event change, with _$entity()_ being the current (new) entity details, and the function `$prevEntity()` being the previous (old) entity details.
+For the **Events:** nodes (Events: all and Events: state) the node triggers from an entity-change event, with _$entity()_ being the current (new) entity details, and the function `$prevEntity()` being the previous (old) entity details.
 
 ```json
 {"old": $prevEntity(), "new": $entity()}
@@ -54,6 +54,10 @@ $entities().*.attributes[$exists(array)]
 In the second flow, a _Current State_ node is used, with any valid entity. The return from the entity itself is not required - the node is just being used as a vehicle in which to execute the _$entities()_ function. When specifying a specific entity `$entities('sun.next_dawn')` only that entity will be returned, otherwise an array of all entities in Home Assistant will be returned. This JSONata expression then matches any entity, filtering out attributes fields where an object key 'array' exists.
 
 In contrast to the preceeding flow, this will return just an array of the entity attribtues. The JSONata code in this case can be executed just as and when required.
+
+**Note:** Where a number of entity state values or attributes are required at the same point for collective processing, using JSONata in a Current State node can be highly effective.
+- several Current State nodes can be chained in sequence, with each writing state or entity data to a different msg.field
+- one Current State node can execute a JSONata expression, collating various $entity() or $entities('sensor.name') functions to either place values into one object, or to perform the necessary computation at that point. Output from JSONata can be either a simple primative, or an object with several fields.
 
 ### Using _$areas()_, _$areaDevices_ and _$areaEntities()_
 
