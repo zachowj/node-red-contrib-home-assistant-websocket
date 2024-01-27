@@ -51,9 +51,10 @@ In the **Home Assistant nodes**, JSONata can be used to set entity states, set o
     - Motion detection start, and motion ending only before 08:30 and after 17:30
     - Switch just turned off, and has been on for less than three minutes
     - Motion detection only before dawn and after dusk, with dusk and dawn times output
-4. Trigger a flow from complex state change conditions
-    - Blah blah blah
-    - Blah blah blah
+4. [Trigger a flow from state change conditions](../cookbook/jsonata-4-trigger-state.md)
+    - Every minute before and after sunset
+    - Automation events just before, at, and just after sunset
+    - Adjust light brightness from 0 to 100 percent over sunset
 5. [Write state and attribute values to an HA sensor](../cookbook/jsonata-5-sensor.md)
     - Provide a sensor with a count of the number of lights that are on
     - Provide an attribute array (list) of the lights that are on

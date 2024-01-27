@@ -51,14 +51,14 @@ The `[ ]` operator has several applications.
 JSONata does not inherently regard singleton values as fundamentally different to arrays. Although a singleton is a value without enclosing structure, path expressions that require an array input can accept a singleton, which is treated as an array of one item. In some situations, particularly with path input or output list flattening, it may be necessary to add an additional `[]` to the expression to ensure correct evaluation, and where an array of arrays is required in the result.
 
 **No result means _nothing_ is returned:**
-One of the more unusual aspects of JSONata is the behaviour when an expression evaluates to _no discernable result_. Simply put, JSONata will neither return a value, nor `null` nor an error message where there is no result from an expression. Mistyping `paylaod` or requesting an array index `payload[100]` for an array of only 25 items will return **nothing**. This can make writing, testing and debugging JSONata code challenging, but it eliminates the need to code for exception conditions - declare what you want, and nothing else will be returned.
+One of the more unusual aspects of JSONata is the behaviour when an expression evaluates to _no discernible result_. Simply put, JSONata will neither return a value, nor `null` nor an error message where there is no result from an expression. Mistyping `paylaod` or requesting an array index `payload[100]` for an array of only 25 items will return **nothing**. This can make writing, testing and debugging JSONata code challenging, but it eliminates the need to code for exception conditions - declare what you want, and nothing else will be returned.
 
 The filter operator binds more strongly than the mapping operator. This means that `payload.array[0]` is returned as an array of the first items in each `payload.array` and not the first item in the `payload.array` array result. Use `(payload.array)[0]` to force evaluation in a different order.
 
 ## The reduce (aggregation) operator `{ }`
 
 This operator can only be used once in an expression line, and should ideally be at the very end.
-Note that `{ }` is a valid empty object, and `{"key": "value"}` is a one-field object as expected. Both the key as well as the value can be any expression, thus`{last_updated: payload.state}` will generate a valid object as long as `last_updated`results in a string value. Naturally values may be an valid JSON type, including objects and arrays.
+Note that `{ }` is a valid empty object, and `{"key": "value"}` is a one-field object as expected. Both the key as well as the value can be any expression, thus`{last_updated: payload.state}` will generate a valid object as long as `last_updated` results in a string value. Naturally values may be an valid JSON type, including objects and arrays.
 
 It is worth noting that in a key-value pair where the value is an expression that returns nothing, the key-value pair will not be returned in the result.
 
@@ -182,7 +182,7 @@ The simplicity comes from the power of JSONata to map, filter, sort and aggregat
 Here we declare the result to be the first part of the array up to the new value, the new value, then the remainder of the array. You may note that `$count($array)` is incorrect being one greater than the end index, however as JSONata does not complain when accessing beyond the array length, this point can be relaxed.
 
 **It is worth noting** that it is not necessary to refer to the input JSON document. The following expression generates an array of 24 objects.
-`([1..12])#$pos.{"index": $, "hour": $formatInteger($pos, "09") & ":00"}`
+`([1..24])#$pos.{"index": $, "hour": $formatInteger($pos, "09") & ":00"}`
 
 **Declarative functional programming for objects:**
 Given an object in msg.payload, how then do we change just one field value, since `payload.field:="new value"` is _not_ permitted? The answer is that we have to write a "function" that declares - that is, returns - the result we require, with the idea that JSONata expressions are functions applied to the input JSON object.
@@ -218,10 +218,12 @@ Where functions _explicitly_ require an array, passing singletons will generate 
 
 JSONata can be directly entered into any node where the UI field entry type is **J: expression**. The Node-RED editor permits expansion of the simple box using the '...' field at the end of the line. This editor provides more space, the ability to select and insert JSONata functions from a pick list, a formatting option, and a tab for testing. However, this can be limited and the [try JSONata](https://try.jsonata.org) website is easier to use.
 
-Use a debug node set to output "complete message", copy this object and paste over the left hand side JSON input object (there is a useful formatter option). Test JSONata code can be written in the top right hand window, and the result appears immediately below. Useful output messages indicated where no result is generated or an error has occurred.
+If using the JSONata Exerciser website, use a debug node set to output the "complete message", copy this entire object and paste over the left hand side JSON input object (there is a useful formatter option). Test JSONata code can then be written in the top right hand window, and the result appears immediately below. Useful output messages indicate where there is an error in the input JSON, where no result is generated, or where an error has occurred.
 
-Note that there are special Node-RED functions, `$env()` is one, that can be tested in the Node-RED editor, but not in **try JSONata**. The WebSocket functions, such as `$entity()`, cannot be tested in either editor.
+Note that there are special Node-RED functions, `$env()` is one, that can be tested in the Node-RED editor, but not in **try JSONata**. The WebSocket functions, such as `$entity()` cannot be tested in either editor.
 
 ## What JSONata cannot do
 
 JSONata can almost completely replace JavaScript in function nodes. However, the simplicity and power of the declarative language is at the expense of efficiency. Arrays and files with more than, say, 500 elements or lines will require significant CPU processing as to temporarily halt Node-RED and potentially Home Assistant. The main barrier to use is more likely to be the time and effort required to generate code, since it can be challenging to think in terms of a functional _declaration_, the outcome of which is the required result, rather than the more usual approach of designing and writing an algorithm to _prescribe_ how to obtain the required result.
+
+Good luck.

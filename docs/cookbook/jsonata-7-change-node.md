@@ -1,30 +1,30 @@
-# JSONata Example 7 - Change Node
+# JSONata Example 7 - Change node
 
 **Using JSONata for more complex tasks:**
 
-Many automations can be coded using a simple JSONata expression at some convenient point in the flow, often directly within one of the WebSocket nodes. Where the data involved is a more complex structure, then JSONata is a powerful tool for manipulating JSON objects and array.
+Many automations can be coded using a simple JSONata expression at some convenient point in the flow, often directly within one of the WebSocket nodes. Where the data involved is a more complex structure, then JSONata is a powerful tool for manipulating JSON objects and arrays. Almost all computation can be achieved using JSONata in a Change node in place of using a Function node.
 
 ## Read a person state history for the past week
 
-Since Home Assistant stores state history for a default 10 days, it is possible to read historic state records. The **Get History** node can do this for any given entity, and using _relative time_ it is easy to obtain an array of past _state-change_ events.
+Since Home Assistant stores state history for 10 days by default, it is possible to read historic state records. The **Get History** node can do this for any given entity, and using _relative time_ it is easy to obtain an array of past _state-change_ events.
 
-There are no opportunities to use JSONata within this simple node itself, however JSONata can be used both to setup the node parameters and to manipulate the returned array. In this example, JSONata is used extensively to
+There are no opportunities to use JSONata within the Get History node itself, however JSONata can be used both to setup the node parameters and to manipulate the returned array. In this example, JSONata is used extensively to:
 
 - set the input parameters for the time period required
-- read the current state for 'now' and the given entity ID
-- add an 'event' for 'now' and an 'event' for the earliest history-period time
-- calculate the time interval between state changes and create 'event-periods'
+- read the current entity state for 'now' and the given entity ID
+- add an 'event' for 'now' and an 'event' for the start history-period time
+- calculate the time interval between successive state changes to create 'event-periods'
 - filter out any event periods less than, say, 50 minutes or for state 'unknown'
-- compact now-sequential equal-state events into one longer period
+- compact any now sequential equal-state events into one longer period
 
-This returns a filtered array of entity states, the time that state started and the time it ended, and the duration in minutes. The need for extensive data processing here comes from the way 'person' sensors report, giving rise to short periods of 'unknown' or 'away' because WiFi signal or a smart phone has gone 'off-line'.
+This returns a filtered array of entity states, with the time that state period started and the time it ended, and the duration in minutes. The requirement for extensive data processing here is due to the way 'person' sensors report, giving rise to short periods of 'unknown' or 'away' because Wi-Fi signal or a smart phone has gone 'off-line'.
 
 ![screenshot](./images/jsonata_7_1.png)
 
 @[code](@examples/cookbook/jsonata-new/read-person-history.json)
 
 
-```json
+```
 (
 /* FILTER parameters */
     $fMins:=50;
@@ -85,28 +85,33 @@ This returns a filtered array of entity states, the time that state started and 
 ```
 **Notes:**
 
-The Inject Node uses JSONata to create msg.payload as a data object, setting the relative time parameter for the Get History node, and also setting the timestamp for the effective start of this time period.
+The Inject node uses JSONata to initially create msg.payload as a data object, setting the relative time parameter for the Get History node, and also setting the timestamp for the effective start of this time period.
 
 The Current State node uses JSONata in the output to retain msg.payload and also merge in the _entityId_ using `$entity().entity_id`. This now sets msg.payload with the required input parameters for the Get History node (which therefore requires no UI settings). Full entity details are also captured in msg.data as usual. 
 
 ::: caution
-This code has been tested but person sensors can go 'off line' for long periods
+This example code has been tested but person sensors can go 'off line' for long periods
 and the exact nature of the output data should be checked by experimentation.
 :::
 
-## Report only those periods when 'not home' during the day
+## Report only those periods when _'not home'_ during the day
 
 Once state history has been manipulated like this into an event-array, it is easy to ask questions, such as "how many times has this person been away this week?"
 
 The question "when was this person away during the day?" for example, can be answered by filtering the state event array, to look for 'not home' and for the event period (both start and end) to be entirely on the same date.
 
-```json
+```
 payload[state="not_home" and ($substringBefore(from,"T") = $substringBefore(upto,"T") ) ]
 ```
 
 
 **Note on history records:**
 
-In asking for the history for the past 24 hours, the Get History node will return an array of all state change events that occured within that time period. If the current state has been unchanged for the entire period requested, then an empty array will be returned.
+In asking for the history for the past 24 hours, the Get History node will return an array of all state change events that occurred within that time period. If the current state has been unchanged for the entire period requested, then an empty array will be returned.
 
-To address this, the JSONata code here first adds a record for 'now' at the current state. Then the code finds the oldest state (which may well be the current 'now' state just added) and adds that as a record for 'the start of the time period requested' at that state. This ensures that the returned history event array is topped and tailed. The minimum state event array will therefore be _one_ entry from _start of history request_ to _now_, at the _current_ state.
+To address this, the JSONata code here first adds a record for 'now' with the current state. The code then finds the oldest state (which may well be the current 'now' state just added) and adds that as a record for 'the start of the time period requested' at that state. This ensures that the returned history event array is topped and tailed. The minimum state event array will therefore be _one_ entry from _start of history request_ to _now_, at the _current_ state.
+
+**Also see:**
+
+- [JSONata guide](../guide/jsonata.md)
+- [JSONata primer](../guide/jsonata-primer.md)
