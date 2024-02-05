@@ -172,14 +172,14 @@ This works by
 
 The simplicity comes from the power of JSONata to map, filter, sort and aggregate, however compared to most procedural languages it is a new way of thinking. Since the JSON object and variables cannot be modified, there is the question of how to, for example, change just one element in an array. The expression `$array[2]:=10` will return an error since the left hand side of assignment can _only_ be a variable and not an expression. To achieve this requires a _declaration_ of the new array, built as follows.
 
-    ```jsonata
-    (
-      $array:=[1, 2, 3, 4, 5, 6];
-      $newval:=10;
-      $index:=2;
-      $append($array[[0..$index-1]], $newval)~>$append($array[[$index+1..$count($array)]])
-    )
-    ```
+```jsonata
+  (
+    $array:=[1, 2, 3, 4, 5, 6];
+    $newval:=10;
+    $index:=2;
+    $append($array[[0..$index-1]], $newval)~>$append($array[[$index+1..$count($array)]])
+  )
+```
 
 Here we declare the result to be the first part of the array up to the new value, the new value, then the remainder of the array. You may note that `$count($array)` is incorrect being one greater than the end index, however as JSONata does not complain when accessing beyond the array length, this point can be relaxed.
 
@@ -193,14 +193,14 @@ The `$spread()` function takes a JSON object and returns an array of objects, ea
 The `$merge()` function reverses this, taking an array of objects and combining back into one object. A particular feature of this function is that, where key values are duplicated, the end result contains only the _last_ such key to be found.
 Therefore, the approach to take is to spread the object, append the replacement key:value as an object to the end of this array, then to merge the array back together.
 
-````jsonata
+```jsonata
  (
    $object:={"first": 1, "second": 2, "third": 3};
    $replaceKey:= "second";
    $replaceVal:= 15;
    $spread($object) ~> $append({$replaceKey: $replaceVal}) ~> $merge()
  )
- ```
+```
 
 Deeply nested objects are much more complex, as the entire tree has to be unpicked and rebuilt in order. Fortunately there is a special function that can perform [transformation](https://docs.jsonata.org/other-operators#-------transform) on an object for us.
 `$object ~> | $ | {"second": 15} |`
@@ -231,4 +231,7 @@ Note that there are special Node-RED functions, `$env()` is one, that can be tes
 JSONata can almost completely replace JavaScript in function nodes. However, the simplicity and power of the declarative language is at the expense of efficiency. Arrays and files with more than, say, 500 elements or lines will require significant CPU processing as to temporarily halt Node-RED and potentially Home Assistant. The main barrier to use is more likely to be the time and effort required to generate code, since it can be challenging to think in terms of a functional _declaration_, the outcome of which is the required result, rather than the more usual approach of designing and writing an algorithm to _prescribe_ how to obtain the required result.
 
 Good luck.
-````
+
+```
+
+```
