@@ -231,7 +231,3 @@ Note that there are special Node-RED functions, `$env()` is one, that can be tes
 JSONata can almost completely replace JavaScript in function nodes. However, the simplicity and power of the declarative language is at the expense of efficiency. Arrays and files with more than, say, 500 elements or lines will require significant CPU processing as to temporarily halt Node-RED and potentially Home Assistant. The main barrier to use is more likely to be the time and effort required to generate code, since it can be challenging to think in terms of a functional _declaration_, the outcome of which is the required result, rather than the more usual approach of designing and writing an algorithm to _prescribe_ how to obtain the required result.
 
 Good luck.
-
-```
-
-```
