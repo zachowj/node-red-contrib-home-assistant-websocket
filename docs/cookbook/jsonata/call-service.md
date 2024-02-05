@@ -1,4 +1,4 @@
-# JSONata Example 1 - Call Service
+# Call Service
 
 Integrations in Home Assistant provide _service calls_ that can be used, for example, to set target temperature on heaters and air-conditioning units. All service calls can be found and tested within Home Assistant Developer toolbox, and it is also useful to check the integration documentation to identify exactly what is required for a successful service call.
 
@@ -21,7 +21,7 @@ The _data object_ will vary, depending on the integration and service call, from
 
 ## Passing variables to WebSocket nodes _in summary_
 
-**JSONata** in Node-RED nodes accesses the incoming message as a JSON object. Thus _msg.payload_ is referenced just as `payload` and is evaluated as the value of that key. The leading 'msg.' is not required, and '{{ payload }}' is invalid JSONata syntax.
+**JSONata** in Node-RED nodes accesses the incoming message as a JSON object. Thus _msg.payload_ is referenced just as `payload` and is evaluated as the value of that key. The leading 'msg.' is not required, and <code v-pre>{{ payload }}</code> is invalid JSONata syntax.
 
 Node-RED typically uses _msg.payload_ to pass values between nodes, however any field can be used. Most WebSocket nodes have _output properties_ that default to set _msg.data_ to the entity details, and therefore in the flow _following_ (not in) the node, `data.state` will typically provide the state value of the entity that was the subject of the _preceding_ WebSocket node.
 

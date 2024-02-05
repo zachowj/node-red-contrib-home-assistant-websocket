@@ -1,4 +1,4 @@
-# JSONata Example 4 - Trigger: state
+# Trigger: state
 
 The **Trigger: state** node is very similar to the _Events: state_ node. It will trigger when a given entity state changes, but unlike the _Events: state_, the _Trigger: state_ node has the opportunity to add conditions using UI fields to construct complex tests. This removes much of the need to manage conditional tests using JSONata.
 

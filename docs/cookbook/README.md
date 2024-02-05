@@ -3,7 +3,14 @@
 Here is a collection of beginner to advanced flows and explanations to help you
 further educate yourself in the world of Home Automation with Node-RED.
 
-- [JSONata Examples](./jsonata.md)
+- JSONata Examples
+  - [Call Service node](./jsonata/call-service.md)
+  - [Change Node](./jsonata/change-node.md)
+  - [Events: state node](./jsonata/events-state.md)
+  - [Function Node](./jsonata/function-node.md)
+  - [Sensor Node](./jsonata/sensor.md)
+  - [Switch Node](./jsonata/switch-node.md)
+  - [Trigger state node](./jsonata/trigger-state.md)
 - [Motion Triggered Light](./motion-triggered-light.md)
 - [Saving and Restoring States](./saving-and-restoring-states.md)
 - [Get state_changed Events Based on Area](./get-state_changed-events-based-on-area.md)

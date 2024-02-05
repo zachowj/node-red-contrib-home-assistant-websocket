@@ -1,4 +1,4 @@
-# JSONata Example 7 - Change node
+# Change node
 
 **Using JSONata for more complex tasks:**
 

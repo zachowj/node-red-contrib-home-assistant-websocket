@@ -1,4 +1,4 @@
-# JSONata Example 5 - Sensor
+# Sensor
 
 Using the WebSocket nodes provides many ways to read events and entity states _from_ Home Assistant into Node-RED. Sending data the other way requires the use of the **Entity** nodes.
 

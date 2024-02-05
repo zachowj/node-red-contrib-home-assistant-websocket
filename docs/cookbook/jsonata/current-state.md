@@ -1,4 +1,4 @@
-# JSONata Example 2 - Current State
+# Current State
 
 The **Current State** node has several opportunities to use JSONata. This example demonstrates all of these, using a node to fetch the current state of a climate air-conditioning unit.
 
