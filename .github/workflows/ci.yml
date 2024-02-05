@@ -62,6 +62,8 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
+      release_version: ${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }}
+      release_tag: ${{ steps.release.outputs.tag_name }}
 
   upload-assets:
     needs: release-please
@@ -76,14 +78,10 @@ jobs:
         run: npm ci
       - name: Pack
         run: npm pack
-      - name: Upload release asset
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: node-red-contrib-home-assistant-websocket-*.tgz
-          tag: ${{ github.ref }}
-          overwrite: true
-          file_glob: true
+      - name: Upload Release Asset
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload ${{ needs.release-please.outputs.release_tag }} ./node-red-contrib-home-assistant-websocket-${{ needs.release-please.outputs.release_version }}.tgz
 
   publish:
     needs: release-please
