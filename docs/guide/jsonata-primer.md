@@ -172,12 +172,14 @@ This works by
 
 The simplicity comes from the power of JSONata to map, filter, sort and aggregate, however compared to most procedural languages it is a new way of thinking. Since the JSON object and variables cannot be modified, there is the question of how to, for example, change just one element in an array. The expression `$array[2]:=10` will return an error since the left hand side of assignment can _only_ be a variable and not an expression. To achieve this requires a _declaration_ of the new array, built as follows.
 
+    ```jsonata
     (
       $array:=[1, 2, 3, 4, 5, 6];
       $newval:=10;
       $index:=2;
       $append($array[[0..$index-1]], $newval)~>$append($array[[$index+1..$count($array)]])
     )
+    ```
 
 Here we declare the result to be the first part of the array up to the new value, the new value, then the remainder of the array. You may note that `$count($array)` is incorrect being one greater than the end index, however as JSONata does not complain when accessing beyond the array length, this point can be relaxed.
 
