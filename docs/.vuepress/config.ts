@@ -91,7 +91,7 @@ export default defineUserConfig({
                         '/guide/conditionals',
                         '/guide/mustache-templates',
                         '/guide/jsonata',
-                        '/guide/jasonata-primer',
+                        '/guide/jsonata-primer',
                         '/guide/diagnostics',
                     ],
                 },
