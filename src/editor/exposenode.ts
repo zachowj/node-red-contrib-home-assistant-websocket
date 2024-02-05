@@ -94,6 +94,7 @@ export function init(n: HassNodeProperties) {
                 }
                 break;
             case NodeType.EventsAll:
+            case NodeType.EventsCalendar:
             case NodeType.EventsState:
             case NodeType.PollState:
             case NodeType.Tag:
@@ -131,6 +132,7 @@ function render() {
             }
             break;
         case NodeType.EventsAll:
+        case NodeType.EventsCalendar:
         case NodeType.EventsState:
         case NodeType.PollState:
         case NodeType.Tag:

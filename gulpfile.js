@@ -73,6 +73,7 @@ const nodeMap = {
     entity: { doc: 'entity', type: 'ha-entity' },
     'entity-config': { doc: 'entity-config', type: 'ha-entity-config' },
     'events-all': { doc: 'events-all', type: 'server-events' },
+    'events-calendar': { doc: 'events-calendar', type: 'ha-events-calendar' },
     'events-state': {
         doc: 'events-state',
         type: 'server-state-changed',

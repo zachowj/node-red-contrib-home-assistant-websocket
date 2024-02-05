@@ -66,7 +66,12 @@ export function getAutocomplete(serverId: string, type: any) {
     return list;
 }
 
-export type AutocompleteType = 'entities' | 'properties' | 'trackers' | 'zones';
+export type AutocompleteType =
+    | 'entities'
+    | 'properties'
+    | 'trackers'
+    | 'zones'
+    | 'calendars';
 export function getAutocompleteData(serverId: string, type: AutocompleteType) {
     let list: { value: any; label: any }[] = [];
     switch (type) {
@@ -118,6 +123,20 @@ export function getAutocompleteData(serverId: string, type: AutocompleteType) {
             const path = 'attributes.friendly_name';
             list = Object.values(entities[serverId])
                 .filter((item) => item.entity_id.startsWith('zone.'))
+                .map((item) => {
+                    return {
+                        value: item.entity_id,
+                        label: deepFind(path, item) || item.entity_id,
+                    };
+                })
+                .sort(sortFriendlyName);
+            break;
+        }
+        case 'calendars': {
+            if (!(serverId in entities)) return [];
+            const path = 'attributes.friendly_name';
+            list = Object.values(entities[serverId])
+                .filter((item) => item.entity_id.startsWith('calendar.'))
                 .map((item) => {
                     return {
                         value: item.entity_id,

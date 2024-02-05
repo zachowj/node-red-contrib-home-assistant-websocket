@@ -42,6 +42,11 @@ const customTypes: { [key: string]: EditorWidgetTypedInputTypeDefinition } = {
     },
     triggerId: { value: 'triggerId', label: 'trigger id', hasValue: false },
     value: { value: 'value', label: 'value', hasValue: false },
+    calendarItem: {
+        value: 'calendarItem',
+        label: 'calendar item',
+        hasValue: false,
+    },
 };
 const defaultTypes: HATypedInputTypeOptions = [
     customTypes.config,

@@ -9,6 +9,7 @@ import deviceConfig from '../nodes/device-config/migrations';
 import entity from '../nodes/entity/migrations';
 import entityConfig from '../nodes/entity-config/migrations';
 import eventsAll from '../nodes/events-all/migrations';
+import eventsCalendar from '../nodes/events-calendar/migrations';
 import eventsState from '../nodes/events-state/migrations';
 import fireEvent from '../nodes/fire-event/migrations';
 import getEntities from '../nodes/get-entities/migrations';
@@ -44,6 +45,7 @@ const nodeTypeTranslation: Partial<Record<NodeType, Migration[]>> = {
     [NodeType.Entity]: entity,
     [NodeType.EntityConfig]: entityConfig,
     [NodeType.EventsAll]: eventsAll,
+    [NodeType.EventsCalendar]: eventsCalendar,
     [NodeType.EventsState]: eventsState,
     [NodeType.FireEvent]: fireEvent,
     [NodeType.GetEntities]: getEntities,

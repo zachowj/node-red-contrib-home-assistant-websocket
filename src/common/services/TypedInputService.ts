@@ -90,6 +90,7 @@ export default class TypedInputService {
             case TypedInputTypes.Results:
             case TypedInputTypes.TriggerId:
             case TypedInputTypes.Value:
+            case TypedInputTypes.CalendarItem:
                 val = props[valueType];
                 break;
             default:

@@ -74,6 +74,7 @@ export enum NodeType {
     Device = 'ha-device',
     Entity = 'ha-entity',
     EventsAll = 'server-events',
+    EventsCalendar = 'ha-events-calendar',
     EventsState = 'server-state-changed',
     FireEvent = 'ha-fire-event',
     GetEntities = 'ha-get-entities',
@@ -133,6 +134,7 @@ export enum TypedInputTypes {
     Regex = 're',
     Value = 'value',
     PreviousValue = 'previousValue',
+    CalendarItem = 'calendarItem',
 }
 
 export enum TimeUnit {

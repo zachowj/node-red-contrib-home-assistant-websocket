@@ -1,0 +1,81 @@
+<input type="hidden" id="node-input-version" />
+
+<div class="form-row">
+    <label
+        for="node-input-name"
+        data-i18n="ha-events-calendar.label.name"
+    ></label>
+    <input type="text" id="node-input-name" />
+</div>
+
+<div class="form-row">
+    <label
+        for="node-input-server"
+        data-i18n="ha-events-calendar.label.server"
+    ></label>
+    <input type="text" id="node-input-server" />
+</div>
+
+<div class="form-row">
+    <label for="node-input-entityId">
+        <i class="fa fa-cube"></i>
+        <span data-i18n="ha-events-calendar.label.entityId"></span>
+    </label>
+    <input type="text" id="node-input-entityId" />
+</div>
+
+<div class="form-row">
+    <label
+        for="node-input-eventType"
+        data-i18n="ha-events-calendar.label.eventType"
+    ></label>
+    <select type="text" id="node-input-eventType">
+        <option
+            value="start"
+            data-i18n="ha-events-calendar.label.start"
+        ></option>
+        <option value="end" data-i18n="ha-events-calendar.label.end"></option>
+    </select>
+</div>
+
+<div class="form-row">
+    <label
+        for="node-input-offset"
+        data-i18n="ha-events-calendar.label.offset"
+    ></label>
+    <input type="text" id="node-input-offset" style="width: 43%" />
+    <input type="hidden" id="node-input-offsetType" />
+    <select id="node-input-offsetUnits" style="width: 27%">
+        <option
+            value="seconds"
+            data-i18n="ha-events-calendar.label.seconds"
+        ></option>
+        <option
+            value="minutes"
+            data-i18n="ha-events-calendar.label.minutes"
+        ></option>
+        <option
+            value="hours"
+            data-i18n="ha-events-calendar.label.hours"
+        ></option>
+    </select>
+</div>
+
+<div class="form-row">
+    <label
+        for="node-input-filter"
+        data-i18n="ha-events-calendar.label.filter"
+    ></label>
+    <input type="text" id="node-input-filter" />
+    <input type="hidden" id="node-input-filterType" />
+</div>
+
+<div class="form-row"><ol id="custom-outputs"></ol></div>
+
+<div class="form-row" id="exposed-as-row">
+    <label
+        for="node-input-exposeAsEntityConfig"
+        data-i18n="ha-tag.label.expose_as"
+    ></label>
+    <input type="text" id="node-input-exposeAsEntityConfig" />
+</div>
