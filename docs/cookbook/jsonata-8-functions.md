@@ -2,13 +2,11 @@
 
 Several additional **JSONata functions** are provided for use within the WebSocket nodes. JSONata expressions are first 'prepared' then 'executed', and the preparation first stage is used to bind the expression to extra Node-RED or other functions. This means that these WebSocket functions can _only_ be used within a WebSocket node.
 
-
 ![screenshot](./images/jsonata_8_1.png)
 
 This example demonstrates the basic use of some of these functions.
 
 @[code](@examples/cookbook/jsonata-examples/ws-functions.json)
-
 
 ### Reading entity state and entity attributes with _$entity()_ and _$prevEntity()_
 
@@ -53,9 +51,10 @@ $entities().*.attributes[$exists(array)]
 
 In the second flow, a _Current State_ node is used, with a valid subject entity. The return from the given entity itself is not required - the node is just being used as a vehicle in which to execute the _$entities()_ function. When specifying a _named_ entity such as `$entities('sun.next_dawn')` only that entity will be returned, otherwise an array of all entities in Home Assistant will be returned. This JSONata expression then matches all entities in the array, filtering out attributes fields where the object key 'array' exists.
 
-In contrast to the preceding flow, this will return just an array of the entity attributes. The JSONata code in this case can also be executed  as and when required.
+In contrast to the preceding flow, this will return just an array of the entity attributes. The JSONata code in this case can also be executed as and when required.
 
 **Note:** Where a number of entity state values or attributes are required at one point in a flow for collective processing, using JSONata in a Current State node can be highly effective. The alternatives are:
+
 - Several Current State nodes chained in sequence, with each writing the state or entity data to a different msg.field.
 - One Current State node executing a JSONata expression, collating various $entity() or $entities('sensor.name') functions to either place values into one object, or to perform the necessary computation at that point. Output from JSONata can be either a simple primitive, or an object with several fields.
 
@@ -70,18 +69,19 @@ $areas()^(name).{
 ```
 
 The JSONata above is just one long expression line (unnecessary new lines have been added just to make the expression easier to read). Evaluated left to right, it starts with the `$areas()` function:
+
 - Without a given area lookup value, this function returns an array of all areas in Home Assistant
-    - which is then sorted alphabetically, by name
+  - which is then sorted alphabetically, by name
 - The result is an array, which is mapped (iterated over)
 - applying an {} object constructor for each array item
-    - the object creates one key: value pair
-    - the key is the area 'name' (this is a string)
-    - the value is a constructed text string
+  - the object creates one key: value pair
+  - the key is the area 'name' (this is a string)
+  - the value is a constructed text string
 - The function $areaDevices(area_id) returns all devices in each area
-    - using 'area_id' for the item area, and returning an array of devices
-    - using $count() to count the number of devices in the returned array
+  - using 'area_id' for the item area, and returning an array of devices
+  - using $count() to count the number of devices in the returned array
 - The function $areaEntities(area_id) returns all entities in that area
-    - returning an array, which is similarly counted
+  - returning an array, which is similarly counted
 - The resulting array of objects is then merged into one single object
 
 **Also see:**

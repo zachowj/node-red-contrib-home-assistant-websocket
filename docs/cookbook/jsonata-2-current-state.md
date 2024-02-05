@@ -16,7 +16,7 @@ Here are three examples, showing how to use JSONata to build **output properties
 
 In the first example we are looking to retrieve the current state and attributes from an air-conditioning unit, and output a text message describing the difference between current and target temperature. The A/C unit current temperature (read only) and the A/C unit target temperature (can be set with a service call) are located in the entity attributes. These are both numbers, so it is very easy to calculate the difference.
 
-**Note:** The default value _msg.data_ is set only for the output message, and therefore _msg.data.state_ would be used to obtain the entity state in nodes further along the flow, but _$entity().state_ is used to obtain the entity state in JSONata expressions inside the node. When using JSONata to build an output message property, there is no requirement to retain the default output property settings for msg.data unless this is specifically required later in the flow. 
+**Note:** The default value _msg.data_ is set only for the output message, and therefore _msg.data.state_ would be used to obtain the entity state in nodes further along the flow, but _$entity().state_ is used to obtain the entity state in JSONata expressions inside the node. When using JSONata to build an output message property, there is no requirement to retain the default output property settings for msg.data unless this is specifically required later in the flow.
 
 ```
 (
@@ -25,6 +25,7 @@ In the first example we are looking to retrieve the current state and attributes
     ($diff>0 ? "Heating" : "Cooling") & " by " & $abs($diff) & " degrees required"
 )
 ```
+
 ### Providing a conditional test value (JSONata expression as a _value_)
 
 **Example:** Output only where the A/C unit has been cooling for two hours and the local time is before 17:00, or when the unit is off.
@@ -33,11 +34,12 @@ The _Current State_ node provides for a _state value test_ opportunity, which if
 
 ![screenshot](./images/jsonata_value.png)
 
-
 ```
 $entities('sensor.time').state < "17:00" ? "cool" : "off"
 ```
+
 ### Generating UI field setting _values_
+
 The Current State node also allows for a **For**, or _duration of state_ test, and here JSONata is again being used to return either '0' when the state is "off" or '2' (hours) when the state is not "off". This complex arrangement will together test for the A/C unit being either immediately off after 17:00, or in cooling mode for at least two hours before 17:00.
 
 ```

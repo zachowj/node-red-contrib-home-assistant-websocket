@@ -3,7 +3,7 @@
 This is a _simple introduction_ highlighting the _key aspects_ of this language. Full details can be found at the online [JSONata documentation](https://docs.jsonata.org/overview)
 
 **JSONata** code can be written as either a _single line expression_, or as multiple line expressions in a _code block_ `( )`.
-Expressions are evaluated against a _JSON object. In Node-RED this object is the node input message.
+Expressions are evaluated against a \_JSON object. In Node-RED this object is the node input message.
 
 A single line expression is evaluated left to right _by operator_, and the result returned is the final evaluation.
 
@@ -47,7 +47,7 @@ The `[ ]` operator has several applications.
 - Otherwise, where the operator encloses a _predicate expression_, this will map over the current context as a list, **filtering** only the list items where the predicate evaluates as true. For example `payload[time<"12:00"]` where `time` is a key value within `payload` object.
 - For the special **range operator** `[a..b]`, such as `[0..3]` this syntax generates an array of integers between the two given integer values. Note that, as in all cases in JSONata, the defining integer values can be either literals, or expressions that evaluate to an integer. To generate an array of integers to be used as a filter requires `[[a..b]]`.
 - Lastly, this operator acts as an **array constructor**. `["one", "two", "three"]` is an array. The simple form `[]` may also be used at any point in a line expression to force singleton output to an array, as in `payload.data[]`.
-  
+
 JSONata does not inherently regard singleton values as fundamentally different to arrays. Although a singleton is a value without enclosing structure, path expressions that require an array input can accept a singleton, which is treated as an array of one item. In some situations, particularly with path input or output list flattening, it may be necessary to add an additional `[]` to the expression to ensure correct evaluation, and where an array of arrays is required in the result.
 
 **No result means _nothing_ is returned:**
@@ -112,12 +112,12 @@ There are also several higher-order functions, such as `$map()` and `$reduce()` 
 
 Functions can be nested, so that
 
-`$substringAfter($substringBefore("2024-01-10T10:32:14.0324","."),"T")`  returns just the time part of the string.
-  
+`$substringAfter($substringBefore("2024-01-10T10:32:14.0324","."),"T")` returns just the time part of the string.
+
 The _function chaining_ operator `~>` allows for greater visual clarity
 
 `$substringBefore("2024-01-10T10:32:14.0324",".") ~> $substringAfter("T")`.
-  
+
 This works with the function chain passing the result as context, and subsequent functions permitting an optional parameter to be substituted by this context.
 
 **Additional features:**
@@ -193,14 +193,14 @@ The `$spread()` function takes a JSON object and returns an array of objects, ea
 The `$merge()` function reverses this, taking an array of objects and combining back into one object. A particular feature of this function is that, where key values are duplicated, the end result contains only the _last_ such key to be found.
 Therefore, the approach to take is to spread the object, append the replacement key:value as an object to the end of this array, then to merge the array back together.
 
-   ```jsonata
-    (
-      $object:={"first": 1, "second": 2, "third": 3};
-      $replaceKey:= "second";
-      $replaceVal:= 15;
-      $spread($object) ~> $append({$replaceKey: $replaceVal}) ~> $merge()
-    )
-    ```
+````jsonata
+ (
+   $object:={"first": 1, "second": 2, "third": 3};
+   $replaceKey:= "second";
+   $replaceVal:= 15;
+   $spread($object) ~> $append({$replaceKey: $replaceVal}) ~> $merge()
+ )
+ ```
 
 Deeply nested objects are much more complex, as the entire tree has to be unpicked and rebuilt in order. Fortunately there is a special function that can perform [transformation](https://docs.jsonata.org/other-operators#-------transform) on an object for us.
 `$object ~> | $ | {"second": 15} |`
@@ -231,3 +231,4 @@ Note that there are special Node-RED functions, `$env()` is one, that can be tes
 JSONata can almost completely replace JavaScript in function nodes. However, the simplicity and power of the declarative language is at the expense of efficiency. Arrays and files with more than, say, 500 elements or lines will require significant CPU processing as to temporarily halt Node-RED and potentially Home Assistant. The main barrier to use is more likely to be the time and effort required to generate code, since it can be challenging to think in terms of a functional _declaration_, the outcome of which is the required result, rather than the more usual approach of designing and writing an algorithm to _prescribe_ how to obtain the required result.
 
 Good luck.
+````

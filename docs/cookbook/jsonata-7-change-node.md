@@ -23,7 +23,6 @@ This returns a filtered array of entity states, with the time that state period 
 
 @[code](@examples/cookbook/jsonata-examples/read-person-history.json)
 
-
 ```
 (
 /* FILTER parameters */
@@ -36,7 +35,7 @@ This returns a filtered array of entity states, with the time that state period 
     $x:=$append(payload, $first)^(>last_changed,>last_updated);
 
 /* copy the oldest state value, and add in as the first record at start of history */
-/* we now have a 'now' and 'start of history' record, even if payload was empty    */    
+/* we now have a 'now' and 'start of history' record, even if payload was empty    */
     $x:=$append($x,{"state": $x[0].state, "last_changed": startAt});
 
 /* create array of state changes, with how long they have been in that state */
@@ -83,11 +82,12 @@ This returns a filtered array of entity states, with the time that state period 
 
 )
 ```
+
 **Notes:**
 
 The Inject node uses JSONata to initially create msg.payload as a data object, setting the relative time parameter for the Get History node, and also setting the timestamp for the effective start of this time period.
 
-The Current State node uses JSONata in the output to retain msg.payload and also merge in the _entityId_ using `$entity().entity_id`. This now sets msg.payload with the required input parameters for the Get History node (which therefore requires no UI settings). Full entity details are also captured in msg.data as usual. 
+The Current State node uses JSONata in the output to retain msg.payload and also merge in the _entityId_ using `$entity().entity_id`. This now sets msg.payload with the required input parameters for the Get History node (which therefore requires no UI settings). Full entity details are also captured in msg.data as usual.
 
 ::: caution
 This example code has been tested but person sensors can go 'off line' for long periods
@@ -103,7 +103,6 @@ The question "when was this person away during the day?" for example, can be ans
 ```
 payload[state="not_home" and ($substringBefore(from,"T") = $substringBefore(upto,"T") ) ]
 ```
-
 
 **Note on history records:**
 

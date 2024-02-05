@@ -68,9 +68,8 @@ export default class JSONataService {
         expr.assign('deviceEntities', this.deviceEntities.bind(this));
         expr.assign('device', this.device.bind(this));
         expr.assign('entity', () => entity);
-        expr.assign(
-            'entities',
-            (val: string) => this.#homeAssistant?.websocket?.getStates(val),
+        expr.assign('entities', (val: string) =>
+            this.#homeAssistant?.websocket?.getStates(val),
         );
         expr.assign('outputData', (obj: string) => {
             if (!obj) {

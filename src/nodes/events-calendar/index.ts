@@ -32,7 +32,7 @@ export interface EventsCalendarNode extends BaseNode {
 
 export default function eventsCalendarNode(
     this: EventsCalendarNode,
-    config: EventsCalendarNodeProperties
+    config: EventsCalendarNodeProperties,
 ) {
     RED.nodes.createNode(this, config);
 
@@ -41,7 +41,7 @@ export default function eventsCalendarNode(
     const serverConfigNode = getServerConfigNode(this.config.server);
     const homeAssistant = getHomeAssistant(serverConfigNode);
     const exposeAsConfigNode = getExposeAsConfigNode(
-        this.config.exposeAsEntityConfig
+        this.config.exposeAsEntityConfig,
     );
     const clientEvents = new ClientEvents({
         node: this,

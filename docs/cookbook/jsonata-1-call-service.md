@@ -16,8 +16,8 @@ The _data object_ will vary, depending on the integration and service call, from
 - Mustache templates are delimited with <code v-pre>{{msg.payload}}</code>. Although acceptable in most JSON input fields, this is _invalid syntax_ in JSONata expressions and must not be used.
 - Home Assistant configuration uses YAML constructs, containing space-tabulation for objects and '-' for arrays. This format is incompatible with both JSON and JSONata, but YAML constructs can be converted to JSON.
 - The WebSocket nodes Data UI field option typically offers two input methods:
-    - `{}` for JSON - this _must_ be strict JSON formed with all literals and string keys. Mustache templates _may_ work successfully in _simple strings_. **JSONata will not work here**. The JSON option cannot accept anything other than literals and Mustache templates.
-    - `J:` for JSONata (expression) - this must _evaluate_ to strict JSON, but can be formed with expressions in both the object keys (evaluating as strings) and the object values. In JSONata, literals evaluate as themselves, so the JSONata option can accept a JSON literal construct.
+  - `{}` for JSON - this _must_ be strict JSON formed with all literals and string keys. Mustache templates _may_ work successfully in _simple strings_. **JSONata will not work here**. The JSON option cannot accept anything other than literals and Mustache templates.
+  - `J:` for JSONata (expression) - this must _evaluate_ to strict JSON, but can be formed with expressions in both the object keys (evaluating as strings) and the object values. In JSONata, literals evaluate as themselves, so the JSONata option can accept a JSON literal construct.
 
 ## Passing variables to WebSocket nodes _in summary_
 
@@ -44,7 +44,6 @@ There are advantages and drawbacks to each approach, and personal choice as well
 Here are three examples, each using JSONata to set the required Data object, and one example of using JSONata to process service call return data.
 
 @[code](@examples/cookbook/jsonata-examples/service-call.json)
-
 
 ## Setting the _Data_ field
 
@@ -92,7 +91,6 @@ This example uses JSONata in two places in the _Events: state_ node. The state v
 "home" in $entities().*[$substringBefore(entity_id,".")="person"].state
 ```
 
-
 JSONata is also then used in the output properties to create the required object for a notification service call. It uses `$entities().*` with a filter looking for those with "light" or "switch" in the entity_id and state "on", then selecting the friendly_name, and joining all those found into a string list in the message.
 
 The message title uses `$entity().attributes.friendly_name` to add the name of the person who just left home to the message title.
@@ -100,7 +98,7 @@ The message title uses `$entity().attributes.friendly_name` to add the name of t
 ```
 {
     "data": {
-        "message": "The " & 
+        "message": "The " &
           $join($entities().*[state = "on" and entity_id ~>
           /^light|^switch/].attributes.friendly_name, ", ") &
           " are on.",

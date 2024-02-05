@@ -16,7 +16,7 @@ Here are three examples, showing how to use JSONata to perform **If-State condit
 (
     $time:=$entities('sensor.time').state;
     $append(["on"], $time<"08:30" or $time>"17:30" ? ["off"]);
-)    
+)
 ```
 
 When the **If State** option is chosen with a _conditional_ (not JSONata) the condition expects a _value_ to test against. The result of the JSONata expression is the final line in the code block. This creates an array containing just ["on"] or if the time is before 08:30 or after 17:30, an array of ["on", "off"]. The motion sensor entity state will be compared with this array value using the inclusive condition 'in'.
@@ -43,9 +43,8 @@ When the **If State** option is chosen with _JSONata_ (not a conditional) then t
 )
 
 ```
+
 In all the WebSocket nodes, the `$entity()` function will return an object for the entity that is the subject of the node. For the **Event:** nodes, the `$entity()` return is for the _current_ or new state, and an additional `$prevEntity()` function will return a similar object for the _previous_ state. Use of both functions allows JSONata expressions to work with and compare the triggering state change.
-
-
 
 **Example:** Motion has been detected before dawn or after dusk.
 
@@ -61,11 +60,12 @@ Here JSONata is again used to generate a Boolean result for the If State test. T
 
     $isdawn:= $date=$substringBefore($dawn,"T");
     $isdusk:= $date!=$substringBefore($dusk,"T");
-    
+
     $ismotion and ($isdawn or $isdusk)
 )
 ```
-The _Sun_ integration in Home Assistant provides 'next_dawn' and 'next_dusk' sensors, with a date-time string value in UTC. Since the _next_ dawn will be for today before dawn, but will be for tomorrow after dawn, and similarly the _next_ dusk will be for today before dusk, but for tomorrow after dusk, it is possible to compare just the date parts of the UTC timestamps, so as to determine if the current time is before or after either dawn or dusk.
+
+The _Sun_ integration in Home Assistant provides 'next*dawn' and 'next_dusk' sensors, with a date-time string value in UTC. Since the \_next* dawn will be for today before dawn, but will be for tomorrow after dawn, and similarly the _next_ dusk will be for today before dusk, but for tomorrow after dusk, it is possible to compare just the date parts of the UTC timestamps, so as to determine if the current time is before or after either dawn or dusk.
 
 ### Creating _output_ properties
 
@@ -81,7 +81,7 @@ To extend this last example, JSONata is used to generate an **output object**. N
 
     $isdawn:= $date=$substringBefore($dawn,"T");
     $isdusk:= $date!=$substringBefore($dusk,"T");
-    
+
     $fire:= $ismotion and ($isdawn or $isdusk);
 
     {"motion": $ismotion,

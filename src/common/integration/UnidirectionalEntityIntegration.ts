@@ -199,8 +199,8 @@ export default class UnidirectionalIntegration extends Integration {
         }
 
         this.saveHaConfigToContext(config);
-        this.status.forEach(
-            (status) => status?.setSuccess('home-assistant.status.registered'),
+        this.status.forEach((status) =>
+            status?.setSuccess('home-assistant.status.registered'),
         );
 
         this.registered = true;

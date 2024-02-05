@@ -74,8 +74,8 @@ export default class BidirectionalIntegration extends UnidirectionalEntityIntegr
             return;
         }
         this.saveHaConfigToContext(haConfig);
-        this.status.forEach(
-            (status) => status?.setSuccess('home-assistant.status.registered'),
+        this.status.forEach((status) =>
+            status?.setSuccess('home-assistant.status.registered'),
         );
 
         this.registered = true;

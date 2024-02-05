@@ -10,7 +10,7 @@ export function startListeners(
     controller: EventsCalendarController,
     homeAssistant: HomeAssistant,
     node: EventsCalendarNode,
-    status: Status
+    status: Status,
 ) {
     const queueUpcomingCalendarEvents = async () => {
         await controller.queueUpcomingCalendarEvents().catch((e) => {
@@ -25,7 +25,7 @@ export function startListeners(
     } else {
         clientEvents.addListener(
             'ha_client:initial_connection_ready',
-            queueUpcomingCalendarEvents
+            queueUpcomingCalendarEvents,
         );
     }
 }

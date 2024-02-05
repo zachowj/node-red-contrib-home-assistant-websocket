@@ -57,8 +57,6 @@ This code uses the current month to lookup a given sunset time, and then to gene
 
 _The figures provided are examples, based on UTC times (DST ignored) for location London, UK and estimate an average sunrise and sunset time for each calendar month. Since sun events can move by up to one hour from start to end of a month, a span of at least 30 minutes is required to successfully include events across the entire month._
 
-
-
 ### Using JSONata to create a _custom message_
 
 The output properties on successful trigger include a default message and a default payload, which includes the basic event details for the trigger entity. It is possible to set the output as a _customised payload_, which replaces msg.payload with specific output, or as a _customised message_, which replaces the entire message with a generated object.

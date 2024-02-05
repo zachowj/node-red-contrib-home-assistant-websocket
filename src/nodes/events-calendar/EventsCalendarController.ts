@@ -27,7 +27,7 @@ export default class EventsCalendarController extends ExposeAsController {
         currentStart: Date,
         currentEnd: Date,
         filter: string | undefined,
-        calendarItem: CalendarItem
+        calendarItem: CalendarItem,
     ): boolean {
         const itemDate = calendarItem.date(this.node.config.eventType);
         if (!(itemDate >= currentStart && itemDate < currentEnd)) {
@@ -65,18 +65,18 @@ export default class EventsCalendarController extends ExposeAsController {
         const offsetIntervalStart =
             start || new Date(now.getTime() + nodeOffsetMs);
         const offsetIntervalEnd = new Date(
-            offsetIntervalStart.getTime() + this.#intervalLengthMs
+            offsetIntervalStart.getTime() + this.#intervalLengthMs,
         );
 
         const nextQueueTime = new Date(
-            offsetIntervalEnd.getTime() - this.#headStartMs // Start the timer 20 milliseconds before the window ends just to give it a head start
+            offsetIntervalEnd.getTime() - this.#headStartMs, // Start the timer 20 milliseconds before the window ends just to give it a head start
         );
 
         try {
             const items: CalendarItem[] | undefined =
                 await this.retrieveCalendarItems(
                     offsetIntervalStart,
-                    offsetIntervalEnd
+                    offsetIntervalEnd,
                 );
 
             if (!Array.isArray(items)) {
@@ -90,15 +90,15 @@ export default class EventsCalendarController extends ExposeAsController {
                 this.status.setSending(
                     RED._('ha-events-calendar.status.queued-multi', {
                         count: items.length,
-                    })
+                    }),
                 );
             } else if (items.length > 0) {
                 this.status.setSending(
-                    RED._('ha-events-calendar.status.queued-one')
+                    RED._('ha-events-calendar.status.queued-one'),
                 );
             } else {
                 this.status.setSending(
-                    RED._('ha-events-calendar.status.queued-none')
+                    RED._('ha-events-calendar.status.queued-none'),
                 );
             }
         } catch (exc: any) {
@@ -106,27 +106,27 @@ export default class EventsCalendarController extends ExposeAsController {
                 RED._('ha-events-calendar.error.retrieval', {
                     entity: this.node.config.entityId,
                     error: exc.message,
-                })
+                }),
             );
         }
 
         // Queue a timer for the next interval starting at intervalEnd.
         this.#nextUpcomingTimer = setTimeout(
             this.queueUpcomingCalendarEvents.bind(this, offsetIntervalEnd),
-            nextQueueTime.getTime() - now.getTime()
+            nextQueueTime.getTime() - now.getTime(),
         );
     }
 
     private async retrieveCalendarItems(
         intervalStart: Date,
-        intervalEnd: Date
+        intervalEnd: Date,
     ): Promise<CalendarItem[] | undefined> {
         const rawItems: ICalendarItem[] = await this.homeAssistant.http.get(
             `/calendars/${this.node.config.entityId}`,
             {
                 start: intervalStart.toISOString(),
                 end: intervalEnd.toISOString(),
-            }
+            },
         );
         if (!Array.isArray(rawItems)) {
             return;
@@ -134,7 +134,7 @@ export default class EventsCalendarController extends ExposeAsController {
         const filterText = this.node.config.filter
             ? await this.typedInputService.getValue(
                   this.node.config.filter,
-                  this.node.config.filterType
+                  this.node.config.filterType,
               )
             : undefined;
 
@@ -145,8 +145,8 @@ export default class EventsCalendarController extends ExposeAsController {
                     this,
                     intervalStart,
                     intervalEnd,
-                    filterText
-                )
+                    filterText,
+                ),
             );
         // TODO: allow more customisable conditions for filtering
 
@@ -156,7 +156,7 @@ export default class EventsCalendarController extends ExposeAsController {
     private async queueCalendarItem(item: CalendarItem, now: Date) {
         let timeToFireMs = await this.calcFireMs(
             item.date(this.node.config.eventType),
-            now
+            now,
         );
         if (timeToFireMs < 0 - this.#headStartMs) {
             // if time has significantly passed for this item, then don't bother queuing it.
@@ -174,7 +174,7 @@ export default class EventsCalendarController extends ExposeAsController {
         // Queue/requeue it and set a timer to fire it at the appropriate time
         this.#queuedCalendarItemTimers[item.queueIndex()] = setTimeout(
             this.fireCalendarItem.bind(this, item),
-            timeToFireMs
+            timeToFireMs,
         );
     }
 
@@ -188,11 +188,11 @@ export default class EventsCalendarController extends ExposeAsController {
     private async getOffsetMs() {
         const offsetNum = await this.typedInputService.getValue(
             this.node.config.offset,
-            this.node.config.offsetType
+            this.node.config.offsetType,
         );
         const nodeOffsetMs = getTimeInMilliseconds(
             offsetNum,
-            this.node.config.offsetUnits
+            this.node.config.offsetUnits,
         );
         return nodeOffsetMs;
     }
@@ -217,11 +217,11 @@ export default class EventsCalendarController extends ExposeAsController {
             message,
             {
                 calendarItem: item as ICalendarItem,
-            }
+            },
         );
         this.node.send(message);
         this.status.setSuccess(
-            RED._('ha-events-calendar.status.sent', { summary: item.summary })
+            RED._('ha-events-calendar.status.sent', { summary: item.summary }),
         );
     }
 }
