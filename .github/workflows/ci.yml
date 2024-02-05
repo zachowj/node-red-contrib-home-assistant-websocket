@@ -74,6 +74,8 @@ jobs:
           cache: npm
       - name: npm install
         run: npm ci
+      - name: Pack
+        run: npm pack
       - name: Upload release asset
         uses: svenstaro/upload-release-action@v2
         with:
