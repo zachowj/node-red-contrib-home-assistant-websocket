@@ -13,7 +13,7 @@ The _data object_ will vary, depending on the integration and service call, from
 
 **Note:** The data field used in a service call must be a valid JSON object.
 
-- Mustache templates are delimited with '{{msg.payload}}'. Although acceptable in most JSON input fields, this is _invalid syntax_ in JSONata expressions and must not be used.
+- Mustache templates are delimited with <code v-pre>{{msg.payload}}</code>. Although acceptable in most JSON input fields, this is _invalid syntax_ in JSONata expressions and must not be used.
 - Home Assistant configuration uses YAML constructs, containing space-tabulation for objects and '-' for arrays. This format is incompatible with both JSON and JSONata, but YAML constructs can be converted to JSON.
 - The WebSocket nodes Data UI field option typically offers two input methods:
     - `{}` for JSON - this _must_ be strict JSON formed with all literals and string keys. Mustache templates _may_ work successfully in _simple strings_. **JSONata will not work here**. The JSON option cannot accept anything other than literals and Mustache templates.
