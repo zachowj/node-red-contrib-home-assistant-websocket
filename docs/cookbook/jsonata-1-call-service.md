@@ -43,7 +43,7 @@ There are advantages and drawbacks to each approach, and personal choice as well
 
 Here are three examples, each using JSONata to set the required Data object, and one example of using JSONata to process service call return data.
 
-@[code](@examples/cookbook/jsonata-examples/service_call.json)
+@[code](@examples/cookbook/jsonata-examples/service-call.json)
 
 
 ## Setting the _Data_ field
