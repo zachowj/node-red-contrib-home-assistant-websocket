@@ -191,12 +191,14 @@ The `$spread()` function takes a JSON object and returns an array of objects, ea
 The `$merge()` function reverses this, taking an array of objects and combining back into one object. A particular feature of this function is that, where key values are duplicated, the end result contains only the _last_ such key to be found.
 Therefore, the approach to take is to spread the object, append the replacement key:value as an object to the end of this array, then to merge the array back together.
 
+   ```jsonata
     (
       $object:={"first": 1, "second": 2, "third": 3};
       $replaceKey:= "second";
       $replaceVal:= 15;
       $spread($object) ~> $append({$replaceKey: $replaceVal}) ~> $merge()
     )
+    ```
 
 Deeply nested objects are much more complex, as the entire tree has to be unpicked and rebuilt in order. Fortunately there is a special function that can perform [transformation](https://docs.jsonata.org/other-operators#-------transform) on an object for us.
 `$object ~> | $ | {"second": 15} |`
