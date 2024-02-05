@@ -6,7 +6,7 @@ JSONata is a _functional declarative_ language, designed to work with JSON objec
 - The expression is evaluated against a JSON object. In Node-RED this JSON is the top level message object. There is no need to use a leading 'msg.' therefore just  `payload` will evaluate as the message payload _value_, and `topic` as the topic _value_.
 
 ::: warning
-JSONata is very different to Mustache templates, and the use of {{msg.payload}} will not work as you might expect.
+JSONata is very different to Mustache templates, and the use of <code v-pre>{{msg.payload}}</code> will not work as you might expect.
 :::
 
 In the **Home Assistant nodes**, JSONata can be used to set entity states, set output property values, generate UI parameters, or as conditional tests (both generating the test value, and as an evaluated predicate expression).
