@@ -56,7 +56,7 @@
     "home-assistant-js-websocket": "9.1.0",
     "joi": "17.12.0",
     "lodash": "4.17.21",
-    "lowdb": "1.0.0",
+    "lowdb": "7.0.1",
     "mustache": "4.2.0",
     "selectn": "1.1.2",
     "slugify": "1.6.6",
