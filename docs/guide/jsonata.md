@@ -38,32 +38,32 @@ In the **Home Assistant nodes**, JSONata can be used to set entity states, set o
 
 **Examples of using JSONata in the Home Assistant Nodes:**
 
-1. [Call a service using JSONata to build the data object](../cookbook/jsonata-1-call-service.md)
+1. [Call a service using JSONata to build the data object](../cookbook/jsonata/call-service.md)
    - Increase light brightness with remote
    - Set A/C target temperature and hvac mode
    - Send 'lights on' notification when leaving home
    - Extract weather forecast details from call return
-2. [Read the current state or attribute value of an entity](../cookbook/jsonata-2-current-state.md)
+2. [Read the current state or attribute value of an entity](../cookbook/jsonata/current-state.md)
    - Report difference between A/C current and target temperatures
    - Report if A/C been cooling for more than 2 hours before 17:00
    - Report if A/C unit is running outside of 'office hours'
-3. [Listen for entity state or attribute changes](../cookbook/jsonata-3-events-state.md)
+3. [Listen for entity state or attribute changes](../cookbook/jsonata/events-state.md)
    - Motion detection start, and motion ending only before 08:30 and after 17:30
    - Switch just turned off, and has been on for less than three minutes
    - Motion detection only before dawn and after dusk, with dusk and dawn times output
-4. [Trigger a flow from state change conditions](../cookbook/jsonata-4-trigger-state.md)
+4. [Trigger a flow from state change conditions](../cookbook/jsonata/trigger-state.md)
    - Every minute before and after sunset
    - Automation events just before, at, and just after sunset
    - Adjust light brightness from 0 to 100 percent over sunset
-5. [Write state and attribute values to an HA sensor](../cookbook/jsonata-5-sensor.md)
+5. [Write state and attribute values to an HA sensor](../cookbook/jsonata/sensor.md)
    - Provide a sensor with a count of the number of lights that are on
    - Provide an attribute array (list) of the lights that are on
    - Since I last looked, list which lights have been turned on, or off
-6. [Route flow (switch node) based on computed outcomes](../cookbook/jsonata-6-switch-node.md)
+6. [Route flow (switch node) based on computed outcomes](../cookbook/jsonata/switch-node.md)
    - Select flow routing depending on state 'last changed ms' period in minutes
-7. [Read state history and process the return JSON (change node)](../cookbook/jsonata-7-change-node.md)
+7. [Read state history and process the return JSON (change node)](../cookbook/jsonata/change-node.md)
    - Calculate when, and for how long, I have not been at home in the past week
-8. [Using the additional $entity() functions in JSONata](../cookbook/jsonata-8-functions.md)
+8. [Using the additional $entity() functions in JSONata](../cookbook/jsonata/functions.md)
    - Reading node entity states and attributes
    - Reading all Home Assistant entities
    - Reading Areas, Devices, and their Entities

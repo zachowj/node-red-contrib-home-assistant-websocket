@@ -7,7 +7,7 @@ further educate yourself in the world of Home Automation with Node-RED.
   - [Call Service node](./jsonata/call-service.md)
   - [Change Node](./jsonata/change-node.md)
   - [Events: state node](./jsonata/events-state.md)
-  - [Function Node](./jsonata/function-node.md)
+  - [Functions](./jsonata/functions.md)
   - [Sensor Node](./jsonata/sensor.md)
   - [Switch Node](./jsonata/switch-node.md)
   - [Trigger state node](./jsonata/trigger-state.md)

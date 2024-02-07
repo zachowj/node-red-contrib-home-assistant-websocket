@@ -1,4 +1,4 @@
-# Using the WebSocket extra functions
+# Other functions
 
 Several additional **JSONata functions** are provided for use within the WebSocket nodes. JSONata expressions are first 'prepared' then 'executed', and the preparation first stage is used to bind the expression to extra Node-RED or other functions. This means that these WebSocket functions can _only_ be used within a WebSocket node.
 

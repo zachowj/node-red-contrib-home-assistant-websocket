@@ -47,6 +47,16 @@ Here are three examples, each using JSONata to set the required Data object, and
 
 ## Setting the _Data_ field
 
+### Settings a data property from a Home Assistant entity
+
+**Example:** A _Call Service_ node that sets the target temperature of a climate entity to the current temperature of a sensor entity.
+
+```
+{
+  "temperature": $entities("sensor.living_room_temperature").state
+}
+```
+
 ### Increase lights brightness with remote
 
 **Example:** A remote with a button that when clicked increases the brightness of a given light by an amount that is set from an input_number inside Home Assistant.
