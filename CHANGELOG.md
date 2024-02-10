@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.63.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.62.3...v0.63.0) (2024-02-10)
+
+
+### Features
+
+* **calendar:** Implement Calendar Event Trigger Node ([f5a183c](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f5a183c77fe23ef24820763f48aaf41a8706fce5))
+
 ## [0.62.3](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.62.2...v0.62.3) (2024-01-09)
 
 
