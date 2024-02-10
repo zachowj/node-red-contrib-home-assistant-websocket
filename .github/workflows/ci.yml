@@ -76,6 +76,8 @@ jobs:
           cache: npm
       - name: npm install
         run: npm ci
+      - name: build
+        run: npm run build
       - name: Pack
         run: npm pack
       - name: Upload Release Asset
