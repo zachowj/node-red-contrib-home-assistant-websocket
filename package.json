@@ -88,7 +88,7 @@
     "@types/string.prototype.matchall": "4.0.4",
     "@types/timestring": "^6.0.5",
     "@types/ws": "8.5.10",
-    "@typescript-eslint/eslint-plugin": "6.19.1",
+    "@typescript-eslint/eslint-plugin": "7.0.0",
     "@typescript-eslint/parser": "6.18.0",
     "@vuepress/plugin-google-analytics": "2.0.0-rc.0",
     "@vuepress/plugin-register-components": "2.0.0-rc.0",
