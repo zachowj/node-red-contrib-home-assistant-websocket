@@ -126,7 +126,7 @@
     "gulp-wrap": "0.15.0",
     "handlebars": "^4.7.8",
     "husky": "8.0.3",
-    "jsonata": "1.8.6",
+    "jsonata": "1.8.7",
     "lazypipe": "1.0.2",
     "lint-staged": "15.2.0",
     "markdown-it": "14.0.0",
