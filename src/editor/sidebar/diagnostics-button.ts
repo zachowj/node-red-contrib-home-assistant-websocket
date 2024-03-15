@@ -63,8 +63,12 @@ export function setupDiagnosticButton() {
             ],
         });
 
-        $.get('/homeassistant/diagnostics', function (data) {
+        $.get('homeassistant/diagnostics', function (data) {
             $('#home-assistant-diagnostics-textarea').val(data);
+        }).fail(function () {
+            $('#home-assistant-diagnostics-textarea').val(
+                i18n('home-assistant.sidebar.diagnostics.failed_fetch'),
+            );
         });
     });
 }
