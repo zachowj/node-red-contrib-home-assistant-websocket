@@ -147,7 +147,7 @@
     "ts-node": "10.9.2",
     "ts-sinon": "2.0.2",
     "tslib": "2.6.2",
-    "typescript": "5.3.3",
+    "typescript": "5.4.3",
     "vinyl-source-stream": "2.0.0",
     "vuepress": "2.0.0-rc.0",
     "vuepress-plugin-copy-code2": "2.0.0-rc.11"
