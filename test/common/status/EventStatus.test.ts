@@ -79,6 +79,7 @@ describe('EventsStatus', function () {
             expect(nodeStub.status).callCount(5);
         });
     });
+
     describe('Event Listeners', function () {
         it('should set connection state to disconnected and call updateConnectionStatus', function () {
             eventEmitter.emit(ClientEvent.Close);
@@ -89,6 +90,7 @@ describe('EventsStatus', function () {
                 text: 'home-assistant.status.disconnected',
             });
         });
+
         it('should set connection state to connecting and call updateConnectionStatus', function () {
             eventEmitter.emit(ClientEvent.Connecting);
             expect(nodeStub.status).to.be.calledOnce;
@@ -98,6 +100,7 @@ describe('EventsStatus', function () {
                 text: 'home-assistant.status.connecting',
             });
         });
+
         it('should set connection state to connected and call updateConnectionStatus', function () {
             eventEmitter.emit(ClientEvent.Open);
             expect(nodeStub.status).to.be.calledOnce;
@@ -107,6 +110,7 @@ describe('EventsStatus', function () {
                 text: 'home-assistant.status.connected',
             });
         });
+
         it('should set connection state to running and call updateConnectionStatus', function () {
             eventEmitter.emit(ClientEvent.Running);
             expect(nodeStub.status).to.be.calledOnce;

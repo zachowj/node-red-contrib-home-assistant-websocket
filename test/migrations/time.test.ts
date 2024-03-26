@@ -84,6 +84,7 @@ describe('Migrations - Time Node', function () {
             expect(migratedSchema).to.eql(VERSION_0);
         });
     });
+
     describe('Version 1', function () {
         it('should update version 0 to version 1', function () {
             const migrate = migrations.find((m) => m.version === 1);
@@ -91,15 +92,19 @@ describe('Migrations - Time Node', function () {
             expect(migratedSchema).to.eql(VERSION_1);
         });
     });
+
     describe('Version 2', function () {
         let migrate: Migration | undefined;
+
         before(function () {
             migrate = migrations.find((m) => m.version === 2);
         });
+
         it('should update version 1 to version 2', function () {
             const migratedSchema = migrate?.up(VERSION_1);
             expect(migratedSchema).to.eql(VERSION_2);
         });
+
         it('payload value should update to same value in outputProperties', function () {
             const schema = {
                 ...VERSION_1,
@@ -119,6 +124,7 @@ describe('Migrations - Time Node', function () {
             const migratedSchema = migrate?.up(schema);
             expect(migratedSchema).to.eql(expectedSchema);
         });
+
         it('payload number type should update to number type in outputProperties', function () {
             const schema = {
                 ...VERSION_1,
@@ -139,6 +145,7 @@ describe('Migrations - Time Node', function () {
             expect(migratedSchema).to.eql(expectedSchema);
         });
     });
+
     describe('Version 3', function () {
         it('should update version 2 to version 3', function () {
             const migrate = migrations.find((m) => m.version === 3);
@@ -146,6 +153,7 @@ describe('Migrations - Time Node', function () {
             expect(migratedSchema).to.eql(VERSION_3);
         });
     });
+
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
         expect(migratedSchema).to.eql(VERSION_3);

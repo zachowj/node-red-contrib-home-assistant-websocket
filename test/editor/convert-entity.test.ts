@@ -210,6 +210,7 @@ describe('convert-entity', function () {
             };
             expect(RED.nodes.import).to.have.been.calledWith(expected);
         });
+
         it('should convert sensor output properties', function () {
             const data = {
                 ...NODE_DATA,
@@ -230,6 +231,7 @@ describe('convert-entity', function () {
             };
             expect(RED.nodes.import).to.have.been.calledWith(expected);
         });
+
         describe('binary sensor', function () {
             it('should create node of type ha-binary-sensor', function () {
                 const data = {
@@ -257,6 +259,7 @@ describe('convert-entity', function () {
             });
         });
     });
+
     describe('switch', function () {
         it('should set defaults', function () {
             const data = { ...NODE_DATA, entityType: EntityType.Switch };
@@ -265,6 +268,7 @@ describe('convert-entity', function () {
                 EXPECTED_SWITCH_NODE,
             );
         });
+
         it('should set outputOnStateChange to true', function () {
             const data = {
                 ...NODE_DATA,
@@ -278,6 +282,7 @@ describe('convert-entity', function () {
             };
             expect(RED.nodes.import).to.have.been.calledWith(expected);
         });
+
         it('should set outputOnStateChange to false', function () {
             const data = {
                 ...NODE_DATA,
@@ -291,6 +296,7 @@ describe('convert-entity', function () {
             };
             expect(RED.nodes.import).to.have.been.calledWith(expected);
         });
+
         it('should convert switch output properties', function () {
             const data = {
                 ...NODE_DATA,

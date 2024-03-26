@@ -73,6 +73,7 @@ describe('Comparator Service', function () {
 
                 expect(result).to.be.true;
             });
+
             it('should return true when checking global context that exist', async function () {
                 contextServiceStub.get.withArgs('global', 'foo').returns('bar');
 
@@ -85,6 +86,7 @@ describe('Comparator Service', function () {
 
                 expect(result).to.be.true;
             });
+
             it('should return false when flow context does not exist', async function () {
                 const result = await comparatorService.getComparatorResult(
                     'is',
@@ -96,6 +98,7 @@ describe('Comparator Service', function () {
                 expect(result).to.be.false;
             });
         });
+
         describe('check entity values', function () {
             it('should return true when entitys state is equal to expected state', async function () {
                 const entity = {
@@ -113,6 +116,7 @@ describe('Comparator Service', function () {
 
                 expect(result).to.be.true;
             });
+
             it('should return false when entitys state is not equal to expected state', async function () {
                 const entity = {
                     entity_id: 'light.kitchen',
@@ -148,6 +152,7 @@ describe('Comparator Service', function () {
 
                 expect(result).to.be.true;
             });
+
             it('should return false when entitys state is not equal to expected state', async function () {
                 const entity = {
                     entity_id: 'light.kitchen',
@@ -214,6 +219,7 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.true;
                 });
+
                 it('should return false when comparing different values', async function () {
                     const result = await comparatorService.getComparatorResult(
                         'is',
@@ -224,6 +230,7 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.false;
                 });
+
                 it('should return true when comparing valid regex values', async function () {
                     const result = await comparatorService.getComparatorResult(
                         'is',
@@ -234,6 +241,7 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.true;
                 });
+
                 it('should return false when comparing different regex values', async function () {
                     const result = await comparatorService.getComparatorResult(
                         'is',
@@ -244,6 +252,7 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.false;
                 });
+
                 it('should return true when comparing two same booleans', async function () {
                     const result = await comparatorService.getComparatorResult(
                         'is',
@@ -254,6 +263,7 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.true;
                 });
+
                 it('should return false when comparing two different booleans', async function () {
                     const result = await comparatorService.getComparatorResult(
                         'is',
@@ -265,6 +275,7 @@ describe('Comparator Service', function () {
                     expect(result).to.be.false;
                 });
             });
+
             describe('is not', function () {
                 it('should return false when comparing equal values', async function () {
                     const result = await comparatorService.getComparatorResult(
@@ -276,6 +287,7 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.false;
                 });
+
                 it('should return true when comparing different values', async function () {
                     const result = await comparatorService.getComparatorResult(
                         'is_not',
@@ -287,6 +299,7 @@ describe('Comparator Service', function () {
                     expect(result).to.be.true;
                 });
             });
+
             describe('is greater than', function () {
                 it('should return true when comparing greater values', async function () {
                     const result = await comparatorService.getComparatorResult(
@@ -298,6 +311,7 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.true;
                 });
+
                 it('should return false when comparing equal values', async function () {
                     const result = await comparatorService.getComparatorResult(
                         'gt',
@@ -308,6 +322,7 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.false;
                 });
+
                 it('should return false when comparing less values', async function () {
                     const result = await comparatorService.getComparatorResult(
                         'gt',
@@ -319,6 +334,7 @@ describe('Comparator Service', function () {
                     expect(result).to.be.false;
                 });
             });
+
             describe('is less than', function () {
                 it('should return true when comparing less values', async function () {
                     const result = await comparatorService.getComparatorResult(
@@ -330,6 +346,7 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.true;
                 });
+
                 it('should return false when comparing equal values', async function () {
                     const result = await comparatorService.getComparatorResult(
                         'lt',
@@ -340,6 +357,7 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.false;
                 });
+
                 it('should return false when comparing greater values', async function () {
                     const result = await comparatorService.getComparatorResult(
                         'lt',
@@ -351,6 +369,7 @@ describe('Comparator Service', function () {
                     expect(result).to.be.false;
                 });
             });
+
             describe('is greater than or equal to', function () {
                 it('should return true when comparing greater values', async function () {
                     const result = await comparatorService.getComparatorResult(
@@ -362,6 +381,7 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.true;
                 });
+
                 it('should return true when comparing equal values', async function () {
                     const result = await comparatorService.getComparatorResult(
                         'gte',
@@ -372,6 +392,7 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.true;
                 });
+
                 it('should return false when comparing less values', async function () {
                     const result = await comparatorService.getComparatorResult(
                         'gte',
@@ -383,6 +404,7 @@ describe('Comparator Service', function () {
                     expect(result).to.be.false;
                 });
             });
+
             describe('is less than or equal to', function () {
                 it('should return true when comparing less values', async function () {
                     const result = await comparatorService.getComparatorResult(
@@ -394,6 +416,7 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.true;
                 });
+
                 it('should return true when comparing equal values', async function () {
                     const result = await comparatorService.getComparatorResult(
                         'lte',
@@ -404,6 +427,7 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.true;
                 });
+
                 it('should return false when comparing greater values', async function () {
                     const result = await comparatorService.getComparatorResult(
                         'lte',
@@ -415,6 +439,7 @@ describe('Comparator Service', function () {
                     expect(result).to.be.false;
                 });
             });
+
             describe('is in', function () {
                 it('should convert the compare data type to "list"', async function () {
                     sinon.spy(transformState, 'transform');
@@ -441,6 +466,7 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.true;
                 });
+
                 it('should return false when comparing not in values', async function () {
                     const result = await comparatorService.getComparatorResult(
                         'includes',
@@ -451,6 +477,7 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.false;
                 });
+
                 it('should return false when comparing empty values', async function () {
                     const result = await comparatorService.getComparatorResult(
                         'includes',
@@ -462,6 +489,7 @@ describe('Comparator Service', function () {
                     expect(result).to.be.false;
                 });
             });
+
             describe('is not in', function () {
                 it('should return false when comparing in values', async function () {
                     const result = await comparatorService.getComparatorResult(
@@ -473,6 +501,7 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.false;
                 });
+
                 it('should return true when comparing not in values', async function () {
                     const result = await comparatorService.getComparatorResult(
                         'does_not_include',
@@ -483,6 +512,7 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.true;
                 });
+
                 it('should return true when comparing empty values', async function () {
                     const result = await comparatorService.getComparatorResult(
                         'does_not_include',
@@ -494,6 +524,7 @@ describe('Comparator Service', function () {
                     expect(result).to.be.true;
                 });
             });
+
             describe('starts with', function () {
                 it('should return true when comparing starts with values', async function () {
                     const result = await comparatorService.getComparatorResult(
@@ -505,6 +536,7 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.true;
                 });
+
                 it('should return false when comparing not starts with values', async function () {
                     const result = await comparatorService.getComparatorResult(
                         'starts_with',
@@ -515,6 +547,7 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.false;
                 });
+
                 it('should return false when comparing empty values', async function () {
                     const result = await comparatorService.getComparatorResult(
                         'starts_with',
@@ -526,6 +559,7 @@ describe('Comparator Service', function () {
                     expect(result).to.be.false;
                 });
             });
+
             describe('contains', function () {
                 it('should return true when comparing contains values', async function () {
                     const result = await comparatorService.getComparatorResult(
@@ -537,6 +571,7 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.true;
                 });
+
                 it('should return false when comparing not contains values', async function () {
                     const result = await comparatorService.getComparatorResult(
                         'cont',
@@ -547,6 +582,7 @@ describe('Comparator Service', function () {
 
                     expect(result).to.be.false;
                 });
+
                 it('should return false when comparing empty values', async function () {
                     const result = await comparatorService.getComparatorResult(
                         'cont',
@@ -609,6 +645,7 @@ describe('Comparator Service', function () {
                     );
                     expect(result).to.be.true;
                 });
+
                 it('should return false when the JSONata services returns false', async function () {
                     jsonataServiceStub.evaluate.resolves(false);
                     const result = await comparatorService.getComparatorResult(

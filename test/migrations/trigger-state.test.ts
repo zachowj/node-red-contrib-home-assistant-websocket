@@ -79,6 +79,7 @@ describe('Migrations - Trigger State Node', function () {
             expect(migratedSchema).to.eql(VERSION_0);
         });
     });
+
     describe('Version 1', function () {
         it('should add property inputs equal to 1 and enabledInput equal to true', function () {
             const migrate = migrations.find((m) => m.version === 1);
@@ -86,15 +87,19 @@ describe('Migrations - Trigger State Node', function () {
             expect(migratedSchema).to.eql(VERSION_1);
         });
     });
+
     describe('Version 2', function () {
         let migrate: Migration | undefined;
+
         before(function () {
             migrate = migrations.find((m) => m.version === 2);
         });
+
         it('should add version 1 to version 2', function () {
             const migratedSchema = migrate?.up(VERSION_1);
             expect(migratedSchema).to.eql(VERSION_2);
         });
+
         it('should convert comma delimited entity list to array and change type to list', function () {
             const schema = {
                 ...VERSION_1,
@@ -109,6 +114,7 @@ describe('Migrations - Trigger State Node', function () {
             ]);
             expect(migratedSchema.entityidfiltertype).to.eql('list');
         });
+
         it('should only contain one entity if there is a trailing comma', function () {
             const schema = {
                 ...VERSION_1,
@@ -119,6 +125,7 @@ describe('Migrations - Trigger State Node', function () {
             expect(migratedSchema.entityid).to.have.lengthOf(1);
         });
     });
+
     describe('Version 3', function () {
         it('should update version 2 to version 3', function () {
             const migrate = migrations.find((m) => m.version === 3);
@@ -126,6 +133,7 @@ describe('Migrations - Trigger State Node', function () {
             expect(migratedSchema).to.eql(VERSION_3);
         });
     });
+
     describe('Version 4', function () {
         it('should update version 3 to version 4', function () {
             const migrate = migrations.find((m) => m.version === 4);
@@ -133,6 +141,7 @@ describe('Migrations - Trigger State Node', function () {
             expect(migratedSchema).to.eql(VERSION_4);
         });
     });
+
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
         expect(migratedSchema).to.eql(VERSION_4);

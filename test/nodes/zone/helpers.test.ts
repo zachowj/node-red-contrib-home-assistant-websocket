@@ -20,6 +20,7 @@ describe('location', function () {
             expect(location).to.have.property('latitude');
             expect(location).to.have.property('longitude');
         });
+
         it('should return undefined for invalid latitude', function () {
             const badLatitude: any = {
                 attributes: {
@@ -30,6 +31,7 @@ describe('location', function () {
             const location = getLocationData(badLatitude);
             expect(location).to.be.undefined;
         });
+
         it('should return undefined for invalid longitude', function () {
             const badLongitude: any = {
                 attributes: {
@@ -41,6 +43,7 @@ describe('location', function () {
             expect(location).to.be.undefined;
         });
     });
+
     describe('getZoneData', function () {
         it('should return coords and radius', function () {
             const goodZone: any = {
@@ -55,6 +58,7 @@ describe('location', function () {
             expect(location).to.have.property('longitude');
             expect(location).to.have.property('radius');
         });
+
         it('should return undefined for invalid radius', function () {
             const badRadius: any = {
                 attributes: {

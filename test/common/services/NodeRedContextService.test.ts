@@ -65,6 +65,7 @@ describe('Node-RED Context Service', function () {
 
                 expect(result).to.equal(message.payload);
             });
+
             it('should return undefined if message property is not found', function () {
                 const message = {
                     payload: 'test',
@@ -81,18 +82,21 @@ describe('Node-RED Context Service', function () {
 
                 expect(result).to.be.undefined;
             });
+
             it('should return undefined if message is not provided', function () {
                 const result = nodeRedContextService.get('msg', 'payload');
 
                 expect(result).to.be.undefined;
             });
         });
+
         describe('flow', function () {
             before(function () {
                 nodeApiStub.util.parseContextStore = sinon.stub().returns({
                     key: 'foo',
                 });
             });
+
             it('should return value from flow context', function () {
                 nodeContext.flow.get = sinon.stub().returns('test');
                 nodeStub.context.returns(nodeContext);
@@ -100,6 +104,7 @@ describe('Node-RED Context Service', function () {
                 const result = nodeRedContextService.get('flow', 'foo');
                 expect(result).to.equal('test');
             });
+
             it('should return undefined if flow context is not found', function () {
                 nodeContext.flow.get = sinon.stub().returns(undefined);
                 nodeStub.context.returns(nodeContext);
@@ -108,6 +113,7 @@ describe('Node-RED Context Service', function () {
                 expect(result).to.be.undefined;
             });
         });
+
         describe('global', function () {
             it('should return value from global context', function () {
                 nodeContext.global.get = sinon.stub().returns('test');
@@ -116,6 +122,7 @@ describe('Node-RED Context Service', function () {
                 const result = nodeRedContextService.get('global', 'foo');
                 expect(result).to.equal('test');
             });
+
             it('should return undefined if global context is not found', function () {
                 nodeContext.global.get = sinon.stub().returns(undefined);
                 nodeStub.context.returns(nodeContext);
@@ -132,15 +139,19 @@ describe('Node-RED Context Service', function () {
                 key: 'payload',
             });
         });
+
         describe('msg', function () {
             let setObjectPropertyStub: sinon.SinonStub;
+
             before(function () {
                 setObjectPropertyStub = sinon.stub();
                 nodeApiStub.util.setObjectProperty = setObjectPropertyStub;
             });
+
             afterEach(function () {
                 setObjectPropertyStub.reset();
             });
+
             it('should set value in msg context', function () {
                 const message: NodeMessage = {};
                 nodeRedContextService.set(
@@ -155,6 +166,7 @@ describe('Node-RED Context Service', function () {
                     'foo',
                 );
             });
+
             it('should not set message property if message is not provided', function () {
                 nodeRedContextService.set(
                     'msg',

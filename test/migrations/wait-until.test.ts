@@ -60,15 +60,19 @@ describe('Migrations - Wait Until Node', function () {
             expect(migratedSchema).to.eql(VERSION_0);
         });
     });
+
     describe('Version 1', function () {
         let migrate: Migration | undefined;
+
         before(function () {
             migrate = migrations.find((m) => m.version === 1);
         });
+
         it('should add version 1 to version 0', function () {
             const migratedSchema = migrate?.up(VERSION_0);
             expect(migratedSchema).to.eql(VERSION_1);
         });
+
         it('should convert comma delimited entity list to array and change type to list', function () {
             const schema = {
                 ...VERSION_0,
@@ -83,6 +87,7 @@ describe('Migrations - Wait Until Node', function () {
             ]);
             expect(migratedSchema.entityIdFilterType).to.eql('list');
         });
+
         it('should only contain one entity if there is a trailing comma', function () {
             const schema = {
                 ...VERSION_0,
@@ -93,15 +98,19 @@ describe('Migrations - Wait Until Node', function () {
             expect(migratedSchema.entityId).to.have.lengthOf(1);
         });
     });
+
     describe('Version 2', function () {
         let migrate: Migration | undefined;
+
         before(function () {
             migrate = migrations.find((m) => m.version === 2);
         });
+
         it('should change payload output to custom output format', function () {
             const migratedSchema = migrate?.up(VERSION_1);
             expect(migratedSchema).to.eql(VERSION_2);
         });
+
         it('should have empty output properties if entity location set to none', function () {
             const migratedSchema = migrate?.up({
                 ...VERSION_1,
@@ -113,11 +122,13 @@ describe('Migrations - Wait Until Node', function () {
                 outputProperties: [],
             });
         });
+
         it('should add version 2 to version 1', function () {
             const migratedSchema = migrate?.up(VERSION_1);
             expect(migratedSchema).to.eql(VERSION_2);
         });
     });
+
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
         expect(migratedSchema).to.eql(VERSION_2);

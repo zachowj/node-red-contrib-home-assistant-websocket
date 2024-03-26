@@ -105,6 +105,7 @@ describe('Migrations - Events: State Node', function () {
 
             expect(migratedSchema).to.eql(VERSION_0);
         });
+
         it(`should only set defaults if property is undefined for state_type, halt_if_type, and half_if_compare`, function () {
             const schema = {
                 ...VERSION_UNDEFINED,
@@ -124,6 +125,7 @@ describe('Migrations - Events: State Node', function () {
             expect(migratedSchema).to.eql(expectedSchema);
         });
     });
+
     describe('Version 1', function () {
         it('should update version 0 to version 1', function () {
             const migrate = migrations.find((m) => m.version === 1);
@@ -132,6 +134,7 @@ describe('Migrations - Events: State Node', function () {
             expect(migratedSchema).to.eql(VERSION_1);
         });
     });
+
     describe('Version 2', function () {
         it('should update version 1 to version 2', function () {
             const migrate = migrations.find((m) => m.version === 2);
@@ -140,6 +143,7 @@ describe('Migrations - Events: State Node', function () {
             expect(migratedSchema).to.eql(VERSION_2);
         });
     });
+
     describe('Version 3', function () {
         it('should update version 2 to version 3', function () {
             const migrate = migrations.find((m) => m.version === 3);
@@ -148,15 +152,19 @@ describe('Migrations - Events: State Node', function () {
             expect(migratedSchema).to.eql(VERSION_3);
         });
     });
+
     describe('Version 4', function () {
         let migrate: Migration | undefined;
+
         before(function () {
             migrate = migrations.find((m) => m.version === 4);
         });
+
         it('should add version 3 to version 4', function () {
             const migratedSchema = migrate?.up(VERSION_3);
             expect(migratedSchema).to.eql(VERSION_4);
         });
+
         it('should convert comma delimited entity list to array and change type to list', function () {
             const schema = {
                 ...VERSION_3,
@@ -171,6 +179,7 @@ describe('Migrations - Events: State Node', function () {
             ]);
             expect(migratedSchema.entityidfiltertype).to.eql('list');
         });
+
         it('should only contain one entity if there is a trailing comma', function () {
             const schema = {
                 ...VERSION_3,
@@ -181,6 +190,7 @@ describe('Migrations - Events: State Node', function () {
             expect(migratedSchema.entityidfilter).to.have.lengthOf(1);
         });
     });
+
     describe('Version 5', function () {
         it('should update version 4 to version 5', function () {
             const migrate = migrations.find((m) => m.version === 5);
@@ -189,6 +199,7 @@ describe('Migrations - Events: State Node', function () {
             expect(migratedSchema).to.eql(VERSION_5);
         });
     });
+
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
         expect(migratedSchema).to.eql(VERSION_5);

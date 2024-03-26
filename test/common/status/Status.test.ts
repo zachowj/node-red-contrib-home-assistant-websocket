@@ -38,6 +38,7 @@ describe('Status', function () {
             );
         });
     });
+
     describe('setText', function () {
         it('status should only contain the text property', function () {
             const status = new Status({

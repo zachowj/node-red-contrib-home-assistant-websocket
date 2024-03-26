@@ -105,6 +105,7 @@ describe('JSONata Service', function () {
                     attributes: {},
                 });
             });
+
             it('should be able to output state', async function () {
                 const result = await jsonataService.evaluate(
                     `$entity().state`,
@@ -144,6 +145,7 @@ describe('JSONata Service', function () {
                     attributes: {},
                 });
             });
+
             it('should be able to output state', async function () {
                 const result = await jsonataService.evaluate(
                     `$prevEntity().state`,
@@ -234,6 +236,7 @@ describe('JSONata Service', function () {
                     expect(result[0]).to.be.a('number');
                     expect(result[0]).to.be.within(1, 3);
                 });
+
                 it('should get two results 5-7', async function () {
                     const result = await jsonataService.evaluate(
                         `$sampleSize([5,6,7], 2)`,

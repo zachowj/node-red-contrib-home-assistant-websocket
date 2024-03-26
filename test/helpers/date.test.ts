@@ -4,6 +4,7 @@ import { formatDate } from '../../src/helpers/date';
 
 describe('formatDate', function () {
     let nodeVersion: string;
+
     before(function () {
         nodeVersion = process.version.substring(1, 3);
     });
@@ -16,6 +17,7 @@ describe('formatDate', function () {
         });
         expect(formattedDate).to.equal('Jan 12, 12:12 PM');
     });
+
     it('should format date using en-GB as locale', function () {
         // node 12 does not support en-GB locale
         if (nodeVersion === '12') this.skip();
@@ -26,6 +28,7 @@ describe('formatDate', function () {
         });
         expect(formattedDate).to.equal('12 Jan, 16:12');
     });
+
     it('should format date to include all options', function () {
         // node 12 does not support Intl.DateTimeFormatOptions fractionalSecondDigits
         if (nodeVersion === '12') this.skip();

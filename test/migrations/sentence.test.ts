@@ -57,6 +57,7 @@ describe('Migrations - Sentense Node', function () {
             expect(migratedSchema).to.eql(VERSION_1);
         });
     });
+
     it('should update an version 0 to current version', function () {
         const migratedSchema = migrate(VERSION_0);
         expect(migratedSchema).to.eql(VERSION_1);

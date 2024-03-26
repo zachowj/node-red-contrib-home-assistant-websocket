@@ -74,6 +74,7 @@ describe('Migrations - Entity Node', function () {
             expect(migratedSchema).to.eql(VERSION_0);
         });
     });
+
     describe('Version 1', function () {
         it('should update version 0 to version 1', function () {
             const migrate = migrations.find((m) => m.version === 1);
@@ -82,6 +83,7 @@ describe('Migrations - Entity Node', function () {
             expect(migratedSchema).to.eql(VERSION_1);
         });
     });
+
     describe('Version 2', function () {
         it('should update version 1 to version 2', function () {
             const migrate = migrations.find((m) => m.version === 1);
@@ -90,6 +92,7 @@ describe('Migrations - Entity Node', function () {
             expect(migratedSchema).to.eql(VERSION_1);
         });
     });
+
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
         expect(migratedSchema).to.eql(VERSION_3);

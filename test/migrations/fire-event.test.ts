@@ -27,6 +27,7 @@ describe('Migrations - Fire Event Node', function () {
             expect(migratedSchema).to.eql(VERSION_0);
         });
     });
+
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
         expect(migratedSchema).to.eql(VERSION_0);

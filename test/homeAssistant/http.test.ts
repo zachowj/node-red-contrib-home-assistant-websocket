@@ -10,9 +10,11 @@ describe('HTTP API', function () {
         rejectUnauthorizedCerts: false,
     };
     let httpApi: HttpAPI;
+
     before(function () {
         httpApi = new HttpAPI(CREDS);
     });
+
     describe('get', function () {
         it('should use the correct authentication header', async function () {
             const path = '/config';

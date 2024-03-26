@@ -194,6 +194,7 @@ describe('Input Service', function () {
                 },
             });
         });
+
         it('should ignore message values if block input override is enabled', function () {
             const config = { ...nodeConfig, foo: 'bar' };
             const inputService = new InputService<TestNode>({
@@ -225,6 +226,7 @@ describe('Input Service', function () {
 
     describe('validate', function () {
         let nodeConfig: TestNode;
+
         beforeEach(function () {
             nodeConfig = {
                 id: '',
@@ -234,6 +236,7 @@ describe('Input Service', function () {
                 version: 0,
             };
         });
+
         it('should return true if required properties are set', function () {
             const schema = Joi.object({
                 foo: Joi.string().required(),
@@ -285,6 +288,7 @@ describe('Input Service', function () {
 
             expect(result).to.equal(true);
         });
+
         it('should throw ValidationError if schema is invalid', function () {
             const schema = Joi.object({
                 foo: Joi.string().required(),
