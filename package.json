@@ -129,7 +129,7 @@
     "jsonata": "1.8.7",
     "lazypipe": "1.0.2",
     "lint-staged": "15.2.0",
-    "markdown-it": "14.0.0",
+    "markdown-it": "14.1.0",
     "markdown-it-container": "4.0.0",
     "markdown-it-inline-comments": "1.0.1",
     "merge-stream": "2.0.0",
