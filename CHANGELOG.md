@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.63.2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.63.1...v0.63.2) (2024-04-08)
+
+
+### Bug Fixes
+
+* **sensor:** Fix options mapping in sensor node ([15f2920](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/15f292076131dd215d7173cd5644b111f6d802e6))
+
 ## [0.63.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.63.0...v0.63.1) (2024-03-15)
 
 
