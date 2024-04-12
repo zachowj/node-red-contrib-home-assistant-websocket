@@ -138,7 +138,9 @@ export default abstract class SensorBase<
                 throw new HomeAssistantError(err, 'home-assistant.error.error');
             }
 
-            throw new Error(`Error updating state and attributes. ${err}`);
+            throw new Error(
+                `Error updating state and attributes. ${JSON.stringify(err)}`,
+            );
         }
 
         this.status.setSuccess(state);
