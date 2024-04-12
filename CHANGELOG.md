@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.64.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.63.2...v0.64.0) (2024-04-12)
+
+
+### Features
+
+* **sentence:** Add device id to output properties ([8f1ccd9](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/8f1ccd9c6c9157a1a9c3537703763c2e3c8e1dd4))
+
+
+### Bug Fixes
+
+* Fix diagnostics info to not show undefined for addon version ([1fda39f](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/1fda39f6469bfa6c4023dbf72a3801f4b8b2a3aa))
+
 ## [0.63.2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.63.1...v0.63.2) (2024-04-08)
 
 
