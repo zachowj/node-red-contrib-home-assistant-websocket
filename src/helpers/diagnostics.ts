@@ -89,8 +89,9 @@ interface AddonInfo {
     result: string;
     data: { version: string };
 }
-async function getAddonVersion(): Promise<string> {
-    if (addonVersionCached) return addonVersionCached;
+async function getAddonVersion(): Promise<string | undefined> {
+    if (addonVersionCached || !process.env.SUPERVISOR_TOKEN)
+        return addonVersionCached;
 
     try {
         const response = await axios.get<any, AddonInfo>(
@@ -116,9 +117,7 @@ export async function getEnvironmentData() {
         `\n` +
         `Node-RED version: ${RED.version()}\n` +
         `Docker: ${(await isRunningInDocker()) ? 'yes' : 'no'}\n` +
-        `Add-on: ${
-            process.env.SUPERVISOR_TOKEN ? await getAddonVersion() : 'no'
-        }\n` +
+        `Add-on: ${(await getAddonVersion()) ?? 'no'}\n` +
         `\n` +
         `Node.js version: ${process.version} ${process.arch} ${process.platform}\n` +
         `OS: ${os.type()} ${os.release()} ${os.arch()}\n`;

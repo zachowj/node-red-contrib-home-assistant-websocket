@@ -40,19 +40,8 @@ body:
   - type: textarea
     attributes:
       label: Environment Information
-      description: Retrieve this information using the [diagnostic flow](https://zachowj.github.io/node-red-contrib-home-assistant-websocket/guide/diagnostics.html)
-      value: |
-        Version: 
-
-        Home Assistant version:
-        Companion version:
-
-        Node-RED version:
-        Docker: no
-        Add-on: no
-
-        Node.js version:
-        OS:
+      description: Retrieve this information using the [diagnostic information button](https://zachowj.github.io/node-red-contrib-home-assistant-websocket/guide/diagnostics.html)
+      placeholder: Get information from the link above
     validations:
       required: true
   - type: textarea

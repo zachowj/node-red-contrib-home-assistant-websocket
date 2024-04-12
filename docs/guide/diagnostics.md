@@ -1,4 +1,4 @@
-# Diagnostics Flow
+# Diagnostics Information
 
 ## Overview
 
