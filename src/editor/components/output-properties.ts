@@ -10,7 +10,7 @@ let _extraTypes: string[] = [];
 
 const customTypes: { [key: string]: EditorWidgetTypedInputTypeDefinition } = {
     config: { value: 'config', label: 'config.', hasValue: true },
-    deviceId: { value: 'triggerId', label: 'device id', hasValue: false },
+    deviceId: { value: 'deviceId', label: 'device id', hasValue: false },
     entity: { value: 'entity', label: 'entity', hasValue: false },
     entityId: { value: 'triggerId', label: 'entity id', hasValue: false },
     entityState: {

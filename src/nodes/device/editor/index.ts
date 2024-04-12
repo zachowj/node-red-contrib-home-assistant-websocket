@@ -362,7 +362,7 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
         const getExtraTypes = (type: 'action' | 'trigger') => {
             const extraTypes = {
                 action: ['sentData'],
-                trigger: ['eventData', 'deviceId'],
+                trigger: ['eventData', 'triggerId'],
             };
             return extraTypes[type];
         };

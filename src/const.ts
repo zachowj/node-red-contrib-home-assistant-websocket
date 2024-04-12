@@ -135,6 +135,7 @@ export enum TypedInputTypes {
     Value = 'value',
     PreviousValue = 'previousValue',
     CalendarItem = 'calendarItem',
+    DeviceId = 'deviceId',
 }
 
 export enum TimeUnit {

@@ -2,10 +2,12 @@ import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
 import OutputController from '../../common/controllers/OutputController';
 import { NodeMessage } from '../../types/nodes';
 import { SentenceNode } from '.';
+import { TypedInputTypes } from '../../const';
 
 interface SentenceResponse {
     sentence: string;
-    result: Record<string, unknown>;
+    result: Record<string, unknown> | null;
+    deviceId: string | null;
 }
 
 const ExposeAsController = ExposeAsMixin(OutputController<SentenceNode>);
@@ -18,9 +20,10 @@ export default class SentenseController extends ExposeAsController {
             this.node.config.outputProperties,
             message,
             {
-                config: this.node.config,
-                triggerId: data.sentence,
-                results: data.result,
+                [TypedInputTypes.Config]: this.node.config,
+                [TypedInputTypes.TriggerId]: data.sentence,
+                [TypedInputTypes.Results]: data.result,
+                [TypedInputTypes.DeviceId]: data.deviceId,
             },
         );
         this.status.setSuccess('home-assistant.status.triggered');

@@ -48,13 +48,13 @@ const SentenceEditor: EditorNodeDef<SentenceEditorNodeProperties> = {
             value: [
                 {
                     property: 'topic',
-                    propertyType: 'msg',
+                    propertyType: TypedInputTypes.Message,
                     value: '',
                     valueType: TypedInputTypes.TriggerId,
                 },
                 {
                     property: 'payload',
-                    propertyType: 'msg',
+                    propertyType: TypedInputTypes.Message,
                     value: '',
                     valueType: TypedInputTypes.TriggerId,
                 },
@@ -92,7 +92,11 @@ const SentenceEditor: EditorNodeDef<SentenceEditorNodeProperties> = {
             );
 
         haOutputs.createOutputs(this.outputProperties, {
-            extraTypes: ['triggerId', 'results'],
+            extraTypes: [
+                TypedInputTypes.TriggerId,
+                TypedInputTypes.Results,
+                TypedInputTypes.DeviceId,
+            ],
         });
     },
     oneditsave: function () {

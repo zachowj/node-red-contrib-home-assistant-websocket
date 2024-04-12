@@ -80,6 +80,7 @@ export default class TypedInputService {
                 break;
             }
             case TypedInputTypes.Data:
+            case TypedInputTypes.DeviceId:
             case TypedInputTypes.Entity:
             case TypedInputTypes.EntityState:
             case TypedInputTypes.EventData:
