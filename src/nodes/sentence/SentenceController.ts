@@ -1,8 +1,8 @@
 import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
 import OutputController from '../../common/controllers/OutputController';
+import { TypedInputTypes } from '../../const';
 import { NodeMessage } from '../../types/nodes';
 import { SentenceNode } from '.';
-import { TypedInputTypes } from '../../const';
 
 interface SentenceResponse {
     sentence: string;
