@@ -110,7 +110,7 @@
     "eslint-plugin-promise": "6.1.1",
     "eslint-plugin-simple-import-sort": "10.0.0",
     "eslint-plugin-sort-requires": "2.1.0",
-    "gulp": "4.0.2",
+    "gulp": "5.0.0",
     "gulp-buffer": "0.0.2",
     "gulp-cheerio": "1.0.0",
     "gulp-concat": "2.6.1",
