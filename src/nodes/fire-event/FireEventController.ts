@@ -2,11 +2,10 @@ import InputOutputController, {
     InputProperties,
 } from '../../common/controllers/InputOutputController';
 import NoConnectionError from '../../common/errors/NoConnectionError';
+import { DataSource } from '../../common/services/InputService';
 import { TypedInputTypes } from '../../const';
 import { renderTemplate } from '../../helpers/mustache';
 import { FireEventNode, FireEventNodeProperties } from '.';
-import { DataSource } from '../../common/services/InputService';
-import { event } from 'jquery';
 
 export default class FireEventController extends InputOutputController<
     FireEventNode,
