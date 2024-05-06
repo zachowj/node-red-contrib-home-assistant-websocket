@@ -5,6 +5,8 @@ import NoConnectionError from '../../common/errors/NoConnectionError';
 import { TypedInputTypes } from '../../const';
 import { renderTemplate } from '../../helpers/mustache';
 import { FireEventNode, FireEventNodeProperties } from '.';
+import { DataSource } from '../../common/services/InputService';
+import { event } from 'jquery';
 
 export default class FireEventController extends InputOutputController<
     FireEventNode,
@@ -20,14 +22,20 @@ export default class FireEventController extends InputOutputController<
             throw new NoConnectionError();
         }
 
-        const eventType = renderTemplate(
-            parsedMessage.event.value,
-            message,
-            this.node.context(),
-            this.homeAssistant.websocket.getStates(),
-        );
-        let eventData: any;
-        if (parsedMessage.data.value) {
+        const eventType =
+            parsedMessage.event.source === DataSource.Message
+                ? parsedMessage.event.value
+                : renderTemplate(
+                      parsedMessage.event.value,
+                      message,
+                      this.node.context(),
+                      this.homeAssistant.websocket.getStates(),
+                  );
+
+        let eventData: unknown;
+        if (parsedMessage.data.source === DataSource.Message) {
+            eventData = parsedMessage.data.value;
+        } else if (parsedMessage.data.value) {
             if (parsedMessage.dataType.value === TypedInputTypes.JSONata) {
                 eventData = await this.jsonataService.evaluate(
                     parsedMessage.data.value,
