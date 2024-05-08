@@ -119,7 +119,7 @@
     "gulp-htmlmin": "5.0.1",
     "gulp-markdownit": "1.0.3",
     "gulp-merge-json": "2.2.1",
-    "gulp-postcss": "9.1.0",
+    "gulp-postcss": "10.0.0",
     "gulp-sass": "5.1.0",
     "gulp-terser": "2.1.0",
     "gulp-typescript": "6.0.0-alpha.1",
