@@ -97,7 +97,7 @@
     "browser-sync": "3.0.2",
     "chai": "4.4.1",
     "cheerio": "1.0.0-rc.12",
-    "cssnano": "6.0.3",
+    "cssnano": "7.0.1",
     "del": "6.1.1",
     "eslint": "8.56.0",
     "eslint-config-prettier": "9.1.0",
