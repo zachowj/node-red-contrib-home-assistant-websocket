@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.65.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.64.0...v0.65.0) (2024-06-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* **fire-event:** Mustache templates or JSONata expression being passed into the fire-event node will no longer be rendered
+
+### Bug Fixes
+
+* **fire-event:** Only render templates/expressions when not from message input ([16e8e22](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/16e8e225e2fb1431bff899b0210fe0644e3e272a))
+
 ## [0.64.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.63.2...v0.64.0) (2024-04-12)
 
 
