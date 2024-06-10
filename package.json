@@ -89,7 +89,7 @@
     "@types/timestring": "^6.0.5",
     "@types/ws": "8.5.10",
     "@typescript-eslint/eslint-plugin": "7.9.0",
-    "@typescript-eslint/parser": "7.9.0",
+    "@typescript-eslint/parser": "7.12.0",
     "@vuepress/plugin-google-analytics": "2.0.0-rc.0",
     "@vuepress/plugin-register-components": "2.0.0-rc.0",
     "@vuepress/plugin-search": "2.0.0-rc.0",
