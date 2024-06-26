@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.65.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.65.0...v0.65.1) (2024-06-26)
+
+
+### Bug Fixes
+
+* Add event listeners for entity type selection for NR 4.0 ([9ea63cf](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/9ea63cf36e0031fffba5d4b07d4e77c75ff9b896))
+
 ## [0.65.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.64.0...v0.65.0) (2024-06-03)
 
 
