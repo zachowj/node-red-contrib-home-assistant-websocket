@@ -197,6 +197,12 @@ export const saveEntityType = (
     type: EntityType,
     selector: EntityTypeSelector = 'entityConfig',
 ) => {
+    // For Node-RED 4.0+
+    $(`#node-input-btn-${selector}-add`).on('click', function () {
+        $('body').data('haEntityType', type);
+    });
+    // For Node-RED proir to 4.0
+    // TODO: Remove this when Node-RED 4.0 is the minimum version
     $(`#node-input-lookup-${selector}`).on('click', function () {
         if ($(`#node-input-${selector}`).val() === '_ADD_') {
             $('body').data('haEntityType', type);
