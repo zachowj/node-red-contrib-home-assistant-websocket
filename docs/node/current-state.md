@@ -27,7 +27,7 @@ output.
 
 - Type: `number`
 
-The amount of time the entity state needs to constant for the "If state" to be `true`
+The amount of time the entity state needs to have been constant for the "If state" to be `true`
 
 ### State Type
 
