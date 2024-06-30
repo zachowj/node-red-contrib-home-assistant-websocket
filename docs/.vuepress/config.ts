@@ -96,8 +96,14 @@ export default defineUserConfig({
                         '/guide/call-service',
                         '/guide/conditionals',
                         '/guide/mustache-templates',
-                        '/guide/jsonata',
-                        '/guide/jsonata-primer',
+                        {
+                            text: 'JSONata',
+                            collapsible: false,
+                            children: [
+                                '/guide/jsonata/',
+                                '/guide/jsonata/jsonata-primer',
+                            ],
+                        },
                         '/guide/diagnostics',
                     ],
                 },

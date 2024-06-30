@@ -56,5 +56,5 @@ The Debug nodes also contain JSONata as a further demonstration of how versatile
 
 **Also see:**
 
-- [JSONata guide](../guide/jsonata.md)
-- [JSONata primer](../guide/jsonata-primer.md)
+- [JSONata guide](../../guide/jsonata/)
+- [JSONata primer](../../guide/jsonata/jsonata-primer.md)

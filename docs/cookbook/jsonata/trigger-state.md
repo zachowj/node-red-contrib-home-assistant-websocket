@@ -86,5 +86,5 @@ As a further example, the JSONata output calculates a percentage value going fro
 
 **Also see:**
 
-- [JSONata guide](../guide/jsonata.md)
-- [JSONata primer](../guide/jsonata-primer.md)
+- [JSONata guide](../../guide/jsonata/)
+- [JSONata primer](../../guide/jsonata/jsonata-primer.md)

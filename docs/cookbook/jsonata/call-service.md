@@ -57,6 +57,20 @@ Here are three examples, each using JSONata to set the required Data object, and
 }
 ```
 
+### Setting a data property from a Home Assistant entity with a calculation
+
+Here the state of a sensor entity is read, converted to a number, and then increased by 3.
+
+::: warning
+States from Home Assistant are always strings, and so any calculations must be converted to a number first.
+:::
+
+```
+{
+  "temperature": $number($entities("sensor.living_room_temperature").state) + 3
+}
+```
+
 ### Increase lights brightness with remote
 
 **Example:** A remote with a button that when clicked increases the brightness of a given light by an amount that is set from an input_number inside Home Assistant.
@@ -136,5 +150,5 @@ results.*.forecast{
 
 **Also see:**
 
-- [JSONata guide](../guide/jsonata.md)
-- [JSONata primer](../guide/jsonata-primer.md)
+- [JSONata guide](../../guide/jsonata/)
+- [JSONata primer](../../guide/jsonata/jsonata-primer.md)

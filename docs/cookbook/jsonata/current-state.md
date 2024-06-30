@@ -70,5 +70,5 @@ JSONata used at this point can be extensive, with a combination of entity states
 
 **Also see:**
 
-- [JSONata guide](../guide/jsonata.md)
-- [JSONata primer](../guide/jsonata-primer.md)
+- [JSONata guide](../../guide/jsonata/)
+- [JSONata primer](../../guide/jsonata/jsonata-primer.md)

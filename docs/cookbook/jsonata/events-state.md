@@ -110,5 +110,5 @@ $entity().state = "on" and (
 
 **Also see:**
 
-- [JSONata guide](../guide/jsonata.md)
-- [JSONata primer](../guide/jsonata-primer.md)
+- [JSONata guide](../../guide/jsonata/)
+- [JSONata primer](../../guide/jsonata/jsonata-primer.md)
