@@ -61,7 +61,7 @@
     "selectn": "1.1.2",
     "slugify": "1.6.6",
     "timestring": "7.0.0",
-    "ws": "8.17.1"
+    "ws": "8.18.0"
   },
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "1.0.2",
@@ -87,7 +87,7 @@
     "@types/sinon-chai": "3.2.12",
     "@types/string.prototype.matchall": "4.0.4",
     "@types/timestring": "^6.0.5",
-    "@types/ws": "8.5.10",
+    "@types/ws": "8.5.11",
     "@typescript-eslint/eslint-plugin": "7.13.1",
     "@typescript-eslint/parser": "7.13.0",
     "@vuepress/plugin-google-analytics": "2.0.0-rc.0",
