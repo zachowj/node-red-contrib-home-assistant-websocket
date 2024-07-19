@@ -15,6 +15,8 @@ Creates a binary sensor in Home Assistant which can be manipulated from this nod
 
 The state of the entity should be updated to
 
+To set the Home Assistant state to `Unknown`, send a state with a js expression `null`.
+
 ### Attributes
 
 - Type: `Object`
