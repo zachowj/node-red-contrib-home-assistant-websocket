@@ -87,7 +87,7 @@
     "@types/sinon-chai": "3.2.12",
     "@types/string.prototype.matchall": "4.0.4",
     "@types/timestring": "^6.0.5",
-    "@types/ws": "8.5.11",
+    "@types/ws": "8.5.12",
     "@typescript-eslint/eslint-plugin": "7.13.1",
     "@typescript-eslint/parser": "7.16.1",
     "@vuepress/plugin-google-analytics": "2.0.0-rc.0",
