@@ -1,13 +1,21 @@
 {
   "ha-api": {
+    "error": {
+      "invalid_method": "Invalid API method __method__.",
+      "requires_path": "HTTP request requires a valid path.",
+      "requires_type": "A WebSocket request requires a 'type' property in the data object."
+    },
     "label": {
       "data": "Data",
       "method": "Method",
       "method_option": {
+        "delete": "DELETE",
         "get": "GET",
-        "post": "POST"
+        "post": "POST",
+        "put": "PUT"
       },
       "name": "Name",
+      "parameters": "Parameters",
       "path": "Path",
       "protocol": "Protocol",
       "protocol_option": {
@@ -22,11 +30,6 @@
       },
       "server": "Server",
       "show_debug": "Show debug information"
-    },
-    "error": {
-      "requires_type": "A WebSocket request requires a 'type' property in the data object.",
-      "requires_path": "HTTP request requires a valid path.",
-      "invalid_method": "Invalid API method __method__."
     },
     "status": {
       "method_called": "__method__ called"

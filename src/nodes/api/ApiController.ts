@@ -6,7 +6,8 @@ import NoConnectionError from '../../common/errors/NoConnectionError';
 import { DataSource } from '../../common/services/InputService';
 import { TypedInputTypes } from '../../const';
 import { generateRenderTemplate } from '../../helpers/mustache';
-import { ApiMethod, ApiNode, ApiNodeProperties, ApiProtocol } from '.';
+import { ApiNode, ApiNodeProperties } from '.';
+import { ApiMethod, ApiProtocol } from './const';
 
 export default class ApiController extends InputOutputController<
     ApiNode,
@@ -72,18 +73,34 @@ export default class ApiController extends InputOutputController<
             const method = parsedMessage.method.value;
             this.debugToClient({ method, path, data });
 
-            if (method === ApiMethod.Get) {
-                results = await this.homeAssistant.http.get(
-                    path,
-                    data,
-                    parsedMessage.responseType.value,
-                );
-            } else {
-                results = await this.homeAssistant.http.post(
-                    path,
-                    data,
-                    parsedMessage.responseType.value,
-                );
+            switch (method) {
+                case ApiMethod.Get:
+                    results = await this.homeAssistant.http.get(
+                        path,
+                        data,
+                        parsedMessage.responseType.value,
+                    );
+                    break;
+                case ApiMethod.Post:
+                    results = await this.homeAssistant.http.post(
+                        path,
+                        data,
+                        parsedMessage.responseType.value,
+                    );
+                    break;
+                case ApiMethod.Put:
+                    results = await this.homeAssistant.http.put(
+                        path,
+                        data,
+                        parsedMessage.responseType.value,
+                    );
+                    break;
+                case ApiMethod.Delete:
+                    results = await this.homeAssistant.http.delete(
+                        path,
+                        data,
+                        parsedMessage.responseType.value,
+                    );
             }
         } else {
             if (!('type' in data)) {

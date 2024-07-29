@@ -89,15 +89,20 @@ export default class Http {
     ): Promise<T> {
         debug(`HTTP POST: ${this.#client.defaults.baseURL}/${path}`);
 
-        this.#client.defaults.responseType = responseType;
-
-        const response = await this.#client.post(path, data).catch((err) => {
-            debug(`POST: request error: ${err.toString()}`);
-            if (err.response?.data?.message) {
-                throw new HomeAssistantError(err.response.data);
-            }
-            throw err;
-        });
+        const response = await this.#client
+            .request({
+                method: 'post',
+                url: path,
+                data,
+                responseType,
+            })
+            .catch((err) => {
+                debug(`POST: request error: ${err.toString()}`);
+                if (err.response?.data?.message) {
+                    throw new HomeAssistantError(err.response.data);
+                }
+                throw err;
+            });
 
         return responseType === 'json'
             ? response.data ?? ''
@@ -111,12 +116,64 @@ export default class Http {
     ): Promise<T> {
         debug(`HTTP GET: ${this.#client.defaults.baseURL}/${path}`);
 
-        this.#client.defaults.responseType = responseType;
-
         const response = await this.#client
-            .request({ url: path, params })
+            .request({ method: 'get', url: path, params, responseType })
             .catch((err) => {
                 debug(`GET: request error: ${err.toString()}`);
+                if (err.response?.data?.message) {
+                    throw new HomeAssistantError(err.response.data);
+                }
+                throw err;
+            });
+
+        return responseType === 'json'
+            ? response.data ?? ''
+            : (response.data as any);
+    }
+
+    async put<T>(
+        path: string,
+        data: any = {},
+        responseType: ResponseType = 'json',
+    ): Promise<T> {
+        debug(`HTTP PUT: ${this.#client.defaults.baseURL}/${path}`);
+
+        const response = await this.#client
+            .request({
+                method: 'put',
+                url: path,
+                data,
+                responseType,
+            })
+            .catch((err) => {
+                debug(`PUT: request error: ${err.toString()}`);
+                if (err.response?.data?.message) {
+                    throw new HomeAssistantError(err.response.data);
+                }
+                throw err;
+            });
+
+        return responseType === 'json'
+            ? response.data ?? ''
+            : (response.data as any);
+    }
+
+    async delete<T>(
+        path: string,
+        data: any = {},
+        responseType: ResponseType = 'json',
+    ): Promise<T> {
+        debug(`HTTP DELETE: ${this.#client.defaults.baseURL}/${path}`);
+
+        const response = await this.#client
+            .request({
+                method: 'delete',
+                url: path,
+                data,
+                responseType,
+            })
+            .catch((err) => {
+                debug(`DELETE: request error: ${err.toString()}`);
                 if (err.response?.data?.message) {
                     throw new HomeAssistantError(err.response.data);
                 }

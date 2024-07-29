@@ -14,6 +14,7 @@ import {
     OutputProperty,
 } from '../../types/nodes';
 import ApiController from './ApiController';
+import { ApiMethod, ApiProtocol } from './const';
 
 export interface ApiNodeProperties extends BaseNodeProperties {
     protocol: string;
@@ -29,16 +30,6 @@ export interface ApiNodeProperties extends BaseNodeProperties {
 
 export interface ApiNode extends BaseNode {
     config: ApiNodeProperties;
-}
-
-export enum ApiMethod {
-    Get = 'get',
-    Post = 'post',
-}
-
-export enum ApiProtocol {
-    Http = 'http',
-    Websocket = 'websocket',
 }
 
 const inputs: NodeInputs = {

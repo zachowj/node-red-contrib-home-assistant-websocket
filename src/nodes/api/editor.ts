@@ -1,10 +1,12 @@
 import { EditorNodeDef, EditorNodeInstance, EditorRED } from 'node-red';
 
-import { NodeType } from '../../const';
+import { NodeType, TypedInputTypes } from '../../const';
 import * as haOutputs from '../../editor/components/output-properties';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
+import { i18n } from '../../editor/i18n';
 import { HassNodeProperties, OutputProperty } from '../../editor/types';
+import { ApiMethod, ApiProtocol } from './const';
 
 declare const RED: EditorRED;
 
@@ -39,8 +41,8 @@ const ApiEditor: EditorNodeDef<ApiEditorNodeProperties> = {
         server: { value: '', type: NodeType.Server, required: true },
         version: { value: RED.settings.get('haApiVersion', 0) },
         debugenabled: { value: false },
-        protocol: { value: 'websocket' },
-        method: { value: 'get' },
+        protocol: { value: ApiProtocol.Websocket },
+        method: { value: ApiMethod.Get },
         path: { value: '' },
         data: {
             value: '',
@@ -50,13 +52,13 @@ const ApiEditor: EditorNodeDef<ApiEditorNodeProperties> = {
                 allowBlank: true,
             }),
         },
-        dataType: { value: 'jsonata' },
+        dataType: { value: TypedInputTypes.JSONata },
         responseType: { value: 'json' },
         outputProperties: {
             value: [
                 {
                     property: 'payload',
-                    propertyType: 'msg',
+                    propertyType: TypedInputTypes.Message,
                     value: '',
                     valueType: 'results',
                 },
@@ -74,32 +76,34 @@ const ApiEditor: EditorNodeDef<ApiEditorNodeProperties> = {
         haServer.init(this, '#node-input-server');
 
         $('#node-input-data').typedInput({
-            types: ['jsonata', 'json'],
+            types: [TypedInputTypes.JSONata, TypedInputTypes.JSON],
             typeField: '#node-input-dataType',
         });
 
         $('#node-input-protocol')
             .on('change', function () {
-                const isHttp = $(this).val() === 'http';
+                const isHttp = $(this).val() === ApiProtocol.Http;
                 $('.http').toggle(isHttp);
                 $('#node-input-method').trigger('change');
             })
             .trigger('change');
 
         $('#node-input-method').on('change', function () {
+            const method = $('#node-input-method').val() as ApiMethod;
             const label =
-                $('#node-input-protocol').val() === 'http' &&
-                $('#node-input-method').val() === 'get'
-                    ? 'Params'
-                    : 'Data';
-            $('#data-label').text(label);
+                $('#node-input-protocol').val() === ApiProtocol.Http &&
+                [ApiMethod.Get, ApiMethod.Delete].includes(method)
+                    ? 'parameters'
+                    : 'data';
+
+            $('#data-label').text(i18n(`ha-api.label.${label}`));
         });
 
         $('#node-input-location').typedInput({
             types: [
-                'msg',
-                'flow',
-                'global',
+                TypedInputTypes.Message,
+                TypedInputTypes.Flow,
+                TypedInputTypes.Global,
                 { value: 'none', label: 'None', hasValue: false },
             ],
             typeField: '#node-input-locationType',
