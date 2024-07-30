@@ -43,7 +43,7 @@ export default class EntitySelector {
                 break;
             case 'list':
                 id = isSelect2Initialized(this.#$select)
-                    ? this.#$select.select2('data')?.map((e) => e.id) ?? []
+                    ? (this.#$select.select2('data')?.map((e) => e.id) ?? [])
                     : '';
                 break;
             case 'substring':
@@ -64,8 +64,8 @@ export default class EntitySelector {
             const text =
                 getUiSettings().entitySelector === 'id'
                     ? id
-                    : entities.find((e) => e.entity_id === id)?.attributes
-                          .friendly_name ?? id;
+                    : (entities.find((e) => e.entity_id === id)?.attributes
+                          .friendly_name ?? id);
             acc.push(
                 $('<option />', {
                     value: id,

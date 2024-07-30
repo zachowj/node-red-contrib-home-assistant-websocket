@@ -105,7 +105,7 @@ export default class Http {
             });
 
         return responseType === 'json'
-            ? response.data ?? ''
+            ? (response.data ?? '')
             : (response.data as any);
     }
 
@@ -127,7 +127,7 @@ export default class Http {
             });
 
         return responseType === 'json'
-            ? response.data ?? ''
+            ? (response.data ?? '')
             : (response.data as any);
     }
 
@@ -154,7 +154,7 @@ export default class Http {
             });
 
         return responseType === 'json'
-            ? response.data ?? ''
+            ? (response.data ?? '')
             : (response.data as any);
     }
 
@@ -181,7 +181,7 @@ export default class Http {
             });
 
         return responseType === 'json'
-            ? response.data ?? ''
+            ? (response.data ?? '')
             : (response.data as any);
     }
 }

@@ -142,7 +142,7 @@ function createWebsocketConfig(
     const connectionDelay =
         credentials.host !== SUPERVISOR_URL
             ? false
-            : config.connectionDelay ?? false;
+            : (config.connectionDelay ?? false);
     const heartbeatInterval = Number(config.heartbeatInterval) ?? 0;
     const heartbeat =
         config.heartbeat && Number.isInteger(heartbeatInterval)

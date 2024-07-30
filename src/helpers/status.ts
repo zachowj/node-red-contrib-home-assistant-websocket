@@ -110,15 +110,15 @@ export class Status {
             month:
                 config?.statusMonth === 'hidden'
                     ? undefined
-                    : config?.statusMonth ?? 'short',
+                    : (config?.statusMonth ?? 'short'),
             day:
                 config?.statusDay === 'hidden'
                     ? undefined
-                    : config?.statusDay ?? 'numeric',
+                    : (config?.statusDay ?? 'numeric'),
             hourCycle:
                 config?.statusHourCycle === 'default'
                     ? undefined
-                    : config?.statusHourCycle ?? 'h23',
+                    : (config?.statusHourCycle ?? 'h23'),
             hour: 'numeric',
             minute: 'numeric',
         };
