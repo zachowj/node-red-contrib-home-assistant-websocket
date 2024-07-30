@@ -7,9 +7,13 @@ import {
 import { DeviceCapabilityType } from '../const';
 
 export type HassArea = {
+    aliases: string[];
     area_id: string;
+    floor_id: string | null;
+    icon: string | null;
+    labels: string[];
     name: string;
-    picture?: string;
+    picture: string | null;
 };
 
 export type HassAreas = HassArea[];
@@ -147,4 +151,20 @@ export interface HassEntityRegistryDisplayEntry {
     translation_key?: string;
     platform?: string;
     display_precision?: number;
+}
+
+export interface HassFloor {
+    alias: string[];
+    floor_id: string;
+    icon: string | null;
+    level: number | null;
+    name: string;
+}
+
+export interface HassLabel {
+    color: string | null;
+    description: string | null;
+    icon: string | null;
+    label_id: string;
+    name: string;
 }

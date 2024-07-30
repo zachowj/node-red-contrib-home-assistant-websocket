@@ -6,6 +6,8 @@ import {
     updateDevices,
     updateEntities,
     updateEntity,
+    updateFloors,
+    updateLabels,
     updateServices,
     updateTargetDomains,
 } from './editor/data';
@@ -58,6 +60,8 @@ RED.comms.subscribe('homeassistant/areas/#', updateAreas);
 RED.comms.subscribe('homeassistant/devices/#', updateDevices);
 RED.comms.subscribe('homeassistant/entity/#', updateEntity);
 RED.comms.subscribe('homeassistant/entities/#', updateEntities);
+RED.comms.subscribe('homeassistant/floors/#', updateFloors);
+RED.comms.subscribe('homeassistant/labels/#', updateLabels);
 RED.comms.subscribe('homeassistant/integration/#', updateIntegration);
 RED.comms.subscribe('homeassistant/services/#', updateServices);
 RED.comms.subscribe('homeassistant/targetDomains/#', updateTargetDomains);

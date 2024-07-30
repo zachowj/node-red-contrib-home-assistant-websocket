@@ -39,13 +39,15 @@ export default class Comms {
 
     startListeners(): void {
         this.#clientEvents.addListeners(this, [
-            [HaEvent.ServicesUpdated, this.onServicesUpdated],
-            [ClientEvent.StatesLoaded, this.onStatesLoaded],
             ['ha_events:state_changed', this.onStateChanged],
             [ClientEvent.Integration, this.onIntegrationEvent],
+            [ClientEvent.StatesLoaded, this.onStatesLoaded],
             [HaEvent.AreaRegistryUpdated, this.onAreaRegistryUpdate],
             [HaEvent.DeviceRegistryUpdated, this.onDeviceRegistryUpdate],
+            [HaEvent.FloorRegistryUpdated, this.onFloorRegistryUpdate],
+            [HaEvent.LabelRegistryUpdated, this.onLabelRegistryUpdate],
             [HaEvent.RegistryUpdated, this.onRegistryUpdate],
+            [HaEvent.ServicesUpdated, this.onServicesUpdated],
         ]);
     }
 
@@ -63,6 +65,14 @@ export default class Comms {
 
     onDeviceRegistryUpdate(devices: HassDevices): void {
         this.publish('devices', devices);
+    }
+
+    onFloorRegistryUpdate(floors: { [key: string]: string }): void {
+        this.publish('floors', floors);
+    }
+
+    onLabelRegistryUpdate(labels: { [key: string]: string }): void {
+        this.publish('labels', labels);
     }
 
     onRegistryUpdate({

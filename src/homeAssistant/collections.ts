@@ -1,4 +1,8 @@
-import { Connection, getCollection } from 'home-assistant-js-websocket';
+import {
+    Collection,
+    Connection,
+    getCollection,
+} from 'home-assistant-js-websocket';
 import { Store } from 'home-assistant-js-websocket/dist/store';
 import { throttle } from 'lodash';
 
@@ -7,12 +11,14 @@ import {
     HassDevices,
     HassEntityRegistryDisplayEntryResponse,
     HassEntityRegistryEntry,
+    HassFloor,
+    HassLabel,
 } from '../types/home-assistant';
 
 export function subscribeAreaRegistry(
     conn: Connection,
     cb: (state: HassAreas) => void,
-): void {
+): Collection<HassAreas> {
     const fetchAreaRegistry = (conn: Connection) =>
         conn.sendMessagePromise<HassAreas>({
             type: 'config/area_registry/list',
@@ -37,6 +43,8 @@ export function subscribeAreaRegistry(
         subscribeUpdates,
     );
     collection.subscribe(cb);
+
+    return collection;
 }
 
 export function subscribeDeviceRegistry(
@@ -130,6 +138,66 @@ export function subscribeEntityRegistryDisplay(
         conn,
         '_entityRegistryDisplay',
         fetchEntityRegistry,
+        subscribeUpdates,
+    );
+    collection.subscribe(cb);
+}
+
+export function subscribeFloorRegistry(
+    conn: Connection,
+    cb: (state: HassFloor[]) => void,
+): void {
+    const fetchFloorRegistry = (conn: Connection) =>
+        conn.sendMessagePromise<HassFloor[]>({
+            type: 'config/floor_registry/list',
+        });
+
+    const subscribeUpdates = (conn: Connection, store: Store<HassFloor[]>) =>
+        conn.subscribeEvents(
+            throttle(
+                () =>
+                    fetchFloorRegistry(conn).then((floors) =>
+                        store.setState(floors, true),
+                    ),
+                500,
+            ),
+            'floor_registry_updated',
+        );
+
+    const collection = getCollection(
+        conn,
+        '_floors',
+        fetchFloorRegistry,
+        subscribeUpdates,
+    );
+    collection.subscribe(cb);
+}
+
+export function subscribeLabelRegistry(
+    conn: Connection,
+    cb: (state: HassLabel[]) => void,
+): void {
+    const fetchLabelRegistry = (conn: Connection) =>
+        conn.sendMessagePromise<HassLabel[]>({
+            type: 'config/label_registry/list',
+        });
+
+    const subscribeUpdates = (conn: Connection, store: Store<HassLabel[]>) =>
+        conn.subscribeEvents(
+            throttle(
+                () =>
+                    fetchLabelRegistry(conn).then((labels) =>
+                        store.setState(labels, true),
+                    ),
+                500,
+            ),
+            'label_registry_updated',
+        );
+
+    const collection = getCollection(
+        conn,
+        '_labels',
+        fetchLabelRegistry,
         subscribeUpdates,
     );
     collection.subscribe(cb);

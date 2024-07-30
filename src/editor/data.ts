@@ -4,7 +4,12 @@ import {
     HassServices,
 } from 'home-assistant-js-websocket';
 
-import { HassArea, HassDevice } from '../types/home-assistant';
+import {
+    HassArea,
+    HassDevice,
+    HassFloor,
+    HassLabel,
+} from '../types/home-assistant';
 import { i18n } from './i18n';
 import { HassTargetDomains } from './types';
 import { deepFind } from './utils';
@@ -12,6 +17,8 @@ import { deepFind } from './utils';
 const areas: { [serverId: string]: HassArea[] } = {};
 const devices: { [serverId: string]: HassDevice[] } = {};
 const entities: { [serverId: string]: HassEntities } = {};
+const floors: { [serverId: string]: HassFloor[] } = {};
+const labels: { [serverId: string]: HassLabel[] } = {};
 const services: { [serverId: string]: HassServices } = {};
 const targetDomains: { [serverId: string]: HassTargetDomains } = {};
 
@@ -34,6 +41,16 @@ export function updateEntity(topic: string, data: HassEntity): void {
 export function updateEntities(topic: string, data: HassEntities): void {
     const serverId = parseServerId(topic);
     entities[serverId] = data;
+}
+
+export function updateFloors(topic: string, data: HassFloor[]): void {
+    const serverId = parseServerId(topic);
+    floors[serverId] = data;
+}
+
+export function updateLabels(topic: string, data: HassLabel[]): void {
+    const serverId = parseServerId(topic);
+    labels[serverId] = data;
 }
 
 export function updateServices(topic: string, data: HassServices): void {
@@ -185,6 +202,14 @@ export function getEntity(serverId: string, entityId: string): HassEntity {
 
 export function getEntities(serverId: string): HassEntities {
     return entities[serverId] ?? {};
+}
+
+export function getFloors(serverId: string): HassFloor[] {
+    return floors[serverId] ?? [];
+}
+
+export function getLabels(serverId: string): HassLabel[] {
+    return labels[serverId] ?? [];
 }
 
 export function getProperties(serverId: string, entityId: string): string[] {

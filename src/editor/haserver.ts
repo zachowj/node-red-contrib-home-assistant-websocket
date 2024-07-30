@@ -3,7 +3,13 @@ import { EditorNodeInstance, EditorRED } from 'node-red';
 
 import { NodeType } from '../const';
 import { ConfigServerEditorNodeProperties } from '../nodes/config-server/editor';
-import { HassArea, HassAreas, HassDevices } from '../types/home-assistant';
+import {
+    HassArea,
+    HassAreas,
+    HassDevices,
+    HassFloor,
+    HassLabel,
+} from '../types/home-assistant';
 import * as haData from './data';
 import { HassNodeProperties, HassTargetDomains } from './types';
 
@@ -119,16 +125,24 @@ export const getAreaNameById = (areaId?: string): string => {
     return haData.getAreaNameById(serverId, areaId);
 };
 
-export const getEntities = (): HassEntity[] => {
-    return Object.values(haData.getEntities(serverId));
-};
-
 export const getAreas = (): HassAreas => {
     return haData.getAreas(serverId);
 };
 
 export const getDevices = (): HassDevices => {
     return haData.getDevices(serverId);
+};
+
+export const getEntities = (): HassEntity[] => {
+    return Object.values(haData.getEntities(serverId));
+};
+
+export const getFloors = (): HassFloor[] => {
+    return haData.getFloors(serverId);
+};
+
+export const getLabels = (): HassLabel[] => {
+    return haData.getLabels(serverId);
 };
 
 export const getServices = (): HassServices => {
