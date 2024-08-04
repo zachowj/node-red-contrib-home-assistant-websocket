@@ -10,26 +10,11 @@ import { getNormalizedDomainServices } from './utils';
 
 export type Filter<T> = (value: T, index: number, array: T[]) => boolean;
 
-const floorIdSelector = '#floor-list';
-const areaIdSelector = '#area-list';
-const deviceIdSelector = '#device-list';
-const entityIdSelector = '#entity-list';
-const labelIdSelector = '#label-list';
-const idSelectors = [
-    floorIdSelector,
-    areaIdSelector,
-    deviceIdSelector,
-    entityIdSelector,
-    labelIdSelector,
-];
-
-const ValidTargetNone = 'none';
-const ValidTargetAll = 'all';
-const ValidTargetEntityOnly = 'entity_only';
-export type ValidTargets =
-    | typeof ValidTargetNone
-    | typeof ValidTargetAll
-    | typeof ValidTargetEntityOnly;
+enum ValidTarget {
+    None = 'none',
+    All = 'all',
+    EntityOnly = 'entity_only',
+}
 
 /*
  https://developers.home-assistant.io/docs/dev_101_services
@@ -41,9 +26,9 @@ export type ValidTargets =
  Entity selector parameters will automatically be applied to device and area, and 
  device selector parameters will automatically be applied to area.
  */
-export function getValidTargets(action: string): ValidTargets {
+export function getValidTargets(action: string): ValidTarget {
     if (containsMustache(action)) {
-        return ValidTargetAll;
+        return ValidTarget.All;
     }
 
     const services = haServer.getServices();
@@ -53,9 +38,9 @@ export function getValidTargets(action: string): ValidTargets {
         !services?.[domain]?.[service] ||
         services?.[domain]?.[service]?.target !== undefined
     )
-        return ValidTargetAll;
+        return ValidTarget.All;
 
-    return ValidTargetNone;
+    return ValidTarget.None;
 }
 
 // TODO: Check integration and device_class
@@ -88,9 +73,16 @@ export function getValidTargets(action: string): ValidTargets {
 //         : undefined;
 // }
 
+const idSelectors = [
+    '#floor-list',
+    '#area-list',
+    '#device-list',
+    '#entity-list',
+    '#label-list',
+];
 export function displayValidTargets(action: string) {
     const validTargets = getValidTargets(action);
     const $ids = $(idSelectors.join(', '));
     const $formRow = $ids.parents('.form-row');
-    $formRow.toggle(validTargets !== ValidTargetNone);
+    $formRow.toggle(validTargets !== ValidTarget.None);
 }
