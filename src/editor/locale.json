@@ -12,7 +12,8 @@
         "warning": "It is recommended to back up your flows before doing an update of all Home Assistant nodes."
       },
       "notifications": {
-        "attention": "Attention"
+        "attention": "Attention",
+        "clipboard_copy": "Copied to clipboard"
       }
     }
   }

@@ -57,15 +57,17 @@ const resourcePath = 'resources/node-red-contrib-home-assistant-websocket';
 const resourceFiles = [
     `<script src="${resourcePath}/select2.full.min.js?v=4.1.0-rc.0"></script>`,
     `<link rel="stylesheet" href="${resourcePath}/select2.min.css?v=4.1.0-rc.0">`,
+    `<link rel="stylesheet" href="${resourcePath}/virtual-select.v1.0.44.min.css">`,
+    `<script src="${resourcePath}/virtual-select.v1.0.44.min.js"></script>`,
     `<script src="${resourcePath}/maximize-select2-height.min.js?v=1.0.4"></script>`,
     `<script src="${resourcePath}/handlebars.min-v4.7.8.js"></script>`,
 ];
 
 const nodeMap = {
+    action: { doc: 'action', type: 'api-call-service' },
     api: { doc: 'API', type: 'ha-api' },
     'binary-sensor': { doc: 'binary-sensor', type: 'ha-binary-sensor' },
     button: { doc: 'button', type: 'ha-button' },
-    'call-service': { doc: 'call-service', type: 'api-call-service' },
     'config-server': { doc: 'config-server', type: 'server' },
     'current-state': { doc: 'current-state', type: 'api-current-state' },
     device: { doc: 'device', type: 'ha-device' },

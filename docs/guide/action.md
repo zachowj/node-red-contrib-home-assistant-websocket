@@ -1,22 +1,22 @@
-# Call Service Tips and Tricks
+# Action Tips and Tricks
 
 ## Homeassistant Domain
 
 The `homeassisant` domain can be used with different domains of entities with certain services.
 
-Here's an example of using the `homeassistant` domain to turn off some lights, switches, and everything that can be turned off in the laundry room in a single service call. This can save you from having to have multiple call-service nodes.
+Here's an example of using the `homeassistant` domain to turn off some lights, switches, and everything that can be turned off in the laundry room in a single service call. This can save you from having to have multiple action nodes.
 
-![screenshot of a call-service node using homeassistant domain](./images/call-service_06.png)
+![screenshot of a action node using homeassistant domain](./images/call-service_06.png)
 
 ## Using Mustache Templates
 
 Mustache templates can be used in the domain, service, and entity id fields. This is useful if you want to set the service based on `msg.payload` or any other message property.
 
-Here's an example using [eztimer](https://flows.nodered.org/node/node-red-contrib-eztimer) to set the output of the node to `on` or `off`. Then use that in the call-service node for which service to use.
+Here's an example using [eztimer](https://flows.nodered.org/node/node-red-contrib-eztimer) to set the output of the node to `on` or `off`. Then use that in the action node for which service to use.
 
 ![screenshot of flow](./images/call-service_01.png)
 
-![screenshot of the call-service node](./images/call-service_03.png)
+![screenshot of the action node](./images/call-service_03.png)
 
 @[code](@examples/guides/call-service/mustache_templates_01.json)
 
@@ -49,7 +49,7 @@ It's recommended to use the JSONata expression, `J: Expression`, for the data fi
 
 ![screenshot of flow](./images/call-service_04.png)
 
-![screenshot of the call-service node](./images/call-service_05.png)
+![screenshot of the action node](./images/call-service_05.png)
 
 ```json
 { "message": "The " & data.attributes.friendly_name & " has been opened." }
@@ -87,7 +87,7 @@ Home Assistant states are represented as strings so to be able to do arithmetic 
 
 #### Adding 3 to the current temperature of a climate entity
 
-![screenshot of call-service node](./images/call-service_02.png)
+![screenshot of action node](./images/call-service_02.png)
 
 ```json
 { "temperature": $entities("climate.thermostat").attributes.temperature + 3 }
@@ -99,7 +99,7 @@ Example of getting a list of lights from the get-entities node and then creating
 
 ![screenshot of flow](./images/call-service_07.png)
 
-![screenshot of call-service node](./images/call-service_08.png)
+![screenshot of action node](./images/call-service_08.png)
 
 ```json
 { "entity_id": $join(payload.entity_id, ",") }
@@ -109,7 +109,7 @@ Example of getting a list of lights from the get-entities node and then creating
 
 **Also see:**
 
-- [Call-service node](../node/call-service.md)
+- [Action node](../node/action.md)
 - [JSONata Guide](./jsonata.md)
 - [https://docs.jsonata.org](https://docs.jsonata.org)
 - [http://try.jsonata.org](http://try.jsonata.org)

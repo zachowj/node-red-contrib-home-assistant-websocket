@@ -93,7 +93,7 @@ export default defineUserConfig({
                     children: [
                         '/guide/',
                         '/guide/first-automation',
-                        '/guide/call-service',
+                        '/guide/action',
                         '/guide/conditionals',
                         '/guide/mustache-templates',
                         {
@@ -136,8 +136,8 @@ export default defineUserConfig({
                     text: 'General Nodes',
                     collapsible: true,
                     children: [
+                        'action',
                         'API',
-                        'call-service',
                         'current-state',
                         'device',
                         'events-all',

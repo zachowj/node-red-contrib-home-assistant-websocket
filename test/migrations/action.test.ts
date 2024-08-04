@@ -5,7 +5,7 @@ import {
     migrate,
     Migration,
 } from '../../src/helpers/migrate';
-import migrations from '../../src/nodes/call-service/migrations';
+import migrations from '../../src/nodes/action/migrations';
 
 isMigrationArray(migrations);
 
@@ -75,6 +75,14 @@ const VERSION_5 = {
     deviceId: [],
     entityId: ['entity.id1', 'entity.id2'],
     target: undefined,
+};
+
+const VERSION_6 = {
+    ...VERSION_5,
+    version: 6,
+    floorId: [],
+    labelId: [],
+    action: 'service_domain.service_action',
 };
 
 describe('Migrations - Call Service Node', function () {
@@ -262,8 +270,22 @@ describe('Migrations - Call Service Node', function () {
         });
     });
 
+    describe('Version 6', function () {
+        let migrate: Migration | undefined;
+
+        before(function () {
+            migrate = migrations.find((m) => m.version === 6);
+        });
+
+        it('should update version 5 to version 6', function () {
+            const migratedSchema = migrate?.up(VERSION_5);
+
+            expect(migratedSchema).to.eql(VERSION_6);
+        });
+    });
+
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_5);
+        expect(migratedSchema).to.eql(VERSION_6);
     });
 });

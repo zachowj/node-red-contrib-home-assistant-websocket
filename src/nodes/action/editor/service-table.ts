@@ -56,13 +56,12 @@ export const updateServiceSelection = () => {
         $unknownServiceDiv.show();
         $knownServiceDiv.hide();
         $loadExampleData.hide();
-        $('#service-data-desc .title').val('');
+        $('#service-data-desc .title').html('');
     }
 };
 
 // Load example data into data field
 export const loadExampleData = () => {
-    const $entityIdField = $('#node-input-entityId');
     const $data = $('#node-input-data');
 
     const [domain, service] = getNormalizedDomainServices();
@@ -77,9 +76,7 @@ export const loadExampleData = () => {
                 (acc, key) => {
                     const val = fields[key].example;
                     if (key === 'entity_id') {
-                        if (val?.toString()) {
-                            $entityIdField.val();
-                        }
+                        acc[key] = val ?? '';
                         return acc;
                     }
                     if (val === undefined) {

@@ -1,17 +1,17 @@
 {
   "api-call-service": {
     "error": {
+      "domain_service_deprecated": "The domain and service input properties are deprecated and will be removed in version 1.0. Please use the action property instead.",
+      "invalid_action_format": "Invalid action format: __action__",
       "invalid_entity_id": "Invalid entity ID format",
       "invalid_json": "Invalid JSON: __json__",
       "invalid_merge_context": "Invalid merge context: __context__"
     },
     "label": {
+      "action": "Action",
       "alternate_tags": "Use alternate template tags for the data field",
-      "area": "Area",
       "data": "Data",
-      "device": "Device",
       "domain": "Domain",
-      "entity": "Entity",
       "load_example_data": "Load example data",
       "merge_context": "Merge context",
       "name": "Name",
@@ -24,7 +24,12 @@
       },
       "server": "Server",
       "service": "Service",
-      "show_debug": "Show debug information"
+      "show_debug": "Show debug information",
+      "target_area": "Area target",
+      "target_device": "Device target",
+      "target_entity": "Entity target",
+      "target_floor": "Floor target",
+      "target_label": "Label target"
     },
     "status": {
       "service_called": "__domain__.__service__ called"

@@ -1,5 +1,13 @@
 {
   "home-assistant": {
+    "component": {
+      "id-selector": {
+        "label": {
+          "copy": "Copy ID",
+          "delete": "Delete ID"
+        }
+      }
+    },
     "label": {
       "output_properties": "Output properties"
     }

@@ -108,4 +108,18 @@ export default [
             return newSchema;
         },
     },
+    {
+        version: 6,
+        up: (schema: any) => {
+            const newSchema = {
+                ...schema,
+                version: 6,
+                floorId: [],
+                labelId: [],
+                action: `${schema.domain}.${schema.service}`,
+            };
+
+            return newSchema;
+        },
+    },
 ];

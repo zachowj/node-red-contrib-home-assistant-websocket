@@ -21,10 +21,10 @@ import {
     setupMigrations,
     versionCheck,
 } from './editor/version';
+import ActionEditor from './nodes/action/editor';
 import ApiEditor from './nodes/api/editor';
 import BinarySensorEditor from './nodes/binary-sensor/editor';
 import ButtonEditor from './nodes/button/editor';
-import CallServiceEditor from './nodes/call-service/editor';
 import ConfigServerEditor from './nodes/config-server/editor';
 import CurrentStateEditor from './nodes/current-state/editor';
 import DeviceEditor from './nodes/device/editor';
@@ -80,7 +80,7 @@ RED.nodes.registerType(NodeType.Server, ConfigServerEditor);
 
 // general nodes
 RED.nodes.registerType(NodeType.API, ApiEditor);
-RED.nodes.registerType(NodeType.CallSevice, CallServiceEditor);
+RED.nodes.registerType(NodeType.Action, ActionEditor);
 RED.nodes.registerType(NodeType.CurrentState, CurrentStateEditor);
 RED.nodes.registerType(NodeType.Device, DeviceEditor);
 RED.nodes.registerType(NodeType.Entity, EntityEditor);

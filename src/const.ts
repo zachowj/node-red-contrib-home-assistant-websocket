@@ -60,8 +60,8 @@ export enum EntityFilterType {
 }
 
 export enum NodeType {
+    Action = 'api-call-service',
     API = 'ha-api',
-    CallSevice = 'api-call-service',
     CurrentState = 'api-current-state',
     Device = 'ha-device',
     Entity = 'ha-entity',

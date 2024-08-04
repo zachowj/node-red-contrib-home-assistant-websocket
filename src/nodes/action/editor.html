@@ -17,55 +17,28 @@
 </div>
 
 <div class="form-row">
-    <label
-        for="node-input-domain"
-        data-i18n="api-call-service.label.domain"
-    ></label>
-    <select id="node-input-domain" style="width: 70%"></select>
+    <label data-i18n="api-call-service.label.action"></label>
+    <div id="ha-action"></div>
 </div>
 
 <div class="form-row">
-    <label
-        for="node-input-service"
-        data-i18n="api-call-service.label.service"
-    ></label>
-    <select id="node-input-service" style="width: 70%"></select>
+    <ol id="floor-list"></ol>
 </div>
 
 <div class="form-row">
-    <label
-        for="node-input-areaId"
-        data-i18n="api-call-service.label.area"
-    ></label>
-    <select
-        id="node-input-areaId"
-        multiple="multiple"
-        style="width: 70%"
-    ></select>
+    <ol id="area-list"></ol>
 </div>
 
 <div class="form-row">
-    <label
-        for="node-input-deviceId"
-        data-i18n="api-call-service.label.device"
-    ></label>
-    <select
-        id="node-input-deviceId"
-        multiple="multiple"
-        style="width: 70%"
-    ></select>
+    <ol id="device-list"></ol>
 </div>
 
 <div class="form-row">
-    <label
-        for="node-input-entityId"
-        data-i18n="api-call-service.label.entity"
-    ></label>
-    <select
-        id="node-input-entityId"
-        multiple="multiple"
-        style="width: 70%"
-    ></select>
+    <ol id="entity-list"></ol>
+</div>
+
+<div class="form-row">
+    <ol id="label-list"></ol>
 </div>
 
 <div class="form-row">
@@ -123,6 +96,14 @@
 
 <div class="form-row"><ol id="custom-outputs"></ol></div>
 
+<div class="form-row checkbox-option">
+    <input type="checkbox" id="node-input-debugenabled" />
+    <label
+        for="node-input-debugenabled"
+        data-i18n="api-call-service.label.show_debug"
+    ></label>
+</div>
+
 <div id="service-data-desc" class="form-row">
     <button
         id="example-data"
@@ -130,7 +111,10 @@
         class="red-ui-button red-ui-button-small"
         data-i18n="api-call-service.label.load_example_data"
     ></button>
-    <h4>Service: <span class="title"></span></h4>
+    <h4>
+        <span data-i18n="api-call-service.label.action"></span>:
+        <span class="title"></span>
+    </h4>
     <div class="unknown-service">Unknown domain or service</div>
     <div class="known-service">
         <p class="service-description"></p>
@@ -145,12 +129,4 @@
             <tbody></tbody>
         </table>
     </div>
-</div>
-
-<div class="form-row checkbox-option">
-    <input type="checkbox" id="node-input-debugenabled" />
-    <label
-        for="node-input-debugenabled"
-        data-i18n="api-call-service.label.show_debug"
-    ></label>
 </div>

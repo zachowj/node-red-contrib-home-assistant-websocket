@@ -4,10 +4,10 @@ import Storage from './common/Storage';
 import { NodeType } from './const';
 import { setRED } from './globals';
 import { getExposedSettings } from './helpers/exposed-settings';
+import actionNode from './nodes/action';
 import apiNode from './nodes/api';
 import binarySensorNode from './nodes/binary-sensor';
 import buttonNode from './nodes/button';
-import callServiceNode from './nodes/call-service';
 import configServerNode from './nodes/config-server';
 import currentStateNode from './nodes/current-state';
 import deviceNode from './nodes/device';
@@ -40,7 +40,7 @@ import { createRoutes } from './routes';
 
 const nodes: Record<NodeType, any> = {
     [NodeType.API]: apiNode,
-    [NodeType.CallSevice]: callServiceNode,
+    [NodeType.Action]: actionNode,
     [NodeType.CurrentState]: currentStateNode,
     [NodeType.Device]: deviceNode,
     [NodeType.Entity]: entityNode,

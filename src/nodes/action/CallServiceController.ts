@@ -7,6 +7,7 @@ import InputOutputController, {
 } from '../../common/controllers/InputOutputController';
 import InputError from '../../common/errors/InputError';
 import NoConnectionError from '../../common/errors/NoConnectionError';
+import { DataSource } from '../../common/services/InputService';
 import { TypedInputTypes } from '../../const';
 import { RED } from '../../globals';
 import { generateRenderTemplate } from '../../helpers/mustache';
@@ -20,6 +21,7 @@ export default class CallServiceController extends InputOutputController<
     CallServiceNodeProperties
 > {
     #queue: QueueItem[] = [];
+    #hasDeprecatedWarned = false;
 
     protected async onInput({
         message,
@@ -41,8 +43,32 @@ export default class CallServiceController extends InputOutputController<
             this.node.context(),
             states,
         );
-        const domain = render(parsedMessage.domain.value);
-        const service = render(parsedMessage.service.value);
+
+        let action: string = parsedMessage.action.value;
+        // TODO: Remove in version 1.0
+        // Check if the action is in the old format
+        if (
+            parsedMessage.domain.source === DataSource.Message ||
+            parsedMessage.service.source === DataSource.Message
+        ) {
+            action = `${parsedMessage.domain.value}.${parsedMessage.service.value}`;
+            if (!this.#hasDeprecatedWarned) {
+                this.#hasDeprecatedWarned = true;
+                this.node.warn(
+                    RED._('api-call-service.error.domain_service_deprecated'),
+                );
+            }
+        } else if (parsedMessage.action.source === DataSource.Config) {
+            action = render(action);
+        }
+
+        const [domain, service] = action.toLowerCase().split('.');
+        if (!domain || !service) {
+            throw new InputError([
+                'api-call-service.error.invalid_action_format',
+                { action },
+            ]);
+        }
         const target = this.#getTargetData(parsedMessage.target.value, message);
 
         const mergedData = await this.#mergeContextData(
@@ -202,9 +228,11 @@ export default class CallServiceController extends InputOutputController<
         );
 
         const map: Record<string, string> = {
+            floorId: 'floor_id',
             areaId: 'area_id',
             deviceId: 'device_id',
             entityId: 'entity_id',
+            labelId: 'label_id',
         };
         const configTarget: Record<string, any> = {};
 

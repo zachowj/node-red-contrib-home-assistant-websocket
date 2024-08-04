@@ -1,7 +1,7 @@
 import { NodeType } from '../const';
+import action from '../nodes/action/migrations';
 import api from '../nodes/api/migrations';
 import binarySensor from '../nodes/binary-sensor/migrations';
-import callService from '../nodes/call-service/migrations';
 import configServer from '../nodes/config-server/migrations';
 import currentState from '../nodes/current-state/migrations';
 import device from '../nodes/device/migrations';
@@ -37,7 +37,7 @@ export interface Migration {
 const nodeTypeTranslation: Partial<Record<NodeType, Migration[]>> = {
     [NodeType.API]: api,
     [NodeType.BinarySensor]: binarySensor,
-    [NodeType.CallSevice]: callService,
+    [NodeType.Action]: action,
     [NodeType.Server]: configServer,
     [NodeType.CurrentState]: currentState,
     [NodeType.Device]: device,

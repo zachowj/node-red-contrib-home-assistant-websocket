@@ -8,7 +8,10 @@ import { DateTimeFormatOptions } from '../../types/DateTimeFormatOptions';
 
 declare const RED: EditorRED;
 
-export type SelectorType = 'id' | 'friendlyName';
+export enum SelectorType {
+    Id = 'id',
+    FriendlyName = 'friendlyName',
+}
 
 export interface ConfigServerEditorNodeProperties extends EditorNodeProperties {
     version: number;
@@ -54,9 +57,9 @@ const ConfigServerEditor: EditorNodeDef<
                 );
             },
         },
-        areaSelector: { value: 'friendlyName' },
-        deviceSelector: { value: 'friendlyName' },
-        entitySelector: { value: 'friendlyName' },
+        areaSelector: { value: SelectorType.FriendlyName },
+        deviceSelector: { value: SelectorType.FriendlyName },
+        entitySelector: { value: SelectorType.FriendlyName },
         statusSeparator: { value: ': ' },
         statusYear: { value: 'hidden' },
         statusMonth: { value: 'short' },

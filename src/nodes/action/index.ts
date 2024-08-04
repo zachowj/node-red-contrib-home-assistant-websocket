@@ -19,17 +19,20 @@ import CallServiceController from './CallServiceController';
 import { Queue } from './const';
 
 export interface CallServiceNodeProperties extends BaseNodeProperties {
-    domain: string;
-    service: string;
+    action: string;
     data: string;
     dataType: string;
     areaId?: string[];
     deviceId?: string[];
     entityId?: string[];
+    floorId?: string[];
     mergeContext: string;
     mustacheAltTags: boolean;
     queue: Queue;
     outputProperties: OutputProperty[];
+    // TODO: Remove in version 1.0
+    domain?: string;
+    service?: string;
 }
 
 export interface CallServiceNode extends BaseNode {
@@ -37,13 +40,9 @@ export interface CallServiceNode extends BaseNode {
 }
 
 const inputs: NodeInputs = {
-    domain: {
-        messageProp: 'payload.domain',
-        configProp: 'domain',
-    },
-    service: {
-        messageProp: 'payload.service',
-        configProp: 'service',
+    action: {
+        messageProp: 'payload.action',
+        configProp: 'action',
     },
     target: {
         messageProp: 'payload.target',
@@ -53,17 +52,74 @@ const inputs: NodeInputs = {
         configProp: 'data',
         default: {},
     },
+    // deprecated
+    // TODO: Remove in version 1.0
+    domain: {
+        messageProp: 'payload.domain',
+        configProp: 'domain',
+    },
+    service: {
+        messageProp: 'payload.service',
+        configProp: 'service',
+    },
 };
 
+function customActionValidation(
+    value: string | undefined,
+    helpers: Joi.CustomHelpers,
+) {
+    const { domain, service } = helpers.state.ancestors[0];
+
+    if (!value && !domain && !service) {
+        return helpers.message({ custom: 'Action is required' });
+    }
+
+    if (typeof value !== 'string') {
+        return helpers.message({ custom: 'Action must be a string' });
+    }
+
+    return value;
+}
+
+function customDomainServiceValidation(
+    value: string | undefined,
+    helpers: Joi.CustomHelpers,
+) {
+    const { action } = helpers.state.ancestors[0];
+
+    if (action) {
+        return value;
+    }
+
+    if (!value) {
+        return helpers.message({
+            custom: 'Both domain and service are required',
+        });
+    }
+
+    if (typeof value !== 'string') {
+        return helpers.message({
+            custom: `${helpers.state.path?.[0]} must be a string`,
+        });
+    }
+
+    return value;
+}
+
+// TODO: Custom validation can be removed after version 1.0
 const inputSchema: Joi.ObjectSchema = Joi.object({
-    domain: Joi.string().required(),
-    service: Joi.string().required(),
+    action: Joi.custom(customActionValidation),
     data: Joi.alternatives(Joi.string().allow(''), Joi.object()).required(),
     target: Joi.object().keys({
+        floor_id: Joi.alternatives(Joi.string(), Joi.array().optional()),
         area_id: Joi.alternatives(Joi.string(), Joi.array().optional()),
         device_id: Joi.alternatives(Joi.string(), Joi.array().optional()),
         entity_id: Joi.alternatives(Joi.string(), Joi.array().optional()),
+        label_id: Joi.alternatives(Joi.string(), Joi.array().optional()),
     }),
+    // deprecated
+    domain: Joi.custom(customDomainServiceValidation),
+    service: Joi.custom(customDomainServiceValidation),
 });
 
 export default function callServiceNode(

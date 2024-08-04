@@ -1,0 +1,54 @@
+@import 'variables';
+
+.vscomp-wrapper {
+    font-family: $primary-font;
+
+    &.focused,
+    &:focus {
+        .vscomp-toggle-button {
+            box-shadow: none;
+            border-color: var(--red-ui-form-input-focus-color);
+            outline: 0;
+            outline: thin dotted \9;
+        }
+    }
+
+    .vscomp-toggle-button {
+        border-radius: 4px;
+        vertical-align: middle;
+        border-color: var(--red-ui-form-input-border-color);
+    }
+}
+
+.vscomp-value {
+    color: $primary-text-color;
+}
+
+.vscomp-search-container {
+    > label.vscomp-search-label {
+        border: 0;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        margin-bottom: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        white-space: nowrap;
+        width: 1px;
+    }
+
+    > input.vscomp-search-input {
+        background-color: rgba(0, 0, 0, 0);
+        border: 0;
+        color: inherit;
+        font-size: 15px;
+        height: 38px;
+        padding: 10px 0;
+        width: calc(100% - 30px);
+    }
+}
+
+#ha-action {
+    margin-left: 4px;
+}
