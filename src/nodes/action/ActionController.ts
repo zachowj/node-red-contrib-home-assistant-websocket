@@ -13,12 +13,12 @@ import { RED } from '../../globals';
 import { generateRenderTemplate } from '../../helpers/mustache';
 import { isNodeRedEnvVar } from '../../helpers/utils';
 import { NodeMessage } from '../../types/nodes';
-import { CallServiceNode, CallServiceNodeProperties } from '.';
+import { ActionNode, ActionNodeProperties } from '.';
 import { Queue, QueueItem } from './const';
 
-export default class CallServiceController extends InputOutputController<
-    CallServiceNode,
-    CallServiceNodeProperties
+export default class ActionController extends InputOutputController<
+    ActionNode,
+    ActionNodeProperties
 > {
     #queue: QueueItem[] = [];
     #hasDeprecatedWarned = false;
@@ -239,7 +239,7 @@ export default class CallServiceController extends InputOutputController<
         for (const key in map) {
             const prop = map[key];
             const target = this.node.config[
-                key as keyof CallServiceNodeProperties
+                key as keyof ActionNodeProperties
             ] as string[];
             configTarget[prop] = target ? [...target] : undefined;
             if (Array.isArray(configTarget[prop])) {

@@ -15,10 +15,10 @@ import {
     BaseNodeProperties,
     OutputProperty,
 } from '../../types/nodes';
-import CallServiceController from './CallServiceController';
+import ActionController from './ActionController';
 import { Queue } from './const';
 
-export interface CallServiceNodeProperties extends BaseNodeProperties {
+export interface ActionNodeProperties extends BaseNodeProperties {
     action: string;
     data: string;
     dataType: string;
@@ -35,8 +35,8 @@ export interface CallServiceNodeProperties extends BaseNodeProperties {
     service?: string;
 }
 
-export interface CallServiceNode extends BaseNode {
-    config: CallServiceNodeProperties;
+export interface ActionNode extends BaseNode {
+    config: ActionNodeProperties;
 }
 
 const inputs: NodeInputs = {
@@ -122,9 +122,9 @@ const inputSchema: Joi.ObjectSchema = Joi.object({
     service: Joi.custom(customDomainServiceValidation),
 });
 
-export default function callServiceNode(
-    this: CallServiceNode,
-    config: CallServiceNodeProperties,
+export default function actionNode(
+    this: ActionNode,
+    config: ActionNodeProperties,
 ): void {
     RED.nodes.createNode(this, config);
 
@@ -136,14 +136,14 @@ export default function callServiceNode(
         config: serverConfigNode.config,
         node: this,
     });
-    const inputService = new InputService<CallServiceNodeProperties>({
+    const inputService = new InputService<ActionNodeProperties>({
         inputs,
         nodeConfig: this.config,
         schema: inputSchema,
     });
     const controllerDeps = createControllerDependencies(this, homeAssistant);
 
-    const controller = new CallServiceController({
+    const controller = new ActionController({
         inputService,
         node: this,
         status,

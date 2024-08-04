@@ -16,7 +16,7 @@ import { buildDomainServices } from './utils';
 
 declare const RED: EditorRED;
 
-interface CallServiceEditorNodeProperties extends EditorNodeProperties {
+interface ActionEditorNodeProperties extends EditorNodeProperties {
     server: any;
     version: number;
     debugenabled: boolean;
@@ -44,7 +44,7 @@ interface CallServiceEditorNodeProperties extends EditorNodeProperties {
     mergecontext?: string;
 }
 
-const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
+const ActionEditor: EditorNodeDef<ActionEditorNodeProperties> = {
     category: NodeCategory.HomeAssistant,
     color: NodeColor.HaBlue,
     inputs: 1,
@@ -215,4 +215,4 @@ const CallServiceEditor: EditorNodeDef<CallServiceEditorNodeProperties> = {
     },
 };
 
-export default CallServiceEditor;
+export default ActionEditor;
