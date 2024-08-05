@@ -1,7 +1,7 @@
+import { IdSelectorType } from '../../../common/const';
 import { SelectorType } from '../../../nodes/config-server/editor';
 import { getUiSettings } from '../../haserver';
 import * as haServer from '../../haserver';
-import { IdSelectorType } from './types';
 
 /**
  * @typedef {object} virtualSelectOption

@@ -1,0 +1,22 @@
+{
+  "home-assistant": {
+    "component": {
+      "id-selector": {
+        "label": {
+          "add-button": {
+            "area": "add area",
+            "device": "add device",
+            "entity": "add entity",
+            "floor": "add floor",
+            "label": "add label",
+            "regex": "add regex",
+            "substring": "add substring"
+          },
+          "copy": "Copy ID",
+          "delete": "Delete ID",
+          "preview": "Preview"
+        }
+      }
+    }
+  }
+}

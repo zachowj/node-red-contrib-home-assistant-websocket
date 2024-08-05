@@ -1,5 +1,6 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
+import { IdSelectorType } from '../../common/const';
 import { TransformType } from '../../common/TransformState';
 import {
     ComparatorType,
@@ -7,14 +8,18 @@ import {
     NodeType,
     TypedInputTypes,
 } from '../../const';
-import EntitySelector from '../../editor/components/EntitySelector';
+import IdSelector, {
+    getSelectedIds,
+} from '../../editor/components/idSelector/IdSelector';
 import * as ifState from '../../editor/components/ifstate';
 import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
+import { i18n } from '../../editor/i18n';
 import { OutputProperty } from '../../editor/types';
 import { saveEntityType } from '../entity-config/editor/helpers';
+import { EntitySelector } from './index';
 
 declare const RED: EditorRED;
 
@@ -22,8 +27,7 @@ interface EventsStateEditorNodeProperties extends EditorNodeProperties {
     server: string;
     version: number;
     exposeAsEntityConfig: string;
-    entityId: string | string[];
-    entityIdType: string;
+    entities: EntitySelector;
     outputInitially: boolean;
     stateType: TransformType;
     ifState: string;
@@ -41,6 +45,8 @@ interface EventsStateEditorNodeProperties extends EditorNodeProperties {
     outputProperties: OutputProperty[];
 
     // deprecated but needed for migration
+    entityId: undefined;
+    entityIdType: undefined;
     entityidfilter: undefined;
     entityidfiltertype: undefined;
     outputinitially: undefined;
@@ -60,7 +66,16 @@ const EventsStateEditor: EditorNodeDef<EventsStateEditorNodeProperties> = {
     icon: 'ha-events-state-changed.svg',
     paletteLabel: 'events: state',
     label: function () {
-        return this.name || `state_changed: ${this.entityId || 'all entities'}`;
+        let label: string[] = [];
+        if (this.entities) {
+            Object.entries(this.entities).forEach(([, ids]) => {
+                if (Array.isArray(ids) && ids?.length) {
+                    label = [...label, ...ids];
+                }
+            });
+        }
+
+        return this.name || `state_changed: ${label}`;
     },
     labelStyle: ha.labelStyle,
     defaults: {
@@ -75,8 +90,29 @@ const EventsStateEditor: EditorNodeDef<EventsStateEditorNodeProperties> = {
             filter: (config) => config.entityType === EntityType.Switch,
             required: false,
         },
-        entityId: { value: '', required: true },
-        entityIdType: { value: 'exact' },
+        entities: {
+            value: {
+                [IdSelectorType.Entity]: [''],
+                [IdSelectorType.Substring]: [],
+                [IdSelectorType.Regex]: [],
+            },
+            // TODO: After v1.0 uncomment validation because now it will throw errors for nodes that have a version prior to 6
+            // validate: (value) => {
+            //     if (!value) {
+            //         return false;
+            //     }
+
+            //     Object.entries(value).forEach(([_, ids]) => {
+            //         if (Array.isArray(ids)) {
+            //             if (ids.some((id) => id.length)) {
+            //                 return true;
+            //             }
+            //         }
+            //     });
+
+            //     return false;
+            // },
+        },
         outputInitially: { value: false },
         stateType: { value: TransformType.String },
         ifState: { value: '' },
@@ -116,6 +152,8 @@ const EventsStateEditor: EditorNodeDef<EventsStateEditorNodeProperties> = {
         },
 
         // deprecated but needed for migration
+        entityId: { value: undefined },
+        entityIdType: { value: undefined },
         exposeToHomeAssistant: { value: undefined },
         haConfig: { value: undefined },
         entityidfilter: { value: undefined },
@@ -129,18 +167,26 @@ const EventsStateEditor: EditorNodeDef<EventsStateEditorNodeProperties> = {
     },
     oneditprepare: function () {
         ha.setup(this);
-        haServer.init(this, '#node-input-server', (serverId) => {
-            entitySelector.serverChanged(serverId);
+        haServer.init(this, '#node-input-server', () => {
+            idSelector.refreshOptions();
         });
         exposeNode.init(this);
         saveEntityType(EntityType.Switch, 'exposeAsEntityConfig');
 
-        const entitySelector = new EntitySelector({
-            filterTypeSelector: '#node-input-entityIdType',
-            entityId: this.entityId,
-            serverId: haServer.getSelectedServerId(),
+        const idSelector = new IdSelector({
+            element: '#entity-list',
+            types: [
+                IdSelectorType.Entity,
+                IdSelectorType.Substring,
+                IdSelectorType.Regex,
+            ],
+            headerText: i18n('server-state-changed.label.entities'),
         });
-        $('#dialog-form').data('entitySelector', entitySelector);
+        Object.entries(this.entities).forEach(([type, ids]) => {
+            ids?.forEach((id) => {
+                idSelector.addId(type as IdSelectorType, id);
+            });
+        });
 
         ifState.init(
             '#node-input-ifState',
@@ -149,8 +195,13 @@ const EventsStateEditor: EditorNodeDef<EventsStateEditorNodeProperties> = {
         );
 
         $('#node-input-for').typedInput({
-            default: 'num',
-            types: ['num', 'jsonata', 'flow', 'global'],
+            default: TypedInputTypes.Number,
+            types: [
+                TypedInputTypes.Number,
+                TypedInputTypes.JSONata,
+                TypedInputTypes.Flow,
+                TypedInputTypes.Global,
+            ],
             typeField: '#node-input-forType',
         });
 
@@ -161,18 +212,14 @@ const EventsStateEditor: EditorNodeDef<EventsStateEditorNodeProperties> = {
     oneditsave: function () {
         const outputs = $('#node-input-ifState').val() ? 2 : 1;
         $('#node-input-outputs').val(outputs);
+        const entities = getSelectedIds('#entity-list');
+        this.entities = {
+            [IdSelectorType.Entity]: entities[IdSelectorType.Entity],
+            [IdSelectorType.Substring]: entities[IdSelectorType.Substring],
+            [IdSelectorType.Regex]: entities[IdSelectorType.Regex],
+        };
+
         this.outputProperties = haOutputs.getOutputs();
-        const entitySelector = $('#dialog-form').data(
-            'entitySelector',
-        ) as EntitySelector;
-        this.entityId = entitySelector.entityId;
-        entitySelector.destroy();
-    },
-    oneditcancel: function () {
-        const entitySelector = $('#dialog-form').data(
-            'entitySelector',
-        ) as EntitySelector;
-        entitySelector.destroy();
     },
 };
 

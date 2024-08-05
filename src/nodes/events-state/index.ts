@@ -1,3 +1,4 @@
+import { IdSelectorType } from '../../common/const';
 import { createControllerDependencies } from '../../common/controllers/helpers';
 import ConfigError from '../../common/errors/ConfigError';
 import ClientEvents from '../../common/events/ClientEvents';
@@ -18,12 +19,17 @@ import {
 import { startListeners } from './events';
 import EventsStateController from './EventsStateController';
 
+export type EntitySelector = {
+    [IdSelectorType.Entity]: string[];
+    [IdSelectorType.Substring]: string[];
+    [IdSelectorType.Regex]: string[];
+};
+
 export interface EventsStateNodeProperties extends BaseNodeProperties {
     exposeAsEntityConfig: string;
-    entityId: string | string[];
-    entityIdType: string;
     outputInitially: boolean;
     stateType: TransformType;
+    entities: EntitySelector;
     ifState: string;
     ifStateType: string;
     ifStateOperator: string;
@@ -51,9 +57,13 @@ export default function eventsStateNode(
 
     this.config = migrate(config);
 
-    if (!this.config?.entityId) {
+    if (
+        !this.config?.entities[IdSelectorType.Entity]?.length &&
+        !this.config?.entities[IdSelectorType.Substring]?.length &&
+        !this.config?.entities[IdSelectorType.Regex]?.length
+    ) {
         const error = new ConfigError(
-            'server-state-changed.error.entity_id_required',
+            'server-state-changed.error.entity_required',
         );
         this.status({
             fill: StatusColor.Red,

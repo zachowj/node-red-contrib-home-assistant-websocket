@@ -1,10 +1,10 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
+import { IdSelectorType } from '../../../common/const';
 import { NodeType, TypedInputTypes } from '../../../const';
 import IdSelector, {
     getSelectedIds,
 } from '../../../editor/components/idSelector/IdSelector';
-import { IdSelectorType } from '../../../editor/components/idSelector/types';
 import * as haOutputs from '../../../editor/components/output-properties';
 import ha, { NodeCategory, NodeColor } from '../../../editor/ha';
 import * as haServer from '../../../editor/haserver';

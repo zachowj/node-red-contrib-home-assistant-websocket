@@ -1,6 +1,6 @@
+import { IdSelectorType } from '../../../common/const';
 import { i18n } from '../../i18n';
 import { createRow } from './elements';
-import { IdSelectorType } from './types';
 import { createSelectOptions } from './virtual-select';
 
 interface EditableListButton {
@@ -136,6 +136,7 @@ export function getSelectedIds(elementId: string): SelectedIds {
             return;
         }
 
+        let value = '';
         switch (type) {
             case IdSelectorType.Entity:
             case IdSelectorType.Device:
@@ -144,16 +145,21 @@ export function getSelectedIds(elementId: string): SelectedIds {
             case IdSelectorType.Label: {
                 const $vs = $(this).find('.virtual-select');
                 // @ts-expect-error - value is not recognized
-                const value = $vs[0].value as string;
-                if (value.length) {
-                    selectedIds[type].add(value);
-                }
+                value = $vs[0].value as string;
                 break;
             }
             case IdSelectorType.Substring:
-            case IdSelectorType.Regex:
+            case IdSelectorType.Regex: {
+                const $input = $(this).find('.id-selector-regex');
+                value = $input.val() as string;
+                break;
+            }
             default:
                 break;
+        }
+
+        if (value.length) {
+            selectedIds[type].add(value);
         }
     });
 

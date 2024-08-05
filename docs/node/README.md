@@ -42,7 +42,7 @@ Listens for all types of events from home assistant with the ability to filter b
 
 ## [Events: state](events-state.md)
 
-Listens for only `state_changed` events from home assistant
+Listens for state changes of entities from Home Assistant.
 
 ## [Fire Event](./fire-event.md)
 

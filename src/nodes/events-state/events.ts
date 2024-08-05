@@ -1,3 +1,4 @@
+import { IdSelectorType } from '../../common/const';
 import { getErrorData } from '../../common/errors/inputErrorHandler';
 import ClientEvents from '../../common/events/ClientEvents';
 import Status from '../../common/status/Status';
@@ -13,17 +14,23 @@ export function startListeners(
     node: EventsStateNode,
     status: Status,
 ) {
-    let eventTopic = `ha_events:state_changed`;
-
-    if (node.config.entityIdType === 'exact') {
-        eventTopic =
-            eventTopic = `ha_events:state_changed:${node.config.entityId}`;
+    if (
+        node.config.entities[IdSelectorType.Substring].length === 0 &&
+        node.config.entities[IdSelectorType.Regex].length === 0
+    ) {
+        for (const entity of node.config.entities[IdSelectorType.Entity]) {
+            const eventTopic = `ha_events:state_changed:${entity}`;
+            clientEvents.addListener(
+                eventTopic,
+                controller.onHaEventsStateChanged.bind(controller),
+            );
+        }
+    } else {
+        clientEvents.addListener(
+            'ha_events:state_changed',
+            controller.onHaEventsStateChanged.bind(controller),
+        );
     }
-
-    clientEvents.addListener(
-        eventTopic,
-        controller.onHaEventsStateChanged.bind(controller),
-    );
 
     if (node.config.outputInitially) {
         const generateStateChanges = async () => {

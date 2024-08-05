@@ -1,7 +1,9 @@
 import { EditorRED } from 'node-red';
 
+import { IdSelectorType } from '../../../common/const';
+import { openEntityFilter } from '../../editors/entity-filter';
+import { getEntities } from '../../haserver';
 import { i18n } from '../../i18n';
-import { IdSelectorType } from './types';
 import { createVirtualSelect } from './virtual-select';
 
 declare const RED: EditorRED;
@@ -71,6 +73,54 @@ export function createDeleteButton(
     return $button;
 }
 
+function createTextField(value: string): JQuery<HTMLElement> {
+    return $('<input>', {
+        type: 'text',
+        class: 'id-selector-regex',
+        css: {
+            flex: 1,
+        },
+        value,
+    });
+}
+
+function createPreviewButton(
+    $container: JQuery<HTMLElement>,
+    type: IdSelectorType,
+): JQuery<HTMLElement> {
+    const $button = $('<a>', {
+        href: '#',
+        class: 'red-ui-button',
+        style: 'margin-left: 10px;',
+        title: i18n('home-assistant.component.id-selector.label.preview'),
+    })
+        .on('click', function previewClick(evt: any) {
+            evt.preventDefault();
+            const $input = $container.find('input');
+            const value = $input.val();
+
+            if (
+                typeof value !== 'string' ||
+                (type !== IdSelectorType.Substring &&
+                    type !== IdSelectorType.Regex)
+            ) {
+                return;
+            }
+
+            openEntityFilter({
+                filter: value,
+                filterType: type,
+                entities: getEntities(),
+                complete: (filter) => {
+                    $input.val(filter);
+                },
+            });
+        })
+        .append($('<i>', { class: 'fa fa-eye' }));
+
+    return $button;
+}
+
 export function createRow(
     $editableList,
     $container: JQuery<HTMLElement>,
@@ -96,6 +146,8 @@ export function createRow(
             break;
         case IdSelectorType.Substring:
         case IdSelectorType.Regex:
+            createTextField(value).appendTo($wrapper);
+            createPreviewButton($container, type).appendTo($wrapper);
             break;
         default:
     }

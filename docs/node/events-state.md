@@ -1,26 +1,20 @@
 # Events: state
 
-Outputs state_changed event types sent from Home Assistant
-
-The autocomplete will open to allow easier selection in the case you want a specific entity however the actual match is a substring match so no validation is done
+Listens for state changes of entities from Home Assistant.
 
 ## Configuration:
 
-### Entity ID <Badge text="required"/>
-
-- Type: `string|regex`
-
-matches for entity_id field
-
-Custom ids can be inserted into the list by adding a `#` at the end of the id
-
-### Entity ID Filter Types <Badge text="required"/>
+### Entity <Badge text="required"/>
 
 - Type: `string`
-- Values: `exact|substring|regex`
-- Default: `exact`
 
-Substring can be a comma-delimited list.
+The entity ID is used to listen for state changes. This can be a entity ID, regex, or a substring. If a regex or substring is used, the node will listen for all entities that match.
+
+Example:
+
+- `light.kitchen` (entity) listens for state changes of the `light.kitchen` entity
+- `^light.*` (regex) listens for state changes of all entities that start with `light.`
+- `light` (substring) listens for state changes of all entities that contain `light` in the entity ID
 
 ### If State
 
