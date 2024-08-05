@@ -133,7 +133,7 @@
     "markdown-it-container": "4.0.0",
     "markdown-it-inline-comments": "1.0.1",
     "merge-stream": "2.0.0",
-    "mocha": "10.6.0",
+    "mocha": "10.7.0",
     "nock": "13.5.4",
     "node-red": "4.0.2",
     "node-red-node-test-helper": "0.3.4",
