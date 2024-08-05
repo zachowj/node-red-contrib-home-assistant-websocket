@@ -1,5 +1,6 @@
 import Joi from 'joi';
 
+import { IdSelectorType } from '../../common/const';
 import { createControllerDependencies } from '../../common/controllers/helpers';
 import ConfigError from '../../common/errors/ConfigError';
 import { getErrorData } from '../../common/errors/inputErrorHandler';
@@ -9,21 +10,21 @@ import ComparatorService from '../../common/services/ComparatorService';
 import InputService from '../../common/services/InputService';
 import State from '../../common/State';
 import EventsStatus from '../../common/status/EventStatus';
+import { StatusColor, StatusShape } from '../../common/status/Status';
 import TransformState, { TransformType } from '../../common/TransformState';
-import { EntityFilterType } from '../../const';
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
 import { getExposeAsConfigNode, getServerConfigNode } from '../../helpers/node';
 import { getHomeAssistant } from '../../homeAssistant';
 import { BaseNode, BaseNodeProperties } from '../../types/nodes';
+import { EntitySelector } from '../events-state';
 import { Constraint, CustomOutput, DISABLE, ENABLE } from './const';
 import { createStateChangeEvents } from './helpers';
 import TriggerStateController from './TriggerStateController';
 import TriggerStateStatus from './TriggerStateStatus';
 
 export interface TriggerStateProperties extends BaseNodeProperties {
-    entityId: string | string[];
-    entityIdType: string;
+    entities: EntitySelector;
     debugEnabled: boolean;
     constraints: Constraint[];
     customOutputs: CustomOutput[];
@@ -61,8 +62,18 @@ export default function triggerState(
 
     this.config = migrate(config);
 
-    if (!this.config.entityId) {
-        throw new ConfigError('trigger-state.error.enttity_id_required');
+    if (
+        !this.config?.entities[IdSelectorType.Entity]?.length &&
+        !this.config?.entities[IdSelectorType.Substring]?.length &&
+        !this.config?.entities[IdSelectorType.Regex]?.length
+    ) {
+        const error = new ConfigError('trigger-state.error.entity_required');
+        this.status({
+            fill: StatusColor.Red,
+            shape: StatusShape.Ring,
+            text: error.statusMessage,
+        });
+        throw error;
     }
 
     const serverConfigNode = getServerConfigNode(this.config.server);
@@ -142,20 +153,23 @@ export default function triggerState(
         );
     }
 
-    let eventTopic = 'ha_events:state_changed';
-
-    // If the entity id type is exact, then we need to listen to a specific entity
-    if (this.config.entityIdType === EntityFilterType.Exact) {
-        const id = Array.isArray(this.config.entityId)
-            ? this.config.entityId[0]
-            : this.config.entityId;
-        eventTopic = `${eventTopic}:${id.trim()}`;
+    if (
+        config.entities[IdSelectorType.Substring].length === 0 &&
+        config.entities[IdSelectorType.Regex].length === 0
+    ) {
+        for (const entity of config.entities[IdSelectorType.Entity]) {
+            const eventTopic = `ha_events:state_changed:${entity}`;
+            clientEvents.addListener(
+                eventTopic,
+                controller.onEntityStateChanged.bind(controller),
+            );
+        }
+    } else {
+        clientEvents.addListener(
+            'ha_events:state_changed',
+            controller.onEntityStateChanged.bind(controller),
+        );
     }
-
-    clientEvents.addListener(
-        eventTopic,
-        controller.onEntityStateChanged.bind(controller),
-    );
 
     if (controller.isEnabled && this.config.outputInitially) {
         const generateStateChanges = async () => {

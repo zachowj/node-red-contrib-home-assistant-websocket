@@ -1,3 +1,5 @@
+import { IdSelectorType } from '../../common/const';
+
 export default [
     {
         version: 0,
@@ -82,6 +84,46 @@ export default [
             if (schema.stateType === undefined) {
                 newSchema.stateType = 'str';
             }
+
+            return newSchema;
+        },
+    },
+    {
+        version: 5,
+        up: (schema: any) => {
+            const newSchema = {
+                ...schema,
+                version: 5,
+                entities: [],
+
+                entityId: undefined,
+                entityIdType: undefined,
+            };
+
+            const entitites: {
+                [IdSelectorType.Entity]: string[];
+                [IdSelectorType.Substring]: string[];
+                [IdSelectorType.Regex]: string[];
+            } = {
+                [IdSelectorType.Entity]: [],
+                [IdSelectorType.Substring]: [],
+                [IdSelectorType.Regex]: [],
+            };
+            switch (schema.entityIdType) {
+                case 'list':
+                    entitites[IdSelectorType.Entity] = schema.entityId;
+                    break;
+                case 'exact':
+                    entitites[IdSelectorType.Entity] = [schema.entityId];
+                    break;
+                case 'substring':
+                    entitites[IdSelectorType.Substring] = [schema.entityId];
+                    break;
+                case 'regex':
+                    entitites[IdSelectorType.Regex] = [schema.entityId];
+                    break;
+            }
+            newSchema.entities = entitites;
 
             return newSchema;
         },

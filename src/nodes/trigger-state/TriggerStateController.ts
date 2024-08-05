@@ -353,14 +353,21 @@ export default class TriggerStateController extends ExposeAsController {
 
         const eventMessage = cloneDeep(evt);
 
-        if (
-            !eventMessage.event.new_state ||
-            !shouldIncludeEvent(
-                eventMessage.entity_id,
-                this.node.config.entityId,
-                this.node.config.entityIdType,
-            )
-        ) {
+        if (!eventMessage.event.new_state) {
+            return;
+        }
+
+        // Check if the entity_id is in the list of entities to watch
+        const valid = Object.entries(this.node.config.entities).some(
+            ([type, ids]) => {
+                return ids?.some((id) =>
+                    shouldIncludeEvent(eventMessage.entity_id, id, type),
+                );
+            },
+        );
+
+        // If the entity_id is not in the list of entities to watch, return
+        if (!valid) {
             return;
         }
 

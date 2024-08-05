@@ -1,5 +1,6 @@
 import { EditorNodeDef, EditorRED } from 'node-red';
 
+import { IdSelectorType } from '../../common/const';
 import { TransformType } from '../../common/TransformState';
 import {
     ComparatorType,
@@ -7,13 +8,16 @@ import {
     NodeType,
     TypedInputTypes,
 } from '../../const';
-import EntitySelector from '../../editor/components/EntitySelector';
+import IdSelector, {
+    getSelectedIds,
+} from '../../editor/components/idSelector/IdSelector';
 import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import { i18n } from '../../editor/i18n';
 import { HassNodeProperties } from '../../editor/types';
 import { saveEntityType } from '../entity-config/editor/helpers';
+import { EntitySelector } from '../events-state';
 import {
     ComparatorPropertyType,
     Constraint,
@@ -26,8 +30,7 @@ import {
 declare const RED: EditorRED;
 
 interface TriggerStateEditorNodeProperties extends HassNodeProperties {
-    entityId: string | string[];
-    entityIdType: string;
+    entities: EntitySelector;
     constraints: Constraint[];
     customOutputs: CustomOutput[];
     outputInitially: boolean;
@@ -35,6 +38,8 @@ interface TriggerStateEditorNodeProperties extends HassNodeProperties {
     enableInput: boolean;
 
     // deprecated but still needed for migration
+    entityId: undefined;
+    entityIdType: undefined;
     exposeToHomeAssistant: undefined;
     haConfig: undefined;
     entityid: undefined;
@@ -72,7 +77,16 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
     icon: 'font-awesome/fa-map-signs',
     paletteLabel: 'trigger: state',
     label: function () {
-        return this.name || `trigger-state: ${this.entityId}`;
+        let label: string[] = [];
+        if (this.entities) {
+            Object.entries(this.entities).forEach(([, ids]) => {
+                if (Array.isArray(ids) && ids?.length) {
+                    label = [...label, ...ids];
+                }
+            });
+        }
+
+        return this.name || `trigger-state: ${label}`;
     },
     labelStyle: ha.labelStyle,
     defaults: {
@@ -88,8 +102,29 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
             filter: (config) => config.entityType === EntityType.Switch,
             required: false,
         },
-        entityId: { value: '', required: true },
-        entityIdType: { value: 'exact' },
+        entities: {
+            value: {
+                [IdSelectorType.Entity]: [''],
+                [IdSelectorType.Substring]: [],
+                [IdSelectorType.Regex]: [],
+            },
+            // TODO: After v1.0 uncomment validation because now it will throw errors for nodes that have a version prior to 6
+            // validate: (value) => {
+            //     if (!value) {
+            //         return false;
+            //     }
+
+            //     Object.entries(value).forEach(([_, ids]) => {
+            //         if (Array.isArray(ids)) {
+            //             if (ids.some((id) => id.length)) {
+            //                 return true;
+            //             }
+            //         }
+            //     });
+
+            //     return false;
+            // },
+        },
         debugEnabled: { value: false },
         constraints: {
             value: [
@@ -110,6 +145,8 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
         enableInput: { value: false },
 
         // deprecated but still needed for migration
+        entityId: { value: undefined },
+        entityIdType: { value: undefined },
         exposeToHomeAssistant: { value: undefined },
         haConfig: { value: undefined },
         entityid: { value: undefined },
@@ -124,16 +161,25 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
         const $constraintList = $('#constraint-list');
         const $outputList = $('#output-list');
 
-        haServer.init(this, '#node-input-server', (serverId) => {
-            entitySelector.serverChanged(serverId);
+        haServer.init(this, '#node-input-server', () => {
+            idSelector.refreshOptions();
         });
         saveEntityType(EntityType.Switch, 'exposeAsEntityConfig');
-        const entitySelector = new EntitySelector({
-            filterTypeSelector: '#node-input-entityIdType',
-            entityId: this.entityId,
-            serverId: haServer.getSelectedServerId(),
+
+        const idSelector = new IdSelector({
+            element: '#entity-list',
+            types: [
+                IdSelectorType.Entity,
+                IdSelectorType.Substring,
+                IdSelectorType.Regex,
+            ],
+            headerText: i18n('server-state-changed.label.entities'),
         });
-        $('#dialog-form').data('entitySelector', entitySelector);
+        Object.entries(this.entities).forEach(([type, ids]) => {
+            ids?.forEach((id) => {
+                idSelector.addId(type as IdSelectorType, id);
+            });
+        });
 
         let availableEntities: string[] = [];
         let availableProperties: string[] = [];
@@ -566,17 +612,13 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
 
         this.constraints = constraints;
         this.customOutputs = outputs;
-        const entitySelector = $('#dialog-form').data(
-            'entitySelector',
-        ) as EntitySelector;
-        this.entityId = entitySelector.entityId;
-        entitySelector.destroy();
-    },
-    oneditcancel: function () {
-        const entitySelector = $('#dialog-form').data(
-            'entitySelector',
-        ) as EntitySelector;
-        entitySelector.destroy();
+
+        const entities = getSelectedIds('#entity-list');
+        this.entities = {
+            [IdSelectorType.Entity]: entities[IdSelectorType.Entity],
+            [IdSelectorType.Substring]: entities[IdSelectorType.Substring],
+            [IdSelectorType.Regex]: entities[IdSelectorType.Regex],
+        };
     },
 };
 

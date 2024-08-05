@@ -70,6 +70,17 @@ const VERSION_4 = {
     version: 4,
     stateType: 'str',
 };
+const VERSION_5 = {
+    ...VERSION_4,
+    version: 5,
+    entities: {
+        entity: ['entity.id'],
+        substring: [],
+        regex: [],
+    },
+    entityId: undefined,
+    entityIdType: undefined,
+};
 
 describe('Migrations - Trigger State Node', function () {
     describe('Version 0', function () {
@@ -142,8 +153,50 @@ describe('Migrations - Trigger State Node', function () {
         });
     });
 
+    describe('Version 5', function () {
+        it('should update version 4 to version 5', function () {
+            const migrate = migrations.find((m) => m.version === 5);
+            const migratedSchema = migrate?.up(VERSION_4);
+
+            expect(migratedSchema).to.eql(VERSION_5);
+        });
+
+        it('should convert a substring type to a entities substring array', function () {
+            const schema = {
+                ...VERSION_4,
+                entityId: 'entity.id',
+                entityIdType: 'substring',
+            };
+            const migratedSchema = migrate(schema);
+            expect(migratedSchema.entities.substring).to.eql(['entity.id']);
+        });
+
+        it('should convert a regex type to a entities regex array', function () {
+            const schema = {
+                ...VERSION_4,
+                entityId: 'entity.id',
+                entityIdType: 'regex',
+            };
+            const migratedSchema = migrate(schema);
+            expect(migratedSchema.entities.regex).to.eql(['entity.id']);
+        });
+
+        it('should convert a list type to a entities entity array', function () {
+            const schema = {
+                ...VERSION_4,
+                entityId: ['entity.id', 'entity2.id'],
+                entityIdType: 'list',
+            };
+            const migratedSchema = migrate(schema);
+            expect(migratedSchema.entities.entity).to.eql([
+                'entity.id',
+                'entity2.id',
+            ]);
+        });
+    });
+
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_4);
+        expect(migratedSchema).to.eql(VERSION_5);
     });
 });
