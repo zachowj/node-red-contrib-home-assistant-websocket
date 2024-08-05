@@ -1,27 +1,25 @@
 # Trigger: state
 
-Much like the `State Changed Node` however, provides some advanced functionality
+Much like the [events: state](./events-state.md) however, provides some advanced functionality
 around common automation use cases.
 
-An advanced version of the `server:state-changed` node
+An advanced version of the `events: state` node
 
 <!-- TODO: Needs a total rework -->
 
 ## Configuration
 
-### Entity ID <Badge text="required"/>
+### Entity <Badge text="required"/>
 
 - Type: `string`
 
-The id of an entity to use for the comparison.
+  The entity ID is used to listen for state changes. This can be a entity ID, regex, or a substring. If a regex or substring is used, the node will listen for all entities that match.
 
-Custom ids can be inserted into the list by adding a `#` at the end of the id
+Example:
 
-### Entity ID Filter Types <Badge text="required"/>
-
-- Type: `string`
-- Values: `exact|list|substring|regex`
-- Default: `exact`
+- `light.kitchen` (entity) listens for state changes of the `light.kitchen` entity
+- `^light.*` (regex) listens for state changes of all entities that start with `light.`
+- `light` (substring) listens for state changes of all entities that contain `light` in the entity ID
 
 ### State Type
 
