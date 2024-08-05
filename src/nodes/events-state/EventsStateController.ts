@@ -64,12 +64,14 @@ export default class EventsStateController extends ExposeAsController {
         const newState = evt.event?.new_state?.state;
 
         let found = false;
-        Object.entries(this.node.config.entities).forEach(([type, ids]) => {
-            ids?.forEach((id) => {
+        Object.entries(this.node.config.entities).some(([type, ids]) => {
+            ids?.some((id) => {
                 if (shouldIncludeEvent(evt.entity_id, id, type)) {
                     found = true;
                 }
+                return found;
             });
+            return found;
         });
 
         if (!found) {
