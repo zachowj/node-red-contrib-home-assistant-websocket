@@ -3,15 +3,15 @@ import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 import { NodeType, TypedInputTypes } from '../../../const';
 import IdSelector, {
     getSelectedIds,
-    IdSelectorType,
-} from '../../../editor/components/IdSelector';
+} from '../../../editor/components/idSelector/IdSelector';
+import { IdSelectorType } from '../../../editor/components/idSelector/types';
 import * as haOutputs from '../../../editor/components/output-properties';
 import ha, { NodeCategory, NodeColor } from '../../../editor/ha';
 import * as haServer from '../../../editor/haserver';
 import { i18n } from '../../../editor/i18n';
 import { OutputProperty } from '../../../editor/types';
 import { loadExampleData, updateServiceSelection } from './service-table';
-import { displayValidTargets } from './targets';
+import { getValidTargets, ValidTarget } from './targets';
 import { buildDomainServices } from './utils';
 
 declare const RED: EditorRED;
@@ -103,11 +103,7 @@ const ActionEditor: EditorNodeDef<ActionEditorNodeProperties> = {
             }
             lastServerId = serverId;
             updateServiceSelection();
-            floorSelector.refreshOptions();
-            areaSelector.refreshOptions();
-            deviceSelector.refreshOptions();
-            entitySelector.refreshOptions();
-            labelSelector.refreshOptions();
+            idSelector.refreshOptions();
             const services = haServer.getServices();
             // @ts-expect-error - VirtualSelect is not recognized
             $haAction[0].setOptions(buildDomainServices(services));
@@ -129,51 +125,41 @@ const ActionEditor: EditorNodeDef<ActionEditorNodeProperties> = {
         });
 
         // Target selectors
-        const floorSelector = new IdSelector({
-            element: '#floor-list',
-            type: IdSelectorType.Floor,
-            headerText: i18n('api-call-service.label.target_floor'),
-            selectedIds: this.floorId ?? [],
+        const idSelector = new IdSelector({
+            element: '#target-list',
+            types: [
+                IdSelectorType.Entity,
+                IdSelectorType.Device,
+                IdSelectorType.Area,
+                IdSelectorType.Floor,
+                IdSelectorType.Label,
+            ],
+            headerText: i18n('api-call-service.label.targets'),
         });
-
-        const areaSelector = new IdSelector({
-            element: '#area-list',
-            type: IdSelectorType.Area,
-            headerText: i18n('api-call-service.label.target_area'),
-            selectedIds: this.areaId ?? [],
-        });
-
-        const deviceSelector = new IdSelector({
-            element: '#device-list',
-            type: IdSelectorType.Device,
-            headerText: i18n('api-call-service.label.target_device'),
-            selectedIds: this.deviceId ?? [],
-        });
-
-        const entitySelector = new IdSelector({
-            element: '#entity-list',
-            type: IdSelectorType.Entity,
-            headerText: i18n('api-call-service.label.target_entity'),
-            selectedIds: this.entityId ?? [],
-        });
-
-        const labelSelector = new IdSelector({
-            element: '#label-list',
-            type: IdSelectorType.Label,
-            headerText: i18n('api-call-service.label.target_label'),
-            selectedIds: this.labelId ?? [],
+        const ids = {
+            [IdSelectorType.Floor]: this.floorId,
+            [IdSelectorType.Area]: this.areaId,
+            [IdSelectorType.Device]: this.deviceId,
+            [IdSelectorType.Entity]: this.entityId,
+            [IdSelectorType.Label]: this.labelId,
+        };
+        Object.entries(ids).forEach(([type, ids]) => {
+            ids?.forEach((id) => {
+                idSelector.addId(type as IdSelectorType, id);
+            });
         });
 
         // Update lists when action changes
         $haAction
             .on('change', () => {
                 updateServiceSelection();
-                displayValidTargets($haAction.val() as string);
-                floorSelector.clearSelectorIfHidden();
-                areaSelector.clearSelectorIfHidden();
-                deviceSelector.clearSelectorIfHidden();
-                entitySelector.clearSelectorIfHidden();
-                labelSelector.clearSelectorIfHidden();
+                const action = $haAction.val() as string;
+                const showTargets = getValidTargets(action) === ValidTarget.All;
+                const $formRow = $('#target-list').parents('.form-row');
+                $formRow.toggle(showTargets);
+                if (!showTargets) {
+                    idSelector.clear();
+                }
             })
             .trigger('change');
 
@@ -205,11 +191,12 @@ const ActionEditor: EditorNodeDef<ActionEditorNodeProperties> = {
         // Here so input overrides still work
         [this.domain, this.service] = this.action.split('.');
 
-        this.floorId = getSelectedIds('#floor-list');
-        this.areaId = getSelectedIds('#area-list');
-        this.deviceId = getSelectedIds('#device-list');
-        this.entityId = getSelectedIds('#entity-list');
-        this.labelId = getSelectedIds('#label-list');
+        const targets = getSelectedIds('#target-list');
+        this.floorId = targets[IdSelectorType.Floor];
+        this.areaId = targets[IdSelectorType.Area];
+        this.deviceId = targets[IdSelectorType.Device];
+        this.entityId = targets[IdSelectorType.Entity];
+        this.labelId = targets[IdSelectorType.Label];
 
         this.outputProperties = haOutputs.getOutputs();
     },

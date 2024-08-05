@@ -11,7 +11,6 @@
       "action": "Action",
       "alternate_tags": "Use alternate template tags for the data field",
       "data": "Data",
-      "domain": "Domain",
       "load_example_data": "Load example data",
       "merge_context": "Merge context",
       "name": "Name",
@@ -23,13 +22,8 @@
         "queue_none": "don't queue messages"
       },
       "server": "Server",
-      "service": "Service",
       "show_debug": "Show debug information",
-      "target_area": "Area target",
-      "target_device": "Device target",
-      "target_entity": "Entity target",
-      "target_floor": "Floor target",
-      "target_label": "Label target"
+      "targets": "Targets"
     },
     "status": {
       "service_called": "__domain__.__service__ called"

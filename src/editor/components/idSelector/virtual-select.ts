@@ -1,19 +1,7 @@
-import { EditorRED } from 'node-red';
-
-import { SelectorType } from '../../nodes/config-server/editor';
-import { getUiSettings } from '../haserver';
-import * as haServer from '../haserver';
-import { i18n } from '../i18n';
-
-declare const RED: EditorRED;
-
-export enum IdSelectorType {
-    Floor = 'floor',
-    Area = 'area',
-    Device = 'device',
-    Entity = 'entity',
-    Label = 'label',
-}
+import { SelectorType } from '../../../nodes/config-server/editor';
+import { getUiSettings } from '../../haserver';
+import * as haServer from '../../haserver';
+import { IdSelectorType } from './types';
 
 /**
  * @typedef {object} virtualSelectOption
@@ -192,226 +180,115 @@ export type VirtualSelectOptions = {
     moreText?: string;
 };
 
-export default class IdSelector {
-    #$element: JQuery<HTMLElement>;
-    #selectedIds: string[];
-    #headerText: string;
-    #selectType: IdSelectorType;
+export function createSelectOptions(
+    type: IdSelectorType,
+): VirtualSelectOption[] {
+    const list: VirtualSelectOption[] = [];
+    const useDeviceId = getUiSettings().deviceSelector === SelectorType.Id;
+    const useEntityId = getUiSettings().entitySelector === SelectorType.Id;
 
-    constructor({
-        type,
-        element,
-        selectedIds,
-        headerText,
-    }: {
-        type: IdSelectorType;
-        element: string;
-        selectedIds: string[];
-        headerText: string;
-    }) {
-        this.#selectType = type;
-        this.#$element = $(element);
-        this.#selectedIds = selectedIds;
-        this.#headerText = headerText;
-
-        this.init();
-    }
-
-    #buildSelectOptions(): VirtualSelectOption[] {
-        const list: VirtualSelectOption[] = [];
-        const useDeviceId = getUiSettings().deviceSelector === SelectorType.Id;
-        const useEntityId = getUiSettings().entitySelector === SelectorType.Id;
-
-        switch (this.#selectType) {
-            case IdSelectorType.Floor:
-                haServer.getFloors().forEach((floor) => {
-                    list.push({
-                        label: floor.name,
-                        value: floor.floor_id,
-                        alias: [floor.floor_id],
-                    });
+    switch (type) {
+        case IdSelectorType.Floor:
+            haServer.getFloors().forEach((floor) => {
+                list.push({
+                    label: floor.name,
+                    value: floor.floor_id,
+                    alias: [floor.floor_id],
                 });
-                break;
-            case IdSelectorType.Area:
-                haServer.getAreas().forEach((area) => {
-                    list.push({
-                        label: area.name,
-                        value: area.area_id,
-                        alias: [area.area_id],
-                    });
+            });
+            break;
+        case IdSelectorType.Area:
+            haServer.getAreas().forEach((area) => {
+                list.push({
+                    label: area.name,
+                    value: area.area_id,
+                    alias: [area.area_id],
                 });
-                break;
-            case IdSelectorType.Device:
-                haServer.getDevices().forEach((device) => {
-                    const label = useDeviceId
-                        ? device.id
-                        : device.name_by_user || device.name;
-                    list.push({
-                        label,
-                        value: device.id,
-                        description: haServer.getAreaNameById(device.area_id),
-                        alias: [device.id],
-                    });
+            });
+            break;
+        case IdSelectorType.Device:
+            haServer.getDevices().forEach((device) => {
+                const label = useDeviceId
+                    ? device.id
+                    : device.name_by_user || device.name;
+                list.push({
+                    label,
+                    value: device.id,
+                    description: haServer.getAreaNameById(device.area_id),
+                    alias: [device.id],
                 });
-                break;
-            case IdSelectorType.Entity: {
-                const entities = haServer.getEntities();
-                entities.forEach((entity) => {
-                    const label = useEntityId
-                        ? entity.entity_id
-                        : entity.attributes.friendly_name || entity.entity_id;
-                    const description = useEntityId
-                        ? entity.attributes.friendly_name
-                        : entity.entity_id;
-                    list.push({
-                        label,
-                        value: entity.entity_id,
-                        description,
-                    });
+            });
+            break;
+        case IdSelectorType.Entity: {
+            const entities = haServer.getEntities();
+            entities.forEach((entity) => {
+                const label = useEntityId
+                    ? entity.entity_id
+                    : entity.attributes.friendly_name || entity.entity_id;
+                const description = useEntityId
+                    ? entity.attributes.friendly_name
+                    : entity.entity_id;
+                list.push({
+                    label,
+                    value: entity.entity_id,
+                    description,
                 });
-                break;
-            }
-            case IdSelectorType.Label:
-                haServer.getLabels().forEach((label) => {
-                    list.push({
-                        label: label.name,
-                        value: label.label_id,
-                        alias: [label.label_id],
-                    });
-                });
-                break;
-            default:
-                break;
+            });
+            break;
         }
-
-        return list.sort((a, b) =>
-            (a.label ?? a.value).localeCompare(b.label ?? b.value),
-        );
-    }
-
-    buildVirtualSelectOptions(): Record<string, any> {
-        switch (this.#selectType) {
-            case IdSelectorType.Device:
-            case IdSelectorType.Entity:
-                return {
-                    hasOptionDescription: true,
-                };
-            case IdSelectorType.Area:
-            case IdSelectorType.Floor:
-            case IdSelectorType.Label:
-            default:
-                return {};
-        }
-    }
-
-    init() {
-        const options = this.#buildSelectOptions();
-        this.#$element.editableList({
-            addButton: true,
-            height: 'auto',
-            header: $('<div>').append(this.#headerText),
-            addItem: (container: JQuery<HTMLElement>, _, data: any) => {
-                container.css({ display: 'flex', 'flex-direction': 'row' });
-                const $div = $('<div>', {
-                    class: 'virtual-select',
-                    style: 'flex:1;',
-                }).appendTo(container);
-
-                // @ts-expect-error - VirtualSelect is not recognized
-                const virtualSelect = VirtualSelect.init({
-                    ele: $div[0],
-                    hideClearButton: true,
-                    search: true,
-                    maxWidth: '100%',
-                    options,
-                    placeholder: '',
-                    allowNewOption: true,
-                    optionsCount: 6,
-                    selectedValue: data?.value,
-
-                    ...this.buildVirtualSelectOptions(),
+        case IdSelectorType.Label:
+            haServer.getLabels().forEach((label) => {
+                list.push({
+                    label: label.name,
+                    value: label.label_id,
+                    alias: [label.label_id],
                 });
-
-                $('<a>', {
-                    href: '#',
-                    class: 'red-ui-button',
-                    style: 'margin-left: 10px;',
-                    title: i18n(
-                        'home-assistant.component.id-selector.label.copy',
-                    ),
-                })
-                    .on('click', function copyClick(evt: any) {
-                        evt.preventDefault();
-                        const value = virtualSelect.getValue();
-                        if (!value) {
-                            return;
-                        }
-                        // @ts-expect-error - clipboard is not recognized
-                        if (RED.clipboard.copyText(value)) {
-                            RED.notify(
-                                i18n(
-                                    'home-assistant.ui.notifications.clipboard_copy',
-                                ),
-                                { type: 'success', timeout: 2000 },
-                            );
-                        }
-                    })
-                    .append($('<i>', { class: 'fa fa-copy' }))
-                    .appendTo(container);
-                $('<a>', {
-                    href: '#',
-                    class: 'red-ui-button id-delete-button',
-                    style: 'margin-left: 10px;',
-                    title: i18n(
-                        'home-assistant.component.id-selector.label.delete',
-                    ),
-                })
-                    .on('click', (evt: any) => {
-                        evt.preventDefault();
-                        const data = container.data('data');
-                        const $li = container.closest('li');
-                        $li.addClass('red-ui-editableList-item-deleting');
-                        $li.fadeOut(200, () => {
-                            this.#$element.editableList('removeItem', data);
-                        });
-                        virtualSelect.destroy();
-                    })
-                    .append($('<i>', { class: 'fa fa-remove' }))
-                    .appendTo(container);
-            },
-        });
-        this.#selectedIds.forEach((floorId) => {
-            this.#$element.editableList('addItem', { value: floorId });
-        });
+            });
+            break;
+        default:
+            break;
     }
 
-    clearSelectorIfHidden() {
-        if (this.#$element.is(':visible')) {
-            return;
-        }
-        this.#$element.find('.id-delete-button').trigger('click');
-    }
+    return list.sort((a, b) =>
+        (a.label ?? a.value).localeCompare(b.label ?? b.value),
+    );
+}
 
-    refreshOptions() {
-        const options = this.#buildSelectOptions();
-        this.#$element.find('.virtual-select').each(function () {
-            // @ts-expect-error - VirtualSelect is not recognized
-            this.setOptions(options, true);
-        });
+function createVirtualSelectOptions(type: IdSelectorType): Record<string, any> {
+    switch (type) {
+        case IdSelectorType.Device:
+        case IdSelectorType.Entity:
+            return {
+                hasOptionDescription: true,
+            };
+        case IdSelectorType.Area:
+        case IdSelectorType.Floor:
+        case IdSelectorType.Label:
+        default:
+            return {};
     }
 }
 
-export function getSelectedIds(elementId: string): string[] {
-    const items = $(elementId).editableList('items');
-    // create a Set to store ids
-    const selectedIds: Set<string> = new Set();
-    items.each(function () {
-        // @ts-expect-error - value is not recognized
-        const value = $(this).find('.virtual-select')[0].value as string;
-        if (value.length) {
-            selectedIds.add(value);
-        }
+export function createVirtualSelect(type: IdSelectorType, value: string): any {
+    const $div = $('<div>', {
+        class: 'virtual-select',
+        style: 'flex:1;',
     });
 
-    return Array.from(selectedIds);
+    // @ts-expect-error - VirtualSelect is not recognized
+    VirtualSelect.init({
+        ele: $div[0],
+        hideClearButton: true,
+        search: true,
+        maxWidth: '100%',
+        options: createSelectOptions(type),
+        placeholder: '',
+        allowNewOption: true,
+        optionsCount: 6,
+        selectedValue: value,
+
+        ...createVirtualSelectOptions(type),
+    });
+
+    return $div;
 }

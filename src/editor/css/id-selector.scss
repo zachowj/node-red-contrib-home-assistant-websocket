@@ -1,0 +1,12 @@
+.id-selector > li {
+    padding-top: 0;
+
+    .id-selector-row {
+        font-size: 0.8em;
+    }
+
+    .id-selector-wrapper {
+        display: flex;
+        flex-direction: row;
+    }
+}

@@ -10,10 +10,9 @@ import { getNormalizedDomainServices } from './utils';
 
 export type Filter<T> = (value: T, index: number, array: T[]) => boolean;
 
-enum ValidTarget {
-    None = 'none',
+export enum ValidTarget {
     All = 'all',
-    EntityOnly = 'entity_only',
+    None = 'none',
 }
 
 /*
@@ -72,17 +71,3 @@ export function getValidTargets(action: string): ValidTarget {
 //         ? (target) => targets[target[targetId]]?.includes(filterDomain)
 //         : undefined;
 // }
-
-const idSelectors = [
-    '#floor-list',
-    '#area-list',
-    '#device-list',
-    '#entity-list',
-    '#label-list',
-];
-export function displayValidTargets(action: string) {
-    const validTargets = getValidTargets(action);
-    const $ids = $(idSelectors.join(', '));
-    const $formRow = $ids.parents('.form-row');
-    $formRow.toggle(validTargets !== ValidTarget.None);
-}
