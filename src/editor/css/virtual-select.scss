@@ -14,9 +14,10 @@
     }
 
     .vscomp-toggle-button {
-        border-radius: 4px;
-        vertical-align: middle;
         border-color: var(--red-ui-form-input-border-color);
+        border-radius: 4px;
+        height: 34px;
+        vertical-align: middle;
     }
 }
 
