@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.66.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.65.1...v0.66.0) (2024-08-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* **action:** The call-service node has been renamed to the action node. The domain and service input properties are deprecated and will be removed in version 1.0. Please use the action property instead.
+
+### Features
+
+* **action:** Add selector for floor and label ([20e08ab](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/20e08aba4fd34ff58f7d75feb9df241ac8a6cccf))
+* Add support for floors and labels ([36c2c9d](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/36c2c9d66ec5bfd8e5e588f5bd97b7a0fd288670))
+* **api:** Add DELETE and PUT methods to the API node ([7bba5af](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/7bba5af90238001e3120117d54ac0fab5fdfb1b6)), closes [#1435](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1435)
+* **events-state:** Update event state listener to allow listening to multiple types ([57a8ab7](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/57a8ab7845fb28d0ff082ebf67818130551ea27a))
+* **trigger-state:** Update listener to allow listening to multiple types at once ([a14a7f3](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a14a7f338ad18d709cdb9d5dfd88ae22a628e043))
+
 ## [0.65.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.65.0...v0.65.1) (2024-06-26)
 
 
