@@ -17,7 +17,7 @@ import * as haServer from '../../editor/haserver';
 import { i18n } from '../../editor/i18n';
 import { HassNodeProperties } from '../../editor/types';
 import { saveEntityType } from '../entity-config/editor/helpers';
-import { EntitySelector } from '../events-state';
+import { EntitySelectorList } from '../events-state';
 import {
     ComparatorPropertyType,
     Constraint,
@@ -30,7 +30,7 @@ import {
 declare const RED: EditorRED;
 
 interface TriggerStateEditorNodeProperties extends HassNodeProperties {
-    entities: EntitySelector;
+    entities: EntitySelectorList;
     constraints: Constraint[];
     customOutputs: CustomOutput[];
     outputInitially: boolean;

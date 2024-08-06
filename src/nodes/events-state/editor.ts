@@ -19,7 +19,7 @@ import * as haServer from '../../editor/haserver';
 import { i18n } from '../../editor/i18n';
 import { OutputProperty } from '../../editor/types';
 import { saveEntityType } from '../entity-config/editor/helpers';
-import { EntitySelector } from './index';
+import { EntitySelectorList } from './index';
 
 declare const RED: EditorRED;
 
@@ -27,7 +27,7 @@ interface EventsStateEditorNodeProperties extends EditorNodeProperties {
     server: string;
     version: number;
     exposeAsEntityConfig: string;
-    entities: EntitySelector;
+    entities: EntitySelectorList;
     outputInitially: boolean;
     stateType: TransformType;
     ifState: string;

@@ -17,14 +17,14 @@ import { migrate } from '../../helpers/migrate';
 import { getExposeAsConfigNode, getServerConfigNode } from '../../helpers/node';
 import { getHomeAssistant } from '../../homeAssistant';
 import { BaseNode, BaseNodeProperties } from '../../types/nodes';
-import { EntitySelector } from '../events-state';
+import { EntitySelectorList } from '../events-state';
 import { Constraint, CustomOutput, DISABLE, ENABLE } from './const';
 import { createStateChangeEvents } from './helpers';
 import TriggerStateController from './TriggerStateController';
 import TriggerStateStatus from './TriggerStateStatus';
 
 export interface TriggerStateProperties extends BaseNodeProperties {
-    entities: EntitySelector;
+    entities: EntitySelectorList;
     debugEnabled: boolean;
     constraints: Constraint[];
     customOutputs: CustomOutput[];

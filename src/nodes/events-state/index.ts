@@ -19,7 +19,7 @@ import {
 import { startListeners } from './events';
 import EventsStateController from './EventsStateController';
 
-export type EntitySelector = {
+export type EntitySelectorList = {
     [IdSelectorType.Entity]: string[];
     [IdSelectorType.Substring]: string[];
     [IdSelectorType.Regex]: string[];
@@ -29,7 +29,7 @@ export interface EventsStateNodeProperties extends BaseNodeProperties {
     exposeAsEntityConfig: string;
     outputInitially: boolean;
     stateType: TransformType;
-    entities: EntitySelector;
+    entities: EntitySelectorList;
     ifState: string;
     ifStateType: string;
     ifStateOperator: string;
