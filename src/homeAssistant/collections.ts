@@ -9,7 +9,6 @@ import { throttle } from 'lodash';
 import {
     HassAreas,
     HassDevices,
-    HassEntityRegistryDisplayEntryResponse,
     HassEntityRegistryEntry,
     HassFloor,
     HassLabel,
@@ -104,39 +103,6 @@ export function subscribeEntityRegistry(
     const collection = getCollection(
         conn,
         '_entity',
-        fetchEntityRegistry,
-        subscribeUpdates,
-    );
-    collection.subscribe(cb);
-}
-
-export function subscribeEntityRegistryDisplay(
-    conn: Connection,
-    cb: (state: HassEntityRegistryDisplayEntryResponse) => void,
-): void {
-    const fetchEntityRegistry = (conn: Connection) =>
-        conn.sendMessagePromise<HassEntityRegistryDisplayEntryResponse>({
-            type: 'config/entity_registry/list_for_display',
-        });
-
-    const subscribeUpdates = (
-        conn: Connection,
-        store: Store<HassEntityRegistryDisplayEntryResponse>,
-    ) =>
-        conn.subscribeEvents(
-            throttle(
-                () =>
-                    fetchEntityRegistry(conn).then((devices) =>
-                        store.setState(devices, true),
-                    ),
-                500,
-            ),
-            'entity_registry_updated',
-        );
-
-    const collection = getCollection(
-        conn,
-        '_entityRegistryDisplay',
         fetchEntityRegistry,
         subscribeUpdates,
     );

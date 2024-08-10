@@ -1,25 +1,31 @@
-import * as haServer from '../../../editor/haserver';
 import {
     HassDeviceActions,
     HassDeviceCapabilities,
 } from '../../../types/home-assistant';
+import { DeviceEndpoint, fetchDeviceData } from './utils';
 
 export const inputCount = 1;
 
-export const getCapabilitiesList = async (
+export async function getCapabilitiesList(
     action: any,
-): Promise<HassDeviceCapabilities> =>
-    await haServer.fetch('deviceActionCapabilities', {
-        action,
-    });
+): Promise<HassDeviceCapabilities> {
+    return fetchDeviceData<HassDeviceCapabilities>(
+        DeviceEndpoint.DeviceActionCapabilities,
+        { event: JSON.stringify(action) },
+        'ha-device.error.failed_to_fetch_capabilities',
+    );
+}
 
-export const getEventList = async (
+export async function getEventList(
     deviceId: string,
-): Promise<HassDeviceActions> =>
-    await haServer.fetch('deviceActions', {
-        deviceId,
-    });
+): Promise<HassDeviceActions> {
+    return fetchDeviceData<HassDeviceActions>(
+        DeviceEndpoint.DeviceActions,
+        { deviceId },
+        'ha-device.error.failed_to_fetch_actions',
+    );
+}
 
-export const setDefaultOutputs = () => {
+export function setDefaultOutputs() {
     return [];
-};
+}

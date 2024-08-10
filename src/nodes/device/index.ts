@@ -20,14 +20,10 @@ import {
     BaseNodeProperties,
     OutputProperty,
 } from '../../types/nodes';
+import { DeviceType } from './const';
 import DeviceActionController from './DeviceActionController';
 import DeviceIntegration from './DeviceIntegration';
 import DeviceTriggerController from './DeviceTriggerController';
-
-enum DeviceType {
-    Action = 'action',
-    Trigger = 'trigger',
-}
 
 export interface DeviceNodeProperties extends BaseNodeProperties {
     deviceType: DeviceType;

@@ -56,7 +56,6 @@ import {
     subscribeAreaRegistry,
     subscribeDeviceRegistry,
     subscribeEntityRegistry,
-    subscribeEntityRegistryDisplay,
     subscribeFloorRegistry,
     subscribeLabelRegistry,
 } from './collections';
@@ -240,46 +239,6 @@ export default class Websocket {
         );
     }
 
-    // the config/entity_registry/list_for_display endpoint was added in HA version 2023.3.0
-    // fallback to the config/entity_registry/list endpoint for older versions
-    // config/entity_registry/list outputs a larger payload, so we only want to use it if we have to
-    #subscribeEntityRegistry() {
-        if (atLeastHaVersion(this.client.haVersion, 2023, 3)) {
-            subscribeEntityRegistryDisplay(this.client, (entityReg) => {
-                const entities = entityReg.entities.map((entity) => {
-                    return {
-                        entity_id: entity.ei,
-                        device_id: entity.di,
-                        area_id: entity.ai,
-                        platform: entity.pl,
-                        entity_category:
-                            entity.ec !== undefined
-                                ? entityReg.entity_categories[entity.ec]
-                                : undefined,
-                        name: entity.en,
-                        config_entry_id: undefined,
-                        disabled_by: undefined,
-                        icon: undefined,
-                    };
-                });
-
-                this.entities = entities;
-                this.#emitEvent(HaEvent.RegistryUpdated, {
-                    devices: this.devices,
-                    entities: this.entities,
-                });
-            });
-        } else {
-            subscribeEntityRegistry(this.client, (entities) => {
-                this.entities = entities;
-                this.#emitEvent(HaEvent.RegistryUpdated, {
-                    devices: this.devices,
-                    entities: this.entities,
-                });
-            });
-        }
-    }
-
     async #haEvents() {
         // Home Assistant Events
         await this.client.subscribeEvents<HassEvent>(
@@ -304,7 +263,13 @@ export default class Websocket {
                 entities: this.entities,
             });
         });
-        this.#subscribeEntityRegistry();
+        subscribeEntityRegistry(this.client, (entities) => {
+            this.entities = entities;
+            this.#emitEvent(HaEvent.RegistryUpdated, {
+                devices: this.devices,
+                entities: this.entities,
+            });
+        });
         subscribeFloorRegistry(this.client, (floors) => {
             this.#emitEvent(HaEvent.FloorRegistryUpdated, floors);
             this.floors = floors;
@@ -616,10 +581,14 @@ export default class Websocket {
     async getDeviceActions(deviceId?: string): Promise<HassDeviceActions> {
         if (!this.isConnected || !deviceId) return [];
 
-        return this.send<HassDeviceActions>({
+        const results = await this.send<HassDeviceActions>({
             type: 'device_automation/action/list',
             device_id: deviceId,
+        }).catch((e) => {
+            throw e;
         });
+
+        return results;
     }
 
     async getDeviceActionCapabilities(action: {
@@ -630,6 +599,8 @@ export default class Websocket {
         const results = await this.send<HassDeviceCapabilitiesResponse>({
             type: 'device_automation/action/capabilities',
             action,
+        }).catch((e) => {
+            throw e;
         });
 
         return results.extra_fields;
@@ -638,10 +609,14 @@ export default class Websocket {
     async getDeviceTriggers(deviceId?: string): Promise<HassDeviceTriggers> {
         if (!this.isConnected || !deviceId) return [];
 
-        return this.send<HassDeviceTriggers>({
+        const results = await this.send<HassDeviceTriggers>({
             type: 'device_automation/trigger/list',
             device_id: deviceId,
+        }).catch((e) => {
+            throw e;
         });
+
+        return results;
     }
 
     async getDeviceTriggerCapabilities(trigger: {
@@ -652,6 +627,8 @@ export default class Websocket {
         const results = await this.send<HassDeviceCapabilitiesResponse>({
             type: 'device_automation/trigger/capabilities',
             trigger,
+        }).catch((e) => {
+            throw e;
         });
 
         return results.extra_fields;

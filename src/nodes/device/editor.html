@@ -22,11 +22,15 @@
 
 <div class="form-row">
     <label for="node-input-device" data-i18n="ha-device.label.device"></label>
-    <select id="node-input-device" style="width: 70%"></select>
+    <div id="ha-device"></div>
 </div>
 
 <div class="form-row">
-    <label for="event" data-i18n="ha-device.label.trigger"></label>
+    <label
+        for="event"
+        data-i18n="ha-device.label.trigger"
+        style="text-transform: capitalize"
+    ></label>
     <select id="event" style="width: 70%" disabled></select>
 </div>
 

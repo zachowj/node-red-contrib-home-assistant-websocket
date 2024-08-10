@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import {
     HassEntity as HomeAssistantEntity,
     HassEventBase,
@@ -113,44 +112,29 @@ export type HassStateChangedEvent = HassEventBase & {
     };
 };
 
-export interface HassEntityRegistryEntry {
-    entity_id: string;
-    name?: string;
-    icon?: string;
-    platform?: string;
-    config_entry_id?: string;
-    device_id?: string;
-    area_id?: string;
-    disabled_by?: string;
-    entity_category?: 'config' | 'diagnostic';
-}
-
 type HassEntityCategory = 'config' | 'diagnostic';
 
-export interface HassEntityRegistryDisplayEntryResponse {
-    entities: {
-        ei: string;
-        di?: string;
-        ai?: string;
-        ec?: number;
-        en?: string;
-        pl?: string;
-        tk?: string;
-        hb?: boolean;
-        dp?: number;
-    }[];
-    entity_categories: Record<number, HassEntityCategory>;
-}
-export interface HassEntityRegistryDisplayEntry {
+export interface HassEntityRegistryEntry {
+    id: string;
     entity_id: string;
-    name?: string;
-    device_id?: string;
-    area_id?: string;
-    hidden?: boolean;
-    entity_category?: HassEntityCategory;
+    name: string | null;
+    icon: string | null;
+    platform: string;
+    config_entry_id: string | null;
+    device_id: string | null;
+    area_id: string | null;
+    labels: string[];
+    disabled_by: 'user' | 'device' | 'integration' | 'config_entry' | null;
+    hidden_by: Exclude<HassEntityRegistryEntry['disabled_by'], 'config_entry'>;
+    entity_category: HassEntityCategory | null;
+    has_entity_name: boolean;
+    original_name?: string;
+    unique_id: string;
     translation_key?: string;
-    platform?: string;
-    display_precision?: number;
+    options: Record<string, Record<string, unknown>> | null;
+    categories: { [scope: string]: string };
+    created_at: number;
+    modified_at: number;
 }
 
 export interface HassFloor {

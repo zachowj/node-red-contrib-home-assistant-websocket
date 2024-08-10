@@ -7,6 +7,7 @@ import {
 import {
     HassArea,
     HassDevice,
+    HassEntityRegistryEntry,
     HassFloor,
     HassLabel,
 } from '../types/home-assistant';
@@ -21,6 +22,7 @@ const floors: { [serverId: string]: HassFloor[] } = {};
 const labels: { [serverId: string]: HassLabel[] } = {};
 const services: { [serverId: string]: HassServices } = {};
 const targetDomains: { [serverId: string]: HassTargetDomains } = {};
+const entityRegistry: { [serverId: string]: HassEntityRegistryEntry[] } = {};
 
 export function updateAreas(topic: string, data: HassArea[]): void {
     const serverId = parseServerId(topic);
@@ -36,6 +38,14 @@ export function updateEntity(topic: string, data: HassEntity): void {
     const serverId = parseServerId(topic);
     if (!entities[serverId]) entities[serverId] = {};
     entities[serverId][data.entity_id] = data;
+}
+
+export function updateEntityRegistry(
+    topic: string,
+    data: HassEntityRegistryEntry[],
+): void {
+    const serverId = parseServerId(topic);
+    entityRegistry[serverId] = data;
 }
 
 export function updateEntities(topic: string, data: HassEntities): void {
@@ -198,6 +208,13 @@ export function getDevices(serverId: string): HassDevice[] {
 
 export function getEntity(serverId: string, entityId: string): HassEntity {
     return entities[serverId][entityId];
+}
+
+export function getEntityFromRegistry(
+    serverId: string,
+    registryId: string,
+): HassEntityRegistryEntry | undefined {
+    return entityRegistry[serverId].find((entry) => entry.id === registryId);
 }
 
 export function getEntities(serverId: string): HassEntities {

@@ -1,21 +1,24 @@
 {
   "ha-device": {
+    "error": {
+      "failed_to_fetch_capabilities": "Failed to fetch capabilities for device: __event__",
+      "failed_to_fetch_triggers": "Failed to fetch triggers.",
+      "failed_to_fetch_actions": "Failed to fetch actions.",
+      "invalid_device_config": "Invalid config for device trigger",
+      "invalid_device_type": "Invalid device type: __type__",
+      "report": "Report",
+      "unknown_field_type": "Unknown field type: __type__"
+    },
     "label": {
-      "name": "Name",
-      "server": "Server",
-      "type": "Type",
-      "trigger": "Trigger",
       "action": "Action",
       "device": "Device",
-      "seconds": "seconds",
+      "hours": "hours",
       "minutes": "minutes",
-      "hours": "hours"
-    },
-    "error": {
-      "invalid_device_config": "Invalid config for device trigger",
-      "unknown_field_type": "Unknown field type: __type__",
-      "report": "Report",
-      "invalid_device_type": "Invalid device type: __type__"
+      "name": "Name",
+      "seconds": "seconds",
+      "server": "Server",
+      "trigger": "Trigger",
+      "type": "Type"
     },
     "ui": {
       "no_area": "No Area"

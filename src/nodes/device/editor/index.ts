@@ -1,37 +1,33 @@
 import { EditorNodeDef, EditorRED } from 'node-red';
 
-import { EntityType, NodeType } from '../../../const';
+import { EntityType, NodeType, TypedInputTypes } from '../../../const';
 import * as haOutputs from '../../../editor/components/output-properties';
-import { select2DefaultOptions } from '../../../editor/components/select2';
 import * as haData from '../../../editor/data';
 import * as exposeNode from '../../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../../editor/ha';
 import * as haServer from '../../../editor/haserver';
-import { i18n } from '../../../editor/i18n';
 import { HassNodeProperties, OutputProperty } from '../../../editor/types';
 import * as haUtils from '../../../editor/utils';
 import {
-    HassArea,
     HassDeviceAction,
     HassDeviceCapabilities,
     HassDeviceTrigger,
     HassTranslation,
 } from '../../../types/home-assistant';
 import { saveEntityType } from '../../entity-config/editor/helpers';
+import { DeviceType } from '../const';
 import * as action from './action';
 import * as trigger from './trigger';
 import * as deviceUI from './ui';
+import { buildDevices } from './utils';
 
 declare const RED: EditorRED;
-declare global {
-    interface JQuery {
-        maximizeSelect2Height: () => void;
-    }
+
+function getDevice(type: string) {
+    return type === DeviceType.Action ? action : trigger;
 }
 
-const getDevice = (type: string) => (type === 'action' ? action : trigger);
-
-const validateCapabilities = (capabilities: any) => {
+function validateCapabilities(capabilities: any) {
     if (!Array.isArray(capabilities)) return true;
 
     for (const capability of capabilities) {
@@ -50,7 +46,7 @@ const validateCapabilities = (capabilities: any) => {
     }
 
     return true;
-};
+}
 
 interface DeviceEditorNodeProperties extends HassNodeProperties {
     deviceType: string;
@@ -68,13 +64,13 @@ interface DeviceEditorNodeProperties extends HassNodeProperties {
 const defaultOutputProperties: OutputProperty[] = [
     {
         property: 'payload',
-        propertyType: 'msg',
+        propertyType: TypedInputTypes.Message,
         value: '',
         valueType: 'eventData',
     },
     {
         property: 'topic',
-        propertyType: 'msg',
+        propertyType: TypedInputTypes.Message,
         value: '',
         valueType: 'triggerId',
     },
@@ -82,7 +78,7 @@ const defaultOutputProperties: OutputProperty[] = [
 
 const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
     category: NodeCategory.HomeAssistant,
-    color: NodeColor.Alpha,
+    color: NodeColor.Beta,
     inputs: 0,
     outputs: 1,
     icon: 'font-awesome/fa-cube',
@@ -104,7 +100,7 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
         },
         // @ts-ignore - DefinitelyTyped sets property to unchangable
         inputs: { value: 0 },
-        deviceType: { value: 'trigger' },
+        deviceType: { value: DeviceType.Trigger },
         device: { value: '' },
         event: { value: undefined, validate: (v) => v !== undefined },
         capabilities: { value: [], validate: validateCapabilities },
@@ -117,43 +113,28 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
         exposeToHomeAssistant: { value: undefined },
         haConfig: { value: undefined },
     },
-    oneditprepare: function () {
-        ha.setup(this);
-        haServer.init(this, '#node-input-server');
-        exposeNode.init(this);
+    oneditprepare: async function () {
         const SERVER_ADD = '_ADD_';
-        const $server = $('#node-input-server');
-        const $type = $('#node-input-deviceType');
-        const $device = $('#node-input-device');
-        const $event = $('#event');
+        const $server = $<HTMLSelectElement>('#node-input-server');
+        const $type = $<HTMLSelectElement>('#node-input-deviceType');
+        const $device = $('#ha-device');
+        const $event = $<HTMLSelectElement>('#event');
+
+        ha.setup(this);
+        haServer.init(this, '#node-input-server', async (serverId) => {
+            resetElements();
+            // @ts-expect-error - VirtualSelect is not recognized
+            $device[0].setOptions(buildDevices(serverId));
+
+            if (serverId === SERVER_ADD) return;
+
+            await fetchTranslations();
+            await updateEvents($device.val() as string);
+        });
+        exposeNode.init(this);
         let event = getDevice($type.val() as string);
         let translations: HassTranslation;
         saveEntityType(EntityType.Switch, 'exposeAsEntityConfig');
-
-        $device.on('select2:select', function () {
-            updateEvents($(this).val() as string);
-        });
-
-        $event.on('change', function (e) {
-            const value = (e.target as HTMLSelectElement).value;
-            if (value === '__NONE__') return;
-            const data = $event.data('events');
-            updateCapabilities(data[value]);
-        });
-
-        const sortDevices = (a: any, b: any) => {
-            const aName = haUtils.deepFind('text', a);
-            const bName = haUtils.deepFind('text', b);
-            if (aName === bName) return 0;
-            if (typeof aName !== 'string') return 1;
-
-            return aName.localeCompare(bName);
-        };
-
-        const resetElements = () => {
-            clearEventSelect();
-            clearDeviceExtras();
-        };
 
         const fetchTranslations = async () => {
             const lang = RED.i18n.lang();
@@ -163,91 +144,84 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
                     lang,
                 });
             } catch (err) {
-                RED.notify('Error retrieving translations.', 'error');
+                RED.notify('Error retrieving translations.');
             }
         };
 
-        const getAreaName = (areas: HassArea[], areaId?: string) => {
-            if (areaId && areas?.length) {
-                const area = areas.find((a) => a.area_id === areaId);
-                if (area) {
-                    return area.name;
-                }
-            }
+        await fetchTranslations();
 
-            return i18n('ha-device.ui.no_area');
+        // Device selector
+        // @ts-expect-error - VirtualSelect is not recognized
+        VirtualSelect.init({
+            ele: '#ha-device',
+            allowNewOption: true,
+            search: true,
+            maxWidth: '70%',
+            placeholder: '',
+            selectedValue: this.device,
+            silentInitialValueSet: true,
+            hasOptionDescription: true,
+            options: buildDevices(haServer.getSelectedServerId()),
+            optionsCount: 8,
+            hideClearButton: true,
+        });
+        $device.on(
+            // @ts-expect-error - no idea why this is not recognized
+            'change',
+            async function (
+                e: JQuery.TriggeredEvent<any, any, HTMLSelectElement>,
+            ) {
+                await updateEvents(e.currentTarget.value);
+            },
+        );
+
+        $event.on(
+            'change',
+            async function (
+                e: JQuery.TriggeredEvent<any, any, HTMLSelectElement>,
+            ) {
+                const value = e.currentTarget.value;
+                if (value === '__NONE__') return;
+                const data = $event.data('events');
+                await updateCapabilities(data[value]);
+            },
+        );
+
+        const resetElements = () => {
+            clearEventSelect();
+            clearDeviceExtras();
         };
 
-        const populateDevices = (deviceId?: string) => {
-            const serverId = $server.val() as string;
-            if (serverId === SERVER_ADD) return;
-
-            const devices = haData.getDevices(serverId);
-            if (!devices) return;
-
-            const areas = haData.getAreas(serverId);
-
-            $device.empty();
-            $device
-                .select2({
-                    ...select2DefaultOptions,
-                    ...{
-                        data: devices
-                            .map((d) => {
-                                return {
-                                    id: d.id,
-                                    text: d.name_by_user || d.name,
-                                    selected: d.id === deviceId,
-                                    title: getAreaName(areas, d.area_id),
-                                };
-                            })
-                            .sort(sortDevices),
-                    },
-                })
-                .maximizeSelect2Height();
-        };
-
-        const onServerChange = async () => {
-            resetElements();
-            if ($server.val() === SERVER_ADD) return;
-            fetchTranslations();
-            populateDevices();
-            updateEvents($device.val() as string);
-        };
-
-        const onTypeChange = (e: JQueryEventObject) => {
+        const onTypeChange = async (
+            e: JQuery.TriggeredEvent<any, any, HTMLSelectElement>,
+        ) => {
             const deviceId = $device.val() as string;
-            const type = (e.target as HTMLSelectElement).value as
-                | 'action'
-                | 'trigger';
+            const type = e.currentTarget.value as DeviceType;
 
             clearDeviceExtras();
             if (deviceId) {
                 event = getDevice(type);
-                updateEvents(deviceId);
+                await updateEvents(deviceId);
             }
             haOutputs.setTypes(getExtraTypes(type));
             const propertiesList =
-                type === 'trigger' ? defaultOutputProperties : [];
+                type === DeviceType.Trigger ? defaultOutputProperties : [];
             const defaultProperties = event.setDefaultOutputs(propertiesList);
             haOutputs.loadData(defaultProperties);
 
-            $('#event').prev().text(type);
+            $event.prev().text(type);
 
             $('#node-input-exposeAsEntityConfig')
                 .closest('div.form-row')
-                .toggle(type === 'trigger');
+                .toggle(type === DeviceType.Trigger);
         };
 
-        $server.one('change', () => {
+        $server.one('change', async () => {
             resetElements();
-            populateDevices(this.device);
             if ($server.val() !== SERVER_ADD) {
-                fetchTranslations();
-                updateEvents(this.device, this.event, this.capabilities);
+                await updateEvents(this.device, this.event, this.capabilities);
             }
             setTimeout(() => {
-                $server.on('change', onServerChange);
                 $type.on('change', onTypeChange);
             }, 100);
         });
@@ -269,8 +243,13 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
             capabilities?: any,
         ) => {
             if (!deviceId) return;
-            const data = await event.getEventList(deviceId);
-            let selectedIndex;
+
+            const data = await event.getEventList(deviceId).catch((err) => {
+                RED.notify(err);
+                return [];
+            });
+
+            let selectedIndex: number;
             if (data.length === 0) {
                 clearEventSelect();
                 clearDeviceExtras();
@@ -283,10 +262,7 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
                 $event.data('events', data).empty().prop('disabled', false);
                 const options: HTMLOptionElement[] = [];
                 for (let index = 0; index < data.length; index++) {
-                    const str = await localizeDeviceEvent(
-                        deviceType,
-                        data[index],
-                    );
+                    const str = localizeDeviceEvent(deviceType, data[index]);
                     options.push(new Option(str, index.toString()));
                 }
                 $event.append(options);
@@ -305,7 +281,12 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
             capabilities?: HassDeviceCapabilities,
         ) => {
             clearDeviceExtras();
-            const data = await event.getCapabilitiesList(action);
+            const data = await event
+                .getCapabilitiesList(action)
+                .catch((err) => {
+                    RED.notify(err);
+                    return [];
+                });
             if (data?.length) {
                 $event.data('capabilities', data);
                 const html = deviceUI.createDeviceExtraFields(
@@ -316,12 +297,13 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
             }
         };
 
-        const localizeDeviceEvent = async (
+        const localizeDeviceEvent = (
             eventType: string,
             event: Record<string, any>,
         ) => {
             const translateKey = (type = 'type') =>
                 `component.${event.domain}.device_automation.${eventType}_${type}.${event[type]}`;
+
             let desc =
                 translations?.[translateKey()] ??
                 (event.subtype
@@ -329,21 +311,36 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
                     : event.type);
 
             const vars = {
-                entity_name: async (): Promise<string> => {
-                    if (!event.entity_id) return '<unknown>';
-
-                    const entity = haData.getEntity(
-                        $server.val() as string,
+                // Change {entity_name} to the friendly name of the entity
+                entity_name: (): string => {
+                    const unknown = '<unknown>';
+                    if (!event.entity_id) return unknown;
+                    const serverId = $server.val() as string;
+                    const entityRegistry = haData.getEntityFromRegistry(
+                        serverId,
                         event.entity_id,
                     );
+                    if (!entityRegistry) return unknown;
+                    // If the entity registry has a name, use it
+                    if (entityRegistry?.name) return entityRegistry.name;
 
-                    if (!entity) return '';
+                    const entity = haData.getEntity(
+                        serverId,
+                        entityRegistry.entity_id,
+                    );
 
-                    return !entity.attributes ||
-                        entity.attributes.friendly_name === undefined
-                        ? event.entity_id.split('.')[1].replace(/_/g, ' ')
-                        : entity.attributes.friendly_name || '';
+                    if (entity) {
+                        // If the entity has a friendly name, use it. Otherwise, use the entity_id
+                        return entity.attributes.friendly_name === undefined
+                            ? entity.entity_id.replace(/_/g, ' ')
+                            : (entity.attributes.friendly_name ?? '');
+                    }
+
+                    return (
+                        entityRegistry.original_name || entityRegistry.entity_id
+                    );
                 },
+                // Change {subtype} to the subtype of the event
                 subtype: (): string =>
                     translations[translateKey('subtype')] || event.subtype,
             };
@@ -351,15 +348,21 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
             for (const key of objKeys) {
                 const str = `{${key}}`;
                 if (desc.indexOf(str) !== -1) {
-                    const value = await vars[key]();
-                    desc = desc.replace(str, value);
+                    try {
+                        const value = vars[key]();
+                        desc = desc.replace(str, value);
+                    } catch (e) {
+                        RED.notify(
+                            `Error fetaching translation device event: ${JSON.stringify(e)}`,
+                        );
+                    }
                 }
             }
 
             return desc;
         };
 
-        const getExtraTypes = (type: 'action' | 'trigger') => {
+        const getExtraTypes = (type: DeviceType) => {
             const extraTypes = {
                 action: ['sentData'],
                 trigger: ['eventData', 'triggerId'],
@@ -367,18 +370,25 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
             return extraTypes[type];
         };
 
-        $('#dialog-form').prepend(ha.alphaWarning(367));
+        $('#dialog-form').prepend(ha.betaWarning(1467));
         haOutputs.createOutputs(this.outputProperties, {
-            extraTypes: getExtraTypes($type.val() as 'action' | 'trigger'),
+            extraTypes: getExtraTypes($type.val() as DeviceType),
         });
     },
     oneditsave: function () {
-        const event = getDevice($('#node-input-deviceType').val() as string);
-        const $event = $('#event');
-        const eventType = $event.val() as string;
+        const event = getDevice(
+            $<HTMLSelectElement>('#node-input-deviceType').val() as string,
+        );
 
         // @ts-ignore - DefinitelyTyped is wrong
         this.inputs = event.inputCount;
+
+        // save device id
+        this.device = $('#ha-device').val() as string;
+
+        // save trigger/action data and capabilities
+        const $event = $<HTMLSelectElement>('#event');
+        const eventType = $event.val() as string;
         if (eventType !== '__NONE__') {
             const events = $event.data('events');
             const capabilities = $event.data('capabilities');

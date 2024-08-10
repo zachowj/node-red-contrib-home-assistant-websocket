@@ -6,6 +6,7 @@ import {
     updateDevices,
     updateEntities,
     updateEntity,
+    updateEntityRegistry,
     updateFloors,
     updateLabels,
     updateServices,
@@ -65,6 +66,7 @@ RED.comms.subscribe('homeassistant/labels/#', updateLabels);
 RED.comms.subscribe('homeassistant/integration/#', updateIntegration);
 RED.comms.subscribe('homeassistant/services/#', updateServices);
 RED.comms.subscribe('homeassistant/targetDomains/#', updateTargetDomains);
+RED.comms.subscribe('homeassistant/entityRegistry/#', updateEntityRegistry);
 RED.comms.subscribe(PRINT_TO_DEBUG_TOPIC, printToDebugPanel);
 setupMigrations();
 setupEditors();

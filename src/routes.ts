@@ -1,4 +1,5 @@
 import bonjour from 'bonjour';
+import debug from 'debug';
 import { NextFunction, Request, Response } from 'express';
 import flatten from 'flat';
 
@@ -52,78 +53,93 @@ async function getDeviceActions(
     req: CustomRequest,
     res: Response,
 ): Promise<void> {
+    let message: string | undefined;
+    let success = true;
     const deviceId = req.query.deviceId?.toString();
-    const actions =
-        await req?.homeAssistant?.websocket.getDeviceActions(deviceId);
-    res.json(actions ?? []);
+    const actions = await req?.homeAssistant?.websocket
+        .getDeviceActions(deviceId)
+        .catch((e) => {
+            debug(`Error getting device actions. ${JSON.stringify(e)}`);
+            success = false;
+            message = e.message;
+            return [];
+        });
+
+    res.json({ success, data: actions ?? [], message });
 }
 
 async function getDeviceActionCapabilities(
     req: CustomRequest,
     res: Response,
 ): Promise<void> {
-    const action = req.query.action as { [key: string]: any };
-    const capabilities =
-        await req?.homeAssistant?.websocket.getDeviceActionCapabilities(action);
-    res.json(capabilities ?? []);
+    let success = true;
+    let message: string | undefined;
+    const queryEvent = req.query.event;
+    let event: Record<string, unknown>;
+    try {
+        event = JSON.parse(queryEvent as string);
+    } catch (e) {
+        success = false;
+        message = 'Invalid event';
+        res.json({ success, data: [], message });
+        return;
+    }
+
+    const capabilities = await req?.homeAssistant?.websocket
+        .getDeviceActionCapabilities(event)
+        .catch((e) => {
+            success = false;
+            message = e.message;
+            return [];
+        });
+
+    res.json({ success, data: capabilities ?? [], message });
 }
 
 async function getDeviceTriggers(
     req: CustomRequest,
     res: Response,
 ): Promise<void> {
+    let success = true;
+    let message: string | undefined;
     const deviceId = req.query.deviceId?.toString();
-    const triggers =
-        await req?.homeAssistant?.websocket.getDeviceTriggers(deviceId);
-    res.json(triggers ?? []);
+    const triggers = await req?.homeAssistant?.websocket
+        .getDeviceTriggers(deviceId)
+        .catch((e) => {
+            success = false;
+            message = e.message;
+            return [];
+        });
+
+    res.json({ success, data: triggers ?? [], message });
 }
 
 async function getDeviceTriggerCapabilities(
     req: CustomRequest,
     res: Response,
 ): Promise<void> {
-    const trigger = req.query.trigger as { [key: string]: any };
-    const capabilities =
-        await req?.homeAssistant?.websocket.getDeviceTriggerCapabilities(
-            trigger,
-        );
-    res.json(capabilities ?? []);
-}
-
-function getEntitiesSelect2(req: CustomRequest, res: Response): void {
-    const websocket = req?.homeAssistant?.websocket;
-
-    if (!websocket) {
-        res.json({ results: [] });
+    let success = true;
+    let message: string | undefined;
+    const queryEvent = req.query.event;
+    let event: Record<string, unknown>;
+    try {
+        event = JSON.parse(queryEvent as string);
+    } catch (e) {
+        success = false;
+        message = 'Invalid event';
+        res.json({ success, data: [], message });
         return;
     }
 
-    const term = req.query.term?.toString().trim();
-    const states = Object.values(websocket.getStates());
+    const capabilities = await req?.homeAssistant?.websocket
+        .getDeviceTriggerCapabilities(event)
+        .catch((e) => {
+            success = false;
+            message = e.message;
+            return [];
+        });
 
-    const filteredEntities = !term
-        ? states
-        : states?.filter((entity) => {
-              const words = term.split(' ');
-              const friendlyName =
-                  entity.attributes.friendly_name?.toLowerCase();
-
-              return words.every(
-                  (word) =>
-                      friendlyName?.indexOf(word) !== -1 ||
-                      entity.entity_id?.indexOf(word) !== -1,
-              );
-          });
-
-    const results = filteredEntities.map((e) => {
-        return {
-            id: e.entity_id,
-            text: e.attributes.friendly_name ?? e.entity_id,
-            title: e.entity_id,
-        };
-    });
-
-    res.json({ results });
+    res.json({ success, data: capabilities ?? [], message });
 }
 
 function getEntities(req: CustomRequest, res: Response): void {
@@ -248,7 +264,6 @@ export function createRoutes(): void {
         deviceTriggers: getDeviceTriggers,
         deviceTriggerCapabilities: getDeviceTriggerCapabilities,
         entities: getEntities,
-        entitiesSelect2: getEntitiesSelect2,
         properties: getProperties,
         services: getServices,
         states: getStates,

@@ -12,14 +12,6 @@ import {
     HassStateChangedEvent,
 } from '../../types/home-assistant';
 
-const convertSetToArray = (obj: { [key: string]: Set<string> }) => {
-    const result: { [key: string]: string[] } = {};
-    Object.keys(obj).forEach((key) => {
-        result[key] = Array.from(obj[key]);
-    });
-    return result;
-};
-
 export default class Comms {
     readonly #clientEvents: ClientEvents;
     readonly #homeAssistant: HomeAssistant;
@@ -76,48 +68,11 @@ export default class Comms {
     }
 
     onRegistryUpdate({
-        devices,
         entities,
     }: {
-        areas: HassAreas;
-        devices: HassDevices;
         entities: HassEntityRegistryEntry[];
     }): void {
-        const areaDomains: { [key: string]: Set<string> } = {};
-        const deviceDomains: { [key: string]: Set<string> } = {};
-        entities.forEach((entity) => {
-            if (entity.area_id) {
-                if (!(entity.area_id in areaDomains)) {
-                    areaDomains[entity.area_id] = new Set<string>();
-                }
-                areaDomains[entity.area_id].add(entity.entity_id.split('.')[0]);
-            }
-            if (entity.device_id) {
-                if (!(entity.device_id in deviceDomains)) {
-                    deviceDomains[entity.device_id] = new Set<string>();
-                }
-                deviceDomains[entity.device_id].add(
-                    entity.entity_id.split('.')[0],
-                );
-            }
-        });
-
-        devices.forEach((device) => {
-            if (device.area_id) {
-                if (!(device.area_id in areaDomains)) {
-                    areaDomains[device.area_id] = new Set<string>();
-                }
-                areaDomains[device.area_id] = new Set([
-                    ...areaDomains[device.area_id],
-                    ...(deviceDomains[device.id] ?? []),
-                ]);
-            }
-        });
-
-        this.publish('targetDomains', {
-            areas: convertSetToArray(areaDomains),
-            devices: convertSetToArray(deviceDomains),
-        });
+        this.publish('entityRegistry', entities);
     }
 
     onIntegrationEvent(eventType: string): void {

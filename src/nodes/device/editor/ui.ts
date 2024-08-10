@@ -1,5 +1,9 @@
 import { i18n as haI18n } from '../../../editor/i18n';
 
+function createLabel(name: string, id: string) {
+    return `<label for="${id}">${name.replace(/_/g, ' ')}</label>`;
+}
+
 export function createDeviceExtraFields(
     fields: any[] = [],
     capabilities: any[] = [],
@@ -67,8 +71,7 @@ export function createDeviceExtraFields(
 function createDeviceBoolean(field: any, store: any) {
     const id = `deviceExtra-${field.name}`;
     const value = store ? store.value : '';
-    const html = `
-        <label for="${id}">${field.name}</label>
+    const html = `${createLabel(field.name, id)}        
         <input type="checkbox" id="${id}" style="width: auto" value="${value}"/>        
         `;
 
@@ -79,7 +82,7 @@ function createDeviceFloat(field: any, store: any) {
     const id = `deviceExtra-${field.name}`;
     const value = store ? store.value : '';
     let html = `
-        <label for="${id}">${field.name}</label>
+        ${createLabel(field.name, id)}
         <input type="text" id="${id}" style="width: 35%" value="${value}"/>        
         `;
     if (field.description && field.description.suffix) {
@@ -93,7 +96,7 @@ function createDeviceInteger(field: any, store: any) {
     const id = `deviceExtra-${field.name}`;
     const value = store ? store.value : '';
     const $elements = $(`
-        <label for="${id}">${field.name}</label>
+        ${createLabel(field.name, id)}
         <div class="range-row">
             <input type="checkbox" />
             <input type="range" id="${id}" max="${field.valueMax}" min="${
@@ -121,7 +124,7 @@ function createDeviceInteger(field: any, store: any) {
         .trigger('change');
     $range
         .on('change input', () => {
-            $text.val($range.val());
+            $text.val($range.val() as string);
         })
         .trigger('change');
     $text.on('keyup change', () => {
@@ -130,7 +133,7 @@ function createDeviceInteger(field: any, store: any) {
             const num = Number(val);
             if (num < field.valueMin) $text.val(field.valueMin);
             if (num > field.valueMax) $text.val(field.valueMax);
-            $range.val($text.val());
+            $range.val($text.val() as string);
         }
     });
 
@@ -149,9 +152,7 @@ function createDeviceDuration(field: Record<string, any>, store: any) {
         hours: haI18n(`${namespace}.hours`),
     };
     const html = `
-        <label for="${id}">
-            <i class="fa fa-clock-o"></i> ${field.name}
-        </label>
+        ${createLabel(field.name, id)}
         <input type="text" id="${id}" style="width: 35%" value="${value}"/>
         <select id="${id}Units" style="width: 35%">
             <option value="seconds" ${selected('seconds')}>${
@@ -180,7 +181,7 @@ function createDeviceSelect(
     );
 
     const html = `
-        <label for="${id}">${field.name}</label>
+        ${createLabel(field.name, id)}
         <select id="${id}" style="width: 70%">
         ${options.join('')}
         </select>        
@@ -195,7 +196,7 @@ function createDeviceString(
     const id = `deviceExtra-${field.name}`;
     const value = store ? store.value : '';
     const html = `
-        <label for="${id}">${field.name}</label>
+        ${createLabel(field.name, id)}
         <input type="text" id="${id}" style="width: 70%" value="${value}"/>
         `;
     return wrapWithRow(html);
@@ -233,7 +234,7 @@ export function getCapabilities(capabilities: any[] = []) {
                 break;
             case 'float':
             case 'positive_time_period_dict':
-                if (value && value.length && !isNaN(Number(value))) {
+                if (value?.length && !isNaN(Number(value))) {
                     const cap = {
                         name: item.name,
                         type: item.type,
@@ -247,11 +248,11 @@ export function getCapabilities(capabilities: any[] = []) {
                 }
                 break;
             case 'integer': {
-                const $sel = $(`#${id}`);
+                const $sel = $<HTMLSelectElement>(`#${id}`);
                 const checked = $sel
                     .siblings('input[type="checkbox"]')
                     .prop('checked');
-                if (checked && value && value.length && !isNaN(Number(value))) {
+                if (checked && value?.length && !isNaN(Number(value))) {
                     const cap = {
                         name: item.name,
                         type: item.type,
@@ -262,7 +263,7 @@ export function getCapabilities(capabilities: any[] = []) {
                 break;
             }
             case 'select':
-                if (value && value.length) {
+                if (value.length) {
                     acc.push({
                         name: item.name,
                         type: item.type,
@@ -271,7 +272,7 @@ export function getCapabilities(capabilities: any[] = []) {
                 }
                 break;
             case 'string':
-                if (value.length) {
+                if (value?.length) {
                     acc.push({
                         name: item.name,
                         type: item.type,

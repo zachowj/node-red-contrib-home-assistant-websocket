@@ -229,7 +229,7 @@ export function getValues() {
 const NodeMinIntegraionVersion = {
     [NodeType.BinarySensor]: '1.1.0',
     [NodeType.Button]: '1.0.4',
-    [NodeType.Device]: '3.0.0',
+    [NodeType.Device]: '4.0.2',
     [NodeType.Number]: '1.3.0',
     [NodeType.Select]: '1.4.0',
     [NodeType.Sentence]: '2.2.0',
