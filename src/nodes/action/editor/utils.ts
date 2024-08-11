@@ -1,6 +1,5 @@
 import { HassServices } from 'home-assistant-js-websocket';
-
-import { VirtualSelectOption } from '../../../editor/components/idSelector/virtual-select';
+import { VirtualSelectOption } from '../../../types/virtual-select';
 
 export function getNormalizedDomainServices(): string[] {
     const action = $('#ha-action').val() as string;

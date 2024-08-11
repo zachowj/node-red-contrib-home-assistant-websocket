@@ -1,8 +1,8 @@
-import { VirtualSelectOption } from '../../../editor/components/idSelector/virtual-select';
 import { getAreaNameById, getDevices } from '../../../editor/data';
 import * as haServer from '../../../editor/haserver';
 import { i18n } from '../../../editor/i18n';
 import { HassDevice } from '../../../types/home-assistant';
+import { VirtualSelectOption } from '../../../types/virtual-select';
 
 export enum DeviceEndpoint {
     DeviceActionCapabilities = 'deviceActionCapabilities',
