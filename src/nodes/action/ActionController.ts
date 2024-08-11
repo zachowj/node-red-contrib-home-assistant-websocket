@@ -310,7 +310,12 @@ export default class ActionController extends InputOutputController<
             message,
             {
                 config: this.node.config,
-                data,
+                data: {
+                    domain,
+                    service,
+                    data,
+                    target,
+                },
                 results: response?.response,
             },
         );
