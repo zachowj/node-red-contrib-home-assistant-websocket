@@ -4,6 +4,7 @@ import { EntityType, NodeType } from '../../const';
 import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
+import { insertSocialBar } from '../../editor/socialbar';
 import { OutputProperty } from '../../editor/types';
 import { saveEntityType } from '../entity-config/editor/helpers';
 
@@ -73,6 +74,8 @@ const ButtonEditor: EditorNodeDef<ButtonEditorNodeProperties> = {
         haOutputs.createOutputs(this.outputProperties, {
             extraTypes: ['entity', 'entityState', 'entityId'],
         });
+
+        insertSocialBar('button');
     },
     oneditsave: function () {
         this.outputProperties = haOutputs.getOutputs();

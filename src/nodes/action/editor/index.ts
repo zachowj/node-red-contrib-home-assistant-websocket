@@ -9,6 +9,7 @@ import * as haOutputs from '../../../editor/components/output-properties';
 import ha, { NodeCategory, NodeColor } from '../../../editor/ha';
 import * as haServer from '../../../editor/haserver';
 import { i18n } from '../../../editor/i18n';
+import { insertSocialBar } from '../../../editor/socialbar';
 import { OutputProperty } from '../../../editor/types';
 import { loadExampleData, updateServiceSelection } from './service-table';
 import { getValidTargets, ValidTarget } from './targets';
@@ -184,6 +185,8 @@ const ActionEditor: EditorNodeDef<ActionEditorNodeProperties> = {
 
         // Service data info
         $('#example-data').on('click', loadExampleData);
+
+        insertSocialBar('action');
     },
     oneditsave: function () {
         this.action = $('#ha-action').val() as string;

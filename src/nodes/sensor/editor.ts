@@ -5,6 +5,7 @@ import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
+import { insertSocialBar } from '../../editor/socialbar';
 import {
     HassNodeProperties,
     HATypedInputTypeOptions,
@@ -130,6 +131,8 @@ const SensorEditor: EditorNodeDef<SensorEditorNodeProperties> = {
         haOutputs.createOutputs(this.outputProperties, {
             extraTypes: ['sentData'],
         });
+
+        insertSocialBar('sensor');
     },
     oneditsave: function () {
         this.attributes = [];

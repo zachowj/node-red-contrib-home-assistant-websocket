@@ -9,6 +9,7 @@ import {
 import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
+import { insertSocialBar } from '../../editor/socialbar';
 import { HassNodeProperties, OutputProperty } from '../../editor/types';
 import { saveEntityType } from '../entity-config/editor/helpers';
 
@@ -98,6 +99,8 @@ const SelectEditor: EditorNodeDef<SelectEditorNodeProperties> = {
         haOutputs.createOutputs(this.outputProperties, {
             extraTypes: [TypedInputTypes.Value, TypedInputTypes.PreviousValue],
         });
+
+        insertSocialBar('select');
     },
     oneditsave: function () {
         this.outputProperties = haOutputs.getOutputs();

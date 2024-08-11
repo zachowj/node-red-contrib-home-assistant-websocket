@@ -5,6 +5,7 @@ import { hassAutocomplete } from '../../editor/components/hassAutocomplete';
 import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
+import { insertSocialBar } from '../../editor/socialbar';
 import { saveEntityType } from '../entity-config/editor/helpers';
 
 declare const RED: EditorRED;
@@ -118,6 +119,8 @@ const ZoneEditor: EditorNodeDef<ZoneEditorNodeProperties> = {
             },
         });
         $zones.editableList('addItems', this.zones as any);
+
+        insertSocialBar('zone');
     },
     oneditsave: function () {
         const entityList = $('#entities').editableList('items');

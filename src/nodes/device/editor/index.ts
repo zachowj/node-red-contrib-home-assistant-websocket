@@ -6,6 +6,7 @@ import * as haData from '../../../editor/data';
 import * as exposeNode from '../../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../../editor/ha';
 import * as haServer from '../../../editor/haserver';
+import { insertSocialBar } from '../../../editor/socialbar';
 import { HassNodeProperties, OutputProperty } from '../../../editor/types';
 import * as haUtils from '../../../editor/utils';
 import {
@@ -374,6 +375,8 @@ const DeviceEditor: EditorNodeDef<DeviceEditorNodeProperties> = {
         haOutputs.createOutputs(this.outputProperties, {
             extraTypes: getExtraTypes($type.val() as DeviceType),
         });
+
+        insertSocialBar('device');
     },
     oneditsave: function () {
         const event = getDevice(

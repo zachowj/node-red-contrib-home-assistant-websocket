@@ -10,6 +10,7 @@ import EntitySelector from '../../editor/components/EntitySelector';
 import * as haOutputs from '../../editor/components/output-properties';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
+import { insertSocialBar } from '../../editor/socialbar';
 import {
     HassNodeProperties,
     HATypedInputTypeOptions,
@@ -176,6 +177,8 @@ const WaitUntilEditor: EditorNodeDef<WaitUntilEditorNodeProperties> = {
         haOutputs.createOutputs(this.outputProperties, {
             extraTypes: ['entity'],
         });
+
+        insertSocialBar('wait-until');
     },
     oneditsave: function () {
         this.outputProperties = haOutputs.getOutputs();

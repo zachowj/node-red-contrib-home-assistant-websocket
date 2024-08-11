@@ -4,6 +4,7 @@ import { NodeType } from '../../const';
 import * as haOutputs from '../../editor/components/output-properties';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
+import { insertSocialBar } from '../../editor/socialbar';
 import { HassNodeProperties, OutputProperty } from '../../editor/types';
 
 declare const RED: EditorRED;
@@ -48,6 +49,8 @@ const UpdateConfigEditor: EditorNodeDef<UpdateConfigEditorNodeProperties> = {
         }
 
         haOutputs.createOutputs(this.outputProperties);
+
+        insertSocialBar('update-config');
     },
     oneditsave: function () {
         this.outputProperties = haOutputs.getOutputs();

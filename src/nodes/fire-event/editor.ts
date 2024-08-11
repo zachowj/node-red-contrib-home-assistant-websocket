@@ -3,6 +3,7 @@ import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 import { NodeType, TypedInputTypes } from '../../const';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
+import { insertSocialBar } from '../../editor/socialbar';
 
 declare const RED: EditorRED;
 
@@ -49,6 +50,8 @@ const FireEventEditor: EditorNodeDef<FireEventEditorNodeProperties> = {
             types: [TypedInputTypes.JSON, TypedInputTypes.JSONata],
             typeField: '#node-input-dataType',
         });
+
+        insertSocialBar('fire-event');
     },
 };
 

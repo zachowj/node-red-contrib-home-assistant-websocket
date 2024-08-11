@@ -5,6 +5,7 @@ import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
+import { insertSocialBar } from '../../editor/socialbar';
 import {
     EditorWidgetEditableListOptions,
     OutputProperty,
@@ -211,6 +212,8 @@ const TagEditor: EditorNodeDef<TagEditorNodeProperties> = {
         haOutputs.createOutputs(this.outputProperties, {
             extraTypes: ['eventData', 'tagId'],
         });
+
+        insertSocialBar('tag');
     },
     oneditsave: function () {
         const tagList = $('#tags').editableList('items');

@@ -6,6 +6,7 @@ import * as ifState from '../../editor/components/ifstate';
 import * as haOutputs from '../../editor/components/output-properties';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
+import { insertSocialBar } from '../../editor/socialbar';
 import { HassNodeProperties, OutputProperty } from '../../editor/types';
 
 declare const RED: EditorRED;
@@ -120,6 +121,8 @@ const CurrentStateEditor: EditorNodeDef<CurrentStateEditorNodeProperties> = {
         haOutputs.createOutputs(this.outputProperties, {
             extraTypes: ['entity', 'entityId', 'entityState'],
         });
+
+        insertSocialBar('current-state');
     },
     oneditsave: function () {
         const outputs = $('#node-input-halt_if').val() ? 2 : 1;

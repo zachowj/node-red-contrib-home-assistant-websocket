@@ -3,6 +3,7 @@ import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 import { NodeType } from '../../const';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
+import { insertSocialBar } from '../../editor/socialbar';
 import { HATypedInputTypeOptions } from '../../editor/types';
 import { OutputType } from './const';
 import { Rule } from './types';
@@ -237,6 +238,8 @@ const GetEntitiesEditor: EditorNodeDef<GetEntitiesEditorNodeProperties> = {
                 }
             })
             .trigger('change');
+
+        insertSocialBar('get-entities');
     },
     oneditsave: function () {
         const rules = $('#logic').editableList('items');

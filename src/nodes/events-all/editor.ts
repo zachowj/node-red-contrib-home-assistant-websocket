@@ -5,6 +5,7 @@ import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
+import { insertSocialBar } from '../../editor/socialbar';
 import { HassNodeProperties, OutputProperty } from '../../editor/types';
 import { saveEntityType } from '../entity-config/editor/helpers';
 
@@ -101,6 +102,8 @@ const EventsAllEditor: EditorNodeDef<EventsAllEditorNodeProperties> = {
         haOutputs.createOutputs(this.outputProperties, {
             extraTypes: ['eventData'],
         });
+
+        insertSocialBar('events-all');
     },
     oneditsave: function () {
         this.outputProperties = haOutputs.getOutputs();

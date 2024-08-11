@@ -5,6 +5,7 @@ import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
+import { insertSocialBar } from '../../editor/socialbar';
 import { OutputProperty } from '../../editor/types';
 import { saveEntityType } from '../entity-config/editor/helpers';
 
@@ -135,6 +136,8 @@ const WebhookEditor: EditorNodeDef<WebhookEditorNodeProperties> = {
         haOutputs.createOutputs(this.outputProperties, {
             extraTypes: ['receivedData', 'headers', 'params', 'triggerId'],
         });
+
+        insertSocialBar('webhook');
     },
     oneditsave: function () {
         this.outputProperties = haOutputs.getOutputs();

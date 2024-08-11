@@ -3,6 +3,7 @@ import { EditorNodeDef, EditorRED } from 'node-red';
 import { NodeType, TypedInputTypes } from '../../const';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
+import { insertSocialBar } from '../../editor/socialbar';
 import { HassNodeProperties } from '../../editor/types';
 
 declare const RED: EditorRED;
@@ -78,6 +79,8 @@ const RenderTemplateEditor: EditorNodeDef<RenderTemplateEditorNodeProperties> =
                 mode: 'ace/mode/text',
                 value: $inputTemplate.val() as string,
             });
+
+            insertSocialBar('render-template');
         },
         oneditresize: function () {
             const $rows = $('#dialog-form>div:not(.node-text-editor-row)');

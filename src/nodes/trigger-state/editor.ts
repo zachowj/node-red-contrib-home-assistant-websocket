@@ -15,6 +15,7 @@ import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import { i18n } from '../../editor/i18n';
+import { insertSocialBar } from '../../editor/socialbar';
 import { HassNodeProperties } from '../../editor/types';
 import { saveEntityType } from '../entity-config/editor/helpers';
 import { EntitySelectorList } from '../events-state';
@@ -531,6 +532,8 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
                 index: index + 2,
             }),
         );
+
+        insertSocialBar('trigger-state');
     },
     oneditsave: function () {
         const constraintsItems = $('#constraint-list').editableList('items');

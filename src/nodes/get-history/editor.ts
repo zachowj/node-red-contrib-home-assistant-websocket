@@ -4,6 +4,7 @@ import { NodeType, TypedInputTypes } from '../../const';
 import { hassAutocomplete } from '../../editor/components/hassAutocomplete';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
+import { insertSocialBar } from '../../editor/socialbar';
 import { EntityFilterType, OutputType } from './const';
 
 declare const RED: EditorRED;
@@ -110,6 +111,8 @@ const GetHistoryEditor: EditorNodeDef<GetHistoryEditorNodeProperties> = {
                 $('.output-option').toggle(target.value === OutputType.Array);
             })
             .trigger('change');
+
+        insertSocialBar('get-history');
     },
 };
 

@@ -5,6 +5,7 @@ import * as haOutputs from '../../editor/components/output-properties';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import { i18n } from '../../editor/i18n';
+import { insertSocialBar } from '../../editor/socialbar';
 import { HassNodeProperties, OutputProperty } from '../../editor/types';
 import { ApiMethod, ApiProtocol } from './const';
 
@@ -112,6 +113,8 @@ const ApiEditor: EditorNodeDef<ApiEditorNodeProperties> = {
         haOutputs.createOutputs(this.outputProperties, {
             extraTypes: ['results'],
         });
+
+        insertSocialBar('API');
     },
     oneditsave: function (this: EditorNodeInstance<ApiEditorNodeProperties>) {
         this.outputProperties = haOutputs.getOutputs();
