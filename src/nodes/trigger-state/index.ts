@@ -154,10 +154,10 @@ export default function triggerState(
     }
 
     if (
-        config.entities[IdSelectorType.Substring].length === 0 &&
-        config.entities[IdSelectorType.Regex].length === 0
+        this.config.entities[IdSelectorType.Substring].length === 0 &&
+        this.config.entities[IdSelectorType.Regex].length === 0
     ) {
-        for (const entity of config.entities[IdSelectorType.Entity]) {
+        for (const entity of this.config.entities[IdSelectorType.Entity]) {
             const eventTopic = `ha_events:state_changed:${entity}`;
             clientEvents.addListener(
                 eventTopic,
