@@ -3,6 +3,7 @@ import { cloneDeep } from 'lodash';
 import { NodeMessage } from 'node-red';
 import selectn from 'selectn';
 
+import { IdSelectorType } from '../../common/const';
 import InputOutputController, {
     InputOutputControllerOptions,
     InputProperties,
@@ -13,7 +14,8 @@ import ClientEvents from '../../common/events/ClientEvents';
 import ComparatorService from '../../common/services/ComparatorService';
 import { DataSource } from '../../common/services/InputService';
 import JSONataService from '../../common/services/JSONataService';
-import { EntityFilterType, TypedInputTypes } from '../../const';
+import { TypedInputTypes } from '../../const';
+import { RED } from '../../globals';
 import { renderTemplate } from '../../helpers/mustache';
 import {
     getTimeInMilliseconds,
@@ -61,6 +63,7 @@ export default class WaitUntil extends InputOutputController<
     #savedConfig?: SavedConfig;
     #savedMessage?: NodeMessage;
     #timeoutId?: NodeJS.Timeout;
+    #hasDeprecatedWarned = false;
 
     constructor(params: WaitUntilControllerConstructor) {
         super(params);
@@ -93,13 +96,16 @@ export default class WaitUntil extends InputOutputController<
             return;
         }
 
-        if (
-            !shouldIncludeEvent(
-                event.entity_id,
-                this.#savedConfig.entityId,
-                this.#savedConfig.entityIdFilterType,
-            )
-        ) {
+        // Check if the event should be included
+        const valid = Object.entries(this.#savedConfig.entities).some(
+            ([type, ids]) => {
+                return ids?.some((id) =>
+                    shouldIncludeEvent(event.entity_id, id, type),
+                );
+            },
+        );
+
+        if (!valid) {
             return;
         }
 
@@ -148,8 +154,7 @@ export default class WaitUntil extends InputOutputController<
         clearTimeout(this.#timeoutId);
 
         const config: SavedConfig = {
-            entityId: parsedMessage.entityId.value,
-            entityIdFilterType: parsedMessage.entityIdFilterType.value,
+            entities: parsedMessage.entities.value,
             property: parsedMessage.property.value,
             comparator: parsedMessage.comparator.value,
             value: parsedMessage.value.value,
@@ -161,17 +166,28 @@ export default class WaitUntil extends InputOutputController<
             done,
         };
 
-        // Render mustache templates in the entity id field
-        if (
-            parsedMessage.entityId.source === DataSource.Config &&
-            config.entityIdFilterType === EntityFilterType.Exact
-        ) {
-            config.entityId = renderTemplate(
-                parsedMessage.entityId.value,
-                message,
-                this.node.context(),
-                this.#homeAssistant.websocket.getStates(),
-            );
+        // TODO: remove in v1.0
+        if (parsedMessage.entities.source === DataSource.Transformed) {
+            if (!this.#hasDeprecatedWarned) {
+                this.#hasDeprecatedWarned = true;
+                this.node.warn(
+                    RED._('ha-wait-until.error.entity_id_deprecated'),
+                );
+            }
+        }
+
+        // Render mustache templates in the entity id field when it's from the config
+        if (parsedMessage.entities.source === DataSource.Config) {
+            config.entities[IdSelectorType.Entity] =
+                parsedMessage.entities.value[IdSelectorType.Entity].map(
+                    (e: string) =>
+                        renderTemplate(
+                            e,
+                            message,
+                            this.node.context(),
+                            this.#homeAssistant.websocket.getStates(),
+                        ),
+                );
         }
 
         // If the timeout field is jsonata type evaluate the expression and
@@ -193,21 +209,32 @@ export default class WaitUntil extends InputOutputController<
         // Validate if timeout is a number >= 0
         if (isNaN(timeout) || timeout < 0) {
             throw new InputError(
-                `Invalid value for 'timeout': ${timeout}`,
+                ['ha-wait-until.error.invalid_timeout', { timeout }],
                 'homassistant.error.error',
             );
         }
 
         this.#clientEvents.removeListeners();
-        const eventTopic = `ha_events:state_changed${
-            config.entityIdFilterType === EntityFilterType.Exact
-                ? `:${config.entityId.trim()}`
-                : ''
-        }`;
-        this.#clientEvents.addListener(
-            eventTopic,
-            this.#onEntityChange.bind(this),
-        );
+        if (
+            parsedMessage.entities.value[IdSelectorType.Substring].length ===
+                0 &&
+            parsedMessage.entities.value[IdSelectorType.Regex].length === 0
+        ) {
+            for (const entity of parsedMessage.entities.value[
+                IdSelectorType.Entity
+            ]) {
+                const eventTopic = `ha_events:state_changed:${entity?.trim()}`;
+                this.#clientEvents.addListener(
+                    eventTopic,
+                    this.#onEntityChange.bind(this),
+                );
+            }
+        } else {
+            this.#clientEvents.addListener(
+                'ha_events:state_changed',
+                this.#onEntityChange.bind(this),
+            );
+        }
 
         this.#savedMessage = message;
         this.#active = true;
@@ -219,15 +246,15 @@ export default class WaitUntil extends InputOutputController<
 
             this.#timeoutId = setTimeoutWithErrorHandling(
                 async () => {
-                    const state = Object.assign(
-                        {},
-                        this.#homeAssistant.websocket.getStates(
-                            config.entityId,
-                        ) as HassEntity,
-                    );
+                    let state: HassEntity | undefined;
+                    if (this.#isSingleEntitySelected()) {
+                        state = this.#homeAssistant.websocket.getStates(
+                            config.entities[IdSelectorType.Entity][0],
+                        ) as HassEntity;
 
-                    state.timeSinceChangedMs =
-                        Date.now() - new Date(state.last_changed).getTime();
+                        state.timeSinceChangedMs =
+                            Date.now() - new Date(state.last_changed).getTime();
+                    }
 
                     await this.setCustomOutputs(
                         this.node.config.outputProperties,
@@ -253,22 +280,22 @@ export default class WaitUntil extends InputOutputController<
         // Only check current state when filter type is exact
         if (
             config.checkCurrentState === true &&
-            config.entityIdFilterType === EntityFilterType.Exact
+            this.#isSingleEntitySelected()
         ) {
-            const currentState = this.#homeAssistant.websocket.getStates(
-                config.entityId,
-            );
+            const entityId = config.entities[IdSelectorType.Entity][0];
+            const currentState =
+                this.#homeAssistant.websocket.getStates(entityId);
 
             if (!currentState) {
                 throw new InputError(
-                    `Entity (${config.entityId}) could not be found in cache`,
-                    'not found',
+                    ['ha-wait-until.error.entity_not_found', { entityId }],
+                    'ha-wait-until.error.not_found',
                 );
             }
 
             await this.#onEntityChange({
                 event: {
-                    entity_id: config.entityId,
+                    entity_id: entityId,
                     new_state: currentState as HassEntity,
                 },
             });
@@ -287,5 +314,13 @@ export default class WaitUntil extends InputOutputController<
         this.status.setText('reset');
 
         return true;
+    }
+
+    #isSingleEntitySelected(): boolean {
+        return (
+            this.node.config.entities[IdSelectorType.Entity].length === 1 &&
+            this.node.config.entities[IdSelectorType.Substring].length === 0 &&
+            this.node.config.entities[IdSelectorType.Regex].length === 0
+        );
     }
 }

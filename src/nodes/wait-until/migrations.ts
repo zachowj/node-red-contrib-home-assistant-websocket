@@ -1,3 +1,4 @@
+import { IdSelectorType } from '../../common/const';
 import { TypedInputTypes } from '../../const';
 
 export default [
@@ -64,6 +65,47 @@ export default [
                     valueType: TypedInputTypes.Entity,
                 });
             }
+
+            return newSchema;
+        },
+    },
+
+    {
+        version: 3,
+        up: (schema: any) => {
+            const newSchema = {
+                ...schema,
+                version: 3,
+                entities: [],
+
+                entityId: undefined,
+                entityIdFilterType: undefined,
+            };
+
+            const entitites: {
+                [IdSelectorType.Entity]: string[];
+                [IdSelectorType.Substring]: string[];
+                [IdSelectorType.Regex]: string[];
+            } = {
+                [IdSelectorType.Entity]: [],
+                [IdSelectorType.Substring]: [],
+                [IdSelectorType.Regex]: [],
+            };
+            switch (schema.entityIdFilterType) {
+                case 'list':
+                    entitites[IdSelectorType.Entity] = schema.entityId;
+                    break;
+                case 'exact':
+                    entitites[IdSelectorType.Entity] = [schema.entityId];
+                    break;
+                case 'substring':
+                    entitites[IdSelectorType.Substring] = [schema.entityId];
+                    break;
+                case 'regex':
+                    entitites[IdSelectorType.Regex] = [schema.entityId];
+                    break;
+            }
+            newSchema.entities = entitites;
 
             return newSchema;
         },

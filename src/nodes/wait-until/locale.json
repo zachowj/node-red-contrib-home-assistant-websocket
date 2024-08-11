@@ -1,5 +1,12 @@
 {
   "ha-wait-until": {
+    "error": {
+      "entity_id_deprecated": "The entity id input property is deprecated and will be removed in version 1.0. Please use the entities property instead.",
+      "entity_not_found": "Entity (__entityId__) could not be found",
+      "no_entities_provided": "At least one entity must be provided",
+      "not_found": "not found",
+      "invalid_timeout": "Invalid value for timeout: __timeout__"
+    },
     "label": {
       "block_input_overrides": "Block input overrides",
       "check_current_state": "Check against current state",

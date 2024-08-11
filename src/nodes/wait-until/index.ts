@@ -1,10 +1,14 @@
 import Joi from 'joi';
 import { NodeDef } from 'node-red';
 
+import { IdSelectorType } from '../../common/const';
 import { createControllerDependencies } from '../../common/controllers/helpers';
 import ClientEvents from '../../common/events/ClientEvents';
 import ComparatorService from '../../common/services/ComparatorService';
-import InputService from '../../common/services/InputService';
+import InputService, {
+    DataSource,
+    ParsedMessage,
+} from '../../common/services/InputService';
 import Status from '../../common/status/Status';
 import TransformState from '../../common/TransformState';
 import {
@@ -22,11 +26,11 @@ import {
     BaseNodeProperties,
     OutputProperty,
 } from '../../types/nodes';
+import { EntitySelectorList } from '../events-state';
 import WaitUntilController from './WaitUntilController';
 
 export interface WaitUntilProperties {
-    entityId: string;
-    entityIdFilterType: EntityFilterType;
+    entities: EntitySelectorList;
     property: string;
     comparator: ComparatorType;
     value: string;
@@ -50,12 +54,14 @@ export interface WaitUntilNode extends BaseNode {
 const inputs = {
     entityId: {
         messageProp: ['payload.entity_id', 'payload.entityId'],
-        configProp: 'entityId',
     },
     entityIdFilterType: {
         messageProp: 'payload.entityIdFilterType',
-        configProp: 'entityIdFilterType',
         default: 'exact',
+    },
+    entities: {
+        messageProp: 'payload.entities',
+        configProp: 'entities',
     },
     property: {
         messageProp: 'payload.property',
@@ -87,13 +93,74 @@ const inputs = {
     },
 };
 
+function transformInput(
+    this: InputService<WaitUntilNodeProperties>,
+    parsedMessage: ParsedMessage,
+): ParsedMessage {
+    // If no entities are provided, use entityId
+    if (parsedMessage.entityId.value) {
+        const entities: EntitySelectorList = {
+            [IdSelectorType.Entity]: [],
+            [IdSelectorType.Substring]: [],
+            [IdSelectorType.Regex]: [],
+        };
+        switch (parsedMessage.entityIdFilterType.value) {
+            case EntityFilterType.Exact:
+                entities[IdSelectorType.Entity] = [
+                    parsedMessage.entityId.value,
+                ];
+                break;
+            case EntityFilterType.Substring:
+                entities[IdSelectorType.Substring] = [
+                    parsedMessage.entityId.value,
+                ];
+                break;
+            case EntityFilterType.Regex:
+                entities[IdSelectorType.Regex] = [parsedMessage.entityId.value];
+                break;
+            case EntityFilterType.List:
+                entities[IdSelectorType.Entity] = parsedMessage.entityId.value;
+                break;
+        }
+        parsedMessage.entities.value = entities;
+        parsedMessage.entities.source = DataSource.Transformed;
+    }
+
+    // each entities property should be an array
+    [
+        IdSelectorType.Entity,
+        IdSelectorType.Substring,
+        IdSelectorType.Regex,
+    ].forEach((key) => {
+        const value = parsedMessage.entities.value[key];
+        if (!Array.isArray(value)) {
+            parsedMessage.entities.value[key] = [];
+        }
+    });
+
+    return parsedMessage;
+}
+
 const defaultInputSchema = Joi.object({
-    entityId: Joi.alternatives().try(
-        Joi.array().items(Joi.string()),
-        Joi.string(),
-        Joi.object().instance(RegExp),
-    ),
-    entityIdFilterType: Joi.string().valid(...Object.values(EntityFilterType)),
+    entities: Joi.object({
+        entity: Joi.array().items(Joi.string()),
+        substring: Joi.array().items(Joi.string()),
+        regex: Joi.array().items(Joi.string()),
+    })
+        .custom((value, helpers) => {
+            const { entity, substring, regex } = value;
+
+            if (
+                entity?.length > 0 ||
+                substring?.length > 0 ||
+                regex?.length > 0
+            ) {
+                return value; // At least one array is not empty
+            } else {
+                return helpers.error('array.length');
+            }
+        })
+        .message('ha-wait-until.error.no_entities_provided'),
     property: Joi.string(),
     comparator: Joi.string().valid(...Object.values(ComparatorType)),
     value: Joi.alternatives().try(Joi.string(), Joi.number()),
@@ -104,7 +171,7 @@ const defaultInputSchema = Joi.object({
         .default('0'),
     timeoutUnits: Joi.string().valid(...Object.values(TimeUnit)),
     checkCurrentState: Joi.boolean(),
-});
+}).unknown(true);
 
 export default function waitUntilNode(this: WaitUntilNode, config: NodeDef) {
     RED.nodes.createNode(this, config);
@@ -125,6 +192,7 @@ export default function waitUntilNode(this: WaitUntilNode, config: NodeDef) {
         inputs,
         nodeConfig: this.config,
         schema: defaultInputSchema,
+        transform: transformInput,
     });
     if (this.config.blockInputOverrides) {
         inputService.disableInputOverrides();

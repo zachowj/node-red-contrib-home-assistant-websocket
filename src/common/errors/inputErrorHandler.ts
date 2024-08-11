@@ -16,6 +16,7 @@ export function getErrorData(e: unknown) {
     let statusMessage = RED._('home-assistant.status.error');
     if (isJoiError(e)) {
         statusMessage = RED._('home-assistant.status.validation_error');
+        e.message = RED._(e.message);
     } else if (isHomeAssistantApiError(e)) {
         e = new HomeAssistantError(e);
     } else if (e instanceof BaseError) {

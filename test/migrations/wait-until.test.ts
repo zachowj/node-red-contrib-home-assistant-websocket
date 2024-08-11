@@ -51,6 +51,17 @@ const VERSION_2 = {
     entityLocation: undefined,
     entityLocationType: undefined,
 };
+const VERSION_3 = {
+    ...VERSION_2,
+    version: 3,
+    entities: {
+        entity: [VERSION_UNDEFINED.entityId],
+        substring: [],
+        regex: [],
+    },
+    entityId: undefined,
+    entityIdFilterType: undefined,
+} as const;
 
 describe('Migrations - Wait Until Node', function () {
     describe('Version 0', function () {
@@ -129,8 +140,50 @@ describe('Migrations - Wait Until Node', function () {
         });
     });
 
+    describe('Version 3', function () {
+        it('should update version 2 to version 3', function () {
+            const migrate = migrations.find((m) => m.version === 3);
+            const migratedSchema = migrate?.up(VERSION_2);
+
+            expect(migratedSchema).to.eql(VERSION_3);
+        });
+
+        it('should convert a substring type to a entities substring array', function () {
+            const schema = {
+                ...VERSION_2,
+                entityId: 'entity.id',
+                entityIdFilterType: 'substring',
+            };
+            const migratedSchema = migrate(schema);
+            expect(migratedSchema.entities.substring).to.eql(['entity.id']);
+        });
+
+        it('should convert a regex type to a entities regex array', function () {
+            const schema = {
+                ...VERSION_2,
+                entityId: 'entity.id',
+                entityIdFilterType: 'regex',
+            };
+            const migratedSchema = migrate(schema);
+            expect(migratedSchema.entities.regex).to.eql(['entity.id']);
+        });
+
+        it('should convert a list type to a entities entity array', function () {
+            const schema = {
+                ...VERSION_2,
+                entityId: ['entity.id', 'entity2.id'],
+                entityIdFilterType: 'list',
+            };
+            const migratedSchema = migrate(schema);
+            expect(migratedSchema.entities.entity).to.eql([
+                'entity.id',
+                'entity2.id',
+            ]);
+        });
+    });
+
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_2);
+        expect(migratedSchema).to.eql(VERSION_3);
     });
 });

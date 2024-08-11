@@ -9,6 +9,7 @@ export enum DataSource {
     Default = 'default',
     Message = 'message',
     Missing = 'missing',
+    Transformed = 'transformed',
 }
 
 export type NodeInputs = Record<
@@ -27,25 +28,30 @@ interface ParsedMessageValues {
 }
 
 export type ParsedMessage = Record<string, ParsedMessageValues>;
+type TransformFunction = (parsedMessage: ParsedMessage) => ParsedMessage;
 
 export default class InputService<C extends NodeProperties> {
     readonly #inputs: NodeInputs;
     readonly #nodeConfig: C;
     readonly #schema?: Joi.ObjectSchema;
     #allowInputOverrides = true;
+    #transformCallback?: TransformFunction[] = [];
 
     constructor({
         inputs,
         nodeConfig,
         schema,
+        transform,
     }: {
         inputs?: NodeInputs;
         nodeConfig: C;
         schema?: Joi.ObjectSchema;
+        transform?: TransformFunction;
     }) {
         this.#inputs = inputs ?? {};
         this.#nodeConfig = nodeConfig;
         this.#schema = schema;
+        this.#transformCallback = transform ? [transform] : undefined;
     }
 
     // TODO: Add logic to block input if inputOptions.block is true
@@ -103,7 +109,16 @@ export default class InputService<C extends NodeProperties> {
             parsedResult[fieldKey] = result;
         }
 
-        return parsedResult;
+        return this.#transform(parsedResult);
+    }
+
+    #transform(parsedMessage: ParsedMessage): ParsedMessage {
+        if (!this.#transformCallback) return parsedMessage;
+
+        return this.#transformCallback.reduce(
+            (acc, transform) => transform.call(this, acc),
+            parsedMessage,
+        );
     }
 
     validate(parsedMessage: ParsedMessage): boolean {
@@ -136,5 +151,13 @@ export default class InputService<C extends NodeProperties> {
 
     enableInputOverrides() {
         this.#allowInputOverrides = true;
+    }
+
+    get isInputOverridesEnabled(): boolean {
+        return this.#allowInputOverrides;
+    }
+
+    addTransform(transform: TransformFunction) {
+        this.#transformCallback?.push(transform);
     }
 }
