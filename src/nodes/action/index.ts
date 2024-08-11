@@ -3,7 +3,11 @@ import Joi from 'joi';
 import { createControllerDependencies } from '../../common/controllers/helpers';
 import { inputErrorHandler } from '../../common/errors/inputErrorHandler';
 import ClientEvents from '../../common/events/ClientEvents';
-import InputService, { NodeInputs } from '../../common/services/InputService';
+import InputService, {
+    DataSource,
+    NodeInputs,
+    ParsedMessage,
+} from '../../common/services/InputService';
 import Status from '../../common/status/Status';
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
@@ -52,6 +56,7 @@ const inputs: NodeInputs = {
         configProp: 'data',
         default: {},
     },
+
     // deprecated
     // TODO: Remove in version 1.0
     domain: {
@@ -64,51 +69,27 @@ const inputs: NodeInputs = {
     },
 };
 
-function customActionValidation(
-    value: string | undefined,
-    helpers: Joi.CustomHelpers,
-) {
-    const { domain, service } = helpers.state.ancestors[0];
+function transformInput(
+    this: InputService<ActionNodeProperties>,
+    parsedMessage: ParsedMessage,
+): ParsedMessage {
+    const { domain, service } = parsedMessage;
 
-    if (!value && !domain && !service) {
-        return helpers.message({ custom: 'Action is required' });
+    if (
+        (domain.source === DataSource.Message ||
+            service.source === DataSource.Message) &&
+        domain.value &&
+        service.value
+    ) {
+        parsedMessage.action.value = `${domain.value}.${service.value}`;
+        parsedMessage.action.source = DataSource.Transformed;
     }
 
-    if (typeof value !== 'string') {
-        return helpers.message({ custom: 'Action must be a string' });
-    }
-
-    return value;
+    return parsedMessage;
 }
 
-function customDomainServiceValidation(
-    value: string | undefined,
-    helpers: Joi.CustomHelpers,
-) {
-    const { action } = helpers.state.ancestors[0];
-
-    if (action) {
-        return value;
-    }
-
-    if (!value) {
-        return helpers.message({
-            custom: 'Both domain and service are required',
-        });
-    }
-
-    if (typeof value !== 'string') {
-        return helpers.message({
-            custom: `${helpers.state.path?.[0]} must be a string`,
-        });
-    }
-
-    return value;
-}
-
-// TODO: Custom validation can be removed after version 1.0
 const inputSchema: Joi.ObjectSchema = Joi.object({
-    action: Joi.custom(customActionValidation),
+    action: Joi.string().required(),
     data: Joi.alternatives(Joi.string().allow(''), Joi.object()).required(),
     target: Joi.object().keys({
         floor_id: Joi.alternatives(Joi.string(), Joi.array().optional()),
@@ -117,10 +98,7 @@ const inputSchema: Joi.ObjectSchema = Joi.object({
         entity_id: Joi.alternatives(Joi.string(), Joi.array().optional()),
         label_id: Joi.alternatives(Joi.string(), Joi.array().optional()),
     }),
-    // deprecated
-    domain: Joi.custom(customDomainServiceValidation),
-    service: Joi.custom(customDomainServiceValidation),
-});
+}).unknown(true);
 
 export default function actionNode(
     this: ActionNode,
@@ -140,6 +118,7 @@ export default function actionNode(
         inputs,
         nodeConfig: this.config,
         schema: inputSchema,
+        transform: transformInput,
     });
     const controllerDeps = createControllerDependencies(this, homeAssistant);
 

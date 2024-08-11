@@ -46,16 +46,11 @@ export default class ActionController extends InputOutputController<
 
         let action: string = parsedMessage.action.value;
         // TODO: Remove in version 1.0
-        // Check if the action is in the old format
-        if (
-            parsedMessage.domain.source === DataSource.Message ||
-            parsedMessage.service.source === DataSource.Message
-        ) {
-            action = `${parsedMessage.domain.value}.${parsedMessage.service.value}`;
+        if (parsedMessage.action.source === DataSource.Transformed) {
             if (!this.#hasDeprecatedWarned) {
                 this.#hasDeprecatedWarned = true;
                 this.node.warn(
-                    RED._('api-call-service.error.domain_service_deprecated'),
+                    RED._('ha-action.error.domain_service_deprecated'),
                 );
             }
         } else if (parsedMessage.action.source === DataSource.Config) {
@@ -65,7 +60,7 @@ export default class ActionController extends InputOutputController<
         const [domain, service] = action.toLowerCase().split('.');
         if (!domain || !service) {
             throw new InputError([
-                'api-call-service.error.invalid_action_format',
+                'ha-action.error.invalid_action_format',
                 { action },
             ]);
         }
@@ -137,7 +132,7 @@ export default class ActionController extends InputOutputController<
             return JSON.parse(data);
         } catch (e) {
             throw new InputError([
-                'api-call-service.error.invalid_json',
+                'ha-action.error.invalid_json',
                 { json: data },
             ]);
         }
@@ -306,7 +301,7 @@ export default class ActionController extends InputOutputController<
         );
 
         this.status.setSuccess([
-            'api-call-service.status.service_called',
+            'ha-action.status.service_called',
             { domain, service },
         ]);
 

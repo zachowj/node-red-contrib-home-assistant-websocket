@@ -76,7 +76,7 @@ const ActionEditor: EditorNodeDef<ActionEditorNodeProperties> = {
                 allowBlank: true,
             }),
         },
-        dataType: { value: 'jsonata' },
+        dataType: { value: TypedInputTypes.JSONata },
         mergeContext: { value: '' },
         mustacheAltTags: { value: false },
         outputProperties: {
@@ -135,7 +135,7 @@ const ActionEditor: EditorNodeDef<ActionEditorNodeProperties> = {
                 IdSelectorType.Floor,
                 IdSelectorType.Label,
             ],
-            headerText: i18n('api-call-service.label.targets'),
+            headerText: i18n('ha-action.label.targets'),
         });
         const ids = {
             [IdSelectorType.Floor]: this.floorId,
@@ -192,7 +192,9 @@ const ActionEditor: EditorNodeDef<ActionEditorNodeProperties> = {
         this.action = $('#ha-action').val() as string;
         // TODO: Remove with version 1.0
         // Here so input overrides still work
-        [this.domain, this.service] = this.action.split('.');
+        if (this.action.indexOf('.') !== -1) {
+            [this.domain, this.service] = this.action.split('.');
+        }
 
         const targets = getSelectedIds('#target-list');
         this.floorId = targets[IdSelectorType.Floor];

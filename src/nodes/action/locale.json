@@ -1,5 +1,5 @@
 {
-  "api-call-service": {
+  "ha-action": {
     "error": {
       "domain_service_deprecated": "The domain and service input properties are deprecated and will be removed in version 1.0. Please use the action property instead.",
       "invalid_action_format": "Invalid action format: __action__",

@@ -1,23 +1,17 @@
 <input type="hidden" id="node-input-version" />
 
 <div class="form-row">
-    <label
-        for="node-input-name"
-        data-i18n="api-call-service.label.name"
-    ></label>
+    <label for="node-input-name" data-i18n="ha-action.label.name"></label>
     <input type="text" id="node-input-name" />
 </div>
 
 <div class="form-row">
-    <label
-        for="node-input-server"
-        data-i18n="api-call-service.label.server"
-    ></label>
+    <label for="node-input-server" data-i18n="ha-action.label.server"></label>
     <input type="text" id="node-input-server" />
 </div>
 
 <div class="form-row">
-    <label data-i18n="api-call-service.label.action"></label>
+    <label data-i18n="ha-action.label.action"></label>
     <div id="ha-action"></div>
 </div>
 
@@ -26,10 +20,7 @@
 </div>
 
 <div class="form-row">
-    <label
-        for="node-input-data"
-        data-i18n="api-call-service.label.data"
-    ></label>
+    <label for="node-input-data" data-i18n="ha-action.label.data"></label>
     <input type="text" id="node-input-data" style="width: 70%" />
     <input type="hidden" id="node-input-dataType" />
 </div>
@@ -38,7 +29,7 @@
     <input type="checkbox" id="node-input-mustacheAltTags" />&nbsp;
     <label
         for="node-input-mustacheAltTags"
-        data-i18n="api-call-service.label.alternate_tags"
+        data-i18n="ha-action.label.alternate_tags"
     >
     </label>
 </div>
@@ -46,7 +37,7 @@
 <div class="form-row">
     <label
         for="node-input-mergeContext"
-        data-i18n="api-call-service.label.merge_context"
+        data-i18n="ha-action.label.merge_context"
     ></label>
     <input
         type="text"
@@ -56,24 +47,23 @@
 </div>
 
 <div class="form-row">
-    <label for="node-input-queue" data-i18n="api-call-service.label.queue">
-    </label>
+    <label for="node-input-queue" data-i18n="ha-action.label.queue"> </label>
     <select type="text" id="node-input-queue">
         <option
             value="none"
-            data-i18n="api-call-service.label.queue_option.queue_none"
+            data-i18n="ha-action.label.queue_option.queue_none"
         ></option>
         <option
             value="first"
-            data-i18n="api-call-service.label.queue_option.queue_first"
+            data-i18n="ha-action.label.queue_option.queue_first"
         ></option>
         <option
             value="all"
-            data-i18n="api-call-service.label.queue_option.queue_all"
+            data-i18n="ha-action.label.queue_option.queue_all"
         ></option>
         <option
             value="last"
-            data-i18n="api-call-service.label.queue_option.queue_last"
+            data-i18n="ha-action.label.queue_option.queue_last"
         ></option>
     </select>
 </div>
@@ -84,7 +74,7 @@
     <input type="checkbox" id="node-input-debugenabled" />
     <label
         for="node-input-debugenabled"
-        data-i18n="api-call-service.label.show_debug"
+        data-i18n="ha-action.label.show_debug"
     ></label>
 </div>
 
@@ -93,10 +83,10 @@
         id="example-data"
         style="float: right"
         class="red-ui-button red-ui-button-small"
-        data-i18n="api-call-service.label.load_example_data"
+        data-i18n="ha-action.label.load_example_data"
     ></button>
     <h4>
-        <span data-i18n="api-call-service.label.action"></span>:
+        <span data-i18n="ha-action.label.action"></span>:
         <span class="title"></span>
     </h4>
     <div class="unknown-service">Unknown domain or service</div>

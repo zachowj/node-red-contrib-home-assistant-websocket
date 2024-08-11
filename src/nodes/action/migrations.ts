@@ -116,8 +116,11 @@ export default [
                 version: 6,
                 floorId: [],
                 labelId: [],
-                action: `${schema.domain}.${schema.service}`,
             };
+
+            if (schema.domain || schema.service) {
+                newSchema.action = `${schema.domain}.${schema.service}`;
+            }
 
             return newSchema;
         },
