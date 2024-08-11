@@ -55,11 +55,8 @@ const uiHandlebarsWrap =
     '<script type="text/html" id="handlebars-<%= data.id %>" data-template-name="<%= data.type %>"><%= data.contents %></script>';
 const resourcePath = 'resources/node-red-contrib-home-assistant-websocket';
 const resourceFiles = [
-    `<script src="${resourcePath}/select2.full.min.js?v=4.1.0-rc.0"></script>`,
-    `<link rel="stylesheet" href="${resourcePath}/select2.min.css?v=4.1.0-rc.0">`,
     `<link rel="stylesheet" href="${resourcePath}/virtual-select.v1.0.44.min.css">`,
     `<script src="${resourcePath}/virtual-select.v1.0.44.min.js"></script>`,
-    `<script src="${resourcePath}/maximize-select2-height.min.js?v=1.0.4"></script>`,
     `<script src="${resourcePath}/handlebars.min-v4.7.8.js"></script>`,
 ];
 
