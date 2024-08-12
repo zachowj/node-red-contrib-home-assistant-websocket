@@ -96,7 +96,7 @@
     "autoprefixer": "10.4.20",
     "browser-sync": "3.0.2",
     "chai": "4.5.0",
-    "cheerio": "1.0.0-rc.12",
+    "cheerio": "1.0.0",
     "cssnano": "7.0.5",
     "del": "6.1.1",
     "eslint": "8.57.0",
