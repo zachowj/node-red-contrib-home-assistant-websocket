@@ -71,7 +71,7 @@ export function autocomplete(type: string, callback: (items: any) => void) {
     });
 }
 
-function getItems(type: string, callback: (items: any) => void) {
+export function getItems(type: string, callback: (items: any) => void) {
     // If no server added yet just return
     if (serverId === '_ADD_') return;
 

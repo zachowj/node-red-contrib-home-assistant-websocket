@@ -1,0 +1,28 @@
+div.property-selector {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 5px;
+    grid-row-gap: 5px;
+    align-items: center;
+
+    input,
+    select {
+        width: 100%;
+    }
+
+    .property-label {
+        grid-area: 1 / 1 / 2 / 2;
+    }
+    .input-property {
+        grid-area: 1 / 2 / 2 / 3;
+    }
+    .input-logic {
+        grid-area: 2 / 1 / 3 / 2;
+        width: auto;
+        // text-align: center;
+    }
+    .input-value-wrapper {
+        grid-area: 2 / 2 / 3 / 3;
+    }
+}

@@ -323,7 +323,7 @@ const buildHelp = lazypipe()
 
 task('buildEditorFiles', (done) => {
     const css = src([
-        'src/editor/css/**/*.scss',
+        'src/editor/**/*.scss',
         'src/nodes/**/*.scss',
         '!_*.scss',
     ]).pipe(buildSass());

@@ -1,15 +1,18 @@
 {
   "home-assistant": {
     "ui": {
+      "text": {
+        "looking_for_help": "Looking for help?"
+      },
       "migrations": {
         "all_nodes_updated": "Home Assistant nodes have been updated. Deploy to save changes.",
         "button_cancel": "Cancel",
         "button_label": "Update Home Assistant Nodes",
         "button_ok": "Update Nodes",
-        "message": "This will update all Home Assistant nodes to the current schema. This is not required for the nodes to function.\nNodes with yellow labels need to be updated before they can be edited. This can be done by either opening each node individually in the Node-RED editor or running this command.",
-        "node_schema_updated": "Node schema has been updated",
+        "message": "This will update all Home Assistant nodes to the current schema. Updating is not required for the nodes to function.\nNodes with yellow labels need to be updated before they can be edited. You can update them by opening each node individually in the Node-RED editor or by running this command.",
+        "node_schema_updated": "Node schema has been updated.",
         "title": "Update Home Assistant Nodes",
-        "warning": "It is recommended to back up your flows before doing an update of all Home Assistant nodes."
+        "warning": "It is recommended to back up your flows before updating all Home Assistant nodes."
       },
       "notifications": {
         "attention": "Attention",

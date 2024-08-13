@@ -1,5 +1,6 @@
 import Joi from 'joi';
 
+import { PropertySelectorType } from '../../common/const';
 import { createControllerDependencies } from '../../common/controllers/helpers';
 import ComparatorService from '../../common/services/ComparatorService';
 import InputService, { NodeInputs } from '../../common/services/InputService';
@@ -75,35 +76,20 @@ const inputSchema: Joi.ObjectSchema = Joi.object({
     rules: Joi.array()
         .items(
             Joi.object({
+                condition: Joi.string().valid(
+                    ...Object.values(PropertySelectorType),
+                    '',
+                ),
                 property: Joi.when('logic', {
                     is: ComparatorType.JSONata,
                     then: Joi.any(),
                     otherwise: Joi.string(),
                 }),
-                logic: Joi.string().valid(
-                    ComparatorType.Is,
-                    ComparatorType.IsNot,
-                    ComparatorType.IsLessThan,
-                    ComparatorType.IsLessThanOrEqual,
-                    ComparatorType.IsGreaterThan,
-                    ComparatorType.IsGreaterThanOrEqual,
-                    ComparatorType.Includes,
-                    ComparatorType.DoesNotInclude,
-                    ComparatorType.StartsWith,
-                    ComparatorType.InGroup,
-                    ComparatorType.JSONata,
-                ),
-                value: Joi.string(),
+                logic: Joi.string().valid(...Object.values(ComparatorType), ''),
+                value: Joi.string().allow(''),
                 valueType: Joi.string().valid(
-                    TypedInputTypes.String,
-                    TypedInputTypes.Number,
-                    TypedInputTypes.Boolean,
-                    TypedInputTypes.Regex,
-                    TypedInputTypes.JSONata,
-                    TypedInputTypes.Message,
-                    TypedInputTypes.Flow,
-                    TypedInputTypes.Global,
-                    TypedInputTypes.Entity,
+                    ...Object.values(TypedInputTypes),
+                    '',
                 ),
             }),
         )

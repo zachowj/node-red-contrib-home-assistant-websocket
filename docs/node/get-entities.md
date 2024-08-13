@@ -1,65 +1,98 @@
 # Get Entities
 
-Get Entities based on search criteria
+Retrieve entities based on specific search criteria, such as labels, floors, areas, devices, and entity properties. This node can output the entities in various formats, including an array, a count of the entities, a random entity, or as separate messages for each entity.
 
 ## Configuration
 
 ### Search Criteria
 
-All search criteria have to be true for an entity to be valid.
+All specified criteria must be met for an entity to be considered valid.
 
 ### Property
 
-Has autocompleted with all properties currently set on all loaded entities.
+Autocomplete is available for all properties currently set on loaded entities.
 
 ## Inputs
 
-### payload
+### Payload
 
-- Type: `Object`
+- **Type**: `Object`
 
-Override config values by passing in a property with a valid value.
+Override the configuration values by passing in a property with a valid value.
 
-- rules array
-  - property string
-  - logic string
-  - value string
-  - valueType string
-- outputType string
-- outputEmptyResults boolean
-- outputLocationType string
-- outputLocation string
-- outputResultscount number
+- `rules` (array)
+  - `condition`: string (e.g., `stateObject`, `labelRegistry`, `areaRegistry`, `deviceRegistry`, `floorRegistry`)
+  - `property`: string
+  - `logic`: string
+  - `value`: string
+  - `valueType`: string
+- `outputType`: string
+- `outputEmptyResults`: boolean
+- `outputLocationType`: string
+- `outputLocation`: string
+- `outputResultsCount`: number
+
+#### Example
+
+To retrieve all entities with the device class `battery` on the `First floor` that are not labeled `not replaceable`, include the following in the `payload` property of the message:
+
+```json
+{
+  "rules": [
+    {
+      "condition": "stateObject",
+      "property": "attributes.device_class",
+      "logic": "is",
+      "value": "battery",
+      "valueType": "str"
+    },
+    {
+      "condition": "floorRegistry",
+      "property": "name",
+      "logic": "is",
+      "value": "First floor",
+      "valueType": "str"
+    },
+    {
+      "condition": "labelRegistry",
+      "property": "name",
+      "logic": "is_not",
+      "value": "not replaceable",
+      "valueType": "str"
+    }
+  ]
+}
+```
 
 ## Outputs
 
 ### Array
 
-- Type: `Array`
+- **Type**: `Array`
 
-Sends an array of state objects from search criteria to the Output Location.
+Returns an array of state objects based on the search criteria and sends them to the specified output location.
 
 ### Count
 
-- Type: `number`
+- **Type**: `number`
 
-Return the total count of valid entities.
+Returns the total count of valid entities.
 
 ### Random
 
-- Type: `Object|Array`
+- **Type**: `Object | Array`
 
-Return a random object or array from the available state objects to the Output Location. When <code>One Max Results</code> is selected it will return an object and when more than one is selected will always return an array of state objects.
+Returns a random object or array from the available state objects. If `One Max Results` is selected, it will return a single object; otherwise, it will return an array of state objects.
 
 ### Split
 
-- Type: `msg` part
+- **Type**: `msg.part`
 
-Sends a message for each state object. In the same format as if the split node was used.
+Sends a separate message for each state object, similar to the output of a split node.
 
 ## State Object Format
 
-Sample output when the Output Type is an array:
+Sample output when the output type is an array:
 
 ```json
 [
@@ -86,45 +119,45 @@ Sample output when the Output Type is an array:
 
 ### entity_id
 
-- Type: `string`
+- **Type**: `string`
 
-The entity to which this state belongs
+The entity to which this state belongs.
 
 ### state
 
-- Type: `string`
+- **Type**: `string`
 
-Main attribute state value, examples: 'on', 'off', 'home', 'open', 'closed', etc...
+The main attribute state value, such as 'on', 'off', 'home', 'open', 'closed', etc.
 
 ### attributes
 
-- Type: `Object`
+- **Type**: `Object`
 
-Supported attributes of state set by Home Assistant
+Supported attributes of the state as set by Home Assistant.
 
 ### last_changed
 
-- Type: `string`
+- **Type**: `string`
 
-ISO Date string of last time entity state changed
+ISO Date string representing the last time the entity state changed.
 
 ### timeSinceChangedMs
 
-- Type: `number`
+- **Type**: `number`
 
-Milliseconds since last time entity state changed
+Milliseconds since the last state change of the entity.
 
 ### last_updated
 
-- Type: `string`
+- **Type**: `string`
 
-ISO Date string of last time entity state was updated
+ISO Date string representing the last time the entity state was updated.
 
 ### context
 
-- Type: `Object`
+- **Type**: `Object`
 
-Information on who/what changed the state of this object last.
+Information about who or what last changed the state of this entity.
 
 ## Examples
 
@@ -135,40 +168,37 @@ Information on who/what changed the state of this object last.
 </InfoPanelOnly>
 
 <DocsOnly>
+### Example 1
 
-#### Example 1
-
-You have a presence detection of some sort running in Home Assistant and you want to get a notification when you leave if any doors or windows are left open.
-
-Using the `get entities` node here to get a possible list of entity ids [binary_sensor.front_door, binary_sensor.back_door, binary_sensor.front_window, binary_sensor.back_window] if their state is equal to `open`. The entities are returned with the output `Split`. This means that a message is sent for each valid entity. We then are using a template node to format the payload into the entity friendly name and joining them back into one payload using the `join` node.
+Get a notification when you leave if any doors or windows are left open. Use the `get entities` node to get a list of entity IDs (e.g., `binary_sensor.front_door`, `binary_sensor.back_door`, `binary_sensor.front_window`, `binary_sensor.back_window`) where the state is `open`. The entities are returned with the output `Split`, sending a message for each valid entity. A template node can then format the payload into the entity's friendly name, and the messages can be joined back into one payload using the `join` node.
 
 ![screenshot](./images/get-entities_03.png)
 
 @[code](@examples/node/get-entities/example_01.json)
 
-#### Example 2
+### Example 2
 
-Sort of a Vacation or Away script to randomly turn on some lights around your home.
-
-Using an `inject` node here but you could use your preference of timer node. The `get entities` node is randomly choosing one entity from the criteria where `entity_id starts with light.`.
+Create a vacation or away script to randomly turn on lights around your home. Use an `inject` node (or your preferred timer node) and the `get entities` node to randomly choose an entity from the criteria where `entity_id` starts with `light.`.
 
 ![screenshot](./images/get-entities_02.png)
 
 @[code](@examples/node/get-entities/example_02.json)
 
----
+### Example 3
 
-#### Example 3
-
-On Reddit the other day a user posted this [How can I join 1 to 4 pre-defined messages together based on 4 separate entity states?](https://www.reddit.com/r/homeassistant/comments/a628cw/nodered_how_can_i_join_1_to_4_predefined_messages/) (Their solution can be found in the post)
-
-Here's my take on it using the `get entities` and a `function` node. Using the `Array` output option here.
+Join pre-defined messages based on separate entity states. Use the `get entities` and `function` nodes with the `Array` output option.
 
 ![screenshot](./images/get-entities_01.png)
 
 @[code](@examples/node/get-entities/example_03.json)
 
-Disclaimer: All these examples are untested but should give you a general idea of how to use it.
+### Example 4
+
+Get all lights in an area named "Kitchen" that are off.
+
+![screenshot](./images/get-entities_04.png)
+
+@[code](@examples/node/get-entities/example_04.json)
 
 </DocsOnly>
 

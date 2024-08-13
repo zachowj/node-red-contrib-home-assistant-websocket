@@ -1,10 +1,13 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
-import { NodeType } from '../../const';
+import { PropertySelectorType } from '../../common/const';
+import { ComparatorType, NodeType, TypedInputTypes } from '../../const';
+import PropertySelector, {
+    getRules,
+} from '../../editor/components/propertySelector/PropertySelector';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import { insertSocialBar } from '../../editor/socialbar';
-import { HATypedInputTypeOptions } from '../../editor/types';
 import { OutputType } from './const';
 import { Rule } from './types';
 
@@ -44,11 +47,19 @@ const GetEntitiesEditor: EditorNodeDef<GetEntitiesEditorNodeProperties> = {
         server: { value: '', type: NodeType.Server, required: true },
         version: { value: RED.settings.get('haGetEntitiesVersion', 0) },
         rules: {
-            value: [{ property: '', logic: 'is', value: '', valueType: 'str' }],
+            value: [
+                {
+                    condition: PropertySelectorType.State,
+                    property: '',
+                    logic: ComparatorType.Is,
+                    value: '',
+                    valueType: TypedInputTypes.String,
+                },
+            ],
         },
         outputType: { value: OutputType.Array },
         outputEmptyResults: { value: false },
-        outputLocationType: { value: 'msg' },
+        outputLocationType: { value: TypedInputTypes.Message },
         outputLocation: { value: 'payload' },
         outputResultsCount: {
             value: 1,
@@ -69,149 +80,30 @@ const GetEntitiesEditor: EditorNodeDef<GetEntitiesEditorNodeProperties> = {
     },
     oneditprepare: function () {
         ha.setup(this);
-        const operators = [
-            { value: 'is', text: 'is' },
-            { value: 'is_not', text: 'is not' },
-            { value: 'lt', text: '<' },
-            { value: 'lte', text: '<=' },
-            { value: 'gt', text: '>' },
-            { value: 'gte', text: '>=' },
-            { value: 'includes', text: 'in' },
-            { value: 'does_not_include', text: 'not in' },
-            { value: 'starts_with', text: 'starts with' },
-            { value: 'in_group', text: 'in group' },
-            { value: 'jsonata', text: 'JSONata' },
-        ];
-        const typeEntity = { value: 'entity', label: 'entity.' };
-        const defaultTypes: HATypedInputTypeOptions = [
-            'str',
-            'num',
-            'bool',
-            're',
-            'jsonata',
-            'msg',
-            'flow',
-            'global',
-            typeEntity,
-        ];
-        const $logic = $('#logic');
-
-        let availableProperties: string[] = [];
-        haServer.init(this, '#node-input-server');
-        haServer.autocomplete('properties', (properties: string[]) => {
-            availableProperties = properties;
-            $('.input-property').autocomplete({
-                source: availableProperties,
-                minLength: 0,
-            });
+        haServer.init(this, '#node-input-server', () => {
+            propertySelector.refreshOptions();
         });
 
-        $logic.editableList({
-            addButton: true,
-            removable: true,
-            height: 'auto',
-            addItem: function (container, index, data: Rule) {
-                const $row = $('<div />', {
-                    class: 'editable-list-row',
-                }).appendTo(container);
-                const $row2 = $('<div />', {
-                    class: 'editable-list-row',
-                }).appendTo(container);
-
-                if (!data.hasOwnProperty('logic')) {
-                    data.logic = 'is';
-                }
-
-                $('<span />', {
-                    text: 'Property',
-                    style: 'padding-right: 47px;',
-                }).appendTo($row);
-                const $property = $('<input />', {
-                    type: 'text',
-                    class: 'input-property',
-                    style: 'margin-left: 5px;',
-                })
-                    .appendTo($row)
-                    .val(data.property);
-
-                $property.autocomplete({
-                    source: availableProperties,
-                    minLength: 0,
-                });
-
-                const $logicField = $('<select/>', {
-                    style: 'margin-right: 5px;width: auto;',
-                })
-                    .appendTo($row2)
-                    .on('change', function () {
-                        const $this = $(this);
-                        const val = $this.val() as string;
-                        let types = defaultTypes;
-
-                        $property.prop('disabled', val === 'jsonata');
-
-                        switch (val) {
-                            case 'is':
-                            case 'is_not':
-                                break;
-                            case 'lt':
-                            case 'lte':
-                            case 'gt':
-                            case 'gte':
-                                types = [
-                                    'num',
-                                    'jsonata',
-                                    'msg',
-                                    'flow',
-                                    'global',
-                                    typeEntity,
-                                ];
-                                break;
-                            case 'includes':
-                            case 'does_not_include':
-                            case 'starts_with':
-                            case 'in_group':
-                                types = [
-                                    'str',
-                                    'jsonata',
-                                    'msg',
-                                    'flow',
-                                    'global',
-                                    typeEntity,
-                                ];
-                                break;
-                            case 'jsonata':
-                                types = ['jsonata'];
-                                break;
-                        }
-                        $value.typedInput('types', types);
-                    });
-
-                for (const d in operators) {
-                    $logicField.append(
-                        $('<option></option>')
-                            .val(operators[d].value)
-                            .text(operators[d].text),
-                    );
-                }
-
-                const $value = $('<input />', {
-                    class: 'input-value',
-                    type: 'text',
-                    style: 'width: 70%;',
-                })
-                    .appendTo($row2)
-                    .val(data.value);
-                $value.typedInput({ types: defaultTypes });
-
-                $value.typedInput('type', data.valueType);
-                $logicField.val(data.logic).trigger('change');
-            },
+        const propertySelector = new PropertySelector({
+            element: '#conditions-list',
+            types: [
+                PropertySelectorType.State,
+                PropertySelectorType.Device,
+                PropertySelectorType.Area,
+                PropertySelectorType.Floor,
+                PropertySelectorType.Label,
+            ],
+        });
+        this.rules.forEach((rule) => {
+            propertySelector.addId(rule);
         });
 
-        $logic.editableList('addItems', this.rules);
         $('#node-input-outputLocation').typedInput({
-            types: ['msg', 'flow', 'global'],
+            types: [
+                TypedInputTypes.Message,
+                TypedInputTypes.Flow,
+                TypedInputTypes.Global,
+            ],
             typeField: '#node-input-outputLocationType',
         });
 
@@ -242,31 +134,7 @@ const GetEntitiesEditor: EditorNodeDef<GetEntitiesEditorNodeProperties> = {
         insertSocialBar('get-entities');
     },
     oneditsave: function () {
-        const rules = $('#logic').editableList('items');
-
-        this.rules = [];
-
-        // eslint-disable-next-line @typescript-eslint/no-this-alias
-        const self = this;
-        rules.each(function () {
-            const $rule = $(this);
-            const inputProperty =
-                ($rule.find('.input-property').val() as string) ?? '';
-            const selectLogic = ($rule.find('select').val() as string) ?? '';
-            const inputValue =
-                ($rule.find('.input-value').typedInput('value') as string) ??
-                '';
-            const inputValueType = $rule
-                .find('.input-value')
-                .typedInput('type');
-
-            self.rules.push({
-                property: inputProperty,
-                logic: selectLogic,
-                value: inputValue,
-                valueType: inputValueType,
-            });
-        });
+        this.rules = getRules('#conditions-list');
     },
 };
 

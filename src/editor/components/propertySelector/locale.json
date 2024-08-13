@@ -1,0 +1,24 @@
+{
+  "home-assistant": {
+    "component": {
+      "property-selector": {
+        "label": {
+          "add-button": {
+            "areaRegistry": "add area",
+            "deviceRegistry": "add device",
+            "floorRegistry": "add floor",
+            "labelRegistry": "add label",
+            "stateObject": "add entity"
+          },
+          "areaRegistry_property": "Area Property",
+          "copy": "Copy ID",
+          "delete": "Delete ID",
+          "deviceRegistry_property": "Device Property",
+          "floorRegistry_property": "Floor Property",
+          "labelRegistry_property": "Label Property",
+          "stateObject_property": "Entity Property"
+        }
+      }
+    }
+  }
+}

@@ -7,3 +7,11 @@ export enum IdSelectorType {
     Substring = 'substring',
     Regex = 'regex',
 }
+
+export enum PropertySelectorType {
+    Floor = 'floorRegistry',
+    Area = 'areaRegistry',
+    Device = 'deviceRegistry',
+    State = 'stateObject',
+    Label = 'labelRegistry',
+}

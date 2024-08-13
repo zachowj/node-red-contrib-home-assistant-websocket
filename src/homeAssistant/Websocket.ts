@@ -554,28 +554,32 @@ export default class Websocket {
         this.#emitEvent('ha_client:close');
     }
 
-    getAreas(areaId: string): HassArea;
+    getAreas(areaId: string): HassArea | undefined;
     getAreas(): HassAreas;
     getAreas(areaId?: unknown): unknown {
-        if (areaId) {
-            return cloneDeep(
-                this.areas.find((area) => area.area_id === areaId),
-            );
+        if (typeof areaId === 'string') {
+            this.getArea(areaId);
         }
 
         return this.areas;
     }
 
-    getDevices(deviceId: string): HassDevice;
+    getArea(areaId: string): HassArea | undefined {
+        return cloneDeep(this.areas.find((area) => area.area_id === areaId));
+    }
+
+    getDevices(deviceId: string): HassDevice | undefined;
     getDevices(): HassDevices;
     getDevices(deviceId?: unknown): unknown {
-        if (deviceId) {
-            return cloneDeep(
-                this.devices.find((device) => device.id === deviceId),
-            );
+        if (typeof deviceId === 'string') {
+            this.getDevice(deviceId);
         }
 
         return this.devices;
+    }
+
+    getDevice(deviceId: string): HassDevice | undefined {
+        return cloneDeep(this.devices.find((device) => device.id === deviceId));
     }
 
     async getDeviceActions(deviceId?: string): Promise<HassDeviceActions> {
@@ -635,15 +639,51 @@ export default class Websocket {
     }
 
     getEntities(): HassEntityRegistryEntry[];
-    getEntities(entityId?: string): HassEntityRegistryEntry;
+    getEntities(entityId?: string): HassEntityRegistryEntry | undefined;
     getEntities(entityId?: unknown): unknown {
-        if (entityId) {
-            return cloneDeep(
-                this.entities.find((entity) => entity.entity_id === entityId),
-            );
+        if (typeof entityId === 'string') {
+            this.getEntity(entityId);
         }
 
-        return this.entities;
+        return cloneDeep(this.entities);
+    }
+
+    getEntity(entityId: string): HassEntityRegistryEntry | undefined {
+        return cloneDeep(
+            this.entities.find((entity) => entity.entity_id === entityId),
+        );
+    }
+
+    getFloors(floorId: string): HassFloor | undefined;
+    getFloors(): HassFloor[];
+    getFloors(floorId?: unknown): unknown {
+        if (typeof floorId === 'string') {
+            this.getFloors(floorId);
+        }
+
+        return cloneDeep(this.floors);
+    }
+
+    getFloor(floorId: string): HassFloor | undefined {
+        return cloneDeep(
+            this.floors.find((floor) => floor.floor_id === floorId),
+        );
+    }
+
+    getLabels(labelId: string): HassLabel | undefined;
+    getLabels(): HassLabel[];
+    getLabels(labelId?: unknown): unknown {
+        if (typeof labelId === 'string') {
+            this.getLabels(labelId);
+        }
+
+        return cloneDeep(this.labels);
+    }
+
+    getLabel(labelId: string): HassLabel | undefined {
+        return cloneDeep(
+            this.labels.find((label) => label.label_id === labelId),
+        );
     }
 
     getStates(): HassEntities;

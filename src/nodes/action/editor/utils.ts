@@ -1,4 +1,5 @@
 import { HassServices } from 'home-assistant-js-websocket';
+
 import { VirtualSelectOption } from '../../../types/virtual-select';
 
 export function getNormalizedDomainServices(): string[] {

@@ -27,9 +27,15 @@ export enum ComparatorType {
     Includes = 'includes',
     DoesNotInclude = 'does_not_include',
     Contains = 'cont',
+    DoesNotContain = 'does_not_cont',
     StartsWith = 'starts_with',
     InGroup = 'in_group',
     JSONata = 'jsonata',
+    IsNull = 'is_null',
+    IsNotNull = 'is_not_null',
+    IsTrue = 'is_true',
+    IsFalse = 'is_false',
+    Regex = 'regex',
 }
 
 export enum DeviceCapabilityType {
