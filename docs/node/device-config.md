@@ -1,5 +1,7 @@
 # Device Config
 
+The Device Config node is used for configuring devices that have been added to Home Assistant. It allows you to set up and manage device-specific settings and options within Node-RED, ensuring that your automations can correctly interact with your devices.
+
 ## Configuration
 
 ### Name

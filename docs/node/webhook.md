@@ -1,6 +1,6 @@
 # Webhook
 
-Outputs the data received from the created webhook in Home Assistant
+The Webhook node outputs data received from a created webhook in Home Assistant. Webhooks are a way to receive data or trigger automations from external sources, and this node allows you to integrate those triggers into your Node-RED flows.
 
 ::: warning
 _Needs [Custom Integration](https://github.com/zachowj/hass-node-red) installed

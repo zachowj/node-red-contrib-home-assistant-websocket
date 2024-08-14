@@ -1,6 +1,6 @@
 # Entity Config
 
-Home Assistant entity config
+The Entity Config node provides configuration options for the different entity type nodes within Node-RED. It’s used to set up and manage the properties and settings for entities, ensuring they behave as expected within your automations and Home Assistant environment.
 
 ## Configuration
 

@@ -1,6 +1,6 @@
 # Render Template
 
-Can either set the template in the node configuration or pass in the `msg.template` property of the incoming message. Passing template via `msg.template` will override the template string set in node configuration.
+The Render Template node allows you to render templates based on input data. Templates in Home Assistant are powerful tools for dynamically generating text or values based on the state of entities or other variables. This node sends the template to Home Assistant for rendering and outputs the result.
 
 ::: tip NOTE:
 The node will output any Home Assistant API errors for catching with the 'catch-all'

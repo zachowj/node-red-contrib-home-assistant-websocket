@@ -5,7 +5,7 @@ in Home Assistant for this node to function_
 
 # Switch
 
-Creates a switch in Home Assistant which can be manipulated from this node.
+The Switch node creates a switch entity within Home Assistant that can be controlled from Node-RED. This node also allows a flow to be started from a service call, making it a versatile tool for both controlling devices and triggering automations.
 
 ## Configuration
 

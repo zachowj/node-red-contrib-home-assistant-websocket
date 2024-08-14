@@ -5,7 +5,7 @@ in Home Assistant for this node to function_
 
 # Number
 
-Creates a number in Home Assistant which can be manipulated from this node.
+The Number node creates a number entity in Home Assistant that can be manipulated from within Node-RED. This entity type is typically used to represent numeric values that can be adjusted, such as a thermostat setting or a brightness level for lights.
 
 ## Configuration
 

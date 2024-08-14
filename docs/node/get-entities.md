@@ -1,6 +1,6 @@
 # Get Entities
 
-Retrieve entities based on specific search criteria, such as labels, floors, areas, devices, and entity properties. This node can output the entities in various formats, including an array, a count of the entities, a random entity, or as separate messages for each entity.
+The Get Entities node retrieves entities based on specific search criteria, with three different output options. This node is useful for filtering and finding entities that match certain conditions, such as all lights that are currently on, or sensors reporting a specific range of values.
 
 ## Configuration
 

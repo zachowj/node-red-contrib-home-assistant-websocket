@@ -1,6 +1,6 @@
 # Poll State
 
-Polls for the state at regular intervals, optionally also outputting at the start and when the state changes. Useful for either alert for non-communicating devices (time since change > 1 day for example) or dashboard graphs with consistent interval charts
+The Poll State node outputs the state of an entity at regular intervals. It can also be configured to trigger at startup and whenever the entity changes state, if desired. This node is useful for regularly checking the status of an entity, ensuring your automations stay up to date with the latest information.
 
 ## Configuration
 

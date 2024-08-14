@@ -1,6 +1,6 @@
 # Sentence
 
-A sentence trigger fires when [Assist](https://www.home-assistant.io/voice_control/) matches a sentence from a voice assistant using the default [conversation agent](https://www.home-assistant.io/integrations/conversation/).
+The Sentence node triggers when the Home Assistant [Assist](https://www.home-assistant.io/voice_control/) feature matches a sentence from a voice assistant using the default [conversation agent](https://www.home-assistant.io/integrations/conversation/). This node is used for voice control integrations, allowing specific voice commands to trigger automations within Node-RED.
 
 Sentences are allowed to use some basic template syntax. Check Home Assistant [documentation](https://www.home-assistant.io/docs/automation/trigger/#sentence-trigger) for more information.
 

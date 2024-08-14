@@ -1,5 +1,7 @@
 # API
 
+The API node provides access to all points of the Home Assistant WebSocket and HTTP API. This enables you to interact programmatically with Home Assistant, sending and receiving data through these protocols. It’s a powerful tool for integrating third-party systems, custom automations, or advanced control within Node-RED, offering full access to Home Assistant's core functionalities.
+
 ## Config
 
 ### Protocol <Badge text="required"/>

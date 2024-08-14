@@ -1,6 +1,6 @@
 # Zone
 
-Outputs when one of the configured entities enter or leaves one of the defined zones.
+The Zone node outputs data when a configured entity enters or leaves one of the defined zones in Home Assistant. Zones are geographical areas you define in Home Assistant, and this node can trigger automations based on whether entities (like phones or trackers) enter or exit these zones.
 
 ## Configuration
 

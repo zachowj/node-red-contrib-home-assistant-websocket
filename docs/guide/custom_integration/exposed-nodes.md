@@ -1,36 +1,42 @@
 # Exposed Nodes
 
-## Available to all event nodes
+## Nodes Available for Exposure
 
-[Events: all](../../node/events-all.md), [events:
-state](../../node/events-state.md), [trigger:
-state](../../node/trigger-state.md), and [poll state](../../node/poll-state.md) nodes
-will have the option to be exposed to Home Assistant, and when enabled, it will
-show up in Home Assistant as a switch. Turning on and off these switches will
-disable/enable the nodes in Node-RED. This should help people who find
-themselves having to make input_booleans in HA to enable/disable flows. This is a much cleaner way to do it.
+The following nodes can be exposed to Home Assistant, appearing as switches that can be toggled to enable or disable them in Node-RED:
 
-## Trigger an exposed event node from a service call `nodered.trigger`
+- [Events: all](../../node/events-all.md)
+- [Device](../../node/device.md)
+- [Events: state](../../node/events-state.md)
+- [Poll State](../../node/poll-state.md)
+- [Sentence](../../node/sentence.md)
+- [Tag](../../node/tag.md)
+- [Time](../../node/time.md)
+- [Trigger: state](../../node/trigger-state.md)
+- [Webhook](../../node/webhook.md)
+- [Zone](../../node/zone.md)
 
-Exposed nodes can be triggered from a service call. The service call is
-`nodered.trigger` and it takes the following data properties:
+This feature provides a cleaner alternative to creating `input_booleans` in Home Assistant for controlling flow activation.
 
-### entity_id
+## Triggering Exposed Nodes via `nodered.trigger`
 
-- Required
+Exposed nodes can be activated using the `nodered.trigger` service call with the following parameters:
 
-The entity_id of the exposed node to trigger. This is the entity_id of the node in Home Assistant. For example, if the entity_id of the node in Home Assistant is `switch.my_node`, then the entity_id to use in the service call is `switch.my_node`.
+### `entity_id`
 
-### output_path
+- **Required**
+- The `entity_id` of the exposed node to be triggered, as seen in Home Assistant. For example, use `switch.my_node` if that is the node's `entity_id`.
 
-- Optional
-- Defaults to 0
-- Can be a comma separated list of output paths
+### `output_path`
 
-The output path of the node to send the message through. When this value is set to 0, the message will be sent through all output paths. If this value is set to 1, the message will be sent through the first output path. When this value is set to 2, the message will be sent through the second output path, and so on.
+- **Optional**
+- Default: `0`
+- Can be a comma-separated list of output paths.
+- Determines which output path(s) the message will be sent through:
+  - `0`: Send through all output paths.
+  - `1`: Send through the first output path.
+  - `2`: Send through the second output path, and so on.
 
-### message
+### `message`
 
-- Required
-
-The message the triggered node will output. This can be any valid JSON object. For example, if the message is `{ "payload": "hello world" }`, then the message will be sent to the node as `msg.payload` with the value of `hello world`.
+- **Required**
+- The message to be sent when triggering the node. This should be a valid JSON object. For example, `{ "payload": "hello world" }` would set `msg.payload` to `hello world`.

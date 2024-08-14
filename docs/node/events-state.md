@@ -1,6 +1,6 @@
 # Events: state
 
-Listens for state changes of entities from Home Assistant.
+The Events: State node listens for state changes of entities within Home Assistant. It triggers a flow in Node-RED whenever an entity's state changes, allowing you to automate responses to various conditions, like turning on lights when motion is detected or sending a notification when a door is opened.
 
 ## Configuration:
 

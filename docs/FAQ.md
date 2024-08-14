@@ -4,43 +4,31 @@ sidebar: auto
 
 # FAQ
 
-## What is what
+## What is What?
 
-[node-red-contrib-home-assistant-websocket](index.md) is a package that contains a set of nodes in Node-RED that interface with Home Assistant. It uses the Home Assistant WebSocket API to communicate with Home Assistant.
+- [node-red-contrib-home-assistant-websocket](index.md): A Node-RED package containing nodes that interface with Home Assistant using the WebSocket API.
 
-[hass-node-red](https://github.com/zachowj/hass-node-red) is a Home Assistant custom [integration](https://www.home-assistant.io/docs/glossary/#integration). It extends the Home Assistant WebSocket API to allow Node-RED to do more with Home Assistant, such as creating sensors, buttons, and switches in Home Assistant from Node-RED. Typically, it is installed via [HACS](https://hacs.xyz/) but can be installed [manually](https://github.com/zachowj/hass-node-red?tab=readme-ov-file#manual).
+- [hass-node-red](https://github.com/zachowj/hass-node-red): A custom Home Assistant integration that extends the WebSocket API, allowing Node-RED to create sensors, buttons, and switches in Home Assistant. It is usually installed via [HACS](https://hacs.xyz/) but can also be installed [manually](https://github.com/zachowj/hass-node-red?tab=readme-ov-file#manual).
 
-[Node-RED Home Assistant Community Add-on](https://github.com/hassio-addons/addon-node-red) is a Home Assistant [Add-on](https://www.home-assistant.io/docs/glossary/#add-on) that runs Node-RED with the [Home Assistant nodes](https://github.com/zachowj/node-red-contrib-home-assistant-websocket) pre-installed.
+- [Node-RED Home Assistant Community Add-on](https://github.com/hassio-addons/addon-node-red): A Home Assistant Add-on that runs Node-RED with Home Assistant nodes pre-installed.
 
-[Node-RED](https://nodered.org) is a flow-based development tool for visual programming developed originally by IBM for wiring together hardware devices, APIs, and online services as part of the Internet of Things.
+- [Node-RED](https://nodered.org): A flow-based development tool for visual programming, originally developed by IBM, used to wire together hardware devices, APIs, and online services as part of the Internet of Things.
 
-[Home Assistant](https://www.home-assistant.io) is an open source home automation that puts local control and privacy first.
+- [Home Assistant](https://www.home-assistant.io): An open-source home automation platform focused on local control and privacy.
 
-## Entities not showing in the autocomplete dropdown
+## Entities Not Showing in the Autocomplete Dropdown
 
-1. Make sure you have at least deployed once after adding a server config.
-2. There sometimes is a caching issue. Caching can be disabled for autocomplete
-   results in the server config node and restarting Node-RED.
+1. Ensure you've deployed at least once after adding a server configuration.
+2. If there's a caching issue, disable caching for autocomplete results in the server config node, and restart Node-RED.
 
-## Entity could not be found in cache for entity_id: ???
+## Entity Could Not Be Found in Cache for entity_id: ???
 
-If your flow runs before Node-RED has had a chance to connect to Home Assistant
-and retrieve the latest state information. The cache will be empty and this
-error is thrown.
+This error occurs if your flow runs before Node-RED connects to Home Assistant and retrieves the latest state information, leaving the cache empty.
 
-Home Assistant Add-on users have a 5-second delay between connection attempts because of
-how the supervisor proxy works and the high CPU usage it can cause, [Issue
-#76](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/76#issuecomment-453877333).
-The delay can be turned off in the server config.
+For Home Assistant Add-on users, there is a 5-second delay between connection attempts due to the supervisor proxy, which can cause high CPU usage. This delay can be turned off in the server config ([Issue #76](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/76#issuecomment-453877333)).
 
-## Why do some of my nodes have a yellow font?
+## Why Do Some of My Nodes Have a Yellow Font?
 
-Starting with version 0.12.0 individual nodes on the workspace will now have a
-version number associated with them. This will allow changes to be made to the
-structure of nodes without affecting all nodes of that type until you edit them.
-Legacy nodes will have a yellow font until the node has been upgraded to the
-current version.
+Starting with version 0.12.0, individual nodes in the workspace will have a version number associated with them, allowing structural changes without affecting all nodes of that type until edited. Nodes with legacy versions will display yellow font until upgraded.
 
-Just because the text is yellow on a node doesn’t mean you need to update it.
-It will continue to function just as it has and the next time you modify the node
-it will be upgraded then.
+Yellow text on a node doesn’t mean it needs immediate updating; it will continue functioning as before and will be upgraded the next time you modify it.

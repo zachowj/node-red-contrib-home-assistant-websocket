@@ -5,7 +5,7 @@ in Home Assistant for this node to function_
 
 # Binary Sensor
 
-Creates a binary sensor in Home Assistant which can be manipulated from this node.
+This node allows you to create a binary sensor entity within Home Assistant that can be controlled directly from Node-RED. A binary sensor is a type of entity that has only two possible states: typically "on" or "off". It can represent various real-world conditions, such as whether a door is open or closed, or if motion is detected.
 
 ## Configuration
 

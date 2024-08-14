@@ -12,7 +12,7 @@ export default defineUserConfig({
     base: '/node-red-contrib-home-assistant-websocket/',
     title: 'node-red-contrib-home-assistant-websocket',
     description:
-        'Node-RED integration with Home Assistant through the WebSocket and HTTP API',
+        'A suite of nodes that seamlessly integrates Home Assistant with Node-RED',
     head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
     plugins: [
         googleAnalyticsPlugin({ id: 'G-T0F3RKFVF3' }),
@@ -48,8 +48,12 @@ export default defineUserConfig({
             { text: 'Cookbook', link: '/cookbook/' },
             { text: 'Scrubber', link: '/scrubber/' },
             {
-                text: 'Forums',
+                text: 'Discussions',
                 link: 'https://github.com/zachowj/node-red-contrib-home-assistant-websocket/discussions',
+            },
+            {
+                text: 'Discord',
+                link: 'https://discord.gg/ktpFC2SK',
             },
         ],
         sidebar: {

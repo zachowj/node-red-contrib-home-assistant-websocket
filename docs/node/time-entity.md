@@ -5,7 +5,7 @@ in Home Assistant for this node to function_
 
 # Time
 
-Creates a time entity in Home Assistant which can be manipulated from this node or Home Assistant.
+The Time Entity node creates a time entity within Home Assistant that can be controlled from Node-RED. This entity type is used to represent time values, such as a specific time of day or a duration, and can be used to trigger automations based on time-related conditions.
 
 ## Configuration
 

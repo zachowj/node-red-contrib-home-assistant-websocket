@@ -1,11 +1,6 @@
 # Trigger: state
 
-Much like the [events: state](./events-state.md) however, provides some advanced functionality
-around common automation use cases.
-
-An advanced version of the `events: state` node
-
-<!-- TODO: Needs a total rework -->
+The Trigger: State node functions similarly to the State Changed Node but provides advanced functionality for common automation use cases. This node allows for more complex conditions and actions based on entity state changes, making it a powerful tool for creating detailed and nuanced automations.
 
 ## Configuration
 

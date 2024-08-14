@@ -1,6 +1,6 @@
 # Events: calendar
 
-Outputs calendar item events similar to the calendar automation in Home Assistant
+The Calendar node listens for events from Home Assistant's calendar integration. It triggers a flow in Node-RED when a calendar event starts or ends, allowing you to automate actions based on your calendar schedule.
 
 ## Configuration:
 

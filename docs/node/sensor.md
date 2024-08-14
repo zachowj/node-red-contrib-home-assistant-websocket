@@ -5,7 +5,7 @@ in Home Assistant for this node to function_
 
 # Sensor
 
-Creates a sensor in Home Assistant which can be manipulated from this node.
+The Sensor node creates a sensor entity within Home Assistant that is controlled from Node-RED. Sensors are entities that report data from various sources, such as temperature, humidity, or motion detection. This node allows you to create and manage such sensors directly from your Node-RED flows.
 
 ## Configuration
 

@@ -1,6 +1,6 @@
 # Time
 
-A node that can be scheduled to trigger at a future date and time from a Home Assistant entity.
+The Time node can be scheduled to trigger at a specific future date and time, based on a Home Assistant entity. This node is useful for creating time-based automations, such as triggering a notification or alarm at a specific hour.
 
 ## Configuration
 

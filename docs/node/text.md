@@ -5,7 +5,7 @@ in Home Assistant for this node to function_
 
 # Text
 
-Creates a text entity in Home Assistant which can be manipulated from this node.
+The Text node creates a text entity within Home Assistant that can be manipulated from Node-RED. Text entities are used to store and display text values, and this node allows you to dynamically update and control these values within your automations.
 
 ## Configuration
 

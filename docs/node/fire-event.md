@@ -1,6 +1,6 @@
 # Fire Event
 
-Fire an event to Home Assistants event bus
+The Fire Event node allows you to fire an event on the Home Assistant event bus. This can be used to trigger automations or notify other parts of the system about specific occurrences. It’s a way to programmatically generate events that other nodes or systems can listen to and react upon.
 
 ## Configuration
 

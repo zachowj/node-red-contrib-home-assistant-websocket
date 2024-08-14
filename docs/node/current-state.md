@@ -1,6 +1,6 @@
 # Current State
 
-Returns the current state of an entity. Useful for using conditional logic to automation flows.
+This node is used to fetch the last known state of any entity within Home Assistant when it receives an input. It’s useful for making decisions based on the current status of entities, such as checking if a light is already on before turning it off, or determining the temperature reading before adjusting the thermostat.
 
 ## Configuration
 

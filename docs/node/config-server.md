@@ -1,6 +1,6 @@
 # Server Config
 
-Home Assistant connection configuration
+The Server Config node is used for configuring the connection to Home Assistant. This node manages the details of how Node-RED communicates with your Home Assistant instance, including server URL, authentication, and other connection settings.
 
 ## Config
 

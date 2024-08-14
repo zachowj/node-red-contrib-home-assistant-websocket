@@ -5,7 +5,7 @@ in Home Assistant for this node to function_
 
 # Select
 
-Creates a select entity in Home Assistant which can be manipulated from this node.
+The Select node creates a select entity in Home Assistant that can be manipulated from Node-RED. This type of entity typically represents a dropdown menu or a list of options from which the user can choose, and it can be used to control or adjust settings within your automations.
 
 ## Configuration
 

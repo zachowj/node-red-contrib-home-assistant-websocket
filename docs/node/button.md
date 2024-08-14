@@ -5,7 +5,7 @@ in Home Assistant for this node to function_
 
 # Button
 
-Creates a [button entity](https://developers.home-assistant.io/docs/core/entity/button) in Home Assistant that will trigger the flow when pressed.
+The Button node creates a button entity within Home Assistant that, when pressed, triggers a flow in Node-RED. This is useful for manual triggers within automations, allowing users to start an automation sequence directly from the Home Assistant interface with a simple click.
 
 ## Outputs
 

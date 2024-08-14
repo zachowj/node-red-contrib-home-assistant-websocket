@@ -1,6 +1,6 @@
 # Action
 
-Sends a request to Home Assistant to perform an action e.g. `light.turn_on`, `input_select.select_option`, etc.
+This node allows you to send a request to Home Assistant to perform specific actions. These actions could include tasks such as turning on a light (`light.turn_on`), selecting an option from a dropdown menu (`input_select.select_option`), or any other service call supported by Home Assistant. It serves as a bridge between Node-RED and Home Assistant, enabling automation flows to directly control devices or entities in your smart home setup.
 
 ::: tip Helpful Examples
 [Action Tips and Tricks](/guide/action.html)

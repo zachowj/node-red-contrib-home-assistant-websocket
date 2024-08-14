@@ -1,7 +1,6 @@
 # Events: all
 
-Listens for all types of events from Home Assistant with the ability to filter
-by event type.
+This node listens for all types of events from Home Assistant, with the ability to filter by event type. It’s a powerful tool for triggering automations based on specific events occurring within Home Assistant, such as state changes, sensor readings, or user interactions.
 
 ## Configuration
 

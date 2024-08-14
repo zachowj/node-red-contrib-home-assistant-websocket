@@ -1,8 +1,6 @@
 # Wait Until
 
-When an input is received the node will wait until the condition is met or the
-timeout occurs then will pass on the last received message. Any new input will
-reset the timeout timer.
+The Wait Until node waits for a specific condition to be met or for a timeout to occur before passing on the last received message. This node is useful for pausing the flow of automation until certain criteria are met, such as waiting for a door to close before turning off the lights.
 
 ## Configuration
 

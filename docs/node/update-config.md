@@ -1,6 +1,6 @@
 # Update Config
 
-This node allows you to update the Home Assistant configuration of a node from within a flow. This is useful if you want to change the configuration of a node based on the state of an entity or some other event.
+The Update Config node allows you to update the configuration of entities within Home Assistant. This node is used for dynamically adjusting the settings of entities, ensuring they stay in sync with your automation requirements.
 
 ## Configuration
 

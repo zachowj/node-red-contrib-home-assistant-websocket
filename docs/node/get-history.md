@@ -1,6 +1,6 @@
 # Get History
 
-Fetches history from Home Assistant (all history for the past day by default)
+The Get History node fetches the history of Home Assistant entities based on input criteria. This can be used to analyze past states or events, such as tracking temperature changes over time or reviewing when a door was last opened. It’s useful for creating more complex automations based on historical data.
 
 ## Configuration
 

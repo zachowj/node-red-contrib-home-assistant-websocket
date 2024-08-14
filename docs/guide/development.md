@@ -1,79 +1,92 @@
 # Development
 
-Also see [CONTRIBUTING.md](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/blob/main/CONTRIBUTING.md).
+For detailed contributing guidelines, refer to [CONTRIBUTING.md](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/blob/main/CONTRIBUTING.md).
 
-## Environment setup
+## Environment Setup
 
-Here are the steps to successfully setup your development environment to contribute to this project
+Follow these steps to set up your development environment for contributing to this project:
 
-### Setup using the VS Code dev container
+### Using the VS Code Dev Container
 
-This will set up a docker container with all the required tools and dependencies to get started.
+This method sets up a Docker container with all required tools and dependencies.
 
-1. Go to the [Node-RED Home Assistant](https://github.com/zachowj/node-red-contrib-home-assistant-websocket) repository and fork it.
+1. Fork the [Node-RED Home Assistant repository](https://github.com/zachowj/node-red-contrib-home-assistant-websocket).
 
-1. Clone your forked repository to your local machine.
+2. Clone your forked repository:
 
    ```sh
    git clone https://github.com/<GITHUB_USER_NAME>/node-red-contrib-home-assistant-websocket
    ```
 
-1. Open the project in VS Code.
+3. Open the project in VS Code.
 
-1. Install the [Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension.
+4. Install the [Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension.
 
-1. Click the green button in the lower-left corner of the window that says "Reopen in Container".
+5. Click the green button in the lower-left corner labeled "Reopen in Container."
 
-1. Wait for the container to build and start.
+6. Wait for the container to build and start.
 
-1. Open a terminal in VS Code and run `npm run dev` to start the development server.
+7. Open a terminal in VS Code and run `npm run dev` to start the development server.
 
-### Setup locally
+### Local Setup
 
-1. Go to the [Node-RED Home Assistant](https://github.com/zachowj/node-red-contrib-home-assistant-websocket) repository and fork it.
+1. Fork the [Node-RED Home Assistant repository](https://github.com/zachowj/node-red-contrib-home-assistant-websocket).
 
-1. Clone your forked repository to your local machine.
+2. Clone your forked repository:
 
    ```sh
-   git clone https://github.com/zachowj/node-red-contrib-home-assistant-websocket
+   git clone https://github.com/<GITHUB_USER_NAME>/node-red-contrib-home-assistant-websocket
    ```
 
-1. create an npm link to your forked project. This will also build this project's dependencies.
+3. Navigate to the project directory and create an npm link, which also builds the project's dependencies:
 
    ```sh
    cd node-red-contrib-home-assistant-websocket
    npm link
    ```
 
-1. [Install](https://nodered.org/docs/getting-started/local) Node-RED on localhost, assuming we install it on ~/dev directory (you can install it in another location as you wish)
+4. [Install Node-RED](https://nodered.org/docs/getting-started/local) locally. This example assumes installation in the `~/dev` directory:
 
    ```sh
    cd ~/dev/node-red
    npm install -g --unsafe-perm node-red
    ```
 
-1. Install your fork project into local Node-RED using npm link:
+5. Link your forked project to the local Node-RED installation:
 
    ```sh
    cd ~/dev/node-red
    npm link node-red-contrib-home-assistant-websocket
    ```
 
-1. Starting Node-RED on localhost
+6. Start Node-RED:
 
    ```sh
    cd ~/dev/node_modules/node-red
    npm run dev
    ```
 
-### Accessing
+### Accessing the Development Server
 
-After running `npm run dev` Node-RED will be running on ports 1880 and 3000. You can access the development server at http://localhost:1880 or http://localhost:3000 either port can be used. On port 3000 browser-sync is running and will reload the browser when changes are made to the editor source code.
+After running `npm run dev`, Node-RED will be available on ports 1880 and 3000. Access the development server at:
+
+- [http://localhost:1880](http://localhost:1880)
+- [http://localhost:3000](http://localhost:3000)
+
+Port 3000 includes browser-sync, which will automatically reload the browser when changes are made to the editor source code.
 
 ### Linting
 
-This project uses [ESLint](https://eslint.org/) and [Prettier](https://prettier.io/) to lint and format the code. You can run `npm run lint` to lint the code.
+This project uses [ESLint](https://eslint.org/) and [Prettier](https://prettier.io/) for code linting and formatting. Run the following command to lint the code:
+
+```sh
+npm run lint
+```
 
 ### Testing
 
-1. Run `npm run test` to run the tests.
+To run the tests, use:
+
+```sh
+npm run test
+```
