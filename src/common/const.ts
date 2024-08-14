@@ -9,9 +9,9 @@ export enum IdSelectorType {
 }
 
 export enum PropertySelectorType {
-    Floor = 'floorRegistry',
-    Area = 'areaRegistry',
-    Device = 'deviceRegistry',
-    State = 'stateObject',
-    Label = 'labelRegistry',
+    Floor = 'floor_registry',
+    Area = 'area_registry',
+    Device = 'device_registry',
+    State = 'state_object',
+    Label = 'label_registry',
 }
