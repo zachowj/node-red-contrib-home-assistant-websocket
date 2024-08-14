@@ -1,9 +1,6 @@
 {
   "home-assistant": {
     "ui": {
-      "text": {
-        "looking_for_help": "Looking for help?"
-      },
       "migrations": {
         "all_nodes_updated": "Home Assistant nodes have been updated. Deploy to save changes.",
         "button_cancel": "Cancel",
@@ -17,6 +14,11 @@
       "notifications": {
         "attention": "Attention",
         "clipboard_copy": "Copied to clipboard"
+      },
+      "text": {
+        "discussions": "Discussions",
+        "documentation": "Documentation",
+        "looking_for_help": "Looking for help?"
       }
     }
   }
