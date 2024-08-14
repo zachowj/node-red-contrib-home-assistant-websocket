@@ -389,7 +389,7 @@ task('buildEditorFiles', (done) => {
     const html = src([
         'src/nodes/**/*.html',
         `docs/node/*.md`,
-        `!docs/node/README.md`,
+        `!docs/node/index.md`,
     ]).pipe(
         flatmap((stream, file) => {
             const [filename, ext] = file.basename.split('.');
