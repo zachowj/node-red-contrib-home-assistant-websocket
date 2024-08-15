@@ -1,9 +1,11 @@
-# Scrubber
+# Scrubber Tool
 
-## What does this do?
+The Scrubber tool cleans up your exported flow by removing specific references and properties, making it more shareable and user-friendly.
 
-- Makes your exported flow a little more friendly to other users
-- Clears all references to the Home Assistant server
-- Clears `lat`, `lon`, `latitude`, and `longitude` properties from all nodes
+## Key Features
+
+- **User-Friendly Export**: Simplifies your exported flow, making it easier for others to use.
+- **Server Reference Removal**: Eliminates all references to the Home Assistant server.
+- **Location Data Cleanup**: Clears `lat`, `lon`, `latitude`, and `longitude` properties from all nodes.
 
 <scrubber />
