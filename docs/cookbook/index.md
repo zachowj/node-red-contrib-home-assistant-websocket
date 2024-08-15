@@ -4,7 +4,7 @@ Here is a collection of beginner to advanced flows and explanations to help you
 further educate yourself in the world of Home Automation with Node-RED.
 
 - JSONata Examples
-  - [Call Service node](./jsonata/call-service.md)
+  - [Action node](./jsonata/action.md)
   - [Change Node](./jsonata/change-node.md)
   - [Events: state node](./jsonata/events-state.md)
   - [Functions](./jsonata/functions.md)

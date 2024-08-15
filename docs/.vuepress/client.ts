@@ -17,6 +17,10 @@ const redirectRoutes = [
         from: '/guide/call-service.html',
         to: '/guide/action.html',
     },
+    {
+        from: '/cookbook/jsonata/call-service.html',
+        to: '/cookbook/jsonata/action.html',
+    },
 ];
 
 export default defineClientConfig({

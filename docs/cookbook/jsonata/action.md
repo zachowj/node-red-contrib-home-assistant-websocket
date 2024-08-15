@@ -1,4 +1,4 @@
-# Call Service
+# Action Node JSONata Examples
 
 Integrations in Home Assistant provide _service calls_ that can be used, for example, to set target temperature on heaters and air-conditioning units. All service calls can be found and tested within Home Assistant Developer toolbox, and it is also useful to check the integration documentation to identify exactly what is required for a successful service call.
 
@@ -29,11 +29,11 @@ Within the WebSocket node itself, the entity data is accessed using the special 
 
 In JSONata, as well as using message fields or the entity functions, Node-RED provides functions to access environment variables using `$env('ENV_NAME')`. Global context can be read using `$globalContext(name[, store])` and flow context likewise as `$flowContext(name[, store])`.
 
-## JSONata and the _Call Service_ node
+## JSONata and the _Action_ node
 
-For Node-RED flows with a _Call Service_ node there are three locations where the _Data object_ can be defined.
+For Node-RED flows with a _Action_ node there are three locations where the _Data object_ can be defined.
 
-- Directly in the _Call Service_ node UI 'Data' field, using the JSONata option.
+- Directly in the _Action_ node UI 'Data' field, using the JSONata option.
 - In a preceding _Change_ node, passing the Service Call settings in a _msg.payload_ object.
 - In a flow trigger node, such as _Events: state_ node, generated as an output _msg.payload_ object.
 
@@ -49,7 +49,7 @@ Here are three examples, each using JSONata to set the required Data object, and
 
 ### Settings a data property from a Home Assistant entity
 
-**Example:** A _Call Service_ node that sets the target temperature of a climate entity to the current temperature of a sensor entity.
+**Example:** A _Action_ node that sets the target temperature of a climate entity to the current temperature of a sensor entity.
 
 ```
 {
@@ -75,7 +75,7 @@ States from Home Assistant are always strings, and so any calculations must be c
 
 **Example:** A remote with a button that when clicked increases the brightness of a given light by an amount that is set from an input_number inside Home Assistant.
 
-JSONata expression in the _Call Service_ node UI Data field. Nothing special is required as input to this node as all the settings are completed within the node itself.
+JSONata expression in the _Action_ node UI Data field. Nothing special is required as input to this node as all the settings are completed within the node itself.
 
 ```
 {
@@ -91,7 +91,7 @@ JSONata expression in the _Call Service_ node UI Data field. Nothing special is 
 
 **Example:** Set the target temperature (and mode) for air-conditioning unit from the input msg.payload value.
 
-Here a _Change_ node is used to build the msg.payload object required to set the Call Service node parameters, including the nested data field. In a Change node, the special WebSocket `$entity()` and `$entities()` functions are _not_ available, however we can still perform a read from global context using the Node-RED `$globalContext()` function. These Node-RED functions can be used to bring in values from context and environment variables.
+Here a _Change_ node is used to build the msg.payload object required to set the Action node parameters, including the nested data field. In a Change node, the special WebSocket `$entity()` and `$entities()` functions are _not_ available, however we can still perform a read from global context using the Node-RED `$globalContext()` function. These Node-RED functions can be used to bring in values from context and environment variables.
 
 ```
 {
@@ -103,7 +103,7 @@ Here a _Change_ node is used to build the msg.payload object required to set the
 }
 ```
 
-The _Call Service_ node can accept from one to all of the UI parameters in msg.payload, and where given these each take precedence over any UI settings. Default settings can therefore be set in the UI, and can then be over-riden by the input message, including when using settings from _Inject_ nodes as shown in the example.
+The _Action_ node can accept from one to all of the UI parameters in msg.payload, and where given these each take precedence over any UI settings. Default settings can therefore be set in the UI, and can then be over-riden by the input message, including when using settings from _Inject_ nodes as shown in the example.
 
 ### Notification of lights left on when leaving home
 
@@ -131,7 +131,7 @@ The message title uses `$entity().attributes.friendly_name` to add the name of t
 }
 ```
 
-In this example all the parameter setup is performed in the _Events: state_ node, so the _Call Service_ node can accept all the required parameters just from the input msg.payload object.
+In this example all the parameter setup is performed in the _Events: state_ node, so the _Action_ node can accept all the required parameters just from the input msg.payload object.
 
 ## Processing a service call _return_
 
