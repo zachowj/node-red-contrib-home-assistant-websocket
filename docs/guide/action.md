@@ -1,76 +1,75 @@
-# Action Tips and Tricks
+# Action Node Tips and Tricks
 
-## Homeassistant Domain
+## Home Assistant Domain
 
-The `homeassisant` domain can be used with different domains of entities with certain services.
+The `homeassistant` domain is versatile, allowing you to control multiple entities across different domains with various services.
 
-Here's an example of using the `homeassistant` domain to turn off some lights, switches, and everything that can be turned off in the laundry room in a single service call. This can save you from having to have multiple action nodes.
+For example, you can use the `homeassistant` domain to turn off lights, switches, and any other devices in the laundry room with a single action call. This approach reduces the need for multiple action nodes.
 
-![screenshot of a action node using homeassistant domain](./images/call-service_06.png)
+![Screenshot of an action node using the Home Assistant domain](./images/action_06.png)
 
 ## Using Mustache Templates
 
-Mustache templates can be used in the domain, service, and entity id fields. This is useful if you want to set the service based on `msg.payload` or any other message property.
+Mustache templates can be applied in the domain, service, and entity ID fields, which is especially useful for setting the service based on `msg.payload` or other message properties.
 
-Here's an example using [eztimer](https://flows.nodered.org/node/node-red-contrib-eztimer) to set the output of the node to `on` or `off`. Then use that in the action node for which service to use.
+For instance, you can use [eztimer](https://flows.nodered.org/node/node-red-contrib-eztimer) to set the output of a node to `on` or `off`, and then use that output in the action node to determine the service to use.
 
-![screenshot of flow](./images/call-service_01.png)
+![Screenshot of flow](./images/action_01.png)
 
-![screenshot of the action node](./images/call-service_03.png)
+![Screenshot of the action node](./images/action_03.png)
 
-@[code](@examples/guides/call-service/mustache_templates_01.json)
+@[code](@examples/guides/action_node/mustache_templates_01.json)
 
-Mustache templates are also accepted in the data field when their type is set to JSON.
+Mustache templates are also supported in the data field when set to JSON format.
 
-**Also see:**
+**Related Resources:**
 
 - [Mustache Templates](./mustache-templates.md)
 
 ## Targets
 
-The target fields allow you to target areas, devices, and/or entities. Any combination can be used when they are available, some services don't accept areas and devices.
+Target fields allow you to specify areas, devices, and/or entities, either individually or in combination. Note that not all services accept areas and devices.
 
-Mustache templates and environment variables can be used inside each target list.
+Mustache templates and environment variables can be used within each target list.
 
 ## Data Field
 
 ::: tip
-It's recommended to use the JSONata expression, `J: Expression`, for the data field as it has several advantages over JSON.
+For the data field, it’s recommended to use the JSONata expression (`J: Expression`), as it offers several benefits over JSON:
 
 - Handles quotes based on the type of variable
-- Allows the insertion of more complex variables such as arrays and object
-- Mathematical operations are permitted
+- Allows the insertion of complex variables such as arrays and objects
+- Supports mathematical operations
+  :::
 
-:::
+### Inserting a Message Property into a String
 
-### Inserting a message property into a string
+#### Example: Sending a TTS Message When a Door is Opened
 
-#### Sending a TTS message when a door is opened
+![Screenshot of flow](./images/action_04.png)
 
-![screenshot of flow](./images/call-service_04.png)
-
-![screenshot of the action node](./images/call-service_05.png)
+![Screenshot of the action node](./images/action_05.png)
 
 ```json
-{ "message": "The " & data.attributes.friendly_name & " has been opened." }
+{ "message": "The " & data.attributes.friendly_name & " has been opened.", "entity_id": "all" }
 ```
 
-@[code](@examples/guides/call-service/door_sensor_tts.json)
+@[code](@examples/guides/action_node/door_sensor_tts.json)
 
-### Getting a property value of a Home Assistant entity
+### Retrieving a Property Value of a Home Assistant Entity
 
-There's a custom function in JSONata inside Home Assistant nodes that allows the fetching of any property of an HA entity.
+Home Assistant nodes support custom JSONata functions to fetch properties of any HA entity.
 
 - `$entities()` returns all entities in the cache
-- `$entities("entity_id")` returns a single entity from the cache matching the passed in `entity_id`
+- `$entities("entity_id")` returns a single entity from the cache that matches the given `entity_id`
 
-#### Example of getting the friendly name of an entity
+#### Example: Getting the Friendly Name of an Entity
 
 ```json
 { "message": "The " & $entities("binary_sensor.front_door").attributes.friendly_name & " has been opened." }
 ```
 
-#### Example of getting friendly names of all the lights and switches with an `on` state
+#### Example: Getting Friendly Names of All Lights and Switches in an `On` State
 
 ```json
 {
@@ -79,37 +78,41 @@ There's a custom function in JSONata inside Home Assistant nodes that allows the
 }
 ```
 
-### Doing arithmetic
+### Performing Arithmetic Operations
 
-Home Assistant states are represented as strings so to be able to do arithmetic on them in JSONata they will need to be cast to a number first use [`$number()`](https://docs.jsonata.org/numeric-functions#number). Most attributes of entities are in their correct state but it never hurts to be safe and cast them as a number.
+Since Home Assistant states are represented as strings, you need to cast them to numbers in JSONata to perform arithmetic. Use the function [`$number()`](https://docs.jsonata.org/numeric-functions#number) for this purpose. Although most entity attributes are in the correct state, casting them as numbers ensures accuracy.
 
-`$number($entities("sensor.kitchen_lux").state)`
+Example:
 
-#### Adding 3 to the current temperature of a climate entity
+```
+$number($entities("sensor.kitchen_lux").state)
+```
 
-![screenshot of action node](./images/call-service_02.png)
+#### Example: Adding 3 to the Current Temperature of a Climate Entity
+
+![Screenshot of action node](./images/action_02.png)
 
 ```json
 { "temperature": $entities("climate.thermostat").attributes.temperature + 3 }
 ```
 
-### Create a comma-delimited entity id list
+### Creating a Comma-Delimited Entity ID List
 
-Example of getting a list of lights from the get-entities node and then creating an entity id list to turn them off. The entity id field is left blank in this example as it is defined in the data field.
+You can generate an entity ID list by retrieving entities using the get-entities node and then creating a comma-separated list to turn them off. In this example, the entity ID field is left blank as it is defined in the data field.
 
-![screenshot of flow](./images/call-service_07.png)
+![Screenshot of flow](./images/action_07.png)
 
-![screenshot of action node](./images/call-service_08.png)
+![Screenshot of action node](./images/action_08.png)
 
 ```json
 { "entity_id": $join(payload.entity_id, ",") }
 ```
 
-@[code](@examples/guides/call-service/entity_id_list.json)
+@[code](@examples/guides/action_node/entity_id_list.json)
 
-**Also see:**
+**Additional Resources:**
 
-- [Action node](../node/action.md)
+- [Action Node Documentation](../node/action.md)
 - [JSONata Guide](./jsonata.md)
-- [https://docs.jsonata.org](https://docs.jsonata.org)
-- [http://try.jsonata.org](http://try.jsonata.org)
+- [JSONata Documentation](https://docs.jsonata.org)
+- [JSONata Playground](http://try.jsonata.org)

@@ -4,8 +4,8 @@
 
 The following nodes can be exposed to Home Assistant, appearing as switches that can be toggled to enable or disable them in Node-RED:
 
-- [Events: all](../../node/events-all.md)
 - [Device](../../node/device.md)
+- [Events: all](../../node/events-all.md)
 - [Events: state](../../node/events-state.md)
 - [Poll State](../../node/poll-state.md)
 - [Sentence](../../node/sentence.md)
