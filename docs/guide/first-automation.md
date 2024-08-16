@@ -1,67 +1,56 @@
 # First Automation
 
-For your first automation, we'll start simple and set up an automation to turn on and off a
-light when the sun comes up and goes down.
+For your first automation, let's keep it simple by setting up a light to turn on when the sun sets and off when it rises.
 
-This example will use the state, `below_horizon`/`above_horizon`, of the `sun.sun` entity from
-Home Assistant to trigger the light.
+This example uses the `sun.sun` entity in Home Assistant, which has states `below_horizon` and `above_horizon`, to trigger the light.
 
-## Events: state
+## Events: State Node
 
-Place an Events: state node onto the workspace and double click on it to edit.
+1. Drag an **Events: state** node onto the workspace and double-click it to edit.
 
 ![screenshot](./images/first-automation_01.png)
 
-## Entity ID
+## Entity ID Configuration
 
-We'll add `sun.sun` to the **Entity ID** field and leave the entity id filter type
-to `Exact` as we only want to match one entity.
+2. In the **Entity ID** field, enter `sun.sun`. This is the entity that will trigger the automation.
 
-## If State
+## If State Condition
 
-**If State** is a conditional that will be checked against the state of the entity
-when it triggers the node. If the condition is found to be `true` the message
-will be sent out the top output and if found to be `false` it will be sent out
-the bottom output. If no conditional value is set there will only be one output
-and all messages will flow through it.
+3. The **If State** condition checks the entity's state when the node is triggered. If the condition is `true`, the message will be sent through the top output; if `false`, it will be sent through the bottom output. If no condition is set, all messages will pass through a single output.
 
-For this example we will set the **If State** to `above_horizon`.
+   For this example, set the **If State** to `above_horizon`.
 
 ![screenshot](./images/first-automation_02.png)
 
-## Call Service
+## Action Node
 
-Now that the trigger is set up it's time to set up the action. Most communication
-done with Home Assistant will come in the forms of services calls using the Call
-Service Node.
+4. Now, let's set up the actions that will be triggered. Most Home Assistant interactions are done through action calls, which we'll handle with the **Action** node.
 
-Drag two Call Service nodes onto the workspace and connect them to each of the
-outputs from the Events: state node.
+5. Drag two **Action** nodes onto the workspace and connect them to the outputs of the **Events: state** node.
 
 ![screenshot](./images/first-automation_03.png)
 
-Since we made the conditional in the Events: state node _if state is equal to
-above_horizon_ the top output will be the action to turn off the light and the bottom output will be the action to turn on the light.
+- Since we set the **If State** to `above_horizon`, the top output will turn off the light, and the bottom output will turn it on.
 
-The three fields that are relevant for this example are: Domain, Service, and
-Entity Id. **Domain** is going to be `light`, **Service** is going to be
-`turn_off`, and **Entity Id** is going to be `light.front_porch`. The Second
-Call Service node will be the same except the **Service** is going to be `turn_on`.
+6. Configure the **Action** nodes:
+   - **Action**: `light.turn_off` (for the top output) and `light.turn_on` (for the bottom output)
+   - **Entity**: `light.front_porch`
 
 ![screenshot](./images/first-automation_04.png)
 
 ## Complete Automation
 
-At this point, you can deploy and should have your first working automation in
-Node-RED.
+7. Once you've configured everything, deploy your flow. You now have your first working automation in Node-RED!
 
 ![screenshot](./images/first-automation_05.png)
 
 @[code](@examples/guides/first-automation/complete-automation.json)
 
-**Also see:**
+---
+
+**Related Resources:**
 
 - [Importing and Exporting Flows](https://nodered.org/docs/user-guide/editor/workspace/import-export)
-- [Call Service Node](/node/call-service.md)
-- [Events: state Node](/node/events-state.md)
-- [Conditionals](./conditionals.md)
+- [Call Service Node Documentation](/node/call-service.md)
+- [Events: State Node Documentation](/node/events-state.md)
+- [Conditionals in Node-RED](./conditionals.md)
