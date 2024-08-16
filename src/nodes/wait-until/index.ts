@@ -53,6 +53,7 @@ export interface WaitUntilNode extends BaseNode {
 
 const inputs = {
     entityId: {
+        // TODO: Remove payload.entity_id in v1.0
         messageProp: ['payload.entity_id', 'payload.entityId'],
     },
     entityIdFilterType: {
@@ -126,6 +127,21 @@ function transformInput(
         parsedMessage.entities.source = DataSource.Transformed;
     }
 
+    // If entities is a string or array, convert to object
+    if (
+        parsedMessage.entities.source === DataSource.Message &&
+        (typeof parsedMessage.entities.value === 'string' ||
+            Array.isArray(parsedMessage.entities.value))
+    ) {
+        parsedMessage.entities.value = {
+            [IdSelectorType.Entity]:
+                typeof parsedMessage.entities.value === 'string'
+                    ? [parsedMessage.entities.value]
+                    : parsedMessage.entities.value,
+        };
+        parsedMessage.entities.source = DataSource.Transformed;
+    }
+
     // each entities property should be an array
     [
         IdSelectorType.Entity,
@@ -171,6 +187,13 @@ const defaultInputSchema = Joi.object({
         .default('0'),
     timeoutUnits: Joi.string().valid(...Object.values(TimeUnit)),
     checkCurrentState: Joi.boolean(),
+
+    // Only used for input overrides
+    entityId: Joi.alternatives().try(
+        Joi.string(),
+        Joi.array().items(Joi.string()),
+    ),
+    entityIdFilterType: Joi.string().valid(...Object.values(EntityFilterType)),
 }).unknown(true);
 
 export default function waitUntilNode(this: WaitUntilNode, config: NodeDef) {

@@ -167,7 +167,7 @@ export default class WaitUntil extends InputOutputController<
         };
 
         // TODO: remove in v1.0
-        if (parsedMessage.entities.source === DataSource.Transformed) {
+        if (parsedMessage.entityId.source === DataSource.Message) {
             if (!this.#hasDeprecatedWarned) {
                 this.#hasDeprecatedWarned = true;
                 this.node.warn(
@@ -176,8 +176,8 @@ export default class WaitUntil extends InputOutputController<
             }
         }
 
-        // Render mustache templates in the entity id field when it's from the config
         if (parsedMessage.entities.source === DataSource.Config) {
+            // Render mustache templates in the entity id field when it's from the config
             config.entities[IdSelectorType.Entity] =
                 parsedMessage.entities.value[IdSelectorType.Entity].map(
                     (e: string) =>

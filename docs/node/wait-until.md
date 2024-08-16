@@ -57,6 +57,8 @@ If the received message has this property set to any value the node will be set 
 
 ### Example
 
+### Full Payload
+
 ```json
 {
   "entities": {
@@ -71,6 +73,22 @@ If the received message has this property set to any value the node will be set 
   "timeout": 10,
   "timeoutUnits": "seconds",
   "checkCurrentState": false
+}
+```
+
+#### Override with a Single Entity
+
+```json
+{
+  "entities": "light.living_room"
+}
+```
+
+#### Override with a Several Entities
+
+```json
+{
+  "entities": ["light.living_room", "light.bedroom"]
 }
 ```
 
