@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.66.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.65.1...v0.66.0) (2024-08-16)
+
+
+### ⚠ BREAKING CHANGES
+
+* Entity IDs incorrectly placed in `targets.entity_id` instead of `data.entity_id` will now trigger errors.
+* **wait-until:** If a wait-until node times out and the entity selector has multiple entities, the output property 'entity' will have an undefined value.
+* **device:** Fix device action to send entity to HA
+* **action:** The call-service node has been renamed to the action node. The domain and service input properties are deprecated and will be removed in version 1.0. Please use the action property instead.
+
+### Features
+
+* **action:** Add selector for floor and label ([20e08ab](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/20e08aba4fd34ff58f7d75feb9df241ac8a6cccf))
+* Add support for floors and labels ([36c2c9d](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/36c2c9d66ec5bfd8e5e588f5bd97b7a0fd288670))
+* **api:** Add DELETE and PUT methods to the API node ([7bba5af](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/7bba5af90238001e3120117d54ac0fab5fdfb1b6)), closes [#1435](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1435)
+* **events-state:** Update event state listener to allow listening to multiple types ([57a8ab7](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/57a8ab7845fb28d0ff082ebf67818130551ea27a))
+* **get-entities:** Add device/area/floor/label conditions ([b194eb0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/b194eb0a1695bdb1390fc10fe684204b5ecaf311))
+* **trigger-state:** Update listener to allow listening to multiple types at once ([a14a7f3](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a14a7f338ad18d709cdb9d5dfd88ae22a628e043))
+* **wait-until:** Update wait-until listener to allow listening to multiple types ([d24b604](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d24b6043a254b5fea208130aa10e787cb15563f9)), closes [#919](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/919)
+
+
+### Bug Fixes
+
+* **action:** Fix sent data to output sent data and not the data field only ([30b15a7](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/30b15a7a22ae69a7df6c2db8d71b3d74ded24354))
+* **device:** Fix device action to send entity to HA ([48cfa54](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/48cfa545ca34e1d6afe9c21992f2c8fab76b1eb7))
+* **device:** Fix device node losing trigger id ([48cfa54](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/48cfa545ca34e1d6afe9c21992f2c8fab76b1eb7))
+* **trigger-state:** Use post migrated config for event triggers ([b841734](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/b841734d70951414393f45fd8da035fcd4b5e0ee))
+
+
+### Reverts
+
+* "fix(call-service): Merge target data into service data before sending to HA" ([5960d09](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/5960d0991754fb2a6977308fd04eaefbdbfc099b))
+
 ## [0.65.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.65.0...v0.65.1) (2024-06-26)
 
 
