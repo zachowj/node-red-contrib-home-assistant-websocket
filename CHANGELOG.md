@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.66.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.66.0...v0.66.1) (2024-08-17)
+
+
+### Bug Fixes
+
+* Move entity_id from target field to data field ([1ae771d](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/1ae771d2551b008dea9c201e257d63f6fe91d9f2))
+
 ## [0.66.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.65.1...v0.66.0) (2024-08-16)
 
 
