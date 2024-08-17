@@ -4,6 +4,7 @@ import { IdSelectorType } from '../../../common/const';
 import { openEntityFilter } from '../../editors/entity-filter';
 import { getEntities } from '../../haserver';
 import { i18n } from '../../i18n';
+import { TargetData } from './IdSelector';
 import { createVirtualSelect } from './virtual-select';
 
 declare const RED: EditorRED;
@@ -126,6 +127,7 @@ export function createRow(
     $container: JQuery<HTMLElement>,
     type: IdSelectorType,
     value: string,
+    targetData: TargetData,
 ): JQuery<HTMLElement>[] {
     const $row = $('<div>', {
         class: 'id-selector-row',
@@ -141,7 +143,7 @@ export function createRow(
         case IdSelectorType.Device:
         case IdSelectorType.Entity:
         case IdSelectorType.Label:
-            createVirtualSelect(type, value).appendTo($wrapper);
+            createVirtualSelect(targetData, type, value).appendTo($wrapper);
             createCopyButton($container).appendTo($wrapper);
             break;
         case IdSelectorType.Substring:

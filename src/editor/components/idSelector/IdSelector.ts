@@ -1,4 +1,15 @@
+import { HassEntity } from 'home-assistant-js-websocket';
+
 import { IdSelectorType } from '../../../common/const';
+import { ActionTargetFilter } from '../../../nodes/action/editor/targets';
+import {
+    HassArea,
+    HassAreas,
+    HassDevice,
+    HassFloor,
+    HassLabel,
+} from '../../../types/home-assistant';
+import * as haServer from '../../haserver';
 import { i18n } from '../../i18n';
 import { createRow } from './elements';
 import { createSelectOptions } from './virtual-select';
@@ -9,26 +20,162 @@ interface EditableListButton {
     class: string;
     click: (evt: any) => void;
 }
+export interface TargetData {
+    entities: HassEntity[];
+    devices: HassDevice[];
+    areas: HassAreas;
+    floors: HassFloor[];
+    labels: HassLabel[];
+}
 
 export default class IdSelector {
     #$element: JQuery<HTMLElement>;
     #headerText: string;
     #types: IdSelectorType[];
+    #filter: ActionTargetFilter[];
+    #targetData: TargetData;
 
     constructor({
         types,
         element,
         headerText,
+        filter,
     }: {
         types: IdSelectorType[];
         element: string;
         headerText: string;
+        filter?: ActionTargetFilter[];
     }) {
         this.#types = types;
         this.#$element = $(element);
         this.#headerText = headerText;
+        this.#filter = filter ?? [];
+        this.#targetData = this.#createTargetData();
 
         this.init();
+    }
+
+    #createTargetData(): TargetData {
+        const entityRegistry = haServer.getEntityRegistry();
+        const entities = haServer.getEntities();
+        const devices = haServer.getDevices();
+        const areas = haServer.getAreas();
+        const floors = haServer.getFloors();
+        const labels = haServer.getLabels();
+
+        if (this.#filter.length === 0) {
+            return {
+                entities,
+                devices,
+                areas,
+                floors,
+                labels,
+            };
+        }
+
+        const filteredEntities: HassEntity[] = [];
+        const filteredDevices: HassDevice[] = [];
+        const filteredAreas: HassAreas = [];
+        const filteredFloors: HassFloor[] = [];
+        const filteredLabels: HassLabel[] = [];
+
+        for (const filter of this.#filter) {
+            const {
+                integration,
+                domain,
+                device_class: deviceClass,
+                supported_features: supportedFeatures,
+            } = filter;
+
+            for (const entity of entityRegistry) {
+                // Skip disabled entities
+                if (entity.disabled_by !== null) {
+                    continue;
+                }
+
+                // Skip entities that are not part of the integration
+                if (integration && entity.platform !== integration) {
+                    continue;
+                }
+
+                // Skip entities that are not part of the domain
+                const entityDomain = entity.entity_id.split('.')[0];
+                if (domain?.length && !domain.includes(entityDomain)) {
+                    continue;
+                }
+
+                const state = haServer.getEntity(entity.entity_id);
+
+                // Skip entities that are not part of the device class
+                if (
+                    deviceClass?.length &&
+                    state.attributes.device_class !== undefined &&
+                    !deviceClass.includes(state.attributes.device_class)
+                ) {
+                    continue;
+                }
+
+                // Skip entities that do not have the supported features
+                if (
+                    supportedFeatures !== undefined &&
+                    state.attributes.supported_features !== undefined &&
+                    (state.attributes.supported_features &
+                        supportedFeatures) ===
+                        0
+                ) {
+                    continue;
+                }
+
+                // Add devices that the entity is part of
+                let device: HassDevice | undefined;
+                if (entity.device_id) {
+                    device = devices.find((d) => d.id === entity.device_id);
+                    if (device) {
+                        pushIfNotExist(filteredDevices, device);
+                    }
+                }
+
+                // Add areas that the entity is part of
+                let area: HassArea | undefined;
+                const areaId = entity.area_id ?? device?.area_id;
+                if (areaId) {
+                    area = areas.find((a) => a.area_id === areaId);
+                    if (area) {
+                        pushIfNotExist(filteredAreas, area);
+                    }
+                }
+
+                // Add floors that the entity is part of
+                if (area?.floor_id) {
+                    const floor = floors.find(
+                        (f) => f.floor_id === area?.floor_id,
+                    );
+                    if (floor) {
+                        pushIfNotExist(filteredFloors, floor);
+                    }
+                }
+
+                // Add labels that the entity is part of
+                if (entity.labels.length) {
+                    for (const label of entity.labels) {
+                        const l = labels.find((l) => l.label_id === label);
+                        if (l) {
+                            filteredLabels.push(l);
+                        }
+                    }
+                }
+
+                filteredEntities.push(state);
+            }
+        }
+
+        return {
+            entities: filteredEntities,
+            devices: filteredDevices,
+            areas: filteredAreas,
+            floors: filteredFloors,
+            labels: filteredLabels,
+        };
     }
 
     #createAddButton(type: IdSelectorType) {
@@ -55,7 +202,6 @@ export default class IdSelector {
     }
 
     init() {
-        // padding: 4px 0px 8px;
         this.#$element.addClass('id-selector');
         this.#$element.editableList({
             addButton: false,
@@ -67,6 +213,7 @@ export default class IdSelector {
                     $container,
                     data.type,
                     data.value,
+                    this.#targetData,
                 );
                 $elements.forEach((element) => $container.append(element));
             },
@@ -84,6 +231,8 @@ export default class IdSelector {
     }
 
     refreshOptions() {
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
+        const _self = this;
         this.#$element.editableList('items').each(function () {
             const $li = $(this);
             const { type } = $li.data('data');
@@ -94,11 +243,17 @@ export default class IdSelector {
 
             const $vs = $li.find('.virtual-select');
             if ($vs.length) {
-                const options = createSelectOptions(type);
+                const options = createSelectOptions(_self.#targetData, type);
                 // @ts-expect-error - setOptions is not recognized
                 $vs[0].setOptions(options, true);
             }
         });
+    }
+
+    updateFilter(filter: ActionTargetFilter[]) {
+        this.#filter = filter;
+        this.#targetData = this.#createTargetData();
+        this.refreshOptions();
     }
 }
 
@@ -174,4 +329,11 @@ export function getSelectedIds(elementId: string): SelectedIds {
         ),
         [IdSelectorType.Regex]: Array.from(selectedIds[IdSelectorType.Regex]),
     };
+}
+
+// Push an element to an array if it does not exist
+function pushIfNotExist<T>(array: T[], element: T) {
+    if (!array.includes(element)) {
+        array.push(element);
+    }
 }

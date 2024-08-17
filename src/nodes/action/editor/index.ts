@@ -12,7 +12,7 @@ import { i18n } from '../../../editor/i18n';
 import { insertSocialBar } from '../../../editor/socialbar';
 import { OutputProperty } from '../../../editor/types';
 import { loadExampleData, updateServiceSelection } from './service-table';
-import { getValidTargets, ValidTarget } from './targets';
+import { getTargetFilters, getValidTargets, ValidTarget } from './targets';
 import { buildDomainServices } from './utils';
 
 declare const RED: EditorRED;
@@ -136,6 +136,7 @@ const ActionEditor: EditorNodeDef<ActionEditorNodeProperties> = {
                 IdSelectorType.Label,
             ],
             headerText: i18n('ha-action.label.targets'),
+            filter: getTargetFilters(),
         });
         const ids = {
             [IdSelectorType.Floor]: this.floorId,
@@ -154,6 +155,7 @@ const ActionEditor: EditorNodeDef<ActionEditorNodeProperties> = {
         $haAction
             .on('change', () => {
                 updateServiceSelection();
+                idSelector.updateFilter(getTargetFilters());
                 const action = $haAction.val() as string;
                 const showTargets = getValidTargets(action) === ValidTarget.All;
                 const $formRow = $('#target-list').parents('.form-row');

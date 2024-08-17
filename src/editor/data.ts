@@ -217,6 +217,10 @@ export function getEntityFromRegistry(
     return entityRegistry[serverId].find((entry) => entry.id === registryId);
 }
 
+export function getEntityRegistry(serverId: string): HassEntityRegistryEntry[] {
+    return entityRegistry[serverId] ?? [];
+}
+
 export function getEntities(serverId: string): HassEntities {
     return entities[serverId] ?? {};
 }

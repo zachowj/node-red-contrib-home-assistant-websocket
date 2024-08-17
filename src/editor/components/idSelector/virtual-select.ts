@@ -3,8 +3,10 @@ import { SelectorType } from '../../../nodes/config-server/editor';
 import { VirtualSelectOption } from '../../../types/virtual-select';
 import { getUiSettings } from '../../haserver';
 import * as haServer from '../../haserver';
+import { TargetData } from './IdSelector';
 
 export function createSelectOptions(
+    data: TargetData,
     type: IdSelectorType,
 ): VirtualSelectOption[] {
     const list: VirtualSelectOption[] = [];
@@ -13,7 +15,7 @@ export function createSelectOptions(
 
     switch (type) {
         case IdSelectorType.Floor:
-            haServer.getFloors().forEach((floor) => {
+            data.floors.forEach((floor) => {
                 list.push({
                     label: floor.name,
                     value: floor.floor_id,
@@ -22,7 +24,7 @@ export function createSelectOptions(
             });
             break;
         case IdSelectorType.Area:
-            haServer.getAreas().forEach((area) => {
+            data.areas.forEach((area) => {
                 list.push({
                     label: area.name,
                     value: area.area_id,
@@ -31,7 +33,7 @@ export function createSelectOptions(
             });
             break;
         case IdSelectorType.Device:
-            haServer.getDevices().forEach((device) => {
+            data.devices.forEach((device) => {
                 const label = useDeviceId
                     ? device.id
                     : device.name_by_user || device.name;
@@ -44,8 +46,7 @@ export function createSelectOptions(
             });
             break;
         case IdSelectorType.Entity: {
-            const entities = haServer.getEntities();
-            entities.forEach((entity) => {
+            data.entities.forEach((entity) => {
                 const label = useEntityId
                     ? entity.entity_id
                     : entity.attributes.friendly_name || entity.entity_id;
@@ -61,7 +62,7 @@ export function createSelectOptions(
             break;
         }
         case IdSelectorType.Label:
-            haServer.getLabels().forEach((label) => {
+            data.labels.forEach((label) => {
                 list.push({
                     label: label.name,
                     value: label.label_id,
@@ -93,7 +94,11 @@ function createVirtualSelectOptions(type: IdSelectorType): Record<string, any> {
     }
 }
 
-export function createVirtualSelect(type: IdSelectorType, value: string): any {
+export function createVirtualSelect(
+    data: TargetData,
+    type: IdSelectorType,
+    value: string,
+): any {
     const $div = $('<div>', {
         class: 'virtual-select',
         style: 'flex:1;',
@@ -105,7 +110,7 @@ export function createVirtualSelect(type: IdSelectorType, value: string): any {
         hideClearButton: true,
         search: true,
         maxWidth: '100%',
-        options: createSelectOptions(type),
+        options: createSelectOptions(data, type),
         placeholder: '',
         allowNewOption: true,
         optionsCount: 6,

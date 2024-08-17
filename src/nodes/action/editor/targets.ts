@@ -2,17 +2,58 @@ import * as haServer from '../../../editor/haserver';
 import { containsMustache } from '../../../helpers/utils';
 import { getNormalizedDomainServices } from './utils';
 
-// type ServiceTarget = {
-//     entity?: {
-//         domain?: string;
-//     };
-// };
+type ServiceEntityFilter = {
+    integration?: string;
+    domain?: string | string[];
+    device_class?: string | string[];
+    supported_features?: number | [number];
+};
 
-export type Filter<T> = (value: T, index: number, array: T[]) => boolean;
+type ServiceFilter = {
+    entity?: ServiceEntityFilter | ServiceEntityFilter[];
+};
+
+export type ActionTargetFilter = {
+    integration?: string;
+    domain?: string[];
+    device_class?: string[];
+    supported_features?: number;
+};
 
 export enum ValidTarget {
     All = 'all',
     None = 'none',
+}
+
+export function convertServiceEntityFilter(
+    filter: ServiceEntityFilter,
+): ActionTargetFilter {
+    return {
+        integration: filter.integration,
+        domain: Array.isArray(filter.domain)
+            ? filter.domain
+            : filter.domain
+              ? [filter.domain]
+              : undefined,
+        device_class: Array.isArray(filter.device_class)
+            ? filter.device_class
+            : filter.device_class
+              ? [filter.device_class]
+              : undefined,
+        supported_features: Array.isArray(filter.supported_features)
+            ? filter.supported_features[0]
+            : filter.supported_features,
+    };
+}
+
+export function getActionTargetFilter(
+    filter: ServiceFilter,
+): ActionTargetFilter[] {
+    if (!filter.entity) return [];
+
+    return Array.isArray(filter.entity)
+        ? filter.entity.map(convertServiceEntityFilter)
+        : [convertServiceEntityFilter(filter.entity)];
 }
 
 /*
@@ -42,32 +83,10 @@ export function getValidTargets(action: string): ValidTarget {
     return ValidTarget.None;
 }
 
-// TODO: Check integration and device_class
-// function entitiesByServiceTarget(): Filter<HassEntity> | undefined {
-//     const services = haServer.getServices();
-//     const [domain, service] = getNormalizedDomainServices();
-//     const filterDomain = (
-//         services?.[domain]?.[service]?.target as ServiceTarget
-//     )?.entity?.domain;
+export function getTargetFilters(): ActionTargetFilter[] {
+    const services = haServer.getServices();
+    const [domain, service] = getNormalizedDomainServices();
+    const filter = services?.[domain]?.[service]?.target as ServiceFilter;
 
-//     return filterDomain
-//         ? (value) => value.entity_id.startsWith(`${filterDomain}.`)
-//         : undefined;
-// }
-
-// TODO: for devices check integration, manufacturer, model
-// function ByServiceTarget(
-//     target: 'areas' | 'devices',
-//     targetId: 'id' | 'area_id',
-// ) {
-//     const targets = haServer.getTargetDomains()[target];
-//     const services = haServer.getServices();
-//     const [domain, service] = getNormalizedDomainServices();
-//     const filterDomain = (
-//         services?.[domain]?.[service]?.target as ServiceTarget
-//     )?.entity?.domain;
-
-//     return filterDomain
-//         ? (target) => targets[target[targetId]]?.includes(filterDomain)
-//         : undefined;
-// }
+    return filter ? getActionTargetFilter(filter) : [];
+}

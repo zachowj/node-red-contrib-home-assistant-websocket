@@ -133,6 +133,14 @@ export const getDevices = (): HassDevices => {
     return haData.getDevices(serverId);
 };
 
+export const getEntity = (entityId: string): HassEntity => {
+    return haData.getEntity(serverId, entityId);
+};
+
+export const getEntityRegistry = () => {
+    return haData.getEntityRegistry(serverId);
+};
+
 export const getEntities = (): HassEntity[] => {
     return Object.values(haData.getEntities(serverId));
 };
