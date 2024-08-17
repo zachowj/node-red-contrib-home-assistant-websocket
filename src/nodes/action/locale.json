@@ -2,6 +2,7 @@
   "ha-action": {
     "error": {
       "domain_service_deprecated": "The domain and service input properties are deprecated and will be removed in version 1.0. Please use the action property instead.",
+      "entity_id_target_data": "Entity ID is required to be in the data property for this action. Please add the entity ID to the data property. This will stop working in version 1.0.",
       "invalid_action_format": "Invalid action format: __action__",
       "invalid_entity_id": "Invalid entity ID format",
       "invalid_json": "Invalid JSON: __json__",
@@ -26,7 +27,7 @@
       "targets": "Targets"
     },
     "status": {
-      "service_called": "__domain__.__service__ called"
+      "action_called": "__domain__.__service__ called"
     }
   }
 }

@@ -22,6 +22,7 @@ export default class ActionController extends InputOutputController<
 > {
     #queue: QueueItem[] = [];
     #hasDeprecatedWarned = false;
+    #hasDeprecatedWarnedTargetEntityId = false;
 
     protected async onInput({
         message,
@@ -71,6 +72,31 @@ export default class ActionController extends InputOutputController<
             message,
             render,
         );
+
+        // TODO: Remove in version 1.0 - Check if entity_id should be in the data field not the target field
+        if (
+            parsedMessage.action?.value &&
+            typeof target.entity_id === 'string'
+        ) {
+            const services = this.homeAssistant.websocket.getServices();
+            const [domain, service] = parsedMessage.action?.value
+                .toLowerCase()
+                .split('.');
+
+            if (
+                services[domain]?.[service]?.fields?.entity_id !== undefined &&
+                !mergedData.entity_id
+            ) {
+                if (!this.#hasDeprecatedWarnedTargetEntityId) {
+                    this.#hasDeprecatedWarnedTargetEntityId = true;
+                    this.node.warn(
+                        RED._('ha-action.error.entity_id_target_data'),
+                    );
+                }
+                mergedData.entity_id = target.entity_id;
+                target.entity_id = undefined;
+            }
+        }
 
         const queueItem: QueueItem = {
             domain,
@@ -301,7 +327,7 @@ export default class ActionController extends InputOutputController<
         );
 
         this.status.setSuccess([
-            'ha-action.status.service_called',
+            'ha-action.status.action_called',
             { domain, service },
         ]);
 
