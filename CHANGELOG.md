@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.67.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.66.1...v0.67.0) (2024-08-17)
+
+
+### Features
+
+* **action:** Add filters to ID selectors ([8d34e43](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/8d34e43aba5501119df1c6e6f173d7c95e3e9a99))
+
 ## [0.66.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.66.0...v0.66.1) (2024-08-17)
 
 
