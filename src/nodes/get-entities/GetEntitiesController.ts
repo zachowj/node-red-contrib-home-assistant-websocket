@@ -154,15 +154,12 @@ export default class GetEntitiesController extends SendSplitController {
         const states = this.#homeAssistant.websocket.getStates();
         const sortedConditions = sortConditions(conditions);
 
-        for (const entity of entities) {
-            // disabled entities don't have a state object
-            if (entity.disabled_by !== null) {
-                continue;
-            }
-
+        for (const state of Object.values(states) as HassEntity[]) {
             this.#resetCurrent();
 
-            const state = states[entity.entity_id] as HassEntity;
+            const entity = entities.find(
+                (e) => e.entity_id === state.entity_id,
+            );
             let ruleMatched = true;
 
             for (const rule of sortedConditions) {
@@ -196,6 +193,11 @@ export default class GetEntitiesController extends SendSplitController {
                         break;
                     }
                 } else if (rule.condition === PropertySelectorType.Label) {
+                    if (!entity) {
+                        ruleMatched = false;
+                        break;
+                    }
+
                     if (entity.labels.length === 0) {
                         ruleMatched = false;
                         break;
@@ -233,6 +235,11 @@ export default class GetEntitiesController extends SendSplitController {
                         break;
                     }
                 } else {
+                    if (!entity) {
+                        ruleMatched = false;
+                        break;
+                    }
+
                     let propertyValue: unknown;
                     if (rule.condition === PropertySelectorType.Device) {
                         const device = this.#getDevice(entity);
