@@ -170,7 +170,11 @@ export default class GetEntitiesController extends SendSplitController {
                     break;
                 }
 
-                if (rule.condition === PropertySelectorType.State) {
+                if (
+                    rule.condition === PropertySelectorType.State ||
+                    // If the condition is not set, it is a state condition
+                    rule.condition === undefined
+                ) {
                     const value = selectn(rule.property, state);
                     const result =
                         await this.#comparatorService.getComparatorResult(
