@@ -12,7 +12,6 @@ import {
     HassLabel,
 } from '../types/home-assistant';
 import { i18n } from './i18n';
-import { HassTargetDomains } from './types';
 import { deepFind } from './utils';
 
 const areas: { [serverId: string]: HassArea[] } = {};
@@ -21,7 +20,6 @@ const entities: { [serverId: string]: HassEntities } = {};
 const floors: { [serverId: string]: HassFloor[] } = {};
 const labels: { [serverId: string]: HassLabel[] } = {};
 const services: { [serverId: string]: HassServices } = {};
-const targetDomains: { [serverId: string]: HassTargetDomains } = {};
 const entityRegistry: { [serverId: string]: HassEntityRegistryEntry[] } = {};
 
 export function updateAreas(topic: string, data: HassArea[]): void {
@@ -66,14 +64,6 @@ export function updateLabels(topic: string, data: HassLabel[]): void {
 export function updateServices(topic: string, data: HassServices): void {
     const serverId = parseServerId(topic);
     services[serverId] = data;
-}
-
-export function updateTargetDomains(
-    topic: string,
-    data: HassTargetDomains,
-): void {
-    const serverId = parseServerId(topic);
-    targetDomains[serverId] = data;
 }
 
 function parseServerId(topic: string) {
@@ -259,10 +249,6 @@ export function getProperties(serverId: string, entityId: string): string[] {
 
 export function getServices(serverId: string): HassServices {
     return services[serverId] ?? {};
-}
-
-export function getTargetDomains(serverId: string): HassTargetDomains {
-    return targetDomains[serverId] ?? { areas: {}, devices: {} };
 }
 
 function flatten(object: any, path?: string, separator = '.'): any {

@@ -46,8 +46,3 @@ export interface HassNodeProperties extends EditorNodeProperties {
     exposeToHomeAssistant?: boolean;
     haConfig?: HassExposedConfig[];
 }
-
-export interface HassTargetDomains {
-    areas: { [area_id: string]: string[] };
-    devices: { [id: string]: string[] };
-}

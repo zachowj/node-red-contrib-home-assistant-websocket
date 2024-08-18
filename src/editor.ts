@@ -10,7 +10,6 @@ import {
     updateFloors,
     updateLabels,
     updateServices,
-    updateTargetDomains,
 } from './editor/data';
 import { setupEditors } from './editor/editors';
 import { updateIntegration } from './editor/exposenode';
@@ -65,7 +64,6 @@ RED.comms.subscribe('homeassistant/floors/#', updateFloors);
 RED.comms.subscribe('homeassistant/labels/#', updateLabels);
 RED.comms.subscribe('homeassistant/integration/#', updateIntegration);
 RED.comms.subscribe('homeassistant/services/#', updateServices);
-RED.comms.subscribe('homeassistant/targetDomains/#', updateTargetDomains);
 RED.comms.subscribe('homeassistant/entityRegistry/#', updateEntityRegistry);
 RED.comms.subscribe(PRINT_TO_DEBUG_TOPIC, printToDebugPanel);
 setupMigrations();

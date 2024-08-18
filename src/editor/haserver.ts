@@ -11,7 +11,7 @@ import {
     HassLabel,
 } from '../types/home-assistant';
 import * as haData from './data';
-import { HassNodeProperties, HassTargetDomains } from './types';
+import { HassNodeProperties } from './types';
 
 declare const RED: EditorRED;
 
@@ -155,10 +155,6 @@ export const getLabels = (): HassLabel[] => {
 
 export const getServices = (): HassServices => {
     return haData.getServices(serverId);
-};
-
-export const getTargetDomains = (): HassTargetDomains => {
-    return haData.getTargetDomains(serverId);
 };
 
 export const getUiSettings = () => {
