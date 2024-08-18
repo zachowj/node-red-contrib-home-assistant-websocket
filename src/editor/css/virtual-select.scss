@@ -1,5 +1,3 @@
-@import 'variables';
-
 .vscomp-wrapper {
     font-family: var(--red-ui-primary-font);
     color: var(--red-ui-form-text-color);
@@ -27,45 +25,61 @@
     color: var(--red-ui-primary-text-color);
 }
 
-.vscomp-arrow::after {
-  border-bottom-color: var(--red-ui-form-text-color);
-  border-right-color: var(--red-ui-form-text-color);
+.vscomp-arrow {
+    &::after {
+        border-bottom-color: var(--red-ui-form-text-color);
+        border-right-color: var(--red-ui-form-text-color);
+    }
 }
 
-.vscomp-clear-icon::before,
-.vscomp-clear-icon::after {
-  background-color: var(--red-ui-form-text-color);
+.vscomp-clear-icon {
+    &::before,
+    &::after {
+        background-color: var(--red-ui-form-text-color);
+    }
+
+    &:hover {
+        &::before,
+        &::after {
+            background: var(--red-ui-form-input-background);
+        }
+    }
 }
 
-.vscomp-clear-icon:hover::before,
-.vscomp-clear-icon:hover::after {
-  background: var(--red-ui-form-input-background);
-}
+.vscomp-clear-button {
+    &:hover {
+        background: var(--red-ui-form-text-color);
 
-.vscomp-clear-button:hover {
-  background: var(--red-ui-form-text-color);
-}
-
-.vscomp-clear-button:hover .vscomp-clear-icon::before,
-.vscomp-clear-button:hover .vscomp-clear-icon::after {
-  background-color: var(--red-ui-form-input-background);
+        .vscomp-clear-icon {
+            &::before,
+            &::after {
+                background-color: var(--red-ui-form-input-background);
+            }
+        }
+    }
 }
 
 .vscomp-dropbox {
-  background-color: var(--red-ui-form-input-background);
-  border: 1px solid var(--red-ui-primary-border-color);
+    background-color: var(--red-ui-form-input-background);
+    border: 1px solid var(--red-ui-primary-border-color);
 }
 
-.vscomp-option.selected {
-  background-color: var(--red-ui-secondary-background-selected)
-}
+.vscomp-option {
+    &.selected {
+        background-color: var(--red-ui-secondary-background-selected);
+    }
 
-.vscomp-option.focused {
-  background-color: var(--red-ui-form-input-focus-color)
+    &.focused {
+        background-color: var(--red-ui-form-input-focus-color);
+    }
+
+    .vscomp-option-description {
+        font-size: 11px;
+    }
 }
 
 .vscomp-search-container {
-  border-bottom-color: var(--red-ui-form-input-border-color);
+    border-bottom-color: var(--red-ui-form-input-border-color);
 
     > label.vscomp-search-label {
         border: 0;
@@ -92,6 +106,6 @@
 }
 
 .pop-comp-wrapper {
-  color: var(--red-ui-form-text-color);
-  background-color: var(--red-ui-form-input-background);
+    color: var(--red-ui-form-text-color);
+    background-color: var(--red-ui-form-input-background);
 }
