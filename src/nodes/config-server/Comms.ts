@@ -6,9 +6,11 @@ import { HaEvent } from '../../homeAssistant';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
 import { ClientEvent } from '../../homeAssistant/Websocket';
 import {
-    HassAreas,
-    HassDevices,
+    HassArea,
+    HassDevice,
     HassEntityRegistryEntry,
+    HassFloor,
+    HassLabel,
     HassStateChangedEvent,
 } from '../../types/home-assistant';
 
@@ -38,7 +40,7 @@ export default class Comms {
             [HaEvent.DeviceRegistryUpdated, this.onDeviceRegistryUpdate],
             [HaEvent.FloorRegistryUpdated, this.onFloorRegistryUpdate],
             [HaEvent.LabelRegistryUpdated, this.onLabelRegistryUpdate],
-            [HaEvent.RegistryUpdated, this.onRegistryUpdate],
+            [HaEvent.EntityRegistryUpdated, this.onEntityRegistryUpdate],
             [HaEvent.ServicesUpdated, this.onServicesUpdated],
         ]);
     }
@@ -51,27 +53,23 @@ export default class Comms {
         );
     }
 
-    onAreaRegistryUpdate(areas: HassAreas): void {
+    onAreaRegistryUpdate(areas: HassArea[]): void {
         this.publish('areas', areas);
     }
 
-    onDeviceRegistryUpdate(devices: HassDevices): void {
+    onDeviceRegistryUpdate(devices: HassDevice[]): void {
         this.publish('devices', devices);
     }
 
-    onFloorRegistryUpdate(floors: { [key: string]: string }): void {
+    onFloorRegistryUpdate(floors: HassFloor[]): void {
         this.publish('floors', floors);
     }
 
-    onLabelRegistryUpdate(labels: { [key: string]: string }): void {
+    onLabelRegistryUpdate(labels: HassLabel[]): void {
         this.publish('labels', labels);
     }
 
-    onRegistryUpdate({
-        entities,
-    }: {
-        entities: HassEntityRegistryEntry[];
-    }): void {
+    onEntityRegistryUpdate(entities: HassEntityRegistryEntry[]): void {
         this.publish('entityRegistry', entities);
     }
 

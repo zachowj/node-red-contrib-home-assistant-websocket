@@ -258,17 +258,10 @@ export default class Websocket {
         subscribeDeviceRegistry(this.client, (devices) => {
             this.#emitEvent(HaEvent.DeviceRegistryUpdated, devices);
             this.devices = devices;
-            this.#emitEvent(HaEvent.RegistryUpdated, {
-                devices: this.devices,
-                entities: this.entities,
-            });
         });
         subscribeEntityRegistry(this.client, (entities) => {
+            this.#emitEvent(HaEvent.EntityRegistryUpdated, entities);
             this.entities = entities;
-            this.#emitEvent(HaEvent.RegistryUpdated, {
-                devices: this.devices,
-                entities: this.entities,
-            });
         });
         subscribeFloorRegistry(this.client, (floors) => {
             this.#emitEvent(HaEvent.FloorRegistryUpdated, floors);

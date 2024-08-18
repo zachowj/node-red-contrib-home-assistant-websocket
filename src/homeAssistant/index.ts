@@ -20,7 +20,7 @@ export enum HaEvent {
     FloorRegistryUpdated = 'floors_updated',
     Integration = 'nodered',
     LabelRegistryUpdated = 'labels_updated',
-    RegistryUpdated = 'registry_updated',
+    EntityRegistryUpdated = 'entity_registry_updated',
     ServicesUpdated = 'services_updated',
     StateChanged = 'state_changed',
     TagScanned = 'tag_scanned',
