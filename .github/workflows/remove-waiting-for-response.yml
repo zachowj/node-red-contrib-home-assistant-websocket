@@ -1,0 +1,55 @@
+name: Remove 'waiting-for-response' label on issue comment by author
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  remove-label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Remove label from issue if comment is from author
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { context, github } = require('@actions/github');
+            const { issue, repository, payload } = context;
+            const { owner, repo } = repository;
+            const { number } = issue;
+            const commentAuthor = payload.comment.user.login;
+            const labelToRemove = 'waiting-for-response';
+
+            // Get issue details
+            const { data: issueDetails } = await github.rest.issues.get({
+              owner,
+              repo,
+              issue_number: number
+            });
+
+            // Check if the comment author is the issue author
+            if (issueDetails.user.login === commentAuthor) {
+              // Get the issue's labels
+              const { data: labels } = await github.rest.issues.listLabelsOnIssue({
+                owner,
+                repo,
+                issue_number: number
+              });
+
+              // Check if the label exists and remove it
+              if (labels.some(label => label.name === labelToRemove)) {
+                await github.rest.issues.removeLabel({
+                  owner,
+                  repo,
+                  issue_number: number,
+                  name: labelToRemove
+                });
+                console.log(`Removed label '${labelToRemove}' from issue #${number}`);
+              } else {
+                console.log(`Label '${labelToRemove}' not found on issue #${number}`);
+              }
+            } else {
+              console.log(`Comment by non-author ${commentAuthor}. No label removed.`);
+            }
