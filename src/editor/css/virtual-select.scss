@@ -19,93 +19,94 @@
         height: 34px;
         vertical-align: middle;
     }
-}
 
-.vscomp-value {
-    color: var(--red-ui-primary-text-color);
-}
-
-.vscomp-arrow {
-    &::after {
-        border-bottom-color: var(--red-ui-form-text-color);
-        border-right-color: var(--red-ui-form-text-color);
-    }
-}
-
-.vscomp-clear-icon {
-    &::before,
-    &::after {
-        background-color: var(--red-ui-form-text-color);
+    .vscomp-value {
+        color: var(--red-ui-primary-text-color);
     }
 
-    &:hover {
-        &::before,
+    .vscomp-arrow {
         &::after {
-            background: var(--red-ui-form-input-background);
+            border-bottom-color: var(--red-ui-form-text-color);
+            border-right-color: var(--red-ui-form-text-color);
         }
     }
-}
 
-.vscomp-clear-button {
-    &:hover {
-        background: var(--red-ui-form-text-color);
+    .vscomp-clear-icon {
+        &::before,
+        &::after {
+            background-color: var(--red-ui-form-text-color);
+        }
 
-        .vscomp-clear-icon {
+        &:hover {
             &::before,
             &::after {
-                background-color: var(--red-ui-form-input-background);
+                background: var(--red-ui-form-input-background);
             }
         }
     }
-}
 
-.vscomp-dropbox {
-    background-color: var(--red-ui-form-input-background);
-    border: 1px solid var(--red-ui-primary-border-color);
-}
+    .vscomp-clear-button {
+        &:hover {
+            background: var(--red-ui-form-text-color);
 
-.vscomp-option {
-    &.selected {
-        background-color: var(--red-ui-secondary-background-selected);
+            .vscomp-clear-icon {
+                &::before,
+                &::after {
+                    background-color: var(--red-ui-form-input-background);
+                }
+            }
+        }
     }
 
-    &.focused {
-        background-color: var(--red-ui-form-input-focus-color);
+    .vscomp-dropbox {
+        background-color: var(--red-ui-form-input-background);
+        border: 1px solid var(--red-ui-primary-border-color);
     }
 
-    .vscomp-option-description {
-        font-size: 11px;
-    }
-}
+    .vscomp-option {
+        &.selected {
+            background-color: var(--red-ui-secondary-background-selected);
+        }
 
-.vscomp-search-container {
-    border-bottom-color: var(--red-ui-form-input-border-color);
+        &.focused {
+            background-color: var(--red-ui-form-input-focus-color);
+        }
 
-    > label.vscomp-search-label {
-        border: 0;
-        clip: rect(0 0 0 0);
-        height: 1px;
-        margin: -1px;
-        margin-bottom: -1px;
-        overflow: hidden;
-        padding: 0;
-        position: absolute;
-        white-space: nowrap;
-        width: 1px;
+        .vscomp-option-description {
+            color: var(--red-ui-form-placeholder-color);
+            font-size: 11px;
+        }
     }
 
-    > input.vscomp-search-input {
-        background-color: rgba(0, 0, 0, 0);
-        border: 0;
-        color: inherit;
-        font-size: 15px;
-        height: 38px;
-        padding: 10px 0;
-        width: calc(100% - 30px);
-    }
-}
+    .vscomp-search-container {
+        border-bottom-color: var(--red-ui-form-input-border-color);
 
-.pop-comp-wrapper {
-    color: var(--red-ui-form-text-color);
-    background-color: var(--red-ui-form-input-background);
+        > label.vscomp-search-label {
+            border: 0;
+            clip: rect(0 0 0 0);
+            height: 1px;
+            margin: -1px;
+            margin-bottom: -1px;
+            overflow: hidden;
+            padding: 0;
+            position: absolute;
+            white-space: nowrap;
+            width: 1px;
+        }
+
+        > input.vscomp-search-input {
+            background-color: rgba(0, 0, 0, 0);
+            border: 0;
+            color: inherit;
+            font-size: 15px;
+            height: 38px;
+            padding: 10px 0;
+            width: calc(100% - 30px);
+        }
+    }
+
+    .pop-comp-wrapper {
+        color: var(--red-ui-form-text-color);
+        background-color: var(--red-ui-form-input-background);
+    }
 }
