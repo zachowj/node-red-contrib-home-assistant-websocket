@@ -1,14 +1,17 @@
-import { defineUserConfig } from 'vuepress';
-import { defaultTheme } from '@vuepress/theme-default';
+import { viteBundler } from '@vuepress/bundler-vite';
+import { copyCodePlugin } from '@vuepress/plugin-copy-code';
 import { googleAnalyticsPlugin } from '@vuepress/plugin-google-analytics';
+import { prismjsPlugin } from '@vuepress/plugin-prismjs';
 import { registerComponentsPlugin } from '@vuepress/plugin-register-components';
-import { copyCodePlugin } from 'vuepress-plugin-copy-code2';
 import { searchPlugin } from '@vuepress/plugin-search';
-import { getDirname, path } from '@vuepress/utils';
+import { defaultTheme } from '@vuepress/theme-default';
+import { defineUserConfig } from 'vuepress';
+import { getDirname, path } from 'vuepress/utils';
 
 const __dirname = getDirname(import.meta.url);
 
 export default defineUserConfig({
+    bundler: viteBundler(),
     base: '/node-red-contrib-home-assistant-websocket/',
     title: 'node-red-contrib-home-assistant-websocket',
     description:
@@ -17,15 +20,15 @@ export default defineUserConfig({
     plugins: [
         googleAnalyticsPlugin({ id: 'G-T0F3RKFVF3' }),
         copyCodePlugin(),
+        prismjsPlugin({
+            lineNumbers: false,
+        }),
         registerComponentsPlugin({
             componentsDir: path.resolve(__dirname, './components'),
         }),
         searchPlugin(),
     ],
     markdown: {
-        code: {
-            lineNumbers: false,
-        },
         importCode: {
             handleImportPath: (str) =>
                 str.replace(

@@ -51,6 +51,6 @@ This example uses the `sun.sun` entity in Home Assistant, which has states `belo
 **Related Resources:**
 
 - [Importing and Exporting Flows](https://nodered.org/docs/user-guide/editor/workspace/import-export)
-- [Call Service Node Documentation](/node/call-service.md)
+- [Action Node Documentation](/node/action.md)
 - [Events: State Node Documentation](/node/events-state.md)
 - [Conditionals in Node-RED](./conditionals.md)

@@ -13,7 +13,7 @@ In the **Home Assistant nodes**, JSONata can be used to set entity states, set o
 
 ## Examples of using JSONata in the Home Assistant Nodes:
 
-1. [Call a service using JSONata to build the data object](../../cookbook/jsonata/call-service.md)
+1. [Call a service using JSONata to build the data object](../../cookbook/jsonata/action.md)
    - Increase light brightness with remote
    - Set A/C target temperature and hvac mode
    - Send 'lights on' notification when leaving home

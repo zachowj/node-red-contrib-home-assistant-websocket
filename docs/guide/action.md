@@ -113,6 +113,6 @@ You can generate an entity ID list by retrieving entities using the get-entities
 **Additional Resources:**
 
 - [Action Node Documentation](../node/action.md)
-- [JSONata Guide](./jsonata.md)
+- [JSONata Guide](./jsonata/)
 - [JSONata Documentation](https://docs.jsonata.org)
 - [JSONata Playground](http://try.jsonata.org)
