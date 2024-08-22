@@ -15,35 +15,29 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const { issue, repository, payload } = context;
-            const { owner, repo } = repository;
-            const { number } = issue;
+            const { issue, repo, payload } = context;
             const commentAuthor = payload.comment.user.login;
             const labelToRemove = 'waiting-for-response';
 
+            const issueData = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number
+            };
+
             // Get issue details
-            const { data: issueDetails } = await github.rest.issues.get({
-              owner,
-              repo,
-              issue_number: number
-            });
+            const { data: issueDetails } = await github.rest.issues.get(issueData);                          
 
             // Check if the comment author is the issue author
             if (issueDetails.user.login === commentAuthor) {
               // Get the issue's labels
-              const { data: labels } = await github.rest.issues.listLabelsOnIssue({
-                owner,
-                repo,
-                issue_number: number
-              });
+              const { data: labels } = await github.rest.issues.listLabelsOnIssue(issueData);
 
               // Check if the label exists and remove it
               if (labels.some(label => label.name === labelToRemove)) {
                 await github.rest.issues.removeLabel({
-                  owner,
-                  repo,
-                  issue_number: number,
-                  name: labelToRemove
+                  name: labelToRemove,
+                  ...issueData
                 });
                 console.log(`Removed label '${labelToRemove}' from issue #${number}`);
               } else {
