@@ -4,15 +4,18 @@
   "name": "Node-RED",
   "dockerFile": "Dockerfile",
   // Set *default* container specific settings.json values on container create.
-  "settings": {
-    "terminal.integrated.shell.linux": "/bin/bash"
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash"
+      },
+      "extensions": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode"]
+    }
   },
-  // Add the IDs of extensions you want installed when the container is created.
-  "extensions": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode"],
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   "forwardPorts": [1880, 3000],
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "npm install",
+  "postCreateCommand": "pnpm install",
   // Uncomment to connect as a non-root user. See https://aka.ms/vscode-remote/containers/non-root.
   "remoteUser": "node-red",
   "workspaceMount": "source=${localWorkspaceFolder},target=/data/node_modules/node-red-contrib-home-assistant-websocket,type=bind,consistency=delegated",
