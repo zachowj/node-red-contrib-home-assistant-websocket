@@ -1,8 +1,20 @@
-import { StackInstanceEntry } from '@node-red/editor-client';
 import { EditorRED } from 'node-red';
 
 import { EntityType, NodeType } from '../../const';
 import { i18n } from '../i18n';
+
+interface StackInstanceEntry {
+    collapsible?: boolean | undefined;
+    container: JQuery<HTMLDivElement>;
+    header: JQuery<HTMLDivElement>;
+    contentWrap: JQuery<HTMLDivElement>;
+    content: JQuery<HTMLDivElement>;
+    title: JQuery<HTMLDivElement>;
+    toggle(): boolean;
+    expand(): boolean | undefined;
+    collapse(): boolean | undefined;
+    isExpanded(): boolean;
+}
 
 declare const RED: EditorRED;
 declare const Handlebars: typeof import('handlebars');
