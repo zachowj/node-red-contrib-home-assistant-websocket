@@ -9,13 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Remove label from issue if comment is from author
         uses: actions/github-script@v7
         with:
           script: |
-            const { context, github } = require('@actions/github');
             const { issue, repository, payload } = context;
             const { owner, repo } = repository;
             const { number } = issue;
