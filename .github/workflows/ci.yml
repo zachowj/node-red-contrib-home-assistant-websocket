@@ -35,19 +35,23 @@ jobs:
     name: Tests (Node ${{ matrix.node-version }} - node-red ${{ matrix.node-red-version }})
     steps:
       - uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9      
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: npm
-      - name: npm install
-        run: npm ci
+          cache: pnpm
+      - name: pnpm install
+        run: pnpm install
       - name: Install exact version of node-red
-        run: npm install --save-dev node-red@${{ matrix.node-red-version }}
-      - name: npm lint
-        run: npm run lint
-      - name: npm test
-        run: npm test
+        run: pnpm add -D node-red@${{ matrix.node-red-version }}
+      - name: pnpm lint
+        run: pnpm run lint
+      - name: pnpm test
+        run: pnpm test
         env:
           CI: true
 
@@ -71,15 +75,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9            
       - uses: actions/setup-node@v4
         with:
-          cache: npm
-      - name: npm install
-        run: npm ci
+          cache: pnpm
+      - name: pnpm install
+        run: pnpm install
       - name: build
-        run: npm run build
+        run: pnpm run build
       - name: Pack
-        run: npm pack
+        run: pnpm pack
       - name: Upload Release Asset
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
