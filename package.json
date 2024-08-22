@@ -9,6 +9,7 @@
   "engines": {
     "node": ">=14.0.0"
   },
+  "packageManager": "pnpm@9.7.1",
   "scripts": {
     "build": "gulp build",
     "coverage": "nyc --reporter=lcov pnpm run test",
@@ -153,7 +154,8 @@
     "typescript": "5.5.4",
     "vinyl-source-stream": "2.0.0",
     "vue": "^3.4.38",
-    "vuepress": "2.0.0-rc.15"
+    "vuepress": "2.0.0-rc.15",
+    "yargs": "^17.7.2"
   },
   "lint-staged": {
     "*.{js,ts}": [

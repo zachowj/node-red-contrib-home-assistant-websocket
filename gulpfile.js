@@ -482,11 +482,14 @@ task(
 // nodemon and browser-sync code modified from
 // https://github.com/connio/node-red-contrib-connio/blob/master/gulpfile.js
 function runNodemonAndBrowserSync(done) {
+    const argv = require('yargs').argv;
+    const dir = argv.dir;
+
     nodemonInstance = nodemon(`
-    nodemon
-    --ignore **/*
-    --exec node-red -u ~/.node-red
-  `);
+        nodemon
+        --ignore **/*
+        --exec node-red -u ${dir ?? process.env.NODE_RED_DEV_DIR ?? '.node-red'}
+    `);
 
     nodemon
         .once('start', () => {

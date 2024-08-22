@@ -327,6 +327,9 @@ importers:
       vuepress:
         specifier: 2.0.0-rc.15
         version: 2.0.0-rc.15(@vuepress/bundler-vite@2.0.0-rc.15(@types/node@18.19.42)(sass@1.77.8)(terser@5.26.0)(typescript@5.5.4)(yaml@2.5.0))(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4))
+      yargs:
+        specifier: ^17.7.2
+        version: 17.7.2
 
 packages:
 

@@ -12,3 +12,4 @@ coverage
 dist/
 docs/.vuepress/.cache
 docs/.vuepress/.temp
+.node-red
