@@ -25,12 +25,17 @@ If you want to make larger changes to the documentation, you can clone the repos
 
 1. Open the repository in Visual Studio Code.
 1. Click on the green "Open a Remote Window" button in the bottom left corner and select "Reopen in Container".
-1. Open a terminal in Visual Studio Code and run `npm install --save-dev` to install the dependencies.
-1. Run `npm run docs:dev` to start the development server.
+1. Open a terminal in Visual Studio Code and run `pnpm docs:dev` to start the development server.
 
 ### Manual environment
 
 1. Install [Node.js](https://nodejs.org/).
+1. Enable pnpm
+
+   ```sh
+   corepack enable && corepack enable npm
+   ```
+
 1. Go to the [Node-RED Home Assistant](https://github.com/zachowj/node-red-contrib-home-assistant-websocket) repository and fork it.
 1. Clone your forked repository to your local machine.
 
@@ -39,5 +44,5 @@ If you want to make larger changes to the documentation, you can clone the repos
    ```
 
 1. Open the repository in your favorite editor.
-1. Run `npm install --save-dev` to install the dependencies.
-1. Run `npm run docs:dev` to start the development server.
+1. Run `pnpm install` to install the dependencies.
+1. Run `pnpm run docs:dev` to start the development server.
