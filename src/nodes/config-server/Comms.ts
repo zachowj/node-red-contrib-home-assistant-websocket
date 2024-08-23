@@ -1,4 +1,5 @@
 import { HassEntities, HassServices } from 'home-assistant-js-websocket';
+import { throttle } from 'lodash';
 
 import ClientEvents from '../../common/events/ClientEvents';
 import { RED } from '../../globals';
@@ -54,23 +55,38 @@ export default class Comms {
     }
 
     onAreaRegistryUpdate(areas: HassArea[]): void {
-        this.publish('areas', areas);
+        const throttledPublish = throttle(() => {
+            this.publish('areas', areas);
+        }, 1000);
+        throttledPublish();
     }
 
     onDeviceRegistryUpdate(devices: HassDevice[]): void {
-        this.publish('devices', devices);
+        const throttledPublish = throttle(() => {
+            this.publish('devices', devices);
+        }, 1000);
+        throttledPublish();
     }
 
     onFloorRegistryUpdate(floors: HassFloor[]): void {
-        this.publish('floors', floors);
+        const throttledPublish = throttle(() => {
+            this.publish('floors', floors);
+        }, 1000);
+        throttledPublish();
     }
 
     onLabelRegistryUpdate(labels: HassLabel[]): void {
-        this.publish('labels', labels);
+        const throttledPublish = throttle(() => {
+            this.publish('labels', labels);
+        }, 1000);
+        throttledPublish();
     }
 
     onEntityRegistryUpdate(entities: HassEntityRegistryEntry[]): void {
-        this.publish('entityRegistry', entities);
+        const throttledPublish = throttle(() => {
+            this.publish('entityRegistry', entities);
+        }, 1000);
+        throttledPublish();
     }
 
     onIntegrationEvent(eventType: string): void {
@@ -81,7 +97,10 @@ export default class Comms {
     }
 
     onServicesUpdated(services: HassServices): void {
-        this.publish('services', services);
+        const throttledPublish = throttle(() => {
+            this.publish('services', services);
+        }, 1000);
+        throttledPublish();
     }
 
     onStateChanged(event: HassStateChangedEvent): void {
@@ -92,6 +111,9 @@ export default class Comms {
     }
 
     onStatesLoaded(entities: HassEntities): void {
-        this.publish('entities', entities);
+        const throttledPublish = throttle(() => {
+            this.publish('entities', entities);
+        }, 1000);
+        throttledPublish();
     }
 }
