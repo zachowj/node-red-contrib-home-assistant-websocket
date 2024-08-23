@@ -38,9 +38,9 @@ jobs:
                   name: labelToRemove,
                   ...issueData
                 });
-                console.log(`Removed label '${labelToRemove}' from issue #${number}`);
+                console.log(`Removed label '${labelToRemove}' from issue #${context.issue.number}`);
               } else {
-                console.log(`Label '${labelToRemove}' not found on issue #${number}`);
+                console.log(`Label '${labelToRemove}' not found on issue #${context.issue.number}`);
               }
             } else {
               console.log(`Comment by non-author ${commentAuthor}. No label removed.`);
