@@ -2,6 +2,7 @@ import ClientEvents from '../../common/events/ClientEvents';
 import { TypedInputTypes } from '../../const';
 import { getEntitiesFromJsonata } from '../../helpers/utils';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
+import { ClientEvent } from '../../homeAssistant/Websocket';
 import { TimeNode } from '.';
 import TimeController from './TimeController';
 
@@ -12,7 +13,7 @@ export function startListener(
     node: TimeNode,
 ) {
     clientEvents.addListener(
-        'ha_client:ready',
+        ClientEvent.Ready,
         controller.onStateChanged.bind(controller),
     );
 

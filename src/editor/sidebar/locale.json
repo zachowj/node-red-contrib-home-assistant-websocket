@@ -13,7 +13,16 @@
         "device": "Device",
         "entity": "Entity",
         "information": "Information",
+        "issues": "Issues",
+        "no_issues": "No issues found",
         "server": "Server"
+      },
+      "issues": {
+        "show_hidden": "Show Hidden",
+        "open_editor": "Open Editor",
+        "hide_issue": "Hide",
+        "show_issue": "Show",
+        "find_node": "Find in Workspace"
       }
     }
   }

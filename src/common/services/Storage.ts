@@ -2,7 +2,7 @@ import fs from 'fs';
 import low from 'lowdb';
 import FileAsync from 'lowdb/adapters/FileAsync';
 
-import { RED } from '../globals';
+import { RED } from '../../globals';
 
 export interface LastPayloadData {
     state: string | number | boolean;
@@ -16,12 +16,15 @@ export interface NodeData {
 
 export interface StorageData {
     nodes: { [key: string]: NodeData };
+    issues: {
+        hidden: string[];
+    };
 }
 
 export const PACKAGE_NAME = 'node-red-contrib-home-assistant-websocket';
 const FILENAME = `${PACKAGE_NAME}.json`;
 
-export class Storage {
+export default class Storage {
     #adapter?: low.AdapterAsync;
     #DB?: low.LowdbAsync<StorageData>;
     #path?: string;
@@ -117,6 +120,25 @@ export class Storage {
         await this.#DB.unset(`nodes.${this.#nodeSlug(nodeId)}`).write();
         return true;
     }
-}
 
-export default new Storage();
+    public async saveIssues(ids: string[]): Promise<void> {
+        if (!this.#DB) {
+            throw new Error('cannot save node data without a db');
+        }
+        const path = `issues.hidden`;
+
+        return this.#DB.set(path, ids).write();
+    }
+
+    public getIssues(): string[] {
+        if (!this.#DB) {
+            throw new Error('cannot get node data without a db');
+        }
+        const issues = this.#DB.get('issues.hidden').value();
+        if (!issues) {
+            return [];
+        }
+
+        return issues;
+    }
+}

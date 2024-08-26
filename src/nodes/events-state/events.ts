@@ -3,6 +3,7 @@ import { getErrorData } from '../../common/errors/inputErrorHandler';
 import ClientEvents from '../../common/events/ClientEvents';
 import Status from '../../common/status/Status';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
+import { ClientEvent } from '../../homeAssistant/Websocket';
 import { createStateChangeEvents } from '../trigger-state/helpers';
 import { EventsStateNode } from '.';
 import EventsStateController from './EventsStateController';
@@ -50,7 +51,7 @@ export function startListeners(
             generateStateChanges();
         } else {
             clientEvents.addListener(
-                'ha_client:initial_connection_ready',
+                ClientEvent.InitialConnectionReady,
                 generateStateChanges,
             );
         }

@@ -16,6 +16,7 @@ import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
 import { getExposeAsConfigNode, getServerConfigNode } from '../../helpers/node';
 import { getHomeAssistant } from '../../homeAssistant';
+import { ClientEvent } from '../../homeAssistant/Websocket';
 import { BaseNode, BaseNodeProperties } from '../../types/nodes';
 import { EntitySelectorList } from '../events-state';
 import { Constraint, CustomOutput, DISABLE, ENABLE } from './const';
@@ -187,7 +188,7 @@ export default function triggerState(
             generateStateChanges();
         } else {
             clientEvents.addListener(
-                'ha_client:initial_connection_ready',
+                ClientEvent.InitialConnectionReady,
                 generateStateChanges,
             );
         }

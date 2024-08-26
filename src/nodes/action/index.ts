@@ -30,6 +30,7 @@ export interface ActionNodeProperties extends BaseNodeProperties {
     deviceId?: string[];
     entityId?: string[];
     floorId?: string[];
+    labelId?: string[];
     mergeContext: string;
     mustacheAltTags: boolean;
     queue: Queue;

@@ -1,8 +1,9 @@
 import { NodeAPI } from 'node-red';
 
-import Storage from './common/Storage';
+import IssueService from './common/services/IssueService';
+import Storage from './common/services/Storage';
 import { NodeType } from './const';
-import { setRED } from './globals';
+import { setIssues, setRED, setStorage } from './globals';
 import { getExposedSettings } from './helpers/exposed-settings';
 import actionNode from './nodes/action';
 import apiNode from './nodes/api';
@@ -79,9 +80,11 @@ const nodes: Record<NodeType, any> = {
 
 export default async (RED: NodeAPI): Promise<void> => {
     setRED(RED);
+    const storage = new Storage();
+    await storage.init();
+    setStorage(storage);
+    setIssues(new IssueService());
     createRoutes();
-
-    await Storage.init();
 
     let type: NodeType;
     for (type in nodes) {

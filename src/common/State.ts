@@ -1,6 +1,7 @@
+import { storageService } from '../globals';
 import { BaseNode, NodeDone } from '../types/nodes';
 import { NodeEvent } from './events/Events';
-import Storage, { LastPayloadData } from './Storage';
+import { LastPayloadData } from './services/Storage';
 
 export default class State {
     #enabled = true;
@@ -9,15 +10,16 @@ export default class State {
 
     constructor(node: BaseNode) {
         this.#node = node;
-        this.#enabled = Storage.getNodeData(node.id, 'isEnabled') ?? true;
-        this.#lastPayload = Storage.getNodeData(node.id, 'lastPayload');
+        this.#enabled =
+            storageService.getNodeData(node.id, 'isEnabled') ?? true;
+        this.#lastPayload = storageService.getNodeData(node.id, 'lastPayload');
 
         node.on(NodeEvent.Close, this.#onClose.bind(this));
     }
 
     async #onClose(removed: boolean, done: NodeDone) {
         if (removed) {
-            await Storage.removeNodeData(this.#node.id).catch(done);
+            await storageService.removeNodeData(this.#node.id).catch(done);
         }
         done();
     }
@@ -28,17 +30,17 @@ export default class State {
 
     async setEnabled(state: boolean) {
         this.#enabled = state;
-        await Storage.saveNodeData(this.#node.id, 'isEnabled', state).catch(
-            this.#node.error,
-        );
+        await storageService
+            .saveNodeData(this.#node.id, 'isEnabled', state)
+            .catch(this.#node.error);
         this.#emitChange();
     }
 
     async setLastPayload(payload: LastPayloadData) {
         this.#lastPayload = payload;
-        await Storage.saveNodeData(this.#node.id, 'lastPayload', payload).catch(
-            this.#node.error,
-        );
+        await storageService
+            .saveNodeData(this.#node.id, 'lastPayload', payload)
+            .catch(this.#node.error);
         this.#emitChange();
     }
 

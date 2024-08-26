@@ -1,10 +1,11 @@
 import { getErrorData } from '../../common/errors/inputErrorHandler';
 import ClientEvents from '../../common/events/ClientEvents';
 import Status from '../../common/status/Status';
-import { HA_CLIENT_READY, HA_EVENTS, TypedInputTypes } from '../../const';
+import { HA_EVENTS, TypedInputTypes } from '../../const';
 import { getEntitiesFromJsonata } from '../../helpers/utils';
 import { HaEvent } from '../../homeAssistant';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
+import { ClientEvent } from '../../homeAssistant/Websocket';
 import { PollStateNode, PollStateNodeProperties } from '.';
 import PollStateController from './PollStateController';
 
@@ -39,7 +40,7 @@ export async function startListeners({
             });
         } else {
             clientEvents.addListener(
-                'ha_client:initial_connection_ready',
+                ClientEvent.InitialConnectionReady,
                 controller.onTimer.bind(controller),
             );
         }
@@ -53,7 +54,7 @@ export async function startListeners({
         });
     } else {
         clientEvents.addListener(
-            HA_CLIENT_READY,
+            ClientEvent.Ready,
             controller.onIntervalUpdate.bind(controller),
         );
     }

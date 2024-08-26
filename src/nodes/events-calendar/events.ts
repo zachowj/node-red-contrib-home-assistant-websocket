@@ -2,6 +2,7 @@ import { getErrorData } from '../../common/errors/inputErrorHandler';
 import ClientEvents from '../../common/events/ClientEvents';
 import Status from '../../common/status/Status';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
+import { ClientEvent } from '../../homeAssistant/Websocket';
 import { EventsCalendarNode } from '.';
 import EventsCalendarController from './EventsCalendarController';
 
@@ -24,7 +25,7 @@ export function startListeners(
         queueUpcomingCalendarEvents();
     } else {
         clientEvents.addListener(
-            'ha_client:initial_connection_ready',
+            ClientEvent.InitialConnectionReady,
             queueUpcomingCalendarEvents,
         );
     }

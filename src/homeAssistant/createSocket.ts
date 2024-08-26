@@ -9,6 +9,8 @@ import {
 } from 'home-assistant-js-websocket';
 import WebSocket from 'ws';
 
+import { ClientEvent } from './Websocket';
+
 const debug = Debug('home-assistant:socket');
 
 interface HaWebSocket extends WebSocket {
@@ -44,7 +46,7 @@ export default function createSocket({
         promReject: (err: Error) => void,
     ) {
         debug('[Auth Phase] New connection', url);
-        eventBus.emit('ha_client:connecting');
+        eventBus.emit(ClientEvent.Connecting);
 
         const socket = new WebSocket(url, {
             rejectUnauthorized: rejectUnauthorizedCerts,

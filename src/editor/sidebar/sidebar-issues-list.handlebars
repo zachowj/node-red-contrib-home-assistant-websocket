@@ -1,0 +1,41 @@
+{{#each issues}}
+<li data-id="{{this.id}}" {{{isHidden this.hide}}}>
+    <div class="ha-issues-list-row" {{{backgroundcolor this.color}}}>
+        {{#if this.isFontAwesomeIcon}}
+        <i class="ha-icon fa fa-fw {{this.icon}}"></i>
+        {{else}}
+        <div
+            class="ha-icon"
+            style="background-image: url('icons/node-red-contrib-home-assistant-websocket/{{this.icon}}');"
+        ></div>
+        {{/if}}
+        <span>{{this.name}}</span>
+        <button
+            type="button"
+            class="red-ui-button red-ui-button-small ha-edit-node"
+        >
+            <i class="fa fa-pencil"></i>
+        </button>
+        <button
+            type="button"
+            class="red-ui-button red-ui-button-small ha-find-node"
+        >
+            <i class="fa fa-search"></i>
+        </button>
+        <button
+            type="button"
+            class="red-ui-button red-ui-button-small ha-hidden-issue"
+        >
+            <i class="fa fa-eye"></i>
+            <i class="fa fa-eye-slash"></i>
+        </button>
+    </div>
+    <ul>
+        {{#each this.issues}}
+            <li>{{this}}</li>
+        {{/each}}
+    </ul>
+</li>
+{{else}}
+<li>{{i18n "home-assistant.sidebar.stacks.no_issues"}}</li>
+{{/each}}

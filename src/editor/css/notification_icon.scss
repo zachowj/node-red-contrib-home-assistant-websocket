@@ -1,0 +1,21 @@
+#red-ui-header li.ha-notification {
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+
+    div {
+        color: var(--red-ui-text-color-warning);
+        cursor: pointer;
+        padding-left: 5px;
+        align-self: end;
+        
+        span {
+            font-size: 25px;
+        }
+
+        i {
+            font-size: 20px;
+        }
+
+    }
+}

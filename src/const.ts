@@ -1,4 +1,3 @@
-export const HA_CLIENT_READY = 'ha_client:ready';
 export const HA_EVENT_SERVICES_UPDATED = 'services_updated';
 export const HA_EVENT_INTEGRATION = 'nodered';
 export const HA_EVENTS = 'ha_events';

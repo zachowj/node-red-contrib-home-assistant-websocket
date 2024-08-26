@@ -47,6 +47,7 @@ import {
     HassEntityRegistryEntry,
     HassFloor,
     HassLabel,
+    HassTag,
     HassTags,
     HassTranslations,
     SubscriptionUnsubscribe,
@@ -91,9 +92,11 @@ export enum ClientEvent {
     Connected = 'ha_client:connected',
     Connecting = 'ha_client:connecting',
     Error = 'ha_client:error',
+    InitialConnectionReady = 'initial_connection_ready',
     Integration = 'integration',
     Open = 'ha_client:open',
     Ready = 'ha_client:ready',
+    RegistriesLoaded = 'ha_client:registries_loaded',
     Running = 'ha_client:running',
     ServicesLoaded = 'ha_client:services_loaded',
     StatesLoaded = 'ha_client:states_loaded',
@@ -107,6 +110,12 @@ export default class Websocket {
     #stopHeartbeat?: StopHeartbeat;
     #subscribedEvents = new Set<string>();
     #unsubCallback: { [id: string]: () => void } = {};
+    #isAreaRegistryLoaded = false;
+    #isDeviceRegistryLoaded = false;
+    #isEntityRegistryLoaded = false;
+    #isFloorRegistryLoaded = false;
+    #isLabelRegistryLoaded = false;
+    #isAllRegistriesLoaded = false;
 
     areas: HassAreas = [];
     client!: Connection;
@@ -126,14 +135,18 @@ export default class Websocket {
         this.#eventBus = eventBus;
 
         this.#eventBus.on(
-            'ha_client:connecting',
+            ClientEvent.Connecting,
             this.onClientConnecting.bind(this),
         );
-        this.onStatesLoadedAndRunning('initial_connection_ready');
+        this.onStatesLoadedAndRunning(ClientEvent.InitialConnectionReady);
     }
 
     get isConnected(): boolean {
         return this.connectionState === ClientState.Connected;
+    }
+
+    get isStatesLoaded(): boolean {
+        return this.#statesLoaded;
     }
 
     #emitEvent(event: string, data?: any) {
@@ -161,7 +174,7 @@ export default class Websocket {
                 }) as unknown as Promise<HaWebSocket>,
         }).catch((e) => {
             this.connectionState = ClientState.Error;
-            this.#emitEvent('ha_client:error');
+            this.#emitEvent(ClientEvent.Error);
 
             // Handle connection errors
             let message: string | undefined;
@@ -194,7 +207,7 @@ export default class Websocket {
         this.onClientOpen();
         // emit connected for only the first connection to the server
         // so we can setup certain things only once like registerEvents
-        this.#emitEvent('ha_client:connected');
+        this.#emitEvent(ClientEvent.Connected);
         this.#clientEvents();
         this.#haEvents();
     }
@@ -252,31 +265,62 @@ export default class Websocket {
         subscribeServices(this.client, this.onClientServices.bind(this));
 
         subscribeAreaRegistry(this.client, (areas) => {
-            this.#emitEvent(HaEvent.AreaRegistryUpdated, areas);
+            this.#isAreaRegistryLoaded = true;
             this.areas = areas;
+            this.#checkIfAllRegistriesLoaded();
+            this.#emitEvent(HaEvent.AreaRegistryUpdated, areas);
         });
         subscribeDeviceRegistry(this.client, (devices) => {
-            this.#emitEvent(HaEvent.DeviceRegistryUpdated, devices);
+            this.#isDeviceRegistryLoaded = true;
             this.devices = devices;
+            this.#checkIfAllRegistriesLoaded();
+            this.#emitEvent(HaEvent.DeviceRegistryUpdated, devices);
         });
         subscribeEntityRegistry(this.client, (entities) => {
-            this.#emitEvent(HaEvent.EntityRegistryUpdated, entities);
+            this.#isEntityRegistryLoaded = true;
             this.entities = entities;
+            this.#checkIfAllRegistriesLoaded();
+            this.#emitEvent(HaEvent.EntityRegistryUpdated, entities);
         });
         subscribeFloorRegistry(this.client, (floors) => {
-            this.#emitEvent(HaEvent.FloorRegistryUpdated, floors);
+            this.#isFloorRegistryLoaded = true;
             this.floors = floors;
+            this.#checkIfAllRegistriesLoaded();
+            this.#emitEvent(HaEvent.FloorRegistryUpdated, floors);
         });
         subscribeLabelRegistry(this.client, (labels) => {
-            this.#emitEvent(HaEvent.LabelRegistryUpdated, labels);
+            this.#isLabelRegistryLoaded = true;
             this.labels = labels;
+            this.#checkIfAllRegistriesLoaded();
+            this.#emitEvent(HaEvent.LabelRegistryUpdated, labels);
         });
+    }
+
+    #checkIfAllRegistriesLoaded() {
+        if (
+            !this.#isAllRegistriesLoaded &&
+            this.#isAreaRegistryLoaded &&
+            this.#isDeviceRegistryLoaded &&
+            this.#isEntityRegistryLoaded &&
+            this.#isFloorRegistryLoaded &&
+            this.#isLabelRegistryLoaded &&
+            this.isStatesLoaded &&
+            this.#servicesLoaded
+        ) {
+            this.#emitEvent(ClientEvent.RegistriesLoaded);
+            this.#isAllRegistriesLoaded = true;
+            RED.log.debug('[Home Assistant] All registries loaded');
+        }
+    }
+
+    get isAllRegistriesLoaded(): boolean {
+        return this.#isAllRegistriesLoaded;
     }
 
     #onHomeAssistantRunning() {
         if (!this.isHomeAssistantRunning) {
             this.isHomeAssistantRunning = true;
-            this.#emitEvent('ha_client:running');
+            this.#emitEvent(ClientEvent.Running);
             if (this.integrationVersion === NO_VERSION) {
                 this.createIntegrationEvent(INTEGRATION_NOT_LOADED);
             }
@@ -383,7 +427,8 @@ export default class Websocket {
 
         if (!this.#statesLoaded) {
             this.#statesLoaded = true;
-            this.#emitEvent('ha_client:states_loaded', this.states);
+            this.#emitEvent(ClientEvent.StatesLoaded, this.states);
+            this.#checkIfAllRegistriesLoaded();
         }
     }
 
@@ -396,19 +441,20 @@ export default class Websocket {
         this.#emitEvent(HA_EVENT_SERVICES_UPDATED, this.services);
         if (!this.#servicesLoaded) {
             this.#servicesLoaded = true;
-            this.#emitEvent('ha_client:services_loaded');
+            this.#emitEvent(ClientEvent.ServicesLoaded);
+            this.#checkIfAllRegistriesLoaded();
         }
     }
 
-    onStatesLoadedAndRunning(event = 'ready'): void {
+    onStatesLoadedAndRunning(event: ClientEvent = ClientEvent.Ready): void {
         const statesLoaded = new Promise((resolve) => {
-            this.#eventBus.once('ha_client:states_loaded', resolve);
+            this.#eventBus.once(ClientEvent.ServicesLoaded, resolve);
         });
         const homeAssinstantRunning = new Promise((resolve) => {
-            this.#eventBus.once('ha_client:running', resolve);
+            this.#eventBus.once(ClientEvent.Running, resolve);
         });
         Promise.all([statesLoaded, homeAssinstantRunning]).then(([states]) => {
-            this.#eventBus.emit(`ha_client:${event}`, states);
+            this.#eventBus.emit(event, states);
         });
     }
 
@@ -514,7 +560,7 @@ export default class Websocket {
                 this.#config.host,
             );
         }
-        this.#emitEvent('ha_client:open');
+        this.#emitEvent(ClientEvent.Open);
     }
 
     onClientClose(): void {
@@ -525,7 +571,7 @@ export default class Websocket {
     onClientError(data: unknown): void {
         debug('events connection error, cleaning up connection');
         debug(data);
-        this.#emitEvent('ha_client:error', data);
+        this.#emitEvent(ClientEvent.Error, data);
         this.resetClient();
     }
 
@@ -543,8 +589,13 @@ export default class Websocket {
         this.isHomeAssistantRunning = false;
         this.#servicesLoaded = false;
         this.#statesLoaded = false;
+        this.#isAreaRegistryLoaded = false;
+        this.#isDeviceRegistryLoaded = false;
+        this.#isEntityRegistryLoaded = false;
+        this.#isFloorRegistryLoaded = false;
+        this.#isLabelRegistryLoaded = false;
         this.connectionState = ClientState.Disconnected;
-        this.#emitEvent('ha_client:close');
+        this.#emitEvent(ClientEvent.Close);
     }
 
     getAreas(areaId: string): HassArea | undefined;
@@ -554,7 +605,7 @@ export default class Websocket {
             this.getArea(areaId);
         }
 
-        return this.areas;
+        return cloneDeep(this.areas);
     }
 
     getArea(areaId: string): HassArea | undefined {
@@ -568,7 +619,7 @@ export default class Websocket {
             this.getDevice(deviceId);
         }
 
-        return this.devices;
+        return cloneDeep(this.devices);
     }
 
     getDevice(deviceId: string): HassDevice | undefined {
@@ -651,7 +702,7 @@ export default class Websocket {
     getFloors(): HassFloor[];
     getFloors(floorId?: unknown): unknown {
         if (typeof floorId === 'string') {
-            this.getFloors(floorId);
+            this.getFloor(floorId);
         }
 
         return cloneDeep(this.floors);
@@ -693,6 +744,10 @@ export default class Websocket {
 
     getServices(): HassServices {
         return cloneDeep(this.services);
+    }
+
+    getTag(tagId: string): HassTag | undefined {
+        return cloneDeep(this.tags?.find((tag) => tag.id === tagId));
     }
 
     async getTranslations(

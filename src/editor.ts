@@ -13,6 +13,7 @@ import {
 } from './editor/data';
 import { setupEditors } from './editor/editors';
 import { updateIntegration } from './editor/exposenode';
+import { updateIssues } from './editor/issues';
 import { printToDebugPanel } from './editor/print-to-debug';
 import { initSidebar } from './editor/sidebar';
 import {
@@ -65,6 +66,7 @@ RED.comms.subscribe('homeassistant/labels/#', updateLabels);
 RED.comms.subscribe('homeassistant/integration/#', updateIntegration);
 RED.comms.subscribe('homeassistant/services/#', updateServices);
 RED.comms.subscribe('homeassistant/entityRegistry/#', updateEntityRegistry);
+RED.comms.subscribe('homeassistant/issues', updateIssues);
 RED.comms.subscribe(PRINT_TO_DEBUG_TOPIC, printToDebugPanel);
 setupMigrations();
 setupEditors();

@@ -1,0 +1,23 @@
+{
+  "home-assistant": {
+    "service": {
+      "issue": {
+        "device_not_found": "Device __device_id__ not found",
+        "entity_not_found": "Entity __entity_id__ not found",
+        "failed_to_hide": "Failed to hide issue __issue_id__",
+        "invalid_action": "Action __action__ is not found",
+        "issue_hidden": "Issue __issue_id__ hidden",
+        "no-response": "No response from server",
+        "tag_not_found": "Tag __tag_id__ not found",
+        "target_area_not_found": "Target area __area_id__ not found",
+        "target_device_not_found": "Target device __device_id__ not found",
+        "target_entity_not_found": "Target entity __entity_id__ not found",
+        "target_floor_not_found": "Target floor __floor_id__ not found",
+        "target_label_not_found": "Target label __label_id__ not found",
+        "tooltip_description": "Home Assistant nodes with issues",
+        "unexpected": "Unexpected error (__status__) __message__",
+        "zone_not_found": "Zone __zone_id__ not found"
+      }
+    }
+  }
+}

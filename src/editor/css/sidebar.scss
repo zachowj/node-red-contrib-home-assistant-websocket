@@ -56,10 +56,113 @@
                 }
             }
         }
+
+        .ha-issues-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+
+            &-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                color: var(--red-ui-node-label-color);
+                margin: 0 5px;
+                padding: 5px;
+                background-color: #41bdf5;
+
+                span {
+                    text-align: left;
+                    flex: 2;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    padding-left: 5px;
+                    font-size: 0.9em;
+                }
+
+                button {
+                    margin-left: 5px;
+                }
+
+                .ha-hidden-issue {
+                    i {
+                        &.fa-eye {
+                            display: none;
+                        }
+
+                        &.fa-eye-slash {
+                            display: inline-block;
+                        }
+                    }
+                }
+            }
+
+            &.ha-show-hidden {
+                .ha-hidden {
+                    display: block;
+
+                    .ha-issues-list-row {
+                        background-color: var(
+                            --red-ui-list-item-background-disabled
+                        ) !important;
+                        color: var(--red-ui-secondary-text-color);
+                    }
+
+                    .ha-hidden-issue {
+                        i {
+                            &.fa-eye {
+                                display: inline-block !important;
+                            }
+
+                            &.fa-eye-slash {
+                                display: none !important;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .ha-hidden {
+                display: none;
+            }
+
+            ul {
+                list-style: disc;
+                padding: 3px 0;
+                margin-left: 20px;
+
+                li {
+                    font-size: 12px;
+                    color: var(--red-ui-secondary-text-color);
+                    overflow: hidden;
+                }
+            }
+
+            .ha-icon {
+                width: 20px;
+                height: 20px;
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-position: center;
+                font-size: 1.3333333em;
+                color: #fff;
+            }
+        }
     }
 }
 
 #home-assistant-stack-container {
     position: relative;
     height: 100%;
+}
+
+#ha-issue-header {
+    display: flex;
+    align-items: start;
+    padding: 5px;
+
+    input {
+        margin-right: 5px;
+    }
 }

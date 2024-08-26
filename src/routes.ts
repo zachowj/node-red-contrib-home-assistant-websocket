@@ -4,7 +4,7 @@ import { NextFunction, Request, Response } from 'express';
 import flatten from 'flat';
 
 import { NO_VERSION } from './const';
-import { RED } from './globals';
+import { issueService, RED } from './globals';
 import { getEnvironmentData } from './helpers/diagnostics';
 import { getServerConfigNode } from './helpers/node';
 import { Credentials, getHomeAssistant } from './homeAssistant';
@@ -199,11 +199,14 @@ async function getTags(req: CustomRequest, res: Response): Promise<void> {
     const tags = req.query.update
         ? await homeAssistant?.websocket.updateTagList()
         : homeAssistant?.getTags();
+    const entities = homeAssistant?.websocket.getEntities() ?? [];
 
     tags?.map((t: HassTag) => {
+        const tagName = entities.find((e) => e.entity_id === t.id)?.name;
+
         return {
-            id: t.tag_id,
-            name: t.name,
+            id: t.id,
+            name: tagName ?? t.name,
         };
     });
 
@@ -234,6 +237,12 @@ function getIntegrationVersion(req: CustomRequest, res: Response): void {
     res.json({
         version: req?.homeAssistant?.integrationVersion ?? NO_VERSION,
     });
+}
+
+function postHandleHiddenIssue(req: CustomRequest, res: Response): void {
+    const issue = req.body.issue;
+    issueService.toggleIssueHiddenStatus(issue);
+    res.json({});
 }
 
 function findServers(req: CustomRequest, res: Response): void {
@@ -295,4 +304,6 @@ export function createRoutes(): void {
             res.send(await getEnvironmentData());
         },
     );
+
+    RED.httpAdmin.post('/homeassistant/issues/hidden', postHandleHiddenIssue);
 }
