@@ -96,7 +96,7 @@
     "@vuepress/plugin-prismjs": "2.0.0-rc.42",
     "@vuepress/plugin-register-components": "2.0.0-rc.42",
     "@vuepress/plugin-search": "2.0.0-rc.41",
-    "@vuepress/theme-default": "2.0.0-rc.41",
+    "@vuepress/theme-default": "2.0.0-rc.42",
     "autoprefixer": "10.4.20",
     "browser-sync": "3.0.2",
     "chai": "4.5.0",
