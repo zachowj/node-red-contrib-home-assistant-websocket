@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.68.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.67.2...v0.68.0) (2024-08-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* Dropping support for node v16
+
+### Features
+
+* **issues:** Implement issue detection for Home Assistant nodes ([61eb103](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/61eb103f205e26604e0148d230971dffca55ce7e))
+
+
+### Bug Fixes
+
+* Fix ID selector to include state only entities ([8057dd7](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/8057dd7f9a0f3c544b190607d27da45a1a59dd73))
+
+
+### Documentation
+
+* Update node version to 18 ([f0c5f3d](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f0c5f3d34b0f62f125f78450d57dd520bbafb810))
+
 ## [0.67.2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.67.1...v0.67.2) (2024-08-18)
 
 
