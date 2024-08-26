@@ -145,8 +145,8 @@ importers:
         specifier: 2.0.0-rc.41
         version: 2.0.0-rc.41(typescript@5.5.4)(vuepress@2.0.0-rc.15(@vuepress/bundler-vite@2.0.0-rc.15(@types/node@18.19.42)(sass@1.77.8)(terser@5.26.0)(typescript@5.5.4)(yaml@2.5.0))(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4)))
       '@vuepress/plugin-register-components':
-        specifier: 2.0.0-rc.37
-        version: 2.0.0-rc.37(vuepress@2.0.0-rc.15(@vuepress/bundler-vite@2.0.0-rc.15(@types/node@18.19.42)(sass@1.77.8)(terser@5.26.0)(typescript@5.5.4)(yaml@2.5.0))(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4)))
+        specifier: 2.0.0-rc.42
+        version: 2.0.0-rc.42(vuepress@2.0.0-rc.15(@vuepress/bundler-vite@2.0.0-rc.15(@types/node@18.19.42)(sass@1.77.8)(terser@5.26.0)(typescript@5.5.4)(yaml@2.5.0))(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4)))
       '@vuepress/plugin-search':
         specifier: 2.0.0-rc.41
         version: 2.0.0-rc.41(typescript@5.5.4)(vuepress@2.0.0-rc.15(@vuepress/bundler-vite@2.0.0-rc.15(@types/node@18.19.42)(sass@1.77.8)(terser@5.26.0)(typescript@5.5.4)(yaml@2.5.0))(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4)))
@@ -1381,10 +1381,10 @@ packages:
     peerDependencies:
       vuepress: 2.0.0-rc.14
 
-  '@vuepress/plugin-register-components@2.0.0-rc.37':
-    resolution: {integrity: sha512-Ont6tTX67ZJaozH3sfGkQyaE83oMDqpYC8i34StVmidh8naC2uRcxDeza/orSe0nLvb+LUK/WiABB2ZuYRRTxw==}
+  '@vuepress/plugin-register-components@2.0.0-rc.42':
+    resolution: {integrity: sha512-IUWHcJM4vHGJz5cViiCeKkjsfvB39S+BC7c0JLDEByUtWDeHuEmri0uKhgSTZf4PjPeMDNpvI6FDRFtImm/B9g==}
     peerDependencies:
-      vuepress: 2.0.0-rc.14
+      vuepress: 2.0.0-rc.15
 
   '@vuepress/plugin-search@2.0.0-rc.41':
     resolution: {integrity: sha512-WS3EAyO39QbfpvNUqeB7d9+taQ+CxrbziIFfxNnLVY/VL3v3VW7iIYUakKv+Ja4knHCUO+GuKdk12OnYp7s9Ag==}
@@ -7143,7 +7143,7 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  '@vuepress/plugin-register-components@2.0.0-rc.37(vuepress@2.0.0-rc.15(@vuepress/bundler-vite@2.0.0-rc.15(@types/node@18.19.42)(sass@1.77.8)(terser@5.26.0)(typescript@5.5.4)(yaml@2.5.0))(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4)))':
+  '@vuepress/plugin-register-components@2.0.0-rc.42(vuepress@2.0.0-rc.15(@vuepress/bundler-vite@2.0.0-rc.15(@types/node@18.19.42)(sass@1.77.8)(terser@5.26.0)(typescript@5.5.4)(yaml@2.5.0))(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4)))':
     dependencies:
       chokidar: 3.6.0
       vuepress: 2.0.0-rc.15(@vuepress/bundler-vite@2.0.0-rc.15(@types/node@18.19.42)(sass@1.77.8)(terser@5.26.0)(typescript@5.5.4)(yaml@2.5.0))(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4))
@@ -9042,7 +9042,7 @@ snapshots:
   glob-watcher@6.0.0:
     dependencies:
       async-done: 2.0.0
-      chokidar: 3.5.3
+      chokidar: 3.6.0
 
   glob@10.4.5:
     dependencies:
