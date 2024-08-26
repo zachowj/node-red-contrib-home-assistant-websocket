@@ -57,7 +57,7 @@ export default class IdSelector {
 
     #createTargetData(): TargetData {
         const entityRegistry = haServer.getEntityRegistry();
-        const entities = haServer.getEntities();
+        const states = haServer.getEntities();
         const devices = haServer.getDevices();
         const areas = haServer.getAreas();
         const floors = haServer.getFloors();
@@ -65,7 +65,7 @@ export default class IdSelector {
 
         if (this.#filter.length === 0) {
             return {
-                entities,
+                entities: states,
                 devices,
                 areas,
                 floors,
@@ -87,24 +87,21 @@ export default class IdSelector {
                 supported_features: supportedFeatures,
             } = filter;
 
-            for (const entity of entityRegistry) {
-                // Skip disabled entities
-                if (entity.disabled_by !== null) {
-                    continue;
-                }
+            for (const state of states) {
+                const entity = entityRegistry.find(
+                    (e) => e.entity_id === state.entity_id,
+                );
 
                 // Skip entities that are not part of the integration
-                if (integration && entity.platform !== integration) {
+                if (integration && entity?.platform !== integration) {
                     continue;
                 }
 
                 // Skip entities that are not part of the domain
-                const entityDomain = entity.entity_id.split('.')[0];
+                const entityDomain = state.entity_id.split('.')[0];
                 if (domain?.length && !domain.includes(entityDomain)) {
                     continue;
                 }
-
-                const state = haServer.getEntity(entity.entity_id);
 
                 // Skip entities that are not part of the device class
                 if (
@@ -123,6 +120,13 @@ export default class IdSelector {
                         supportedFeatures) ===
                         0
                 ) {
+                    continue;
+                }
+
+                filteredEntities.push(state);
+
+                // Skip the rest of the checks if the entity is not part of the registry
+                if (!entity) {
                     continue;
                 }
 
@@ -164,8 +168,6 @@ export default class IdSelector {
                         }
                     }
                 }
-
-                filteredEntities.push(state);
             }
         }
 
