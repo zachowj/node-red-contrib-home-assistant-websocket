@@ -142,8 +142,8 @@ importers:
         specifier: 2.0.0-rc.37
         version: 2.0.0-rc.37(vuepress@2.0.0-rc.15(@vuepress/bundler-vite@2.0.0-rc.15(@types/node@18.19.42)(sass@1.77.8)(terser@5.26.0)(typescript@5.5.4)(yaml@2.5.0))(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4)))
       '@vuepress/plugin-prismjs':
-        specifier: 2.0.0-rc.41
-        version: 2.0.0-rc.41(typescript@5.5.4)(vuepress@2.0.0-rc.15(@vuepress/bundler-vite@2.0.0-rc.15(@types/node@18.19.42)(sass@1.77.8)(terser@5.26.0)(typescript@5.5.4)(yaml@2.5.0))(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4)))
+        specifier: 2.0.0-rc.42
+        version: 2.0.0-rc.42(typescript@5.5.4)(vuepress@2.0.0-rc.15(@vuepress/bundler-vite@2.0.0-rc.15(@types/node@18.19.42)(sass@1.77.8)(terser@5.26.0)(typescript@5.5.4)(yaml@2.5.0))(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4)))
       '@vuepress/plugin-register-components':
         specifier: 2.0.0-rc.42
         version: 2.0.0-rc.42(vuepress@2.0.0-rc.15(@vuepress/bundler-vite@2.0.0-rc.15(@types/node@18.19.42)(sass@1.77.8)(terser@5.26.0)(typescript@5.5.4)(yaml@2.5.0))(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4)))
@@ -1328,6 +1328,11 @@ packages:
     peerDependencies:
       vuepress: 2.0.0-rc.14
 
+  '@vuepress/highlighter-helper@2.0.0-rc.42':
+    resolution: {integrity: sha512-D5l5thhcpCVOYTba1fneHJ+1Tb9gnwyAObVMxrdygqQlJxJmwCzyh2kVDIIoR/T3uDxqmsLXJkArZv64xYL7PA==}
+    peerDependencies:
+      vuepress: 2.0.0-rc.15
+
   '@vuepress/markdown@2.0.0-rc.15':
     resolution: {integrity: sha512-q+yuwV+PzvFCs92Q/O/3HHRDY9CNYKJgc+fKbqE98P3qGBATnDtABUjc+NjtPvG4OdYt2fELTXOzyprE8omFIw==}
 
@@ -1390,6 +1395,11 @@ packages:
     resolution: {integrity: sha512-0d9LSi5kpZFnAw4ISUDCpQKjUIB1gemjlZvw4SdV8b+dttl1dC8Ykrm93WNiVeR8gWhS+8Oa7J92Kd23ZNlFeQ==}
     peerDependencies:
       vuepress: 2.0.0-rc.14
+
+  '@vuepress/plugin-prismjs@2.0.0-rc.42':
+    resolution: {integrity: sha512-X08xiWzy2HCdGT1+LHu39h+V8AiMHRzCPSvF+ierYwSkiYBCcn17fQ26vz+mnWFoh8aqfIBAAPm2JzSsIGgZuw==}
+    peerDependencies:
+      vuepress: 2.0.0-rc.15
 
   '@vuepress/plugin-register-components@2.0.0-rc.42':
     resolution: {integrity: sha512-IUWHcJM4vHGJz5cViiCeKkjsfvB39S+BC7c0JLDEByUtWDeHuEmri0uKhgSTZf4PjPeMDNpvI6FDRFtImm/B9g==}
@@ -7071,6 +7081,10 @@ snapshots:
     dependencies:
       vuepress: 2.0.0-rc.15(@vuepress/bundler-vite@2.0.0-rc.15(@types/node@18.19.42)(sass@1.77.8)(terser@5.26.0)(typescript@5.5.4)(yaml@2.5.0))(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4))
 
+  '@vuepress/highlighter-helper@2.0.0-rc.42(vuepress@2.0.0-rc.15(@vuepress/bundler-vite@2.0.0-rc.15(@types/node@18.19.42)(sass@1.77.8)(terser@5.26.0)(typescript@5.5.4)(yaml@2.5.0))(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4)))':
+    dependencies:
+      vuepress: 2.0.0-rc.15(@vuepress/bundler-vite@2.0.0-rc.15(@types/node@18.19.42)(sass@1.77.8)(terser@5.26.0)(typescript@5.5.4)(yaml@2.5.0))(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4))
+
   '@vuepress/markdown@2.0.0-rc.15':
     dependencies:
       '@mdit-vue/plugin-component': 2.1.3
@@ -7178,6 +7192,15 @@ snapshots:
     dependencies:
       '@vuepress/helper': 2.0.0-rc.41(typescript@5.5.4)(vuepress@2.0.0-rc.15(@vuepress/bundler-vite@2.0.0-rc.15(@types/node@18.19.42)(sass@1.77.8)(terser@5.26.0)(typescript@5.5.4)(yaml@2.5.0))(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4)))
       '@vuepress/highlighter-helper': 2.0.0-rc.41(vuepress@2.0.0-rc.15(@vuepress/bundler-vite@2.0.0-rc.15(@types/node@18.19.42)(sass@1.77.8)(terser@5.26.0)(typescript@5.5.4)(yaml@2.5.0))(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4)))
+      prismjs: 1.29.0
+      vuepress: 2.0.0-rc.15(@vuepress/bundler-vite@2.0.0-rc.15(@types/node@18.19.42)(sass@1.77.8)(terser@5.26.0)(typescript@5.5.4)(yaml@2.5.0))(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4))
+    transitivePeerDependencies:
+      - typescript
+
+  '@vuepress/plugin-prismjs@2.0.0-rc.42(typescript@5.5.4)(vuepress@2.0.0-rc.15(@vuepress/bundler-vite@2.0.0-rc.15(@types/node@18.19.42)(sass@1.77.8)(terser@5.26.0)(typescript@5.5.4)(yaml@2.5.0))(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4)))':
+    dependencies:
+      '@vuepress/helper': 2.0.0-rc.42(typescript@5.5.4)(vuepress@2.0.0-rc.15(@vuepress/bundler-vite@2.0.0-rc.15(@types/node@18.19.42)(sass@1.77.8)(terser@5.26.0)(typescript@5.5.4)(yaml@2.5.0))(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4)))
+      '@vuepress/highlighter-helper': 2.0.0-rc.42(vuepress@2.0.0-rc.15(@vuepress/bundler-vite@2.0.0-rc.15(@types/node@18.19.42)(sass@1.77.8)(terser@5.26.0)(typescript@5.5.4)(yaml@2.5.0))(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4)))
       prismjs: 1.29.0
       vuepress: 2.0.0-rc.15(@vuepress/bundler-vite@2.0.0-rc.15(@types/node@18.19.42)(sass@1.77.8)(terser@5.26.0)(typescript@5.5.4)(yaml@2.5.0))(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4))
     transitivePeerDependencies:
