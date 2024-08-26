@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       axios:
-        specifier: 1.7.4
-        version: 1.7.4(debug@4.3.6)
+        specifier: 1.7.5
+        version: 1.7.5(debug@4.3.6)
       bonjour:
         specifier: 3.5.0
         version: 3.5.0
@@ -1650,8 +1650,8 @@ packages:
     resolution: {integrity: sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==}
     engines: {node: '>= 0.4'}
 
-  axios@1.7.4:
-    resolution: {integrity: sha512-DukmaFRnY6AzAALSH4J2M3k6PkaC+MfaAGdEERRWcC9q3/TWQwLpHR8ZRLKTdQ3aBDL64EdluRDjJqKw+BPZEw==}
+  axios@1.7.5:
+    resolution: {integrity: sha512-fZu86yCo+svH3uqJ/yTdQ0QHpQu5oL+/QE+QPSv6BZSkDAoky9vytxp7u5qk83OJFS3kEBcesWni9WTZAv3tSw==}
 
   bach@2.0.1:
     resolution: {integrity: sha512-A7bvGMGiTOxGMpNupYl9HQTf0FFDNF4VCmks4PJpFyN1AX2pdKuxuwdvUz2Hu388wcgp+OvGFNsumBfFNkR7eg==}
@@ -7457,7 +7457,7 @@ snapshots:
 
   available-typed-arrays@1.0.5: {}
 
-  axios@1.7.4(debug@4.3.6):
+  axios@1.7.5(debug@4.3.6):
     dependencies:
       follow-redirects: 1.15.6(debug@4.3.6)
       form-data: 4.0.0
@@ -10217,7 +10217,7 @@ snapshots:
   node-red-admin@4.0.0(debug@4.3.6):
     dependencies:
       ansi-colors: 4.1.3
-      axios: 1.7.4(debug@4.3.6)
+      axios: 1.7.5(debug@4.3.6)
       bcryptjs: 2.4.3
       cli-table: 0.3.11
       enquirer: 2.4.1
