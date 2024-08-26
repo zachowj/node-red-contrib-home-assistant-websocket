@@ -91,7 +91,7 @@
     "@typescript-eslint/eslint-plugin": "7.18.0",
     "@typescript-eslint/parser": "7.18.0",
     "@vuepress/bundler-vite": "2.0.0-rc.15",
-    "@vuepress/plugin-copy-code": "2.0.0-rc.41",
+    "@vuepress/plugin-copy-code": "2.0.0-rc.42",
     "@vuepress/plugin-google-analytics": "2.0.0-rc.37",
     "@vuepress/plugin-prismjs": "2.0.0-rc.41",
     "@vuepress/plugin-register-components": "2.0.0-rc.42",
