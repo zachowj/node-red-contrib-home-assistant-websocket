@@ -88,11 +88,11 @@
                 .ha-hidden-issue {
                     i {
                         &.fa-eye {
-                            display: none;
+                            display: inline-block;
                         }
 
                         &.fa-eye-slash {
-                            display: inline-block;
+                            display: none;
                         }
                     }
                 }
@@ -112,11 +112,11 @@
                     .ha-hidden-issue {
                         i {
                             &.fa-eye {
-                                display: inline-block !important;
+                                display: none !important;
                             }
 
                             &.fa-eye-slash {
-                                display: none !important;
+                                display: inline-block !important;
                             }
                         }
                     }
