@@ -6,15 +6,19 @@ Post questions and follow the discussion about this recipe [here](https://github
 
 ![screenshot](./images/actionable-notifications-subflow-for-android_01.png)
 
-v1.0.0 - Requires Nodejs v12
+v1.0.1 - Requires version 0.68.0
 
 **Changes**
+
+- Updated to use the new action node
+
+:::details Old versions
+
+v1.0.0
 
 - Any setting can be set or overwritten using `msg.actionable` to pass a notification object into the node.
 
 @[code](@examples/cookbook/actionable-notifications-subflow-for-android/subflow_1_0_0.json)
-
-:::details Old versions
 
 v0.0.0
 

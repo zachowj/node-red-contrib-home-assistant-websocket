@@ -139,12 +139,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$accentColor: var(--c-brand);
+$accentColor: var(--vp-c-accent);
 
 textarea {
     width: 100%;
     height: 10em;
     border-color: $accentColor;
+    border-style: solid;
 }
 
 button {
@@ -167,7 +168,7 @@ button {
 }
 
 button:hover {
-    background-color: var(--c-brand-light);
+    background-color: var(--vp-c-accent-hover);
 }
 
 .fade-leave-active {
