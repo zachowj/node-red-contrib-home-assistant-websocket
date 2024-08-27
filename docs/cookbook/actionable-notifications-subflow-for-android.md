@@ -8,6 +8,8 @@ Post questions and follow the discussion about this recipe [here](https://github
 
 v1.0.1 - Requires version 0.68.0
 
+@[code](@examples/cookbook/actionable-notifications-subflow-for-android/subflow_1_0_1.json)
+
 **Changes**
 
 - Updated to use the new action node
