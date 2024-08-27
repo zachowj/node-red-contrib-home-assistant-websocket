@@ -49,7 +49,7 @@ import {
     includesIssue,
     isHomeAssistantDataLoaded,
     isHomeAssistantNode,
-} from './helpers';
+} from './utils';
 
 enum NodeRedEvent {
     FlowsStarted = 'flows:started',

@@ -1,6 +1,6 @@
 import { BaseNodeProperties } from '../../../types/nodes';
 import { IssueType } from '.';
-import { getHomeAssistant, isDynamicValue } from './helpers';
+import { getHomeAssistant, isDynamicValue } from './utils';
 
 export function getInvalidIds(
     type: IssueType,

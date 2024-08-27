@@ -1,5 +1,5 @@
 import { Issue, IssueType } from '../../common/services/IssueService';
-import { getHomeAssistant } from '../../common/services/IssueService/helpers';
+import { getHomeAssistant } from '../../common/services/IssueService/utils';
 import { NodeType, TAGS_ALL } from '../../const';
 import { RED } from '../../globals';
 import { NodeProperties } from '../../types/nodes';

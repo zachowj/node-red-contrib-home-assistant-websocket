@@ -3,7 +3,7 @@ import { getInvalidIds } from '../../common/services/IssueService/check';
 import {
     getHomeAssistant,
     isDynamicValue,
-} from '../../common/services/IssueService/helpers';
+} from '../../common/services/IssueService/utils';
 import { NodeType } from '../../const';
 import { RED } from '../../globals';
 import { NodeProperties } from '../../types/nodes';
