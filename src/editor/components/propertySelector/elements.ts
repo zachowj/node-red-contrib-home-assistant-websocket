@@ -109,6 +109,7 @@ function createRegistryRow(data: Rule): JQuery<HTMLElement>[] {
         .wrap('<div class="input-value-wrapper"></div>')
         .val(data.value);
     $i.typedInput({ types: defaultRegistryTypes });
+    $i.typedInput('type', data.valueType);
 
     return [$label, $property, $sel, $i.parent()];
 }
