@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.68.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.68.0...v0.68.1) (2024-08-27)
+
+
+### Bug Fixes
+
+* **action:** correctly apply bitmask for supported features ([e4d4e97](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/e4d4e979747d0ceaec29b0f5067ef33ef0f8719c))
+* **issues:** Ignore all disabled nodes ([526504a](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/526504ab538a80e2fa366df0f6f6f4eabc15764f))
+
 ## [0.68.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.67.2...v0.68.0) (2024-08-26)
 
 
