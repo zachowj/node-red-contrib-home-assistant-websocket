@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 import {
     isMigrationArray,
@@ -54,20 +54,20 @@ describe('Migrations - API Node', function () {
             const migrate = migrations.find((m) => m.version === 0);
             const migratedSchema = migrate?.up(VERSION_UNDEFINED);
 
-            expect(migratedSchema).to.eql(VERSION_0);
+            expect(migratedSchema).toEqual(VERSION_0);
         });
     });
 
     describe('Version 1', function () {
         let migrate: Migration | undefined;
 
-        before(function () {
+        beforeAll(function () {
             migrate = migrations.find((m) => m.version === 1);
         });
 
         it('should update version 0 to version 1', function () {
             const migratedSchema = migrate?.up(VERSION_0);
-            expect(migratedSchema).to.eql(VERSION_1);
+            expect(migratedSchema).toEqual(VERSION_1);
         });
 
         it('should create empty outputProperties if locationType was none', function () {
@@ -81,13 +81,13 @@ describe('Migrations - API Node', function () {
             };
             const migratedSchema = migrate?.up(schema);
 
-            expect(migratedSchema).to.eql(expectedSchema);
+            expect(migratedSchema).toEqual(expectedSchema);
         });
     });
 
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
 
-        expect(migratedSchema).to.eql(VERSION_1);
+        expect(migratedSchema).toEqual(VERSION_1);
     });
 });

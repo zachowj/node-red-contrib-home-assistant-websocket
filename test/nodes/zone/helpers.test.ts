@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, expect, it } from 'vitest';
 
 import {
     getLocationData,
@@ -17,8 +17,8 @@ describe('location', function () {
                 },
             };
             const location = getLocationData(goodEntity);
-            expect(location).to.have.property('latitude');
-            expect(location).to.have.property('longitude');
+            expect(location).toHaveProperty('latitude');
+            expect(location).toHaveProperty('longitude');
         });
 
         it('should return undefined for invalid latitude', function () {
@@ -29,7 +29,7 @@ describe('location', function () {
                 },
             };
             const location = getLocationData(badLatitude);
-            expect(location).to.be.undefined;
+            expect(location).toEqual(undefined);
         });
 
         it('should return undefined for invalid longitude', function () {
@@ -40,7 +40,7 @@ describe('location', function () {
                 },
             };
             const location = getLocationData(badLongitude);
-            expect(location).to.be.undefined;
+            expect(location).toEqual(undefined);
         });
     });
 
@@ -54,9 +54,9 @@ describe('location', function () {
                 },
             };
             const location = getZoneData(goodZone);
-            expect(location).to.have.property('latitude');
-            expect(location).to.have.property('longitude');
-            expect(location).to.have.property('radius');
+            expect(location).toHaveProperty('latitude');
+            expect(location).toHaveProperty('longitude');
+            expect(location).toHaveProperty('radius');
         });
 
         it('should return undefined for invalid radius', function () {
@@ -67,7 +67,7 @@ describe('location', function () {
                 },
             };
             const location = getZoneData(badRadius);
-            expect(location).to.be.undefined;
+            expect(location).toEqual(undefined);
         });
     });
 
@@ -83,7 +83,7 @@ describe('location', function () {
                 radius: 100,
             };
             const result = inZone(location, zone);
-            expect(result).to.be.true;
+            expect(result).toEqual(true);
         });
 
         it('should return false when location is outside the zone radius', function () {
@@ -97,7 +97,7 @@ describe('location', function () {
                 radius: 100,
             };
             const result = inZone(location, zone);
-            expect(result).to.be.false;
+            expect(result).toEqual(false);
         });
 
         it('should return false when zone radius is 0', function () {
@@ -111,7 +111,7 @@ describe('location', function () {
                 radius: 0,
             };
             const result = inZone(location, zone);
-            expect(result).to.be.false;
+            expect(result).toEqual(false);
         });
     });
 });

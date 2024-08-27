@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, expect, it } from 'vitest';
 
 import { getStatusOptions } from '../../../src/common/status/helpers';
 
@@ -9,7 +9,7 @@ describe('getStatusOptions', function () {
                 statusYear: 'hidden',
             });
 
-            expect(options.year).to.be.undefined;
+            expect(options.year).toEqual(undefined);
         });
 
         it('should return "numeric" year if the year is set to numeric', function () {
@@ -17,7 +17,7 @@ describe('getStatusOptions', function () {
                 statusYear: 'numeric',
             });
 
-            expect(options.year).to.equal('numeric');
+            expect(options.year).toEqual('numeric');
         });
 
         it('should return "2-digit" year if the year is set to 2-digit', function () {
@@ -25,7 +25,7 @@ describe('getStatusOptions', function () {
                 statusYear: '2-digit',
             });
 
-            expect(options.year).to.equal('2-digit');
+            expect(options.year).toEqual('2-digit');
         });
     });
 
@@ -35,7 +35,7 @@ describe('getStatusOptions', function () {
                 statusMonth: 'hidden',
             });
 
-            expect(options.month).to.be.undefined;
+            expect(options.month).toEqual(undefined);
         });
 
         it('should return "numeric" month if the month is set to numeric', function () {
@@ -43,7 +43,7 @@ describe('getStatusOptions', function () {
                 statusMonth: 'numeric',
             });
 
-            expect(options.month).to.equal('numeric');
+            expect(options.month).toEqual('numeric');
         });
 
         it('should return "2-digit" month if the month is set to 2-digit', function () {
@@ -51,7 +51,7 @@ describe('getStatusOptions', function () {
                 statusMonth: '2-digit',
             });
 
-            expect(options.month).to.equal('2-digit');
+            expect(options.month).toEqual('2-digit');
         });
 
         it('should return "short" month if the month is set to short', function () {
@@ -59,7 +59,7 @@ describe('getStatusOptions', function () {
                 statusMonth: 'short',
             });
 
-            expect(options.month).to.equal('short');
+            expect(options.month).toEqual('short');
         });
 
         it('should return "long" month if the month is set to long', function () {
@@ -67,7 +67,7 @@ describe('getStatusOptions', function () {
                 statusMonth: 'long',
             });
 
-            expect(options.month).to.equal('long');
+            expect(options.month).toEqual('long');
         });
     });
 
@@ -77,7 +77,7 @@ describe('getStatusOptions', function () {
                 statusDay: 'hidden',
             });
 
-            expect(options.day).to.be.undefined;
+            expect(options.day).toEqual(undefined);
         });
 
         it('should return "numeric" day if the day is set to numeric', function () {
@@ -85,7 +85,7 @@ describe('getStatusOptions', function () {
                 statusDay: 'numeric',
             });
 
-            expect(options.day).to.equal('numeric');
+            expect(options.day).toEqual('numeric');
         });
 
         it('should return "2-digit" day if the day is set to 2-digit', function () {
@@ -93,7 +93,7 @@ describe('getStatusOptions', function () {
                 statusDay: '2-digit',
             });
 
-            expect(options.day).to.equal('2-digit');
+            expect(options.day).toEqual('2-digit');
         });
     });
 
@@ -103,7 +103,7 @@ describe('getStatusOptions', function () {
                 statusHourCycle: 'default',
             });
 
-            expect(options.hourCycle).to.be.undefined;
+            expect(options.hourCycle).toEqual(undefined);
         });
 
         it('should return "h12" hourCycle if the hourCycle is set to h12', function () {
@@ -111,7 +111,7 @@ describe('getStatusOptions', function () {
                 statusHourCycle: 'h12',
             });
 
-            expect(options.hourCycle).to.equal('h12');
+            expect(options.hourCycle).toEqual('h12');
         });
 
         it('should return "h23" hourCycle if the hourCycle is set to h23', function () {
@@ -119,7 +119,7 @@ describe('getStatusOptions', function () {
                 statusHourCycle: 'h23',
             });
 
-            expect(options.hourCycle).to.equal('h23');
+            expect(options.hourCycle).toEqual('h23');
         });
     });
 
@@ -129,7 +129,7 @@ describe('getStatusOptions', function () {
                 statusTimeFormat: 'h:m:s',
             });
 
-            expect(options.second).to.equal('numeric');
+            expect(options.second).toEqual('numeric');
         });
 
         it('should return hour:minute:seconds.milliseconds if the time format is h:m"s.ms', function () {
@@ -137,8 +137,8 @@ describe('getStatusOptions', function () {
                 statusTimeFormat: 'h:m:s.ms',
             });
 
-            expect(options.second).to.equal('numeric');
-            expect(options.fractionalSecondDigits).to.equal(3);
+            expect(options.second).toEqual('numeric');
+            expect(options.fractionalSecondDigits).toEqual(3);
         });
     });
 });

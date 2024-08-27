@@ -1,15 +1,10 @@
-import chai, { expect } from 'chai';
-import { afterEach, before } from 'mocha';
-import sinonChai from 'sinon-chai';
-import sinon, { StubbedInstance, stubInterface } from 'ts-sinon';
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
+import { mock, MockProxy, mockReset } from 'vitest-mock-extended';
 
 import JSONataService from '../../../src/common/services/JSONataService';
 import NodeRedContextService from '../../../src/common/services/NodeRedContextService';
 import TypedInputService from '../../../src/common/services/TypedInputService';
 import { TypedInputTypes } from '../../../src/const';
-import { resetStubInterface } from '../../helpers';
-
-chai.use(sinonChai);
 
 const nodeConfig = {
     id: 'test',
@@ -18,13 +13,13 @@ const nodeConfig = {
 };
 
 describe('Typed Input Service', function () {
-    let contextServiceStub: StubbedInstance<NodeRedContextService>;
-    let jsonataServiceStub: StubbedInstance<JSONataService>;
+    let contextServiceStub: MockProxy<NodeRedContextService>;
+    let jsonataServiceStub: MockProxy<JSONataService>;
     let typedInputService: TypedInputService;
 
-    before(function () {
-        contextServiceStub = stubInterface<NodeRedContextService>();
-        jsonataServiceStub = stubInterface<JSONataService>();
+    beforeAll(function () {
+        contextServiceStub = mock<NodeRedContextService>();
+        jsonataServiceStub = mock<JSONataService>();
         typedInputService = new TypedInputService({
             nodeConfig,
             context: contextServiceStub,
@@ -33,17 +28,16 @@ describe('Typed Input Service', function () {
     });
 
     afterEach(function () {
-        sinon.restore();
-        resetStubInterface(contextServiceStub);
-        resetStubInterface(jsonataServiceStub);
+        mockReset(contextServiceStub);
+        mockReset(jsonataServiceStub);
     });
 
     describe('getValue', function () {
         it('should return the value of the msg property', async function () {
             const message = { payload: 'bar' };
             contextServiceStub.get
-                .withArgs('msg', 'payload', message)
-                .returns('bar');
+                .calledWith('msg', 'payload', message)
+                .mockReturnValue('bar');
             const results = await typedInputService.getValue(
                 'payload',
                 TypedInputTypes.Message,
@@ -52,32 +46,36 @@ describe('Typed Input Service', function () {
                 },
             );
 
-            expect(contextServiceStub.get).to.have.been.calledOnceWithExactly(
+            expect(contextServiceStub.get).toHaveBeenCalledWith(
                 'msg',
                 'payload',
                 message,
             );
-            expect(results).to.equal('bar');
+            expect(results).toEqual('bar');
         });
 
         it('should return the value of the flow property', async function () {
-            contextServiceStub.get.withArgs('flow', 'payload').returns('bar');
+            contextServiceStub.get
+                .calledWith('flow', 'payload')
+                .mockReturnValue('bar');
             const results = await typedInputService.getValue(
                 'payload',
                 TypedInputTypes.Flow,
             );
 
-            expect(results).to.equal('bar');
+            expect(results).toEqual('bar');
         });
 
         it('should return the value of the global property', async function () {
-            contextServiceStub.get.withArgs('global', 'payload').returns('bar');
+            contextServiceStub.get
+                .calledWith('global', 'payload')
+                .mockReturnValue('bar');
             const results = await typedInputService.getValue(
                 'payload',
                 TypedInputTypes.Global,
             );
 
-            expect(results).to.equal('bar');
+            expect(results).toEqual('bar');
         });
 
         describe('bool', function () {
@@ -86,7 +84,7 @@ describe('Typed Input Service', function () {
                     'true',
                     TypedInputTypes.Boolean,
                 );
-                expect(results).to.be.true;
+                expect(results).toEqual(true);
             });
 
             it('should return false when type is set to bool and value "false"', async function () {
@@ -94,7 +92,7 @@ describe('Typed Input Service', function () {
                     'false',
                     TypedInputTypes.Boolean,
                 );
-                expect(results).to.be.false;
+                expect(results).toEqual(false);
             });
 
             it('should return false when type is set to bool and value is not "true"', async function () {
@@ -102,7 +100,7 @@ describe('Typed Input Service', function () {
                     'foo',
                     TypedInputTypes.Boolean,
                 );
-                expect(results).to.be.false;
+                expect(results).toEqual(false);
             });
         });
 
@@ -112,7 +110,7 @@ describe('Typed Input Service', function () {
                     '{"foo": "bar"}',
                     TypedInputTypes.JSON,
                 );
-                expect(results).to.deep.equal({ foo: 'bar' });
+                expect(results).toEqual({ foo: 'bar' });
             });
 
             it('should catch errors silently when parsing the json', async function () {
@@ -120,18 +118,20 @@ describe('Typed Input Service', function () {
                     '{"foo": "bar"',
                     TypedInputTypes.JSON,
                 );
-                expect(results).to.be.undefined;
+                expect(results).toEqual(undefined);
             });
         });
 
         it('should return the current timestamp', async function () {
-            const clock = sinon.useFakeTimers(Date.now());
+            vi.useFakeTimers();
+            const now = new Date();
+            vi.setSystemTime(now);
             const results = await typedInputService.getValue(
                 '',
                 TypedInputTypes.Date,
             );
-            expect(results).to.equal(clock.now);
-            clock.restore();
+            expect(results).toEqual(now.getTime());
+            vi.useRealTimers();
         });
 
         it('should return a number', async function () {
@@ -139,7 +139,7 @@ describe('Typed Input Service', function () {
                 '1',
                 TypedInputTypes.Number,
             );
-            expect(results).to.equal(1);
+            expect(results).toEqual(1);
         });
 
         it('should return undefined when type set to "none"', async function () {
@@ -147,7 +147,7 @@ describe('Typed Input Service', function () {
                 '',
                 TypedInputTypes.None,
             );
-            expect(results).to.be.undefined;
+            expect(results).toEqual(undefined);
         });
 
         it('should retun a string', async function () {
@@ -155,7 +155,7 @@ describe('Typed Input Service', function () {
                 'foo',
                 TypedInputTypes.String,
             );
-            expect(results).to.equal('foo');
+            expect(results).toEqual('foo');
         });
 
         describe('JSONata', function () {
@@ -164,7 +164,7 @@ describe('Typed Input Service', function () {
                     '',
                     TypedInputTypes.JSONata,
                 );
-                expect(results).to.be.undefined;
+                expect(results).toEqual(undefined);
             });
 
             it('should pass the correct properties to the JSONata service', async function () {
@@ -177,17 +177,20 @@ describe('Typed Input Service', function () {
                     prevEntity: { foo: 'bar4' },
                     results: 'hello',
                 };
-                jsonataServiceStub.evaluate.withArgs('foo').resolves('bar');
+                jsonataServiceStub.evaluate
+                    .calledWith('foo')
+                    .mockResolvedValue('bar');
                 const results = await typedInputService.getValue(
                     'foo',
                     TypedInputTypes.JSONata,
                     objs,
                 );
 
-                expect(
-                    jsonataServiceStub.evaluate,
-                ).to.have.been.calledOnceWithExactly('foo', objs);
-                expect(results).to.equal('bar');
+                expect(jsonataServiceStub.evaluate).toHaveBeenCalledWith(
+                    'foo',
+                    objs,
+                );
+                expect(results).toEqual('bar');
             });
         });
 
@@ -197,7 +200,7 @@ describe('Typed Input Service', function () {
                     'id',
                     TypedInputTypes.Config,
                 );
-                expect(results).to.equal('test');
+                expect(results).toEqual('test');
             });
 
             it('should return the name value of the config', async function () {
@@ -205,7 +208,7 @@ describe('Typed Input Service', function () {
                     'name',
                     TypedInputTypes.Config,
                 );
-                expect(results).to.equal('test node');
+                expect(results).toEqual('test node');
             });
 
             it('should return the complete config when value is empty', async function () {
@@ -213,7 +216,7 @@ describe('Typed Input Service', function () {
                     '',
                     TypedInputTypes.Config,
                 );
-                expect(results).to.deep.equal({
+                expect(results).toEqual({
                     id: 'test',
                     type: 'ha-test',
                     name: 'test node',
@@ -242,7 +245,7 @@ describe('Typed Input Service', function () {
                         prop,
                         props,
                     );
-                    expect(results).to.equal(prop + '_value');
+                    expect(results).toEqual(prop + '_value');
                 }
             });
         });

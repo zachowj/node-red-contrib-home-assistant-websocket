@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 import {
     isMigrationArray,
@@ -68,20 +68,20 @@ describe('Migrations - Wait Until Node', function () {
         it('should add version 0 to schema when no version is defined', function () {
             const migrate = migrations.find((m) => m.version === 0);
             const migratedSchema = migrate?.up(VERSION_UNDEFINED);
-            expect(migratedSchema).to.eql(VERSION_0);
+            expect(migratedSchema).toEqual(VERSION_0);
         });
     });
 
     describe('Version 1', function () {
         let migrate: Migration | undefined;
 
-        before(function () {
+        beforeAll(function () {
             migrate = migrations.find((m) => m.version === 1);
         });
 
         it('should add version 1 to version 0', function () {
             const migratedSchema = migrate?.up(VERSION_0);
-            expect(migratedSchema).to.eql(VERSION_1);
+            expect(migratedSchema).toEqual(VERSION_1);
         });
 
         it('should convert comma delimited entity list to array and change type to list', function () {
@@ -91,12 +91,12 @@ describe('Migrations - Wait Until Node', function () {
                 entityIdFilterType: 'substring',
             };
             const migratedSchema = migrate?.up(schema);
-            expect(migratedSchema.entityId).to.eql([
+            expect(migratedSchema.entityId).toEqual([
                 'entity.id',
                 'entity2.id',
                 'entity3.id',
             ]);
-            expect(migratedSchema.entityIdFilterType).to.eql('list');
+            expect(migratedSchema.entityIdFilterType).toEqual('list');
         });
 
         it('should only contain one entity if there is a trailing comma', function () {
@@ -106,20 +106,20 @@ describe('Migrations - Wait Until Node', function () {
                 entityIdFilterType: 'substring',
             };
             const migratedSchema = migrate?.up(schema);
-            expect(migratedSchema.entityId).to.have.lengthOf(1);
+            expect(migratedSchema.entityId).toHaveLength(1);
         });
     });
 
     describe('Version 2', function () {
         let migrate: Migration | undefined;
 
-        before(function () {
+        beforeAll(function () {
             migrate = migrations.find((m) => m.version === 2);
         });
 
         it('should change payload output to custom output format', function () {
             const migratedSchema = migrate?.up(VERSION_1);
-            expect(migratedSchema).to.eql(VERSION_2);
+            expect(migratedSchema).toEqual(VERSION_2);
         });
 
         it('should have empty output properties if entity location set to none', function () {
@@ -128,7 +128,7 @@ describe('Migrations - Wait Until Node', function () {
                 entityLocationType: 'none',
             });
 
-            expect(migratedSchema).to.eql({
+            expect(migratedSchema).toEqual({
                 ...VERSION_2,
                 outputProperties: [],
             });
@@ -136,7 +136,7 @@ describe('Migrations - Wait Until Node', function () {
 
         it('should add version 2 to version 1', function () {
             const migratedSchema = migrate?.up(VERSION_1);
-            expect(migratedSchema).to.eql(VERSION_2);
+            expect(migratedSchema).toEqual(VERSION_2);
         });
     });
 
@@ -145,7 +145,7 @@ describe('Migrations - Wait Until Node', function () {
             const migrate = migrations.find((m) => m.version === 3);
             const migratedSchema = migrate?.up(VERSION_2);
 
-            expect(migratedSchema).to.eql(VERSION_3);
+            expect(migratedSchema).toEqual(VERSION_3);
         });
 
         it('should convert a substring type to a entities substring array', function () {
@@ -155,7 +155,7 @@ describe('Migrations - Wait Until Node', function () {
                 entityIdFilterType: 'substring',
             };
             const migratedSchema = migrate(schema);
-            expect(migratedSchema.entities.substring).to.eql(['entity.id']);
+            expect(migratedSchema.entities.substring).toEqual(['entity.id']);
         });
 
         it('should convert a regex type to a entities regex array', function () {
@@ -165,7 +165,7 @@ describe('Migrations - Wait Until Node', function () {
                 entityIdFilterType: 'regex',
             };
             const migratedSchema = migrate(schema);
-            expect(migratedSchema.entities.regex).to.eql(['entity.id']);
+            expect(migratedSchema.entities.regex).toEqual(['entity.id']);
         });
 
         it('should convert a list type to a entities entity array', function () {
@@ -175,7 +175,7 @@ describe('Migrations - Wait Until Node', function () {
                 entityIdFilterType: 'list',
             };
             const migratedSchema = migrate(schema);
-            expect(migratedSchema.entities.entity).to.eql([
+            expect(migratedSchema.entities.entity).toEqual([
                 'entity.id',
                 'entity2.id',
             ]);
@@ -184,6 +184,6 @@ describe('Migrations - Wait Until Node', function () {
 
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_3);
+        expect(migratedSchema).toEqual(VERSION_3);
     });
 });

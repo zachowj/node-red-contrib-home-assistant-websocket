@@ -1,7 +1,13 @@
-import chai, { expect } from 'chai';
-import { afterEach } from 'mocha';
-import sinonChai from 'sinon-chai';
-import sinon, { StubbedInstance, stubInterface } from 'ts-sinon';
+import {
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+} from 'vitest';
+import { mock, MockProxy, mockReset } from 'vitest-mock-extended';
 
 import ComparatorService from '../../../src/common/services/ComparatorService';
 import JSONataService from '../../../src/common/services/JSONataService';
@@ -10,23 +16,25 @@ import TransformState from '../../../src/common/TransformState';
 import HomeAssistant from '../../../src/homeAssistant/HomeAssistant';
 import { HassEntity } from '../../../src/types/home-assistant';
 
-chai.use(sinonChai);
-
 describe('Comparator Service', function () {
-    let homeAssistantStub: StubbedInstance<HomeAssistant>;
-    let contextServiceStub: StubbedInstance<NodeRedContextService>;
-    let jsonataServiceStub: StubbedInstance<JSONataService>;
+    let homeAssistantStub: MockProxy<HomeAssistant>;
+    let contextServiceStub: MockProxy<NodeRedContextService>;
+    let jsonataServiceStub: MockProxy<JSONataService>;
     let comparatorService: ComparatorService;
     let transformState: TransformState;
 
-    before(function () {
-        homeAssistantStub = stubInterface<HomeAssistant>();
-        contextServiceStub = stubInterface<NodeRedContextService>();
-        jsonataServiceStub = stubInterface<JSONataService>();
+    beforeAll(function () {
+        homeAssistantStub = mock<HomeAssistant>();
+        contextServiceStub = mock<NodeRedContextService>();
+        jsonataServiceStub = mock<JSONataService>();
         transformState = new TransformState();
     });
 
     beforeEach(function () {
+        mockReset(homeAssistantStub);
+        mockReset(contextServiceStub);
+        mockReset(jsonataServiceStub);
+
         comparatorService = new ComparatorService({
             nodeRedContextService: contextServiceStub,
             homeAssistant: homeAssistantStub,
@@ -35,34 +43,33 @@ describe('Comparator Service', function () {
         });
     });
 
-    afterEach(function () {
-        sinon.reset();
-    });
-
     describe('getComparatorResult', function () {
         describe('checking context values', function () {
             it('should return true when checking message context that exist', async function () {
-                contextServiceStub.get
-                    .withArgs('msg', 'foo', { payload: 'bar' })
-                    .returns('bar');
+                contextServiceStub.get.mockReturnValue('bar');
                 const result = await comparatorService.getComparatorResult(
                     'is',
-                    'foo',
+                    'payload',
                     'bar',
                     'msg',
                     { message: { payload: 'bar' } },
                 );
 
-                expect(contextServiceStub.get).to.have.been.calledWith(
+                expect(contextServiceStub.get).toBeCalledWith(
                     'msg',
-                    'foo',
-                    { payload: 'bar' },
+                    'payload',
+                    {
+                        payload: 'bar',
+                    },
                 );
-                expect(result).to.be.true;
+
+                expect(result).toBe(true);
             });
 
             it('should return true when checking flow context that exist', async function () {
-                contextServiceStub.get.withArgs('flow', 'foo').returns('bar');
+                contextServiceStub.get
+                    .calledWith('flow', 'foo')
+                    .mockReturnValue('bar');
 
                 const result = await comparatorService.getComparatorResult(
                     'is',
@@ -71,11 +78,13 @@ describe('Comparator Service', function () {
                     'flow',
                 );
 
-                expect(result).to.be.true;
+                expect(result).toBe(true);
             });
 
             it('should return true when checking global context that exist', async function () {
-                contextServiceStub.get.withArgs('global', 'foo').returns('bar');
+                contextServiceStub.get
+                    .calledWith('global', 'foo')
+                    .mockReturnValue('bar');
 
                 const result = await comparatorService.getComparatorResult(
                     'is',
@@ -84,7 +93,7 @@ describe('Comparator Service', function () {
                     'global',
                 );
 
-                expect(result).to.be.true;
+                expect(result).toBe(true);
             });
 
             it('should return false when flow context does not exist', async function () {
@@ -95,7 +104,7 @@ describe('Comparator Service', function () {
                     'flow',
                 );
 
-                expect(result).to.be.false;
+                expect(result).toBe(false);
             });
         });
 
@@ -114,7 +123,7 @@ describe('Comparator Service', function () {
                     { entity: entity as HassEntity },
                 );
 
-                expect(result).to.be.true;
+                expect(result).toBe(true);
             });
 
             it('should return false when entitys state is not equal to expected state', async function () {
@@ -131,7 +140,7 @@ describe('Comparator Service', function () {
                     { entity: entity as HassEntity },
                 );
 
-                expect(result).to.be.false;
+                expect(result).toBe(false);
             });
         });
 
@@ -150,7 +159,7 @@ describe('Comparator Service', function () {
                     { prevEntity: entity as HassEntity },
                 );
 
-                expect(result).to.be.true;
+                expect(result).toBe(true);
             });
 
             it('should return false when entitys state is not equal to expected state', async function () {
@@ -167,17 +176,17 @@ describe('Comparator Service', function () {
                     { prevEntity: entity as HassEntity },
                 );
 
-                expect(result).to.be.false;
+                expect(result).toBe(false);
             });
         });
 
         describe('check JSONata values', function () {
             afterEach(function () {
-                jsonataServiceStub.evaluate.reset();
+                jsonataServiceStub.evaluate.mockReset();
             });
 
             it('should return true when the JSONata value matches', async function () {
-                jsonataServiceStub.evaluate.resolves('bar');
+                jsonataServiceStub.evaluate.mockResolvedValue('bar');
                 const entity = {
                     entity_id: 'light.light',
                 } as HassEntity;
@@ -195,15 +204,12 @@ describe('Comparator Service', function () {
                         prevEntity: entity,
                     },
                 );
-                expect(jsonataServiceStub.evaluate).to.have.been.calledWith(
-                    'foo',
-                    {
-                        message: { payload: 'bar' },
-                        entity,
-                        prevEntity: entity,
-                    },
-                );
-                expect(result).to.be.true;
+                expect(jsonataServiceStub.evaluate).toBeCalledWith('foo', {
+                    message: { payload: 'bar' },
+                    entity,
+                    prevEntity: entity,
+                });
+                expect(result).toBe(true);
             });
         });
 
@@ -217,7 +223,7 @@ describe('Comparator Service', function () {
                         'str',
                     );
 
-                    expect(result).to.be.true;
+                    expect(result).toBe(true);
                 });
 
                 it('should return false when comparing different values', async function () {
@@ -228,7 +234,7 @@ describe('Comparator Service', function () {
                         'str',
                     );
 
-                    expect(result).to.be.false;
+                    expect(result).toBe(false);
                 });
 
                 it('should return true when comparing valid regex values', async function () {
@@ -239,7 +245,7 @@ describe('Comparator Service', function () {
                         're',
                     );
 
-                    expect(result).to.be.true;
+                    expect(result).toBe(true);
                 });
 
                 it('should return false when comparing different regex values', async function () {
@@ -250,7 +256,7 @@ describe('Comparator Service', function () {
                         're',
                     );
 
-                    expect(result).to.be.false;
+                    expect(result).toBe(false);
                 });
 
                 it('should return true when comparing two same booleans', async function () {
@@ -261,7 +267,7 @@ describe('Comparator Service', function () {
                         'bool',
                     );
 
-                    expect(result).to.be.true;
+                    expect(result).toBe(true);
                 });
 
                 it('should return false when comparing two different booleans', async function () {
@@ -272,7 +278,7 @@ describe('Comparator Service', function () {
                         'bool',
                     );
 
-                    expect(result).to.be.false;
+                    expect(result).toBe(false);
                 });
             });
 
@@ -285,7 +291,7 @@ describe('Comparator Service', function () {
                         'str',
                     );
 
-                    expect(result).to.be.false;
+                    expect(result).toBe(false);
                 });
 
                 it('should return true when comparing different values', async function () {
@@ -296,7 +302,7 @@ describe('Comparator Service', function () {
                         'str',
                     );
 
-                    expect(result).to.be.true;
+                    expect(result).toBe(true);
                 });
             });
 
@@ -309,7 +315,7 @@ describe('Comparator Service', function () {
                         'num',
                     );
 
-                    expect(result).to.be.true;
+                    expect(result).toBe(true);
                 });
 
                 it('should return false when comparing equal values', async function () {
@@ -320,7 +326,7 @@ describe('Comparator Service', function () {
                         'num',
                     );
 
-                    expect(result).to.be.false;
+                    expect(result).toBe(false);
                 });
 
                 it('should return false when comparing less values', async function () {
@@ -331,7 +337,7 @@ describe('Comparator Service', function () {
                         'num',
                     );
 
-                    expect(result).to.be.false;
+                    expect(result).toBe(false);
                 });
             });
 
@@ -344,7 +350,7 @@ describe('Comparator Service', function () {
                         'num',
                     );
 
-                    expect(result).to.be.true;
+                    expect(result).toBe(true);
                 });
 
                 it('should return false when comparing equal values', async function () {
@@ -355,7 +361,7 @@ describe('Comparator Service', function () {
                         'num',
                     );
 
-                    expect(result).to.be.false;
+                    expect(result).toBe(false);
                 });
 
                 it('should return false when comparing greater values', async function () {
@@ -366,7 +372,7 @@ describe('Comparator Service', function () {
                         'num',
                     );
 
-                    expect(result).to.be.false;
+                    expect(result).toBe(false);
                 });
             });
 
@@ -379,7 +385,7 @@ describe('Comparator Service', function () {
                         'num',
                     );
 
-                    expect(result).to.be.true;
+                    expect(result).toBe(true);
                 });
 
                 it('should return true when comparing equal values', async function () {
@@ -390,7 +396,7 @@ describe('Comparator Service', function () {
                         'num',
                     );
 
-                    expect(result).to.be.true;
+                    expect(result).toBe(true);
                 });
 
                 it('should return false when comparing less values', async function () {
@@ -401,7 +407,7 @@ describe('Comparator Service', function () {
                         'num',
                     );
 
-                    expect(result).to.be.false;
+                    expect(result).toBe(false);
                 });
             });
 
@@ -414,7 +420,7 @@ describe('Comparator Service', function () {
                         'num',
                     );
 
-                    expect(result).to.be.true;
+                    expect(result).toBe(true);
                 });
 
                 it('should return true when comparing equal values', async function () {
@@ -425,7 +431,7 @@ describe('Comparator Service', function () {
                         'num',
                     );
 
-                    expect(result).to.be.true;
+                    expect(result).toBe(true);
                 });
 
                 it('should return false when comparing greater values', async function () {
@@ -436,13 +442,13 @@ describe('Comparator Service', function () {
                         'num',
                     );
 
-                    expect(result).to.be.false;
+                    expect(result).toBe(false);
                 });
             });
 
             describe('is in', function () {
                 it('should convert the compare data type to "list"', async function () {
-                    sinon.spy(transformState, 'transform');
+                    vi.spyOn(transformState, 'transform');
                     await comparatorService.getComparatorResult(
                         'includes',
                         'foo, bar',
@@ -450,7 +456,7 @@ describe('Comparator Service', function () {
                         'str',
                     );
 
-                    expect(transformState.transform).to.have.been.calledWith(
+                    expect(transformState.transform).toBeCalledWith(
                         'list',
                         'foo, bar',
                     );
@@ -464,7 +470,7 @@ describe('Comparator Service', function () {
                         'str',
                     );
 
-                    expect(result).to.be.true;
+                    expect(result).toBe(true);
                 });
 
                 it('should return false when comparing not in values', async function () {
@@ -475,7 +481,7 @@ describe('Comparator Service', function () {
                         'str',
                     );
 
-                    expect(result).to.be.false;
+                    expect(result).toBe(false);
                 });
 
                 it('should return false when comparing empty values', async function () {
@@ -486,7 +492,7 @@ describe('Comparator Service', function () {
                         'str',
                     );
 
-                    expect(result).to.be.false;
+                    expect(result).toBe(false);
                 });
             });
 
@@ -499,7 +505,7 @@ describe('Comparator Service', function () {
                         'str',
                     );
 
-                    expect(result).to.be.false;
+                    expect(result).toBe(false);
                 });
 
                 it('should return true when comparing not in values', async function () {
@@ -510,7 +516,7 @@ describe('Comparator Service', function () {
                         'str',
                     );
 
-                    expect(result).to.be.true;
+                    expect(result).toBe(true);
                 });
 
                 it('should return true when comparing empty values', async function () {
@@ -521,7 +527,7 @@ describe('Comparator Service', function () {
                         'str',
                     );
 
-                    expect(result).to.be.true;
+                    expect(result).toBe(true);
                 });
             });
 
@@ -534,7 +540,7 @@ describe('Comparator Service', function () {
                         'str',
                     );
 
-                    expect(result).to.be.true;
+                    expect(result).toBe(true);
                 });
 
                 it('should return false when comparing not starts with values', async function () {
@@ -545,7 +551,7 @@ describe('Comparator Service', function () {
                         'str',
                     );
 
-                    expect(result).to.be.false;
+                    expect(result).toBe(false);
                 });
 
                 it('should return false when comparing empty values', async function () {
@@ -556,7 +562,7 @@ describe('Comparator Service', function () {
                         'str',
                     );
 
-                    expect(result).to.be.false;
+                    expect(result).toBe(false);
                 });
             });
 
@@ -569,7 +575,7 @@ describe('Comparator Service', function () {
                         'str',
                     );
 
-                    expect(result).to.be.true;
+                    expect(result).toBe(true);
                 });
 
                 it('should return false when comparing not contains values', async function () {
@@ -580,7 +586,7 @@ describe('Comparator Service', function () {
                         'str',
                     );
 
-                    expect(result).to.be.false;
+                    expect(result).toBe(false);
                 });
 
                 it('should return false when comparing empty values', async function () {
@@ -591,18 +597,18 @@ describe('Comparator Service', function () {
                         'str',
                     );
 
-                    expect(result).to.be.false;
+                    expect(result).toBe(false);
                 });
             });
 
-            // describe('is in a Home Assistnat group', function () {
-            //     it('should return true when entity id is in group');
-            //     it('should return false when entity id is not in group');
-            // });
+            describe('is in a Home Assistant group', function () {
+                it.skip('should return true when entity id is in group');
+                it.skip('should return false when entity id is not in group');
+            });
 
             describe('JSONata', function () {
                 afterEach(function () {
-                    jsonataServiceStub.evaluate.reset();
+                    jsonataServiceStub.evaluate.mockReset();
                 });
 
                 it('should return true when input is empty', async function () {
@@ -613,11 +619,11 @@ describe('Comparator Service', function () {
                         'jsonata',
                     );
 
-                    expect(result).to.be.true;
+                    expect(result).toBe(true);
                 });
 
                 it('should return true when the JSONata services returns true', async function () {
-                    jsonataServiceStub.evaluate.resolves(true);
+                    jsonataServiceStub.evaluate.mockResolvedValue(true);
                     const entity = {
                         entity_id: 'light.light',
                     } as HassEntity;
@@ -635,26 +641,23 @@ describe('Comparator Service', function () {
                             prevEntity: entity,
                         },
                     );
-                    expect(jsonataServiceStub.evaluate).to.have.been.calledWith(
-                        'foo',
-                        {
-                            message: { payload: 'bar' },
-                            entity,
-                            prevEntity: entity,
-                        },
-                    );
-                    expect(result).to.be.true;
+                    expect(jsonataServiceStub.evaluate).toBeCalledWith('foo', {
+                        message: { payload: 'bar' },
+                        entity,
+                        prevEntity: entity,
+                    });
+                    expect(result).toBe(true);
                 });
 
                 it('should return false when the JSONata services returns false', async function () {
-                    jsonataServiceStub.evaluate.resolves(false);
+                    jsonataServiceStub.evaluate.mockResolvedValue(false);
                     const result = await comparatorService.getComparatorResult(
                         'jsonata',
                         'foo',
                         'bar',
                         'jsonata',
                     );
-                    expect(result).to.be.false;
+                    expect(result).toBe(false);
                 });
             });
         });

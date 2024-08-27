@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 import {
     isMigrationArray,
@@ -63,14 +63,14 @@ describe('Migrations - Events: All Node', function () {
     describe('Version 0', function () {
         let migrate: Migration | undefined;
 
-        before(function () {
+        beforeAll(function () {
             migrate = migrations.find((m) => m.version === 0);
         });
 
         it('should add version 0 to schema when no version is defined', function () {
             const migratedSchema = migrate?.up(VERSION_UNDEFINED);
 
-            expect(migratedSchema).to.eql(VERSION_0);
+            expect(migratedSchema).toEqual(VERSION_0);
         });
 
         it(`should only add waitForRunning if it's undefined`, function () {
@@ -81,7 +81,7 @@ describe('Migrations - Events: All Node', function () {
             };
             const migratedSchema = migrate?.up(schema);
 
-            expect(migratedSchema).to.eql(expectedSchema);
+            expect(migratedSchema).toEqual(expectedSchema);
         });
     });
 
@@ -90,7 +90,7 @@ describe('Migrations - Events: All Node', function () {
             const migrate = migrations.find((m) => m.version === 1);
             const migratedSchema = migrate?.up(VERSION_0);
 
-            expect(migratedSchema).to.eql(VERSION_1);
+            expect(migratedSchema).toEqual(VERSION_1);
         });
     });
 
@@ -98,7 +98,7 @@ describe('Migrations - Events: All Node', function () {
         it('should update version 1 to version 2', function () {
             const migrate = migrations.find((m) => m.version === 2);
             const migratedSchema = migrate?.up(VERSION_1);
-            expect(migratedSchema).to.eql(VERSION_2);
+            expect(migratedSchema).toEqual(VERSION_2);
         });
 
         it('should move event_type to eventType', function () {
@@ -111,7 +111,7 @@ describe('Migrations - Events: All Node', function () {
                 ...VERSION_2,
                 eventType: 'event_name',
             };
-            expect(migratedSchema).to.eql(expectedSchema);
+            expect(migratedSchema).toEqual(expectedSchema);
         });
     });
 
@@ -119,12 +119,12 @@ describe('Migrations - Events: All Node', function () {
         it('should update version 2 to version 3', function () {
             const migrate = migrations.find((m) => m.version === 3);
             const migratedSchema = migrate?.up(VERSION_2);
-            expect(migratedSchema).to.eql(VERSION_3);
+            expect(migratedSchema).toEqual(VERSION_3);
         });
     });
 
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_3);
+        expect(migratedSchema).toEqual(VERSION_3);
     });
 });

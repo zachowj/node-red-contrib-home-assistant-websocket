@@ -1,11 +1,11 @@
-import { expect } from 'chai';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 import { formatDate } from '../../src/helpers/date';
 
 describe('formatDate', function () {
     let nodeVersion: string;
 
-    before(function () {
+    beforeAll(function () {
         nodeVersion = process.version.substring(1, 3);
     });
 
@@ -15,7 +15,7 @@ describe('formatDate', function () {
             locale: 'en-US',
             date,
         });
-        expect(formattedDate).to.equal('Jan 12, 12:12 PM');
+        expect(formattedDate).toEqual('Jan 12, 12:12 PM');
     });
 
     it('should format date using en-GB as locale', function () {
@@ -26,7 +26,7 @@ describe('formatDate', function () {
             locale: 'en-GB',
             date,
         });
-        expect(formattedDate).to.equal('12 Jan, 16:12');
+        expect(formattedDate).toEqual('12 Jan, 16:12');
     });
 
     it('should format date to include all options', function () {
@@ -46,7 +46,7 @@ describe('formatDate', function () {
                 fractionalSecondDigits: 3,
             },
         });
-        expect(formattedDate).to.equal('01/12/2012, 12:12:12.123 PM');
+        expect(formattedDate).toEqual('01/12/2012, 12:12:12.123 PM');
     });
 
     it('should fallback to en-US locale', function () {
@@ -55,6 +55,6 @@ describe('formatDate', function () {
             locale: undefined,
             date,
         });
-        expect(formattedDate).to.equal('Jan 12, 12:12 PM');
+        expect(formattedDate).toEqual('Jan 12, 12:12 PM');
     });
 });

@@ -104,6 +104,7 @@ class BaseNode {
     }
 
     // Subclasses should override these as hooks into common events
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     onClose(removed) {}
 
     onInput() {}

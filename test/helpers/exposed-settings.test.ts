@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, expect, it } from 'vitest';
 
 import { NodeType } from '../../src/const';
 import { getExposedSettings } from '../../src/helpers/exposed-settings';
@@ -7,7 +7,7 @@ import { getCurrentVersion } from '../../src/helpers/migrate';
 describe('getExposedSettings', function () {
     it('should return settings for a node type', function () {
         const result = getExposedSettings(NodeType.Sensor);
-        expect(result).to.deep.equal({
+        expect(result).toEqual({
             settings: {
                 haSensorVersion: {
                     value: 0,
@@ -19,7 +19,7 @@ describe('getExposedSettings', function () {
 
     it('should return settings for a server node type', function () {
         const result = getExposedSettings(NodeType.Server);
-        expect(result).to.deep.equal({
+        expect(result).toEqual({
             settings: {
                 serverVersion: {
                     value: getCurrentVersion(NodeType.Server),

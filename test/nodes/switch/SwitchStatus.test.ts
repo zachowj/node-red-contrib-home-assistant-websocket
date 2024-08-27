@@ -1,7 +1,14 @@
-import chai, { expect } from 'chai';
 import { NodeAPI } from 'node-red';
-import sinonChai from 'sinon-chai';
-import sinon, { StubbedInstance, stubInterface } from 'ts-sinon';
+import {
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+} from 'vitest';
+import { mock, MockProxy, mockReset } from 'vitest-mock-extended';
 
 import Events from '../../../src/common/events/Events';
 import State from '../../../src/common/State';
@@ -10,39 +17,45 @@ import { EntityConfigNode } from '../../../src/nodes/entity-config';
 import { SwitchNode, SwitchNodeProperties } from '../../../src/nodes/switch';
 import SwitchStatus from '../../../src/nodes/switch/SwitchStatus';
 import { ServerNodeConfig } from '../../../src/types/nodes';
-import { resetStubInterface } from '../../helpers';
-
-chai.use(sinonChai);
 
 const fakeNow = new Date(2012, 0, 12, 12, 12, 12);
 
 describe('SwitchEntityStatus', function () {
-    let entityConfigEvents: StubbedInstance<Events>;
-    let entityConfigNode: StubbedInstance<EntityConfigNode>;
-    let nodeStub: StubbedInstance<SwitchNode>;
-    let nodeApiStub: StubbedInstance<NodeAPI>;
-    let serverNodeConfigStub: StubbedInstance<ServerNodeConfig>;
-    let stateStub: StubbedInstance<State>;
-    let switchNodeConfigStub: StubbedInstance<SwitchNodeProperties>;
+    let entityConfigEvents: MockProxy<Events>;
+    let entityConfigNode: MockProxy<EntityConfigNode>;
+    let nodeStub: MockProxy<SwitchNode>;
+    let nodeApiStub: MockProxy<NodeAPI>;
+    let serverNodeConfigStub: MockProxy<ServerNodeConfig>;
+    let stateStub: MockProxy<State>;
+    let switchNodeConfigStub: MockProxy<SwitchNodeProperties>;
 
     let status: SwitchStatus;
 
-    before(function () {
-        entityConfigEvents = stubInterface<Events>();
-        entityConfigNode = stubInterface<EntityConfigNode>();
-        nodeApiStub = stubInterface<NodeAPI>();
-        nodeStub = stubInterface<SwitchNode>();
-        serverNodeConfigStub = stubInterface<ServerNodeConfig>();
-        stateStub = stubInterface<State>();
-        switchNodeConfigStub = stubInterface<SwitchNodeProperties>();
+    beforeAll(function () {
+        entityConfigEvents = mock<Events>();
+        entityConfigNode = mock<EntityConfigNode>();
+        nodeApiStub = mock<NodeAPI>();
+        nodeStub = mock<SwitchNode>();
+        serverNodeConfigStub = mock<ServerNodeConfig>();
+        stateStub = mock<State>();
+        switchNodeConfigStub = mock<SwitchNodeProperties>();
 
         setRED(nodeApiStub);
     });
 
     beforeEach(function () {
-        nodeApiStub._.returnsArg(0);
-        nodeStub.status.returns();
-        sinon.useFakeTimers(fakeNow.getTime());
+        mockReset(entityConfigEvents);
+        mockReset(entityConfigNode);
+        mockReset(nodeStub);
+        mockReset(nodeApiStub);
+        mockReset(serverNodeConfigStub);
+        mockReset(stateStub);
+        mockReset(switchNodeConfigStub);
+
+        nodeApiStub._.mockReturnValue('0');
+        nodeStub.status.mockReturnValue();
+        vi.useFakeTimers();
+        vi.setSystemTime(fakeNow);
 
         nodeStub.config = switchNodeConfigStub;
 
@@ -64,10 +77,7 @@ describe('SwitchEntityStatus', function () {
     });
 
     afterEach(function () {
-        sinon.reset();
-        resetStubInterface(nodeStub);
-        resetStubInterface(stateStub);
-        resetStubInterface(entityConfigNode);
+        vi.useRealTimers();
     });
 
     describe('set', function () {
@@ -79,10 +89,8 @@ describe('SwitchEntityStatus', function () {
             };
             status.set();
 
-            expect(nodeStub.status).to.have.been.calledOnce;
-            expect(nodeStub.status).to.have.been.calledOnceWithExactly(
-                expectedStatus,
-            );
+            expect(nodeStub.status).toHaveBeenCalledOnce();
+            expect(nodeStub.status).toHaveBeenCalledWith(expectedStatus);
         });
     });
 });

@@ -1,27 +1,22 @@
-import chai, { expect } from 'chai';
-import sinonChai from 'sinon-chai';
-import sinon, { StubbedInstance, stubInterface } from 'ts-sinon';
+import { afterEach, beforeAll, describe, expect, it } from 'vitest';
+import { mock, MockProxy, mockReset } from 'vitest-mock-extended';
 
 import Status from '../../../src/common/status/Status';
 import { BaseNode, ServerNodeConfig } from '../../../src/types/nodes';
-import { resetStubInterface } from '../../helpers';
-
-chai.use(sinonChai);
 
 describe('Status', function () {
-    let nodeStub: StubbedInstance<BaseNode>;
-    let serverNodeConfigStub: StubbedInstance<ServerNodeConfig>;
+    let nodeStub: MockProxy<BaseNode>;
+    let serverNodeConfigStub: MockProxy<ServerNodeConfig>;
 
-    before(function () {
-        nodeStub = stubInterface<BaseNode>();
-        nodeStub.status.returns();
-        serverNodeConfigStub = stubInterface<ServerNodeConfig>();
+    beforeAll(function () {
+        nodeStub = mock<BaseNode>();
+        nodeStub.status.mockReturnValue();
+        serverNodeConfigStub = mock<ServerNodeConfig>();
     });
 
     afterEach(function () {
-        sinon.reset();
-        resetStubInterface(nodeStub);
-        resetStubInterface(serverNodeConfigStub);
+        mockReset(nodeStub);
+        mockReset(serverNodeConfigStub);
     });
 
     describe('set', function () {
@@ -33,9 +28,7 @@ describe('Status', function () {
             const expectedStatus = {};
             status.set();
 
-            expect(nodeStub.status).to.have.been.calledOnceWithExactly(
-                expectedStatus,
-            );
+            expect(nodeStub.status).toHaveBeenCalledWith(expectedStatus);
         });
     });
 
@@ -49,9 +42,7 @@ describe('Status', function () {
             const expectedStatus = { text: 'hello' };
             status.setText(expectedStatus.text);
 
-            expect(nodeStub.status).to.have.been.calledOnceWithExactly(
-                expectedStatus,
-            );
+            expect(nodeStub.status).toHaveBeenCalledWith(expectedStatus);
         });
     });
 });

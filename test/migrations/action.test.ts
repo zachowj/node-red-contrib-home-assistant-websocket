@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 import {
     isMigrationArray,
@@ -91,20 +91,20 @@ describe('Migrations - Call Service Node', function () {
             const migrate = migrations.find((m) => m.version === 0);
             const migratedSchema = migrate?.up(VERSION_UNDEFINED);
 
-            expect(migratedSchema).to.eql(VERSION_0);
+            expect(migratedSchema).toEqual(VERSION_0);
         });
     });
 
     describe('Version 1', function () {
         let migrate: Migration | undefined;
 
-        before(function () {
+        beforeAll(function () {
             migrate = migrations.find((m) => m.version === 1);
         });
 
         it('should update version 0 to version 1', function () {
             const migratedSchema = migrate?.up(VERSION_0);
-            expect(migratedSchema).to.eql(VERSION_1);
+            expect(migratedSchema).toEqual(VERSION_1);
         });
 
         it('extract entity_id out of data and move it to entityId', function () {
@@ -119,7 +119,7 @@ describe('Migrations - Call Service Node', function () {
             };
             const migratedSchema = migrate?.up(schema);
 
-            expect(migratedSchema).to.eql(expectedSchema);
+            expect(migratedSchema).toEqual(expectedSchema);
         });
 
         it('extract entity_id out of data and move it to entityId with data only containing left over properties', function () {
@@ -138,7 +138,7 @@ describe('Migrations - Call Service Node', function () {
             };
             const migratedSchema = migrate?.up(schema);
 
-            expect(migratedSchema).to.eql(expectedSchema);
+            expect(migratedSchema).toEqual(expectedSchema);
         });
 
         it(`set entityId to empty string when entity_id doesn't exists in data`, function () {
@@ -156,21 +156,21 @@ describe('Migrations - Call Service Node', function () {
             };
             const migratedSchema = migrate?.up(schema);
 
-            expect(migratedSchema).to.eql(expectedSchema);
+            expect(migratedSchema).toEqual(expectedSchema);
         });
     });
 
     describe('Version 2', function () {
         let migrate: Migration | undefined;
 
-        before(function () {
+        beforeAll(function () {
             migrate = migrations.find((m) => m.version === 2);
         });
 
         it('should update version 1 to version 2', function () {
             const migratedSchema = migrate?.up(VERSION_1);
 
-            expect(migratedSchema).to.eql(VERSION_2);
+            expect(migratedSchema).toEqual(VERSION_2);
         });
 
         it('should have empty outputProperties when locationType is none', function () {
@@ -180,7 +180,7 @@ describe('Migrations - Call Service Node', function () {
             };
             const migratedSchema = migrate?.up(schema);
 
-            expect(migratedSchema.outputProperties).to.eql([]);
+            expect(migratedSchema.outputProperties).toEqual([]);
         });
     });
 
@@ -189,21 +189,21 @@ describe('Migrations - Call Service Node', function () {
             const migrate = migrations.find((m) => m.version === 3);
             const migratedSchema = migrate?.up(VERSION_2);
 
-            expect(migratedSchema).to.eql(VERSION_3);
+            expect(migratedSchema).toEqual(VERSION_3);
         });
     });
 
     describe('Version 4', function () {
         let migrate: Migration | undefined;
 
-        before(function () {
+        beforeAll(function () {
             migrate = migrations.find((m) => m.version === 4);
         });
 
         it('should update version 3 to version 4', function () {
             const migratedSchema = migrate?.up(VERSION_3);
 
-            expect(migratedSchema).to.eql(VERSION_4);
+            expect(migratedSchema).toEqual(VERSION_4);
         });
 
         describe('entity id property', function () {
@@ -214,7 +214,7 @@ describe('Migrations - Call Service Node', function () {
                 };
                 const migratedSchema = migrate?.up(schema);
 
-                expect(migratedSchema.target.entityId).to.eql([]);
+                expect(migratedSchema.target.entityId).toEqual([]);
             });
 
             it('should set the target entity to an empty array when the entity id is undefined', function () {
@@ -224,7 +224,7 @@ describe('Migrations - Call Service Node', function () {
                 };
                 const migratedSchema = migrate?.up(schema);
 
-                expect(migratedSchema.target.entityId).to.eql([]);
+                expect(migratedSchema.target.entityId).toEqual([]);
             });
 
             it('should set the target entity to an array of length 1 when the entity id is a single entity', function () {
@@ -234,7 +234,7 @@ describe('Migrations - Call Service Node', function () {
                 };
                 const migratedSchema = migrate?.up(schema);
 
-                expect(migratedSchema.target.entityId).to.have.a.lengthOf(1);
+                expect(migratedSchema.target.entityId).toHaveLength(1);
             });
         });
     });
@@ -242,14 +242,14 @@ describe('Migrations - Call Service Node', function () {
     describe('Version 5', function () {
         let migrate: Migration | undefined;
 
-        before(function () {
+        beforeAll(function () {
             migrate = migrations.find((m) => m.version === 5);
         });
 
         it('should update version 4 to version 5', function () {
             const migratedSchema = migrate?.up(VERSION_4);
 
-            expect(migratedSchema).to.eql(VERSION_5);
+            expect(migratedSchema).toEqual(VERSION_5);
         });
 
         it('should move targets to the base object', function () {
@@ -263,29 +263,29 @@ describe('Migrations - Call Service Node', function () {
             };
             const migratedSchema = migrate?.up(schema);
 
-            expect(migratedSchema.areaId).to.eql(['living_room']);
-            expect(migratedSchema.deviceId).to.eql(['1234']);
-            expect(migratedSchema.entityId).to.eql(['sun.sun']);
-            expect(migratedSchema.target).to.eql(undefined);
+            expect(migratedSchema.areaId).toEqual(['living_room']);
+            expect(migratedSchema.deviceId).toEqual(['1234']);
+            expect(migratedSchema.entityId).toEqual(['sun.sun']);
+            expect(migratedSchema.target).toEqual(undefined);
         });
     });
 
     describe('Version 6', function () {
         let migrate: Migration | undefined;
 
-        before(function () {
+        beforeAll(function () {
             migrate = migrations.find((m) => m.version === 6);
         });
 
         it('should update version 5 to version 6', function () {
             const migratedSchema = migrate?.up(VERSION_5);
 
-            expect(migratedSchema).to.eql(VERSION_6);
+            expect(migratedSchema).toEqual(VERSION_6);
         });
     });
 
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_6);
+        expect(migratedSchema).toEqual(VERSION_6);
     });
 });

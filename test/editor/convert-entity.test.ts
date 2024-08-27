@@ -1,16 +1,12 @@
-import chai, { expect } from 'chai';
 import { EditorRED } from 'node-red';
-import sinonChai from 'sinon-chai';
-import sinon, { StubbedInstance, stubInterface } from 'ts-sinon';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { mock, MockProxy, mockReset } from 'vitest-mock-extended';
 
 import { EntityType, NodeType } from '../../src/const';
 import {
     convertEntityNode,
     EntityProperties,
 } from '../../src/editor/convert-entity';
-import { resetStubInterface } from '../helpers';
-
-chai.use(sinonChai);
 
 declare global {
     // eslint-disable-next-line no-var
@@ -100,48 +96,45 @@ const EXPECTED_SWITCH_NODE = {
 };
 
 describe('convert-entity', function () {
-    let RED: StubbedInstance<EditorRED>;
+    let RED: MockProxy<EditorRED>;
 
     beforeEach(function () {
         const newId = '123';
 
-        RED = stubInterface<EditorRED>();
+        RED = mock<EditorRED>();
 
-        RED.group.addToGroup = sinon.stub();
-        RED.group.removeFromGroup = sinon.stub();
+        RED.group.addToGroup = vi.fn();
+        RED.group.removeFromGroup = vi.fn();
 
         // @ts-expect-error - function is not defined in types
-        RED.nodes.getNodeLinks = sinon.stub().returns([]);
-        RED.nodes.group = sinon.stub();
-        RED.nodes.id = sinon.stub().returns(newId);
-        RED.nodes.import = sinon.stub();
-        RED.nodes.moveNodeToTab = sinon.stub();
-        RED.nodes.node = sinon
-            .stub()
-            .onFirstCall()
-            .returns(null)
-            .onSecondCall()
-            .returns({ id: newId });
-        RED.nodes.remove = sinon.stub();
+        RED.nodes.getNodeLinks = vi.fn().mockReturnValue([]);
+        RED.nodes.group = vi.fn();
+        RED.nodes.id = vi.fn().mockReturnValue(newId);
+        RED.nodes.import = vi.fn();
+        RED.nodes.moveNodeToTab = vi.fn();
+        RED.nodes.node = vi.fn().mockReturnValueOnce(null).mockReturnValue({
+            id: newId,
+        });
+        RED.nodes.remove = vi.fn();
 
-        RED.settings.get = sinon.stub().returns(0);
+        RED.settings.get = vi.fn().mockReturnValue(0);
 
-        RED.view.redraw = sinon.stub();
+        RED.view.redraw = vi.fn();
 
         global.RED = RED;
     });
 
     afterEach(function () {
-        resetStubInterface(RED);
+        mockReset(RED);
     });
 
     it('should remove old entity node and create config node and sensor node', function () {
         convertEntityNode(NODE_DATA);
-        expect(RED.nodes.remove).to.have.been.calledWith('oldId');
-        expect(RED.nodes.moveNodeToTab).to.have.been.called;
-        expect(RED.nodes.import).to.have.been.calledWith(EXPECTED_CONFIG_NODE);
-        expect(RED.nodes.import).to.have.been.calledWith(EXPECTED_SENSOR_NODE);
-        expect(RED.view.redraw).to.have.been.calledWith(true);
+        expect(RED.nodes.remove).toBeCalledWith('oldId');
+        expect(RED.nodes.moveNodeToTab).toHaveBeenCalled();
+        expect(RED.nodes.import).toBeCalledWith(EXPECTED_CONFIG_NODE);
+        expect(RED.nodes.import).toBeCalledWith(EXPECTED_SENSOR_NODE);
+        expect(RED.view.redraw).toBeCalledWith(true);
     });
 
     describe('config node creation', function () {
@@ -152,25 +145,21 @@ describe('convert-entity', function () {
                 ...EXPECTED_CONFIG_NODE,
                 name: 'sensor config for my name',
             };
-            expect(RED.nodes.import).to.have.been.calledWith(expected);
+            expect(RED.nodes.import).toHaveBeenCalledWith(expected);
         });
     });
 
     it("should remove and add to group if it's in a group", function () {
-        RED.nodes.node = sinon
-            .stub()
-            .onFirstCall()
-            .returns(null)
-            .onSecondCall()
-            .returns({ id: '123' })
-            .onThirdCall()
-            .returns({ id: '123' });
+        RED.nodes.node = vi
+            .fn()
+            .mockReturnValueOnce(null)
+            .mockReturnValue({ id: '123' });
         const data = { ...NODE_DATA, g: 'groupId' };
         convertEntityNode(data);
-        expect(RED.group.removeFromGroup).to.have.been.called;
-        expect(RED.group.addToGroup).to.have.been.called;
-        expect(RED.nodes.group).to.have.been.calledTwice;
-        expect(RED.nodes.group).to.have.been.calledWith('groupId');
+        expect(RED.group.removeFromGroup).toHaveBeenCalled();
+        expect(RED.group.addToGroup).toHaveBeenCalled();
+        expect(RED.nodes.group).toHaveBeenCalledTimes(2);
+        expect(RED.nodes.group).toHaveBeenCalledWith('groupId');
     });
 
     describe('binary sensor/sensor', function () {
@@ -208,7 +197,7 @@ describe('convert-entity', function () {
                 ],
                 inputOverride: 'block',
             };
-            expect(RED.nodes.import).to.have.been.calledWith(expected);
+            expect(RED.nodes.import).toHaveBeenCalledWith(expected);
         });
 
         it('should convert sensor output properties', function () {
@@ -229,7 +218,7 @@ describe('convert-entity', function () {
                     },
                 ],
             };
-            expect(RED.nodes.import).to.have.been.calledWith(expected);
+            expect(RED.nodes.import).toHaveBeenCalledWith(expected);
         });
 
         describe('binary sensor', function () {
@@ -243,7 +232,7 @@ describe('convert-entity', function () {
                     ...EXPECTED_SENSOR_NODE,
                     type: NodeType.BinarySensor,
                 };
-                expect(RED.nodes.import).to.have.been.calledWith(expected);
+                expect(RED.nodes.import).toHaveBeenCalledWith(expected);
             });
         });
 
@@ -255,7 +244,7 @@ describe('convert-entity', function () {
                     ...EXPECTED_SENSOR_NODE,
                     type: NodeType.Sensor,
                 };
-                expect(RED.nodes.import).to.have.been.calledWith(expected);
+                expect(RED.nodes.import).toHaveBeenCalledWith(expected);
             });
         });
     });
@@ -264,9 +253,7 @@ describe('convert-entity', function () {
         it('should set defaults', function () {
             const data = { ...NODE_DATA, entityType: EntityType.Switch };
             convertEntityNode(data);
-            expect(RED.nodes.import).to.have.been.calledWith(
-                EXPECTED_SWITCH_NODE,
-            );
+            expect(RED.nodes.import).toHaveBeenCalledWith(EXPECTED_SWITCH_NODE);
         });
 
         it('should set outputOnStateChange to true', function () {
@@ -280,7 +267,7 @@ describe('convert-entity', function () {
                 ...EXPECTED_SWITCH_NODE,
                 outputOnStateChange: true,
             };
-            expect(RED.nodes.import).to.have.been.calledWith(expected);
+            expect(RED.nodes.import).toHaveBeenCalledWith(expected);
         });
 
         it('should set outputOnStateChange to false', function () {
@@ -294,7 +281,7 @@ describe('convert-entity', function () {
                 ...EXPECTED_SWITCH_NODE,
                 outputOnStateChange: false,
             };
-            expect(RED.nodes.import).to.have.been.calledWith(expected);
+            expect(RED.nodes.import).toHaveBeenCalledWith(expected);
         });
 
         it('should convert switch output properties', function () {
@@ -316,7 +303,7 @@ describe('convert-entity', function () {
                     },
                 ],
             };
-            expect(RED.nodes.import).to.have.been.calledWith(expected);
+            expect(RED.nodes.import).toHaveBeenCalledWith(expected);
         });
     });
 });

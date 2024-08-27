@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, expect, it } from 'vitest';
 
 import { isMigrationArray, migrate } from '../../src/helpers/migrate';
 import migrations from '../../src/nodes/device/migrations';
@@ -51,7 +51,7 @@ describe('Migrations - Device Node', function () {
         it('should add version 0 to schema when no version is defined', function () {
             const migrate = migrations.find((m) => m.version === 0);
             const migratedSchema = migrate?.up(VERSION_UNDEFINED);
-            expect(migratedSchema).to.eql(VERSION_0);
+            expect(migratedSchema).toEqual(VERSION_0);
         });
     });
 
@@ -59,12 +59,12 @@ describe('Migrations - Device Node', function () {
         it('should add version 1 to schema when no version is defined', function () {
             const migrate = migrations.find((m) => m.version === 1);
             const migratedSchema = migrate?.up(VERSION_0);
-            expect(migratedSchema).to.eql(VERSION_1);
+            expect(migratedSchema).toEqual(VERSION_1);
         });
     });
 
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_1);
+        expect(migratedSchema).toEqual(VERSION_1);
     });
 });

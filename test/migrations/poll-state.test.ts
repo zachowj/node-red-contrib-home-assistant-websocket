@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, expect, it } from 'vitest';
 
 import { isMigrationArray, migrate } from '../../src/helpers/migrate';
 import migrations from '../../src/nodes/poll-state/migrations';
@@ -89,7 +89,7 @@ describe('Migrations - Poll State Node', function () {
         it('should add version 0 to schema when no version is defined', function () {
             const migrate = migrations.find((m) => m.version === 0);
             const migratedSchema = migrate?.up(VERSION_UNDEFINED);
-            expect(migratedSchema).to.eql(VERSION_0);
+            expect(migratedSchema).toEqual(VERSION_0);
         });
     });
 
@@ -97,7 +97,7 @@ describe('Migrations - Poll State Node', function () {
         it('should update version 0 to version 1 setting new defaults', function () {
             const migrate = migrations.find((m) => m.version === 1);
             const migratedSchema = migrate?.up(VERSION_0);
-            expect(migratedSchema).to.eql(VERSION_1);
+            expect(migratedSchema).toEqual(VERSION_1);
         });
     });
 
@@ -105,7 +105,7 @@ describe('Migrations - Poll State Node', function () {
         it('should update version 1 to version 2 setting new defaults', function () {
             const migrate = migrations.find((m) => m.version === 2);
             const migratedSchema = migrate?.up(VERSION_1);
-            expect(migratedSchema).to.eql(VERSION_2);
+            expect(migratedSchema).toEqual(VERSION_2);
         });
     });
 
@@ -113,12 +113,12 @@ describe('Migrations - Poll State Node', function () {
         it('should update version 2 to version 3 setting new defaults', function () {
             const migrate = migrations.find((m) => m.version === 3);
             const migratedSchema = migrate?.up(VERSION_2);
-            expect(migratedSchema).to.eql(VERSION_3);
+            expect(migratedSchema).toEqual(VERSION_3);
         });
     });
 
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_3);
+        expect(migratedSchema).toEqual(VERSION_3);
     });
 });

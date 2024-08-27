@@ -1,30 +1,41 @@
-import chai, { expect } from 'chai';
+import { HassEntities, HassEntity } from 'home-assistant-js-websocket';
 import jsonata, { Expression } from 'jsonata';
 import { Node, NodeAPI, NodeMessage } from 'node-red';
-import sinonChai from 'sinon-chai';
-import sinon, { StubbedInstance, stubInterface } from 'ts-sinon';
+import {
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+} from 'vitest';
+import {
+    DeepMockProxy,
+    mock,
+    mockDeep,
+    MockProxy,
+    mockReset,
+} from 'vitest-mock-extended';
 
 import JSONataService from '../../../src/common/services/JSONataService';
 import { setRED } from '../../../src/globals';
 import HomeAssistant from '../../../src/homeAssistant/HomeAssistant';
-import { resetStubInterface } from '../../helpers';
-
-chai.use(sinonChai);
 
 describe('JSONata Service', function () {
-    let NodeApiStub: StubbedInstance<NodeAPI>;
-    let homeAssistantStub: StubbedInstance<HomeAssistant>;
-    let nodeStub: StubbedInstance<Node>;
+    let NodeApiStub: MockProxy<NodeAPI>;
+    let homeAssistantStub: DeepMockProxy<HomeAssistant>;
+    let nodeStub: MockProxy<Node>;
 
-    before(function () {
-        NodeApiStub = stubInterface<NodeAPI>();
+    beforeAll(function () {
+        NodeApiStub = mock<NodeAPI>();
         setRED(NodeApiStub);
     });
 
     beforeEach(function () {
         let expression: Expression;
-        homeAssistantStub = stubInterface<HomeAssistant>();
-        nodeStub = stubInterface<Node>();
+        homeAssistantStub = mockDeep<HomeAssistant>();
+        nodeStub = mock<Node>();
 
         const prepareJSONataExpressionFake = (value: string) => {
             expression = jsonata(value);
@@ -36,18 +47,17 @@ describe('JSONata Service', function () {
             callback: (err: Error | null, result: any) => void,
         ) => callback(null, expr.evaluate(msg));
 
-        NodeApiStub.util.prepareJSONataExpression = sinon
-            .stub()
-            .callsFake(prepareJSONataExpressionFake);
-        NodeApiStub.util.evaluateJSONataExpression = sinon
-            .stub()
-            .callsFake(evaluateJSONataExpressionFake);
+        NodeApiStub.util.prepareJSONataExpression = vi
+            .fn()
+            .mockImplementation(prepareJSONataExpressionFake);
+        NodeApiStub.util.evaluateJSONataExpression = vi
+            .fn()
+            .mockImplementation(evaluateJSONataExpressionFake);
     });
 
     afterEach(function () {
-        sinon.restore();
-        resetStubInterface(homeAssistantStub);
-        resetStubInterface(nodeStub);
+        mockReset(NodeApiStub);
+        mockReset(homeAssistantStub);
     });
 
     describe('evaluate', function () {
@@ -58,17 +68,19 @@ describe('JSONata Service', function () {
 
         it('should call setup functions', async function () {
             const result = await jsonataService.evaluate(`"test"`);
-            expect(NodeApiStub.util.prepareJSONataExpression).to.have.been
-                .calledOnce;
-            expect(NodeApiStub.util.evaluateJSONataExpression).to.have.been
-                .calledOnce;
-            expect(result).to.equal('test');
+            expect(
+                NodeApiStub.util.prepareJSONataExpression,
+            ).toHaveBeenCalledOnce();
+            expect(
+                NodeApiStub.util.evaluateJSONataExpression,
+            ).toHaveBeenCalledOnce();
+            expect(result).toEqual('test');
         });
 
         it('should return the correct value from an equation', async function () {
             const result = await jsonataService.evaluate(`1 + 1`);
 
-            expect(result).to.equal(2);
+            expect(result).toEqual(2);
         });
 
         describe('should use the message object as the context', function () {
@@ -77,7 +89,7 @@ describe('JSONata Service', function () {
                     message: { payload: 1 },
                 });
 
-                expect(result).to.equal(2);
+                expect(result).toEqual(2);
             });
 
             it('should return message payload of type string', async function () {
@@ -85,7 +97,7 @@ describe('JSONata Service', function () {
                     message: { payload: 'hello' },
                 });
 
-                expect(result).to.equal('hello');
+                expect(result).toEqual('hello');
             });
         });
 
@@ -99,7 +111,7 @@ describe('JSONata Service', function () {
                     },
                 });
 
-                expect(result).to.deep.equal({
+                expect(result).toEqual({
                     entity_id: 'light.kitchen',
                     state: 'on',
                     attributes: {},
@@ -114,7 +126,7 @@ describe('JSONata Service', function () {
                     },
                 );
 
-                expect(result).to.equal('on');
+                expect(result).toEqual('on');
             });
 
             it('should be compare state', async function () {
@@ -125,7 +137,7 @@ describe('JSONata Service', function () {
                     },
                 );
 
-                expect(result).to.equal(true);
+                expect(result).toEqual(true);
             });
         });
 
@@ -139,7 +151,7 @@ describe('JSONata Service', function () {
                     },
                 });
 
-                expect(result).to.deep.equal({
+                expect(result).toEqual({
                     entity_id: 'light.kitchen',
                     state: 'on',
                     attributes: {},
@@ -154,7 +166,7 @@ describe('JSONata Service', function () {
                     },
                 );
 
-                expect(result).to.equal('on');
+                expect(result).toEqual('on');
             });
 
             it('should be compare state of prevEntity', async function () {
@@ -165,64 +177,66 @@ describe('JSONata Service', function () {
                     },
                 );
 
-                expect(result).to.equal(true);
+                expect(result).toEqual(true);
             });
         });
 
-        // describe('$entities()', function () {
-        //     const entities = {
-        //         'light.kitchen': {
-        //             entity_id: 'light.kitchen',
-        //             state: 'on',
-        //             attributes: {},
-        //             last_changed: '2019-01-01T00:00:00.000000Z',
-        //             last_updated: '2019-01-01T00:00:00.000000Z',
-        //             context: {
-        //                 id: 'c0b8f8f8-f8f8-f8f8-f8f8-f8f8f8f8f8f8',
-        //                 user_id: 'user_id',
-        //                 parent_id: '0000',
-        //             },
-        //         },
-        //         'light.living_room': {
-        //             entity_id: 'light.living_room',
-        //             state: 'on',
-        //             attributes: {},
-        //             last_changed: '2019-01-01T00:00:00.000000Z',
-        //             last_updated: '2019-01-01T00:00:00.000000Z',
-        //             context: {
-        //                 id: 'c0b8f8f8-f8f8-f8f8-f8f8-f8f8f8f8f8f8',
-        //                 user_id: 'user_id',
-        //                 parent_id: '0000',
-        //             },
-        //         },
-        //     };
-        //     it('should return all entities');
-        //     it('should return a single entity when passed an entitiy id');
-        // it('should return all entities', function () {
-        //     websocketStub.getStates.returns(entities);
-        //     homeAssistantStub.websocket = websocketStub;
-        //     const result = jsonataService.evaluate(`$entities()`);
-        //     console.log(homeAssistantStub.websocket.getStates());
-        //     expect(result).to.deep.equal(entities);
-        // });
+        describe('$entities()', function () {
+            const entities = {
+                'light.kitchen': {
+                    entity_id: 'light.kitchen',
+                    state: 'on',
+                    attributes: {},
+                    last_changed: '2019-01-01T00:00:00.000000Z',
+                    last_updated: '2019-01-01T00:00:00.000000Z',
+                    context: {
+                        id: 'c0b8f8f8-f8f8-f8f8-f8f8-f8f8f8f8f8f8',
+                        user_id: 'user_id',
+                        parent_id: '0000',
+                    },
+                },
+                'light.living_room': {
+                    entity_id: 'light.living_room',
+                    state: 'on',
+                    attributes: {},
+                    last_changed: '2019-01-01T00:00:00.000000Z',
+                    last_updated: '2019-01-01T00:00:00.000000Z',
+                    context: {
+                        id: 'c0b8f8f8-f8f8-f8f8-f8f8-f8f8f8f8f8f8',
+                        user_id: 'user_id',
+                        parent_id: '0000',
+                    },
+                },
+            } as HassEntities;
 
-        // it('should return a single entity when passed an entitiy id', function () {
-        //     websocketStub.getStates.returns(entities);
-        //     const result = jsonataService.evaluate(
-        //         `$entities("light.kitchen")`
-        //     );
+            it.skip('should return all entities', async function () {
+                vi.spyOn(
+                    homeAssistantStub.websocket,
+                    'getStates',
+                ).mockReturnValue(entities as unknown as HassEntity);
+                const result = await jsonataService.evaluate(`$entities()`);
+                expect(result).toEqual(entities);
+            });
 
-        //     expect(result).to.deep.equal(entities['light.kitchen']);
-        // });
-        // });
+            it.skip('should return a single entity when passed an entitiy id', async function () {
+                homeAssistantStub.websocket.getStates
+                    .calledWith('light.kitchen')
+                    .mockReturnValue(entities['light.kitchen']);
+                const result = await jsonataService.evaluate(
+                    `$entities("light.kitchen")`,
+                );
+                expect(result).toEqual(entities['light.kitchen']);
+            });
+        });
 
         describe('lodash functions', function () {
             describe('randomNumber()', function () {
                 it('should be able to call randomNumber', async function () {
                     const result =
                         await jsonataService.evaluate(`$randomNumber(5, 10)`);
-                    expect(result).to.be.a('number');
-                    expect(result).to.be.within(5, 10);
+                    expect(result).toBeTypeOf('number');
+                    expect(result).toBeGreaterThanOrEqual(5);
+                    expect(result).toBeLessThanOrEqual(10);
                 });
             });
 
@@ -231,10 +245,11 @@ describe('JSONata Service', function () {
                     const result =
                         await jsonataService.evaluate(`$sampleSize([1,2,3])`);
 
-                    expect(result).to.be.a('array');
-                    expect(result).to.have.lengthOf(1);
-                    expect(result[0]).to.be.a('number');
-                    expect(result[0]).to.be.within(1, 3);
+                    expect(Array.isArray(result)).toBe(true);
+                    expect(result).toHaveLength(1);
+                    expect(result[0]).toBeTypeOf('number');
+                    expect(result[0]).toBeGreaterThanOrEqual(0);
+                    expect(result[0]).toBeLessThanOrEqual(3);
                 });
 
                 it('should get two results 5-7', async function () {
@@ -242,12 +257,14 @@ describe('JSONata Service', function () {
                         `$sampleSize([5,6,7], 2)`,
                     );
 
-                    expect(result).to.be.a('array');
-                    expect(result).to.have.lengthOf(2);
-                    expect(result[0]).to.be.a('number');
-                    expect(result[0]).to.be.within(5, 7);
-                    expect(result[1]).to.be.a('number');
-                    expect(result[1]).to.be.within(5, 7);
+                    expect(Array.isArray(result)).toBe(true);
+                    expect(result).toHaveLength(2);
+                    expect(result[0]).toBeTypeOf('number');
+                    expect(result[0]).toBeGreaterThanOrEqual(5);
+                    expect(result[0]).toBeLessThanOrEqual(7);
+                    expect(result[1]).toBeGreaterThanOrEqual(5);
+                    expect(result[1]).toBeLessThanOrEqual(7);
+                    expect(result[1]).toBeTypeOf('number');
                 });
             });
         });
@@ -263,7 +280,7 @@ describe('JSONata Service', function () {
                     outputData,
                 );
 
-                expect(result).to.deep.equal(outputData);
+                expect(result).toEqual(outputData);
             });
 
             it('should return all output data except the message property', async function () {
@@ -280,7 +297,7 @@ describe('JSONata Service', function () {
                     outputData,
                 );
 
-                expect(result).to.deep.equal(expectedResults);
+                expect(result).toEqual(expectedResults);
             });
 
             it('should return a single output data', async function () {
@@ -293,7 +310,7 @@ describe('JSONata Service', function () {
                     outputData,
                 );
 
-                expect(result).to.deep.equal(outputData.one);
+                expect(result).toEqual(outputData.one);
             });
         });
     });

@@ -1,6 +1,5 @@
-import { expect } from 'chai';
 import Joi from 'joi';
-import { beforeEach } from 'mocha';
+import { beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
 import InputService, {
     DataSource,
@@ -17,7 +16,7 @@ describe('Input Service', function () {
         let nodeConfig: TestNode;
         let schema: Joi.ObjectSchema;
 
-        before(function () {
+        beforeAll(function () {
             schema = Joi.object();
         });
 
@@ -50,7 +49,7 @@ describe('Input Service', function () {
 
             const parsed = inputService.parse(msg);
 
-            expect(parsed).to.deep.equal({
+            expect(parsed).toEqual({
                 foobar: {
                     key: 'foobar',
                     source: 'message',
@@ -79,7 +78,7 @@ describe('Input Service', function () {
 
             const parsed = inputService.parse(msg);
 
-            expect(parsed).to.deep.equal({
+            expect(parsed).toEqual({
                 foobar: {
                     key: 'foobar',
                     source: 'message',
@@ -105,7 +104,7 @@ describe('Input Service', function () {
 
             const parsed = inputService.parse(msg);
 
-            expect(parsed).to.deep.equal({
+            expect(parsed).toEqual({
                 foobar: {
                     key: 'foobar',
                     source: 'config',
@@ -131,7 +130,7 @@ describe('Input Service', function () {
 
             const parsed = inputService.parse(msg);
 
-            expect(parsed).to.deep.equal({
+            expect(parsed).toEqual({
                 foobar: {
                     key: 'foobar',
                     source: 'default',
@@ -156,7 +155,7 @@ describe('Input Service', function () {
 
             const parsed = inputService.parse(msg);
 
-            expect(parsed).to.deep.equal({
+            expect(parsed).toEqual({
                 foobar: {
                     key: 'foobar',
                     source: 'missing',
@@ -186,7 +185,7 @@ describe('Input Service', function () {
 
             const parsed = inputService.parse(msg);
 
-            expect(parsed).to.deep.equal({
+            expect(parsed).toEqual({
                 foobar: {
                     key: 'foobar',
                     source: 'message',
@@ -214,7 +213,7 @@ describe('Input Service', function () {
             };
 
             const parsed = inputService.parse(msg);
-            expect(parsed).to.deep.equal({
+            expect(parsed).toEqual({
                 foobar: {
                     key: 'foobar',
                     source: 'config',
@@ -257,7 +256,7 @@ describe('Input Service', function () {
 
             const result = inputService.validate(parsedMessage);
 
-            expect(result).to.equal(true);
+            expect(result).toBe(true);
         });
 
         it('should throw ValidationError if required properties are not set', function () {
@@ -272,9 +271,8 @@ describe('Input Service', function () {
 
             const parsedMessage: ParsedMessage = {};
 
-            expect(() => inputService.validate(parsedMessage)).to.throw(
-                Joi.ValidationError,
-                '"foo" is required',
+            expect(() => inputService.validate(parsedMessage)).toThrowError(
+                /^"foo" is required$/,
             );
         });
     });
@@ -286,16 +284,15 @@ describe('Input Service', function () {
             });
             const result = InputService.validateSchema(schema, { foo: 'bar' });
 
-            expect(result).to.equal(true);
+            expect(result).toBe(true);
         });
 
         it('should throw ValidationError if schema is invalid', function () {
             const schema = Joi.object({
                 foo: Joi.string().required(),
             });
-            expect(() => InputService.validateSchema(schema, {})).to.throw(
-                Joi.ValidationError,
-                '"foo" is required',
+            expect(() => InputService.validateSchema(schema, {})).toThrowError(
+                /^"foo" is required$/,
             );
         });
     });

@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 import {
     isMigrationArray,
@@ -87,7 +87,7 @@ describe('Migrations - Trigger State Node', function () {
         it('should add version 0 to schema when no version is defined', function () {
             const migrate = migrations.find((m) => m.version === 0);
             const migratedSchema = migrate?.up(VERSION_UNDEFINED);
-            expect(migratedSchema).to.eql(VERSION_0);
+            expect(migratedSchema).toEqual(VERSION_0);
         });
     });
 
@@ -95,20 +95,20 @@ describe('Migrations - Trigger State Node', function () {
         it('should add property inputs equal to 1 and enabledInput equal to true', function () {
             const migrate = migrations.find((m) => m.version === 1);
             const migratedSchema = migrate?.up(VERSION_0);
-            expect(migratedSchema).to.eql(VERSION_1);
+            expect(migratedSchema).toEqual(VERSION_1);
         });
     });
 
     describe('Version 2', function () {
         let migrate: Migration | undefined;
 
-        before(function () {
+        beforeAll(function () {
             migrate = migrations.find((m) => m.version === 2);
         });
 
         it('should add version 1 to version 2', function () {
             const migratedSchema = migrate?.up(VERSION_1);
-            expect(migratedSchema).to.eql(VERSION_2);
+            expect(migratedSchema).toEqual(VERSION_2);
         });
 
         it('should convert comma delimited entity list to array and change type to list', function () {
@@ -118,12 +118,12 @@ describe('Migrations - Trigger State Node', function () {
                 entityidfiltertype: 'substring',
             };
             const migratedSchema = migrate?.up(schema);
-            expect(migratedSchema.entityid).to.eql([
+            expect(migratedSchema.entityid).toEqual([
                 'entity.id',
                 'entity2.id',
                 'entity3.id',
             ]);
-            expect(migratedSchema.entityidfiltertype).to.eql('list');
+            expect(migratedSchema.entityidfiltertype).toEqual('list');
         });
 
         it('should only contain one entity if there is a trailing comma', function () {
@@ -133,7 +133,7 @@ describe('Migrations - Trigger State Node', function () {
                 entityidfiltertype: 'substring',
             };
             const migratedSchema = migrate?.up(schema);
-            expect(migratedSchema.entityid).to.have.lengthOf(1);
+            expect(migratedSchema.entityid).toHaveLength(1);
         });
     });
 
@@ -141,7 +141,7 @@ describe('Migrations - Trigger State Node', function () {
         it('should update version 2 to version 3', function () {
             const migrate = migrations.find((m) => m.version === 3);
             const migratedSchema = migrate?.up(VERSION_2);
-            expect(migratedSchema).to.eql(VERSION_3);
+            expect(migratedSchema).toEqual(VERSION_3);
         });
     });
 
@@ -149,7 +149,7 @@ describe('Migrations - Trigger State Node', function () {
         it('should update version 3 to version 4', function () {
             const migrate = migrations.find((m) => m.version === 4);
             const migratedSchema = migrate?.up(VERSION_3);
-            expect(migratedSchema).to.eql(VERSION_4);
+            expect(migratedSchema).toEqual(VERSION_4);
         });
     });
 
@@ -158,7 +158,7 @@ describe('Migrations - Trigger State Node', function () {
             const migrate = migrations.find((m) => m.version === 5);
             const migratedSchema = migrate?.up(VERSION_4);
 
-            expect(migratedSchema).to.eql(VERSION_5);
+            expect(migratedSchema).toEqual(VERSION_5);
         });
 
         it('should convert a substring type to a entities substring array', function () {
@@ -168,7 +168,7 @@ describe('Migrations - Trigger State Node', function () {
                 entityIdType: 'substring',
             };
             const migratedSchema = migrate(schema);
-            expect(migratedSchema.entities.substring).to.eql(['entity.id']);
+            expect(migratedSchema.entities.substring).toEqual(['entity.id']);
         });
 
         it('should convert a regex type to a entities regex array', function () {
@@ -178,7 +178,7 @@ describe('Migrations - Trigger State Node', function () {
                 entityIdType: 'regex',
             };
             const migratedSchema = migrate(schema);
-            expect(migratedSchema.entities.regex).to.eql(['entity.id']);
+            expect(migratedSchema.entities.regex).toEqual(['entity.id']);
         });
 
         it('should convert a list type to a entities entity array', function () {
@@ -188,7 +188,7 @@ describe('Migrations - Trigger State Node', function () {
                 entityIdType: 'list',
             };
             const migratedSchema = migrate(schema);
-            expect(migratedSchema.entities.entity).to.eql([
+            expect(migratedSchema.entities.entity).toEqual([
                 'entity.id',
                 'entity2.id',
             ]);
@@ -197,6 +197,6 @@ describe('Migrations - Trigger State Node', function () {
 
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).to.eql(VERSION_5);
+        expect(migratedSchema).toEqual(VERSION_5);
     });
 });

@@ -1,5 +1,5 @@
-import { expect } from 'chai';
 import nock from 'nock';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 import HttpAPI from '../../src/homeAssistant/Http';
 
@@ -11,7 +11,7 @@ describe('HTTP API', function () {
     };
     let httpApi: HttpAPI;
 
-    before(function () {
+    beforeAll(function () {
         httpApi = new HttpAPI(CREDS);
     });
 
@@ -25,7 +25,7 @@ describe('HTTP API', function () {
                 .reply(200, 'request successful');
             const response = await httpApi.get(path);
 
-            expect(response).to.equal('request successful');
+            expect(response).toEqual('request successful');
         });
     });
 
@@ -34,7 +34,7 @@ describe('HTTP API', function () {
             nock(CREDS.host).get('/api/history/period').reply(200, []);
             const response = await httpApi.getHistory();
 
-            expect(response).to.eql([]);
+            expect(response).toEqual([]);
         });
 
         it('should use the correct endpoint with an entity and timestamp', async function () {
@@ -53,7 +53,7 @@ describe('HTTP API', function () {
                 data.filterEntityId,
             );
 
-            expect(response).to.eql([]);
+            expect(response).toEqual([]);
         });
 
         it('should use the correct endpoint with endTimestamp', async function () {
@@ -70,7 +70,7 @@ describe('HTTP API', function () {
                 data.endTimestamp,
             );
 
-            expect(response).to.eql([]);
+            expect(response).toEqual([]);
         });
 
         it('should return a sorted flatten array', async function () {
@@ -94,7 +94,7 @@ describe('HTTP API', function () {
             nock(CREDS.host).get('/api/history/period').reply(200, arr);
             const response = await httpApi.getHistory(null, null, null, true);
 
-            expect(response).to.eql(expectedResponse);
+            expect(response).toEqual(expectedResponse);
         });
     });
 
@@ -107,7 +107,7 @@ describe('HTTP API', function () {
                 .reply(200, str);
             const response = await httpApi.renderTemplate(str);
 
-            expect(response).to.equal(str);
+            expect(response).toEqual(str);
         });
     });
 });
