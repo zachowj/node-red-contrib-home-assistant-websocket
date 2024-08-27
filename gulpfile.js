@@ -321,7 +321,7 @@ const buildHelp = lazypipe()
         ),
     );
 
-task('buildEditorFiles', (done) => {
+task('buildEditorFiles', () => {
     const css = src([
         'src/editor/**/*.scss',
         'src/nodes/**/*.scss',
@@ -412,7 +412,7 @@ task('buildEditorFiles', (done) => {
         }),
     );
 
-    merge([
+    return merge([
         css,
         js,
         html,
@@ -424,8 +424,6 @@ task('buildEditorFiles', (done) => {
         .pipe(concat('index.html'))
         .pipe(header(resourceFiles.join('')))
         .pipe(dest(editorFilePath + '/'));
-
-    done();
 });
 
 task('buildSourceFiles', () => {
