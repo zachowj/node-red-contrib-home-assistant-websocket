@@ -6,7 +6,7 @@ type ServiceEntityFilter = {
     integration?: string;
     domain?: string | string[];
     device_class?: string | string[];
-    supported_features?: number | [number];
+    supported_features?: (number | number[])[];
 };
 
 type ServiceFilter = {
@@ -17,7 +17,7 @@ export type ActionTargetFilter = {
     integration?: string;
     domain?: string[];
     device_class?: string[];
-    supported_features?: number;
+    supported_features?: (number | number[])[];
 };
 
 export enum ValidTarget {
@@ -40,9 +40,7 @@ export function convertServiceEntityFilter(
             : filter.device_class
               ? [filter.device_class]
               : undefined,
-        supported_features: Array.isArray(filter.supported_features)
-            ? filter.supported_features[0]
-            : filter.supported_features,
+        supported_features: filter.supported_features,
     };
 }
 

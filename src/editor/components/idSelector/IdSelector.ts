@@ -12,6 +12,7 @@ import {
 import * as haServer from '../../haserver';
 import { i18n } from '../../i18n';
 import { createRow } from './elements';
+import { isFeatureSupported, pushIfNotExist } from './utils';
 import { createSelectOptions } from './virtual-select';
 
 interface EditableListButton {
@@ -116,9 +117,10 @@ export default class IdSelector {
                 if (
                     supportedFeatures !== undefined &&
                     state.attributes.supported_features !== undefined &&
-                    (state.attributes.supported_features &
-                        supportedFeatures) ===
-                        0
+                    !isFeatureSupported(
+                        state.attributes.supported_features,
+                        supportedFeatures,
+                    )
                 ) {
                     continue;
                 }
@@ -331,11 +333,4 @@ export function getSelectedIds(elementId: string): SelectedIds {
         ),
         [IdSelectorType.Regex]: Array.from(selectedIds[IdSelectorType.Regex]),
     };
-}
-
-// Push an element to an array if it does not exist
-function pushIfNotExist<T>(array: T[], element: T) {
-    if (!array.includes(element)) {
-        array.push(element);
-    }
 }
