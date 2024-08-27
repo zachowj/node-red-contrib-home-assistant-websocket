@@ -412,7 +412,7 @@ task('buildEditorFiles', (done) => {
         }),
     );
 
-    return merge([
+    merge([
         css,
         js,
         html,
@@ -424,6 +424,8 @@ task('buildEditorFiles', (done) => {
         .pipe(concat('index.html'))
         .pipe(header(resourceFiles.join('')))
         .pipe(dest(editorFilePath + '/'));
+
+    done();
 });
 
 task('buildSourceFiles', () => {
