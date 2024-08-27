@@ -123,7 +123,7 @@ export default class IssueService {
 
     #getChangedNodes(eventData: FlowsStartedEvent): NodeDef[] {
         if (eventData.type === DeploymentType.Full) {
-            this.#clearIssues();
+            this.#issues.clear();
             return eventData.config.flows;
         }
 
@@ -162,7 +162,10 @@ export default class IssueService {
     }
 
     #handleFlowsStarted(event: FlowsStartedEvent) {
-        const changedNodes = this.#getChangedNodes(event);
+        const changedNodes = this.#getChangedNodes(event).filter(
+            // @ts-expect-error - d exists on NodeDef
+            (node) => !node?.d,
+        );
         this.#performChecks(changedNodes);
     }
 
@@ -185,6 +188,7 @@ export default class IssueService {
 
         // remove hidden issues that no longer exist
         this.#hiddenIssues = foundHiddenIssueNodes;
+        this.#saveHiddenIssues();
         this.#performChecks(nodes);
     }
 
@@ -356,12 +360,6 @@ export default class IssueService {
         this.#issues.delete(nodeId);
         this.#hiddenIssues.delete(nodeId);
         RED.log.debug(`[Home Assistant] Issue removed: ${nodeId}`);
-        this.#issuesUpdated();
-    }
-
-    #clearIssues() {
-        this.#issues.clear();
-        RED.log.debug('[Home Assistant] Issues cleared');
         this.#issuesUpdated();
     }
 
