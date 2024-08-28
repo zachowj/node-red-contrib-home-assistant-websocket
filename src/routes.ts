@@ -3,8 +3,9 @@ import debug from 'debug';
 import { NextFunction, Request, Response } from 'express';
 import flatten from 'flat';
 
+import issueService from './common/services/IssueService';
 import { NO_VERSION } from './const';
-import { issueService, RED } from './globals';
+import { RED } from './globals';
 import { getEnvironmentData } from './helpers/diagnostics';
 import { getServerConfigNode } from './helpers/node';
 import { Credentials, getHomeAssistant } from './homeAssistant';

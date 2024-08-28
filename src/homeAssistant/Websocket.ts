@@ -310,7 +310,6 @@ export default class Websocket {
         ) {
             this.#emitEvent(ClientEvent.RegistriesLoaded);
             this.#isAllRegistriesLoaded = true;
-            RED.log.debug('[Home Assistant] All registries loaded');
         }
     }
 
@@ -321,11 +320,11 @@ export default class Websocket {
     #onHomeAssistantRunning() {
         if (!this.isHomeAssistantRunning) {
             this.isHomeAssistantRunning = true;
-            this.#checkIfAllRegistriesLoaded();
             this.#emitEvent(ClientEvent.Running);
             if (this.integrationVersion === NO_VERSION) {
                 this.createIntegrationEvent(INTEGRATION_NOT_LOADED);
             }
+            this.#checkIfAllRegistriesLoaded();
         }
     }
 

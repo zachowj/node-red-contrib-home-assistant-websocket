@@ -24,9 +24,10 @@ export interface StorageData {
 export const PACKAGE_NAME = 'node-red-contrib-home-assistant-websocket';
 const FILENAME = `${PACKAGE_NAME}.json`;
 
-export default class Storage {
+class Storage {
     #adapter?: low.AdapterAsync;
     #DB?: low.LowdbAsync<StorageData>;
+    #initialized = false;
     #path?: string;
 
     constructor({
@@ -56,6 +57,10 @@ export default class Storage {
     }
 
     public async init(): Promise<void> {
+        if (this.#initialized) {
+            return;
+        }
+        this.#initialized = true;
         const path = this.#path ?? RED.settings.userDir;
         const dbLocation = `${path}/${FILENAME}`;
 
@@ -142,3 +147,5 @@ export default class Storage {
         return issues;
     }
 }
+
+export default new Storage();

@@ -24,6 +24,7 @@ export default class ConnectionLog {
             [ClientEvent.StatesLoaded, this.onHaStatesLoaded],
             [ClientEvent.ServicesLoaded, this.onHaServicesLoaded],
             ['integration', this.onIntegrationEvent],
+            [ClientEvent.RegistriesLoaded, this.onRegistriesLoaded],
         ]);
         node.on(NodeEvent.Close, this.onClose.bind(this));
     }
@@ -63,5 +64,9 @@ export default class ConnectionLog {
 
     onIntegrationEvent = (eventType: IntegrationState) => {
         this.#node.debug(`Integration: ${eventType}`);
+    };
+
+    onRegistriesLoaded = () => {
+        this.#node.debug('Registries Loaded');
     };
 }

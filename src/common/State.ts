@@ -1,7 +1,6 @@
-import { storageService } from '../globals';
 import { BaseNode, NodeDone } from '../types/nodes';
 import { NodeEvent } from './events/Events';
-import { LastPayloadData } from './services/Storage';
+import storageService, { LastPayloadData } from './services/StorageService';
 
 export default class State {
     #enabled = true;

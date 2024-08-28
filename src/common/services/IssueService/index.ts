@@ -1,7 +1,6 @@
-import { throttle } from 'lodash';
 import { NodeDef } from 'node-red';
 
-import { RED, storageService } from '../../../globals';
+import { RED } from '../../../globals';
 import { HaEvent } from '../../../homeAssistant';
 import HomeAssistant from '../../../homeAssistant/HomeAssistant';
 import { ClientEvent } from '../../../homeAssistant/Websocket';
@@ -43,6 +42,7 @@ import zoneIssueCheck, {
 } from '../../../nodes/zone/issue-check';
 import { HassStateChangedEvent } from '../../../types/home-assistant';
 import { BaseNodeProperties } from '../../../types/nodes';
+import storageService from '../../services/StorageService';
 import {
     getHomeAssistant,
     getServerId,
@@ -88,6 +88,14 @@ export interface Issue {
     unsubscribe?: IssueListener;
 }
 
+export interface IssueUpdate {
+    nodeId: string;
+    messages: string[];
+    hide: boolean;
+}
+
+type UpdateHandler = (issues: IssueUpdate[]) => void;
+
 interface FlowsStartedEvent {
     config: {
         flows: NodeDef[];
@@ -107,12 +115,26 @@ interface FlowsStartedEvent {
 
 const ONE_HOUR = 3600000;
 
-export default class IssueService {
+class IssueService {
+    #initialized = false;
     #nodesToCheck = new Map<string, BaseNodeProperties[]>();
     #issues = new Map<string, Issue[]>();
     #hiddenIssues: Set<string> = new Set();
+    #updateHandlers: UpdateHandler[] = [];
 
-    constructor() {
+    public init(updateHandler?: UpdateHandler | UpdateHandler[]) {
+        if (this.#initialized) {
+            return;
+        }
+        this.#initialized = true;
+        if (updateHandler) {
+            if (Array.isArray(updateHandler)) {
+                this.#updateHandlers.push(...updateHandler);
+            } else {
+                this.#updateHandlers.push(updateHandler);
+            }
+        }
+
         this.#loadHiddenIssues();
 
         RED.events.on(
@@ -373,16 +395,15 @@ export default class IssueService {
         this.#issuesUpdated();
     }
 
-    #issuesUpdated = throttle(() => {
-        RED.log.debug('[Home Assistant] Issues sent to client');
+    #issuesUpdated(): void {
         const issues = Array.from(this.#issues).map(([nodeId, issues]) => ({
             nodeId,
             messages: issues.map((issue) => issue.message),
             hide: this.#hiddenIssues.has(nodeId),
         }));
 
-        RED.comms.publish(`homeassistant/issues`, issues, true);
-    }, 500);
+        this.#updateHandlers.forEach((handler) => handler(issues));
+    }
 
     public toggleIssueHiddenStatus(nodeId: string) {
         if (this.#hiddenIssues.has(nodeId)) {
@@ -416,4 +437,17 @@ export default class IssueService {
             issue.unsubscribe = undefined;
         };
     }
+
+    public addUpdateHandler(handler: UpdateHandler) {
+        this.#updateHandlers.push(handler);
+    }
+
+    public removeUpdateHandler(handler: UpdateHandler) {
+        const index = this.#updateHandlers.indexOf(handler);
+        if (index !== -1) {
+            this.#updateHandlers.splice(index, 1);
+        }
+    }
 }
+
+export default new IssueService();

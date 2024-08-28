@@ -1,3 +1,4 @@
+import { throttle } from 'lodash';
 import { NodeDef } from 'node-red';
 
 import { NodeType } from '../../../const';
@@ -7,7 +8,7 @@ import { containsMustache, isNodeRedEnvVar } from '../../../helpers/utils';
 import { homeAssistantConnections } from '../../../homeAssistant';
 import HomeAssistant from '../../../homeAssistant/HomeAssistant';
 import { BaseNodeProperties } from '../../../types/nodes';
-import { Issue } from '.';
+import { Issue, IssueUpdate } from '.';
 
 /**
  * Get the Home Assistant instance from the node.
@@ -102,3 +103,8 @@ function isSameIssue(a: Issue, b: Issue): boolean {
         a.message === b.message
     );
 }
+
+export const publishIssueUpdate = throttle((issues: IssueUpdate[]): void => {
+    RED.log.debug('[Home Assistant] Issues sent to client');
+    RED.comms.publish(`homeassistant/issues`, issues, true);
+}, 500);
