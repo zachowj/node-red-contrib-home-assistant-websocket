@@ -302,7 +302,7 @@ export default class IssueService {
                 case IssueType.StateId: {
                     // listen for state changes to check if the issue is fixed
                     const eventName = `ha_events:state_changed:${issue.identity}`;
-                    const onEvent = throttle((event: HassStateChangedEvent) => {
+                    const onEvent = (event: HassStateChangedEvent) => {
                         if (event.entity_id === issue.identity) {
                             const foundIssues = this.#checkForIssues(node);
                             // if the issue is still present, keep listening
@@ -310,7 +310,7 @@ export default class IssueService {
                                 ha.eventBus.off(eventName, onEvent);
                             }
                         }
-                    }, 500);
+                    };
                     ha.eventBus.on(eventName, onEvent);
                     break;
                 }
@@ -336,13 +336,13 @@ export default class IssueService {
                 issue.type as keyof typeof IssueTypeToRegistryEventMap
             ];
         // listen for registry changes to check if the issue is fixed
-        const onEvent = throttle(() => {
+        const onEvent = () => {
             const foundIssues = this.#checkForIssues(node);
             // if the issue is still present, keep listening
             if (!includesIssue(foundIssues, issue)) {
                 ha.eventBus.off(event, onEvent);
             }
-        }, 500);
+        };
         ha.eventBus.on(event, onEvent);
     }
 

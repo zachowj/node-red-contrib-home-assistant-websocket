@@ -305,7 +305,8 @@ export default class Websocket {
             this.#isFloorRegistryLoaded &&
             this.#isLabelRegistryLoaded &&
             this.isStatesLoaded &&
-            this.#servicesLoaded
+            this.#servicesLoaded &&
+            this.isHomeAssistantRunning
         ) {
             this.#emitEvent(ClientEvent.RegistriesLoaded);
             this.#isAllRegistriesLoaded = true;
@@ -320,6 +321,7 @@ export default class Websocket {
     #onHomeAssistantRunning() {
         if (!this.isHomeAssistantRunning) {
             this.isHomeAssistantRunning = true;
+            this.#checkIfAllRegistriesLoaded();
             this.#emitEvent(ClientEvent.Running);
             if (this.integrationVersion === NO_VERSION) {
                 this.createIntegrationEvent(INTEGRATION_NOT_LOADED);
