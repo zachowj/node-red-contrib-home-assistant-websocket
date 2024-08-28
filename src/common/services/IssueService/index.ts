@@ -78,11 +78,14 @@ const IssueTypeToRegistryEventMap = {
     [IssueType.LabelId]: HaEvent.LabelRegistryUpdated,
 } as const;
 
+type IssueListener = (event?: HassStateChangedEvent) => void;
+
 export interface Issue {
     type: IssueType;
     message: string;
     identity: string;
     hide?: boolean;
+    unsubscribe?: IssueListener;
 }
 
 interface FlowsStartedEvent {
@@ -102,7 +105,7 @@ interface FlowsStartedEvent {
     };
 }
 
-const SIX_HOURS = 21600000;
+const ONE_HOUR = 3600000;
 
 export default class IssueService {
     #nodesToCheck = new Map<string, BaseNodeProperties[]>();
@@ -118,7 +121,7 @@ export default class IssueService {
         );
 
         // every 6 hours, check all nodes for issues
-        setInterval(this.#handlePeriodicCheck.bind(this), SIX_HOURS);
+        setInterval(this.#handlePeriodicCheck.bind(this), ONE_HOUR);
     }
 
     #getChangedNodes(eventData: FlowsStartedEvent): NodeDef[] {
@@ -302,16 +305,16 @@ export default class IssueService {
                 case IssueType.StateId: {
                     // listen for state changes to check if the issue is fixed
                     const eventName = `ha_events:state_changed:${issue.identity}`;
-                    const onEvent = (event: HassStateChangedEvent) => {
-                        if (event.entity_id === issue.identity) {
+                    const onEvent = (event?: HassStateChangedEvent) => {
+                        if (event?.entity_id === issue.identity) {
                             const foundIssues = this.#checkForIssues(node);
                             // if the issue is still present, keep listening
                             if (!includesIssue(foundIssues, issue)) {
-                                ha.eventBus.off(eventName, onEvent);
+                                issue.unsubscribe?.();
                             }
                         }
                     };
-                    ha.eventBus.on(eventName, onEvent);
+                    this.#addListener(ha, issue, eventName, onEvent);
                     break;
                 }
                 case IssueType.AreaId:
@@ -340,10 +343,10 @@ export default class IssueService {
             const foundIssues = this.#checkForIssues(node);
             // if the issue is still present, keep listening
             if (!includesIssue(foundIssues, issue)) {
-                ha.eventBus.off(event, onEvent);
+                issue.unsubscribe?.();
             }
         };
-        ha.eventBus.on(event, onEvent);
+        this.#addListener(ha, issue, event, onEvent);
     }
 
     #setIssue(nodeId: string, issues: Issue[]) {
@@ -357,6 +360,13 @@ export default class IssueService {
         if (!this.#issues.has(nodeId)) {
             return;
         }
+
+        // remove listeners
+        const issues = this.#issues.get(nodeId);
+        issues?.forEach((issue) => {
+            issue.unsubscribe?.();
+        });
+
         this.#issues.delete(nodeId);
         this.#hiddenIssues.delete(nodeId);
         RED.log.debug(`[Home Assistant] Issue removed: ${nodeId}`);
@@ -391,5 +401,19 @@ export default class IssueService {
 
     #saveHiddenIssues() {
         storageService.saveIssues(Array.from(this.#hiddenIssues));
+    }
+
+    #addListener(
+        ha: HomeAssistant,
+        issue: Issue,
+        event: string,
+        handler: IssueListener,
+    ) {
+        ha.eventBus.on(event, handler);
+
+        issue.unsubscribe = () => {
+            ha.eventBus.removeListener(event, handler);
+            issue.unsubscribe = undefined;
+        };
     }
 }
