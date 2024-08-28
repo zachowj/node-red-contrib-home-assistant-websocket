@@ -132,12 +132,26 @@ export default class IdSelector {
                     continue;
                 }
 
+                const addLabels = (labelIds: string[]) => {
+                    for (const id of labelIds) {
+                        const l = labels.find((l) => l.label_id === id);
+                        if (l) {
+                            filteredLabels.push(l);
+                        }
+                    }
+                };
+
+                if (entity.labels.length) {
+                    addLabels(entity.labels);
+                }
+
                 // Add devices that the entity is part of
                 let device: HassDevice | undefined;
                 if (entity.device_id) {
                     device = devices.find((d) => d.id === entity.device_id);
                     if (device) {
                         pushIfNotExist(filteredDevices, device);
+                        addLabels(device.labels);
                     }
                 }
 
@@ -148,6 +162,7 @@ export default class IdSelector {
                     area = areas.find((a) => a.area_id === areaId);
                     if (area) {
                         pushIfNotExist(filteredAreas, area);
+                        addLabels(area.labels);
                     }
                 }
 
@@ -158,16 +173,6 @@ export default class IdSelector {
                     );
                     if (floor) {
                         pushIfNotExist(filteredFloors, floor);
-                    }
-                }
-
-                // Add labels that the entity is part of
-                if (entity.labels.length) {
-                    for (const label of entity.labels) {
-                        const l = labels.find((l) => l.label_id === label);
-                        if (l) {
-                            filteredLabels.push(l);
-                        }
                     }
                 }
             }

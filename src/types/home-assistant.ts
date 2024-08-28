@@ -25,6 +25,7 @@ export type HassDevice = {
     entry_type: string;
     id: string;
     identifiers?: string[][];
+    labels: string[];
     manufacturer?: string;
     model?: string;
     name: string;
