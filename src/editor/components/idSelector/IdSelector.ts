@@ -136,7 +136,7 @@ export default class IdSelector {
                     for (const id of labelIds) {
                         const l = labels.find((l) => l.label_id === id);
                         if (l) {
-                            filteredLabels.push(l);
+                            pushIfNotExist(filteredLabels, l);
                         }
                     }
                 };
