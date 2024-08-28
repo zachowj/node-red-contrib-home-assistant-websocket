@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.68.4](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.68.3...v0.68.4) (2024-08-28)
+
+
+### Bug Fixes
+
+* **issues:** Fix possible memory leak from event listeners ([929a309](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/929a309b2e38825443c554cb0c93361d6f54279d))
+
 ## [0.68.3](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.68.2...v0.68.3) (2024-08-28)
 
 
