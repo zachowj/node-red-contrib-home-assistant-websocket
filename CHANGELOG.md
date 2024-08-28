@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.68.6](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.68.5...v0.68.6) (2024-08-28)
+
+
+### Bug Fixes
+
+* **action:** Ensure label displays only once ([37c143d](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/37c143d5c1e001e00792d4f2fcf459a304192251))
+
 ## [0.68.5](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.68.4...v0.68.5) (2024-08-28)
 
 
