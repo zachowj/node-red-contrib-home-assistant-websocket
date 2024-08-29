@@ -82,7 +82,7 @@ export default class WaitUntil extends InputOutputController<
     async #onEntityChange(evt: {
         event: {
             entity_id: string;
-            new_state: HassEntity;
+            new_state?: HassEntity;
             old_state?: HassEntity;
         };
     }) {
@@ -129,8 +129,10 @@ export default class WaitUntil extends InputOutputController<
         this.#active = false;
         this.status.setSuccess('ha-wait-until.status.true');
 
-        event.new_state.timeSinceChangedMs =
-            Date.now() - new Date(event.new_state.last_changed).getTime();
+        if (event.new_state) {
+            event.new_state.timeSinceChangedMs =
+                Date.now() - new Date(event.new_state.last_changed).getTime();
+        }
 
         await this.setCustomOutputs(
             this.node.config.outputProperties,
