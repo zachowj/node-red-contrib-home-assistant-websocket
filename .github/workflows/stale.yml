@@ -18,7 +18,8 @@ jobs:
     steps:
       - uses: actions/stale@v9
         with:
-          days-before-issue-stale: 60
+          any-of-issue-labels: "waiting-for-response"
+          days-before-issue-stale: 30
           stale-issue-label: stale
           stale-issue-message: >
             This issue has been automatically marked as abandoned because it has not had
