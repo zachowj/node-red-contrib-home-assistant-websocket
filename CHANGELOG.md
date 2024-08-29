@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.68.7](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.68.6...v0.68.7) (2024-08-29)
+
+
+### Bug Fixes
+
+* **wait-until:** Add null check for new_state in WaitUntilController ([b526b00](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/b526b007fe713c0fa66b91a70ea48996bc54e337))
+
 ## [0.68.6](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.68.5...v0.68.6) (2024-08-28)
 
 
