@@ -68,8 +68,10 @@ export default class Zone extends ExposeAsController {
 
         if (!zones.length) return;
 
-        event.new_state.timeSinceChangedMs =
-            Date.now() - new Date(event.new_state.last_changed).getTime();
+        if (event.new_state) {
+            event.new_state.timeSinceChangedMs =
+                Date.now() - new Date(event.new_state.last_changed).getTime();
+        }
 
         const msg = {
             topic: entityId,

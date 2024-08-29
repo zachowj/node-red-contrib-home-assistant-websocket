@@ -395,9 +395,11 @@ export default class TriggerStateController extends ExposeAsController {
             );
         }
 
-        eventMessage.event.new_state.timeSinceChangedMs =
-            Date.now() -
-            new Date(eventMessage.event.new_state.last_changed).getTime();
+        if (eventMessage.event.new_state) {
+            eventMessage.event.new_state.timeSinceChangedMs =
+                Date.now() -
+                new Date(eventMessage.event.new_state.last_changed).getTime();
+        }
 
         const constraintComparatorResults =
             await this.#getConstraintComparatorResults(
