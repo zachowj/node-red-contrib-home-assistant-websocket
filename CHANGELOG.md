@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.68.8](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.68.7...v0.68.8) (2024-08-30)
+
+
+### Bug Fixes
+
+* Add null check for new_state in TriggerStateController and ZoneController ([5258e4a](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/5258e4a76f7a6a11e79c6742c3ead32656017c38))
+* **wait-until:** Handle undefined entity in timeSinceChangedMs calculation ([0512e1f](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/0512e1ff0eb25dd435aedb45b2391046f53e62d5)), closes [#1519](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1519)
+
 ## [0.68.7](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.68.6...v0.68.7) (2024-08-29)
 
 
