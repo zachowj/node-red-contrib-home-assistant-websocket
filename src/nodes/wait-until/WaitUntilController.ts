@@ -254,8 +254,11 @@ export default class WaitUntil extends InputOutputController<
                             config.entities[IdSelectorType.Entity][0],
                         ) as HassEntity;
 
-                        state.timeSinceChangedMs =
-                            Date.now() - new Date(state.last_changed).getTime();
+                        if (state) {
+                            state.timeSinceChangedMs =
+                                Date.now() -
+                                new Date(state.last_changed).getTime();
+                        }
                     }
 
                     await this.setCustomOutputs(

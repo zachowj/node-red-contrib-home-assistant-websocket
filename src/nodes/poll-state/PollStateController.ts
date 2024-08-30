@@ -77,8 +77,10 @@ export default class PollStateController extends ExposeAsController {
             ]);
         }
 
-        entity.timeSinceChangedMs =
-            Date.now() - new Date(entity.last_changed).getTime();
+        if (entity) {
+            entity.timeSinceChangedMs =
+                Date.now() - new Date(entity.last_changed).getTime();
+        }
 
         if (this.node.config.stateType !== TransformType.String) {
             // Convert and save original state if needed

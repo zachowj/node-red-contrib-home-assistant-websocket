@@ -39,6 +39,7 @@ import waitUntilNode from './nodes/wait-until';
 import webhookNode from './nodes/webhook';
 import zoneNode from './nodes/zone';
 import { createRoutes } from './routes';
+import version from './version';
 
 const nodes: Record<NodeType, any> = {
     [NodeType.API]: apiNode,
@@ -89,4 +90,8 @@ export default async (RED: NodeAPI): Promise<void> => {
     for (type in nodes) {
         RED.nodes.registerType(type, nodes[type], getExposedSettings(type));
     }
+
+    RED.log.info(
+        `node-red-contrib-home-assistant-websocket v${version} nodes initialized`,
+    );
 };

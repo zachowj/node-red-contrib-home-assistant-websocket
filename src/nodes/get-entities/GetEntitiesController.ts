@@ -285,7 +285,7 @@ export default class GetEntitiesController extends SendSplitController {
                 }
             }
 
-            if (ruleMatched) {
+            if (ruleMatched && state) {
                 state.timeSinceChangedMs =
                     Date.now() - new Date(state.last_changed).getTime();
                 filteredEntities.push(state);
