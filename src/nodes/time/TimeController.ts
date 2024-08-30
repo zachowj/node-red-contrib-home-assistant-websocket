@@ -21,6 +21,7 @@ export default class TimeController extends ExposeAsController {
     #cronjob: CronJob | null = null;
 
     #createCronjob(crontab: string | Date) {
+        this.node.debug(`Creating cronjob: ${crontab}`);
         this.#cronjob = CronJob.from({
             cronTime: crontab,
             onTick: async () => {
@@ -37,6 +38,9 @@ export default class TimeController extends ExposeAsController {
 
     #destoryCronjob() {
         if (this.#cronjob != null) {
+            this.node.debug(
+                `Destroying cronjob: ${this.#cronjob?.nextDate().toJSDate()}`,
+            );
             this.#cronjob.stop();
             this.#cronjob = null;
         }
