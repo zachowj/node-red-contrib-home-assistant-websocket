@@ -6,15 +6,22 @@ Post questions and follow the discussion about this recipe [here](https://github
 
 ![screenshot](./images/actionable-notifications-subflow-for-android_01.png)
 
+v1.1.0 - Requires version 0.68.0
+
+@[code](@examples/cookbook/actionable-notifications-subflow-for-android/subflow_1_1_0.json)
+
+**Changes**
+
+- Added selectable Home Assistant server config
+- Change service from text input to dropdown
+
+:::details Old versions
+
 v1.0.1 - Requires version 0.68.0
 
 @[code](@examples/cookbook/actionable-notifications-subflow-for-android/subflow_1_0_1.json)
 
-**Changes**
-
 - Updated to use the new action node
-
-:::details Old versions
 
 v1.0.0
 
@@ -30,6 +37,7 @@ v0.0.0
 
 | Options        | Description                                                                                            |                                                             Documentation                                                             |
 | -------------- | ------------------------------------------------------------------------------------------------------ | :-----------------------------------------------------------------------------------------------------------------------------------: |
+| HA config      | Home Assistant configuration node                                                                      |                                                                                                                                       |
 | Notify Service | Can take multiple services as a comma delimited list e.g.: `mobile_app_username, mobile_app_username2` |                                                                                                                                       |
 | Title          | Top line of text                                                                                       |                          [link](https://companion.home-assistant.io/docs/notifications/notifications-basic)                           |
 | Message        | Second line of text accepts HTML tags                                                                  |        [link](https://companion.home-assistant.io/docs/notifications/notifications-basic#notification-message-html-formatting)        |
