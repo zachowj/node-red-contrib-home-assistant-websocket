@@ -1,16 +1,54 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
+import { EventsList } from '../../src/common/events/Events';
 import {
+    addEventListeners,
     containsMustache,
     getEntitiesFromJsonata,
+    getTimeInMilliseconds,
     isNodeRedEnvVar,
     parseTime,
+    shouldInclude,
     shouldIncludeEvent,
     toCamelCase,
     validEntityId,
 } from '../../src/helpers/utils';
 
 describe('utils', function () {
+    describe('shouldInclude', function () {
+        it('should include everything if no regex is passed', function () {
+            expect(shouldInclude('test', undefined, undefined)).toBe(true);
+            expect(shouldInclude('test', undefined, /test/)).toBe(false);
+            expect(shouldInclude('test', /test/, undefined)).toBe(true);
+        });
+
+        it('should include everything if target string is empty', function () {
+            expect(shouldInclude('', /test/, /test/)).toBe(true);
+        });
+
+        it('should include if target string matches include regex', function () {
+            expect(shouldInclude('test', /test/, /abc/)).toBe(true);
+            expect(shouldInclude('test', /test/, /test/)).toBe(false);
+            expect(shouldInclude('test', /test/, /abc/)).toBe(true);
+        });
+
+        it('should exclude if target string matches exclude regex', function () {
+            expect(shouldInclude('test', /abc/, /test/)).toBe(false);
+            expect(shouldInclude('test', /abc/, /abc/)).toBe(false);
+            expect(shouldInclude('test', /abc/, /abc/)).toBe(false);
+        });
+
+        it('should include if target string matches include regex and not exclude regex', function () {
+            expect(shouldInclude('test', /test/, /abc/)).toBe(true);
+            expect(shouldInclude('test', /test/, /abc/)).toBe(true);
+        });
+
+        it('should exclude if target string matches exclude regex and not include regex', function () {
+            expect(shouldInclude('test', /abc/, /test/)).toBe(false);
+            expect(shouldInclude('test', /abc/, /test/)).toBe(false);
+        });
+    });
+
     describe('containsMustache', function () {
         it('should return true for strings containing mustache syntax', function () {
             expect(containsMustache('{{hello}}')).toEqual(true);
@@ -138,6 +176,17 @@ describe('utils', function () {
         });
     });
 
+    describe('getTimeInMilliseconds', function () {
+        it('should return the time in milliseconds', function () {
+            expect(getTimeInMilliseconds(500, 'milliseconds')).toEqual(500);
+            expect(getTimeInMilliseconds(1, 'seconds')).toEqual(1000);
+            expect(getTimeInMilliseconds(1, 'minutes')).toEqual(60000);
+            expect(getTimeInMilliseconds(1, 'hours')).toEqual(3600000);
+            expect(getTimeInMilliseconds(1, 'days')).toEqual(86400000);
+            expect(getTimeInMilliseconds(1, 'unknown')).toEqual(1000);
+        });
+    });
+
     describe('parseTime', function () {
         it('should parse valid time strings', function () {
             expect(parseTime('00:00')).toEqual({
@@ -191,6 +240,45 @@ describe('utils', function () {
             expect(validEntityId('domain_.entity')).toEqual(false);
             expect(validEntityId('domain._entity')).toEqual(false);
             expect(validEntityId('domain.__entity')).toEqual(false);
+        });
+    });
+
+    describe('addEventListeners', function () {
+        const emitter = {
+            on: vi.fn(),
+            addListener: vi.fn(),
+            once: vi.fn(),
+            removeListener: vi.fn(),
+            off: vi.fn(),
+            removeAllListeners: vi.fn(),
+            setMaxListeners: vi.fn(),
+            getMaxListeners: vi.fn(),
+            listeners: vi.fn(),
+            rawListeners: vi.fn(),
+            emit: vi.fn(),
+            listenerCount: vi.fn(),
+            prependListener: vi.fn(),
+            prependOnceListener: vi.fn(),
+            eventNames: vi.fn(),
+        };
+
+        it('should add event listeners to event emitter', function () {
+            const eventListeners: EventsList = [
+                ['event1', vi.fn()],
+                ['event2', vi.fn()],
+            ];
+
+            addEventListeners(eventListeners, emitter);
+
+            expect(emitter.on).toHaveBeenCalledTimes(2);
+            expect(emitter.on).toHaveBeenCalledWith(
+                'event1',
+                eventListeners[0][1],
+            );
+            expect(emitter.on).toHaveBeenCalledWith(
+                'event2',
+                eventListeners[1][1],
+            );
         });
     });
 });
