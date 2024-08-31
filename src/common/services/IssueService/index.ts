@@ -49,6 +49,7 @@ import {
     includesIssue,
     isHomeAssistantDataLoaded,
     isHomeAssistantNode,
+    isIssuesEqual,
 } from './utils';
 
 enum NodeRedEvent {
@@ -372,6 +373,10 @@ class IssueService {
     }
 
     #setIssue(nodeId: string, issues: Issue[]) {
+        if (isIssuesEqual(issues, this.#issues.get(nodeId) || [])) {
+            return;
+        }
+
         this.#issues.set(nodeId, issues);
 
         RED.log.debug(`[Home Assistant] Issue added: ${nodeId}`);

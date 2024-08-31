@@ -56,6 +56,14 @@ export function includesIssue(issues: Issue[], issue: Issue): boolean {
     return issues.some((i) => isSameIssue(i, issue));
 }
 
+export function isIssuesEqual(a: Issue[], b: Issue[]): boolean {
+    if (a.length !== b.length) {
+        return false;
+    }
+
+    return a.every((issue, index) => isSameIssue(issue, b[index]));
+}
+
 /**
  * Check if the value is a mustache template or a Node-RED environment variable.
  *

@@ -7,6 +7,7 @@ import {
     includesIssue,
     isDynamicValue,
     isHomeAssistantNode,
+    isIssuesEqual,
 } from '../../../../src/common/services/IssueService/utils';
 import { NodeType } from '../../../../src/const';
 import { BaseNodeProperties } from '../../../../src/types/nodes';
@@ -80,6 +81,128 @@ describe('utils', function () {
         it('should return false when the node type is not a valid Home Assistant node type', function () {
             const node = { type: 'invalidType' } as NodeDef;
             expect(isHomeAssistantNode(node)).toEqual(false);
+        });
+    });
+
+    describe('isIssuesEqual', function () {
+        it('should return true when the issues are equal', function () {
+            const a = [
+                { type: IssueType.EntityId, identity: '1', message: 'test' },
+            ];
+            const b = [
+                { type: IssueType.EntityId, identity: '1', message: 'test' },
+            ];
+            expect(isIssuesEqual(a, b)).toEqual(true);
+        });
+
+        describe('Not Equal', function () {
+            it('should return false when the identity are not equal', function () {
+                const a = [
+                    {
+                        type: IssueType.EntityId,
+                        identity: '1',
+                        message: 'test',
+                    },
+                ];
+                const b = [
+                    {
+                        type: IssueType.EntityId,
+                        identity: '2',
+                        message: 'test',
+                    },
+                ];
+                expect(isIssuesEqual(a, b)).toEqual(false);
+            });
+
+            it('should return false when the message are not equal', function () {
+                const a = [
+                    {
+                        type: IssueType.EntityId,
+                        identity: '1',
+                        message: 'test',
+                    },
+                ];
+                const b = [
+                    {
+                        type: IssueType.EntityId,
+                        identity: '1',
+                        message: 'test2',
+                    },
+                ];
+                expect(isIssuesEqual(a, b)).toEqual(false);
+            });
+
+            it('should return false when the type are not equal', function () {
+                const a = [
+                    {
+                        type: IssueType.EntityId,
+                        identity: '1',
+                        message: 'test',
+                    },
+                ];
+                const b = [
+                    {
+                        type: IssueType.DeviceId,
+                        identity: '1',
+                        message: 'test',
+                    },
+                ];
+                expect(isIssuesEqual(a, b)).toEqual(false);
+            });
+
+            it('should return false when the issues length are not equal', function () {
+                const a = [
+                    {
+                        type: IssueType.EntityId,
+                        identity: '1',
+                        message: 'test',
+                    },
+                ];
+                const b = [
+                    {
+                        type: IssueType.EntityId,
+                        identity: '1',
+                        message: 'test',
+                    },
+                    {
+                        type: IssueType.EntityId,
+                        identity: '2',
+                        message: 'test',
+                    },
+                ];
+                expect(isIssuesEqual(a, b)).toEqual(false);
+            });
+
+            it('should return false when Issues are in different order', function () {
+                const a = [
+                    {
+                        type: IssueType.EntityId,
+                        identity: '1',
+                        message: 'test',
+                    },
+                    {
+                        type: IssueType.EntityId,
+                        identity: '2',
+                        message: 'test',
+                    },
+                ];
+                const b = [
+                    {
+                        type: IssueType.EntityId,
+                        identity: '2',
+                        message: 'test',
+                    },
+                    {
+                        type: IssueType.EntityId,
+                        identity: '1',
+                        message: 'test',
+                    },
+                ];
+                expect(isIssuesEqual(a, b)).toEqual(false);
+            });
+        });
+        it('should return true when both issues are empty', function () {
+            expect(isIssuesEqual([], [])).toEqual(true);
         });
     });
 });
