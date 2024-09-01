@@ -5,7 +5,7 @@
         "device_not_found": "Device __device_id__ not found",
         "entity_not_found": "Entity __entity_id__ not found",
         "failed_to_hide": "Failed to hide issue __issue_id__",
-        "invalid_action": "Action __action__ is not found",
+        "invalid_action": "Action __action__ not found",
         "issue_hidden": "Issue __issue_id__ hidden",
         "no-response": "No response from server",
         "tag_not_found": "Tag __tag_id__ not found",

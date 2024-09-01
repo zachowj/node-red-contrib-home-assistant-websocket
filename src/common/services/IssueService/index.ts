@@ -50,6 +50,7 @@ import {
     isHomeAssistantDataLoaded,
     isHomeAssistantNode,
     isIssuesEqual,
+    isNodeDisabled,
 } from './utils';
 
 enum NodeRedEvent {
@@ -143,7 +144,7 @@ class IssueService {
             this.#handleFlowsStarted.bind(this),
         );
 
-        // every 6 hours, check all nodes for issues
+        // every hour, check all nodes for issues
         setInterval(this.#handlePeriodicCheck.bind(this), ONE_HOUR);
     }
 
@@ -189,8 +190,7 @@ class IssueService {
 
     #handleFlowsStarted(event: FlowsStartedEvent) {
         const changedNodes = this.#getChangedNodes(event).filter(
-            // @ts-expect-error - d exists on NodeDef
-            (node) => !node?.d,
+            (node) => !isNodeDisabled(node),
         );
         this.#performChecks(changedNodes);
     }
@@ -206,8 +206,7 @@ class IssueService {
             }
 
             // only check nodes that are not disabled
-            // @ts-expect-error - d exists on NodeDef
-            if (!node.d) {
+            if (!isNodeDisabled(node)) {
                 nodes.push(node);
             }
         });

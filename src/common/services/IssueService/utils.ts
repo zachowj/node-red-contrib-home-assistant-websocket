@@ -116,3 +116,20 @@ export const publishIssueUpdate = throttle((issues: IssueUpdate[]): void => {
     RED.log.debug('[Home Assistant] Issues sent to client');
     RED.comms.publish(`homeassistant/issues`, issues, true);
 }, 500);
+
+export function isNodeDisabled(node: NodeDef): boolean {
+    // @ts-expect-error - d is not defined in NodeDef
+    if (node.d === true) {
+        return true;
+    }
+
+    let disabled = false;
+    RED.nodes.eachNode((n) => {
+        // @ts-expect-error - disabled is not defined in NodeDef
+        if (n.id === node.z && n.disabled === true) {
+            disabled = true;
+        }
+    });
+
+    return disabled;
+}
