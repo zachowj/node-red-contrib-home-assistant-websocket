@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.68.9](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.68.8...v0.68.9) (2024-09-01)
+
+
+### Bug Fixes
+
+* **issues:** Ignore nodes when in a disabled tab ([85589ba](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/85589ba81c0d28572aa13e98eadc400ff75a5845))
+
 ## [0.68.8](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.68.7...v0.68.8) (2024-08-30)
 
 
