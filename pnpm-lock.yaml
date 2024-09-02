@@ -256,8 +256,8 @@ importers:
         specifier: 2.0.0
         version: 2.0.0
       nock:
-        specifier: 13.5.4
-        version: 13.5.4
+        specifier: 13.5.5
+        version: 13.5.5
       node-red:
         specifier: 4.0.2
         version: 4.0.2(debug@4.3.6)
@@ -3865,8 +3865,8 @@ packages:
   no-case@2.3.2:
     resolution: {integrity: sha512-rmTZ9kz+f3rCvK2TD1Ue/oZlns7OGoIWP4fc3llxxRXlOkHKoWPPWJOfFYpITabSow43QJbRIoHQXtt10VldyQ==}
 
-  nock@13.5.4:
-    resolution: {integrity: sha512-yAyTfdeNJGGBFxWdzSKCBYxs5FxLbCg5X5Q4ets974hcQzG1+qCxvIyOo4j2Ry6MUlhWVMX4OoYDefAIIwupjw==}
+  nock@13.5.5:
+    resolution: {integrity: sha512-XKYnqUrCwXC8DGG1xX4YH5yNIrlh9c065uaMZZHUoeUUINTOyt+x/G+ezYk0Ft6ExSREVIs+qBJDK503viTfFA==}
     engines: {node: '>= 10.13'}
 
   node-red-admin@4.0.0:
@@ -9665,7 +9665,7 @@ snapshots:
     dependencies:
       lower-case: 1.1.4
 
-  nock@13.5.4:
+  nock@13.5.5:
     dependencies:
       debug: 4.3.6(supports-color@5.5.0)
       json-stringify-safe: 5.0.1
