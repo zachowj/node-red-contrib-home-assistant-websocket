@@ -123,6 +123,7 @@ class IssueService {
     #issues = new Map<string, Issue[]>();
     #hiddenIssues: Set<string> = new Set();
     #updateHandlers: UpdateHandler[] = [];
+    #tabs: Record<string, boolean | undefined> = {};
 
     public init(updateHandler?: UpdateHandler | UpdateHandler[]) {
         if (this.#initialized) {
@@ -139,10 +140,10 @@ class IssueService {
 
         this.#loadHiddenIssues();
 
-        RED.events.on(
-            NodeRedEvent.FlowsStarted,
-            this.#handleFlowsStarted.bind(this),
-        );
+        RED.events.on(NodeRedEvent.FlowsStarted, (event: FlowsStartedEvent) => {
+            this.#getTabInfo();
+            this.#handleFlowsStarted(event);
+        });
 
         // every hour, check all nodes for issues
         setInterval(this.#handlePeriodicCheck.bind(this), ONE_HOUR);
@@ -188,9 +189,20 @@ class IssueService {
         return changedNodesArrayWithDefs;
     }
 
+    // There's no way to get tab info from a node def without looping over all nodes
+    // so we need to listen for flows started and save tabs info in a map
+    #getTabInfo() {
+        RED.nodes.eachNode((node) => {
+            if (node.type === 'tab') {
+                // @ts-expect-error - disabled is not defined in NodeDef
+                this.#tabs[node.id] = node.disabled;
+            }
+        });
+    }
+
     #handleFlowsStarted(event: FlowsStartedEvent) {
         const changedNodes = this.#getChangedNodes(event).filter(
-            (node) => !isNodeDisabled(node),
+            (node) => !isNodeDisabled(node, this.#tabs[node.z]),
         );
         this.#performChecks(changedNodes);
     }
@@ -206,7 +218,7 @@ class IssueService {
             }
 
             // only check nodes that are not disabled
-            if (!isNodeDisabled(node)) {
+            if (!isNodeDisabled(node, this.#tabs[node.z])) {
                 nodes.push(node);
             }
         });
