@@ -89,6 +89,9 @@ export default function issueCheck(config: ActionNodeProperties): Issue[] {
             config[target.idsProperty],
         );
         for (const id of invalidIds) {
+            if (id === 'all' && target.idsProperty === 'entityId') {
+                continue;
+            }
             const message = RED._(
                 `home-assistant.service.issue.${target.issueMessage}`,
                 {

@@ -115,7 +115,7 @@ interface FlowsStartedEvent {
     };
 }
 
-const ONE_HOUR = 3600000;
+const SIX_HOURS = 6 * 60 * 60 * 1000;
 
 class IssueService {
     #initialized = false;
@@ -146,7 +146,7 @@ class IssueService {
         });
 
         // every hour, check all nodes for issues
-        setInterval(this.#handlePeriodicCheck.bind(this), ONE_HOUR);
+        setInterval(this.#handlePeriodicCheck.bind(this), SIX_HOURS);
     }
 
     #getChangedNodes(eventData: FlowsStartedEvent): NodeDef[] {
