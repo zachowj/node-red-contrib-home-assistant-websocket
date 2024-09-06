@@ -85,21 +85,22 @@ export default function issueCheck(config: ActionNodeProperties): Issue[] {
                 let data: Record<string, unknown> = {};
                 try {
                     data = JSON.parse(config.data || '{}');
+
+                    if (config.entityId?.length && !data.entity_id) {
+                        const ids = config.entityId.join(', ');
+                        issues.push({
+                            type: IssueType.EntityId,
+                            message: RED._(
+                                'home-assistant.service.issue.entity_id_target_data',
+                                {
+                                    entity_id: ids,
+                                },
+                            ),
+                            identity: ids,
+                        });
+                    }
                 } catch (e) {
-                    // fail silently
-                }
-                if (config.entityId?.length && !data.entity_id) {
-                    const ids = config.entityId.join(', ');
-                    issues.push({
-                        type: IssueType.EntityId,
-                        message: RED._(
-                            'home-assistant.service.issue.entity_id_target_data',
-                            {
-                                entity_id: ids,
-                            },
-                        ),
-                        identity: ids,
-                    });
+                    // if data is not valid JSON we can't check if entity_id is in data so we skip this check
                 }
             }
         }
