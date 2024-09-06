@@ -78,6 +78,30 @@ export default function issueCheck(config: ActionNodeProperties): Issue[] {
                 message,
                 identity: config.action,
             });
+        } else {
+            // TODO: Remove in version 1.0 - Should no longer be needed
+            // check if target.entity_id should be in data.entity_id
+            if (services[domain]?.[service]?.fields?.entity_id !== undefined) {
+                let data: Record<string, unknown> = {};
+                try {
+                    data = JSON.parse(config.data || '{}');
+                } catch (e) {
+                    // fail silently
+                }
+                if (config.entityId?.length && !data.entity_id) {
+                    const ids = config.entityId.join(', ');
+                    issues.push({
+                        type: IssueType.EntityId,
+                        message: RED._(
+                            'home-assistant.service.issue.entity_id_target_data',
+                            {
+                                entity_id: ids,
+                            },
+                        ),
+                        identity: ids,
+                    });
+                }
+            }
         }
     }
 
@@ -89,6 +113,8 @@ export default function issueCheck(config: ActionNodeProperties): Issue[] {
             config[target.idsProperty],
         );
         for (const id of invalidIds) {
+            // Skip the 'all' entity id if the target is entityId
+            // https://www.home-assistant.io/docs/scripts/perform-actions/#the-basics
             if (id === 'all' && target.idsProperty === 'entityId') {
                 continue;
             }
