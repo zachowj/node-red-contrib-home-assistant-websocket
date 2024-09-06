@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.69.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.68.10...v0.69.0) (2024-09-06)
+
+
+### Features
+
+* **issues:** Validate entity_id placement within the correct property for the action node ([eef3717](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/eef371778ca6da9ee569181087f90328bec64533))
+
 ## [0.68.10](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.68.9...v0.68.10) (2024-09-05)
 
 
