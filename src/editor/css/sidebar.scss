@@ -130,12 +130,11 @@
             ul {
                 list-style: disc;
                 padding: 3px 0;
-                margin-left: 20px;
+                margin: 0 5px 0 20px;
 
                 li {
                     font-size: 12px;
                     color: var(--red-ui-secondary-text-color);
-                    overflow: hidden;
                 }
             }
 
