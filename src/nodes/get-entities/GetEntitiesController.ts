@@ -157,6 +157,11 @@ export default class GetEntitiesController extends SendSplitController {
         for (const state of Object.values(states) as HassEntity[]) {
             this.#resetCurrent();
 
+            if (state?.last_changed) {
+                state.timeSinceChangedMs =
+                    Date.now() - new Date(state.last_changed).getTime();
+            }
+
             const entity = entities.find(
                 (e) => e.entity_id === state.entity_id,
             );
@@ -286,8 +291,6 @@ export default class GetEntitiesController extends SendSplitController {
             }
 
             if (ruleMatched && state) {
-                state.timeSinceChangedMs =
-                    Date.now() - new Date(state.last_changed).getTime();
                 filteredEntities.push(state);
             }
         }

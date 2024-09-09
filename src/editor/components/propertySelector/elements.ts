@@ -161,7 +161,16 @@ function createEntityRow(data: Rule): JQuery<HTMLElement>[] {
             const val = $this.val() as string;
             let types = defaultTypes;
 
-            $property.prop('disabled', val === TypedInputTypes.JSONata);
+            // disable property selector for JSONata
+            if (val === ComparatorType.JSONata) {
+                // @ts-expect-error - VirtualSelect is not recognized
+                $property[0].disable();
+                // @ts-expect-error - VirtualSelect is not recognized
+                $property[0].reset();
+            } else {
+                // @ts-expect-error - VirtualSelect is not recognized
+                $property[0].enable();
+            }
 
             switch (val) {
                 case ComparatorType.Is:
