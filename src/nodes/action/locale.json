@@ -25,7 +25,8 @@
       },
       "server": "Server",
       "show_debug": "Show debug information",
-      "targets": "Targets"
+      "targets": "Targets",
+      "unknown_action": "Unknown action"
     },
     "status": {
       "action_called": "__domain__.__service__ called"

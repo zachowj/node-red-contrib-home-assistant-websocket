@@ -79,6 +79,13 @@ Will change the tags used for the mustache template to `<%` and `%>`
 
 Will store the first, last, or all messages received while disconnected from Home Assistant and send them once connected again
 
+### Block Input Overrides
+
+- Type: `boolean`
+- Default: `true`
+
+Stop `msg.payload` values from overriding local config
+
 ## Input
 
 All properties need to be under `msg.payload`.

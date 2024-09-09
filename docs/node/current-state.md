@@ -42,7 +42,7 @@ Convert the state of the entity to the selected type. Boolean will be converted 
 - Type: `boolean`
 - Default: `false`
 
-Stop msg.payload values from overriding local config
+Stop `msg.payload` values from overriding local config
 
 ## Inputs
 
