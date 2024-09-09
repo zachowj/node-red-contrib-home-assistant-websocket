@@ -85,6 +85,12 @@ const VERSION_6 = {
     action: 'service_domain.service_action',
 };
 
+const VERSION_7 = {
+    ...VERSION_6,
+    version: 7,
+    blockInputOverrides: false,
+};
+
 describe('Migrations - Call Service Node', function () {
     describe('Version 0', function () {
         it('should add version 0 to schema when no version is defined', function () {
@@ -284,8 +290,22 @@ describe('Migrations - Call Service Node', function () {
         });
     });
 
+    describe('Version 7', function () {
+        let migrate: Migration | undefined;
+
+        beforeAll(function () {
+            migrate = migrations.find((m) => m.version === 7);
+        });
+
+        it('should update version 6 to version 7', function () {
+            const migratedSchema = migrate?.up(VERSION_6);
+
+            expect(migratedSchema).toEqual(VERSION_7);
+        });
+    });
+
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).toEqual(VERSION_6);
+        expect(migratedSchema).toEqual(VERSION_7);
     });
 });

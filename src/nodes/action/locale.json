@@ -11,6 +11,7 @@
     "label": {
       "action": "Action",
       "alternate_tags": "Use alternate template tags for the data field",
+      "block_input_overrides": "Block input overrides",
       "data": "Data",
       "load_example_data": "Load example data",
       "merge_context": "Merge context",

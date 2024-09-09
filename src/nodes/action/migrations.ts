@@ -125,4 +125,16 @@ export default [
             return newSchema;
         },
     },
+    {
+        version: 7,
+        up: (schema: any) => {
+            const newSchema = {
+                ...schema,
+                version: 7,
+                blockInputOverrides: false,
+            };
+
+            return newSchema;
+        },
+    },
 ];

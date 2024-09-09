@@ -35,6 +35,8 @@ export interface ActionNodeProperties extends BaseNodeProperties {
     mustacheAltTags: boolean;
     queue: Queue;
     outputProperties: OutputProperty[];
+    blockInputOverrides: boolean;
+
     // TODO: Remove in version 1.0
     domain?: string;
     service?: string;
@@ -121,6 +123,9 @@ export default function actionNode(
         schema: inputSchema,
         transform: transformInput,
     });
+    if (this.config.blockInputOverrides) {
+        inputService.disableInputOverrides();
+    }
     const controllerDeps = createControllerDependencies(this, homeAssistant);
 
     const controller = new ActionController({

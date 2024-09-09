@@ -34,6 +34,7 @@ interface ActionEditorNodeProperties extends EditorNodeProperties {
     mustacheAltTags: boolean;
     queue: string;
     outputProperties: OutputProperty[];
+    blockInputOverrides: boolean;
 
     // deprecated
     domain?: string;
@@ -84,6 +85,7 @@ const ActionEditor: EditorNodeDef<ActionEditorNodeProperties> = {
             validate: haOutputs.validate,
         },
         queue: { value: 'none' },
+        blockInputOverrides: { value: true },
 
         // deprecated
         domain: { value: '' },
