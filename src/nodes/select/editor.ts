@@ -19,6 +19,7 @@ interface SelectEditorNodeProperties extends HassNodeProperties {
     entityConfig: any;
     mode: ValueIntegrationMode;
     outputProperties: OutputProperty[];
+    exposeAsEntityConfig: string;
 }
 
 const SelectEditor: EditorNodeDef<SelectEditorNodeProperties> = {
@@ -43,8 +44,15 @@ const SelectEditor: EditorNodeDef<SelectEditorNodeProperties> = {
             value: '',
             type: NodeType.EntityConfig,
             // @ts-ignore - DefinitelyTyped is missing this property
-            filter: (config) => config.entityType === 'select',
+            filter: (config) => config.entityType === EntityType.Select,
             required: true,
+        },
+        exposeAsEntityConfig: {
+            value: '',
+            type: NodeType.EntityConfig,
+            // @ts-ignore - DefinitelyTyped is missing this property
+            filter: (config) => config.entityType === EntityType.Switch,
+            required: false,
         },
         mode: { value: ValueIntegrationMode.Listen },
         value: { value: 'payload' },
@@ -72,6 +80,7 @@ const SelectEditor: EditorNodeDef<SelectEditorNodeProperties> = {
         exposeNode.init(this);
 
         saveEntityType(EntityType.Select);
+        saveEntityType(EntityType.Switch, 'exposeAsEntityConfig');
 
         $('#dialog-form').prepend(ha.betaWarning(968));
 

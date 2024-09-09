@@ -19,6 +19,7 @@ interface NumberEditorNodeProperties extends HassNodeProperties {
     entityConfig: any;
     mode: ValueIntegrationMode;
     outputProperties: OutputProperty[];
+    exposeAsEntityConfig: string;
 }
 
 const NumberEditor: EditorNodeDef<NumberEditorNodeProperties> = {

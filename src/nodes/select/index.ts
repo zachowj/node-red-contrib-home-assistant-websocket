@@ -1,6 +1,9 @@
 import Joi from 'joi';
 
-import { createControllerDependencies } from '../../common/controllers/helpers';
+import {
+    createControllerDependencies,
+    createExposeAsControllerDependences,
+} from '../../common/controllers/helpers';
 import Events from '../../common/events/Events';
 import { IntegrationEvent } from '../../common/integration/Integration';
 import InputService, { NodeInputs } from '../../common/services/InputService';
@@ -8,7 +11,7 @@ import Status from '../../common/status/Status';
 import { TypedInputTypes, ValueIntegrationMode } from '../../const';
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
-import { getConfigNodes } from '../../helpers/node';
+import { getConfigNodes, getExposeAsConfigNode } from '../../helpers/node';
 import { getHomeAssistant } from '../../homeAssistant/index';
 import {
     BaseNode,
@@ -16,12 +19,14 @@ import {
     OutputProperty,
 } from '../../types/nodes';
 import SelectController from './SelectController';
+import SelectOutputController from './SelectOutputController';
 
 export interface SelectNodeProperties extends EntityBaseNodeProperties {
     mode: ValueIntegrationMode;
     value: string;
     valueType: string;
     outputProperties: OutputProperty[];
+    exposeAsEntityConfig: string;
 }
 
 export interface SelectNode extends BaseNode {
@@ -63,36 +68,64 @@ export default function selectNode(
 
     const { entityConfigNode, serverConfigNode } = getConfigNodes(this);
     const homeAssistant = getHomeAssistant(serverConfigNode);
-    const status = new Status({
-        config: serverConfigNode.config,
-        node: this,
-    });
 
-    const controllerDeps = createControllerDependencies(this, homeAssistant);
-    const inputService = new InputService<SelectNodeProperties>({
-        inputs,
-        nodeConfig: this.config,
-        schema: inputSchema,
-    });
+    switch (this.config.mode) {
+        case ValueIntegrationMode.Get:
+        case ValueIntegrationMode.Set:
+            {
+                const status = new Status({
+                    config: serverConfigNode.config,
+                    node: this,
+                });
 
-    entityConfigNode.integration.setStatus(status);
-    const controller = new SelectController({
-        inputService,
-        integration: entityConfigNode.integration,
-        node: this,
-        status,
-        ...controllerDeps,
-    });
+                const controllerDeps = createControllerDependencies(
+                    this,
+                    homeAssistant,
+                );
+                const inputService = new InputService<SelectNodeProperties>({
+                    inputs,
+                    nodeConfig: this.config,
+                    schema: inputSchema,
+                });
 
-    if (this.config.mode === ValueIntegrationMode.Listen) {
-        const entityConfigEvents = new Events({
-            node: this,
-            emitter: entityConfigNode,
-        });
-        entityConfigEvents.setStatus(status);
-        entityConfigEvents.addListener(
-            IntegrationEvent.ValueChange,
-            controller.onValueChange.bind(controller),
-        );
+                entityConfigNode.integration.setStatus(status);
+                // eslint-disable-next-line no-new
+                new SelectController({
+                    inputService,
+                    integration: entityConfigNode.integration,
+                    node: this,
+                    status,
+                    ...controllerDeps,
+                });
+            }
+            break;
+        case ValueIntegrationMode.Listen:
+            {
+                const exposeAsConfigNode = getExposeAsConfigNode(
+                    this.config.exposeAsEntityConfig,
+                );
+                const controllerDeps = createExposeAsControllerDependences({
+                    exposeAsConfigNode,
+                    homeAssistant,
+                    node: this,
+                    serverConfigNode,
+                });
+
+                const controller = new SelectOutputController({
+                    node: this,
+                    ...controllerDeps,
+                });
+                controller.setExposeAsConfigNode(exposeAsConfigNode);
+                const entityConfigEvents = new Events({
+                    node: this,
+                    emitter: entityConfigNode,
+                });
+                entityConfigEvents.setStatus(controllerDeps.status);
+                entityConfigEvents.addListener(
+                    IntegrationEvent.ValueChange,
+                    controller.onValueChange.bind(controller),
+                );
+            }
+            break;
     }
 }

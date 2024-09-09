@@ -7,7 +7,6 @@ import NoConnectionError from '../../common/errors/NoConnectionError';
 import { IntegrationEvent } from '../../common/integration/Integration';
 import ValueEntityIntegration from '../../common/integration/ValueEntityIntegration';
 import { ValueIntegrationMode } from '../../const';
-import { NodeMessage } from '../../types/nodes';
 import { EntityConfigNode } from '../entity-config';
 import { SelectNode, SelectNodeProperties } from '.';
 
@@ -131,21 +130,5 @@ export default class SelectController extends InputOutputController<
         }
 
         return options.includes(option);
-    }
-
-    public async onValueChange(value: string, previousValue?: string) {
-        const message: NodeMessage = {};
-        await this.setCustomOutputs(
-            this.node.config.outputProperties,
-            message,
-            {
-                config: this.node.config,
-                value,
-                previousValue,
-            },
-        );
-
-        this.status.setSuccess(value);
-        this.node.send(message);
     }
 }
