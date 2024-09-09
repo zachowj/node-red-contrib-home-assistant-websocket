@@ -1,5 +1,3 @@
-import { NodeMessage } from 'node-red';
-
 import InputOutputController, {
     InputOutputControllerOptions,
     InputProperties,
@@ -125,24 +123,6 @@ export default class TimeEntityController extends InputOutputController<
                 'home-assistant.status.error',
             );
         }
-    }
-
-    // Triggers when a entity value changes in Home Assistant
-    public async onValueChange(value: string, previousValue?: string) {
-        const message: NodeMessage = {};
-        await this.setCustomOutputs(
-            this.node.config.outputProperties,
-            message,
-            {
-                config: this.node.config,
-                value,
-                previousValue,
-            },
-        );
-
-        // inject value so colons are not removed
-        this.status.setSuccess(['__value__', { value }]);
-        this.node.send(message);
     }
 
     /**

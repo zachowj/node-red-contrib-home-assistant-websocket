@@ -20,6 +20,7 @@ interface TimeEntityEditorNodeProperties extends HassNodeProperties {
     mode: ValueIntegrationMode;
     value: string;
     outputProperties: OutputProperty[];
+    exposeAsEntityConfig: string;
 }
 
 const TimeEntityEditor: EditorNodeDef<TimeEntityEditorNodeProperties> = {
@@ -47,6 +48,13 @@ const TimeEntityEditor: EditorNodeDef<TimeEntityEditorNodeProperties> = {
             filter: (config) => config.entityType === 'time',
             required: true,
         },
+        exposeAsEntityConfig: {
+            value: '',
+            type: NodeType.EntityConfig,
+            // @ts-ignore - DefinitelyTyped is missing this property
+            filter: (config) => config.entityType === EntityType.Switch,
+            required: false,
+        },
         mode: { value: ValueIntegrationMode.Listen },
         value: { value: 'payload' },
         valueType: { value: TypedInputTypes.Message },
@@ -73,6 +81,7 @@ const TimeEntityEditor: EditorNodeDef<TimeEntityEditorNodeProperties> = {
         exposeNode.init(this);
 
         saveEntityType(EntityType.Time);
+        saveEntityType(EntityType.Switch, 'exposeAsEntityConfig');
         $('#dialog-form').prepend(ha.betaWarning(988));
 
         const $valueRow = $('#node-input-value').parent();

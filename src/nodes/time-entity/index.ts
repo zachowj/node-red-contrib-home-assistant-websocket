@@ -1,6 +1,9 @@
 import Joi from 'joi';
 
-import { createControllerDependencies } from '../../common/controllers/helpers';
+import {
+    createControllerDependencies,
+    createExposeAsControllerDependences,
+} from '../../common/controllers/helpers';
 import Events from '../../common/events/Events';
 import { IntegrationEvent } from '../../common/integration/Integration';
 import InputService, { NodeInputs } from '../../common/services/InputService';
@@ -8,13 +11,14 @@ import Status from '../../common/status/Status';
 import { TypedInputTypes, ValueIntegrationMode } from '../../const';
 import { RED } from '../../globals';
 import { migrate } from '../../helpers/migrate';
-import { getConfigNodes } from '../../helpers/node';
+import { getConfigNodes, getExposeAsConfigNode } from '../../helpers/node';
 import { getHomeAssistant } from '../../homeAssistant/index';
 import {
     BaseNode,
     EntityBaseNodeProperties,
     OutputProperty,
 } from '../../types/nodes';
+import TextOutputController from '../text/TextOutputController';
 import TimeEntityController from './TimeEntityController';
 
 export interface TimeEntityNodeProperties extends EntityBaseNodeProperties {
@@ -22,6 +26,7 @@ export interface TimeEntityNodeProperties extends EntityBaseNodeProperties {
     value: string;
     valueType: string;
     outputProperties: OutputProperty[];
+    exposeAsEntityConfig: string;
 }
 
 export interface TimeEntityNode extends BaseNode {
@@ -64,36 +69,64 @@ export default function timeEntityNode(
     const { entityConfigNode, serverConfigNode } = getConfigNodes(this);
     const homeAssistant = getHomeAssistant(serverConfigNode);
 
-    const status = new Status({
-        config: serverConfigNode.config,
-        node: this,
-    });
+    switch (this.config.mode) {
+        case ValueIntegrationMode.Get:
+        case ValueIntegrationMode.Set:
+            {
+                const status = new Status({
+                    config: serverConfigNode.config,
+                    node: this,
+                });
 
-    const controllerDeps = createControllerDependencies(this, homeAssistant);
-    const inputService = new InputService<TimeEntityNodeProperties>({
-        inputs,
-        nodeConfig: this.config,
-        schema: inputSchema,
-    });
+                const controllerDeps = createControllerDependencies(
+                    this,
+                    homeAssistant,
+                );
+                const inputService = new InputService<TimeEntityNodeProperties>(
+                    {
+                        inputs,
+                        nodeConfig: this.config,
+                        schema: inputSchema,
+                    },
+                );
 
-    entityConfigNode.integration.setStatus(status);
-    const controller = new TimeEntityController({
-        inputService,
-        integration: entityConfigNode.integration,
-        node: this,
-        status,
-        ...controllerDeps,
-    });
+                entityConfigNode.integration.setStatus(status);
+                // eslint-disable-next-line no-new
+                new TimeEntityController({
+                    inputService,
+                    integration: entityConfigNode.integration,
+                    node: this,
+                    status,
+                    ...controllerDeps,
+                });
+            }
+            break;
+        case ValueIntegrationMode.Listen: {
+            const exposeAsConfigNode = getExposeAsConfigNode(
+                this.config.exposeAsEntityConfig,
+            );
+            const controllerDeps = createExposeAsControllerDependences({
+                exposeAsConfigNode,
+                homeAssistant,
+                node: this,
+                serverConfigNode,
+            });
 
-    if (this.config.mode === ValueIntegrationMode.Listen) {
-        const entityConfigEvents = new Events({
-            node: this,
-            emitter: entityConfigNode,
-        });
-        entityConfigEvents.setStatus(status);
-        entityConfigEvents.addListener(
-            IntegrationEvent.ValueChange,
-            controller.onValueChange.bind(controller),
-        );
+            const controller = new TextOutputController({
+                node: this,
+                ...controllerDeps,
+            });
+            controller.setExposeAsConfigNode(exposeAsConfigNode);
+
+            const entityConfigEvents = new Events({
+                node: this,
+                emitter: entityConfigNode,
+            });
+            entityConfigEvents.setStatus(controllerDeps.status);
+            entityConfigEvents.addListener(
+                IntegrationEvent.ValueChange,
+                controller.onValueChange.bind(controller),
+            );
+        }
     }
 }

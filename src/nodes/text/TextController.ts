@@ -7,7 +7,6 @@ import NoConnectionError from '../../common/errors/NoConnectionError';
 import { IntegrationEvent } from '../../common/integration/Integration';
 import ValueEntityIntegration from '../../common/integration/ValueEntityIntegration';
 import { ValueIntegrationMode } from '../../const';
-import { NodeMessage } from '../../types/nodes';
 import { EntityConfigNode } from '../entity-config';
 import { TextNode, TextNodeProperties } from '.';
 
