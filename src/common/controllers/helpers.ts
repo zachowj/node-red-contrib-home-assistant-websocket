@@ -1,8 +1,12 @@
+import { Credentials } from '../../homeAssistant';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
-import { BaseNode } from '../../types/nodes';
+import { EntityConfigNode } from '../../nodes/entity-config';
+import { BaseNode, ServerNode } from '../../types/nodes';
+import ClientEvents from '../events/ClientEvents';
 import JSONataService from '../services/JSONataService';
 import NodeRedContextService from '../services/NodeRedContextService';
 import TypedInputService from '../services/TypedInputService';
+import EventsStatus from '../status/EventStatus';
 
 /**
  * Create some of the dependencies needed for a BaseNode controller.
@@ -30,5 +34,37 @@ export function createControllerDependencies(
         jsonataService,
         nodeRedContextService,
         typedInputService,
+    };
+}
+
+export function createExposeAsControllerDependences({
+    exposeAsConfigNode,
+    homeAssistant,
+    node,
+    serverConfigNode,
+}: {
+    exposeAsConfigNode?: EntityConfigNode;
+    homeAssistant: HomeAssistant;
+    node: BaseNode;
+    serverConfigNode: ServerNode<Credentials>;
+}) {
+    const controllerDeps = createControllerDependencies(node, homeAssistant);
+
+    const clientEvents = new ClientEvents({
+        node,
+        emitter: homeAssistant.eventBus,
+    });
+
+    const status = new EventsStatus({
+        clientEvents,
+        config: serverConfigNode.config,
+        exposeAsEntityConfigNode: exposeAsConfigNode,
+        node,
+    });
+
+    return {
+        ...controllerDeps,
+        exposeAsConfigNode,
+        status,
     };
 }

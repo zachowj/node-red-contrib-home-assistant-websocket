@@ -43,8 +43,15 @@ const NumberEditor: EditorNodeDef<NumberEditorNodeProperties> = {
             value: '',
             type: NodeType.EntityConfig,
             // @ts-expect-error - DefinitelyTyped is missing this property
-            filter: (config) => config.entityType === 'number',
+            filter: (config) => config.entityType === EntityType.Number,
             required: true,
+        },
+        exposeAsEntityConfig: {
+            value: '',
+            type: NodeType.EntityConfig,
+            // @ts-ignore - DefinitelyTyped is missing this property
+            filter: (config) => config.entityType === EntityType.Switch,
+            required: false,
         },
         mode: { value: ValueIntegrationMode.Listen },
         value: { value: 'payload' },
@@ -72,11 +79,13 @@ const NumberEditor: EditorNodeDef<NumberEditorNodeProperties> = {
         exposeNode.init(this);
 
         saveEntityType(EntityType.Number);
+        saveEntityType(EntityType.Switch, 'exposeAsEntityConfig');
         $('#dialog-form').prepend(ha.betaWarning(962));
 
-        const $valueRow = $('#node-input-value').parent();
         $('#node-input-mode').on('change', function (this: HTMLSelectElement) {
-            $valueRow.toggle(this.value === ValueIntegrationMode.Set);
+            $('#node-input-value')
+                .parent()
+                .toggle(this.value === ValueIntegrationMode.Set);
             $('#node-input-inputs').val(
                 this.value === ValueIntegrationMode.Listen ? 0 : 1,
             );

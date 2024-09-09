@@ -1,6 +1,6 @@
 import { EditorRED } from 'node-red';
 
-import { NO_VERSION, NodeType } from '../const';
+import { NO_VERSION, NodeType, ValueIntegrationMode } from '../const';
 import { HassExposedConfig, HassNodeProperties } from './types';
 import * as haUtils from './utils';
 
@@ -106,6 +106,10 @@ export function init(n: HassNodeProperties) {
                 break;
         }
     });
+
+    if (isEntityNode()) {
+        $('#node-input-mode').on('change', toggleExposeAsForListenMode);
+    }
 }
 
 function render() {
@@ -257,6 +261,11 @@ function renderAlert(type: NodeType) {
         $('#dialog-form').prepend(alertText);
     }
     $('#integrationAlert').toggle(!integartionValid);
+}
+
+export function toggleExposeAsForListenMode() {
+    const mode = $('#node-input-mode').val() as ValueIntegrationMode;
+    $('#exposed-as-row').toggle(mode === ValueIntegrationMode.Listen);
 }
 
 // TODO: Can be removed when all nodes are migrated to Typescript

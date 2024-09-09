@@ -1,5 +1,3 @@
-import { NodeMessage } from 'node-red';
-
 import InputOutputController, {
     InputOutputControllerOptions,
     InputProperties,
@@ -122,24 +120,6 @@ export default class NumberController extends InputOutputController<
                 'home-assistant.status.error',
             );
         }
-    }
-
-    public async onValueChange(value: number, previousValue?: number) {
-        if (isNaN(value)) return;
-
-        const message: NodeMessage = {};
-
-        await this.setCustomOutputs(
-            this.node.config.outputProperties,
-            message,
-            {
-                config: this.node.config,
-                value,
-                previousValue,
-            },
-        );
-        this.status.setSuccess(value.toString());
-        this.node.send(message);
     }
 
     // keep the number in range if min/max is set in the entity config
