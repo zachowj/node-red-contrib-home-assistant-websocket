@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.71.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.70.0...v0.71.0) (2024-09-09)
+
+
+### Features
+
+* **number:** Promote number node from beta to stable ([f235081](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f235081b9ca7f22401bd0bbba0e837b7422efa27))
+* **select:** Promote select node from beta to stable ([f235081](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f235081b9ca7f22401bd0bbba0e837b7422efa27))
+* **text:** Promote text node from beta to stable ([f235081](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f235081b9ca7f22401bd0bbba0e837b7422efa27))
+* **time-entity:** Promote time-entity node from beta to stable ([f235081](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f235081b9ca7f22401bd0bbba0e837b7422efa27))
+
+
+### Bug Fixes
+
+* **get-entities:** Add timeSinceChangedMs to the states before condition checks ([5036246](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/50362467ee935eaffa15ea60116ede95b4ed854d))
+
 ## [0.70.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.69.1...v0.70.0) (2024-09-09)
 
 
