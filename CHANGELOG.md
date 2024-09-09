@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.70.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.69.1...v0.70.0) (2024-09-09)
+
+
+### Features
+
+* **action:** Add option to block input overrides in action nodes ([8dd947f](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/8dd947f140aa21cbd545d5064bcdd38698c85d11)), closes [#1489](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1489)
+* **number:** Add "Expose as" option for Listening mode in number node ([e7441e1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/e7441e1b339193426ef2b1abdc498a42951cef11))
+* **select:** Add "Expose as" option for Listening mode in select node ([8dfffb3](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/8dfffb3a2ca475c68539ea2d92786f0b529c3685))
+* **text:** Add "Expose as" option for Listening mode in text node ([60d69d2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/60d69d2a4ad262b47b921e67db273fdbd89d6b0f))
+* **time-entity:** Add "Expose as" option for Listening mode in time-entity node ([7ae8c09](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/7ae8c0950f6a9a40aa0a5ee65fc897700db52334))
+
 ## [0.69.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.69.0...v0.69.1) (2024-09-06)
 
 
