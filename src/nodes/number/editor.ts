@@ -24,7 +24,7 @@ interface NumberEditorNodeProperties extends HassNodeProperties {
 
 const NumberEditor: EditorNodeDef<NumberEditorNodeProperties> = {
     category: NodeCategory.HomeAssistantEntities,
-    color: NodeColor.Beta,
+    color: NodeColor.HaBlue,
     inputs: 0,
     outputs: 1,
     icon: 'font-awesome/fa-hashtag',
@@ -81,7 +81,6 @@ const NumberEditor: EditorNodeDef<NumberEditorNodeProperties> = {
 
         saveEntityType(EntityType.Number);
         saveEntityType(EntityType.Switch, 'exposeAsEntityConfig');
-        $('#dialog-form').prepend(ha.betaWarning(962));
 
         $('#node-input-mode').on('change', function (this: HTMLSelectElement) {
             $('#node-input-value')

@@ -24,7 +24,7 @@ interface SelectEditorNodeProperties extends HassNodeProperties {
 
 const SelectEditor: EditorNodeDef<SelectEditorNodeProperties> = {
     category: NodeCategory.HomeAssistantEntities,
-    color: NodeColor.Beta,
+    color: NodeColor.HaBlue,
     inputs: 0,
     outputs: 1,
     icon: 'font-awesome/fa-list',
@@ -81,8 +81,6 @@ const SelectEditor: EditorNodeDef<SelectEditorNodeProperties> = {
 
         saveEntityType(EntityType.Select);
         saveEntityType(EntityType.Switch, 'exposeAsEntityConfig');
-
-        $('#dialog-form').prepend(ha.betaWarning(968));
 
         const $valueRow = $('#node-input-value').parent();
         $('#node-input-mode').on('change', function (this: HTMLSelectElement) {
