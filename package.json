@@ -93,7 +93,7 @@
     "autoprefixer": "10.4.20",
     "browser-sync": "3.0.2",
     "cheerio": "1.0.0",
-    "cssnano": "7.0.5",
+    "cssnano": "7.0.6",
     "del": "6.1.1",
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
