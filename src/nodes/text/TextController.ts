@@ -134,20 +134,4 @@ export default class TextController extends InputOutputController<
 
         return true;
     }
-
-    public async onValueChange(value: string, previousValue?: string) {
-        const message: NodeMessage = {};
-
-        await this.setCustomOutputs(
-            this.node.config.outputProperties,
-            message,
-            {
-                config: this.node.config,
-                value,
-                previousValue,
-            },
-        );
-        this.status.setSuccess(value);
-        this.node.send(message);
-    }
 }

@@ -19,6 +19,7 @@ interface TextEditorNodeProperties extends HassNodeProperties {
     entityConfig: any;
     mode: ValueIntegrationMode;
     outputProperties: OutputProperty[];
+    exposeAsEntityConfig: string;
 }
 
 const TextEditor: EditorNodeDef<TextEditorNodeProperties> = {
@@ -46,6 +47,13 @@ const TextEditor: EditorNodeDef<TextEditorNodeProperties> = {
             filter: (config) => config.entityType === 'text',
             required: true,
         },
+        exposeAsEntityConfig: {
+            value: '',
+            type: NodeType.EntityConfig,
+            // @ts-ignore - DefinitelyTyped is missing this property
+            filter: (config) => config.entityType === EntityType.Switch,
+            required: false,
+        },
         mode: { value: ValueIntegrationMode.Listen },
         value: { value: 'payload' },
         valueType: { value: TypedInputTypes.Message },
@@ -72,6 +80,7 @@ const TextEditor: EditorNodeDef<TextEditorNodeProperties> = {
         exposeNode.init(this);
 
         saveEntityType(EntityType.Text);
+        saveEntityType(EntityType.Switch, 'exposeAsEntityConfig');
         $('#dialog-form').prepend(ha.betaWarning(963));
 
         const $valueRow = $('#node-input-value').parent();
