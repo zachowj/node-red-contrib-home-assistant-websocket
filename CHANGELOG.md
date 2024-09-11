@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.72.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.71.0...v0.72.0) (2024-09-11)
+
+
+### Features
+
+* **sentence:** Add support for custom responses in the sentence node ([bdfcd95](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/bdfcd95574982168f315b3e6152f6d578582fda7))
+
 ## [0.71.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.70.0...v0.71.0) (2024-09-09)
 
 
