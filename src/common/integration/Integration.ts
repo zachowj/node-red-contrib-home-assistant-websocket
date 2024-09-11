@@ -25,6 +25,7 @@ export enum MessageType {
     Entity = 'nodered/entity',
     RemoveDevice = 'nodered/device/remove',
     SentenceTrigger = 'nodered/sentence',
+    SentenceResponse = 'nodered/sentence_response',
     UpdateConfig = 'nodered/entity/update_config',
     Webhook = 'nodered/webhook',
 }

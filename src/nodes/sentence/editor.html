@@ -1,4 +1,5 @@
 <input type="hidden" id="node-input-version" />
+<input type="hidden" id="node-input-inputs" />
 
 <div class="form-row">
     <label for="node-input-name" data-i18n="ha-sentence.label.name"></label>
@@ -11,22 +12,71 @@
 </div>
 
 <div class="form-row">
+    <label for="node-input-mode">
+        <span data-i18n="ha-select.label.mode"></span>
+    </label>
+    <select id="node-input-mode">
+        <option
+            value="trigger"
+            data-i18n="ha-sentence.label.mode_option.trigger"
+        ></option>
+        <option
+            value="response"
+            data-i18n="ha-sentence.label.mode_option.response"
+        ></option>
+    </select>
+</div>
+
+<div class="form-row sentence-trigger">
     <ol id="node-input-sentences-container"></ol>
 </div>
 
-<div class="form-row">
+<div class="form-row sentence-trigger">
+    <label for="node-input-triggerResponseType">
+        <span data-i18n="ha-sentence.label.response_type"></span>
+    </label>
+    <select id="node-input-triggerResponseType">
+        <option
+            value="fixed"
+            data-i18n="ha-sentence.label.response_type_option.fixed"
+        ></option>
+        <option
+            value="dynamic"
+            data-i18n="ha-sentence.label.response_type_option.dynamic"
+        ></option>
+    </select>
+</div>
+
+<div class="form-row sentence-response">
     <label
         for="node-input-response"
         data-i18n="ha-sentence.label.response"
     ></label>
-    <input type="text" id="node-input-response" placeholder="Done" />
+    <input type="text" id="node-input-response" style="width: 70%" />
+    <input type="hidden" id="node-input-responseType" />
+</div>
+
+<div class="form-row sentence-trigger">
+    <label
+        for="node-input-triggerResponse"
+        data-i18n="ha-sentence.label.response"
+    ></label>
+    <input type="text" id="node-input-triggerResponse" placeholder="Done" />
+</div>
+
+<div class="form-row sentence-trigger">
+    <label
+        for="node-input-responseTimeout"
+        data-i18n="ha-sentence.label.timeout"
+    ></label>
+    <input type="text" id="node-input-responseTimeout" value="1000" />
 </div>
 
 <div class="form-row">
     <ol id="custom-outputs"></ol>
 </div>
 
-<div class="form-row" id="exposed-as-row">
+<div class="form-row sentence-trigger" id="exposed-as-row">
     <label
         for="node-input-exposeAsEntityConfig"
         data-i18n="ha-tag.label.expose_as"

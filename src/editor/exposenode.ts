@@ -1,6 +1,7 @@
 import { EditorRED } from 'node-red';
 
 import { NO_VERSION, NodeType, ValueIntegrationMode } from '../const';
+import { SentenceMode } from '../nodes/sentence/const';
 import { HassExposedConfig, HassNodeProperties } from './types';
 import * as haUtils from './utils';
 
@@ -88,6 +89,14 @@ export function init(n: HassNodeProperties) {
                 renderAlert(type);
                 break;
             case NodeType.Sentence:
+                {
+                    const mode = $('#node-input-mode').val() as SentenceMode;
+                    $('#exposed-as-row').toggle(mode === SentenceMode.Trigger);
+                    if (!isAddNodeSelected('server')) {
+                        renderAlert(type);
+                    }
+                }
+                break;
             case NodeType.Webhook:
                 if (!isAddNodeSelected('server')) {
                     renderAlert(type);
@@ -236,7 +245,7 @@ const NodeMinIntegraionVersion = {
     [NodeType.Device]: '4.0.2',
     [NodeType.Number]: '1.3.0',
     [NodeType.Select]: '1.4.0',
-    [NodeType.Sentence]: '2.2.0',
+    [NodeType.Sentence]: '4.1.0',
     [NodeType.Sensor]: '1.1.0',
     [NodeType.Switch]: '1.1.0',
     [NodeType.Tag]: '0.5.0',

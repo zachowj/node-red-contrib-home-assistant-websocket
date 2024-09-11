@@ -10,7 +10,7 @@ const VERSION_0 = {
     type: 'ha-sentence',
     name: 'label of node',
     version: 0,
-    sentenses: [
+    sentences: [
         "[it's ]party time",
         'happy (new year|birthday)',
         'hello world',
@@ -48,8 +48,16 @@ const VERSION_1 = {
     response: '',
     exposeAsEntityConfig: '',
 };
+const VERSION_2 = {
+    ...VERSION_1,
+    version: 2,
+    mode: 'trigger',
+    responseType: 'jsonata',
+    responseTimeout: 1000,
+    triggerResponseType: 'fixed',
+};
 
-describe('Migrations - Sentense Node', function () {
+describe('Migrations - Sentence Node', function () {
     describe('Version 1', function () {
         it('should update version 0 to version 1', function () {
             const migrate = migrations.find((m) => m.version === 1);
@@ -58,8 +66,16 @@ describe('Migrations - Sentense Node', function () {
         });
     });
 
+    describe('Version 2', function () {
+        it('should update version 1 to version 2', function () {
+            const migrate = migrations.find((m) => m.version === 2);
+            const migratedSchema = migrate?.up(VERSION_1);
+            expect(migratedSchema).toEqual(VERSION_2);
+        });
+    });
+
     it('should update an version 0 to current version', function () {
         const migratedSchema = migrate(VERSION_0);
-        expect(migratedSchema).toEqual(VERSION_1);
+        expect(migratedSchema).toEqual(VERSION_2);
     });
 });

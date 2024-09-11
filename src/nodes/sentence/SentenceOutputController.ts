@@ -8,10 +8,11 @@ interface SentenceResponse {
     sentence: string;
     result: Record<string, unknown> | null;
     deviceId: string | null;
+    responseId: number;
 }
 
 const ExposeAsController = ExposeAsMixin(OutputController<SentenceNode>);
-export default class SentenseController extends ExposeAsController {
+export default class SentenceController extends ExposeAsController {
     public async onReceivedMessage(data: SentenceResponse) {
         if (!this.isEnabled) return;
 
@@ -26,6 +27,7 @@ export default class SentenseController extends ExposeAsController {
                 [TypedInputTypes.DeviceId]: data.deviceId,
             },
         );
+        message._sentence_response_id = data.responseId;
         this.status.setSuccess('home-assistant.status.triggered');
         this.node.send(message);
     }

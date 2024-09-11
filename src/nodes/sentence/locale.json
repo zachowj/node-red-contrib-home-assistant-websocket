@@ -1,10 +1,25 @@
 {
   "ha-sentence": {
+    "error": {
+      "missing_response_id": "_sentence_response_id was not found in the message object"
+    },
     "label": {
+      "fallback_response": "Fallback Response",
+      "mode": "Mode",
+      "mode_option": {
+        "response": "response",
+        "trigger": "trigger"
+      },
       "name": "Name",
       "response": "Response",
+      "response_type": "Response Type",
+      "response_type_option": {
+        "dynamic": "dynamic",
+        "fixed": "fixed"
+      },
       "sentences": "Sentences",
-      "server": "Server"
+      "server": "Server",
+      "timeout": "Timeout"
     }
   }
 }

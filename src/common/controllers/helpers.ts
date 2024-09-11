@@ -64,6 +64,7 @@ export function createExposeAsControllerDependences({
 
     return {
         ...controllerDeps,
+        clientEvents,
         exposeAsConfigNode,
         status,
     };
