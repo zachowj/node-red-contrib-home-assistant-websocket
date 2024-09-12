@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.72.2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.72.1...v0.72.2) (2024-09-12)
+
+
+### Bug Fixes
+
+* Update virtual-select.ts to handle null attributes in createSelectOptions function ([557271c](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/557271ca46109fb7d4b05b5e64545efe22a0171f))
+
 ## [0.72.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.72.0...v0.72.1) (2024-09-12)
 
 
