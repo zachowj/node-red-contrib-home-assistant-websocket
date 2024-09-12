@@ -32,10 +32,12 @@ export function updateDevices(topic: string, data: HassDevice[]): void {
     devices[serverId] = data;
 }
 
-export function updateEntity(topic: string, data: HassEntity): void {
+export function updateEntity(topic: string, data: HassEntity[]): void {
     const serverId = parseServerId(topic);
     if (!entities[serverId]) entities[serverId] = {};
-    entities[serverId][data.entity_id] = data;
+    data.forEach((item) => {
+        entities[serverId][item.entity_id] = item;
+    });
 }
 
 export function updateEntityRegistry(

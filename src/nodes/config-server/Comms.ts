@@ -55,38 +55,23 @@ export default class Comms {
     }
 
     onAreaRegistryUpdate(areas: HassArea[]): void {
-        const throttledPublish = throttle(() => {
-            this.publish('areas', areas);
-        }, 1000);
-        throttledPublish();
+        this.publish('areas', areas);
     }
 
     onDeviceRegistryUpdate(devices: HassDevice[]): void {
-        const throttledPublish = throttle(() => {
-            this.publish('devices', devices);
-        }, 1000);
-        throttledPublish();
+        this.publish('devices', devices);
     }
 
     onFloorRegistryUpdate(floors: HassFloor[]): void {
-        const throttledPublish = throttle(() => {
-            this.publish('floors', floors);
-        }, 1000);
-        throttledPublish();
+        this.publish('floors', floors);
     }
 
     onLabelRegistryUpdate(labels: HassLabel[]): void {
-        const throttledPublish = throttle(() => {
-            this.publish('labels', labels);
-        }, 1000);
-        throttledPublish();
+        this.publish('labels', labels);
     }
 
     onEntityRegistryUpdate(entities: HassEntityRegistryEntry[]): void {
-        const throttledPublish = throttle(() => {
-            this.publish('entityRegistry', entities);
-        }, 1000);
-        throttledPublish();
+        this.publish('entityRegistry', entities);
     }
 
     onIntegrationEvent(eventType: string): void {
@@ -97,23 +82,24 @@ export default class Comms {
     }
 
     onServicesUpdated(services: HassServices): void {
-        const throttledPublish = throttle(() => {
-            this.publish('services', services);
-        }, 1000);
-        throttledPublish();
+        this.publish('services', services);
     }
 
+    #stateChangedBatchedUpdates: Map<string, HassStateChangedEvent> = new Map();
+    #throttledStateChangedPublish = throttle(() => {
+        this.publish(
+            'entity',
+            Array.from(this.#stateChangedBatchedUpdates.values()),
+        );
+        this.#stateChangedBatchedUpdates.clear();
+    }, 1000);
+
     onStateChanged(event: HassStateChangedEvent): void {
-        const entity = event.event.new_state;
-        if (entity) {
-            this.publish('entity', entity);
-        }
+        this.#stateChangedBatchedUpdates.set(event.entity_id, event);
+        this.#throttledStateChangedPublish();
     }
 
     onStatesLoaded(entities: HassEntities): void {
-        const throttledPublish = throttle(() => {
-            this.publish('entities', entities);
-        }, 1000);
-        throttledPublish();
+        this.publish('entities', entities);
     }
 }
