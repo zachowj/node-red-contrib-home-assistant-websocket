@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.72.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.72.0...v0.72.1) (2024-09-12)
+
+
+### Bug Fixes
+
+* ensure comms throttle works as intended ([4065746](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/40657466feef85588bfbd531ebcb3da789bebb82))
+
 ## [0.72.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.71.0...v0.72.0) (2024-09-11)
 
 
