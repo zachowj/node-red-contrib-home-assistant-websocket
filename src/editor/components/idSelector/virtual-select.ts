@@ -49,9 +49,9 @@ export function createSelectOptions(
             data.entities.forEach((entity) => {
                 const label = useEntityId
                     ? entity.entity_id
-                    : entity.attributes.friendly_name || entity.entity_id;
+                    : entity.attributes?.friendly_name || entity.entity_id;
                 const description = useEntityId
-                    ? entity.attributes.friendly_name
+                    ? entity.attributes?.friendly_name
                     : entity.entity_id;
                 list.push({
                     label,
