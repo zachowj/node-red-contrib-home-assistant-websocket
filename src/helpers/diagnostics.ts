@@ -94,7 +94,7 @@ async function getAddonVersion(): Promise<string | undefined> {
         return addonVersionCached;
 
     try {
-        const response = await axios.get<any, AddonInfo>(
+        const response = await axios.get<AddonInfo>(
             'http://supervisor/addons/self/info',
             {
                 headers: {
@@ -102,7 +102,7 @@ async function getAddonVersion(): Promise<string | undefined> {
                 },
             },
         );
-        addonVersionCached = response.data.version;
+        addonVersionCached = response.data.data.version;
         return addonVersionCached;
     } catch (err) {
         return 'error fetching version';
