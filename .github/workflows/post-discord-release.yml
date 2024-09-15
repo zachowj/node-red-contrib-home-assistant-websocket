@@ -1,0 +1,20 @@
+name: Post Release to Discord
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  post_to_discord:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send release to Discord
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          curl -H "Content-Type: application/json" \
+            -X POST \
+            -d '{
+              "content": "New Release: **${{ github.event.release.name }}**\n${{ github.event.release.body }}\nCheck it out here: ${{ github.event.release.html_url }}"
+            }' \
+            $DISCORD_WEBHOOK
