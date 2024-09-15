@@ -1,13 +1,15 @@
 name: Documentation
 
 on:
+  release:
+    types:
+      - published
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - "docs/**"
-      - "examples/**"
+    inputs:
+      branch:
+        description: "Branch to run the workflow on"
+        required: true
+        default: "main"
 
 jobs:
   build-deploy:
@@ -15,6 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.inputs.branch }}
           fetch-depth: 0 # For last-updated time
       - name: Install pnpm
         uses: pnpm/action-setup@v4
