@@ -18,7 +18,7 @@ function buildDocumentationButton(node?: string) {
 
 function buildDiscordButton() {
     return $('<a>', {
-        href: 'https://discord.gg/58PHf3Gm',
+        href: 'https://discord.gg/RZubQsRCvJ',
         title: 'Discord',
         text: 'Discord',
         ...options,
