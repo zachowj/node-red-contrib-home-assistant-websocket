@@ -120,7 +120,7 @@
     "gulp-typescript": "6.0.0-alpha.1",
     "gulp-wrap": "0.15.0",
     "handlebars": "^4.7.8",
-    "husky": "9.1.5",
+    "husky": "9.1.6",
     "jsonata": "2.0.5",
     "lazypipe": "1.0.2",
     "lint-staged": "15.2.10",
