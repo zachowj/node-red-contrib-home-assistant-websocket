@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.72.4](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.72.3...v0.72.4) (2024-09-16)
+
+
+### Bug Fixes
+
+* **socialbar:** replace Discord button link with permanent invite code ([a1a4016](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a1a40166606ca75bedf12a3817ebb945c62bd642))
+* **socialbar:** update Discord button link to new URL ([3adc8c5](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/3adc8c5381c48837f7556d6361bfca20994149f9))
+
 ## [0.72.3](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.72.2...v0.72.3) (2024-09-16)
 
 
