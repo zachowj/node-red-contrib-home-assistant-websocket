@@ -3,7 +3,7 @@ name: Documentation
 on:
   release:
     types:
-      - published
+      - released
   workflow_dispatch:
     inputs:
       branch:

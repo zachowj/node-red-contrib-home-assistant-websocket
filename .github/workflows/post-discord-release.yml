@@ -2,7 +2,8 @@ name: Post Release to Discord
 
 on:
   release:
-    types: [published]
+    types:
+      - released
 
 jobs:
   post_to_discord:
