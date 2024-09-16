@@ -203,7 +203,7 @@ function addIssueListEvents($list: JQuery) {
             $.ajax({
                 url: `homeassistant/issues/hidden`,
                 type: 'POST',
-                data: JSON.stringify({ issue } ?? {}),
+                data: JSON.stringify({ issue }),
                 contentType: 'application/json',
                 success: () => {
                     RED.notify(
