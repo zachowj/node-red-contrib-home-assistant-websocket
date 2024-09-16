@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.72.3](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.72.2...v0.72.3) (2024-09-16)
+
+
+### Bug Fixes
+
+* **comms:** update stateChanged handling to use HassEntity and prevent null entries ([fc62241](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/fc6224150918e8241642d6c8bfc92a7be42cc328))
+* **diagnostics:** correctly fetch and display addon version ([c26c7ee](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/c26c7eed945fa60b1f5b6b598315fd04a4e3476c))
+
 ## [0.72.2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.72.1...v0.72.2) (2024-09-12)
 
 
