@@ -99,6 +99,8 @@ jobs:
     if: ${{ needs.release-please.outputs.release_created }}
     uses: zachowj/node-red-contrib-home-assistant-websocket/.github/workflows/post-discord-release.yml@main
     secrets: inherit
+    with:
+      github_event: ${{ toJson(github.event) }}
 
   publish-documentation:
     needs: release-please
