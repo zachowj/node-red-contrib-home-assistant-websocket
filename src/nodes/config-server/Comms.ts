@@ -9,6 +9,7 @@ import { ClientEvent } from '../../homeAssistant/Websocket';
 import {
     HassArea,
     HassDevice,
+    HassEntity,
     HassEntityRegistryEntry,
     HassFloor,
     HassLabel,
@@ -85,7 +86,7 @@ export default class Comms {
         this.publish('services', services);
     }
 
-    #stateChangedBatchedUpdates: Map<string, HassStateChangedEvent> = new Map();
+    #stateChangedBatchedUpdates: Map<string, HassEntity> = new Map();
     #throttledStateChangedPublish = throttle(() => {
         this.publish(
             'entity',
@@ -95,7 +96,9 @@ export default class Comms {
     }, 1000);
 
     onStateChanged(event: HassStateChangedEvent): void {
-        this.#stateChangedBatchedUpdates.set(event.entity_id, event);
+        const entity = event.event.new_state;
+        if (!entity) return;
+        this.#stateChangedBatchedUpdates.set(event.entity_id, entity);
         this.#throttledStateChangedPublish();
     }
 
