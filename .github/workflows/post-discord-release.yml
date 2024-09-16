@@ -1,9 +1,8 @@
 name: Post Release to Discord
 
 on:
-  release:
-    types:
-      - released
+  workflow_call:
+  workflow_dispatch:
 
 jobs:
   post_to_discord:

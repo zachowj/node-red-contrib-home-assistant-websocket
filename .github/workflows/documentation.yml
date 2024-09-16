@@ -1,9 +1,7 @@
 name: Documentation
 
 on:
-  release:
-    types:
-      - released
+  workflow_call:
   workflow_dispatch:
     inputs:
       branch:
