@@ -100,7 +100,9 @@ jobs:
     uses: zachowj/node-red-contrib-home-assistant-websocket/.github/workflows/post-discord-release.yml@main
     secrets: inherit
     with:
-      github_event: ${{ toJson(github.event) }}
+      release_name: ${{ github.event.release.name }}
+      release_body: ${{ github.event.release.body }}
+      release_html_url: ${{ github.event.release.html_url }}
 
   publish-documentation:
     needs: release-please

@@ -3,11 +3,18 @@ name: Post Release to Discord
 on:
   workflow_call:
     inputs:
-      github_event:
+      release_name:
+        description: "Name of the release"
         required: true
-        type: object
-  workflow_dispatch:
-
+        type: string
+      release_body:
+        description: "Body of the release notes"
+        required: true
+        type: string
+      release_html_url:
+        description: "URL to the release on GitHub"
+        required: true
+        type: string
 jobs:
   post_to_discord:
     runs-on: ubuntu-latest
@@ -19,6 +26,6 @@ jobs:
           curl -H "Content-Type: application/json" \
             -X POST \
             -d '{
-              "content": "New Release: **${{ github_event.release.name }}**\n${{ github_event.release.body }}\nCheck it out here: ${{ github_event.release.html_url }}"
+              "content": "New Release: **${{ inputs.release_name }}**\n${{ inputs.release_body }}\nCheck it out here: ${{ inputs.release_html_url }}"
             }' \
             $DISCORD_WEBHOOK
