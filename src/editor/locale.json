@@ -16,7 +16,8 @@
         "clipboard_copy": "Copied to clipboard"
       },
       "text": {
-        "discussions": "Discussions",
+        "discord": "Join Discord",
+        "discussions": "Github Discussions",
         "documentation": "Documentation",
         "looking_for_help": "Looking for help?"
       }

@@ -16,11 +16,12 @@ function buildDocumentationButton(node?: string) {
     });
 }
 
+const discord = i18n('home-assistant.ui.text.discord');
 function buildDiscordButton() {
     return $('<a>', {
         href: 'https://discord.gg/RZubQsRCvJ',
         title: 'Discord',
-        text: 'Discord',
+        text: discord,
         ...options,
     });
 }
@@ -29,7 +30,7 @@ const discussions = i18n('home-assistant.ui.text.discussions');
 function buildDiscussionsButton() {
     return $('<a>', {
         href: 'https://github.com/zachowj/node-red-contrib-home-assistant-websocket/discussions',
-        title: `Github ${discussions}`,
+        title: discussions,
         text: discussions,
         ...options,
     });
