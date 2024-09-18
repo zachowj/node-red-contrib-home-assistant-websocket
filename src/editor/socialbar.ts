@@ -19,7 +19,7 @@ function buildDocumentationButton(node?: string) {
 const discord = i18n('home-assistant.ui.text.discord');
 function buildDiscordButton() {
     return $('<a>', {
-        href: 'https://discord.gg/RZubQsRCvJ',
+        href: 'https://discord.gg/QNdsZgNBnU',
         title: 'Discord',
         text: discord,
         ...options,
