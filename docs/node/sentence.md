@@ -122,4 +122,16 @@ This example checks the status of a binary sensor to determine whether the car i
 
 @[code](@examples/node/sentence/sentence_dynamic_response_02.json)
 
+#### Example 3: Play a Jellyfin Show
+
+This example demonstrates how to use the Sentence node with Home Assistant's conversation integration to play a show from Jellyfin. The flow utilizes dynamic responses to respond with the selected episode.
+
+Full details can be found in the [Cookbook](../cookbook/play-jellyfin-show-using-sentence-node.md).
+
+![screenshot](../cookbook/images/play-jellyfin-show-using-sentence-node_01.png)
+
+![screenshot](../cookbook/images/play-jellyfin-show-using-sentence-node_03.png)
+
+@[code](@examples/cookbook/play-jellyfin-show-using-sentence-node/play-jellyfin-show-using-sentence-node.json)
+
 </DocsOnly>

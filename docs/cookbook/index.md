@@ -23,6 +23,7 @@ further educate yourself in the world of Home Automation with Node-RED.
 - [Holiday lights scheduler and demo mode for WLED](./holiday-lights-scheduler-and-demo-mode-for-wled.md)
 - [Actionable Notifications Subflow for Android](./actionable-notifications-subflow-for-android.md)
 - [Events by Label](./events-by-label.md)
+- [Play Jellyfin Show using the Sentence Node](./play-jellyfin-show-using-sentence-node.md)
 
 All JSON exports are also available under the examples tab in the Node-RED
 import menu.
