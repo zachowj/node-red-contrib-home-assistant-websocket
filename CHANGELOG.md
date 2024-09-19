@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.73.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.72.4...v0.73.0) (2024-09-19)
+
+
+### Features
+
+* **time:** Added option to allow past date inputs without throwing errors ([a1e16ee](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a1e16ee6f16bb4701165477be2b649ce27eb4620))
+
+
+### Bug Fixes
+
+* **time:** Resolve "Date in past. Will never be fired." error for valid dates ([a1e16ee](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a1e16ee6f16bb4701165477be2b649ce27eb4620)), closes [#1575](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1575)
+
 ## [0.72.4](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.72.3...v0.72.4) (2024-09-16)
 
 
