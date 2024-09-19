@@ -56,7 +56,7 @@ export default defineUserConfig({
             },
             {
                 text: 'Discord',
-                link: 'https://discord.gg/RZubQsRCvJ',
+                link: 'https://discord.gg/QNdsZgNBnU',
             },
         ],
         sidebar: {
