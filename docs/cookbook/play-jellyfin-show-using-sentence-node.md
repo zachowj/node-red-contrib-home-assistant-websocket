@@ -39,3 +39,14 @@ The flow includes nodes to retrieve the necessary data from Jellyfin. Follow the
 6. Deploy the flow.
 
 ![Flow screenshot](./images/play-jellyfin-show-using-sentence-node_04.png)
+
+## Extended Usage
+
+This flow can be expanded to include additional functionality, such as:
+
+- Customizing which devices the show is played on.
+- Playing a random episode from a specific show.
+- Playing a random episode from a specific season.
+- Playing the next unwatched episode from a show.
+- Playing the next episode from a show.
+- Playing a random episode from a specific genre.
