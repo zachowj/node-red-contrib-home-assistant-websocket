@@ -28,6 +28,7 @@ export interface TimeNodeProperties extends BaseNodeProperties {
     thursday: boolean;
     friday: boolean;
     saturday: boolean;
+    ignorePastDate: boolean;
     outputProperties: OutputProperty[];
     exposeAsEntityConfig: string;
 }

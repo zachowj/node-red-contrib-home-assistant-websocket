@@ -17,9 +17,9 @@ importers:
       compare-versions:
         specifier: 6.1.1
         version: 6.1.1
-      cron:
-        specifier: 3.1.7
-        version: 3.1.7
+      cronosjs:
+        specifier: ^1.7.1
+        version: 1.7.1
       debug:
         specifier: 4.3.7
         version: 4.3.7(supports-color@5.5.0)
@@ -995,9 +995,6 @@ packages:
 
   '@types/lowdb@1.0.11':
     resolution: {integrity: sha512-h99VMxvTuz+VsXUVCCJo4dsps4vbkXwvU71TpmxDoiBU24bJ0VBygIHgmMm+UPoQIFihmV6euRik4z8J7XDJWg==}
-
-  '@types/luxon@3.4.2':
-    resolution: {integrity: sha512-TifLZlFudklWlMBfhubvgqTXRzLDI5pCbGa4P8a3wPyUQSW+1xQ5eDsreP9DWHX3tjq1ke96uYG/nwundroWcA==}
 
   '@types/markdown-it-emoji@3.0.1':
     resolution: {integrity: sha512-cz1j8R35XivBqq9mwnsrP2fsz2yicLhB8+PDtuVkKOExwEdsVBNI+ROL3sbhtR5occRZ66vT0QnwFZCqdjf3pA==}
@@ -2127,9 +2124,6 @@ packages:
 
   create-require@1.1.1:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
-
-  cron@3.1.7:
-    resolution: {integrity: sha512-tlBg7ARsAMQLzgwqVxy8AZl/qlTc5nibqYwtNGoCrd+cV+ugI+tvZC1oT/8dFH8W455YrywGykx/KMmAqOr7Jw==}
 
   cronosjs@1.7.1:
     resolution: {integrity: sha512-d6S6+ep7dJxsAG8OQQCdKuByI/S/AV64d9OF5mtmcykOyPu92cAkAnF3Tbc9s5oOaLQBYYQmTNvjqYRkPJ/u5Q==}
@@ -3737,10 +3731,6 @@ packages:
   lru-cache@6.0.0:
     resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
     engines: {node: '>=10'}
-
-  luxon@3.4.4:
-    resolution: {integrity: sha512-zobTr7akeGHnv7eBOXcRgMeCP6+uyYsczwmeRCauvpvaAltgNyTbLH/+VaEAPUeWBT+1GuNmz4wC/6jtQzbbVA==}
-    engines: {node: '>=12'}
 
   magic-string@0.30.11:
     resolution: {integrity: sha512-+Wri9p0QHMy+545hKww7YAu5NyzF8iomPL/RQazugQ9+Ez4Ic3mERMd8ZTX5rfK944j+560ZJi8iAwgak1Ac7A==}
@@ -6432,8 +6422,6 @@ snapshots:
     dependencies:
       '@types/lodash': 4.17.7
 
-  '@types/luxon@3.4.2': {}
-
   '@types/markdown-it-emoji@3.0.1':
     dependencies:
       '@types/markdown-it': 14.1.2
@@ -7789,11 +7777,6 @@ snapshots:
       vary: 1.1.2
 
   create-require@1.1.1: {}
-
-  cron@3.1.7:
-    dependencies:
-      '@types/luxon': 3.4.2
-      luxon: 3.4.4
 
   cronosjs@1.7.1: {}
 
@@ -9801,8 +9784,6 @@ snapshots:
   lru-cache@6.0.0:
     dependencies:
       yallist: 4.0.0
-
-  luxon@3.4.4: {}
 
   magic-string@0.30.11:
     dependencies:

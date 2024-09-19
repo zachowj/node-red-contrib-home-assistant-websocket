@@ -1,4 +1,4 @@
-import { CronJob } from 'cron';
+import { CronosTask, scheduleTask } from 'cronosjs';
 import selectn from 'selectn';
 
 import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
@@ -18,13 +18,13 @@ const DEFAULT_PROPERTY = 'state';
 
 const ExposeAsController = ExposeAsMixin(OutputController<TimeNode>);
 export default class TimeController extends ExposeAsController {
-    #cronjob: CronJob | null = null;
+    #cronjob: CronosTask | null = null;
 
-    #createCronjob(crontab: string | Date) {
+    #createCronjob(crontab: string) {
         this.node.debug(`Creating cronjob: ${crontab}`);
-        this.#cronjob = CronJob.from({
-            cronTime: crontab,
-            onTick: async () => {
+        this.#cronjob = scheduleTask(
+            crontab,
+            async () => {
                 try {
                     await this.#onTimer();
                 } catch (e) {
@@ -32,15 +32,13 @@ export default class TimeController extends ExposeAsController {
                     this.status.setError();
                 }
             },
-            start: true,
-        });
+            {},
+        );
     }
 
     #destoryCronjob() {
         if (this.#cronjob != null) {
-            this.node.debug(
-                `Destroying cronjob: ${this.#cronjob?.nextDate().toJSDate()}`,
-            );
+            this.node.debug(`Destroying cronjob: ${this.#cronjob?.nextRun}`);
             this.#cronjob.stop();
             this.#cronjob = null;
         }
@@ -97,10 +95,10 @@ export default class TimeController extends ExposeAsController {
         return Number(offsetMs);
     }
 
-    #getRandomOffset(crontab: Date, offset: number) {
+    #getRandomOffset(date: Date, offset: number) {
         // if not repeating stay ahead of current time
         if (!this.node.config.repeatDaily && Math.sign(offset) === -1) {
-            const cronTimestamp = crontab.getTime();
+            const cronTimestamp = date.getTime();
             const maxOffset =
                 Math.max(Date.now(), cronTimestamp + offset) - cronTimestamp;
             return maxOffset * Math.random();
@@ -151,9 +149,7 @@ export default class TimeController extends ExposeAsController {
         if (this.node.config.repeatDaily) {
             const sentTime = this.#formatDate(now);
             // convert luxon to date
-            const nextTime = this.#formatDate(
-                this.#cronjob?.nextDate().toJSDate(),
-            );
+            const nextTime = this.#formatDate(this.#cronjob?.nextRun);
             this.status.setSuccess([
                 'ha-time.status.sent_and_next',
                 {
@@ -176,7 +172,7 @@ export default class TimeController extends ExposeAsController {
         const property = this.node.config.property || DEFAULT_PROPERTY;
         const entity = this.#getEntity();
         const dateString = selectn(property, entity);
-        let crontab;
+        let date: Date | undefined;
         let offset;
 
         this.#destoryCronjob();
@@ -194,40 +190,46 @@ export default class TimeController extends ExposeAsController {
                     'ha-time.status.invalid_date',
                 );
             }
-            crontab = new Date(dateString);
+            date = new Date(dateString);
         } else {
-            crontab = new Date();
-            crontab.setHours(digits.hour);
-            crontab.setMinutes(digits.minutes);
-            crontab.setSeconds(digits.seconds);
+            date = new Date();
+            date.setHours(digits.hour);
+            date.setMinutes(digits.minutes);
+            date.setSeconds(digits.seconds);
         }
 
         // plus minus offset
         if (offset !== 0) {
             if (this.node.config.randomOffset) {
-                offset = this.#getRandomOffset(crontab, offset);
+                offset = this.#getRandomOffset(date, offset);
             }
-            const timestamp = crontab.getTime() + offset;
-            crontab.setTime(timestamp);
+            const timestamp = date.getTime() + offset;
+            date.setTime(timestamp);
         }
+
+        let crontab = `${date.getSeconds()} ${date.getMinutes()} ${date.getHours()} ${date.getDate()} ${
+            date.getMonth() + 1
+        } *`;
 
         // Create repeating crontab string
         if (this.node.config.repeatDaily) {
             const days = this.#getDays();
-            crontab = `${crontab.getSeconds()} ${crontab.getMinutes()} ${crontab.getHours()} * * ${days}`;
-        } else if (crontab.getTime() < Date.now()) {
-            this.node.warn(
-                RED._('ha-time.error.in_the_past', {
-                    date: dateString,
-                }),
-            );
+            crontab = `${date.getSeconds()} ${date.getMinutes()} ${date.getHours()} * * ${days}`;
+        } else if (date.getTime() < Date.now()) {
+            if (!this.node.config.ignorePastDate) {
+                this.node.warn(
+                    RED._('ha-time.error.in_the_past', {
+                        date: dateString,
+                    }),
+                );
+            }
             this.status.setFailed('ha-time.status.in_the_past');
             return;
         }
 
         this.#createCronjob(crontab);
 
-        const nextTime = this.#formatDate(this.#cronjob?.nextDate().toJSDate());
+        const nextTime = this.#formatDate(this.#cronjob?.nextRun);
         this.status.setText(RED._('ha-time.status.next_at', { nextTime }));
     }
 }

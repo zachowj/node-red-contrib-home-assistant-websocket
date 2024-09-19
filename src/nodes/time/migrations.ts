@@ -79,4 +79,16 @@ export default [
             return newSchema;
         },
     },
+    {
+        version: 4,
+        up: (schema: any) => {
+            const newSchema = {
+                ...schema,
+                version: 4,
+                ignorePastDate: false,
+            };
+
+            return newSchema;
+        },
+    },
 ];

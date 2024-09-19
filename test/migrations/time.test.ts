@@ -75,6 +75,11 @@ const VERSION_3 = {
     exposeToHomeAssistant: undefined,
     haConfig: undefined,
 };
+const VERSION_4 = {
+    ...VERSION_3,
+    version: 4,
+    ignorePastDate: false,
+};
 
 describe('Migrations - Time Node', function () {
     describe('Version 0', function () {
@@ -154,8 +159,16 @@ describe('Migrations - Time Node', function () {
         });
     });
 
+    describe('Version 4', function () {
+        it('should update version 3 to version 4', function () {
+            const migrate = migrations.find((m) => m.version === 4);
+            const migratedSchema = migrate?.up(VERSION_3);
+            expect(migratedSchema).toEqual(VERSION_4);
+        });
+    });
+
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).toEqual(VERSION_3);
+        expect(migratedSchema).toEqual(VERSION_4);
     });
 });

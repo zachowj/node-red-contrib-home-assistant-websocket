@@ -32,6 +32,7 @@ interface TimeEditorNodeProperties extends EditorNodeProperties {
     friday: boolean;
     saturday: boolean;
     exposeAsEntityConfig: string;
+    ignorePastDate: boolean;
 
     // deprecated but still needed for imports of old flows
     debugenabled: undefined;
@@ -104,6 +105,7 @@ const TimeEditor: EditorNodeDef<TimeEditorNodeProperties> = {
         thursday: { value: true },
         friday: { value: true },
         saturday: { value: true },
+        ignorePastDate: { value: true },
 
         // deprecated but still needed for imports of old flows
         debugenabled: { value: undefined },

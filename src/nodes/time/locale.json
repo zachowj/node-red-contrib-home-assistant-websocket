@@ -11,6 +11,7 @@
     "label": {
       "entity_id": "Entity ID",
       "friday": "Friday",
+      "ignore_past_date": "Ignore past date errors",
       "monday": "Monday",
       "name": "Name",
       "offset": "Offset",
