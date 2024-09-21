@@ -1,0 +1,1050 @@
+{
+	"home-assistant": {
+		"ui": {
+			"migrations": {
+				"all_nodes_updated": "Uzly Home Assistant boli aktualizované. Nasadiť na uloženie zmien.",
+				"button_cancel": "Zrušiť",
+				"button_label": "Aktualizovať uzly Home Assistant",
+				"button_ok": "Aktualizovať uzly",
+				"message": "Toto aktualizuje všetky uzly Home Assistant na aktuálnu schému. Aktualizácia nie je potrebná pre fungovanie uzlov.\nUzly so žltými štítkami musia byť aktualizované predtým, ako ich môžete upravovať. Môžete ich aktualizovať otvorením každého uzla jednotlivo v editore Node-RED alebo spustením tohto príkazu.",
+				"node_schema_updated": "Schéma uzla bola aktualizovaná.",
+				"title": "Aktualizovať uzly Home Assistant",
+				"warning": "Odporúča sa zálohovať vaše toky pred aktualizáciou všetkých uzlov Home Assistant."
+			},
+			"notifications": {
+				"attention": "Pozor",
+				"clipboard_copy": "Skopírované do schránky"
+			},
+			"text": {
+				"discord": "Pripojiť sa na Discord",
+				"discussions": "Diskusie na Github",
+				"documentation": "Dokumentácia",
+				"looking_for_help": "Hľadáte pomoc?"
+			}
+		},
+		"error": {
+			"cannot_connect": "Nie je možné pripojiť sa k serveru Home Assistant",
+			"connection_lost": "spojenie stratené",
+			"hass_host_required": "Základná URL nie je nastavená v konfigurácii servera",
+			"integration_not_loaded": "Integrácia nie je načítaná",
+			"invalid_auth": "Neplatný prístupový token pre WebSocket",
+			"invalid_state": "Neplatný stav",
+			"no_connection": "Žiadne spojenie s Home Assistant",
+			"pattern_not_matched": "Vzor sa nezhoduje",
+			"unknown_error": "Neznáma chyba",
+			"unrecognized_error": "Neznáma chyba: __error__",
+			"user_not_admin": "Používateľ musí mať administrátorské oprávnenia v Home Assistant",
+			"ha_version_not_supported": "Verzia Home Assistant __version__ nie je podporovaná, prosím, aktualizujte na __min_version__ alebo vyššiu"
+		},
+		"status": {
+			"connected": "pripojené",
+			"connecting": "pripájanie",
+			"disabled": "DEAKTIVOVANÉ",
+			"disconnected": "odpojené",
+			"error": "chyba",
+			"error_registering": "chyba pri registrácii",
+			"failed": "zlyhalo",
+			"jsonata_error": "chyba JSONata",
+			"no_connection": "žiadne spojenie",
+			"off": "vypnuté",
+			"on": "zapnuté",
+			"pressed": "stlačené",
+			"received": "prijaté",
+			"registered": "registrované",
+			"running": "beží",
+			"sending": "odosielanie",
+			"state_change": "zmena stavu",
+			"success": "úspech",
+			"triggered": "spustené",
+			"updated": "aktualizované",
+			"validation_error": "chyba validácie"
+		},
+        "label": {
+            "output_properties": "Výstupné vlastnosti",
+            "cancel": "Zrušiť",
+            "filter_results_title": "Filtrovať výsledky",
+            "no_matches_found": "Žiadne zhody nenájdené",
+            "done": "Hotovo"
+        },
+        "sidebar": {
+            "diagnostics": {
+                "close": "Zavrieť",
+                "copied": "Skopírované!",
+                "copy": "Kopírovať do schránky",
+                "environment_data": "Údaje o prostredí",
+                "failed_fetch": "Nepodarilo sa načítať údaje",
+                "fetching_data": "Načítavanie údajov..."
+            },
+            "stacks": {
+                "device": "Zariadenie",
+                "entity": "Entita",
+                "information": "Informácie",
+                "issues": "Problémy",
+                "no_issues": "Žiadne problémy nenájdené",
+                "server": "Server"
+            },
+            "issues": {
+                "show_hidden": "Zobraziť skryté",
+                "open_editor": "Otvoriť editor",
+                "hide_issue": "Skryť",
+                "show_issue": "Zobraziť",
+                "find_node": "Nájsť v pracovnom priestore"
+			}
+		},
+        "service": {
+            "issue": {
+                "device_not_found": "Zariadenie __device_id__ nebolo nájdené",
+                "entity_id_target_data": "ID entity '__entity_id__' by malo byť v dátovej vlastnosti, nie v cieľovej vlastnosti, pre vybranú akciu",
+                "entity_not_found": "Entita __entity_id__ nebola nájdená",
+                "failed_to_hide": "Nepodarilo sa skryť problém __issue_id__",
+                "invalid_action": "Akcia __action__ nebola nájdená",
+                "issue_hidden": "Problém __issue_id__ skrytý",
+                "no-response": "Žiadna odpoveď zo servera",
+                "tag_not_found": "Značka __tag_id__ nebola nájdená",
+                "target_area_not_found": "Cieľová oblasť __area_id__ nebola nájdená",
+                "target_device_not_found": "Cieľové zariadenie __device_id__ nebolo nájdené",
+                "target_entity_not_found": "Cieľová entita __entity_id__ nebola nájdená",
+                "target_floor_not_found": "Cieľové poschodie __floor_id__ nebolo nájdené",
+                "target_label_not_found": "Cieľová značka __label_id__ nebola nájdená",
+                "tooltip_description": "Uzly Home Assistant s problémami",
+                "unexpected": "Neočekávaná chyba (__status__) __message__",
+                "zone_not_found": "Zóna __zone_id__ nebola nájdená"
+            }
+        },
+        "component": {
+            "id-selector": {
+                "label": {
+                    "add-button": {
+                        "area": "pridať oblasť",
+                        "device": "pridať zariadenie",
+                        "entity": "pridať entitu",
+                        "floor": "pridať poschodie",
+                        "label": "pridať značku",
+                        "regex": "pridať regulárny výraz",
+                        "substring": "pridať podreťazec"
+                    },
+                    "copy": "Kopírovať ID",
+                    "delete": "Odstrániť ID",
+                    "preview": "Náhľad"
+                }
+            },
+            "property-selector": {
+                "label": {
+                    "add-button": {
+                        "area_registry": "pridať oblasť",
+                        "device_registry": "pridať zariadenie",
+                        "floor_registry": "pridať poschodie",
+                        "label_registry": "pridať značku",
+                        "state_object": "pridať entitu"
+                    },
+                    "area_registry_property": "Vlastnosť oblasti",
+                    "copy": "Kopírovať ID",
+                    "delete": "Odstrániť ID",
+                    "device_registry_property": "Vlastnosť zariadenia",
+                    "floor_registry_property": "Vlastnosť poschodia",
+                    "label_registry_property": "Vlastnosť značky",
+                    "state_object_property": "Vlastnosť entity"
+				}
+			}
+		}
+	},
+    "ha-action": {
+		"error": {
+			"domain_service_deprecated": "Vstupné vlastnosti domény a služby sú zastarané a budú odstránené vo verzii 1.0. Prosím, použite namiesto toho vlastnosť akcie.",
+			"entity_id_target_data": "ID entity je potrebné umiestniť do dátovej vlastnosti pre túto akciu. Prosím, pridajte ID entity do dátovej vlastnosti. Toto prestane fungovať vo verzii 1.0.",
+			"invalid_action_format": "Neplatný formát akcie: __action__",
+			"invalid_entity_id": "Neplatný formát ID entity",
+			"invalid_json": "Neplatný JSON: __json__",
+			"invalid_merge_context": "Neplatný kontext zlúčenia: __context__"
+		},
+        "label": {
+			"action": "Akcia",
+			"alternate_tags": "Použiť alternatívne šablónové značky pre dátové pole",
+			"block_input_overrides": "Blokovať prepísanie vstupu",
+			"data": "Dáta",
+			"load_example_data": "Načítať príklad dát",
+			"merge_context": "Zlúčiť kontext",
+			"name": "Názov",
+			"queue": "Fronta",
+			"queue_option": {
+				"queue_all": "všetky správy",
+				"queue_first": "iba prvá správa",
+				"queue_last": "iba posledná správa",
+				"queue_none": "nefrontovať správy"
+			},
+			"server": "Server",
+			"show_debug": "Zobraziť ladacie informácie",
+			"targets": "Ciele",
+			"unknown_action": "Neznáma akcia"
+		},
+		"status": {
+			"action_called": "__domain__.__service__ volané"
+		}
+	},
+    "ha-api": {
+        "error": {
+            "invalid_method": "Neplatná metóda API __method__.",
+            "requires_path": "HTTP požiadavka vyžaduje platnú cestu.",
+            "requires_type": "WebSocket požiadavka vyžaduje vlastnosť 'type' v dátovom objekte."
+        },
+        "label": {
+            "data": "Dáta",
+            "method": "Metóda",
+            "method_option": {
+                "delete": "DELETE",
+                "get": "GET",
+                "post": "POST",
+                "put": "PUT"
+            },
+            "name": "Názov",
+            "parameters": "Parametre",
+            "path": "Cesta",
+            "protocol": "Protokol",
+            "protocol_option": {
+                "http": "HTTP",
+                "websocket": "WebSocket"
+            },
+            "response_type": "Typ odpovede",
+            "response_type_option": {
+                "arraybuffer": "binárny buffer",
+                "json": "parsovaný JSON objekt",
+                "text": "UTF-8 reťazec"
+            },
+            "server": "Server",
+            "show_debug": "Zobraziť ladacie informácie"
+        },
+        "status": {
+            "method_called": "__method__ volaná"
+        }
+    },
+    "ha-binary-sensor": {
+        "error": {
+            "api_error": "Chyba API",
+            "integration_not_loaded": "Integrácia nie je načítaná/povolená",
+            "invalid_state": "Stav musí byť definovaný",
+            "no_connection": "Pokús o aktualizáciu senzora bez spojenia so serverom"
+        },
+        "label": {
+            "attribute_key": "Kľúč atribútu",
+            "attribute_value": "Hodnota",
+            "entity_config": "Konfigurácia entity",
+            "input_override": "Prepísanie vstupu",
+            "input_override_option": {
+                "allow": "povoliť",
+                "block": "blokovať",
+                "merge": "zlúčiť"
+            },
+            "name": "Názov",
+            "resend": "Znovu odoslať stav a atribúty",
+            "state": "Stav"
+        }
+    },
+    "ha-button": {
+        "label": {
+            "entity_config": "Konfigurácia entity",
+            "name": "Názov"
+        }
+    },
+    "config-server": {
+        "errors": {
+            "empty_base_url": "Je potrebné nastaviť základnú URL pre Home Assistant",
+            "invalid_base_url": "Neplatná základná URL pre Home Assistant: [__url__]",
+            "invalid_protocol": "Základná URL pre Home Assistant musí začínať http:// alebo https://",
+            "no_server_selected": "Nie je vybraný a nasadený žiadny server.",
+            "server_deploy": "Nasadiť platnú konfiguráciu servera, aby sa zobrazili výsledky automatického dopĺňania."
+        },
+        "label": {
+            "accept_all_certs": "Prijať neautorizované SSL certifikáty",
+            "access_token": "Prístupový token",
+            "area_selector": "Výber oblasti",
+            "base_url": "Základná URL",
+            "cache_autocomplete_results": "Uložiť výsledky automatického dopĺňania do pamäte",
+            "date_option": {
+                "hidden": "skrytý",
+                "long": "dlhý",
+                "numeric": "numerický",
+                "short": "krátky",
+                "two_digit": "2-ciferný"
+			},
+            "day": "Deň",
+            "delay_connection_attempts": "Oneskoriť pokusy o pripojenie",
+            "device_selector": "Výber zariadenia",
+            "enable_global_context_store": "Povoliť globálne úložisko kontextu",
+            "enable_heartbeat": "Povoliť heartbeat",
+            "entity_selector": "Výber entity",
+            "heartbeat_interval": "Interval heartbeat",
+            "hour_cycle": "Cykly hodín",
+            "hour_cycle_option": {
+                "12_hour_format": "12-hodinový formát",
+                "24_hour_format": "24-hodinový formát",
+                "default": "predvolený"
+            },
+			"id_selector": "Výber ID",
+			"month": "Mesiac",
+			"name": "Názov",
+			"seconds": "Sekundy",
+			"selector_option": {
+				"friendly_name": "prívetivé meno",
+				"id": "id"
+			},
+			"separator": "Oddeľovač",
+			"state_boolean_list": "Stav boolean",
+			"status_title": "Formát dátumu stavu",
+			"time_format": "Formát času",
+			"time_format_option": {
+				"hour_min": "hodiny a minúty",
+				"hour_min_sec": "hodiny, minúty a sekundy",
+				"hour_min_sec_ms": "hodiny, minúty, sekundy a milisekundy"
+			},
+			"ui_settings": "Nastavenia UI",
+			"using_add_on": "Používanie doplnku Home Assistant",
+			"year": "Rok"
+        }, 
+        "status": {
+            "connected": "pripojené",
+            "connecting": "pripájanie",
+            "disabled": "DEAKTIVOVANÉ",
+            "disconnected": "odpojené",
+            "error": "chyba",
+            "registered": "registrované",
+            "running": "beží",
+            "triggered": "spustené"
+        }
+    },
+    "api-current-state": {
+        "label": {
+            "block_input_overrides": "Blokovať prepísanie vstupu",
+            "entity_id": "ID entity",
+            "for": "Pre",
+            "for_option": {
+                "days": "dni",
+                "hours": "hodiny",
+                "milliseconds": "milisekundy",
+                "minutes": "minúty",
+                "seconds": "sekundy"
+            },
+            "if_state": "Ak stav",
+            "if_state_option": {
+                "does_not_include": "nie je v",
+                "greater_than": ">",
+                "greater_than_or_equal_to": ">=",
+                "includes": "v",
+                "is": "je",
+                "is_not": "nie je",
+                "jsonata": "JSONata",
+                "less_than": "<",
+                "less_than_or_equal_to": "<="
+            },
+			"name": "Meno",
+			"server": "Server",
+			"state_type": "Typ stavu",
+			"state_type_option": {
+				"boolean": "boolean",
+				"number": "číslo",
+				"string": "reťazec"
+			}
+		}
+	},
+    "ha-device": {
+        "error": {
+            "failed_to_fetch_capabilities": "Nepodarilo sa načítať schopnosti zariadenia: __event__",
+            "failed_to_fetch_triggers": "Nepodarilo sa načítať spúšťače.",
+			"failed_to_fetch_actions": "Nepodarilo sa načítať akcie.",
+			"invalid_device_config": "Neplatná konfigurácia pre spúšťač zariadenia",
+			"invalid_device_type": "Neplatný typ zariadenia: __type__",
+			"report": "Správa",
+			"unknown_field_type": "Neznámy typ poľa: __type__"
+		},
+		"label": {
+			"action": "Akcia",
+			"device": "Zariadenie",
+			"hours": "hodiny",
+			"minutes": "minúty",
+			"name": "Názov",
+			"seconds": "sekundy",
+			"server": "Server",
+			"trigger": "Spúšťač",
+			"type": "Typ"
+		},
+		"ui": {
+			"no_area": "Žiadna oblasť"
+		}
+	},
+    "ha-device-config": {
+        "label": {
+            "name": "Názov",
+            "manufacturer": "Výrobca",
+            "model": "Model",
+            "hw_version": "Verzia hardvéru",
+			"sw_version": "Verzia softvéru"
+		}
+	},
+	"ha-entity": {
+		"label": {
+			"debug": "Zobraziť ladacie informácie",
+			"input_override": "Prepísanie vstupu",
+			"name": "Názov",
+			"on_state_change": "Výstup pri zmene stavu",
+			"output_location": "Umiestnenie výstupu",
+			"payload": "Náklad",
+			"server": "Server",
+			"state": "Stav",
+			"type": "Typ"
+		}
+	},
+    "ha-entity-config": {
+        "label": {
+            "device": "Zariadenie",
+            "name": "Názov",
+            "resend": "Znovu odoslať stav a atribúty",
+			"server": "Server",
+			"show_debug": "Zobraziť ladacie informácie",
+			"type": "Typ",
+			"type_option": {
+				"binary_sensor": "binárny senzor",
+				"button": "tlačidlo",
+				"number": "číslo",
+				"select": "výber",
+				"sensor": "senzor",
+				"switch": "spínač",
+				"text": "text",
+				"time": "čas"
+			}
+		},
+		"data": {
+			"label": {
+				"device_class": "Trieda zariadenia",
+				"device_class_options": {
+					"apparent_power": "zdanlivý výkon",
+					"aqi": "index kvality ovzdušia (AQI)",
+					"atmospheric_pressure": "atmosférický tlak",
+					"battery": "batéria",
+					"battery_charging": "nabíjanie batérie",
+					"carbon_dioxide": "oxid uhličitý",
+					"carbon_monoxide": "oxid uhoľnatý",
+                    "co": "co",
+					"cold": "chlad",
+					"connectivity": "konektivita",
+					"current": "prúd",
+					"data_rate": "rýchlosť dát",
+					"data_size": "veľkosť dát",
+					"date": "dátum",
+					"distance": "vzdialenosť",
+					"door": "dvere",
+					"duration": "trvanie",
+					"energy": "energia",
+					"energy_storage": "ukladanie energie",
+					"frequency": "frekvencia",
+					"garage_door": "garážové dvere",
+					"gas": "plyn",
+					"heat": "teplo",
+					"humidity": "vlhkosť",
+					"illuminance": "osvetlenie",
+					"irradiance": "žiarenie",
+					"light": "svetlo",
+					"lock": "zámok",
+					"moisture": "vlhkosť",
+					"monetary": "peňažný",
+					"motion": "pohyb",
+                    "moving": "pohybujúci sa",
+					"nitrogen_dioxide": "oxid dusičitý",
+					"nitrogen_monoxide": "oxid dusnatý",
+					"nitrous_oxide": "oxid dusný",
+					"occupancy": "obsadenosť",
+					"opening": "otváranie",
+					"outlet": "zásuvka",
+					"ozone": "ozón",
+					"plug": "zástrčka",
+					"pm1": "pm1",
+					"pm10": "pm10",
+					"pm25": "pm25",
+					"power": "výkon",
+					"power_factor": "faktor výkonu",
+					"precipitation": "zrážky",
+					"precipitation_intensity": "intenzita zrážok",
+					"presence": "prítomnosť",
+					"pressure": "tlak",
+					"problem": "problém",
+					"reactive_power": "reaktívny výkon",
+                    "restart": "reštart",
+					"running": "beží",
+					"safety": "bezpečnosť",
+					"signal_strength": "sila signálu",
+					"smoke": "dym",
+					"sound": "zvuk",
+					"sound_pressure": "zvukový tlak",
+					"speed": "rýchlosť",
+					"sulphur_dioxide": "oxid siričitý",
+					"switch": "spínač",
+					"tamper": "manipulácia",
+					"temperature": "teplota",
+					"timestamp": "časová pečiatka",
+					"update": "aktualizácia",
+					"vibration": "vibrácia",
+					"volatile_organic_compounds": "prchavé organické zlúčeniny",
+					"voltage": "napätie",
+					"volume": "objem",
+					"volume_storage": "úložný objem",
+					"water": "voda",
+					"weight": "hmotnosť",
+					"wind_speed": "rýchlosť vetra",
+					"window": "okno"
+				},
+                "entity_category": "Kategória",
+				"entity_category_options": {
+					"config": "konfigurácia",
+					"diagnostic": "diagnostika"
+				},
+				"entity_picture": "Obrázok entity",
+				"icon": "Ikona",
+				"last_reset": "Posledný reset",
+				"max_length": "Maximálna dĺžka",
+				"max_value": "Maximálna hodnota",
+				"min_length": "Minimálna dĺžka",
+				"min_value": "Minimálna hodnota",
+				"mode": "Režim",
+				"mode_options": {
+					"auto": "automatický",
+					"box": "box",
+					"password": "heslo",
+					"slider": "posuvník",
+					"text": "text"
+				},
+				"name": "Prívetivé meno",
+				"options": "Možnosti",
+				"pattern": "Vzor",
+				"state_class": "Trieda stavu",
+				"state_class_options": {
+					"measurement": "meranie",
+					"total": "celkový",
+					"total_increasing": "celkový narastajúci"
+				},
+				"step_value": "Krok",
+				"unit_of_measurement": "Jednotka merania"
+			}
+		}
+	},
+    "server-events": {
+        "alert": "Upozornenie",
+        "alert_message": "Nechať typ udalosti prázdny a počúvať všetky udalosti môže preťažiť frontu správ WebSocket.",
+        "error": {
+			"invalid_json": "Údaje udalosti nie sú platný JSON"
+		},
+		"label": {
+			"event_data": "Údaje udalosti",
+			"event_type": "Typ udalosti",
+			"name": "Názov",
+			"output_only_after_running": "Výstup len po spustení Home Assistant",
+			"server": "Server"
+		},
+		"placeholder": {
+			"all_events": "nechať prázdne pre všetky udalosti"
+		}
+	},
+	"ha-events-calendar": {
+		"label": {
+			"name": "Názov",
+			"server": "Server",
+			"entityId": "Kalendár",
+			"eventType": "Relatívne k",
+			"start": "Začiatok",
+			"end": "Koniec",
+			"offset": "Posun",
+			"seconds": "sekundy",
+			"minutes": "minúty",
+			"hours": "hodiny",
+			"filter": "Filter"
+		},             
+        "error": {
+            "retrieval": "položky kalendára sa nepodarilo načítať z entity_id \"__entity__\", __error__"
+        },
+        "status": {
+			"sent": "__summary__ odoslané",
+			"queued-none": "žiadne nadchádzajúce udalosti vo fronte",
+			"queued-one": "vo fronte 1 nadchádzajúca udalosť",
+			"queued-multi": "vo fronte __count__ nadchádzajúcich udalostí"
+		}
+	},
+	"server-state-changed": {
+		"error": {
+			"entity_required": "Je potrebná entita",
+			"invalid_for": "Neplatná konfiguračná hodnota pre 'pre': \"__for__\" (typ: __type__)"
+		},
+		"label": {
+			"entity": "Entita",
+			"entities": "Entity",
+			"entity_option": {
+				"exact": "presný",
+				"list": "zoznam",
+				"regex": "regulárny výraz",
+				"substring": "podreťazec"
+			},
+            "for": "Pre",
+            "for_option": {
+                "days": "dni",
+				"hours": "hodiny",
+				"milliseconds": "milisekundy",
+				"minutes": "minúty",
+				"seconds": "sekundy"
+			},
+			"if_state": "Ak stav",
+			"if_state_option": {
+				"does_not_include": "nie je v",
+				"greater_than": ">",
+				"greater_than_or_equal_to": ">=",
+				"includes": "v",
+				"is": "je",
+				"is_not": "nie je",
+				"jsonata": "JSONata",
+				"less_than": "<",
+				"less_than_or_equal_to": "<="
+			},
+			"ignore_current_state_unavailable": "Aktuálny stav nie je dostupný",
+			"ignore_current_state_unknown": "Aktuálny stav je neznámy",
+			"ignore_prev_state_null": "Predchádzajúci stav neexistuje",
+			"ignore_prev_state_unavailable": "Predchádzajúci stav nie je dostupný",
+			"ignore_prev_state_unknown": "Predchádzajúci stav je neznámy",
+			"ignore_state_change_event_when": "Ignorovať udalosť zmeny stavu, keď:",
+			"name": "Názov",
+			"output_on_connect": "Výstup pri pripojení",
+			"output_only_on_state_change": "Aktuálny stav sa rovná predchádzajúcemu stavu",
+			"server": "Server",
+			"state_type": "Typ stavu",
+			"state_type_option": {
+				"boolean": "boolean",
+				"number": "číslo",
+				"string": "reťazec"
+			}
+        }
+    },
+    "ha-fire-event": {
+        "label": {
+            "data": "Dáta",
+			"event": "Udalosť",
+			"name": "Názov",
+			"server": "Server"
+		}
+	},
+	"ha-get-entities": {
+		"label": {
+			"max_results": "Maximálny počet výsledkov",
+			"name": "Názov",
+			"output_location": "Umiestnenie výstupu",
+			"output_type": "Typ výstupu",
+			"output_type_option": {
+				"array": "pole",
+				"count": "počet",
+				"random": "náhodný",
+				"split": "rozdeliť"
+			},
+			"send_empty_results": "Odoslať prázdne výsledky",
+			"server": "Server"
+		},
+		"status": {
+			"no_results": "žiadne výsledky",
+			"number_of_results": "__count__ entít",
+			"number_of_random_resuls": "__count__ náhodných"
+		}
+    },
+	"api-get-history": {
+		"error": {
+			"invalid_relative_time": "Neplatný relatívny čas",
+			"no_entity_ids_matched": "Žiadne ID entít sa nezhodujú"
+		},
+		"label": {
+			"date_format": "dátumy musia byť vo formáte ISO",
+			"end_date": "Dátum konca",
+			"entity_id": "ID entity",
+			"entity_id_option": {
+				"regex": "regulárny výraz",
+				"equal": "=="
+			},
+			"example": "príklad",
+			"flatten_results": "Zjednodušiť výsledky",
+			"in_the_last": "Za posledných",
+			"name": "Názov",
+			"output_location": "Umiestnenie výstupu",
+			"output_type": "Typ výstupu",
+			"output_type_option": {
+				"array": "pole",
+				"split": "rozdeliť"
+			},
+			"server": "Server",
+			"start_date": "Dátum začiatku",
+			"use_relative_time": "Použiť relatívny čas"
+		},
+		"placeholder": {
+			"relative_time": "20 minút"
+		},
+		"status": {
+			"no_results": "žiadne výsledky",
+			"requesting": "požiadavka"
+		}
+    },
+    "ha-number": {
+        "error": {
+            "value_not_number": "Stav nie je číslo",
+			"mode_not_supported": "Režim nie je podporovaný"
+		},
+		"label": {
+			"entity_config": "Konfigurácia entity",
+			"mode": "Režim",
+			"mode_option": {
+				"in": "počúvať zmeny",
+				"out": "nastaviť hodnotu"
+			},
+			"name": "Názov",
+			"value": "Hodnota"
+		}
+	},
+	"poll-state": {
+		"error": {
+			"entity_id_not_found": "nepodarilo sa nájsť entitu s ID: __entity_id__",
+			"entity_id_required": "Je potrebné zadať ID entity",
+			"interval_not_a_number": "Interval nie je číslo: __interval__"
+		},
+        "label": {
+            "entity_id": "ID entity",
+			"if_state": "Ak stav",
+			"if_state_option": {
+				"does_not_include": "nie je v",
+				"greater_than": ">",
+				"greater_than_or_equal_to": ">=",
+				"includes": "v",
+				"is": "je",
+				"is_not": "nie je",
+				"jsonata": "JSONata",
+				"less_than": "<",
+				"less_than_or_equal_to": "<="
+			},
+			"name": "Názov",
+			"output_on_change": "Výstup pri zmene",
+			"output_on_connect": "Výstup pri pripojení",
+			"server": "Server",
+			"state_type": "Typ stavu",
+			"state_type_option": {
+				"boolean": "boolean",
+				"number": "číslo",
+				"string": "reťazec"
+			},
+			"update_interval": "Interval aktualizácie",
+			"update_interval_option": {
+				"hours": "hodiny",
+				"minutes": "minúty",
+				"seconds": "sekundy"
+			}
+		},
+        "output_label": {
+			"if_state_false": "if state is false",
+			"if_state_true": "if state is true"
+		}
+	},
+	"api-render-template": {
+		"label": {
+            "name": "Názov",
+            "results": "Výsledky",
+            "server": "Server",
+            "template": "Šablóna"
+        },
+        "status": {
+            "requesting": "Požiadavka"
+        }
+    },
+    "ha-select": {
+        "error": {
+            "invalid_value": "Hodnota možnosti neexistuje v zozname možností",
+            "mode_not_supported": "Režim nie je podporovaný"
+        },
+        "label": {
+            "entity_config": "Konfigurácia entity",
+            "mode": "Režim",
+            "mode_option": {
+                "in": "počúvať zmeny",
+                "out": "nastaviť hodnotu"
+            },
+            "name": "Názov",
+            "value": "Hodnota"
+        }
+    },
+	"ha-sensor": {
+		"label": {
+			"entity_config": "Konfigurácia entity",
+			"input_override": "Prepísanie vstupu",
+			"input_override_option": {
+				"allow": "povoliť",
+				"block": "blokovať",
+				"merge": "zlúčiť"
+			},
+			"name": "Názov",
+			"resend": "Znovu odoslať stav a atribúty",
+			"state": "Stav"
+		}
+	},
+	"ha-sentence": {
+		"error": {
+			"missing_response_id": "_sentence_response_id nebol nájdený v objekte správy"
+		},
+		"label": {
+			"fallback_response": "Náhradná odpoveď",
+			"mode": "Režim",
+			"mode_option": {
+				"response": "odpoveď",
+				"trigger": "spúšťač"
+			},
+			"name": "Názov",
+			"response": "Odpoveď",
+			"response_type": "Typ odpovede",
+			"response_type_option": {
+				"dynamic": "dynamický",
+				"fixed": "pevný"
+			},
+			"sentences": "Vety",
+			"server": "Server",
+			"timeout": "Časový limit"
+        }
+    },
+    "ha-switch": {
+        "label": {
+            "enable_input": "Povoliť vstup",
+            "entity_config": "Konfigurácia entity",
+            "name": "Názov",
+            "output_on_state_change": "Výstup pri zmene stavu"
+        },
+        "status": {
+            "triggered": "spustené"
+        }
+    },
+    "ha-tag": {
+        "errors": {
+            "no_tags_found": "V Home Assistant neboli nájdené žiadne značky"
+        },
+        "label": {
+            "all_tags": "VŠETKY ZNAČKY",
+            "device_id": "ID zariadenia",
+            "devices": "Zariadenia",
+            "expose_as": "Zobraziť ako",
+            "name": "Názov",
+            "server": "Server",
+            "tag": "Značka",
+            "tags": "Značky",
+            "update_tag_list": "aktualizovať zoznam značiek"
+        }
+    },    
+    "ha-text": {
+		"error": {
+			"mode_not_supported": "Režim nie je podporovaný"
+		},
+		"label": {
+			"entity_config": "Konfigurácia entity",
+			"mode": "Režim",
+			"mode_option": {
+				"get": "získať hodnotu",
+				"listen": "počúvať zmeny",
+				"set": "nastaviť hodnotu"
+			},
+			"name": "Názov",
+			"text": "Text"
+		}
+	},
+	"ha-time": {
+		"error": {
+			"in_the_past": "Dátum je v minulosti: __date__",
+			"invalid_date": "Neplatný dátum: __date__",
+			"invalid_jsonata_payload": "Neplatný JSONata pri odosielaní stavu entity ako nákladu",
+			"jsonata_error": "Chyba JSONata: __message__",
+			"no_days_selected": "Nie sú vybrané žiadne dni",
+			"offset_nan": "Posun nie je číslo: __offset__"
+		},
+        "label": {
+			"entity_id": "ID entity",
+			"friday": "Piatok",
+			"ignore_past_date": "Ignorovať chyby minulého dátumu",
+			"monday": "Pondelok",
+			"name": "Názov",
+			"offset": "Posun",
+			"offset_unit_option": {
+				"hours": "hodiny",
+				"minutes": "minúty",
+				"seconds": "sekundy"
+			},
+			"payload": "Náklad",
+			"property": "Vlastnosť",
+			"randomize_offset": "Náhodne nastaviť čas v rámci posunu",
+			"repeat_daily": "Opakovať denne",
+			"saturday": "Sobota",
+			"server": "Server",
+			"show_debug": "Zobraziť ladacie informácie",
+			"sunday": "Nedeľa",
+			"thursday": "Štvrtok",
+			"tuesday": "Utorok",
+			"wednesday": "Streda"
+		},
+        "status": {
+            "error": "Chyba",
+            "in_the_past": "V minulosti",
+            "invalid_date": "Neplatný dátum",
+            "invalid_property": "Neplatná vlastnosť",
+            "next_at": "Ďalej o __nextTime__",
+            "sent": "Odoslané",
+            "sent_and_next": "Odoslané o __sentTime__ Ďalšie o __nextTime__",
+            "unavailable": "nedostupné"        
+        }
+    }, 
+    "ha-time-entity": {
+        "error": {
+            "invalid_format": "Hodnota času musí byť vo formáte 24-hodín HH:MM[:SS]"
+        },
+        "label": {
+            "entity_config": "Konfigurácia entity",
+            "mode": "Režim",
+            "mode_option": {
+                "get": "získať hodnotu",
+                "listen": "počúvať zmeny",
+                "set": "nastaviť hodnotu"
+            },
+            "name": "Názov",
+            "value": "Hodnota"
+        }
+    },
+    "trigger-state": {
+        "error": {
+            "custom_output_message_needs_to_be_object": "Vlastná výstupná správa musí byť objekt kľúč/hodnota",
+            "entity_id_not_found": "Entita \"__entity_id__\" nebola nájdená",
+            "entity_required": "Je potrebná entita"
+        },
+        "label": {
+			"comparator_option": {
+				"does_not_include": "nie je v",
+				"greater_than": ">",
+				"greater_than_or_equal_to": ">=",
+				"includes": "v",
+				"is": "je",
+				"is_not": "nie je",
+				"jsonata": "JSONata",
+				"less_than": "<",
+				"less_than_or_equal_to": "<="
+			},
+			"comparator_property_value_option": {
+				"always": "vždy",
+				"if_prev_state": "ak predchádzajúci stav",
+				"if_property": "ak vlastnosť",
+				"if_state": "ak stav"
+			},
+			"conditions": "Podmienky",
+			"enable_input": "Povoliť vstup",
+			"entity": "Entita",
+			"entity_filter_type_option": {
+				"exact": "presný",
+				"list": "zoznam",
+				"regex": "regulárny výraz",
+				"substring": "podreťazec"
+			},
+			"message_value_option": {
+				"custom": "vlastná správa",
+				"custom_payload": "vlastný náklad",
+				"default": "predvolená správa"
+			},
+			"name": "Názov",
+			"output_on_connect": "Výstup pri pripojení",
+			"server": "Server",
+			"show_debug": "Zobraziť ladacie informácie",
+			"state_type": "Typ stavu",
+			"state_type_option": {
+				"boolean": "boolean",
+				"number": "číslo",
+				"string": "reťazec"
+			},
+			"target_type_option": {
+				"current_state": "aktuálny stav",
+				"previous_state": "predchádzajúci stav",
+				"property": "vlastnosť"
+			},
+			"target_value_option": {
+				"entity_id": "ID entity",
+				"this_entity": "táto entita"
+			}
+        }
+    },
+    "ha-update-config": {
+		"label": {
+			"entity_config": "Konfigurácia entity",
+			"name": "Názov",
+			"server": "Server"
+		}
+	},
+	"ha-wait-until": {
+		"error": {
+			"entity_id_deprecated": "Vlastnosť `entityId` je zastaraná a bude odstránená vo verzii 1.0. Prosím, aktualizujte svoj kód na použitie vlastnosti `entities`.",
+			"entity_not_found": "Entita (__entityId__) nebola nájdená",
+			"no_entities_provided": "Musí byť poskytnutá aspoň jedna entita",
+			"not_found": "nenájdené",
+			"invalid_timeout": "Neplatná hodnota pre časový limit: __timeout__"
+		},
+		"label": {
+			"block_input_overrides": "Blokovať prepísanie vstupu",
+			"check_current_state": "Skontrolovať proti aktuálnemu stavu",
+			"comparator_option": {
+				"does_not_include": "nie je v",
+				"greater_than": ">",
+				"greater_than_or_equal_to": ">=",
+				"includes": "v",
+				"is": "je",
+				"is_not": "nie je",
+				"jsonata": "JSONata",
+				"less_than": "<",
+				"less_than_or_equal_to": "<="
+			},
+			"entity": "Entita",
+			"entity_filter_type_option": {
+				"exact": "presný",
+				"list": "zoznam",
+				"regex": "regulárny výraz",
+				"substring": "podreťazec"
+			},
+			"name": "Názov",
+			"server": "Server",
+			"timeout": "Časový limit",
+			"timeout_units_option": {
+				"days": "dni",
+				"hours": "hodiny",
+				"milliseconds": "milisekundy",
+				"minutes": "minúty",
+				"seconds": "sekundy"
+			},
+			"wait_until": "Čakať do"
+        },
+		"placeholder": {
+            "property": "vlastnosť",
+            "value": "hodnota"
+        },
+        "status": {
+            "timed_out": "vypršal časový limit",
+            "true": "pravda",
+            "waiting": "čakanie"
+		}
+	},
+     "ha-webhook": {
+        "label": {
+            "allowed_methods": "Povolené metódy",
+            "get": "GET",
+            "head": "HEAD",
+            "id": "ID",
+            "name": "Názov",
+            "post": "POST",
+            "put": "PUT",
+            "server": "Server"
+        }
+    },
+    "ha-zone": {
+        "label": {
+            "event": "Udalosť",
+            "name": "Názov",
+            "option": {
+                "enter": "vstúpiť",
+                "enter_or_leave": "vstúpiť alebo opustiť",
+                "leave": "opustiť"
+            },
+            "server": "Server"
+        }
+    }
+}   
