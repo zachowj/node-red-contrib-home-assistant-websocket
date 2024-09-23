@@ -62,7 +62,7 @@
     "ws": "8.18.0"
   },
   "devDependencies": {
-    "@rollup/plugin-typescript": "11.1.6",
+    "@rollup/plugin-typescript": "12.1.0",
     "@rollup/stream": "3.0.1",
     "@types/bonjour": "3.5.13",
     "@types/debug": "4.1.12",
