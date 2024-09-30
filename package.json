@@ -91,7 +91,7 @@
     "@vuepress/plugin-search": "2.0.0-rc.41",
     "@vuepress/theme-default": "2.0.0-rc.43",
     "autoprefixer": "10.4.20",
-    "browser-sync": "3.0.2",
+    "browser-sync": "3.0.3",
     "cheerio": "1.0.0",
     "cssnano": "7.0.6",
     "del": "6.1.1",
