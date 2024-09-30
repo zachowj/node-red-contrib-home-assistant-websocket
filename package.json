@@ -68,7 +68,7 @@
     "@types/debug": "4.1.12",
     "@types/express": "4.17.21",
     "@types/flat": "5.0.5",
-    "@types/jquery": "3.5.30",
+    "@types/jquery": "3.5.31",
     "@types/jqueryui": "1.12.23",
     "@types/lodash": "4.17.9",
     "@types/lowdb": "1.0.11",
