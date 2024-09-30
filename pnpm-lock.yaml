@@ -265,8 +265,8 @@ importers:
         specifier: 0.3.4
         version: 0.3.4
       nodemon:
-        specifier: 3.1.4
-        version: 3.1.4
+        specifier: 3.1.7
+        version: 3.1.7
       postcss:
         specifier: 8.4.47
         version: 8.4.47
@@ -4013,8 +4013,8 @@ packages:
     resolution: {integrity: sha512-pDT4Dchl94/+kkgdwyS2PauDFjZG0Hk0IcHIB+LkW27HLDtdoeMxHTxZh39DYbPP8UflWXWj9JcdDozF+YDOpQ==}
     engines: {node: '>=0.4.0'}
 
-  nodemon@3.1.4:
-    resolution: {integrity: sha512-wjPBbFhtpJwmIeY2yP7QF+UKzPfltVGtfce1g/bB15/8vCGZj8uxD62b/b9M9/WVgme0NZudpownKN+c0plXlQ==}
+  nodemon@3.1.7:
+    resolution: {integrity: sha512-hLj7fuMow6f0lbB0cD14Lz2xNjwsyruH251Pk4t/yIitCFJbmY1myuLlHm/q06aST4jg6EgAh74PIBBrRqpVAQ==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -10136,9 +10136,9 @@ snapshots:
       has: 1.0.4
       is: 3.3.0
 
-  nodemon@3.1.4:
+  nodemon@3.1.7:
     dependencies:
-      chokidar: 3.5.3
+      chokidar: 3.6.0
       debug: 4.3.7(supports-color@5.5.0)
       ignore-by-default: 1.0.1
       minimatch: 3.1.2
