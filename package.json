@@ -86,7 +86,7 @@
     "@vuepress/bundler-vite": "2.0.0-rc.15",
     "@vuepress/plugin-copy-code": "2.0.0-rc.47",
     "@vuepress/plugin-google-analytics": "2.0.0-rc.42",
-    "@vuepress/plugin-prismjs": "2.0.0-rc.43",
+    "@vuepress/plugin-prismjs": "2.0.0-rc.49",
     "@vuepress/plugin-register-components": "2.0.0-rc.44",
     "@vuepress/plugin-search": "2.0.0-rc.41",
     "@vuepress/theme-default": "2.0.0-rc.49",
