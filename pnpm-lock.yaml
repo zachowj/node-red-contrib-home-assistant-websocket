@@ -70,8 +70,8 @@ importers:
         specifier: 4.1.12
         version: 4.1.12
       '@types/express':
-        specifier: 4.17.21
-        version: 4.17.21
+        specifier: 5.0.0
+        version: 5.0.0
       '@types/flat':
         specifier: 5.0.5
         version: 5.0.5
@@ -954,11 +954,11 @@ packages:
   '@types/estree@1.0.5':
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
 
-  '@types/express-serve-static-core@4.17.41':
-    resolution: {integrity: sha512-OaJ7XLaelTgrvlZD8/aa0vvvxZdUmlCn6MtWeB7TkiKW70BQLc9XEPpDLPdbo52ZhXUCrznlWdCHWxJWtdyajA==}
+  '@types/express-serve-static-core@5.0.0':
+    resolution: {integrity: sha512-AbXMTZGt40T+KON9/Fdxx0B2WK5hsgxcfXJLr5bFpZ7b4JCex2WyQPTEKdXqfHiY5nKKBScZ7yCoO6Pvgxfvnw==}
 
-  '@types/express@4.17.21':
-    resolution: {integrity: sha512-ejlPM315qwLpaQlQDTjPdsUFSc6ZsP4AN6AlWnogPjQ7CVi7PYF3YVz+CY3jE2pwYf7E/7HlDAN0rV2GxTG0HQ==}
+  '@types/express@5.0.0':
+    resolution: {integrity: sha512-DvZriSMehGHL1ZNLzi6MidnsDhUZM/x2pRdDIKdwbUNqqwHxMlRdkxtn6/EPKyqKpHqTl/4nRZsRNLpZxZRpPQ==}
 
   '@types/flat@5.0.5':
     resolution: {integrity: sha512-nPLljZQKSnac53KDUDzuzdRfGI0TDb5qPrb+SrQyN3MtdQrOnGsKniHN1iYZsJEBIVQve94Y6gNz22sgISZq+Q==}
@@ -6399,17 +6399,17 @@ snapshots:
 
   '@types/estree@1.0.5': {}
 
-  '@types/express-serve-static-core@4.17.41':
+  '@types/express-serve-static-core@5.0.0':
     dependencies:
       '@types/node': 18.19.42
       '@types/qs': 6.9.11
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.4
 
-  '@types/express@4.17.21':
+  '@types/express@5.0.0':
     dependencies:
       '@types/body-parser': 1.19.5
-      '@types/express-serve-static-core': 4.17.41
+      '@types/express-serve-static-core': 5.0.0
       '@types/qs': 6.9.11
       '@types/serve-static': 1.15.5
 
@@ -6476,7 +6476,7 @@ snapshots:
 
   '@types/node-red@1.3.5':
     dependencies:
-      '@types/express': 4.17.21
+      '@types/express': 5.0.0
       '@types/node-red__editor-api': 1.3.5
       '@types/node-red__editor-client': 1.3.11
       '@types/node-red__registry': 1.3.10
@@ -6485,7 +6485,7 @@ snapshots:
 
   '@types/node-red__editor-api@1.3.5':
     dependencies:
-      '@types/express': 4.17.21
+      '@types/express': 5.0.0
       '@types/node-red__runtime': 1.3.7
 
   '@types/node-red__editor-client@1.3.11':
@@ -6498,14 +6498,14 @@ snapshots:
 
   '@types/node-red__registry@1.3.10':
     dependencies:
-      '@types/express': 4.17.21
+      '@types/express': 5.0.0
       '@types/node-red__runtime': 1.3.7
       '@types/node-red__util': 1.3.7
 
   '@types/node-red__runtime@1.3.7':
     dependencies:
       '@types/cors': 2.8.17
-      '@types/express': 4.17.21
+      '@types/express': 5.0.0
       '@types/node-red__editor-api': 1.3.5
       '@types/node-red__util': 1.3.7
       '@types/passport': 1.0.16
@@ -6524,7 +6524,7 @@ snapshots:
 
   '@types/passport@1.0.16':
     dependencies:
-      '@types/express': 4.17.21
+      '@types/express': 5.0.0
 
   '@types/qs@6.9.11': {}
 
