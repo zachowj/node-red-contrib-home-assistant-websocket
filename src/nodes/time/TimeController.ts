@@ -171,6 +171,7 @@ export default class TimeController extends ExposeAsController {
 
     public async onStateChanged() {
         if (this.#isAlreadyRunning) return;
+        this.#isAlreadyRunning = true;
 
         const property = this.node.config.property || DEFAULT_PROPERTY;
         const entity = this.#getEntity();
