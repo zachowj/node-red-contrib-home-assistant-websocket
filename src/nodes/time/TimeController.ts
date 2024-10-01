@@ -181,63 +181,63 @@ export default class TimeController extends ExposeAsController {
 
         this.#destoryCronjob();
 
-        // Validate inputs
-        this.#checkValidDateString(dateString);
-        offset = await this.#getOffset();
-        const digits = parseTime(dateString);
+        try {
+            // Validate inputs
+            this.#checkValidDateString(dateString);
+            offset = await this.#getOffset();
+            const digits = parseTime(dateString);
 
-        // Doesn't match time format 00:00:00
-        if (!digits) {
-            if (!isValidDate(dateString)) {
-                this.#isAlreadyRunning = false;
-                throw new ConfigError(
-                    ['ha-time.error.invalid_date', { date: dateString }],
-                    'ha-time.status.invalid_date',
-                );
+            // Doesn't match time format 00:00:00
+            if (!digits) {
+                if (!isValidDate(dateString)) {
+                    throw new ConfigError(
+                        ['ha-time.error.invalid_date', { date: dateString }],
+                        'ha-time.status.invalid_date',
+                    );
+                }
+                date = new Date(dateString);
+            } else {
+                date = new Date();
+                date.setHours(digits.hour);
+                date.setMinutes(digits.minutes);
+                date.setSeconds(digits.seconds);
             }
-            date = new Date(dateString);
-        } else {
-            date = new Date();
-            date.setHours(digits.hour);
-            date.setMinutes(digits.minutes);
-            date.setSeconds(digits.seconds);
-        }
 
-        // plus minus offset
-        if (offset !== 0) {
-            if (this.node.config.randomOffset) {
-                offset = this.#getRandomOffset(date, offset);
+            // plus minus offset
+            if (offset !== 0) {
+                if (this.node.config.randomOffset) {
+                    offset = this.#getRandomOffset(date, offset);
+                }
+                const timestamp = date.getTime() + offset;
+                date.setTime(timestamp);
             }
-            const timestamp = date.getTime() + offset;
-            date.setTime(timestamp);
-        }
 
-        let crontab = `${date.getSeconds()} ${date.getMinutes()} ${date.getHours()} ${date.getDate()} ${
-            date.getMonth() + 1
-        } *`;
+            let crontab = `${date.getSeconds()} ${date.getMinutes()} ${date.getHours()} ${date.getDate()} ${
+                date.getMonth() + 1
+            } *`;
 
-        // Create repeating crontab string
-        if (this.node.config.repeatDaily) {
-            const days = this.#getDays();
-            crontab = `${date.getSeconds()} ${date.getMinutes()} ${date.getHours()} * * ${days}`;
-        } else if (date.getTime() < Date.now()) {
-            if (!this.node.config.ignorePastDate) {
-                this.node.warn(
-                    RED._('ha-time.error.in_the_past', {
-                        date: dateString,
-                    }),
-                );
+            // Create repeating crontab string
+            if (this.node.config.repeatDaily) {
+                const days = this.#getDays();
+                crontab = `${date.getSeconds()} ${date.getMinutes()} ${date.getHours()} * * ${days}`;
+            } else if (date.getTime() < Date.now()) {
+                if (!this.node.config.ignorePastDate) {
+                    this.node.warn(
+                        RED._('ha-time.error.in_the_past', {
+                            date: dateString,
+                        }),
+                    );
+                }
+                this.status.setFailed('ha-time.status.in_the_past');
+                return;
             }
-            this.status.setFailed('ha-time.status.in_the_past');
+
+            this.#createCronjob(crontab);
+
+            const nextTime = this.#formatDate(this.#cronjob?.nextRun);
+            this.status.setText(RED._('ha-time.status.next_at', { nextTime }));
+        } finally {
             this.#isAlreadyRunning = false;
-            return;
         }
-
-        this.#createCronjob(crontab);
-
-        const nextTime = this.#formatDate(this.#cronjob?.nextRun);
-        this.status.setText(RED._('ha-time.status.next_at', { nextTime }));
-
-        this.#isAlreadyRunning = false;
     }
 }
