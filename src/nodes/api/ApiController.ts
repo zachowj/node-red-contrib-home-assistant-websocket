@@ -110,7 +110,7 @@ export default class ApiController extends InputOutputController<
             this.debugToClient(JSON.stringify(data));
 
             this.status.setSending();
-            results = this.homeAssistant.websocket.send(data);
+            results = await this.homeAssistant.websocket.send(data);
         }
 
         await this.setCustomOutputs(
