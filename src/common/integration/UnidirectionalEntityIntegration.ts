@@ -215,7 +215,13 @@ export default class UnidirectionalIntegration extends Integration {
         attributes: Record<string, any>,
     ) {
         const payload = this.getEntityPayload(state, attributes);
-        await this.homeAssistant.websocket.send(payload);
+        try {
+            await this.homeAssistant.websocket.send(payload);
+        } catch (err) {
+            this.entityConfigNode.error(
+                `Error updating entity. Error Message: ${err}`,
+            );
+        }
         if (this.entityConfigNode.config.resend) {
             const lastPayload = {
                 state,
@@ -240,7 +246,13 @@ export default class UnidirectionalIntegration extends Integration {
 
         this.debugToClient('unregister', payload);
 
-        await this.homeAssistant?.websocket.send(payload);
+        try {
+            await this.homeAssistant?.websocket.send(payload);
+        } catch (err) {
+            this.entityConfigNode.error(
+                `Error unregistering entity. Error Message: ${err}`,
+            );
+        }
     }
 
     // device endpoints are only available in 1.1.0+
@@ -260,10 +272,16 @@ export default class UnidirectionalIntegration extends Integration {
             `Removing device from Home Assistant: ${this.deviceConfigNode.config.name}`,
         );
 
-        await this.homeAssistant?.websocket.send({
-            type: MessageType.RemoveDevice,
-            node_id: this.deviceConfigNode.id,
-        });
+        try {
+            await this.homeAssistant?.websocket.send({
+                type: MessageType.RemoveDevice,
+                node_id: this.deviceConfigNode.id,
+            });
+        } catch (err) {
+            this.deviceConfigNode.error(
+                `Error removing device. Error Message: ${err}`,
+            );
+        }
     }
 
     protected debugToClient(topic: string, message: any) {
