@@ -19,6 +19,7 @@ const DEFAULT_PROPERTY = 'state';
 const ExposeAsController = ExposeAsMixin(OutputController<TimeNode>);
 export default class TimeController extends ExposeAsController {
     #cronjob: CronosTask | null = null;
+    #isAlreadyRunning = false;
 
     #createCronjob(crontab: string) {
         this.node.debug(`Creating cronjob: ${crontab}`);
@@ -169,6 +170,8 @@ export default class TimeController extends ExposeAsController {
     }
 
     public async onStateChanged() {
+        if (this.#isAlreadyRunning) return;
+
         const property = this.node.config.property || DEFAULT_PROPERTY;
         const entity = this.#getEntity();
         const dateString = selectn(property, entity);
@@ -185,6 +188,7 @@ export default class TimeController extends ExposeAsController {
         // Doesn't match time format 00:00:00
         if (!digits) {
             if (!isValidDate(dateString)) {
+                this.#isAlreadyRunning = false;
                 throw new ConfigError(
                     ['ha-time.error.invalid_date', { date: dateString }],
                     'ha-time.status.invalid_date',
@@ -224,6 +228,7 @@ export default class TimeController extends ExposeAsController {
                 );
             }
             this.status.setFailed('ha-time.status.in_the_past');
+            this.#isAlreadyRunning = false;
             return;
         }
 
@@ -231,5 +236,7 @@ export default class TimeController extends ExposeAsController {
 
         const nextTime = this.#formatDate(this.#cronjob?.nextRun);
         this.status.setText(RED._('ha-time.status.next_at', { nextTime }));
+
+        this.#isAlreadyRunning = false;
     }
 }
