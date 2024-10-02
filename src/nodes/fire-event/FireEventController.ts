@@ -63,11 +63,20 @@ export default class FireEventController extends InputOutputController<
 
         this.status.setSending();
 
-        await this.homeAssistant.websocket.send({
-            type: 'fire_event',
-            event_type: eventType,
-            event_data: eventData,
-        });
+        try {
+            await this.homeAssistant.websocket.send({
+                type: 'fire_event',
+                event_type: eventType,
+                event_data: eventData,
+            });
+        } catch (e: unknown) {
+            if (e instanceof Error) {
+                this.status.setError(e.message);
+                done(e);
+            }
+            this.node.error(e);
+            return;
+        }
 
         this.status.setSuccess(eventType);
         send(message);
