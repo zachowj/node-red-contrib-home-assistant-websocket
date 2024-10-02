@@ -45,7 +45,7 @@ export default class ActionController extends InputOutputController<
             states,
         );
 
-        let action: string = parsedMessage.action.value;
+        let action: string = parsedMessage.action.value.toLowerCase();
         // TODO: Remove in version 1.0
         if (parsedMessage.action.source === DataSource.Transformed) {
             if (!this.#hasDeprecatedWarned) {
@@ -79,10 +79,6 @@ export default class ActionController extends InputOutputController<
             typeof target.entity_id === 'string'
         ) {
             const services = this.homeAssistant.websocket.getServices();
-            const [domain, service] = parsedMessage.action?.value
-                .toLowerCase()
-                .split('.');
-
             if (
                 services[domain]?.[service]?.fields?.entity_id !== undefined &&
                 !mergedData.entity_id
