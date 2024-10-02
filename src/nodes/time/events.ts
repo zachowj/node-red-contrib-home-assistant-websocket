@@ -14,12 +14,12 @@ export function startListener(
 ) {
     clientEvents.addListener(
         ClientEvent.Ready,
-        controller.onStateChanged.bind(controller),
+        controller.handleEvent.bind(controller),
     );
 
     clientEvents.addListener(
         `ha_events:state_changed:${node.config.entityId}`,
-        controller.onStateChanged.bind(controller),
+        controller.handleEvent.bind(controller),
     );
 
     if (
@@ -30,7 +30,7 @@ export function startListener(
         ids.forEach((id) => {
             clientEvents.addListener(
                 `ha_events:state_changed:${id}`,
-                controller.onStateChanged.bind(controller),
+                controller.handleEvent.bind(controller),
             );
         });
     }
