@@ -555,6 +555,7 @@ export default class Websocket {
         this.isHomeAssistantRunning = false;
         this.connectionState = ClientState.Connected;
         if (this.#config.heartbeatInterval) {
+            this.#stopAssignedHeartbeat();
             this.#stopHeartbeat = startHeartbeat(
                 this.client,
                 this.#config.heartbeatInterval,
@@ -581,11 +582,20 @@ export default class Websocket {
     }
 
     close(): void {
-        if (typeof this.#stopHeartbeat === 'function') this.#stopHeartbeat();
+        this.#stopAssignedHeartbeat();
         this?.client?.close();
     }
 
+    #stopAssignedHeartbeat(): void {
+        if (typeof this.#stopHeartbeat === 'function') {
+            const stopHeartbeat = this.#stopHeartbeat;
+            this.#stopHeartbeat = undefined;
+            stopHeartbeat();
+        }
+    }
+
     resetClient(): void {
+        this.#stopAssignedHeartbeat();
         this.integrationVersion = NO_VERSION;
         this.isHomeAssistantRunning = false;
         this.#servicesLoaded = false;
