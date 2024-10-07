@@ -1,1 +1,1 @@
-export default '0.73.0'; // x-release-please-version
+export default '0.74.0'; // x-release-please-version

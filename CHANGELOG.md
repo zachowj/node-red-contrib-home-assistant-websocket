@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.74.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.73.0...v0.74.0) (2024-10-07)
+
+
+### Features
+
+* slovak translation ([623d75b](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/623d75bbb0a964050feabcc980b316a318716b8a))
+
+
+### Bug Fixes
+
+* **action:** preserve domain and service while addressing deprecated notice ([613e505](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/613e505efae0ed750662cf4ee32972051f19ad5d)), closes [#1622](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1622)
+* **api:** Await websocket send in ApiController ([3319bf4](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/3319bf4c1cb517c0da8779e093c0c64b9c4cd1ba))
+* **fire-event:** Handle errors when sending events via websocket ([38167fc](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/38167fcf7cd4410ba51c5cb7ac452d848e18f02b))
+* **integration:** Handle errors when sending and unregistering entities ([cb72c3f](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/cb72c3f8e4fd2c8eef29836e8cd4a95577f94417))
+* **time:** Improve handling of  cronjobs creation ([680227a](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/680227aa4a7d96ea3b8ecacafc9e0aa128ed6e33)), closes [#1490](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1490)
+
 ## [0.73.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.72.4...v0.73.0) (2024-09-19)
 
 
