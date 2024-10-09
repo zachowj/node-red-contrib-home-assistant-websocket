@@ -58,7 +58,7 @@ const CurrentStateEditor: EditorNodeDef<CurrentStateEditorNodeProperties> = {
         halt_if_compare: { value: 'is' },
         entity_id: { value: '' },
         state_type: { value: 'str' },
-        blockInputOverrides: { value: false },
+        blockInputOverrides: { value: true },
         outputProperties: {
             value: [
                 {
