@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.74.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.74.0...v0.74.1) (2024-10-09)
+
+
+### Bug Fixes
+
+* **action:** ensure data field is not merged when input block is enabled ([ef6e47b](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ef6e47b261911e9c9afa78d68f0305c68f12d933)), closes [#1641](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1641)
+
 ## [0.74.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.73.0...v0.74.0) (2024-10-07)
 
 
