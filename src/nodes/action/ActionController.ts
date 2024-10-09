@@ -228,6 +228,10 @@ export default class ActionController extends InputOutputController<
             }
         }
 
+        if (this.node.config.blockInputOverrides) {
+            return { ...configData, ...contextData };
+        }
+
         return { ...configData, ...contextData, ...payload };
     }
 
