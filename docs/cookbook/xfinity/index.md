@@ -21,6 +21,23 @@ Here's an improved version of the requirements list with some additional context
 - **node-red-contrib-home-assistant-websocket** - [GitHub Repository](https://github.com/zachowj/node-red-contrib-home-assistant-websocket)
 - **Node-RED Companion Custom Component** - [GitHub Repository](https://github.com/zachowj/hass-node-red)
 
+This flow requires Node-RED to be configured with a [context store](https://nodered.org/docs/user-guide/context#saving-context-data-to-the-file-system) named "file" to persist data to the file system. This is essential for storing the starting amount of the day’s usage. If desired, this functionality could be adapted to save the data as a sensor in Home Assistant instead.
+
+Add the following configuration to your `settings.js` file to enable file-based storage:
+
+```json title="settings.js"
+contextStorage: {
+    default: {
+        module: "memory",  // Volatile memory storage
+    },
+    file: {
+        module: "localfilesystem"  // Persistent storage in the file system
+    }
+},
+```
+
+This setup ensures that data, such as daily internet usage, is retained across Node-RED restarts. Alternatively, you can adjust the flow to save the daily starting value directly to a Home Assistant sensor, if desired.
+
 ### Flow Overview
 
 ![screenshot of Node-RED flow](./flow.png)
