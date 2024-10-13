@@ -69,7 +69,7 @@ export default defineUserConfig({
                             text: 'JSONata',
                             collapsible: false,
                             children: [
-                                '/cookbook/jsonata/call-service',
+                                '/cookbook/jsonata/action',
                                 '/cookbook/jsonata/change-node',
                                 '/cookbook/jsonata/current-state',
                                 '/cookbook/jsonata/events-state',

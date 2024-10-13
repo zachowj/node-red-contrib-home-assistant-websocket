@@ -24,6 +24,7 @@ further educate yourself in the world of Home Automation with Node-RED.
 - [Actionable Notifications Subflow for Android](./actionable-notifications-subflow-for-android.md)
 - [Events by Label](./events-by-label.md)
 - [Play Jellyfin Show using the Sentence Node](./play-jellyfin-show-using-sentence-node.md)
+- [Xfinity Usage](./xfinity/) - Create sensors from dynamic data
 
 All JSON exports are also available under the examples tab in the Node-RED
 import menu.
