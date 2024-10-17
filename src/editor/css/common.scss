@@ -1,4 +1,4 @@
-@import 'variables';
+@use 'variables';
 
 #version-update {
     padding: 0.5em;
@@ -14,7 +14,7 @@
 
     a,
     a:hover {
-        color: $primary-text-color;
+        color: variables.$primary-text-color;
     }
 }
 
@@ -49,7 +49,7 @@
         }
 
         &.add-spacer {
-            border-bottom: 1px solid $primary-text-color;
+            border-bottom: 1px solid variables.$primary-text-color;
         }
 
         > select {
@@ -78,7 +78,7 @@
 
     li span.property-type {
         font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
-        color: $primary-text-color;
+        color: variables.$primary-text-color;
         font-style: italic;
         font-size: 11px;
         float: right;
@@ -92,14 +92,14 @@
 
     .ha-alpha-box {
         @extend .ha-alert-box;
-        color: $alpha-text-color;
-        background-color: $alpha-background-color;
+        color: variables.$alpha-text-color;
+        background-color: variables.$alpha-background-color;
     }
 
     .ha-beta-box {
         @extend .ha-alert-box;
-        color: $beta-text-color;
-        background-color: $beta-background-color;
+        color: variables.$beta-text-color;
+        background-color: variables.$beta-background-color;
     }
 }
 
@@ -206,7 +206,7 @@
 
 #upgrade-ha-node {
     padding: 4px 12px;
-    background: $home-assistant-color;
+    background: variables.$home-assistant-color;
     color: #eee;
     display: inline-block;
     line-height: 22px;
@@ -219,7 +219,7 @@
 .ui-autocomplete {
     .ui-menu-item-wrapper {
         .sublabel {
-            color: $secondary-text-color;
+            color: variables.$secondary-text-color;
             font-size: smaller;
             margin: 4px 0;
         }
