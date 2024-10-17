@@ -150,34 +150,32 @@ export default class GetEntitiesController extends SendSplitController {
         message: NodeMessage,
     ): Promise<HassEntity[]> {
         const filteredEntities: HassEntity[] = [];
-        const entities = this.#homeAssistant.websocket.getEntities();
         const states = this.#homeAssistant.websocket.getStates();
         const sortedConditions = sortConditions(conditions);
+        const entityRegistryMap = new Map(
+            this.#homeAssistant.websocket
+                .getEntities()
+                .map((e) => [e.entity_id, e]),
+        );
 
-        for (const state of Object.values(states) as HassEntity[]) {
+        for (const entityState of Object.values(states) as HassEntity[]) {
             this.#resetCurrent();
 
-            if (state?.last_changed) {
-                state.timeSinceChangedMs =
-                    Date.now() - new Date(state.last_changed).getTime();
+            // TODO: Remove for version 1.0
+            if (entityState?.last_changed) {
+                entityState.timeSinceChangedMs =
+                    Date.now() - new Date(entityState.last_changed).getTime();
             }
 
-            const entity = entities.find(
-                (e) => e.entity_id === state.entity_id,
-            );
-            let ruleMatched = true;
+            const entity = entityRegistryMap.get(entityState.entity_id);
 
-            for (const rule of sortedConditions) {
-                if (!ruleMatched) {
-                    break;
-                }
-
+            const conditionChecks = sortedConditions.map(async (rule) => {
                 if (
                     rule.condition === PropertySelectorType.State ||
                     // If the condition is not set, it is a state condition
                     rule.condition === undefined
                 ) {
-                    const value = selectn(rule.property, state);
+                    const value = selectn(rule.property, entityState);
                     const result =
                         await this.#comparatorService.getComparatorResult(
                             rule.logic,
@@ -186,89 +184,48 @@ export default class GetEntitiesController extends SendSplitController {
                             rule.valueType,
                             {
                                 message,
-                                entity: state,
+                                entity: entityState,
                             },
                         );
 
                     if (
-                        (rule.logic !== 'jsonata' && value === undefined) ||
+                        (rule.logic !== TypedInputTypes.JSONata &&
+                            value === undefined) ||
                         !result
                     ) {
-                        ruleMatched = false;
-                        break;
+                        return false;
                     }
                 } else if (rule.condition === PropertySelectorType.Label) {
-                    if (!entity) {
-                        ruleMatched = false;
-                        break;
-                    }
+                    if (!entity || !entity.labels.length) return false;
 
-                    if (entity.labels.length === 0) {
-                        ruleMatched = false;
-                        break;
-                    }
-                    let found = false;
-                    for (const labelId of entity.labels) {
+                    const labelCheck = entity.labels.some(async (labelId) => {
                         const label =
                             this.#homeAssistant.websocket.getLabel(labelId);
-
                         if (!label) {
-                            continue;
+                            return false;
                         }
 
-                        const result = simpleComparison(
+                        return simpleComparison(
                             rule.logic as SimpleComparatorType,
                             label[rule.property as keyof HassLabel] as string,
                             await this.typedInputService.getValue(
                                 rule.value,
                                 rule.valueType as TypedInputTypes,
-                                {
-                                    message,
-                                    entity: state,
-                                },
+                                { message, entity: entityState },
                             ),
                         );
+                    });
 
-                        if (result) {
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (!found) {
-                        ruleMatched = false;
-                        break;
+                    if (!labelCheck) {
+                        return false;
                     }
                 } else {
-                    if (!entity) {
-                        ruleMatched = false;
-                        break;
-                    }
-
-                    let propertyValue: unknown;
-                    if (rule.condition === PropertySelectorType.Device) {
-                        const device = this.#getDevice(entity);
-                        if (!device) {
-                            ruleMatched = false;
-                            break;
-                        }
-                        propertyValue =
-                            device[rule.property as keyof HassDevice];
-                    } else if (rule.condition === PropertySelectorType.Area) {
-                        const area = this.#getArea(entity);
-                        if (!area) {
-                            ruleMatched = false;
-                            break;
-                        }
-                        propertyValue = area[rule.property as keyof HassArea];
-                    } else if (rule.condition === PropertySelectorType.Floor) {
-                        const floor = this.#getFloor(entity);
-                        if (!floor) {
-                            ruleMatched = false;
-                            break;
-                        }
-                        propertyValue = floor[rule.property as keyof HassFloor];
-                    }
+                    const propertyValue = this.#getPropertyValue(
+                        rule.condition,
+                        rule.property,
+                        entity,
+                    );
+                    if (!propertyValue) return false;
 
                     const result = simpleComparison(
                         rule.logic as SimpleComparatorType,
@@ -278,24 +235,48 @@ export default class GetEntitiesController extends SendSplitController {
                             rule.valueType as TypedInputTypes,
                             {
                                 message,
-                                entity: state,
+                                entity: entityState,
                             },
                         ),
                     );
 
                     if (!result) {
-                        ruleMatched = false;
-                        break;
+                        return false;
                     }
                 }
-            }
 
-            if (ruleMatched && state) {
-                filteredEntities.push(state);
+                return true;
+            });
+
+            const ruleMatched = (await Promise.all(conditionChecks)).every(
+                Boolean,
+            );
+
+            if (ruleMatched && entityState) {
+                filteredEntities.push(entityState);
             }
         }
 
         return filteredEntities;
+    }
+
+    #getPropertyValue(
+        condition: PropertySelectorType,
+        property: string,
+        entity: HassEntityRegistryEntry | undefined,
+    ) {
+        if (!entity) return undefined;
+
+        switch (condition) {
+            case PropertySelectorType.Device:
+                return this.#getDevice(entity)?.[property as keyof HassDevice];
+            case PropertySelectorType.Area:
+                return this.#getArea(entity)?.[property as keyof HassArea];
+            case PropertySelectorType.Floor:
+                return this.#getFloor(entity)?.[property as keyof HassFloor];
+            default:
+                return undefined;
+        }
     }
 
     #getDevice(entity: HassEntityRegistryEntry): HassDevice | undefined {
