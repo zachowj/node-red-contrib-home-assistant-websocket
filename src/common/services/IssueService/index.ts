@@ -41,7 +41,7 @@ import zoneIssueCheck, {
     isZoneNodeProperties,
 } from '../../../nodes/zone/issue-check';
 import { HassStateChangedEvent } from '../../../types/home-assistant';
-import { BaseNodeProperties } from '../../../types/nodes';
+import { BaseNodeProperties, NodeProperties } from '../../../types/nodes';
 import storageService from '../../services/StorageService';
 import {
     getHomeAssistant,
@@ -263,56 +263,32 @@ class IssueService {
         }
     }
 
+    // Define a mapping of node type check functions to issue check functions
+    #issueCheckMap: [
+        (node: NodeProperties) => boolean,
+        (node: any) => Issue[],
+    ][] = [
+        [isActionNodeProperties, actionIssueCheck],
+        [isCurrentStateNodeProperties, currentStateIssueCheck],
+        [isDeviceNodeProperties, deviceIssueCheck],
+        [isEventsCalendarNodeProperties, eventsCalendarIssueCheck],
+        [isEventsStateNodeProperties, eventsStateIssueCheck],
+        [isGetHistoryNodeProperties, getHistoryIssueCheck],
+        [isPollStateNodeProperties, pollStateIssueCheck],
+        [isTagNodeProperties, tagIssueCheck],
+        [isTimeNodeProperties, timeIssueCheck],
+        [isTriggerStateProperties, triggerStateIssueCheck],
+        [isWaitUntilNodeProperties, waitUntilIssueCheck],
+        [isZoneNodeProperties, zoneIssueCheck],
+    ] as const;
+
     // Check for issues on a node
     #checkForIssues(node: BaseNodeProperties): Issue[] {
         let issues: Issue[] = [];
-        switch (true) {
-            case isActionNodeProperties(node): {
-                issues = actionIssueCheck(node);
-                break;
-            }
-            case isCurrentStateNodeProperties(node): {
-                issues = currentStateIssueCheck(node);
-                break;
-            }
-            case isDeviceNodeProperties(node): {
-                issues = deviceIssueCheck(node);
-                break;
-            }
-            case isEventsCalendarNodeProperties(node): {
-                issues = eventsCalendarIssueCheck(node);
-                break;
-            }
-            case isEventsStateNodeProperties(node): {
-                issues = eventsStateIssueCheck(node);
-                break;
-            }
-            case isGetHistoryNodeProperties(node): {
-                issues = getHistoryIssueCheck(node);
-                break;
-            }
-            case isPollStateNodeProperties(node): {
-                issues = pollStateIssueCheck(node);
-                break;
-            }
-            case isTagNodeProperties(node): {
-                issues = tagIssueCheck(node);
-                break;
-            }
-            case isTimeNodeProperties(node): {
-                issues = timeIssueCheck(node);
-                break;
-            }
-            case isTriggerStateProperties(node): {
-                issues = triggerStateIssueCheck(node);
-                break;
-            }
-            case isWaitUntilNodeProperties(node): {
-                issues = waitUntilIssueCheck(node);
-                break;
-            }
-            case isZoneNodeProperties(node): {
-                issues = zoneIssueCheck(node);
+
+        for (const [checkFn, issueFn] of this.#issueCheckMap) {
+            if (checkFn(node)) {
+                issues = issueFn(node);
                 break;
             }
         }
