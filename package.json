@@ -142,7 +142,7 @@
     "vinyl-source-stream": "2.0.0",
     "vitest": "2.1.1",
     "vitest-mock-extended": "2.0.2",
-    "vue": "3.5.11",
+    "vue": "3.5.12",
     "vuepress": "2.0.0-rc.15",
     "yargs": "17.7.2"
   },
