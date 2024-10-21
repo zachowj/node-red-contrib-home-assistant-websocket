@@ -106,8 +106,8 @@ importers:
         specifier: 4.0.4
         version: 4.0.4
       '@types/timestring':
-        specifier: 6.0.5
-        version: 6.0.5
+        specifier: 7.0.0
+        version: 7.0.0
       '@types/ws':
         specifier: 8.5.12
         version: 8.5.12
@@ -1173,8 +1173,8 @@ packages:
   '@types/supertest@6.0.2':
     resolution: {integrity: sha512-137ypx2lk/wTQbW6An6safu9hXmajAifU/s7szAHLN/FeIm5w7yR0Wkl9fdJMRSHwOn4HLAI0DaB2TOORuhPDg==}
 
-  '@types/timestring@6.0.5':
-    resolution: {integrity: sha512-u+PDTI30Ezg81ENLYTIezc2HtBW7n2/Vgt3vJ2LBzpn/VZzVj33MqxXeVti7g16gPzn3i1hSZCkNCveWp5iowQ==}
+  '@types/timestring@7.0.0':
+    resolution: {integrity: sha512-ZFdmx8cDafCuTsVdP0xEOj8MEHKFo0P7x4lJPMZRKryoURfaO3MtJp4Ih0l35r8tM/+hnTGSAEL9PYf1N/3tbg==}
 
   '@types/web-bluetooth@0.0.20':
     resolution: {integrity: sha512-g9gZnnXVq7gM7v3tJCWV/qw7w+KeOlSHAhgF9RytFyifW6AF61hdT2ucrYhPq9hLs5JIryeupHV3qGk95dH9ow==}
@@ -6627,7 +6627,7 @@ snapshots:
       '@types/methods': 1.1.4
       '@types/superagent': 8.1.1
 
-  '@types/timestring@6.0.5': {}
+  '@types/timestring@7.0.0': {}
 
   '@types/web-bluetooth@0.0.20': {}
 
