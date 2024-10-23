@@ -1,13 +1,12 @@
-import { HassEntity } from 'home-assistant-js-websocket';
-
 import { IdSelectorType } from '../../../common/const';
 import { ActionTargetFilter } from '../../../nodes/action/editor/targets';
 import {
     HassArea,
     HassAreas,
-    HassDevice,
     HassFloor,
     HassLabel,
+    SlimHassDevice,
+    SlimHassEntity,
 } from '../../../types/home-assistant';
 import * as haServer from '../../haserver';
 import { i18n } from '../../i18n';
@@ -22,8 +21,8 @@ interface EditableListButton {
     click: (evt: any) => void;
 }
 export interface TargetData {
-    entities: HassEntity[];
-    devices: HassDevice[];
+    entities: SlimHassEntity[];
+    devices: SlimHassDevice[];
     areas: HassAreas;
     floors: HassFloor[];
     labels: HassLabel[];
@@ -74,8 +73,8 @@ export default class IdSelector {
             };
         }
 
-        const filteredEntities: HassEntity[] = [];
-        const filteredDevices: HassDevice[] = [];
+        const filteredEntities: SlimHassEntity[] = [];
+        const filteredDevices: SlimHassDevice[] = [];
         const filteredAreas: HassAreas = [];
         const filteredFloors: HassFloor[] = [];
         const filteredLabels: HassLabel[] = [];
@@ -146,7 +145,7 @@ export default class IdSelector {
                 }
 
                 // Add devices that the entity is part of
-                let device: HassDevice | undefined;
+                let device: SlimHassDevice | undefined;
                 if (entity.device_id) {
                     device = devices.find((d) => d.id === entity.device_id);
                     if (device) {

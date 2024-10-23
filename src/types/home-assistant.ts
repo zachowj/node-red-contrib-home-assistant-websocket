@@ -1,5 +1,6 @@
 import {
     HassEntity as HomeAssistantEntity,
+    HassEntityAttributeBase,
     HassEventBase,
 } from 'home-assistant-js-websocket';
 
@@ -33,6 +34,11 @@ export type HassDevice = {
     sw_version?: string;
     via_device_id?: string;
 };
+
+export type SlimHassDevice = Pick<
+    HassDevice,
+    'area_id' | 'id' | 'labels' | 'name' | 'name_by_user'
+>;
 
 export type HassDevices = HassDevice[];
 
@@ -138,6 +144,18 @@ export interface HassEntityRegistryEntry {
     modified_at: number;
 }
 
+export type SlimHassEntityRegistryEntry = Pick<
+    HassEntityRegistryEntry,
+    | 'area_id'
+    | 'device_id'
+    | 'entity_id'
+    | 'id'
+    | 'labels'
+    | 'name'
+    | 'original_name'
+    | 'platform'
+>;
+
 export interface HassFloor {
     alias: string[];
     floor_id: string;
@@ -153,3 +171,12 @@ export interface HassLabel {
     label_id: string;
     name: string;
 }
+
+export type SlimHassEntity = {
+    entity_id: HomeAssistantEntity['entity_id'];
+    state: HomeAssistantEntity['state'];
+    attributes: Pick<
+        HassEntityAttributeBase,
+        'device_class' | 'friendly_name' | 'supported_features'
+    >;
+};

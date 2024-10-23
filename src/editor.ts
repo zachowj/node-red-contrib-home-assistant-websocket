@@ -57,17 +57,27 @@ import ZoneEditor from './nodes/zone/editor';
 
 declare const RED: EditorRED;
 
-RED.comms.subscribe('homeassistant/areas/#', updateAreas);
-RED.comms.subscribe('homeassistant/devices/#', updateDevices);
-RED.comms.subscribe('homeassistant/entity/#', updateEntity);
-RED.comms.subscribe('homeassistant/entities/#', updateEntities);
-RED.comms.subscribe('homeassistant/floors/#', updateFloors);
-RED.comms.subscribe('homeassistant/labels/#', updateLabels);
-RED.comms.subscribe('homeassistant/integration/#', updateIntegration);
-RED.comms.subscribe('homeassistant/services/#', updateServices);
-RED.comms.subscribe('homeassistant/entityRegistry/#', updateEntityRegistry);
-RED.comms.subscribe('homeassistant/issues', updateIssues);
-RED.comms.subscribe(PRINT_TO_DEBUG_TOPIC, printToDebugPanel);
+const subscriptions = {
+    'homeassistant/areas/#': updateAreas,
+    'homeassistant/devices/#': updateDevices,
+    'homeassistant/entity/#': updateEntity,
+    'homeassistant/entities/#': updateEntities,
+    'homeassistant/floors/#': updateFloors,
+    'homeassistant/labels/#': updateLabels,
+    'homeassistant/integration/#': updateIntegration,
+    'homeassistant/services/#': updateServices,
+    'homeassistant/entityRegistry/#': updateEntityRegistry,
+    'homeassistant/issues': updateIssues,
+    [PRINT_TO_DEBUG_TOPIC]: printToDebugPanel,
+};
+// Introduce a delay in the subscription process to prevent Node-RED from sending all updates simultaneously.
+// This issue primarily arises when accessing the editor via the Home Assistant ingress proxy,
+// which has a default message size limit of 4MB.
+Object.entries(subscriptions).forEach(([topic, updateFunction], index) => {
+    setTimeout(() => {
+        RED.comms.subscribe(topic, updateFunction);
+    }, index * 150);
+});
 setupMigrations();
 setupEditors();
 RED.events.on('nodes:add', onNodesAdd);

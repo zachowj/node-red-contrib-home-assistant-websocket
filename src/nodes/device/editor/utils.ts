@@ -1,7 +1,7 @@
 import { getAreaNameById, getDevices } from '../../../editor/data';
 import * as haServer from '../../../editor/haserver';
 import { i18n } from '../../../editor/i18n';
-import { HassDevice } from '../../../types/home-assistant';
+import { SlimHassDevice } from '../../../types/home-assistant';
 import { VirtualSelectOption } from '../../../types/virtual-select';
 
 export enum DeviceEndpoint {
@@ -18,7 +18,7 @@ export enum DeviceEndpoint {
  * @returns An array of virtual select options.
  */
 export function buildDevices(serverId: string) {
-    const devices: HassDevice[] = getDevices(serverId);
+    const devices: SlimHassDevice[] = getDevices(serverId);
     const options: VirtualSelectOption[] = [];
     devices.forEach((device) => {
         options.push({

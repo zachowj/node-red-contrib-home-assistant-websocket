@@ -2,6 +2,7 @@ import { HassEntity } from 'home-assistant-js-websocket';
 import { EditorRED } from 'node-red';
 
 import { byPropertiesOf } from '../../helpers/sort';
+import { SlimHassEntity } from '../../types/home-assistant';
 import { i18n } from '../i18n';
 
 declare const RED: EditorRED;
@@ -111,7 +112,7 @@ export const openEntityFilter = ({
 }: {
     filter: string;
     filterType: 'substring' | 'regex';
-    entities: HassEntity[];
+    entities: SlimHassEntity[];
     complete: (filter: string) => void;
 }) => {
     RED.editor.showTypeEditor('ha_entity_filter', {

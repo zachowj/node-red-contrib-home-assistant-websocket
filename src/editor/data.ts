@@ -1,38 +1,38 @@
-import {
-    HassEntities,
-    HassEntity,
-    HassServices,
-} from 'home-assistant-js-websocket';
+import { HassServices } from 'home-assistant-js-websocket';
 
 import {
     HassArea,
-    HassDevice,
-    HassEntityRegistryEntry,
     HassFloor,
     HassLabel,
+    SlimHassDevice,
+    SlimHassEntity,
+    SlimHassEntityRegistryEntry,
 } from '../types/home-assistant';
 import { i18n } from './i18n';
 import { deepFind } from './utils';
 
 const areas: { [serverId: string]: HassArea[] } = {};
-const devices: { [serverId: string]: HassDevice[] } = {};
-const entities: { [serverId: string]: HassEntities } = {};
+const devices: { [serverId: string]: SlimHassDevice[] } = {};
+const entities: {
+    [serverId: string]: { [entity_id: string]: SlimHassEntity };
+} = {};
 const floors: { [serverId: string]: HassFloor[] } = {};
 const labels: { [serverId: string]: HassLabel[] } = {};
 const services: { [serverId: string]: HassServices } = {};
-const entityRegistry: { [serverId: string]: HassEntityRegistryEntry[] } = {};
+const entityRegistry: { [serverId: string]: SlimHassEntityRegistryEntry[] } =
+    {};
 
 export function updateAreas(topic: string, data: HassArea[]): void {
     const serverId = parseServerId(topic);
     areas[serverId] = data;
 }
 
-export function updateDevices(topic: string, data: HassDevice[]): void {
+export function updateDevices(topic: string, data: SlimHassDevice[]): void {
     const serverId = parseServerId(topic);
     devices[serverId] = data;
 }
 
-export function updateEntity(topic: string, data: HassEntity[]): void {
+export function updateEntity(topic: string, data: SlimHassEntity[]): void {
     const serverId = parseServerId(topic);
     if (!entities[serverId]) entities[serverId] = {};
     data.forEach((item) => {
@@ -42,13 +42,16 @@ export function updateEntity(topic: string, data: HassEntity[]): void {
 
 export function updateEntityRegistry(
     topic: string,
-    data: HassEntityRegistryEntry[],
+    data: SlimHassEntityRegistryEntry[],
 ): void {
     const serverId = parseServerId(topic);
     entityRegistry[serverId] = data;
 }
 
-export function updateEntities(topic: string, data: HassEntities): void {
+export function updateEntities(
+    topic: string,
+    data: { [entity_id: string]: SlimHassEntity },
+): void {
     const serverId = parseServerId(topic);
     entities[serverId] = data;
 }
@@ -194,26 +197,30 @@ export function getAreas(serverId: string): HassArea[] {
     return areas[serverId] ?? [];
 }
 
-export function getDevices(serverId: string): HassDevice[] {
+export function getDevices(serverId: string): SlimHassDevice[] {
     return devices[serverId] ?? [];
 }
 
-export function getEntity(serverId: string, entityId: string): HassEntity {
+export function getEntity(serverId: string, entityId: string): SlimHassEntity {
     return entities[serverId][entityId];
 }
 
 export function getEntityFromRegistry(
     serverId: string,
     registryId: string,
-): HassEntityRegistryEntry | undefined {
+): SlimHassEntityRegistryEntry | undefined {
     return entityRegistry[serverId].find((entry) => entry.id === registryId);
 }
 
-export function getEntityRegistry(serverId: string): HassEntityRegistryEntry[] {
+export function getEntityRegistry(
+    serverId: string,
+): SlimHassEntityRegistryEntry[] {
     return entityRegistry[serverId] ?? [];
 }
 
-export function getEntities(serverId: string): HassEntities {
+export function getEntities(serverId: string): {
+    [entity_id: string]: SlimHassEntity;
+} {
     return entities[serverId] ?? {};
 }
 

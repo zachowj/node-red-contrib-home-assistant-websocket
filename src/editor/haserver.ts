@@ -1,4 +1,4 @@
-import { HassEntity, HassServices } from 'home-assistant-js-websocket';
+import { HassServices } from 'home-assistant-js-websocket';
 import { EditorNodeInstance, EditorRED } from 'node-red';
 
 import { NodeType } from '../const';
@@ -6,9 +6,10 @@ import { ConfigServerEditorNodeProperties } from '../nodes/config-server/editor'
 import {
     HassArea,
     HassAreas,
-    HassDevices,
     HassFloor,
     HassLabel,
+    SlimHassDevice,
+    SlimHassEntity,
 } from '../types/home-assistant';
 import * as haData from './data';
 import { HassNodeProperties } from './types';
@@ -129,11 +130,11 @@ export const getAreas = (): HassAreas => {
     return haData.getAreas(serverId);
 };
 
-export const getDevices = (): HassDevices => {
+export const getDevices = (): SlimHassDevice[] => {
     return haData.getDevices(serverId);
 };
 
-export const getEntity = (entityId: string): HassEntity => {
+export const getEntity = (entityId: string): SlimHassEntity => {
     return haData.getEntity(serverId, entityId);
 };
 
@@ -141,7 +142,7 @@ export const getEntityRegistry = () => {
     return haData.getEntityRegistry(serverId);
 };
 
-export const getEntities = (): HassEntity[] => {
+export const getEntities = (): SlimHassEntity[] => {
     return Object.values(haData.getEntities(serverId));
 };
 
