@@ -35,5 +35,5 @@ export default function issueCheck(config: GetHistoryNodeProperties): Issue[] {
 export function isGetHistoryNodeProperties(
     node: NodeProperties,
 ): node is GetHistoryNodeProperties {
-    return node.type === NodeType.GetEntities;
+    return node.type === NodeType.GetHistory;
 }
