@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.74.3](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.74.2...v0.74.3) (2024-11-02)
+
+
+### Bug Fixes
+
+* update node type check in issueCheck function to GetHistory ([1c80b72](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/1c80b72478ffa4c3e7e65b3be7bcb277a9fbad4b))
+
 ## [0.74.2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.74.1...v0.74.2) (2024-10-24)
 
 
