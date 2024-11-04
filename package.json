@@ -134,7 +134,7 @@
     "nodemon": "3.1.7",
     "postcss": "8.4.47",
     "prettier": "3.3.3",
-    "rollup": "4.24.2",
+    "rollup": "4.24.4",
     "sass": "1.80.4",
     "ts-node": "10.9.2",
     "tslib": "2.8.0",
