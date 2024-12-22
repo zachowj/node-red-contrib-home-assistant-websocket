@@ -16,7 +16,7 @@ jobs:
         with:
           script: |
             const commentAuthor = context.payload.comment.user.login;
-            const labelToRemove = 'waiting for response';
+            const labelToRemove = 'waiting-for-response';
 
             const issueData = {
               owner: context.repo.owner,
