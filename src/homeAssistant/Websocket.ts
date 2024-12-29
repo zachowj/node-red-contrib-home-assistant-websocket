@@ -44,6 +44,7 @@ import {
     HassDeviceCapabilities,
     HassDevices,
     HassDeviceTriggers,
+    HassEntityRegistry,
     HassEntityRegistryEntry,
     HassFloor,
     HassLabel,
@@ -120,7 +121,7 @@ export default class Websocket {
     areas: HassAreas = [];
     client!: Connection;
     devices: HassDevices = [];
-    entities: HassEntityRegistryEntry[] = [];
+    entities: HassEntityRegistry = new Map();
     floors: HassFloor[] = [];
     labels: HassLabel[] = [];
     connectionState = ClientState.Disconnected;
@@ -278,7 +279,9 @@ export default class Websocket {
         });
         subscribeEntityRegistry(this.client, (entities) => {
             this.#isEntityRegistryLoaded = true;
-            this.entities = entities;
+            entities.forEach((entity) =>
+                this.entities.set(entity.entity_id, entity),
+            );
             this.#checkIfAllRegistriesLoaded();
             this.#emitEvent(HaEvent.EntityRegistryUpdated, entities);
         });
@@ -609,13 +612,7 @@ export default class Websocket {
         this.#emitEvent(ClientEvent.Close);
     }
 
-    getAreas(areaId: string): HassArea | undefined;
-    getAreas(): HassAreas;
-    getAreas(areaId?: unknown): unknown {
-        if (typeof areaId === 'string') {
-            this.getArea(areaId);
-        }
-
+    getAreas(): HassAreas {
         return cloneDeep(this.areas);
     }
 
@@ -623,13 +620,7 @@ export default class Websocket {
         return cloneDeep(this.areas.find((area) => area.area_id === areaId));
     }
 
-    getDevices(deviceId: string): HassDevice | undefined;
-    getDevices(): HassDevices;
-    getDevices(deviceId?: unknown): unknown {
-        if (typeof deviceId === 'string') {
-            this.getDevice(deviceId);
-        }
-
+    getDevices(): HassDevices {
         return cloneDeep(this.devices);
     }
 
@@ -693,29 +684,15 @@ export default class Websocket {
         return results.extra_fields;
     }
 
-    getEntities(): HassEntityRegistryEntry[];
-    getEntities(entityId?: string): HassEntityRegistryEntry | undefined;
-    getEntities(entityId?: unknown): unknown {
-        if (typeof entityId === 'string') {
-            this.getEntity(entityId);
-        }
-
+    getEntities(): HassEntityRegistry {
         return cloneDeep(this.entities);
     }
 
     getEntity(entityId: string): HassEntityRegistryEntry | undefined {
-        return cloneDeep(
-            this.entities.find((entity) => entity.entity_id === entityId),
-        );
+        return cloneDeep(this.entities.get(entityId));
     }
 
-    getFloors(floorId: string): HassFloor | undefined;
-    getFloors(): HassFloor[];
-    getFloors(floorId?: unknown): unknown {
-        if (typeof floorId === 'string') {
-            this.getFloor(floorId);
-        }
-
+    getFloors(): HassFloor[] {
         return cloneDeep(this.floors);
     }
 
@@ -725,13 +702,7 @@ export default class Websocket {
         );
     }
 
-    getLabels(labelId: string): HassLabel | undefined;
-    getLabels(): HassLabel[];
-    getLabels(labelId?: unknown): unknown {
-        if (typeof labelId === 'string') {
-            this.getLabels(labelId);
-        }
-
+    getLabels(): HassLabel[] {
         return cloneDeep(this.labels);
     }
 
@@ -741,16 +712,12 @@ export default class Websocket {
         );
     }
 
-    getStates(): HassEntities;
-    getStates(entityId?: string): HassEntity | null;
-    getStates(entityId?: unknown): unknown {
-        if (typeof entityId === 'string') {
-            return this.states[entityId]
-                ? cloneDeep(this.states[entityId])
-                : null;
-        }
-
+    getStates(): HassEntities {
         return cloneDeep(this.states);
+    }
+
+    getState(entityId: string): HassEntity | undefined {
+        return cloneDeep(this.states[entityId]);
     }
 
     getServices(): HassServices {

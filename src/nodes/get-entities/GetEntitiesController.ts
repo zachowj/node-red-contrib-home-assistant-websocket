@@ -149,14 +149,10 @@ export default class GetEntitiesController extends SendSplitController {
         conditions: Rule[],
         message: NodeMessage,
     ): Promise<HassEntity[]> {
+        const currentTime = Date.now();
         const filteredEntities: HassEntity[] = [];
         const states = this.#homeAssistant.websocket.getStates();
         const sortedConditions = sortConditions(conditions);
-        const entityRegistryMap = new Map(
-            this.#homeAssistant.websocket
-                .getEntities()
-                .map((e) => [e.entity_id, e]),
-        );
 
         for (const entityState of Object.values(states) as HassEntity[]) {
             this.#resetCurrent();
@@ -164,92 +160,18 @@ export default class GetEntitiesController extends SendSplitController {
             // TODO: Remove for version 1.0
             if (entityState?.last_changed) {
                 entityState.timeSinceChangedMs =
-                    Date.now() - new Date(entityState.last_changed).getTime();
+                    currentTime - new Date(entityState.last_changed).getTime();
             }
 
-            const entity = entityRegistryMap.get(entityState.entity_id);
+            const entity = this.#homeAssistant.websocket.getEntity(
+                entityState.entity_id,
+            );
 
-            const conditionChecks = sortedConditions.map(async (rule) => {
-                if (
-                    rule.condition === PropertySelectorType.State ||
-                    // If the condition is not set, it is a state condition
-                    rule.condition === undefined
-                ) {
-                    const value = selectn(rule.property, entityState);
-                    const result =
-                        await this.#comparatorService.getComparatorResult(
-                            rule.logic,
-                            rule.value,
-                            value,
-                            rule.valueType,
-                            {
-                                message,
-                                entity: entityState,
-                            },
-                        );
-
-                    if (
-                        (rule.logic !== TypedInputTypes.JSONata &&
-                            value === undefined) ||
-                        !result
-                    ) {
-                        return false;
-                    }
-                } else if (rule.condition === PropertySelectorType.Label) {
-                    if (!entity || !entity.labels.length) return false;
-
-                    const labelCheck = entity.labels.some(async (labelId) => {
-                        const label =
-                            this.#homeAssistant.websocket.getLabel(labelId);
-                        if (!label) {
-                            return false;
-                        }
-
-                        return simpleComparison(
-                            rule.logic as SimpleComparatorType,
-                            label[rule.property as keyof HassLabel] as string,
-                            await this.typedInputService.getValue(
-                                rule.value,
-                                rule.valueType as TypedInputTypes,
-                                { message, entity: entityState },
-                            ),
-                        );
-                    });
-
-                    if (!labelCheck) {
-                        return false;
-                    }
-                } else {
-                    const propertyValue = this.#getPropertyValue(
-                        rule.condition,
-                        rule.property,
-                        entity,
-                    );
-                    if (!propertyValue) return false;
-
-                    const result = simpleComparison(
-                        rule.logic as SimpleComparatorType,
-                        propertyValue,
-                        await this.typedInputService.getValue(
-                            rule.value,
-                            rule.valueType as TypedInputTypes,
-                            {
-                                message,
-                                entity: entityState,
-                            },
-                        ),
-                    );
-
-                    if (!result) {
-                        return false;
-                    }
-                }
-
-                return true;
-            });
-
-            const ruleMatched = (await Promise.all(conditionChecks)).every(
-                Boolean,
+            const ruleMatched = await this.#checkConditions(
+                sortedConditions,
+                entityState,
+                entity,
+                message,
             );
 
             if (ruleMatched && entityState) {
@@ -258,6 +180,111 @@ export default class GetEntitiesController extends SendSplitController {
         }
 
         return filteredEntities;
+    }
+
+    async #checkConditions(
+        conditions: Rule[],
+        entityState: HassEntity,
+        entity: HassEntityRegistryEntry | undefined,
+        message: NodeMessage,
+    ): Promise<boolean> {
+        for (const rule of conditions) {
+            if (
+                rule.condition === PropertySelectorType.State ||
+                // If the condition is not set, it is a state condition
+                rule.condition === undefined
+            ) {
+                const value = selectn(rule.property, entityState);
+                const result =
+                    await this.#comparatorService.getComparatorResult(
+                        rule.logic,
+                        rule.value,
+                        value,
+                        rule.valueType,
+                        {
+                            message,
+                            entity: entityState,
+                        },
+                    );
+
+                if (
+                    (rule.logic !== TypedInputTypes.JSONata &&
+                        value === undefined) ||
+                    !result
+                ) {
+                    return false;
+                }
+            } else if (rule.condition === PropertySelectorType.Label) {
+                if (!entity || !entity.labels.length) return false;
+
+                const labelCheck = await this.#checkLabelCondition(
+                    rule,
+                    entity,
+                    entityState,
+                    message,
+                );
+
+                if (!labelCheck) {
+                    return false;
+                }
+            } else {
+                const propertyValue = this.#getPropertyValue(
+                    rule.condition,
+                    rule.property,
+                    entity,
+                );
+                if (!propertyValue) return false;
+
+                const result = simpleComparison(
+                    rule.logic as SimpleComparatorType,
+                    propertyValue,
+                    await this.typedInputService.getValue(
+                        rule.value,
+                        rule.valueType as TypedInputTypes,
+                        {
+                            message,
+                            entity: entityState,
+                        },
+                    ),
+                );
+
+                if (!result) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    async #checkLabelCondition(
+        rule: Rule,
+        entity: HassEntityRegistryEntry,
+        entityState: HassEntity,
+        message: NodeMessage,
+    ): Promise<boolean> {
+        for (const labelId of entity.labels) {
+            const label = this.#homeAssistant.websocket.getLabel(labelId);
+            if (!label) {
+                continue;
+            }
+
+            const result = simpleComparison(
+                rule.logic as SimpleComparatorType,
+                label[rule.property as keyof HassLabel] as string,
+                await this.typedInputService.getValue(
+                    rule.value,
+                    rule.valueType as TypedInputTypes,
+                    { message, entity: entityState },
+                ),
+            );
+
+            if (result) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     #getPropertyValue(

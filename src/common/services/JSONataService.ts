@@ -69,7 +69,7 @@ export default class JSONataService {
         expr.assign('device', this.device.bind(this));
         expr.assign('entity', () => entity);
         expr.assign('entities', (val: string) => {
-            return this.#homeAssistant?.websocket?.getStates(val);
+            return this.#homeAssistant?.websocket?.getState(val);
         });
         expr.assign('outputData', (obj: string) => {
             if (!obj) {
@@ -115,7 +115,7 @@ export default class JSONataService {
      * @returns An array of devices associated with the area, or an empty array if the area does not exist or has no associated devices.
      */
     areaDevices(areaId: string): HassDevice[] {
-        const areas = this.#homeAssistant?.websocket?.getAreas(areaId);
+        const areas = this.#homeAssistant?.websocket?.getArea(areaId);
         const devicesInArea: HassDevice[] = [];
         if (areas) {
             const devices = this.#homeAssistant?.websocket?.getDevices();
@@ -143,31 +143,27 @@ export default class JSONataService {
      * @returns An array of entities associated with the area, or an empty array if the area does not exist or has no associated entities.
      */
     areaEntities(areaId: string): HassEntity[] {
-        const areas = this.#homeAssistant?.websocket?.getAreas(areaId);
+        const areas = this.#homeAssistant?.websocket?.getArea(areaId);
         const entitiesInArea: HassEntity[] = [];
         if (areas) {
-            const entityRegistry =
-                this.#homeAssistant?.websocket?.getEntities();
-            if (entityRegistry) {
-                const devices = this.#homeAssistant?.websocket?.getDevices();
-                entityRegistry.forEach((entry) => {
-                    const entity = this.#homeAssistant?.websocket?.getStates(
-                        entry.entity_id,
-                    );
-                    if (entity) {
-                        if (entry.area_id === areaId) {
+            const devices = this.#homeAssistant?.websocket?.getDevices();
+            this.#homeAssistant?.websocket?.getEntities().forEach((entry) => {
+                const entity = this.#homeAssistant?.websocket?.getState(
+                    entry.entity_id,
+                );
+                if (entity) {
+                    if (entry.area_id === areaId) {
+                        entitiesInArea.push(entity);
+                    } else {
+                        const device = devices?.find(
+                            (device) => device.id === entry.device_id,
+                        );
+                        if (device?.area_id === areaId) {
                             entitiesInArea.push(entity);
-                        } else {
-                            const device = devices?.find(
-                                (device) => device.id === entry.device_id,
-                            );
-                            if (device?.area_id === areaId) {
-                                entitiesInArea.push(entity);
-                            }
                         }
                     }
-                });
-            }
+                }
+            });
         }
 
         return entitiesInArea;
@@ -201,7 +197,7 @@ export default class JSONataService {
         }
 
         if (validEntityId(lookup)) {
-            const entity = this.#homeAssistant?.websocket?.getEntities(lookup);
+            const entity = this.#homeAssistant?.websocket?.getEntity(lookup);
 
             if (entity) {
                 // check if entity has area id and return area name
@@ -217,7 +213,7 @@ export default class JSONataService {
 
                 // check if entity has device id and return area name
                 if (entity.device_id) {
-                    const device = this.#homeAssistant?.websocket?.getDevices(
+                    const device = this.#homeAssistant?.websocket?.getDevice(
                         entity.device_id,
                     );
                     if (device) {
@@ -261,7 +257,7 @@ export default class JSONataService {
      * @returns The device associated with the entity or the device that matches the name, or undefined if the lookup value does not match any entity or device.
      */
     device(lookup: string): HassDevice | undefined {
-        const entities = this.#homeAssistant?.websocket?.getEntities(lookup);
+        const entities = this.#homeAssistant?.websocket?.getEntity(lookup);
         const devices = this.#homeAssistant?.websocket?.getDevices();
         if (entities) {
             if (devices) {
@@ -291,25 +287,19 @@ export default class JSONataService {
      * @returns An array of entities associated with the device, or an empty array if the device does not exist or has no associated entities.
      */
     deviceEntities(deviceId: string): HassEntity[] {
-        const devices = this.#homeAssistant?.websocket?.getDevices(deviceId);
-        let entities: HassEntity[] = [];
+        const devices = this.#homeAssistant?.websocket?.getDevice(deviceId);
+        const entities: HassEntity[] = [];
         if (devices) {
-            const entityRegistry =
-                this.#homeAssistant?.websocket?.getEntities();
-            if (entityRegistry) {
-                entities = entityRegistry.reduce((acc, entry) => {
-                    if (entry.device_id === deviceId) {
-                        const entity =
-                            this.#homeAssistant?.websocket?.getStates(
-                                entry.entity_id,
-                            );
-                        if (entity) {
-                            acc.push(entity);
-                        }
+            this.#homeAssistant?.websocket?.getEntities().forEach((entry) => {
+                if (entry.device_id === deviceId) {
+                    const entity = this.#homeAssistant?.websocket?.getState(
+                        entry.entity_id,
+                    );
+                    if (entity) {
+                        entities.push(entity);
                     }
-                    return acc;
-                }, [] as HassEntity[]);
-            }
+                }
+            });
         }
         return entities;
     }

@@ -51,7 +51,7 @@ export default class CurrentStateController extends InputOutputController<
             this.#homeAssistant.websocket.getStates(),
         );
 
-        const entity = this.#homeAssistant.websocket.getStates(
+        const entity = this.#homeAssistant.websocket.getState(
             entityId,
         ) as HassEntity;
         if (!entity) {

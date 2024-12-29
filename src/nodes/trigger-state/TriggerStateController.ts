@@ -157,7 +157,7 @@ export default class TriggerStateController extends ExposeAsController {
             : constraint.targetValue;
         const entity = isTargetThisEntity
             ? triggerEvent
-            : (this.homeAssistant.websocket.getStates(entityId) as HassEntity);
+            : (this.homeAssistant.websocket.getState(entityId) as HassEntity);
 
         if (entity === null) {
             throw new ConfigError([
@@ -178,7 +178,7 @@ export default class TriggerStateController extends ExposeAsController {
             targetData.state = {
                 entity_id: entityId,
                 old_state: null,
-                new_state: this.homeAssistant.websocket.getStates(
+                new_state: this.homeAssistant.websocket.getState(
                     entityId,
                 ) as HassEntity,
             };

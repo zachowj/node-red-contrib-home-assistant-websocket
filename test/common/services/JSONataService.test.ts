@@ -1,4 +1,4 @@
-import { HassEntities, HassEntity } from 'home-assistant-js-websocket';
+import { HassEntities } from 'home-assistant-js-websocket';
 import jsonata, { Expression } from 'jsonata';
 import { Node, NodeAPI, NodeMessage } from 'node-red';
 import {
@@ -213,13 +213,13 @@ describe('JSONata Service', function () {
                 vi.spyOn(
                     homeAssistantStub.websocket,
                     'getStates',
-                ).mockReturnValue(entities as unknown as HassEntity);
+                ).mockReturnValue(entities as unknown as HassEntities);
                 const result = await jsonataService.evaluate(`$entities()`);
                 expect(result).toEqual(entities);
             });
 
             it.skip('should return a single entity when passed an entitiy id', async function () {
-                homeAssistantStub.websocket.getStates
+                homeAssistantStub.websocket.getState
                     .calledWith('light.kitchen')
                     .mockReturnValue(entities['light.kitchen']);
                 const result = await jsonataService.evaluate(

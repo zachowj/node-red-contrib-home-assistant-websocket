@@ -54,7 +54,7 @@ export function getInvalidIds(
                 }
                 break;
             case IssueType.StateId:
-                if (!ha.websocket.getStates(id)) {
+                if (!ha.websocket.getState(id)) {
                     invalidIds.push(id);
                 }
                 break;

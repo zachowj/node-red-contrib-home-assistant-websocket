@@ -144,6 +144,8 @@ export interface HassEntityRegistryEntry {
     modified_at: number;
 }
 
+export type HassEntityRegistry = Map<string, HassEntityRegistryEntry>;
+
 export type SlimHassEntityRegistryEntry = Pick<
     HassEntityRegistryEntry,
     | 'area_id'

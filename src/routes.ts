@@ -150,8 +150,13 @@ function getEntities(req: CustomRequest, res: Response): void {
 
 function getStates(req: CustomRequest, res: Response): void {
     const entityId = req.query.entityId?.toString();
-    const states = req?.homeAssistant?.websocket.getStates(entityId);
-    res.json(states ?? []);
+    if (entityId === undefined) {
+        res.json(req?.homeAssistant?.websocket.getStates());
+        return;
+    }
+
+    const entity = req?.homeAssistant?.websocket.getState(entityId);
+    res.json(entity ?? []);
 }
 
 function getServices(req: CustomRequest, res: Response): void {
@@ -163,7 +168,9 @@ function getProperties(req: CustomRequest, res: Response): void {
     let flat: (string | string[])[] = [];
     const entityId = req.query.entityId?.toString();
 
-    const entity = req?.homeAssistant?.websocket.getStates(entityId);
+    const entity = entityId
+        ? req?.homeAssistant?.websocket.getState(entityId)
+        : req?.homeAssistant?.websocket.getStates();
 
     if (Array.isArray(entity)) {
         flat = Object.keys(flatten(entity)).filter(
@@ -200,10 +207,9 @@ async function getTags(req: CustomRequest, res: Response): Promise<void> {
     const tags = req.query.update
         ? await homeAssistant?.websocket.updateTagList()
         : homeAssistant?.getTags();
-    const entities = homeAssistant?.websocket.getEntities() ?? [];
 
-    tags?.map((t: HassTag) => {
-        const tagName = entities.find((e) => e.entity_id === t.id)?.name;
+    const mappedTags = tags?.map((t: HassTag) => {
+        const tagName = homeAssistant?.websocket.getEntity(t.id)?.name;
 
         return {
             id: t.id,
@@ -211,7 +217,7 @@ async function getTags(req: CustomRequest, res: Response): Promise<void> {
         };
     });
 
-    res.json(tags ?? []);
+    res.json(mappedTags ?? []);
 }
 
 async function getTranslations(

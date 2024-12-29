@@ -75,9 +75,7 @@ export default class TimeController extends ExposeAsController {
     }
 
     #getEntity() {
-        return this.homeAssistant.websocket.getStates(
-            this.node.config.entityId,
-        );
+        return this.homeAssistant.websocket.getState(this.node.config.entityId);
     }
 
     async #getOffset() {

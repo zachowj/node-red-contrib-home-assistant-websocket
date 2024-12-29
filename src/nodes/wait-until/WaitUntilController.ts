@@ -250,7 +250,7 @@ export default class WaitUntil extends InputOutputController<
                 async () => {
                     let state: HassEntity | undefined;
                     if (this.#isSingleEntitySelected()) {
-                        state = this.#homeAssistant.websocket.getStates(
+                        state = this.#homeAssistant.websocket.getState(
                             config.entities[IdSelectorType.Entity][0],
                         ) as HassEntity;
 
@@ -289,7 +289,7 @@ export default class WaitUntil extends InputOutputController<
         ) {
             const entityId = config.entities[IdSelectorType.Entity][0];
             const currentState =
-                this.#homeAssistant.websocket.getStates(entityId);
+                this.#homeAssistant.websocket.getState(entityId);
 
             if (!currentState) {
                 throw new InputError(

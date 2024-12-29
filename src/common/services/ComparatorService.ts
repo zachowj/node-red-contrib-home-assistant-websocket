@@ -122,7 +122,7 @@ export default class ComparatorService {
                 if (cValue === '') return false;
                 return actualValue?.startsWith(cValue);
             case 'in_group': {
-                const ent = this.#homeAssistant?.websocket.getStates(cValue);
+                const ent = this.#homeAssistant?.websocket.getState(cValue);
                 const groupEntities =
                     selectn('attributes.entity_id', ent) || [];
                 return groupEntities.includes(actualValue);

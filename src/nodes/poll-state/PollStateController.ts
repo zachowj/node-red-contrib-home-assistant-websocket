@@ -67,7 +67,7 @@ export default class PollStateController extends ExposeAsController {
             return;
         }
 
-        const entity = this.homeAssistant.websocket.getStates(
+        const entity = this.homeAssistant.websocket.getState(
             this.node.config.entityId,
         ) as HassEntity;
         if (!entity) {
