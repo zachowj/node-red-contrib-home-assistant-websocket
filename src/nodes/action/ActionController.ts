@@ -45,7 +45,7 @@ export default class ActionController extends InputOutputController<
             states,
         );
 
-        let action: string = parsedMessage.action.value.toLowerCase();
+        let action: string = parsedMessage.action.value;
         // TODO: Remove in version 1.0
         if (parsedMessage.action.source === DataSource.Transformed) {
             if (!this.#hasDeprecatedWarned) {
