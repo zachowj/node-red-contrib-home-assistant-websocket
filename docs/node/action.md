@@ -3,7 +3,7 @@
 This node allows you to send a request to Home Assistant to perform specific actions. These actions could include tasks such as turning on a light (`light.turn_on`), selecting an option from a dropdown menu (`input_select.select_option`), or any other service call supported by Home Assistant. It serves as a bridge between Node-RED and Home Assistant, enabling automation flows to directly control devices or entities in your smart home setup.
 
 ::: tip Helpful Examples
-[Action Tips and Tricks](../guide/action.html)
+[Action Tips and Tricks](/guide/action.md)
 :::
 
 ## Configuration
@@ -11,21 +11,21 @@ This node allows you to send a request to Home Assistant to perform specific act
 ### Action <Badge text="required"/>
 
 - Type: `string`
-- Accepts [Mustache Templates](../guide/mustache-templates.md)
+- Accepts [Mustache Templates](/guide/mustache-templates.md)
 
 Action to perform
 
 ### Floor
 
 - Type: `an array of floor ids`
-- Accepts [Mustache Templates](../guide/mustache-templates.md) for ids
+- Accepts [Mustache Templates](/guide/mustache-templates.md) for ids
 
 A list of floor ids that will be used as targets for the action
 
 ### Area
 
 - Type: `an array of area ids`
-- Accepts [Mustache Templates](../guide/mustache-templates.md) for ids
+- Accepts [Mustache Templates](/guide/mustache-templates.md) for ids
 
 A list of area ids that will be used as targets for the action
 
@@ -34,7 +34,7 @@ Custom ids can be inserted into the list by adding a `#` at the end of the id
 ### Device
 
 - Type: `an array of device ids`
-- Accepts [Mustache Templates](../guide/mustache-templates.md) for ids
+- Accepts [Mustache Templates](/guide/mustache-templates.md) for ids
 
 A list of device ids that will be used as targets for the action
 
@@ -43,21 +43,21 @@ Custom ids can be inserted into the list by adding a `#` at the end of the id
 ### Entity
 
 - Type: `an array of entity ids`
-- Accepts [Mustache Templates](../guide/mustache-templates.md) for ids
+- Accepts [Mustache Templates](/guide/mustache-templates.md) for ids
 
 A list of entity ids that will be used as targets for the action
 
 ### Label
 
 - Type: `an array of label ids`
-- Accepts [Mustache Templates](../guide/mustache-templates.md) for ids
+- Accepts [Mustache Templates](/guide/mustache-templates.md) for ids
 
 A list of label ids that will be used as targets for the action
 
 ### Data
 
 - Type: `JSONata | JSON`
-- Accepts [Mustache Templates](../guide/mustache-templates.md) when data type is JSON
+- Accepts [Mustache Templates](/guide/mustache-templates.md) when data type is JSON
 
 JSON object to pass along.
 

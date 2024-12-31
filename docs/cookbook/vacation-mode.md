@@ -38,7 +38,7 @@ hours.
 
 **Also See**
 
-- [Actionable notifactions subflow for android](./actionable-notifications-subflow-for-android.html)
+- [Actionable notifactions subflow for android](./actionable-notifications-subflow-for-android.md)
 
 ## Step 3
 

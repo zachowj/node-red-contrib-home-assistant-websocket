@@ -168,6 +168,7 @@ Information about who or what last changed the state of this entity.
 </InfoPanelOnly>
 
 <DocsOnly>
+
 ### Example 1
 
 Get a notification when you leave if any doors or windows are left open. Use the `get entities` node to get a list of entity IDs (e.g., `binary_sensor.front_door`, `binary_sensor.back_door`, `binary_sensor.front_window`, `binary_sensor.back_window`) where the state is `open`. The entities are returned with the output `Split`, sending a message for each valid entity. A template node can then format the payload into the entity's friendly name, and the messages can be joined back into one payload using the `join` node.
