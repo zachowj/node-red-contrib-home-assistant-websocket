@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.75.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.74.2...v0.75.0) (2024-12-31)
+
+
+### Features
+
+* **sensor:** add new device classes and units of measurement for area, blood glucose concentration, conductivity, potential hydrogen, and volume flow rate ([0e621aa](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/0e621aac6135252f6ff5ef59b3c05defb97b59a4)), closes [#1710](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1710)
+
+
+### Bug Fixes
+
+* **action:** remove unnecessary toLowerCase conversion for action value ([64a200e](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/64a200e946ce9563d811a031940cd9276c860fc4)), closes [#1697](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1697)
+* **get-entities:** simplify label checks and improve entity label matching logic ([da3c15a](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/da3c15a49a9fb30cd54ba701d5a23b36242d3a83)), closes [#1686](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1686)
+* update node type check in issueCheck function to GetHistory ([1c80b72](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/1c80b72478ffa4c3e7e65b3be7bcb277a9fbad4b))
+
 ## [0.74.2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.74.1...v0.74.2) (2024-10-24)
 
 
