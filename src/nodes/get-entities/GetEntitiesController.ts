@@ -215,7 +215,7 @@ export default class GetEntitiesController extends SendSplitController {
                     return false;
                 }
             } else if (rule.condition === PropertySelectorType.Label) {
-                if (!entity || !entity.labels.length) return false;
+                if (!entity) return false;
 
                 const labelCheck = await this.#checkLabelCondition(
                     rule,
@@ -263,25 +263,52 @@ export default class GetEntitiesController extends SendSplitController {
         entityState: HassEntity,
         message: NodeMessage,
     ): Promise<boolean> {
-        for (const labelId of entity.labels) {
-            const label = this.#homeAssistant.websocket.getLabel(labelId);
-            if (!label) {
-                continue;
+        const value = await this.typedInputService.getValue(
+            rule.value,
+            rule.valueType as TypedInputTypes,
+            { message, entity: entityState },
+        );
+
+        const hasMatchingLabel = (labelIds: string[] | undefined): boolean => {
+            if (!labelIds) return false;
+
+            for (const labelId of labelIds) {
+                const label = this.#homeAssistant.websocket.getLabel(labelId);
+                if (!label) continue;
+
+                const result = simpleComparison(
+                    rule.logic as SimpleComparatorType,
+                    label[rule.property as keyof HassLabel] as string,
+                    value,
+                );
+
+                if (result) return true;
             }
 
-            const result = simpleComparison(
-                rule.logic as SimpleComparatorType,
-                label[rule.property as keyof HassLabel] as string,
-                await this.typedInputService.getValue(
-                    rule.value,
-                    rule.valueType as TypedInputTypes,
-                    { message, entity: entityState },
-                ),
-            );
+            return false;
+        };
 
-            if (result) {
-                return true;
+        // Check entity labels
+        if (hasMatchingLabel(entity.labels)) return true;
+
+        // Check device labels
+        if (entity.device_id) {
+            const device = this.#getDevice(entity);
+            if (device && hasMatchingLabel(device.labels)) return true;
+
+            // Check device area labels
+            if (device?.area_id) {
+                const area = this.#homeAssistant.websocket.getArea(
+                    device.area_id,
+                );
+                if (area && hasMatchingLabel(area.labels)) return true;
             }
+        }
+
+        // Check entity area labels
+        if (entity.area_id) {
+            const area = this.#getArea(entity);
+            if (area && hasMatchingLabel(area.labels)) return true;
         }
 
         return false;
