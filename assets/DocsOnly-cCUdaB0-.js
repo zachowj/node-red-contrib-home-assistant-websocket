@@ -1,0 +1,1 @@
+import{_ as o,o as s,c,f as n}from"./app-yjRbSv4S.js";const t={},r={class:"docs-only"};function l(e,_){return s(),c("div",r,[n(e.$slots,"default")])}const f=o(t,[["render",l],["__file","DocsOnly.vue"]]);export{f as default};
