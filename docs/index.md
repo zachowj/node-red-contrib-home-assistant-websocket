@@ -1,6 +1,6 @@
 ---
 home: true
-heroImage: null
+heroImage: /hero.png
 heroText: Home Assistant nodes for Node-RED
 tagline: A suite of nodes that seamlessly integrates Home Assistant with Node-RED.
 actions:

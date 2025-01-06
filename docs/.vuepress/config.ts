@@ -16,7 +16,24 @@ export default defineUserConfig({
     title: 'node-red-contrib-home-assistant-websocket',
     description:
         'A suite of nodes that seamlessly integrates Home Assistant with Node-RED',
-    head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
+    head: [
+        [
+            'link',
+            {
+                rel: 'icon',
+                href: '/node-red-contrib-home-assistant-websocket/favicon.ico',
+                size: '32x32',
+            },
+        ],
+        [
+            'link',
+            {
+                rel: 'icon',
+                href: '/node-red-contrib-home-assistant-websocket/icon.svg',
+                type: 'image/svg+xml',
+            },
+        ],
+    ],
     plugins: [
         googleAnalyticsPlugin({ id: 'G-T0F3RKFVF3' }),
         copyCodePlugin(),
@@ -44,6 +61,7 @@ export default defineUserConfig({
         docsBranch: 'main',
         // editLinks: true,
         editLinkText: 'Help us improve this page!',
+        logo: '/logo-256.png',
         navbar: [
             { text: 'Guides', link: '/guide/' },
             { text: 'Nodes', link: '/node/' },
