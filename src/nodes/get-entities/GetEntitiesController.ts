@@ -154,7 +154,11 @@ export default class GetEntitiesController extends SendSplitController {
         const states = this.#homeAssistant.websocket.getStates();
         const sortedConditions = sortConditions(conditions);
 
-        for (const entityState of Object.values(states) as HassEntity[]) {
+        const stateKeys = Object.keys(states);
+        for (let i = 0; i < stateKeys.length; i++) {
+            const entityStateId = stateKeys[i];
+            const entityState = states[entityStateId] as HassEntity;
+
             this.#resetCurrent();
 
             // TODO: Remove for version 1.0
@@ -188,7 +192,8 @@ export default class GetEntitiesController extends SendSplitController {
         entity: HassEntityRegistryEntry | undefined,
         message: NodeMessage,
     ): Promise<boolean> {
-        for (const rule of conditions) {
+        for (let i = 0; i < conditions.length; i++) {
+            const rule = conditions[i];
             if (
                 rule.condition === PropertySelectorType.State ||
                 // If the condition is not set, it is a state condition
@@ -292,24 +297,12 @@ export default class GetEntitiesController extends SendSplitController {
         if (hasMatchingLabel(entity.labels)) return true;
 
         // Check device labels
-        if (entity.device_id) {
-            const device = this.#getDevice(entity);
-            if (device && hasMatchingLabel(device.labels)) return true;
+        const device = this.#getDevice(entity);
+        if (hasMatchingLabel(device?.labels)) return true;
 
-            // Check device area labels
-            if (device?.area_id) {
-                const area = this.#homeAssistant.websocket.getArea(
-                    device.area_id,
-                );
-                if (area && hasMatchingLabel(area.labels)) return true;
-            }
-        }
-
-        // Check entity area labels
-        if (entity.area_id) {
-            const area = this.#getArea(entity);
-            if (area && hasMatchingLabel(area.labels)) return true;
-        }
+        // Check area labels
+        const area = this.#getArea(entity);
+        if (hasMatchingLabel(area?.labels)) return true;
 
         return false;
     }
