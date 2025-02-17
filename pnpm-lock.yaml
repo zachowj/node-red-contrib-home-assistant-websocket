@@ -109,8 +109,8 @@ importers:
         specifier: 7.0.0
         version: 7.0.0
       '@types/ws':
-        specifier: 8.5.13
-        version: 8.5.13
+        specifier: 8.5.14
+        version: 8.5.14
       '@typescript-eslint/eslint-plugin':
         specifier: ^7.18.0
         version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1)(typescript@5.6.3)
@@ -1183,8 +1183,8 @@ packages:
   '@types/web-bluetooth@0.0.20':
     resolution: {integrity: sha512-g9gZnnXVq7gM7v3tJCWV/qw7w+KeOlSHAhgF9RytFyifW6AF61hdT2ucrYhPq9hLs5JIryeupHV3qGk95dH9ow==}
 
-  '@types/ws@8.5.13':
-    resolution: {integrity: sha512-osM/gWBTPKgHV8XkTunnegTRIsvF6owmf5w+JtAfOw472dptdm0dlGv4xCt6GwQRcC2XVOvvRE/0bAoQcL2QkA==}
+  '@types/ws@8.5.14':
+    resolution: {integrity: sha512-bd/YFLW+URhBzMXurx7lWByOu+xzU9+kb3RboOteXYDfW+tr+JZa99OyNmPINEGB/ahzKrEuc8rcv4gnpJmxTw==}
 
   '@typescript-eslint/eslint-plugin@7.18.0':
     resolution: {integrity: sha512-94EQTWZ40mzBc42ATNIBimBEDltSJ9RQHCC8vc/PDbxi4k8dVwUAv4o98dk50M1zB+JGFxp43FP7f8+FP8R6Sw==}
@@ -6686,7 +6686,7 @@ snapshots:
 
   '@types/web-bluetooth@0.0.20': {}
 
-  '@types/ws@8.5.13':
+  '@types/ws@8.5.14':
     dependencies:
       '@types/node': 18.19.54
 
@@ -10001,7 +10001,7 @@ snapshots:
   mqtt@5.7.0:
     dependencies:
       '@types/readable-stream': 4.0.15
-      '@types/ws': 8.5.13
+      '@types/ws': 8.5.14
       commist: 3.2.0
       concat-stream: 2.0.0
       debug: 4.3.7(supports-color@5.5.0)
