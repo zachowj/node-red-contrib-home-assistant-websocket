@@ -48,7 +48,7 @@
     "bonjour": "3.5.0",
     "compare-versions": "6.1.1",
     "cronosjs": "^1.7.1",
-    "debug": "4.3.7",
+    "debug": "4.4.0",
     "flat": "^5.0.2",
     "geolib": "3.3.4",
     "home-assistant-js-websocket": "9.4.0",
