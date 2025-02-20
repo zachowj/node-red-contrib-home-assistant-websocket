@@ -47,10 +47,26 @@ class Storage {
 
         try {
             fs.accessSync(path, fs.constants.R_OK | fs.constants.W_OK);
-        } catch (err) {
-            throw new Error(
-                'Cannot read/write to storage file for Home Assistant nodes',
-            );
+        } catch (errFirst) {
+            // Actually test if there's no permissions, for NFS environments
+            // See: https://github.com/nodejs/node/issues/28656
+            const dateTime = new Date().getTime();
+            const filePath = `${path}/tmp_${dateTime}.test`;
+            try {
+                const content = `NodeRed ${PACKAGE_NAME} ${dateTime}`;
+
+                fs.writeFileSync(filePath, content);
+                const readContent = fs.readFileSync(filePath, 'utf8');
+                if (readContent !== content) {
+                    throw new Error('Content mismatch');
+                }
+                fs.unlinkSync(filePath);
+            } catch (err) {
+                console.error({ filePath }, err);
+                throw new Error(
+                    `Cannot read/write to storage file for Home Assistant nodes`,
+                );
+            }
         }
 
         return true;
