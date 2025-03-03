@@ -59,7 +59,7 @@
     "selectn": "1.1.2",
     "slugify": "1.6.6",
     "timestring": "7.0.0",
-    "ws": "8.18.0"
+    "ws": "8.18.1"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "12.1.2",

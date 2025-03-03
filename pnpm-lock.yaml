@@ -54,8 +54,8 @@ importers:
         specifier: 7.0.0
         version: 7.0.0
       ws:
-        specifier: 8.18.0
-        version: 8.18.0
+        specifier: 8.18.1
+        version: 8.18.1
     devDependencies:
       '@rollup/plugin-typescript':
         specifier: 12.1.2
@@ -5884,8 +5884,8 @@ packages:
       utf-8-validate:
         optional: true
 
-  ws@8.18.0:
-    resolution: {integrity: sha512-8VbfWfHLbbwu3+N6OKsOMpBdT4kXPDDB9cJk2bJ6mh9ucxdlnNvH1e+roYkKmN9Nxw2yjz7VzeO9oOz2zJ04Pw==}
+  ws@8.18.1:
+    resolution: {integrity: sha512-RKW2aJZMXeMxVpnZ6bck+RswznaxmzdULiBr6KY7XkTnW8uvt0iT9H5DkHUChXrc+uurzwa0rVI16n/Xzjdz1w==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       bufferutil: ^4.0.1
@@ -10268,7 +10268,7 @@ snapshots:
       rfdc: 1.4.1
       split2: 4.2.0
       worker-timers: 7.1.8
-      ws: 8.18.0
+      ws: 8.18.1
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -12180,7 +12180,7 @@ snapshots:
 
   ws@8.11.0: {}
 
-  ws@8.18.0: {}
+  ws@8.18.1: {}
 
   xml2js@0.6.2:
     dependencies:
