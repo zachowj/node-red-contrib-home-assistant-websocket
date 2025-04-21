@@ -44,7 +44,7 @@
     }
   },
   "dependencies": {
-    "axios": "1.8.3",
+    "axios": "1.8.4",
     "bonjour": "3.5.0",
     "compare-versions": "6.1.1",
     "cronosjs": "^1.7.1",
