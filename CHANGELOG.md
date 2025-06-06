@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.76.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.75.0...v0.76.0) (2025-06-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* Updated the minimum required Home Assistant version to 2024.3.0 in the README to ensure compatibility with the label and floor registries introduced in this version. This update should have been made with the release of version 0.66.0.
+
+### Features
+
+* **sensor:** add 'ms' and 'µs' to duration units ([0dbb5f9](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/0dbb5f9d3643b45f2fac4a2d8e58998d5ea9bc90))
+
+
+### Documentation
+
+* update Home Assistant version requirement to v2024.3 ([9b8ac19](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/9b8ac19687179ba2959ef97e656b322c79028132)), closes [#1707](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1707)
+
 ## [0.75.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.74.2...v0.75.0) (2024-12-31)
 
 
