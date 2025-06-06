@@ -119,7 +119,7 @@ export const sensorUnitOfMeasurement: Record<
     ],
     date: null,
     distance: ['km', 'm', 'cm', 'mm', 'mi', 'yd', 'in'],
-    duration: ['d', 'h', 'min', 's'],
+    duration: ['d', 'h', 'min', 's', 'ms', 'µs'],
     energy: ['Wh', 'kWh', 'MWh', 'GJ'],
     energy_storage: ['Wh', 'kWh', 'MWh', 'MJ', 'GJ'],
     enum: null,
