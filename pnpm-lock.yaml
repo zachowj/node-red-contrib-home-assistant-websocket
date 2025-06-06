@@ -217,8 +217,8 @@ importers:
         specifier: 10.0.0
         version: 10.0.0(postcss@8.5.3)
       gulp-sass:
-        specifier: 5.1.0
-        version: 5.1.0
+        specifier: 6.0.1
+        version: 6.0.1
       gulp-terser:
         specifier: 2.1.0
         version: 2.1.0
@@ -3243,8 +3243,8 @@ packages:
     peerDependencies:
       postcss: ^8.0.0
 
-  gulp-sass@5.1.0:
-    resolution: {integrity: sha512-7VT0uaF+VZCmkNBglfe1b34bxn/AfcssquLKVDYnCDJ3xNBaW7cUuI3p3BQmoKcoKFrs9jdzUxyb+u+NGfL4OQ==}
+  gulp-sass@6.0.1:
+    resolution: {integrity: sha512-4wonidxB8lGPHvahelpGavUBJAuERSl+OIVxPCyQthK4lSJhZ/u3/qjFcyAtnMIXDl6fXTn34H4BXsN7gt54kQ==}
     engines: {node: '>=12'}
 
   gulp-terser@2.1.0:
@@ -9398,10 +9398,10 @@ snapshots:
     transitivePeerDependencies:
       - jiti
 
-  gulp-sass@5.1.0:
+  gulp-sass@6.0.1:
     dependencies:
       lodash.clonedeep: 4.5.0
-      picocolors: 1.0.1
+      picocolors: 1.1.1
       plugin-error: 1.0.1
       replace-ext: 2.0.0
       strip-ansi: 6.0.1
