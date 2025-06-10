@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.77.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.76.0...v0.77.0) (2025-06-10)
+
+
+### Features
+
+* **sensor:** Add mm/s and in/s in speed ([5eb85c1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/5eb85c17ac00457f4ec75393823bddb1bc6b9ce6))
+
 ## [0.76.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.75.0...v0.76.0) (2025-06-06)
 
 
