@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.77.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.77.0...v0.77.1) (2025-06-20)
+
+
+### Bug Fixes
+
+* **JSONataService:** return all cached entity states when $entities() is called without args ([3067f45](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/3067f45e840f1f0cbc2b3c4691af095ee54c4172)), closes [#1820](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1820)
+
 ## [0.77.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.76.0...v0.77.0) (2025-06-10)
 
 
