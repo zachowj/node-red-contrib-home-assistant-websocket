@@ -1,21 +1,38 @@
 #red-ui-header li.ha-notification {
-    align-items: center;
-    justify-content: center;
+    display: inline-block;
+    height: 100%;
     padding: 0 10px;
+    vertical-align: middle;
 
-    div {
+    svg {
+        vertical-align: middle;
+        display: inline-block;
+        line-height: 1;
+    }
+
+    #notification-issues {
+        display: inline-block;
         color: var(--red-ui-text-color-warning);
         cursor: pointer;
-        padding-left: 5px;
-        align-self: end;
-        
-        span {
-            font-size: 25px;
+        padding-left: 0.3125rem;
+
+        &:hover {
+            color: var(--red-ui-debug-message-border-warning);
+        }
+
+        .ha-issue-count {
+            font-size: 1.5rem;
+            vertical-align: middle;
+            display: inline-block;
+            line-height: 1;
         }
 
         i {
-            font-size: 20px;
+            font-size: 1.25rem;
+            vertical-align: middle;
+            display: inline-block;
+            line-height: 1;
+            padding-top: 0.125rem;
         }
-
     }
 }
