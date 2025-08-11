@@ -33,7 +33,7 @@ jobs:
 
     name: Tests (Node ${{ matrix.node-version }} - node-red ${{ matrix.node-red-version }})
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install pnpm
         uses: pnpm/action-setup@v4
       - name: Use Node.js ${{ matrix.node-version }}
@@ -71,7 +71,7 @@ jobs:
     if: ${{ needs.release-please.outputs.release_created }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install pnpm
         uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
