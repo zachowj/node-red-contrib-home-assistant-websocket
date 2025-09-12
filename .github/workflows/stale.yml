@@ -16,7 +16,7 @@ jobs:
       issues: write
 
     steps:
-      - uses: actions/stale@v9
+      - uses: actions/stale@v10
         with:
           any-of-issue-labels: "waiting-for-response"
           days-before-issue-stale: 30
