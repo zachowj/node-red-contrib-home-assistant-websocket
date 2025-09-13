@@ -8,7 +8,7 @@ import InputOutputController, {
 } from '../../common/controllers/InputOutputController';
 import SendSplitMixin from '../../common/controllers/SendSplitMixin';
 import ComparatorService from '../../common/services/ComparatorService';
-import { TypedInputTypes } from '../../const';
+import { ComparatorType, TypedInputTypes } from '../../const';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
 import {
     HassArea,
@@ -23,7 +23,7 @@ import { NodeMessage } from '../../types/nodes';
 import { GetEntitiesNode, GetEntitiesNodeProperties } from '.';
 import { OutputType } from './const';
 import { sortConditions } from './helpers';
-import { SimpleComparatorType, simpleComparison } from './operators';
+import { simpleComparison } from './operators';
 import { Rule } from './types';
 
 interface GetEntitiesControllerConstructor
@@ -241,7 +241,7 @@ export default class GetEntitiesController extends SendSplitController {
                 if (!propertyValue) return false;
 
                 const result = simpleComparison(
-                    rule.logic as SimpleComparatorType,
+                    rule.logic as ComparatorType,
                     propertyValue,
                     await this.typedInputService.getValue(
                         rule.value,
@@ -282,7 +282,7 @@ export default class GetEntitiesController extends SendSplitController {
                 if (!label) continue;
 
                 const result = simpleComparison(
-                    rule.logic as SimpleComparatorType,
+                    rule.logic as ComparatorType,
                     label[rule.property as keyof HassLabel] as string,
                     value,
                 );

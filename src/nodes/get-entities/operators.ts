@@ -1,104 +1,128 @@
 import { ComparatorType } from '../../const';
 import { isBoolean, isString } from '../../helpers/assert';
 
-type Comparator = (a: unknown, b?: unknown, c?: unknown) => boolean;
-export type SimpleComparatorType =
-    | ComparatorType.Is
-    | ComparatorType.IsNot
-    | ComparatorType.Contains
-    | ComparatorType.DoesNotContain
-    | ComparatorType.Includes
-    | ComparatorType.DoesNotInclude
-    | ComparatorType.StartsWith
-    | ComparatorType.IsNull
-    | ComparatorType.IsNotNull
-    | ComparatorType.IsTrue
-    | ComparatorType.IsFalse
-    | ComparatorType.Regex;
-
-function isEqual(a: unknown, b: unknown): boolean {
-    // eslint-disable-next-line eqeqeq
-    return a == b;
-}
-
-function isNotEqual(a: unknown, b: unknown): boolean {
-    // eslint-disable-next-line eqeqeq
-    return a != b;
-}
-
-function contains(a: unknown, b: unknown): boolean {
-    if (!Array.isArray(a) || !isString(b)) {
-        return false;
-    }
-    return a.includes(b);
-}
-
-function doesNotContain(a: unknown, b: unknown): boolean {
-    return !operators[ComparatorType.Contains](a, b);
-}
-
-function includes(a: unknown, b: unknown): boolean {
-    if (!isString(a) || !isString(b)) {
-        return false;
-    }
-    const list = b.split(',').map((item) => item.trim());
-    return list.includes(a);
-}
-
-function doesNotInclude(a: unknown, b: unknown): boolean {
-    return !operators[ComparatorType.Includes](a, b);
-}
-
-function startsWith(a: unknown, b: unknown): boolean {
-    if (!isString(a) || !isString(b)) {
-        return false;
-    }
-    return a.startsWith(b);
-}
-
-function isNull(a: unknown): boolean {
-    return a === null;
-}
-
-function isNotNull(a: unknown): boolean {
-    return a !== null;
-}
-
-function isTrue(a: unknown): boolean {
-    return a === true;
-}
-
-function isFalse(a: unknown): boolean {
-    return a === false;
-}
-
-function regex(a: unknown, b: unknown, c: unknown): boolean {
-    if (!isString(a) || !isString(b) || !isBoolean(c)) {
-        return false;
-    }
-    return new RegExp(b, c ? 'i' : '').test(a);
-}
-
-const operators: Record<SimpleComparatorType, Comparator> = {
-    [ComparatorType.Is]: isEqual,
-    [ComparatorType.IsNot]: isNotEqual,
-    [ComparatorType.Contains]: contains,
-    [ComparatorType.DoesNotContain]: doesNotContain,
-    [ComparatorType.Includes]: includes,
-    [ComparatorType.DoesNotInclude]: doesNotInclude,
-    [ComparatorType.StartsWith]: startsWith,
-    [ComparatorType.IsNull]: isNull,
-    [ComparatorType.IsNotNull]: isNotNull,
-    [ComparatorType.IsTrue]: isTrue,
-    [ComparatorType.IsFalse]: isFalse,
-    [ComparatorType.Regex]: regex,
-} as const;
-
 export function simpleComparison(
-    operator: SimpleComparatorType,
+    operator: ComparatorType,
     a: unknown,
     b?: unknown,
     c?: unknown,
 ): boolean {
-    return operators[operator](a, b, c);
+    switch (operator) {
+        /**
+         * Compares two values for equality using loose comparison (`==`).
+         *
+         * @param a - The first value to compare.
+         * @param b - The second value to compare.
+         * @returns `true` if the values are loosely equal, otherwise `false`.
+         */
+        case ComparatorType.Is:
+            return a === b;
+
+        /**
+         * Determines whether two values are not equal using loose inequality (`!=`).
+         *
+         * @param a - The first value to compare.
+         * @param b - The second value to compare.
+         * @returns `true` if the values are not equal (using loose comparison), otherwise `false`.
+         */
+        case ComparatorType.IsNot:
+            return a !== b;
+
+        /**
+         * Determines whether the array `a` contains the element `b`.
+         *
+         * @param a - The array to search within. If not an array, the function returns `false`.
+         * @param b - The element to search for in the array `a`.
+         * @returns `true` if `a` is an array and contains `b`, otherwise `false`.
+         */
+        case ComparatorType.Contains:
+            return Array.isArray(a) && a.includes(b);
+
+        /**
+         * Determines whether the first value does not contain the second value.
+         * Internally, this negates the result of the 'Contains' comparator.
+         *
+         * @param a - The value to be checked for containment.
+         * @param b - The value to check for within 'a'.
+         * @returns True if 'a' does not contain 'b'; otherwise, false.
+         */
+        case ComparatorType.DoesNotContain:
+            return Array.isArray(a) && !a.includes(b);
+
+        /**
+         * Determines if the string `a` is included in the comma-separated list represented by string `b`.
+         *
+         * Both `a` and `b` must be strings; otherwise, the function returns `false`.
+         * The function splits `b` by commas, trims whitespace from each item, and checks if `a` matches any item.
+         *
+         * @param a - The value to search for in the list.
+         * @param b - A comma-separated string representing the list of possible values.
+         * @returns `true` if `a` is found in the list derived from `b`, otherwise `false`.
+         */
+        case ComparatorType.Includes:
+            return (
+                isString(a) &&
+                isString(b) &&
+                b
+                    .split(',')
+                    .map((s) => s.trim())
+                    .includes(a)
+            );
+
+        /**
+         * Determines whether the first value does not include the second value.
+         * This is the logical negation of the 'includes' comparator.
+         *
+         * @param a - The value to be checked for inclusion.
+         * @param b - The value to check for within `a`.
+         * @returns `true` if `a` does not include `b`, otherwise `false`.
+         */
+        case ComparatorType.DoesNotInclude:
+            return (
+                isString(a) &&
+                isString(b) &&
+                !b
+                    .split(',')
+                    .map((s) => s.trim())
+                    .includes(a)
+            );
+
+        /* Checks if a string starts with another string.
+         * a is the string to check
+         * b is the prefix to check
+         */
+        case ComparatorType.StartsWith:
+            return isString(a) && isString(b) && a.startsWith(b);
+
+        case ComparatorType.IsNull:
+            return a === null;
+
+        case ComparatorType.IsNotNull:
+            return a !== null;
+
+        case ComparatorType.IsTrue:
+            return a === true;
+
+        case ComparatorType.IsFalse:
+            return a === false;
+
+        /**
+         * Tests whether a given string matches a regular expression pattern.
+         *
+         * @param a - The string to test against the regular expression.
+         * @param b - The regular expression pattern as a string.
+         * @param c - If true, the regular expression is case-insensitive.
+         * @returns `true` if `a` matches the pattern `b` (with optional case-insensitivity), otherwise `false`.
+         */
+        case ComparatorType.Regex:
+            return (
+                isString(a) &&
+                isString(b) &&
+                isBoolean(c) &&
+                new RegExp(b, c ? 'i' : '').test(a)
+            );
+
+        default:
+            throw new Error(`Unknown comparator type: ${operator}`);
+    }
 }
