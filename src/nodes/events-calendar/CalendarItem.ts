@@ -1,4 +1,5 @@
-import { DateOrDateTime, toDate } from './helpers';
+import { CalendarEventType, DateOrDateTime } from './const';
+import { toDate } from './helpers';
 
 export interface ICalendarItem {
     start: DateOrDateTime;
@@ -32,7 +33,9 @@ export class CalendarItem implements ICalendarItem {
     }
 
     date(eventType: string): Date {
-        return eventType === 'start' ? toDate(this.start) : toDate(this.end);
+        return eventType === CalendarEventType.Start
+            ? toDate(this.start)
+            : toDate(this.end);
     }
 }
 

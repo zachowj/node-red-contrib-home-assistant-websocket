@@ -1,6 +1,6 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
-import { EntityType, NodeType, TypedInputTypes } from '../../const';
+import { EntityType, NodeType, TimeUnit, TypedInputTypes } from '../../const';
 import { hassAutocomplete } from '../../editor/components/hassAutocomplete';
 import * as haOutputs from '../../editor/components/output-properties';
 import * as exposeNode from '../../editor/exposenode';
@@ -9,6 +9,7 @@ import * as haServer from '../../editor/haserver';
 import { insertSocialBar } from '../../editor/socialbar';
 import { OutputProperty } from '../../editor/types';
 import { saveEntityType } from '../entity-config/editor/helpers';
+import { CalendarEventType } from './const';
 
 declare const RED: EditorRED;
 
@@ -52,11 +53,11 @@ const EventsCalendarEditor: EditorNodeDef<EventsCalendarEditorNodeProperties> =
             },
             entityId: { value: '', required: true },
             filter: { value: '' },
-            filterType: { value: 'str', required: true },
-            eventType: { value: 'start', required: true },
+            filterType: { value: TypedInputTypes.String, required: true },
+            eventType: { value: CalendarEventType.Start, required: true },
             offset: { value: 0, required: true },
-            offsetType: { value: 'num', required: true },
-            offsetUnits: { value: 'minutes', required: true },
+            offsetType: { value: TypedInputTypes.Number, required: true },
+            offsetUnits: { value: TimeUnit.Minutes, required: true },
             outputProperties: {
                 value: [
                     {
@@ -82,13 +83,13 @@ const EventsCalendarEditor: EditorNodeDef<EventsCalendarEditorNodeProperties> =
             });
 
             $('#node-input-offset').typedInput({
-                default: 'num',
-                types: ['num', 'jsonata'],
+                default: TypedInputTypes.Number,
+                types: [TypedInputTypes.Number, TypedInputTypes.JSONata],
                 typeField: '#node-input-offsetType',
             });
 
             $('#node-input-filter').typedInput({
-                types: ['str', 'jsonata'],
+                types: [TypedInputTypes.String, TypedInputTypes.JSONata],
                 typeField: '#node-input-filterType',
             });
 

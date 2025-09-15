@@ -1,14 +1,4 @@
-// Define type aliases
-type WithDateTime = {
-    dateTime: string;
-};
-
-type WithDate = {
-    date: string;
-};
-
-// Create a union type
-export type DateOrDateTime = WithDateTime | WithDate;
+import { DateOrDateTime, WithDate, WithDateTime } from './const';
 
 // Type guard for WithDateTime
 function isWithDateTime(obj: any): obj is WithDateTime {
