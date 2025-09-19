@@ -2,6 +2,67 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.78.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.77.2...v0.78.0) (2025-09-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* **calendar:** CalendarItem start and end are now stored as local ISO 8601 strings with timezone offsets. New boolean property isAllDay explicitly marks all-day events. Code interacting with CalendarItem objects may need to be updated.
+
+### Features
+
+* **calendar:** Add explicit isAllDay property ([37c8923](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/37c8923b305fcbec13f0877d5178487f7747fd28))
+
+
+### Bug Fixes
+
+* **calendar:** Correct all-day event end date and offset handling ([37c8923](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/37c8923b305fcbec13f0877d5178487f7747fd28))
+
+
+### Miscellaneous Chores
+
+* **calendar:** Clean up editor UI ([37c8923](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/37c8923b305fcbec13f0877d5178487f7747fd28))
+* remove unused .coderabbit.yaml configuration file ([7687ba5](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/7687ba5e06095185b9ec33ca0eaa3c689b42c1f0))
+* update release-please configuration to include changelog sections ([ba2760b](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ba2760b46aa094b73de4762d929838d754ca43d7))
+
+
+### Code Refactoring
+
+* **calendar:** reorganize import statements for clarity ([4b7f010](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/4b7f01050964a0d61070756e695b215d7b814888))
+* **calendar:** Simplify event handling and improve date utilities ([37c8923](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/37c8923b305fcbec13f0877d5178487f7747fd28))
+* **calendar:** Strengthen typing ([37c8923](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/37c8923b305fcbec13f0877d5178487f7747fd28))
+* introduce CalendarEventType enum and replace other strings with enums ([ac48f6e](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ac48f6e608bf805069cbb042a5028a7d87d41f59))
+* update comparison logic to use ComparatorType and add unit tests for operators ([f586f4f](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f586f4f940eef3447c12eb66e3fcc3cb446c78c8))
+
+
+### Tests
+
+* **calendar:** Add comprehensive coverage ([37c8923](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/37c8923b305fcbec13f0877d5178487f7747fd28)), closes [#1373](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1373) [#1346](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1346) [#1302](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1302)
+
+
+### Build System
+
+* **deps-dev:** bump @types/jquery from 3.5.32 to 3.5.33 ([#1844](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1844)) ([a0c279b](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a0c279b8b1c88d0cf4272b637725eeff9674d87e))
+* **deps-dev:** bump @types/lodash from 4.17.16 to 4.17.20 ([#1839](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1839)) ([057bed8](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/057bed8480647a45104252568b3e93fe09037c84))
+* **deps-dev:** bump gulp from 5.0.0 to 5.0.1 ([#1845](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1845)) ([3f7e33a](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/3f7e33a05ab2a1b4986c209a2214f8fb03fb72df))
+* **deps-dev:** bump nock from 14.0.1 to 14.0.10 ([#1847](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1847)) ([509e087](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/509e08781d08270a6699132e405218cbfe31c238))
+* **deps-dev:** bump node-red from 4.0.9 to 4.1.0 ([#1842](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1842)) ([07b5921](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/07b5921deda7bcb364bca33e52b8f7388d3ccded))
+* **deps-dev:** bump postcss from 8.5.3 to 8.5.6 ([#1838](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1838)) ([3e9f575](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/3e9f5758f10d1f247e36fa104cf64a2b7e57c35f))
+* **deps-dev:** bump typescript from 5.7.3 to 5.9.2 ([#1843](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1843)) ([f3ef5d6](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f3ef5d6cebe3f927cd0ed991db194bf145c4f04e))
+* **deps:** bump actions/checkout from 4 to 5 ([#1831](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1831)) ([88b31de](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/88b31de1937189ce87a61a7a1aeee937490425a6))
+* **deps:** bump actions/github-script from 7 to 8 ([#1833](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1833)) ([5420bef](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/5420bef82d453ffef9e65c2b763437c3357b9918))
+* **deps:** bump actions/setup-node from 4 to 5 ([#1832](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1832)) ([674d29a](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/674d29aab126ad8c5adf7fac2bc08077773dbf3c))
+* **deps:** bump actions/stale from 9 to 10 ([#1834](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1834)) ([1abe785](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/1abe7850c0279b7ce6df5c8e0975d41437fde75b))
+* **deps:** bump axios from 1.9.0 to 1.12.0 ([#1835](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1835)) ([be617c8](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/be617c85ab714915750a9ae706a03d472b15a8f4))
+* **deps:** bump debug from 4.4.0 to 4.4.3 ([#1840](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1840)) ([693e8ad](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/693e8adbd16419dd0c0693b870dab7cf4d038684))
+* **deps:** bump ws and @types/ws ([#1846](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1846)) ([ec5cb63](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ec5cb636d68dd2321cfd8a3145b35ab0677a8cac))
+
+
+### Continuous Integration
+
+* Add comprehensive Copilot instructions for repository onboarding ([#1849](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1849)) ([70931f8](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/70931f8f94ec6a1cd785a8996297183aaf459073))
+* correct action reference for release-please ([d87582f](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d87582f01beac39bd02605e59b7c0c5a21795d21))
+
 ## [0.77.2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.77.1...v0.77.2) (2025-07-04)
 
 
