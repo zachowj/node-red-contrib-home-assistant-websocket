@@ -1,26 +1,26 @@
 {
-    "ha-events-calendar": {
-        "label": {
-            "name": "Name",
-            "server": "Server",
-            "entityId": "Calendar",
-            "eventType": "Relative To",
-            "start": "Start",
-            "end": "End",
-            "offset": "Offset",
-            "seconds": "seconds",
-            "minutes": "minutes",
-            "hours": "hours",
-            "filter": "Filter"
-        },
-        "error": {
-            "retrieval": "calendar items could not be retrieved from entity_id \"__entity__\", __error__"
-        },
-        "status": {
-            "sent": "__summary__ sent",
-            "queued-none": "no upcoming events queued",
-            "queued-one": "queued 1 upcoming event",
-            "queued-multi": "queued __count__ upcoming events"
-        }
+  "ha-events-calendar": {
+    "error": {
+      "retrieval": "calendar items could not be retrieved from entity_id \"__entity__\", __error__"
+    },
+    "label": {
+      "end": "End",
+      "entityId": "Calendar",
+      "eventType": "Relative To",
+      "filter": "Filter",
+      "hours": "hours",
+      "minutes": "minutes",
+      "name": "Name",
+      "offset": "Offset",
+      "seconds": "seconds",
+      "server": "Server",
+      "start": "Start"
+    },
+    "status": {
+      "queued-multi": "queued __count__ upcoming events",
+      "queued-none": "no events in the next __minutes__ minutes",
+      "queued-one": "queued 1 upcoming event",
+      "sent": "__summary__ sent"
     }
+  }
 }

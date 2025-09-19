@@ -1,21 +1,69 @@
 import { DateOrDateTime, WithDate, WithDateTime } from './const';
 
-// Type guard for WithDateTime
-function isWithDateTime(obj: any): obj is WithDateTime {
-    return obj && typeof obj.dateTime === 'string';
+/**
+ * Returns true if the input is an all-day date (has `date` property).
+ */
+export function isWithDate(input: DateOrDateTime): input is WithDate {
+    return (input as WithDate).date !== undefined;
 }
 
-// Type guard for WithDate
-function isWithDate(obj: any): obj is WithDate {
-    return obj && typeof obj.date === 'string';
+/**
+ * Returns true if the input has a dateTime (normal event).
+ */
+export function isWithDateTime(input: DateOrDateTime): input is WithDateTime {
+    return (input as WithDateTime).dateTime !== undefined;
 }
 
-// Function to handle the conversion at runtime
-export function toDate(obj: DateOrDateTime): Date {
-    if (isWithDateTime(obj)) {
-        return new Date(obj.dateTime);
-    } else if (isWithDate(obj)) {
-        return new Date(obj.date);
+/**
+ * Parse a Calendar DateOrDateTime into a JS Date.
+ * All-day events (date) are returned at midnight local time.
+ */
+export function parseCalendarDate(input: DateOrDateTime): Date {
+    if (isWithDate(input)) {
+        // All-day event: return at midnight local time
+        const [year, month, day] = input.date.split('-').map(Number);
+        return new Date(year, month - 1, day, 0, 0, 0, 0);
+    } else if (isWithDateTime(input)) {
+        // Normal event: parse the datetime string
+        return new Date(input.dateTime);
     }
-    throw new Error('Invalid object');
+    throw new Error('Invalid Calendar DateOrDateTime');
+}
+
+export function toLocalISOWithOffset(
+    date: Date,
+    withMilliseconds: boolean = false,
+): string {
+    const pad = (num: number, size: number = 2): string =>
+        String(num).padStart(size, '0');
+
+    const year = date.getFullYear();
+    const month = pad(date.getMonth() + 1);
+    const day = pad(date.getDate());
+    const hours = pad(date.getHours());
+    const minutes = pad(date.getMinutes());
+    const seconds = pad(date.getSeconds());
+
+    let iso = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+
+    if (withMilliseconds) {
+        iso += `.${pad(date.getMilliseconds(), 3)}`;
+    }
+
+    // Calculate timezone offset
+    const offsetMinutes = date.getTimezoneOffset();
+    const sign = offsetMinutes <= 0 ? '+' : '-';
+    const offsetHours = pad(Math.floor(Math.abs(offsetMinutes) / 60));
+    const offsetMins = pad(Math.abs(offsetMinutes) % 60);
+
+    iso += `${sign}${offsetHours}:${offsetMins}`;
+
+    return iso;
+}
+
+export function shortenString(s: string, maxLength: number): string {
+    if (s.length <= maxLength) {
+        return s;
+    }
+    return s.slice(0, maxLength - 3) + '...';
 }

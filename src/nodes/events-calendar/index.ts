@@ -1,25 +1,27 @@
-import { createControllerDependencies } from '../../common/controllers/helpers';
-import ClientEvents from '../../common/events/ClientEvents';
-import EventsStatus from '../../common/status/EventStatus';
-import { TypedInputTypes } from '../../const';
-import { RED } from '../../globals';
-import { migrate } from '../../helpers/migrate';
-import { getExposeAsConfigNode, getServerConfigNode } from '../../helpers/node';
-import { getHomeAssistant } from '../../homeAssistant';
 import {
     BaseNode,
     BaseNodeProperties,
     OutputProperty,
 } from '../../types/nodes';
-import { startListeners } from './events';
+import { getExposeAsConfigNode, getServerConfigNode } from '../../helpers/node';
+
+import { CalendarEventType } from './const';
+import ClientEvents from '../../common/events/ClientEvents';
 import EventsCalendarController from './EventsCalendarController';
+import EventsStatus from '../../common/status/EventStatus';
+import { RED } from '../../globals';
+import { TypedInputTypes } from '../../const';
+import { createControllerDependencies } from '../../common/controllers/helpers';
+import { getHomeAssistant } from '../../homeAssistant';
+import { migrate } from '../../helpers/migrate';
+import { startListeners } from './events';
 
 export interface EventsCalendarNodeProperties extends BaseNodeProperties {
     exposeAsEntityConfig: string;
     entityId: string;
     filter?: string;
     filterType: TypedInputTypes;
-    eventType: string;
+    eventType: CalendarEventType;
     offset: string;
     offsetType: TypedInputTypes;
     offsetUnits: string;
@@ -64,5 +66,5 @@ export default function eventsCalendarNode(
     });
     controller.setExposeAsConfigNode(exposeAsConfigNode);
 
-    startListeners(clientEvents, controller, homeAssistant, this, status);
+    startListeners(clientEvents, controller, homeAssistant);
 }

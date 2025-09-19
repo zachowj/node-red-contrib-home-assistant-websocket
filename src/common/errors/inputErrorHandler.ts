@@ -58,3 +58,19 @@ export function setTimeoutWithErrorHandling(
 
     return timeoutId;
 }
+
+export function setIntervalWithErrorHandling(
+    callback: (...args: any[]) => void,
+    interval: number,
+    deps?: Dependencies,
+): NodeJS.Timeout {
+    const intervalId = setInterval(() => {
+        try {
+            callback();
+        } catch (e) {
+            inputErrorHandler(e, deps);
+        }
+    }, interval);
+
+    return intervalId;
+}
