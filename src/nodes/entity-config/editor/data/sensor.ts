@@ -153,6 +153,7 @@ export const sensorUnitOfMeasurement: Record<
         'in/h',
         'km/h',
         'kn',
+        'm/min',
         'm/s',
         'mm/s',
         'mm/h',
