@@ -1,14 +1,30 @@
-name: Publish to prerelease npm
+name: Manual Prerelease
+
 on:
   workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to cut the release from (e.g. main, develop, feature/x)"
+        required: true
+        default: main
+      prerelease:
+        description: "Select prerelease label"
+        required: true
+        default: beta
+        type: choice
+        options:
+          - beta
+          - alpha
+          - rc
 
 jobs:
   prerelease:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v5
-      - name: Make prerelease to npm
-        uses: epeli/npm-release@v2
+      - name: Run release-please
+        uses: google-github-actions/release-please-action@v4
         with:
-          type: prerelease
-          token: ${{ secrets.NPM_TOKEN }}
+          release-type: node
+          target-branch: ${{ github.event.inputs.branch }}
+          prerelease: ${{ github.event.inputs.prerelease }}
