@@ -107,7 +107,7 @@ export default class CalendarItem implements ICalendarItem {
             uid: this.#uid,
             recurrence_id: this.#recurrence_id,
             rrule: this.#rrule,
-            isAllDayEvent: this.isAllDayEvent,
+            is_all_day_event: this.isAllDayEvent,
         };
     }
 }

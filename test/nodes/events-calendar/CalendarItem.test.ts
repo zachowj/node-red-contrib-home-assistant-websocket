@@ -69,7 +69,7 @@ describe('CalendarItem', () => {
         expect(obj.uid).toBe('u1');
         expect(obj.recurrence_id).toBeNull();
         expect(obj.rrule).toBeNull();
-        expect(obj.isAllDayEvent).toBe(false);
+        expect(obj.is_all_day_event).toBe(false);
 
         // start/end should be parseable as dates
         expect(isNaN(Date.parse(obj.start))).toBe(false);
