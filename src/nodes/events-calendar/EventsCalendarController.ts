@@ -12,6 +12,7 @@ import CalendarItem, {
     ICalendarItem,
 } from './CalendarItem';
 import { shortenString } from './helpers';
+import SentEventCache from './SentEventCache';
 import Timespan from './Timespan';
 
 interface QueuedCalendarEvent {
@@ -29,6 +30,7 @@ export default class EventsCalendarController extends ExposeAsController {
     #overlapMs: number = ONE_MINUTE_MS;
     #pollIntervalMs: number = FIFTEEN_MINUTES_MS;
     #scheduledTimer: NodeJS.Timeout | null = null;
+    #sentCache = new SentEventCache();
     #timer: NodeJS.Timeout | null = null;
 
     /**
@@ -146,6 +148,9 @@ export default class EventsCalendarController extends ExposeAsController {
 
             if (filterText && !item.summary.includes(filterText)) return acc;
 
+            // Skip if already sent (not expired)
+            if (this.#sentCache.has(item.uniqueId)) return acc;
+
             acc.push({
                 triggerTime: new Date(baseTime.getTime() + offsetMs),
                 event: item,
@@ -204,6 +209,7 @@ export default class EventsCalendarController extends ExposeAsController {
      */
     async #flushEvents() {
         const nowSecond = Math.floor(Date.now() / 1000);
+        const offsetMs = (await this.#getOffsetMs()) ?? 0;
 
         while (this.#eventQueue.length > 0) {
             const nextEvent = this.#eventQueue[0];
@@ -215,6 +221,11 @@ export default class EventsCalendarController extends ExposeAsController {
 
             // Remove from queue
             this.#eventQueue.shift();
+
+            // Double-check not to re-emit
+            if (this.#sentCache.has(nextEvent.event.uniqueId)) {
+                continue;
+            }
 
             // Dispatch event
             const message = {};
@@ -229,6 +240,9 @@ export default class EventsCalendarController extends ExposeAsController {
                     summary: shortenString(nextEvent.event.summary, 32),
                 }),
             );
+
+            // Mark as sent
+            this.#sentCache.mark(nextEvent.event, offsetMs, this.#overlapMs);
         }
     }
 
@@ -247,18 +261,21 @@ export default class EventsCalendarController extends ExposeAsController {
      * and that events are processed in a timely manner.
      */
     async #poll() {
+        // Prune before polling/merging
+        this.#sentCache.prune();
+
         const span = await this.#getNextWindow();
         const newEvents = await this.#fetchEvents(span);
 
-        // Merge new events, deduplicate by ID
         for (const ev of newEvents) {
+            const id = ev.event.uniqueId;
             if (
-                !this.#eventQueue.find(
-                    (e) => e.event.uniqueId === ev.event.uniqueId,
-                )
+                this.#eventQueue.some((e) => e.event.uniqueId === id) ||
+                this.#sentCache.has(id)
             ) {
-                this.#eventQueue.push(ev);
+                continue;
             }
+            this.#eventQueue.push(ev);
         }
         // Sort queue by triggerTime
         this.#eventQueue.sort(
@@ -333,5 +350,6 @@ export default class EventsCalendarController extends ExposeAsController {
             this.#scheduledTimer = null;
         }
         this.#eventQueue = [];
+        this.#sentCache.clear();
     }
 }
