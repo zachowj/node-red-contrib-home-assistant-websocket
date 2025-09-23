@@ -31,11 +31,9 @@ This method sets up a Docker container with all required tools and dependencies.
 ### Local Setup
 
 1. **Fork the Repository:**
-
    - Begin by forking the [Node-RED Home Assistant repository](https://github.com/zachowj/node-red-contrib-home-assistant-websocket) to your GitHub account.
 
 1. **Clone Your Forked Repository:**
-
    - Clone the forked repository to your local machine:
 
      ```bash
@@ -43,7 +41,6 @@ This method sets up a Docker container with all required tools and dependencies.
      ```
 
 1. **Navigate to the Project Directory:**
-
    - Change to the project’s root directory:
 
      ```bash
@@ -51,11 +48,9 @@ This method sets up a Docker container with all required tools and dependencies.
      ```
 
 1. **Setup the Environment:**
-
    - You can either run the setup script or manually configure the environment:
 
    **Option A: Run the Setup Script**
-
    - Execute the provided setup script to automate the environment configuration:
 
      ```bash
@@ -63,7 +58,6 @@ This method sets up a Docker container with all required tools and dependencies.
      ```
 
    **Option B: Manual Setup**
-
    - Alternatively, you can manually create a `.node-red` directory and link `pnpm`:
 
      ```bash
@@ -73,7 +67,6 @@ This method sets up a Docker container with all required tools and dependencies.
      ```
 
 1. **Start Node-RED:**
-
    - Launch Node-RED in development mode:
 
      ```bash
