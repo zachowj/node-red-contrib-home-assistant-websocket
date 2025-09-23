@@ -26,7 +26,7 @@ import {
     TargetType,
 } from './const';
 
-interface DefaultMessage {
+interface DefaultMessage extends NodeMessage {
     topic: string;
     payload: unknown;
     data: Record<string, unknown>;
