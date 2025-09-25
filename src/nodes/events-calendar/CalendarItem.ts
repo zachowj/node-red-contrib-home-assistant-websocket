@@ -1,17 +1,30 @@
 import { CalendarEventType, DateOrDateTime } from './const';
 import { isWithDate, parseCalendarDate, toLocalISOWithOffset } from './helpers';
 
-export interface ICalendarItem {
+// Raw data from Home Assistant API
+export interface RawCalendarItem {
     start: DateOrDateTime;
     end: DateOrDateTime;
     summary: string;
     description: string;
-    location: string | null | undefined;
+    location?: string | null;
     uid: string;
-    recurrence_id: string | null | undefined;
-    rrule: string | null | undefined;
-    uniqueId: string;
-    isAllDayEvent: boolean;
+    recurrence_id?: string | null;
+    rrule?: string | null;
+}
+
+// Public interface with both properties and methods
+export interface ICalendarItem {
+    readonly start: DateOrDateTime;
+    readonly end: DateOrDateTime;
+    readonly summary: string;
+    readonly description: string;
+    readonly location: string | null | undefined;
+    readonly uid: string;
+    readonly recurrence_id: string | null | undefined;
+    readonly rrule: string | null | undefined;
+    readonly uniqueId: string;
+    readonly isAllDayEvent: boolean;
     date(eventType: CalendarEventType): Date;
     convertToObject(): Record<string, any>;
 }
@@ -30,7 +43,7 @@ export default class CalendarItem implements ICalendarItem {
      * CalendarItem encapsulates a calendar entry. Inputs are stored privately
      * and exposed via getters to keep instances immutable from the outside.
      */
-    constructor(data: ICalendarItem) {
+    constructor(data: RawCalendarItem) {
         if (!data || !data.uid) {
             throw new Error('CalendarItem requires a uid.');
         }
@@ -107,11 +120,11 @@ export default class CalendarItem implements ICalendarItem {
             uid: this.#uid,
             recurrence_id: this.#recurrence_id,
             rrule: this.#rrule,
-            is_all_day_event: this.isAllDayEvent,
+            all_day: this.isAllDayEvent,
         };
     }
 }
 
-export function createCalendarItem(data: ICalendarItem): CalendarItem {
+export function createCalendarItem(data: RawCalendarItem): CalendarItem {
     return new CalendarItem(data);
 }

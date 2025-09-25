@@ -44,3 +44,17 @@ Creates a switch within Home Assistant to enable/disable this node. This feature
 Value types:
 
 - `calendar item`: the calendar item object as provided by the Home Assistant API
+
+```json
+{
+  "start": "2023-10-01T09:00:00-07:00", // ISO 8601 format with timezone offset
+  "end": "2023-10-01T10:00:00-07:00", // ISO 8601 format with timezone offset
+  "summary": "Team Meeting", // Event summary
+  "description": "Weekly sync with the team", // Event description
+  "location": "Conference Room A", // Event location
+  "uid": "12345-abcde-67890-fghij", // Unique identifier for the event
+  "recurrence_id": null, // Recurrence ID if applicable
+  "rrule": null, // Recurrence rule if applicable
+  "all_day": false // Boolean indicating if it's an all-day event
+}
+```

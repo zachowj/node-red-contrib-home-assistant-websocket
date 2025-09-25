@@ -37,7 +37,7 @@ const EventsCalendarEditor: EditorNodeDef<EventsCalendarEditorNodeProperties> =
         icon: 'ha-events-calendar.svg',
         paletteLabel: 'events: calendar',
         label: function () {
-            return this.name || `calendar_event`;
+            return this.name || `calendar event`;
         },
         labelStyle: ha.labelStyle,
         defaults: {

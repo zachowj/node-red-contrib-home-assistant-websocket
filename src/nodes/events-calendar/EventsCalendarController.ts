@@ -11,11 +11,12 @@ import CalendarItem, {
     createCalendarItem,
     ICalendarItem,
 } from './CalendarItem';
+import EventQueue from './EventQueue';
 import { shortenString } from './helpers';
 import SentEventCache from './SentEventCache';
 import Timespan from './Timespan';
 
-interface QueuedCalendarEvent {
+export interface QueuedCalendarEvent {
     triggerTime: Date; // The exact Date when this event should be triggered
     event: CalendarItem; // The original CalendarEvent
 }
@@ -26,12 +27,50 @@ const FIFTEEN_MINUTES_MS = 15 * 60 * 1000;
 const ExposeAsController = ExposeAsMixin(OutputController<EventsCalendarNode>);
 export default class EventsCalendarController extends ExposeAsController {
     #currentSpan: Timespan | null = null;
-    #eventQueue: QueuedCalendarEvent[] = [];
     #overlapMs: number = ONE_MINUTE_MS;
     #pollIntervalMs: number = FIFTEEN_MINUTES_MS;
     #scheduledTimer: NodeJS.Timeout | null = null;
     #sentCache = new SentEventCache();
     #timer: NodeJS.Timeout | null = null;
+    #eventQueue: EventQueue = new EventQueue(this.#sentCache);
+
+    /**
+     * Starts the polling process if it is not already running.
+     *
+     * This method initiates an immediate poll and then schedules
+     * subsequent polls at a configured interval. The polling process
+     * is managed by a timer, which ensures that the `#poll` method
+     * is executed repeatedly at the specified interval.
+     */
+    public startPolling() {
+        if (this.#timer) return;
+
+        // Initial poll immediately
+        this.#poll();
+
+        // Repeat at configured interval
+        this.#timer = setIntervalWithErrorHandling(
+            () => this.#poll(),
+            this.#pollIntervalMs,
+            { status: this.status },
+        );
+    }
+
+    /**
+     * Stops polling and clears all scheduled events and timers when the node is closed.
+     */
+    protected onClose() {
+        if (this.#timer) {
+            clearInterval(this.#timer);
+            this.#timer = null;
+        }
+        if (this.#scheduledTimer) {
+            clearTimeout(this.#scheduledTimer);
+            this.#scheduledTimer = null;
+        }
+        this.#eventQueue.clear();
+        this.#sentCache.clear();
+    }
 
     /**
      * Retrieves the offset in milliseconds based on the node's configuration.
@@ -78,11 +117,6 @@ export default class EventsCalendarController extends ExposeAsController {
      * time span. Otherwise, it calculates the next upcoming time span.
      *
      * @returns {Promise<Timespan>} A promise that resolves to the next time window (`Timespan`).
-     *
-     * @remarks
-     * - The method adjusts the time span based on an offset (retrieved asynchronously).
-     * - If a current time span exists, it uses the `nextUpcoming` method to determine the next span.
-     * - The overlap and polling interval are used to calculate the boundaries of the time span.
      */
     async #getNextWindow(): Promise<Timespan> {
         const now = new Date();
@@ -167,8 +201,6 @@ export default class EventsCalendarController extends ExposeAsController {
      * in the queue and the current time. If the event queue is empty, the method exits without scheduling anything.
      *
      * Once the timer triggers, it processes the events in the queue and recursively schedules the next event.
-     *
-     * @private
      */
     #scheduleNextEvent() {
         if (this.#scheduledTimer) {
@@ -179,7 +211,8 @@ export default class EventsCalendarController extends ExposeAsController {
         if (this.#eventQueue.length === 0) return;
 
         const now = Date.now();
-        const nextTriggerTime = this.#eventQueue[0].triggerTime.getTime();
+        const nextTriggerTime =
+            this.#eventQueue.nextEvent!.triggerTime.getTime();
         const delay = Math.max(nextTriggerTime - now, 0);
 
         this.#scheduledTimer = setTimeoutWithErrorHandling(
@@ -199,20 +232,13 @@ export default class EventsCalendarController extends ExposeAsController {
      * next event is less than or equal to the current time (in seconds). If so, the event
      * is removed from the queue, processed, and dispatched. The method also updates the
      * node's status to indicate the event has been sent.
-     *
-     * @remarks
-     * - The method is asynchronous and ensures that events are processed sequentially.
-     * - Events are dispatched using the node's `send` method after setting custom outputs.
-     * - The node's status is updated to reflect the summary of the dispatched event.
-     *
-     * @private
      */
     async #flushEvents() {
         const nowSecond = Math.floor(Date.now() / 1000);
         const offsetMs = (await this.#getOffsetMs()) ?? 0;
 
         while (this.#eventQueue.length > 0) {
-            const nextEvent = this.#eventQueue[0];
+            const nextEvent = this.#eventQueue.nextEvent!;
             const eventSecond = Math.floor(
                 nextEvent.triggerTime.getTime() / 1000,
             );
@@ -267,21 +293,46 @@ export default class EventsCalendarController extends ExposeAsController {
         const span = await this.#getNextWindow();
         const newEvents = await this.#fetchEvents(span);
 
-        for (const ev of newEvents) {
-            const id = ev.event.uniqueId;
-            if (
-                this.#eventQueue.some((e) => e.event.uniqueId === id) ||
-                this.#sentCache.has(id)
-            ) {
-                continue;
-            }
-            this.#eventQueue.push(ev);
-        }
-        // Sort queue by triggerTime
-        this.#eventQueue.sort(
-            (a, b) => a.triggerTime.getTime() - b.triggerTime.getTime(),
-        );
+        await this.#processFetchedEvents(newEvents);
 
+        // Update status based on queue length
+        this.#updateQueueStatus();
+
+        // Dispatch and schedule
+        await this.#flushEvents();
+        this.#scheduleNextEvent();
+    }
+
+    /**
+     * Processes the fetched events by attempting to add each to the internal queue
+     * if it hasn't been queued or processed already, and returns the count of
+     * successfully added events.
+     * @param events - An array of QueuedCalendarEvent objects to process.
+     * @returns The number of events that were successfully added to the queue.
+     */
+    async #processFetchedEvents(
+        events: QueuedCalendarEvent[],
+    ): Promise<number> {
+        let addedCount = 0;
+
+        for (const ev of events) {
+            // Only queue events that aren't already queued or processed
+            if (this.#eventQueue.add(ev)) {
+                addedCount++;
+            }
+        }
+
+        return addedCount;
+    }
+
+    /**
+     * Updates the node's status to reflect the current event queue state.
+     *
+     * - If there are multiple events queued, displays a message indicating the count.
+     * - If there is one event queued, displays a message for a single queued event.
+     * - If the queue is empty, displays a message indicating no events are queued, including the poll interval in minutes.
+     */
+    #updateQueueStatus() {
         const queueLength = this.#eventQueue.length;
         if (queueLength > 1) {
             this.status.setSending(
@@ -300,56 +351,5 @@ export default class EventsCalendarController extends ExposeAsController {
                 }),
             );
         }
-
-        // Dispatch events that are already eligible (catch-up)
-        await this.#flushEvents();
-
-        // Schedule the next upcoming event
-        this.#scheduleNextEvent();
-    }
-
-    /**
-     * Starts the polling process if it is not already running.
-     *
-     * This method initiates an immediate poll and then schedules
-     * subsequent polls at a configured interval. The polling process
-     * is managed by a timer, which ensures that the `#poll` method
-     * is executed repeatedly at the specified interval.
-     *
-     * If the polling process is already active, this method does nothing.
-     *
-     * @remarks
-     * The interval for polling is determined by the `#pollIntervalMs` property.
-     * The `setIntervalWithErrorHandling` function is used to handle any errors
-     * that may occur during the polling process.
-     */
-    public startPolling() {
-        if (this.#timer) return;
-
-        // Initial poll immediately
-        this.#poll();
-
-        // Repeat at configured interval
-        this.#timer = setIntervalWithErrorHandling(
-            () => this.#poll(),
-            this.#pollIntervalMs,
-            { status: this.status },
-        );
-    }
-
-    /**
-     * Stops polling and clears all scheduled events and timers when the node is closed.
-     */
-    protected onClose() {
-        if (this.#timer) {
-            clearInterval(this.#timer);
-            this.#timer = null;
-        }
-        if (this.#scheduledTimer) {
-            clearTimeout(this.#scheduledTimer);
-            this.#scheduledTimer = null;
-        }
-        this.#eventQueue = [];
-        this.#sentCache.clear();
     }
 }
