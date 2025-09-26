@@ -13,6 +13,7 @@ import CalendarItem, {
 } from './CalendarItem';
 import EventQueue from './EventQueue';
 import { shortenString } from './helpers';
+import { retryWithBackoff } from './retryWithBackoff';
 import SentEventCache from './SentEventCache';
 import Timespan from './Timespan';
 
@@ -149,13 +150,40 @@ export default class EventsCalendarController extends ExposeAsController {
      * @param timespan - Time window to fetch events for
      */
     async #fetchEvents(timespan: Timespan): Promise<QueuedCalendarEvent[]> {
-        const rawItems: ICalendarItem[] = await this.homeAssistant.http.get(
-            `/calendars/${this.node.config.entityId}`,
-            {
-                start: timespan.start.toISOString(),
-                end: timespan.end.toISOString(),
-            },
-        );
+        let rawItems: ICalendarItem[] = [];
+
+        try {
+            rawItems = await retryWithBackoff(
+                () =>
+                    this.homeAssistant.http.get(
+                        `/calendars/${this.node.config.entityId}`,
+                        {
+                            start: timespan.start.toISOString(),
+                            end: timespan.end.toISOString(),
+                        },
+                    ),
+                {
+                    retries: 5,
+                    baseMs: 1_000,
+                    maxMs: 30_000,
+                    beforeRetry: (attempt, wait) => {
+                        this.status.setFailed(
+                            `Calendar fetch failed (attempt ${attempt + 1}/5), retrying in ${Math.round(
+                                wait / 1000,
+                            )}s`,
+                        );
+                    },
+                    onGiveUp: (err) => {
+                        this.status.setError(
+                            `Calendar fetch failed (max retries): ${err?.message ?? err}`,
+                        );
+                    },
+                },
+            );
+        } catch {
+            // Give up for this poll cycle
+            return [];
+        }
         if (!Array.isArray(rawItems)) return [];
 
         const offsetMs = (await this.#getOffsetMs()) ?? 0;
