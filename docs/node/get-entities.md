@@ -21,7 +21,7 @@ Autocomplete is available for all properties currently set on loaded entities.
 Override the configuration values by passing in a property with a valid value.
 
 - `rules` (array)
-  - `condition`: string (e.g., `stateObject`, `labelRegistry`, `areaRegistry`, `deviceRegistry`, `floorRegistry`)
+  - `condition`: string (e.g., `state_object`, `label_registry`, `area_registry`, `device_registry`, `floor_registry`)
   - `property`: string
   - `logic`: string
   - `value`: string
@@ -40,21 +40,21 @@ To retrieve all entities with the device class `battery` on the `First floor` th
 {
   "rules": [
     {
-      "condition": "stateObject",
+      "condition": "state_object",
       "property": "attributes.device_class",
       "logic": "is",
       "value": "battery",
       "valueType": "str"
     },
     {
-      "condition": "floorRegistry",
+      "condition": "floor_registry",
       "property": "name",
       "logic": "is",
       "value": "First floor",
       "valueType": "str"
     },
     {
-      "condition": "labelRegistry",
+      "condition": "label_registry",
       "property": "name",
       "logic": "is_not",
       "value": "not replaceable",
