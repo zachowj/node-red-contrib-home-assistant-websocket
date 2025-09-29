@@ -1,4 +1,4 @@
-import bonjour from 'bonjour';
+import { Bonjour } from 'bonjour-service';
 import debug from 'debug';
 import { NextFunction, Request, Response } from 'express';
 import flatten from 'flat';
@@ -257,14 +257,18 @@ function findServers(req: CustomRequest, res: Response): void {
         label: string;
         value: string;
     }[] = [];
-    const browser = bonjour().find({ type: 'home-assistant' }, (service) => {
-        instances.push({
-            label: service.name
-                ? `${service.name} (${service.txt.base_url})`
-                : service.txt.base_url,
-            value: service.txt.base_url,
-        });
-    });
+    const bonjourInstance: Bonjour = new Bonjour();
+    const browser = bonjourInstance.find(
+        { type: 'home-assistant' },
+        (service) => {
+            instances.push({
+                label: service.name
+                    ? `${service.name} (${service.txt.base_url})`
+                    : service.txt.base_url,
+                value: service.txt.base_url,
+            });
+        },
+    );
 
     // Add a bit of delay for all services to be discovered
     setTimeout(() => {
