@@ -1,6 +1,7 @@
 {
   "ha-events-calendar": {
     "error": {
+      "event_type_required": "eventType is required in node configuration",
       "retrieval": "calendar items could not be retrieved from entity_id \"__entity__\", __error__"
     },
     "label": {
@@ -17,6 +18,8 @@
       "start": "Start"
     },
     "status": {
+      "fetch_failed": "calendar fetch failed (attempt __attempt__/__max_attempts__), retrying in __delay__s",
+      "fetch_max_failed": "calendar fetch failed (max retries): __error_message__",
       "queued-multi": "queued __count__ upcoming events",
       "queued-none": "no events in the next __minutes__ minutes",
       "queued-one": "queued 1 upcoming event",

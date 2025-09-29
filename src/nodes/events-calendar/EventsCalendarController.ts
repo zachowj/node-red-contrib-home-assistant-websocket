@@ -167,16 +167,22 @@ export default class EventsCalendarController extends ExposeAsController {
                     baseMs: 1_000,
                     maxMs: 30_000,
                     beforeRetry: (attempt, wait) => {
-                        this.status.setFailed(
-                            `Calendar fetch failed (attempt ${attempt + 1}/5), retrying in ${Math.round(
-                                wait / 1000,
-                            )}s`,
-                        );
+                        this.status.setFailed([
+                            'ha-events-calendar.status.fetch_failed',
+                            {
+                                attempt: attempt + 1,
+                                max_attempts: 5,
+                                delay: Math.round(wait / 1000),
+                            },
+                        ]);
                     },
                     onGiveUp: (err) => {
-                        this.status.setError(
-                            `Calendar fetch failed (max retries): ${err?.message ?? err}`,
-                        );
+                        this.status.setError([
+                            'ha-events-calendar.status.fetch_max_failed',
+                            {
+                                error_message: err?.message ?? err,
+                            },
+                        ]);
                     },
                 },
             );
@@ -189,7 +195,9 @@ export default class EventsCalendarController extends ExposeAsController {
         const offsetMs = (await this.#getOffsetMs()) ?? 0;
         const eventType = this.node.config.eventType;
         if (typeof eventType === 'undefined') {
-            throw new Error('eventType is required in node configuration');
+            throw new Error(
+                RED._('ha-events-calendar.error.event_type_required'),
+            );
         }
 
         const filterText = this.node.config.filter
@@ -363,21 +371,21 @@ export default class EventsCalendarController extends ExposeAsController {
     #updateQueueStatus() {
         const queueLength = this.#eventQueue.length;
         if (queueLength > 1) {
-            this.status.setSending(
-                RED._('ha-events-calendar.status.queued-multi', {
+            this.status.setSending([
+                'ha-events-calendar.status.queued-multi',
+                {
                     count: this.#eventQueue.length,
-                }),
-            );
+                },
+            ]);
         } else if (queueLength > 0) {
-            this.status.setSending(
-                RED._('ha-events-calendar.status.queued-one'),
-            );
+            this.status.setSending('ha-events-calendar.status.queued-one');
         } else {
-            this.status.setSending(
-                RED._('ha-events-calendar.status.queued-none', {
+            this.status.setSending([
+                'ha-events-calendar.status.queued-none',
+                {
                     minutes: this.#pollIntervalMs / 60000,
-                }),
-            );
+                },
+            ]);
         }
     }
 }
