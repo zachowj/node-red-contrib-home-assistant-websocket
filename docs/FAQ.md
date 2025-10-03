@@ -16,6 +16,19 @@ sidebar: auto
 
 - [Home Assistant](https://www.home-assistant.io): An open-source home automation platform focused on local control and privacy.
 
+## How to Install a Specific Version or Downgrade?
+
+To install a specific version of the package or downgrade to an earlier version:
+
+1. Visit the [Releases Page](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/releases) on GitHub.
+2. Download the `.tgz` file for the desired version.
+3. Open Node-RED and navigate to the "Manage palette" option.
+4. Go to the "Install" tab and select the "Upload module tgz file" option.
+5. Upload the downloaded `.tgz` file to install the specific version.
+6. Restart Node-RED to apply the changes.
+
+This method ensures you can control the version of the package used in your Node-RED setup.
+
 ## Entities Not Showing in the Autocomplete Dropdown
 
 1. Ensure you've deployed at least once after adding a server configuration.
