@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.78.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.78.0...v0.78.1) (2025-10-04)
+
+
+### Bug Fixes
+
+* **calendar:** stop duplicate events from being emitted ([621d682](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/621d6827e42b31cdcd4055a77e7c994026ff4fdf)), closes [#1870](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1870)
+
+
+### Documentation
+
+* **copilot-instructions:** streamline project overview and setup instructions ([099d552](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/099d55286f1b4c91ce68ea08dbaf58e49a79ba2a))
+* **FAQ:** add installation instructions for specific version or downgrade ([332aa7b](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/332aa7bb1e02058e0848d9309c1d8e3b5e71e0f2))
+* **get-entities:** update condition property names to use snake_case ([5ef42c2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/5ef42c2ab25ef5a640609087d610b7ed74af9e29)), closes [#1827](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1827)
+
+
+### Code Refactoring
+
+* **routes:** replace bonjour with bonjour-service for service discovery ([de7c26e](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/de7c26eae6c6e9717185b6b349d3a95976b7b61c)), closes [#1786](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1786)
+
 ## [0.78.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.77.2...v0.78.0) (2025-09-29)
 
 
