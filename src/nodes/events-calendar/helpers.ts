@@ -67,3 +67,30 @@ export function shortenString(s: string, maxLength: number): string {
     }
     return s.slice(0, maxLength - 3) + '...';
 }
+
+export function alignDateToMidnight(date: Date): Date {
+    return new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
+        0,
+        0,
+        0,
+        0,
+    );
+}
+
+/**
+ * Checks if the given trigger time is in the past.
+ * @param triggerTime - The trigger time to check.
+ * @param now - The current time in milliseconds.
+ * @returns True if the trigger time is in the past, false otherwise.
+ */
+export function isTriggerTimeInPast(triggerTime: Date, now: number): boolean {
+    // Convert both timestamps to seconds (truncating milliseconds)
+    const triggerTimeSeconds = Math.floor(triggerTime.getTime() / 1000);
+    const nowSeconds = Math.floor(now / 1000);
+
+    // Compare at second level
+    return triggerTimeSeconds < nowSeconds;
+}

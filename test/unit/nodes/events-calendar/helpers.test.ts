@@ -2,9 +2,12 @@ import { describe, expect, it } from 'vitest';
 
 import { DateOrDateTime } from '../../../../src/nodes/events-calendar/const';
 import {
+    alignDateToMidnight,
+    isTriggerTimeInPast,
     isWithDate,
     isWithDateTime,
     parseCalendarDate,
+    shortenString,
     toLocalISOWithOffset,
 } from '../../../../src/nodes/events-calendar/helpers';
 
@@ -136,6 +139,66 @@ describe('helpers', () => {
                 const s = toLocalISOWithOffset(date, true);
                 expect(s).toMatch(/\.007[+-]\d{2}:\d{2}$/);
             });
+        });
+        describe('shortenString', () => {
+            it('should return the string unchanged if it is shorter than or equal to maxLength', () => {
+                expect(shortenString('hello', 10)).toBe('hello');
+                expect(shortenString('hello', 5)).toBe('hello');
+            });
+
+            it('should shorten the string and append "..." if longer than maxLength', () => {
+                expect(shortenString('hello world', 8)).toBe('hello...');
+                expect(shortenString('this is a long string', 10)).toBe(
+                    'this is...',
+                );
+            });
+
+            it('should handle edge cases', () => {
+                expect(shortenString('', 5)).toBe('');
+                expect(shortenString('a', 1)).toBe('a');
+                expect(shortenString('ab', 1)).toBe('...');
+            });
+        });
+    });
+    describe('alignDateToMidnight', () => {
+        it('should set hours, minutes, seconds, and milliseconds to 0', () => {
+            const date = new Date(2025, 8, 19, 10, 30, 45, 123);
+            const aligned = alignDateToMidnight(date);
+            expect(aligned.getFullYear()).toBe(2025);
+            expect(aligned.getMonth()).toBe(8);
+            expect(aligned.getDate()).toBe(19);
+            expect(aligned.getHours()).toBe(0);
+            expect(aligned.getMinutes()).toBe(0);
+            expect(aligned.getSeconds()).toBe(0);
+            expect(aligned.getMilliseconds()).toBe(0);
+        });
+
+        it('should not change the date part', () => {
+            const date = new Date(2023, 0, 1, 23, 59, 59, 999);
+            const aligned = alignDateToMidnight(date);
+            expect(aligned.getFullYear()).toBe(2023);
+            expect(aligned.getMonth()).toBe(0);
+            expect(aligned.getDate()).toBe(1);
+        });
+    });
+
+    describe('isTriggerTimeInPast', () => {
+        it('should return true if triggerTime is in the past', () => {
+            const pastTime = new Date(Date.now() - 1000); // 1 second ago
+            const now = Date.now();
+            expect(isTriggerTimeInPast(pastTime, now)).toBe(true);
+        });
+
+        it('should return false if triggerTime is in the future', () => {
+            const futureTime = new Date(Date.now() + 1000); // 1 second from now
+            const now = Date.now();
+            expect(isTriggerTimeInPast(futureTime, now)).toBe(false);
+        });
+
+        it('should return false if triggerTime is exactly now (same second)', () => {
+            const nowTime = new Date();
+            const now = nowTime.getTime();
+            expect(isTriggerTimeInPast(nowTime, now)).toBe(false);
         });
     });
 });

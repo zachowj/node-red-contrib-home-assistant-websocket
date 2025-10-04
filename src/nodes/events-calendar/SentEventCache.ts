@@ -1,6 +1,6 @@
 import CalendarItem from './CalendarItem';
 import { CalendarEventType } from './const';
-import Timespan from './Timespan';
+import { alignDateToMidnight } from './helpers';
 
 export default class SentEventCache {
     // uniqueId -> expiryAt (ms since epoch)
@@ -42,7 +42,7 @@ export default class SentEventCache {
     ): number {
         let end = event.date(CalendarEventType.End);
         if (event.isAllDayEvent) {
-            end = Timespan.alignToMidnight(end);
+            end = alignDateToMidnight(end);
         }
         return end.getTime() + offsetMs + overlapMs;
     }

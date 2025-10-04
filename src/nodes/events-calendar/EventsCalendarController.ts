@@ -12,24 +12,29 @@ import CalendarItem, {
     ICalendarItem,
 } from './CalendarItem';
 import EventQueue from './EventQueue';
-import { shortenString } from './helpers';
+import {
+    alignDateToMidnight,
+    isTriggerTimeInPast,
+    shortenString,
+} from './helpers';
 import { retryWithBackoff } from './retryWithBackoff';
 import SentEventCache from './SentEventCache';
-import Timespan from './Timespan';
+
+interface Timespan {
+    start: Date;
+    end: Date;
+}
 
 export interface QueuedCalendarEvent {
     triggerTime: Date; // The exact Date when this event should be triggered
     event: CalendarItem; // The original CalendarEvent
 }
 
-const ONE_MINUTE_MS = 60 * 1000;
-const FIFTEEN_MINUTES_MS = 15 * 60 * 1000;
-
 const ExposeAsController = ExposeAsMixin(OutputController<EventsCalendarNode>);
 export default class EventsCalendarController extends ExposeAsController {
-    #currentSpan: Timespan | null = null;
-    #overlapMs: number = ONE_MINUTE_MS;
-    #pollIntervalMs: number = FIFTEEN_MINUTES_MS;
+    static readonly OVERLAP_MS = 60_000; // 1 minutes
+    static readonly POLL_INTERVAL_MS = 900_000; // Default 15 minutes
+
     #scheduledTimer: NodeJS.Timeout | null = null;
     #sentCache = new SentEventCache();
     #timer: NodeJS.Timeout | null = null;
@@ -52,7 +57,7 @@ export default class EventsCalendarController extends ExposeAsController {
         // Repeat at configured interval
         this.#timer = setIntervalWithErrorHandling(
             () => this.#poll(),
-            this.#pollIntervalMs,
+            EventsCalendarController.POLL_INTERVAL_MS,
             { status: this.status },
         );
     }
@@ -95,24 +100,6 @@ export default class EventsCalendarController extends ExposeAsController {
     }
 
     /**
-     * Creates a new `Timespan` instance with a specified start time, end time, and offset.
-     * The start time is adjusted by subtracting the overlap duration (`#overlapMs`).
-     * The resulting timespan is then modified with the provided offset.
-     *
-     * @param start - The start date of the timespan.
-     * @param end - The end date of the timespan.
-     * @param offsetMs - The offset in milliseconds to apply to the timespan.
-     * @returns A new `Timespan` instance with the specified offset applied.
-     */
-    #createTimespan(start: Date, end: Date, offsetMs: number): Timespan {
-        const span = new Timespan(
-            new Date(start.getTime() - this.#overlapMs),
-            end,
-        );
-        return span.withOffset(offsetMs);
-    }
-
-    /**
      * Calculates and retrieves the next time window (`Timespan`) based on the current time,
      * overlap, and polling interval. If no current time span exists, it creates an initial
      * time span. Otherwise, it calculates the next upcoming time span.
@@ -120,28 +107,22 @@ export default class EventsCalendarController extends ExposeAsController {
      * @returns {Promise<Timespan>} A promise that resolves to the next time window (`Timespan`).
      */
     async #getNextWindow(): Promise<Timespan> {
-        const now = new Date();
-        const offsetMs = await this.#getOffsetMs();
+        const currentMs = Date.now();
+        const offsetMs = Math.abs(await this.#getOffsetMs());
 
-        if (!this.#currentSpan) {
-            this.#currentSpan = this.#createTimespan(
-                new Date(now.getTime() - this.#overlapMs),
-                new Date(now.getTime() + this.#pollIntervalMs),
-                offsetMs,
-            );
-        } else {
-            const nextSpan = this.#currentSpan.nextUpcoming(
-                now,
-                this.#pollIntervalMs,
-            );
-            this.#currentSpan = this.#createTimespan(
-                new Date(nextSpan.start.getTime()),
-                nextSpan.end,
-                offsetMs,
-            );
-        }
+        const timespan = {
+            start: new Date(
+                currentMs - EventsCalendarController.OVERLAP_MS - offsetMs,
+            ),
+            end: new Date(
+                currentMs +
+                    EventsCalendarController.POLL_INTERVAL_MS +
+                    EventsCalendarController.OVERLAP_MS +
+                    offsetMs,
+            ),
+        };
 
-        return this.#currentSpan;
+        return timespan;
     }
 
     /**
@@ -149,11 +130,11 @@ export default class EventsCalendarController extends ExposeAsController {
      * Applies the configured offset relative to the event's start or end.
      * @param timespan - Time window to fetch events for
      */
-    async #fetchEvents(timespan: Timespan): Promise<QueuedCalendarEvent[]> {
-        let rawItems: ICalendarItem[] = [];
+    async #fetchEvents(timespan: Timespan): Promise<ICalendarItem[]> {
+        let calendarItems: ICalendarItem[] = [];
 
         try {
-            rawItems = await retryWithBackoff(
+            calendarItems = await retryWithBackoff(
                 () =>
                     this.homeAssistant.http.get(
                         `/calendars/${this.node.config.entityId}`,
@@ -190,15 +171,41 @@ export default class EventsCalendarController extends ExposeAsController {
             // Give up for this poll cycle
             return [];
         }
-        if (!Array.isArray(rawItems)) return [];
+        if (!Array.isArray(calendarItems)) return [];
+
+        return calendarItems;
+    }
+
+    /**
+     * Evaluate a single calendar event and determines if it should be added to the queue.
+     * @param event - The raw calendar event to process.
+     * @param eventType - The type of event (start or end).
+     * @param offsetMs - The offset in milliseconds to apply.
+     * @param filterText - Optional filter text to match against the event summary.
+     * @param now - The current time in milliseconds.
+     * @returns A QueuedCalendarEvent if the event is valid, or undefined otherwise.
+     */
+    async #evaluateEvent(
+        event: ICalendarItem,
+    ): Promise<QueuedCalendarEvent | undefined> {
+        const item = createCalendarItem(event);
+        let baseTime = item.date(this.node.config.eventType);
+
+        // Skip if already sent
+        if (this.#sentCache.has(item.uniqueId)) return;
+
+        // Align all-day events to midnight before applying offset
+        if (item.isAllDayEvent) {
+            baseTime = alignDateToMidnight(baseTime);
+        }
 
         const offsetMs = (await this.#getOffsetMs()) ?? 0;
-        const eventType = this.node.config.eventType;
-        if (typeof eventType === 'undefined') {
-            throw new Error(
-                RED._('ha-events-calendar.error.event_type_required'),
-            );
-        }
+
+        // Calculate the trigger time with the offset
+        const triggerTime = new Date(baseTime.getTime() + offsetMs);
+
+        // Skip if the event's trigger time has already passed
+        if (isTriggerTimeInPast(triggerTime, Date.now())) return;
 
         const filterText = this.node.config.filter
             ? await this.typedInputService.getValue(
@@ -207,28 +214,13 @@ export default class EventsCalendarController extends ExposeAsController {
               )
             : undefined;
 
-        const items = rawItems.reduce((acc, event) => {
-            const item = createCalendarItem(event);
-            let baseTime = item.date(eventType);
+        // Skip if the event does not match the filter
+        if (filterText && !item.summary.includes(filterText)) return;
 
-            // Align all-day events to midnight before applying offset
-            if (item.isAllDayEvent) {
-                baseTime = Timespan.alignToMidnight(baseTime);
-            }
-
-            if (filterText && !item.summary.includes(filterText)) return acc;
-
-            // Skip if already sent (not expired)
-            if (this.#sentCache.has(item.uniqueId)) return acc;
-
-            acc.push({
-                triggerTime: new Date(baseTime.getTime() + offsetMs),
-                event: item,
-            });
-            return acc;
-        }, [] as QueuedCalendarEvent[]);
-
-        return items;
+        return {
+            triggerTime,
+            event: item,
+        };
     }
 
     /**
@@ -304,7 +296,11 @@ export default class EventsCalendarController extends ExposeAsController {
             );
 
             // Mark as sent
-            this.#sentCache.mark(nextEvent.event, offsetMs, this.#overlapMs);
+            this.#sentCache.mark(
+                nextEvent.event,
+                offsetMs,
+                EventsCalendarController.OVERLAP_MS,
+            );
         }
     }
 
@@ -346,14 +342,12 @@ export default class EventsCalendarController extends ExposeAsController {
      * @param events - An array of QueuedCalendarEvent objects to process.
      * @returns The number of events that were successfully added to the queue.
      */
-    async #processFetchedEvents(
-        events: QueuedCalendarEvent[],
-    ): Promise<number> {
+    async #processFetchedEvents(events: ICalendarItem[]): Promise<number> {
         let addedCount = 0;
 
-        for (const ev of events) {
-            // Only queue events that aren't already queued or processed
-            if (this.#eventQueue.add(ev)) {
+        for (const event of events) {
+            const validatedEvent = await this.#evaluateEvent(event);
+            if (validatedEvent && this.#eventQueue.add(validatedEvent)) {
                 addedCount++;
             }
         }
@@ -383,7 +377,7 @@ export default class EventsCalendarController extends ExposeAsController {
             this.status.setSending([
                 'ha-events-calendar.status.queued-none',
                 {
-                    minutes: this.#pollIntervalMs / 60000,
+                    minutes: EventsCalendarController.POLL_INTERVAL_MS / 60000,
                 },
             ]);
         }

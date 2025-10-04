@@ -2,27 +2,16 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import CalendarItem from '../../../../src/nodes/events-calendar/CalendarItem';
 import { CalendarEventType } from '../../../../src/nodes/events-calendar/const';
+import { alignDateToMidnight } from '../../../../src/nodes/events-calendar/helpers';
 import SentEventCache from '../../../../src/nodes/events-calendar/SentEventCache';
-import Timespan from '../../../../src/nodes/events-calendar/Timespan';
 
 vi.mock('../../../../src/nodes/events-calendar/CalendarItem');
-vi.mock(
-    '../../../../src/nodes/events-calendar/Timespan',
-    async (importOriginal) => {
-        const actual = await importOriginal<{ default: typeof Timespan }>();
-        return {
-            ...actual,
-            default: {
-                ...actual.default,
-                alignToMidnight: vi.fn((d: Date) => {
-                    const newDate = new Date(d);
-                    newDate.setHours(0, 0, 0, 0);
-                    return newDate;
-                }),
-            },
-        };
-    },
-);
+vi.mock('../../../../src/nodes/events-calendar/helpers', () => ({
+    alignDateToMidnight: vi.fn(
+        (date: Date) =>
+            new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+    ),
+}));
 
 const createMockEvent = (
     uniqueId: string,
@@ -125,12 +114,10 @@ describe('SentEventCache', () => {
             const event = createMockEvent('event1', endTime, true);
             cache.mark(event, 0, 0);
 
-            const midnight = (Timespan.alignToMidnight as any)(
-                endTime,
-            ).getTime();
+            const midnight = alignDateToMidnight(endTime).getTime();
             const justAfterMidnight = midnight + 1;
 
-            expect(Timespan.alignToMidnight).toHaveBeenCalledWith(endTime);
+            expect(alignDateToMidnight).toHaveBeenCalledWith(endTime);
             cache.prune(justAfterMidnight);
             expect(cache.has('event1', justAfterMidnight)).toBe(false);
         });
