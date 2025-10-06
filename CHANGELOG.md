@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.78.2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.78.1...v0.78.2) (2025-10-06)
+
+
+### Bug Fixes
+
+* **calendar:** handle calendar items without UID ([4888e67](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/4888e67c75b2ce300da098f46bf84a52738bda2b)), closes [#1871](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1871)
+
 ## [0.78.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.78.0...v0.78.1) (2025-10-04)
 
 
