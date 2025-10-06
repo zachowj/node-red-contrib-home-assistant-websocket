@@ -65,5 +65,5 @@ export default function eventsCalendarNode(
     });
     controller.setExposeAsConfigNode(exposeAsConfigNode);
 
-    startListeners(clientEvents, controller, homeAssistant);
+    startListeners(clientEvents, controller, homeAssistant, this, status);
 }

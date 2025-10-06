@@ -48,11 +48,11 @@ export default class EventsCalendarController extends ExposeAsController {
      * is managed by a timer, which ensures that the `#poll` method
      * is executed repeatedly at the specified interval.
      */
-    public startPolling() {
+    public async startPolling() {
         if (this.#timer) return;
 
         // Initial poll immediately
-        this.#poll();
+        await this.#poll();
 
         // Repeat at configured interval
         this.#timer = setIntervalWithErrorHandling(

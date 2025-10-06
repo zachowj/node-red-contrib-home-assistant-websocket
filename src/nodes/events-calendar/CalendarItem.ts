@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 import { CalendarEventType, DateOrDateTime } from './const';
 import { isWithDate, parseCalendarDate, toLocalISOWithOffset } from './helpers';
 
@@ -6,9 +8,9 @@ export interface RawCalendarItem {
     start: DateOrDateTime;
     end: DateOrDateTime;
     summary: string;
-    description: string;
+    description?: string | null;
     location?: string | null;
-    uid: string;
+    uid?: string | null;
     recurrence_id?: string | null;
     rrule?: string | null;
 }
@@ -18,9 +20,9 @@ export interface ICalendarItem {
     readonly start: DateOrDateTime;
     readonly end: DateOrDateTime;
     readonly summary: string;
-    readonly description: string;
+    readonly description: string | null | undefined;
     readonly location: string | null | undefined;
-    readonly uid: string;
+    readonly uid: string | null | undefined;
     readonly recurrence_id: string | null | undefined;
     readonly rrule: string | null | undefined;
     readonly uniqueId: string;
@@ -33,9 +35,9 @@ export default class CalendarItem implements ICalendarItem {
     #start: DateOrDateTime;
     #end: DateOrDateTime;
     #summary: string;
-    #description: string;
+    #description: string | null | undefined;
     #location: string | null | undefined;
-    #uid: string;
+    #uid: string | null | undefined;
     #recurrence_id: string | null | undefined;
     #rrule: string | null | undefined;
 
@@ -44,17 +46,14 @@ export default class CalendarItem implements ICalendarItem {
      * and exposed via getters to keep instances immutable from the outside.
      */
     constructor(data: RawCalendarItem) {
-        if (!data || !data.uid) {
-            throw new Error('CalendarItem requires a uid.');
-        }
         this.#start = data.start;
         this.#end = data.end;
         this.#summary = data.summary ?? '';
         this.#description = data.description ?? '';
-        this.#location = data.location ?? null;
-        this.#uid = data.uid;
-        this.#recurrence_id = data.recurrence_id ?? null;
-        this.#rrule = data.rrule ?? null;
+        this.#location = data.location ?? undefined;
+        this.#uid = data.uid ?? undefined;
+        this.#recurrence_id = data.recurrence_id ?? undefined;
+        this.#rrule = data.rrule ?? undefined;
     }
 
     get start(): DateOrDateTime {
@@ -69,7 +68,7 @@ export default class CalendarItem implements ICalendarItem {
         return this.#summary;
     }
 
-    get description(): string {
+    get description(): string | null | undefined {
         return this.#description;
     }
 
@@ -77,7 +76,7 @@ export default class CalendarItem implements ICalendarItem {
         return this.#location;
     }
 
-    get uid(): string {
+    get uid(): string | null | undefined {
         return this.#uid;
     }
 
@@ -94,7 +93,23 @@ export default class CalendarItem implements ICalendarItem {
     }
 
     get uniqueId(): string {
-        return `${this.#uid}${this.#recurrence_id ?? ''}`;
+        if (this.#uid) {
+            return `${this.#uid}${this.#recurrence_id ?? ''}`;
+        }
+
+        // Normalize and combine fallback fields
+        const start = this.date(CalendarEventType.Start).toISOString();
+        const end = this.date(CalendarEventType.End).toISOString();
+        const summary = (this.#summary ?? '').trim().toLowerCase();
+
+        const data = `${start}|${end}|${summary}`;
+
+        // Hash it to get a compact, stable identifier
+        return crypto
+            .createHash('sha256')
+            .update(data)
+            .digest('hex')
+            .slice(0, 16); // shorten to 16 chars
     }
 
     /**

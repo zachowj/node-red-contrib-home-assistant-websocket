@@ -5,10 +5,6 @@ import { CalendarEventType } from '../../../../src/nodes/events-calendar/const';
 import { toLocalISOWithOffset } from '../../../../src/nodes/events-calendar/helpers';
 
 describe('CalendarItem', () => {
-    it('should throw when created without a uid', () => {
-        expect(() => createCalendarItem({} as any)).toThrow(/uid/i);
-    });
-
     it('should expose getters, date() and uniqueId correctly for normal Date inputs', () => {
         const start = { dateTime: '2025-09-19T10:00:00Z' };
         const end = { dateTime: '2025-09-19T11:00:00Z' };
@@ -33,7 +29,7 @@ describe('CalendarItem', () => {
         expect(item.location).toBe('Conference Room');
         expect(item.uid).toBe('abc123');
         expect(item.recurrence_id).toBe('r1');
-        expect(item.rrule).toBeNull();
+        expect(item.rrule).toBe(undefined);
         expect(item.uniqueId).toBe('abc123r1');
         expect(item.isAllDayEvent).toBe(false);
 
@@ -65,10 +61,10 @@ describe('CalendarItem', () => {
         expect(typeof obj.end).toBe('string');
         expect(obj.summary).toBe('Standup');
         expect(obj.description).toBe('Daily sync');
-        expect(obj.location).toBeNull();
+        expect(obj.location).toBeUndefined();
         expect(obj.uid).toBe('u1');
-        expect(obj.recurrence_id).toBeNull();
-        expect(obj.rrule).toBeNull();
+        expect(obj.recurrence_id).toBeUndefined();
+        expect(obj.rrule).toBeUndefined();
         expect(obj.all_day).toBe(false);
 
         // start/end should be parseable as dates
@@ -92,9 +88,9 @@ describe('CalendarItem', () => {
 
         expect(item.summary).toBe('');
         expect(item.description).toBe('');
-        expect(item.location).toBeNull();
-        expect(item.recurrence_id).toBeNull();
-        expect(item.rrule).toBeNull();
+        expect(item.location).toBeUndefined();
+        expect(item.recurrence_id).toBeUndefined();
+        expect(item.rrule).toBeUndefined();
         expect(item.uniqueId).toBe('minimal');
         expect(item.isAllDayEvent).toBe(false);
 
@@ -143,7 +139,7 @@ describe('CalendarItem', () => {
         } as any;
 
         const item = createCalendarItem(data);
-        expect(item.recurrence_id).toBeNull();
+        expect(item.recurrence_id).toBeUndefined();
         expect(item.uniqueId).toBe('noRecurrence');
     });
 
@@ -194,8 +190,8 @@ describe('CalendarItem', () => {
         } as any;
 
         const item = createCalendarItem(data);
-        expect(item.location).toBeNull();
-        expect(item.convertToObject().location).toBeNull();
+        expect(item.location).toBeUndefined();
+        expect(item.convertToObject().location).toBeUndefined();
     });
 
     it('should include recurrence_id in uniqueId when provided', () => {
