@@ -51,7 +51,7 @@
     "debug": "4.4.3",
     "flat": "^5.0.2",
     "geolib": "3.3.4",
-    "home-assistant-js-websocket": "9.4.0",
+    "home-assistant-js-websocket": "9.5.0",
     "joi": "17.13.3",
     "lodash": "4.17.21",
     "lowdb": "^1.0.0",
