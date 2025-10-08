@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { describe, expect, it } from 'vitest';
 
 import { createCalendarItem } from '../../../../src/nodes/events-calendar/CalendarItem';
@@ -87,7 +88,7 @@ describe('CalendarItem', () => {
         const item = createCalendarItem(data);
 
         expect(item.summary).toBe('');
-        expect(item.description).toBe('');
+        expect(item.description).toBeUndefined();
         expect(item.location).toBeUndefined();
         expect(item.recurrence_id).toBeUndefined();
         expect(item.rrule).toBeUndefined();
@@ -214,5 +215,87 @@ describe('CalendarItem', () => {
         const dEnd = item.date(CalendarEventType.End);
         expect(dEnd).toBeInstanceOf(Date);
         expect(dEnd.toISOString()).toBe('2025-09-19T11:00:00.000Z');
+    });
+
+    it('should generate a uniqueId using uid and recurrence_id when both are provided', () => {
+        const data = {
+            start: { dateTime: '2025-09-19T10:00:00Z' },
+            end: { dateTime: '2025-09-19T11:00:00Z' },
+            uid: 'event123',
+            recurrence_id: 'rec456',
+        } as any;
+
+        const item = createCalendarItem(data);
+        expect(item.uniqueId).toBe('event123rec456');
+    });
+
+    it('should generate a uniqueId using only uid when recurrence_id is not provided', () => {
+        const data = {
+            start: { dateTime: '2025-09-19T10:00:00Z' },
+            end: { dateTime: '2025-09-19T11:00:00Z' },
+            uid: 'event123',
+        } as any;
+
+        const item = createCalendarItem(data);
+        expect(item.uniqueId).toBe('event123');
+    });
+
+    it('should generate a uniqueId using a hash when uid is not provided', () => {
+        const data = {
+            start: { dateTime: '2025-09-19T10:00:00Z' },
+            end: { dateTime: '2025-09-19T11:00:00Z' },
+            summary: 'Sample Event',
+        } as any;
+
+        const item = createCalendarItem(data);
+        const start = item.date(CalendarEventType.Start).toISOString();
+        const end = item.date(CalendarEventType.End).toISOString();
+        const summary = 'Sample Event';
+        const expectedHash = crypto
+            .createHash('sha256')
+            .update(`${start}|${end}|${summary}`)
+            .digest('hex')
+            .slice(0, 16);
+
+        expect(item.uniqueId).toBe(expectedHash);
+    });
+
+    it('should generate a uniqueId using a hash when both uid and recurrence_id are not provided', () => {
+        const data = {
+            start: { dateTime: '2025-09-19T10:00:00Z' },
+            end: { dateTime: '2025-09-19T11:00:00Z' },
+        } as any;
+
+        const item = createCalendarItem(data);
+        const start = item.date(CalendarEventType.Start).toISOString();
+        const end = item.date(CalendarEventType.End).toISOString();
+        const summary = '';
+        const expectedHash = crypto
+            .createHash('sha256')
+            .update(`${start}|${end}|${summary}`)
+            .digest('hex')
+            .slice(0, 16);
+
+        expect(item.uniqueId).toBe(expectedHash);
+    });
+
+    it('should generate a uniqueId using a hash when summary is empty', () => {
+        const data = {
+            start: { dateTime: '2025-09-19T10:00:00Z' },
+            end: { dateTime: '2025-09-19T11:00:00Z' },
+            summary: '',
+        } as any;
+
+        const item = createCalendarItem(data);
+        const start = item.date(CalendarEventType.Start).toISOString();
+        const end = item.date(CalendarEventType.End).toISOString();
+        const summary = '';
+        const expectedHash = crypto
+            .createHash('sha256')
+            .update(`${start}|${end}|${summary}`)
+            .digest('hex')
+            .slice(0, 16);
+
+        expect(item.uniqueId).toBe(expectedHash);
     });
 });

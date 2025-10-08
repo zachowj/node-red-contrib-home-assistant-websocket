@@ -20,11 +20,11 @@ export interface ICalendarItem {
     readonly start: DateOrDateTime;
     readonly end: DateOrDateTime;
     readonly summary: string;
-    readonly description: string | null | undefined;
-    readonly location: string | null | undefined;
-    readonly uid: string | null | undefined;
-    readonly recurrence_id: string | null | undefined;
-    readonly rrule: string | null | undefined;
+    readonly description?: string;
+    readonly location?: string;
+    readonly uid?: string;
+    readonly recurrence_id?: string;
+    readonly rrule?: string;
     readonly uniqueId: string;
     readonly isAllDayEvent: boolean;
     date(eventType: CalendarEventType): Date;
@@ -35,11 +35,11 @@ export default class CalendarItem implements ICalendarItem {
     #start: DateOrDateTime;
     #end: DateOrDateTime;
     #summary: string;
-    #description: string | null | undefined;
-    #location: string | null | undefined;
-    #uid: string | null | undefined;
-    #recurrence_id: string | null | undefined;
-    #rrule: string | null | undefined;
+    #description?: string;
+    #location?: string;
+    #uid?: string;
+    #recurrence_id?: string;
+    #rrule?: string;
 
     /**
      * CalendarItem encapsulates a calendar entry. Inputs are stored privately
@@ -49,7 +49,7 @@ export default class CalendarItem implements ICalendarItem {
         this.#start = data.start;
         this.#end = data.end;
         this.#summary = data.summary ?? '';
-        this.#description = data.description ?? '';
+        this.#description = data.description ?? undefined;
         this.#location = data.location ?? undefined;
         this.#uid = data.uid ?? undefined;
         this.#recurrence_id = data.recurrence_id ?? undefined;
@@ -68,23 +68,23 @@ export default class CalendarItem implements ICalendarItem {
         return this.#summary;
     }
 
-    get description(): string | null | undefined {
+    get description(): string | undefined {
         return this.#description;
     }
 
-    get location(): string | null | undefined {
+    get location(): string | undefined {
         return this.#location;
     }
 
-    get uid(): string | null | undefined {
+    get uid(): string | undefined {
         return this.#uid;
     }
 
-    get recurrence_id(): string | null | undefined {
+    get recurrence_id(): string | undefined {
         return this.#recurrence_id;
     }
 
-    get rrule(): string | null | undefined {
+    get rrule(): string | undefined {
         return this.#rrule;
     }
 
@@ -97,10 +97,10 @@ export default class CalendarItem implements ICalendarItem {
             return `${this.#uid}${this.#recurrence_id ?? ''}`;
         }
 
-        // Normalize and combine fallback fields
+        // Combine fallback fields
         const start = this.date(CalendarEventType.Start).toISOString();
         const end = this.date(CalendarEventType.End).toISOString();
-        const summary = (this.#summary ?? '').trim().toLowerCase();
+        const summary = this.#summary;
 
         const data = `${start}|${end}|${summary}`;
 
