@@ -30,8 +30,8 @@ importers:
         specifier: 3.3.4
         version: 3.3.4
       home-assistant-js-websocket:
-        specifier: 9.4.0
-        version: 9.4.0
+        specifier: 9.5.0
+        version: 9.5.0
       joi:
         specifier: 17.13.3
         version: 17.13.3
@@ -3520,8 +3520,8 @@ packages:
     resolution: {integrity: sha512-QFLV0taWQOZtvIRIAdBChesmogZrtuXvVWsFHZTk2SU+anspqZ2vMnoLg7IE1+Uk16N19APic1BuF8bC8c2m5g==}
     engines: {node: '>=8'}
 
-  home-assistant-js-websocket@9.4.0:
-    resolution: {integrity: sha512-312TuI63IfKf8G+iWvKmPYIdxWMNojwVk03o9OSpQFFDjSCNAYdCUfuPCFs73SuJ1Xpd4D1Eo11CB33MGMqZ+Q==}
+  home-assistant-js-websocket@9.5.0:
+    resolution: {integrity: sha512-gCBX0ulIPW3o5EhYxyNKgztBwNIs7u4hypZ+rcWir65wjLKL3b5uDx1jzU7RceyuANxvVKwBVLNujBeFohjnUw==}
 
   homedir-polyfill@1.0.3:
     resolution: {integrity: sha512-eSmmWE5bZTK2Nou4g0AI3zZ9rswp7GRKoKXS1BLUkvPviOqs4YTN1djQIqrXy9k5gEtdLPy86JjRwsNM9tnDcA==}
@@ -10002,7 +10002,7 @@ snapshots:
 
   hexoid@1.0.0: {}
 
-  home-assistant-js-websocket@9.4.0: {}
+  home-assistant-js-websocket@9.5.0: {}
 
   homedir-polyfill@1.0.3:
     dependencies:
