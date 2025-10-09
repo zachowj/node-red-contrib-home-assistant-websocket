@@ -123,7 +123,7 @@
     "husky": "9.1.7",
     "jsonata": "2.0.5",
     "lazypipe": "1.0.2",
-    "lint-staged": "15.4.3",
+    "lint-staged": "16.2.3",
     "markdown-it": "14.1.0",
     "markdown-it-container": "4.0.0",
     "markdown-it-inline-comments": "1.0.1",
