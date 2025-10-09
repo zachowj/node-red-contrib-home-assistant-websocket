@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.78.3](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.78.2...v0.78.3) (2025-10-09)
+
+
+### Code Refactoring
+
+* **calendar:** update optional fields to use undefined instead of null/undefined ([18bbcd2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/18bbcd217178e578e9c43d952b00b520e32144a9))
+
+
+### Tests
+
+* **calendar:** add uniqueId generation tests for various scenarios ([18bbcd2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/18bbcd217178e578e9c43d952b00b520e32144a9))
+
+
+### Build System
+
+* **deps-dev:** bump @types/mustache from 4.2.5 to 4.2.6 ([#1879](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1879)) ([807987a](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/807987a0557f923ecebb4e3aee16496a5e8c9c6a))
+* **deps-dev:** bump cheerio from 1.0.0 to 1.1.2 ([#1877](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1877)) ([dba374a](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/dba374a638620f749928908a9b83f876b038cede))
+* **deps-dev:** bump cssnano from 7.0.6 to 7.1.1 ([#1874](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1874)) ([ae46388](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ae46388d86e08725f76420ed8645694fd1e88d30))
+* **deps-dev:** bump eslint-plugin-prettier from 5.2.3 to 5.5.4 ([#1876](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1876)) ([9b28555](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/9b285555e97d8cebc05bed08dd9c232b537d6c60))
+* **deps-dev:** bump lint-staged from 15.4.3 to 16.2.3 ([#1873](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1873)) ([acfaec2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/acfaec22c8eb3fe1a68313af58d02a51ffa58b9e))
+* **deps:** bump home-assistant-js-websocket from 9.4.0 to 9.5.0 ([#1875](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1875)) ([dce2c38](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/dce2c387a88589d13298dbd7645c2d0d7b2d1449))
+
 ## [0.78.2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.78.1...v0.78.2) (2025-10-06)
 
 
