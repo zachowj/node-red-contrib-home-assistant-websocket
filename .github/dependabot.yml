@@ -9,6 +9,17 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: "flat" # v6 changes to ESM only
+        update-types: "version-update:semver-major"
+      - dependency-name: "lowdb"
+      - dependency-name: "@types/node" # inline with minimal Node.js version support policy
+        update-types: "version-update:semver-major"
+      - dependency-name: "@types/node-red" # major changes after v1.35
+      - dependency-name: "del" # v7 changes to ESM only
+        update-types: "version-update:semver-major"
+      - dependency-name: "eslint" # keep current until manually updated
+    versioning-strategy: increase
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
