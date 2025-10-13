@@ -129,7 +129,7 @@
     "markdown-it-inline-comments": "^1.0.1",
     "merge-stream": "^2.0.0",
     "nock": "^14.0.10",
-    "node-red": "^4.1.0",
+    "node-red": "^4.1.1",
     "node-red-node-test-helper": "^0.3.5",
     "nodemon": "^3.1.10",
     "postcss": "^8.5.6",
