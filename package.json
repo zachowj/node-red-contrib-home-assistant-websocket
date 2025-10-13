@@ -97,7 +97,7 @@
     "cssnano": "^7.1.1",
     "del": "^6.1.1",
     "eslint": "^8.57.1",
-    "eslint-config-prettier": "^10.1.2",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-n": "^16.6.2",
