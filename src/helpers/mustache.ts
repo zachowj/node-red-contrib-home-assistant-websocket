@@ -3,11 +3,13 @@
  */
 
 import { HassEntities } from 'home-assistant-js-websocket';
-import { Context, render } from 'mustache';
+import mustache from 'mustache';
 import { NodeContext, NodeMessage } from 'node-red';
 import selectn from 'selectn';
 
 import { containsMustache } from './utils';
+
+const { Context, render } = mustache;
 
 function parseContext(key: string) {
     const match = /^(flow|global)(\[(\w+)\])?\.(.+)/.exec(key);
