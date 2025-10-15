@@ -12,7 +12,10 @@
     "strict": true,
     "moduleResolution": "node",
     "baseUrl": "./src",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "inlineSourceMap": false,
+    "inlineSources": true
   },
   "include": ["./src/**/*.js", "./src/**/*.ts"],
   "exclude": [
