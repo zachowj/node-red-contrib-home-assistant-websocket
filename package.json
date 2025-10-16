@@ -16,11 +16,10 @@
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "docs:lint": "prettier --write docs/{.vuepress/**,**}/*.{js,md,html}",
-    "editor:compile": "tsc --project tsconfig.editor.json",
     "lint": "eslint . && prettier --check {docs,src,test}/**/*.{css,js,ts,md,html}",
     "lint:fix": "eslint . --fix && prettier --write {docs,src,test}/**/*.{css,js,ts,md,html}",
     "prepare": "husky",
-    "prepublishOnly": "gulp build",
+    "prepublishOnly": "node build.js build",
     "test": "vitest --run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest"
