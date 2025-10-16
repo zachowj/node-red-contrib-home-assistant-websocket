@@ -99,9 +99,6 @@ importers:
       '@types/selectn':
         specifier: ^1.1.3
         version: 1.1.3
-      '@types/string.prototype.matchall':
-        specifier: ^4.0.4
-        version: 4.0.4
       '@types/timestring':
         specifier: ^7.0.0
         version: 7.0.0
@@ -1255,9 +1252,6 @@ packages:
 
   '@types/sizzle@2.3.10':
     resolution: {integrity: sha512-TC0dmN0K8YcWEAEfiPi5gJP14eJe30TTGjkvek3iM/1NdHHsdCA/Td6GvNndMOo/iSnIsZ4HuuhrYPDAmbxzww==}
-
-  '@types/string.prototype.matchall@4.0.4':
-    resolution: {integrity: sha512-E0KMS5FrWafbfKTGsoTZgrPHxBVknPeBxUTNwJima3t5KLdOlY285sisQC0mkVPTNNBc4nxza5ldly/ct+ISrQ==}
 
   '@types/superagent@8.1.1':
     resolution: {integrity: sha512-YQyEXA4PgCl7EVOoSAS3o0fyPFU6erv5mMixztQYe1bqbWmmn8c+IrqoxjQeZe4MgwXikgcaZPiI/DsbmOVlzA==}
@@ -5921,8 +5915,6 @@ snapshots:
   '@types/sinonjs__fake-timers@8.1.5': {}
 
   '@types/sizzle@2.3.10': {}
-
-  '@types/string.prototype.matchall@4.0.4': {}
 
   '@types/superagent@8.1.1':
     dependencies:
