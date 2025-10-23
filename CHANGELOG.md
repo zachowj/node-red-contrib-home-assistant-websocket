@@ -2,6 +2,44 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.78.3](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.78.2...v0.78.3) (2025-10-16)
+
+
+### Code Refactoring
+
+* **calendar:** update optional fields to use undefined instead of null/undefined ([18bbcd2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/18bbcd217178e578e9c43d952b00b520e32144a9))
+* **mustache:** switch to named import for mustache and clean up code ([51ce45c](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/51ce45c61396bac436fb0f83b45c2f93fe9928ab))
+
+
+### Tests
+
+* **calendar:** add uniqueId generation tests for various scenarios ([18bbcd2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/18bbcd217178e578e9c43d952b00b520e32144a9))
+
+
+### Build System
+
+* add pnpm overrides for jsonata to unify versions and resolve type conflicts ([a3c726c](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a3c726cb580ea5247f1465837ddbca2f581315e2))
+* **deps-dev:** bump @types/mustache from 4.2.5 to 4.2.6 ([#1879](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1879)) ([807987a](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/807987a0557f923ecebb4e3aee16496a5e8c9c6a))
+* **deps-dev:** bump cheerio from 1.0.0 to 1.1.2 ([#1877](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1877)) ([dba374a](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/dba374a638620f749928908a9b83f876b038cede))
+* **deps-dev:** bump cssnano from 7.0.6 to 7.1.1 ([#1874](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1874)) ([ae46388](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ae46388d86e08725f76420ed8645694fd1e88d30))
+* **deps-dev:** bump eslint-config-prettier from 10.1.2 to 10.1.8 ([#1882](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1882)) ([3e77864](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/3e77864dc4889f38ce0e5191faa3827f6efcf920))
+* **deps-dev:** bump eslint-plugin-prettier from 5.2.3 to 5.5.4 ([#1876](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1876)) ([9b28555](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/9b285555e97d8cebc05bed08dd9c232b537d6c60))
+* **deps-dev:** bump lint-staged from 15.4.3 to 16.2.3 ([#1873](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1873)) ([acfaec2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/acfaec22c8eb3fe1a68313af58d02a51ffa58b9e))
+* **deps-dev:** bump lint-staged from 16.2.3 to 16.2.4 ([#1883](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1883)) ([90164c5](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/90164c563892f7f8b836d7679ea98ac5cd6b0cdc))
+* **deps-dev:** bump node-red from 4.1.0 to 4.1.1 ([#1884](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1884)) ([319f7bc](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/319f7bce6944c5c53828b1290cfd2cee6e80b179))
+* **deps-dev:** remove unused @types/bonjour dependency ([e657fae](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/e657fae05dd46f3407fa31f5aebd238204264290))
+* **deps-dev:** remove unused @types/string.prototype.matchall dependency ([478a2b6](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/478a2b654fe5d80ce601f27966775feeed19177e))
+* **deps:** bump home-assistant-js-websocket from 9.4.0 to 9.5.0 ([#1875](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1875)) ([dce2c38](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/dce2c387a88589d13298dbd7645c2d0d7b2d1449))
+* replace gulp with custom esbuild-based build script ([fef41e0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/fef41e0750ad56f1b01fe070cff9dfbd7feaf6ea))
+* **scripts:** remove unused editor compile script and update prepublish command to use build.js ([65bded6](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/65bded65f17036b10c185f51cf9fd1cf9be636b9))
+* update project dependencies to latest compatible versions ([a3c726c](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a3c726cb580ea5247f1465837ddbca2f581315e2))
+
+
+### Continuous Integration
+
+* **dependabot:** correct formatting of update-types for ignored dependencies ([80e3e8e](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/80e3e8e14c884f1b5360bb675652c5bd00c33ba6))
+* **dependabot:** ignore specific dependencies that should not be auto-updated ([a3c726c](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a3c726cb580ea5247f1465837ddbca2f581315e2))
+
 ## [0.78.2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.78.1...v0.78.2) (2025-10-06)
 
 
