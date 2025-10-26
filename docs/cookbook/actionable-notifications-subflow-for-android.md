@@ -6,6 +6,12 @@ Post questions and follow the discussion about this recipe [here](https://github
 
 ![screenshot](./images/actionable-notifications-subflow-for-android_01.png)
 
+v2.0.0
+
+@[code](@examples/cookbook/actionable-notifications-subflow-for-android/subflow_2_0_0.json)
+
+:::details Old versions
+
 v1.1.0 - Requires version 0.68.0
 
 @[code](@examples/cookbook/actionable-notifications-subflow-for-android/subflow_1_1_0.json)
@@ -14,8 +20,6 @@ v1.1.0 - Requires version 0.68.0
 
 - Added selectable Home Assistant server config
 - Change service from text input to dropdown
-
-:::details Old versions
 
 v1.0.1 - Requires version 0.68.0
 
