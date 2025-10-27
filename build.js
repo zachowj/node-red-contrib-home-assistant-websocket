@@ -88,6 +88,30 @@ const buildCache = {
     handlebars: null,
 };
 
+const runTypeCheck = (tsconfigPath) => {
+    const tscPath = require.resolve('typescript/bin/tsc');
+
+    const child = spawn(
+        process.execPath,
+        [tscPath, '--noEmit', '--project', tsconfigPath],
+        { stdio: 'inherit' },
+    );
+
+    child.on('close', (code) => {
+        if (code !== 0) {
+            console.error(
+                `Type checking failed for ${tsconfigPath} (exit code ${code})`,
+            );
+        }
+    });
+
+    child.on('error', (err) => {
+        console.error(
+            `Type checking process error for ${tsconfigPath}: ${err.message}`,
+        );
+    });
+};
+
 const invalidateCache = (types) => {
     types.forEach((type) => {
         buildCache[type] = null;
@@ -362,6 +386,9 @@ const processMarkdown = (markdown) => {
 const buildEditorFiles = async () => {
     const isDevMode = process.argv[2] === 'start';
 
+    const tsconfigPath = path.resolve(__dirname, 'tsconfig.editor.json');
+    runTypeCheck(tsconfigPath);
+
     // Build all components in parallel, using cache when available
     const [
         css,
@@ -380,7 +407,7 @@ const buildEditorFiles = async () => {
             bundle: true,
             minify: !isDevMode,
             format: 'iife',
-            tsconfig: path.resolve(__dirname, 'tsconfig.editor.json'),
+            tsconfig: tsconfigPath,
         }),
         buildNodeHtml(isDevMode),
         buildEditorsHtml(isDevMode),
@@ -408,9 +435,10 @@ const buildEditorFiles = async () => {
 const buildSourceFiles = async () => {
     const isDevMode = process.argv[2] === 'start'; // Check if the command is 'start'
 
-    const tsconfig = JSON.parse(
-        await fs.readFile(path.resolve(__dirname, 'tsconfig.json'), 'utf-8'),
-    );
+    const tsconfigPath = path.resolve(__dirname, 'tsconfig.json');
+    runTypeCheck(tsconfigPath);
+
+    const tsconfig = JSON.parse(await fs.readFile(tsconfigPath, 'utf-8'));
     const includePatterns = tsconfig.include || [];
     const excludePatterns = tsconfig.exclude || [];
     const entryPoints = await fastGlob(includePatterns, {
@@ -425,7 +453,7 @@ const buildSourceFiles = async () => {
         platform: 'node',
         format: 'cjs',
         sourcemap: isDevMode, // Enable source maps in dev mode
-        tsconfig: path.resolve(__dirname, 'tsconfig.json'),
+        tsconfig: tsconfigPath,
     });
 };
 
@@ -434,7 +462,7 @@ const copiedIcons = new Set();
 
 const copyIconFile = async (iconPath) => {
     const relativePath = path.relative(ICONS_DIR, iconPath);
-    const destPath = path.join(`${DIST_DIR}/icons`, relativePath);
+    const destPath = path.join(DIST_DIR, 'icons', relativePath);
 
     await fs.mkdir(path.dirname(destPath), { recursive: true });
     await fs.copyFile(iconPath, destPath);
@@ -470,10 +498,9 @@ const buildLocales = async () => {
         return mergeJson.merge(acc, content);
     }, Promise.resolve({}));
 
-    await fs.writeFile(
-        `${DIST_DIR}/locales/en-US/index.json`,
-        JSON.stringify(mergedLocales),
-    );
+    const outputPath = path.join(DIST_DIR, 'locales', 'en-US', 'index.json');
+    await fs.mkdir(path.dirname(outputPath), { recursive: true });
+    await fs.writeFile(outputPath, JSON.stringify(mergedLocales));
 };
 
 const buildSidebar = async () => {
@@ -514,7 +541,7 @@ const startNodeRed = (dir) => {
     nodeRedProcess = spawn(
         'node',
         [
-            '--trace-deprecation',
+            // '--trace-deprecation',
             '--enable-source-maps',
             nodeRedBinary,
             '-u',
@@ -652,7 +679,7 @@ const startDevServer = () => {
     };
 
     // Watch for changes
-    const watchPaths = [DOCS_DIR, ICONS_DIR, RESOURCES_DIR, SRC_DIR];
+    const watchPaths = [`${DOCS_DIR}/node`, ICONS_DIR, RESOURCES_DIR, SRC_DIR];
 
     const watcher = chokidar.watch(watchPaths, {
         ignoreInitial: true,
@@ -667,7 +694,7 @@ const startDevServer = () => {
         changedFiles.add(filePath);
 
         clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(handleFileChange, 750); // Debounce delay of 500ms
+        debounceTimer = setTimeout(handleFileChange, 750); // Debounce delay of 750ms
     });
 };
 
