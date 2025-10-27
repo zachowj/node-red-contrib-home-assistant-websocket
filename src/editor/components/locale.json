@@ -1,6 +1,14 @@
 {
   "home-assistant": {
     "label": {
+      "entity_state_cast": {
+        "option": {
+          "boolean": "as boolean",
+          "ha_boolean": "as Home Assistant boolean",
+          "number": "as number",
+          "string": "as string"
+        }
+      },
       "output_properties": "Output properties"
     }
   }

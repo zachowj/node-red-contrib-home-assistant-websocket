@@ -26,6 +26,11 @@ If the conditional statement is evaluated as true send the message to the first 
 
 ### State Type
 
+::: warning DEPRECATED
+This feature is being phased out and will be removed in version **1.0.0**.  
+Use the **output properties** for state conversion moving forward.
+:::
+
 - Type: `string`
 
 Convert the state of the entity to the selected type. Boolean will be converted to true based on if the string is equal by default to (y|yes|true|on|home|open). Original value stored in msg.data.original_state

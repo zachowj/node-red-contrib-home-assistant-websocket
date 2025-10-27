@@ -246,3 +246,25 @@ export function containsMustache(str: string): boolean {
     const regex = /{{(?:(?!}}).+)}}/g;
     return regex.test(str);
 }
+
+/**
+ * Converts a string to a boolean value.
+ * Accepts "true"/"false" (case-insensitive), numeric strings, and numbers.
+ * Returns false for unrecognized values.
+ * @param str - The string to convert.
+ * @returns The boolean representation.
+ */
+export function parseValueToBoolean(value: unknown): boolean {
+    if (typeof value === 'boolean') return value;
+    if (typeof value === 'number') return Boolean(value);
+
+    if (typeof value === 'string') {
+        const normalized = value.trim().toLowerCase();
+        if (normalized === 'true') return true;
+        if (normalized === 'false') return false;
+        const num = Number(normalized);
+        if (!isNaN(num)) return Boolean(num);
+    }
+
+    return false;
+}

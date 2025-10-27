@@ -64,6 +64,7 @@ enum DeploymentType {
 
 export enum IssueType {
     AreaId = 'areaId',
+    DeprecatedConfig = 'deprecatedConfig',
     DeviceId = 'deviceId',
     EntityId = 'entityId',
     FloorId = 'floorId',

@@ -11,6 +11,10 @@ import {
 import IdSelector, {
     getSelectedIds,
 } from '../../editor/components/idSelector/IdSelector';
+import {
+    DeprecatedSettingType,
+    renderDeprecatedSettings,
+} from '../../editor/deprecated_settings';
 import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
@@ -534,6 +538,7 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
         );
 
         insertSocialBar('trigger-state');
+        renderDeprecatedSettings(this, [DeprecatedSettingType.StateType]);
     },
     oneditsave: function () {
         const constraintsItems = $('#constraint-list').editableList('items');

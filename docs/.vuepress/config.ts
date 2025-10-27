@@ -129,7 +129,9 @@ export default defineUserConfig({
                                 '/guide/jsonata/jsonata-primer',
                             ],
                         },
+                        '/guide/output-properties',
                         '/guide/diagnostics',
+                        '/guide/breaking-changes',
                     ],
                 },
                 {

@@ -1,7 +1,9 @@
 import { cloneDeep } from 'lodash';
 import selectn from 'selectn';
 
-import { TypedInputTypes } from '../../const';
+import { EntityStateCastType, TypedInputTypes } from '../../const';
+import { getServerConfigNode } from '../../helpers/node';
+import { parseValueToBoolean } from '../../helpers/utils';
 import JSONata from './JSONataService';
 import NodeRedContext from './NodeRedContextService';
 
@@ -79,10 +81,38 @@ export default class TypedInputService {
                 );
                 break;
             }
+            case TypedInputTypes.EntityState:
+                switch (value) {
+                    case EntityStateCastType.Number:
+                        val = Number(props.entity?.state);
+                        break;
+                    case EntityStateCastType.Boolean:
+                        val = parseValueToBoolean(props.entity?.state);
+                        break;
+                    case EntityStateCastType.HA_Boolean:
+                        {
+                            const serverConfigId = this.#nodeConfig.server;
+                            const serverConfig =
+                                getServerConfigNode(serverConfigId);
+                            const haBooleans = serverConfig?.config.ha_boolean;
+                            if (!haBooleans) {
+                                val = false;
+                                break;
+                            }
+                            // TODO: convert from a pipe separated string to an array in the server config node
+                            const booleanValues = haBooleans.split('|');
+                            val = booleanValues.includes(props.entity?.state);
+                        }
+                        break;
+                    case EntityStateCastType.String:
+                    default: // entity state didn't have a value until version 0.79.0
+                        val = props.entity?.state;
+                        break;
+                }
+                break;
             case TypedInputTypes.Data:
             case TypedInputTypes.DeviceId:
             case TypedInputTypes.Entity:
-            case TypedInputTypes.EntityState:
             case TypedInputTypes.EventData:
             case TypedInputTypes.Headers:
             case TypedInputTypes.Params:

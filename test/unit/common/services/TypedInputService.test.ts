@@ -4,7 +4,7 @@ import { mock, MockProxy, mockReset } from 'vitest-mock-extended';
 import JSONataService from '../../../../src/common/services/JSONataService';
 import NodeRedContextService from '../../../../src/common/services/NodeRedContextService';
 import TypedInputService from '../../../../src/common/services/TypedInputService';
-import { TypedInputTypes } from '../../../../src/const';
+import { EntityStateCastType, TypedInputTypes } from '../../../../src/const';
 
 const nodeConfig = {
     id: 'test',
@@ -228,7 +228,6 @@ describe('Typed Input Service', function () {
             const props: Partial<Record<TypedInputTypes, any>> = {
                 data: 'data_value',
                 entity: 'entity_value',
-                entityState: 'entityState_value',
                 eventData: 'eventData_value',
                 headers: 'headers_value',
                 params: 'params_value',
@@ -247,6 +246,67 @@ describe('Typed Input Service', function () {
                     );
                     expect(results).toEqual(prop + '_value');
                 }
+            });
+        });
+        describe('getValue - EntityState', () => {
+            it('should return entity state as string by default', async () => {
+                const entity = { state: 'on' };
+                const result = await typedInputService.getValue(
+                    '',
+                    TypedInputTypes.EntityState,
+                    { entity },
+                );
+                expect(result).toBe('on');
+            });
+
+            it('should return entity state as number when value is "number"', async () => {
+                const entity = { state: '42' };
+                const result = await typedInputService.getValue(
+                    EntityStateCastType.Number,
+                    TypedInputTypes.EntityState,
+                    { entity },
+                );
+                expect(result).toBe(42);
+            });
+
+            it('should return entity state as boolean when value is "boolean"', async () => {
+                const entity = { state: 'true' };
+                const result = await typedInputService.getValue(
+                    EntityStateCastType.Boolean,
+                    TypedInputTypes.EntityState,
+                    { entity },
+                );
+                expect(result).toBe(true);
+            });
+
+            it('should return entity state as boolean (false) when value is "boolean" and state is falsy', async () => {
+                const entity = { state: 'off' };
+                const result = await typedInputService.getValue(
+                    EntityStateCastType.Boolean,
+                    TypedInputTypes.EntityState,
+                    { entity },
+                );
+                expect(result).toBe(false);
+            });
+
+            it('should return undefined if entity is missing', async () => {
+                const result = await typedInputService.getValue(
+                    '',
+                    TypedInputTypes.EntityState,
+                    {},
+                );
+                expect(result).toBeUndefined();
+            });
+        });
+
+        describe('getValue - fallback/default', () => {
+            it('should return value for unknown type', async () => {
+                const result = await typedInputService.getValue(
+                    'foo',
+                    // @ts-expect-error test fallback
+                    'unknown_type',
+                );
+                expect(result).toBe('foo');
             });
         });
     });

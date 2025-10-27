@@ -8,6 +8,7 @@ import {
     getTimeInMilliseconds,
     isNodeRedEnvVar,
     parseTime,
+    parseValueToBoolean,
     shouldInclude,
     shouldIncludeEvent,
     toCamelCase,
@@ -279,6 +280,59 @@ describe('utils', function () {
                 'event2',
                 eventListeners[1][1],
             );
+        });
+    });
+
+    describe('convertStringToBoolean', () => {
+        it('should return true for boolean true', () => {
+            expect(parseValueToBoolean(true)).toBe(true);
+        });
+
+        it('should return false for boolean false', () => {
+            expect(parseValueToBoolean(false)).toBe(false);
+        });
+
+        it('should return true for number 1', () => {
+            expect(parseValueToBoolean(1)).toBe(true);
+        });
+
+        it('should return false for number 0', () => {
+            expect(parseValueToBoolean(0)).toBe(false);
+        });
+
+        it('should return true for string "true" (case-insensitive)', () => {
+            expect(parseValueToBoolean('true')).toBe(true);
+            expect(parseValueToBoolean('TRUE')).toBe(true);
+            expect(parseValueToBoolean(' True ')).toBe(true);
+        });
+
+        it('should return false for string "false" (case-insensitive)', () => {
+            expect(parseValueToBoolean('false')).toBe(false);
+            expect(parseValueToBoolean('FALSE')).toBe(false);
+            expect(parseValueToBoolean(' False ')).toBe(false);
+        });
+
+        it('should return true for numeric strings representing non-zero', () => {
+            expect(parseValueToBoolean('1')).toBe(true);
+            expect(parseValueToBoolean('42')).toBe(true);
+            expect(parseValueToBoolean(' 7 ')).toBe(true);
+        });
+
+        it('should return false for numeric string "0"', () => {
+            expect(parseValueToBoolean('0')).toBe(false);
+            expect(parseValueToBoolean(' 0 ')).toBe(false);
+        });
+
+        it('should return false for unrecognized strings', () => {
+            expect(parseValueToBoolean('foo')).toBe(false);
+            expect(parseValueToBoolean('')).toBe(false);
+            expect(parseValueToBoolean('yes')).toBe(false);
+            expect(parseValueToBoolean('no')).toBe(false);
+        });
+
+        it('should return false for undefined and null', () => {
+            expect(parseValueToBoolean(undefined as any)).toBe(false);
+            expect(parseValueToBoolean(null as any)).toBe(false);
         });
     });
 });

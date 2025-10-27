@@ -143,3 +143,10 @@ export enum TimeUnit {
     Hours = 'hours',
     Days = 'days',
 }
+
+export enum EntityStateCastType {
+    Boolean = 'boolean',
+    HA_Boolean = 'ha_boolean',
+    Number = 'number',
+    String = 'string',
+}

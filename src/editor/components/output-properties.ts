@@ -1,12 +1,19 @@
 import { EditorWidgetTypedInputTypeDefinition } from 'node-red';
 
-import { TypedInputTypes } from '../../const';
+import { EntityStateCastType, TypedInputTypes } from '../../const';
 import { i18n } from '../i18n';
 import { HATypedInputTypeOptions, OutputProperty } from '../types';
 
 const customOutputElement = '#custom-outputs';
 let $outputs: JQuery<HTMLElement>;
 let _extraTypes: string[] = [];
+
+const entityStateOptions = Object.values(EntityStateCastType).map((type) => ({
+    value: type,
+    label: i18n(
+        `home-assistant.label.entity_state_cast.option.${type.toLowerCase()}`,
+    ),
+}));
 
 const customTypes: { [key: string]: EditorWidgetTypedInputTypeDefinition } = {
     config: { value: 'config', label: 'config.', hasValue: true },
@@ -17,6 +24,7 @@ const customTypes: { [key: string]: EditorWidgetTypedInputTypeDefinition } = {
         value: 'entityState',
         label: 'entity state',
         hasValue: false,
+        options: entityStateOptions,
     },
     eventData: { value: 'eventData', label: 'event data', hasValue: false },
     headers: { value: 'headers', label: 'headers', hasValue: false },
@@ -108,7 +116,7 @@ export function createOutputs(
                 .css('width', 'calc(70% - 30px)')
                 .appendTo($row)
                 .typedInput({
-                    default: 'str',
+                    default: TypedInputTypes.String,
                     types: getTypes(),
                 });
 

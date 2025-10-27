@@ -254,22 +254,24 @@ const NodeMinIntegraionVersion = {
     [NodeType.Webhook]: '1.6.0',
 } as const;
 
-function renderAlert(type: NodeType) {
+function renderAlert(type: keyof typeof NodeMinIntegraionVersion) {
     const minVersion = NodeMinIntegraionVersion[type];
+    const currentVersion = getIntegrationVersion();
     const satisfiesVersion =
-        minVersion === undefined ||
-        haUtils.compareVersion(minVersion, getIntegrationVersion());
-    const integartionValid = isIntegrationLoaded() && satisfiesVersion;
+        !minVersion || haUtils.compareVersion(minVersion, currentVersion);
+    const integrationValid = isIntegrationLoaded() && satisfiesVersion;
+
     if (!$('#integrationAlert').length) {
         const alertText = `
             <div id="integrationAlert" class="ui-state-error ha-alert-box">
-                This node requires <a href="https://github.com/zachowj/hass-node-red" target="_blank">Node-RED custom integration ${
-                    satisfiesVersion ? '' : `version ${minVersion}+`
-                } <i class="fa fa-external-link external-link"></i></a> to be installed in Home Assistant for it to function.
+                This node requires the <a href="https://github.com/zachowj/hass-node-red" target="_blank">
+                Node-RED custom integration${satisfiesVersion ? '' : ` version ${minVersion}+`}
+                <i class="fa fa-external-link external-link"></i></a> to be installed in Home Assistant for it to function.
             </div>`;
         $('#dialog-form').prepend(alertText);
     }
-    $('#integrationAlert').toggle(!integartionValid);
+
+    $('#integrationAlert').toggle(!integrationValid);
 }
 
 export function toggleExposeAsForListenMode() {

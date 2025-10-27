@@ -11,6 +11,10 @@ import {
 import { hassAutocomplete } from '../../editor/components/hassAutocomplete';
 import * as ifState from '../../editor/components/ifstate';
 import * as haOutputs from '../../editor/components/output-properties';
+import {
+    DeprecatedSettingType,
+    renderDeprecatedSettings,
+} from '../../editor/deprecated_settings';
 import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
@@ -145,6 +149,7 @@ const PollStateEditor: EditorNodeDef<PollStateEditorNodeProperties> = {
         });
 
         insertSocialBar('poll-state');
+        renderDeprecatedSettings(this, [DeprecatedSettingType.StateType]);
     },
     oneditsave: function () {
         const outputs = $('#node-input-ifState').val() ? 2 : 1;

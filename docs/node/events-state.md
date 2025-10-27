@@ -38,6 +38,11 @@ Output on Connect state changes will not start a timer.
 
 ### State Type
 
+::: warning DEPRECATED
+This feature is being phased out and will be removed in version **1.0.0**.  
+Use the **output properties** for state conversion moving forward.
+:::
+
 - Type: `string`
 - Values: `string|number|boolean`
 - Default: `string`

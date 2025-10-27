@@ -13,6 +13,10 @@ import IdSelector, {
 } from '../../editor/components/idSelector/IdSelector';
 import * as ifState from '../../editor/components/ifstate';
 import * as haOutputs from '../../editor/components/output-properties';
+import {
+    DeprecatedSettingType,
+    renderDeprecatedSettings,
+} from '../../editor/deprecated_settings';
 import * as exposeNode from '../../editor/exposenode';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
@@ -211,6 +215,7 @@ const EventsStateEditor: EditorNodeDef<EventsStateEditorNodeProperties> = {
         });
 
         insertSocialBar('events-state');
+        renderDeprecatedSettings(this, [DeprecatedSettingType.StateType]);
     },
     oneditsave: function () {
         const outputs = $('#node-input-ifState').val() ? 2 : 1;

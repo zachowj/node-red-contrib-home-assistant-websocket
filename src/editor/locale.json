@@ -20,6 +20,11 @@
         "discussions": "Github Discussions",
         "documentation": "Documentation",
         "looking_for_help": "Looking for help?"
+      },
+      "deprecated_settings": {
+        "title": "Deprecated Settings (click to expand/collapse)",
+        "description": "The following settings are deprecated and may be removed in future versions. It is recommended to update your configuration to avoid potential issues.",
+        "state_type_warning": "Warning: The 'State Type' setting will be removed in version 1.0. Please update your configuration accordingly."
       }
     }
   }

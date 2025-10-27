@@ -1,9 +1,13 @@
 import { EditorNodeDef, EditorRED } from 'node-red';
 
-import { NodeType } from '../../const';
+import { ComparatorType, NodeType, TypedInputTypes } from '../../const';
 import { hassAutocomplete } from '../../editor/components/hassAutocomplete';
 import * as ifState from '../../editor/components/ifstate';
 import * as haOutputs from '../../editor/components/output-properties';
+import {
+    DeprecatedSettingType,
+    renderDeprecatedSettings,
+} from '../../editor/deprecated_settings';
 import ha, { NodeCategory, NodeColor } from '../../editor/ha';
 import * as haServer from '../../editor/haserver';
 import { insertSocialBar } from '../../editor/socialbar';
@@ -54,22 +58,22 @@ const CurrentStateEditor: EditorNodeDef<CurrentStateEditorNodeProperties> = {
         version: { value: RED.settings.get('apiCurrentStateVersion', 0) },
         outputs: { value: 1 },
         halt_if: { value: '' },
-        halt_if_type: { value: 'str' },
-        halt_if_compare: { value: 'is' },
+        halt_if_type: { value: TypedInputTypes.String },
+        halt_if_compare: { value: ComparatorType.Is },
         entity_id: { value: '' },
-        state_type: { value: 'str' },
+        state_type: { value: TypedInputTypes.String },
         blockInputOverrides: { value: true },
         outputProperties: {
             value: [
                 {
                     property: 'payload',
-                    propertyType: 'msg',
+                    propertyType: TypedInputTypes.Message,
                     value: '',
                     valueType: 'entityState',
                 },
                 {
                     property: 'data',
-                    propertyType: 'msg',
+                    propertyType: TypedInputTypes.Message,
                     value: '',
                     valueType: 'entity',
                 },
@@ -113,8 +117,14 @@ const CurrentStateEditor: EditorNodeDef<CurrentStateEditorNodeProperties> = {
         );
 
         $('#node-input-for').typedInput({
-            default: 'num',
-            types: ['num', 'jsonata', 'msg', 'flow', 'global'],
+            default: TypedInputTypes.Number,
+            types: [
+                TypedInputTypes.Number,
+                TypedInputTypes.JSONata,
+                TypedInputTypes.Message,
+                TypedInputTypes.Flow,
+                TypedInputTypes.Global,
+            ],
             typeField: '#node-input-forType',
         });
 
@@ -123,6 +133,7 @@ const CurrentStateEditor: EditorNodeDef<CurrentStateEditorNodeProperties> = {
         });
 
         insertSocialBar('current-state');
+        renderDeprecatedSettings(this, [DeprecatedSettingType.StateType]);
     },
     oneditsave: function () {
         const outputs = $('#node-input-halt_if').val() ? 2 : 1;

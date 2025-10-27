@@ -2,6 +2,7 @@
   "home-assistant": {
     "service": {
       "issue": {
+        "deprecated_state_type_config": "State type is deprecated and will be removed in version 1.0",
         "device_not_found": "Device __device_id__ not found",
         "entity_id_target_data": "Entity ID '__entity_id__' should be in the data property, not the target property, for the selected action",
         "entity_not_found": "Entity __entity_id__ not found",
