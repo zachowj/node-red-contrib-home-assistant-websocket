@@ -63,7 +63,7 @@
   },
   "devDependencies": {
     "@types/debug": "^4.1.12",
-    "@types/express": "^4.17.23",
+    "@types/express": "^5.0.4",
     "@types/flat": "^5.0.5",
     "@types/jquery": "^3.5.33",
     "@types/jqueryui": "^1.12.24",

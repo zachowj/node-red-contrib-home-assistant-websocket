@@ -67,8 +67,8 @@ importers:
         specifier: ^4.1.12
         version: 4.1.12
       '@types/express':
-        specifier: ^4.17.23
-        version: 4.17.23
+        specifier: ^5.0.4
+        version: 5.0.4
       '@types/flat':
         specifier: ^5.0.5
         version: 5.0.5
@@ -1106,8 +1106,8 @@ packages:
   '@types/ace@0.0.52':
     resolution: {integrity: sha512-YPF9S7fzpuyrxru+sG/rrTpZkC6gpHBPF14W3x70kqVOD+ks6jkYLapk4yceh36xej7K4HYxcyz9ZDQ2lTvwgQ==}
 
-  '@types/body-parser@1.19.5':
-    resolution: {integrity: sha512-fB3Zu92ucau0iQ0JMCFQE7b/dv8Ot07NI3KaZIkIUNXq82k4eBAqUaneXfleGY9JWskeS9y+u0nXMyspcuQrCg==}
+  '@types/body-parser@1.19.6':
+    resolution: {integrity: sha512-HLFeCYgz89uk22N5Qg3dvGvsv46B8GLvKKo1zKG4NybA8U2DiEO3w9lqGg29t/tfLRJpJ6iQxnVw4OnB7MoM9g==}
 
   '@types/chai@5.2.2':
     resolution: {integrity: sha512-8kB30R7Hwqf40JPiKhVzodJs2Qc1ZJ5zuT3uzw5Hq/dhNCl3G3l83jfpdI1e20BP348+fV7VIL/+FxaXkqBmWg==}
@@ -1130,11 +1130,11 @@ packages:
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
 
-  '@types/express-serve-static-core@4.17.41':
-    resolution: {integrity: sha512-OaJ7XLaelTgrvlZD8/aa0vvvxZdUmlCn6MtWeB7TkiKW70BQLc9XEPpDLPdbo52ZhXUCrznlWdCHWxJWtdyajA==}
+  '@types/express-serve-static-core@5.1.0':
+    resolution: {integrity: sha512-jnHMsrd0Mwa9Cf4IdOzbz543y4XJepXrbia2T4b6+spXC2We3t1y6K44D3mR8XMFSXMCf3/l7rCgddfx7UNVBA==}
 
-  '@types/express@4.17.23':
-    resolution: {integrity: sha512-Crp6WY9aTYP3qPi2wGDo9iUe/rceX01UMhnF1jmwDcKCFM6cx7YhGP/Mpr3y9AASpfHixIG0E6azCcL5OcDHsQ==}
+  '@types/express@5.0.4':
+    resolution: {integrity: sha512-g64dbryHk7loCIrsa0R3shBnEu5p6LPJ09bu9NG58+jz+cRUjFrc3Bz0kNQ7j9bXeCsrRDvNET1G54P/GJkAyA==}
 
   '@types/flat@5.0.5':
     resolution: {integrity: sha512-nPLljZQKSnac53KDUDzuzdRfGI0TDb5qPrb+SrQyN3MtdQrOnGsKniHN1iYZsJEBIVQve94Y6gNz22sgISZq+Q==}
@@ -1148,8 +1148,8 @@ packages:
   '@types/http-cache-semantics@4.0.4':
     resolution: {integrity: sha512-1m0bIFVc7eJWyve9S0RnuRgcQqF/Xd5QsUZAZeQFr1Q3/p9JWoQQEqmVy+DPTNpGXwhgIetAoYF8JSc33q29QA==}
 
-  '@types/http-errors@2.0.4':
-    resolution: {integrity: sha512-D0CFMMtydbJAegzOyHjtiKPLlvnm3iTZyZRSZoLq2mRhDdmLfIWOCYPfQJ4cu2erKghU++QvjcUjp/5h7hESpA==}
+  '@types/http-errors@2.0.5':
+    resolution: {integrity: sha512-r8Tayk8HJnX0FztbZN7oVqGccWgw98T/0neJphO91KkmOzug1KkofZURD4UaD5uH8AqcFLfdPErnBod0u71/qg==}
 
   '@types/jquery@3.5.33':
     resolution: {integrity: sha512-SeyVJXlCZpEki5F0ghuYe+L+PprQta6nRZqhONt9F13dWBtR/ftoaIbdRQ7cis7womE+X2LKhsDdDtkkDhJS6g==}
@@ -1235,8 +1235,8 @@ packages:
   '@types/passport@1.0.17':
     resolution: {integrity: sha512-aciLyx+wDwT2t2/kJGJR2AEeBz0nJU4WuRX04Wu9Dqc5lSUtwu0WERPHYsLhF9PtseiAMPBGNUOtFjxZ56prsg==}
 
-  '@types/qs@6.9.11':
-    resolution: {integrity: sha512-oGk0gmhnEJK4Yyk+oI7EfXsLayXatCWPHary1MtcmbAifkobT9cM9yutG/hZKIseOU0MqbIwQ/u2nn/Gb+ltuQ==}
+  '@types/qs@6.14.0':
+    resolution: {integrity: sha512-eOunJqu0K1923aExK6y8p6fsihYEn/BYuQ4g0CxAAgFc4b/ZLN4CrsRZ55srTdqoiLzU2B2evC+apEIxprEzkQ==}
 
   '@types/range-parser@1.2.7':
     resolution: {integrity: sha512-hKormJbkJqzQGhziax5PItDUTMAM9uE2XXQmM37dyd4hVM+5aVl7oVxMVUiVQn2oCQFN/LKCZdvSM0pFRqbSmQ==}
@@ -1250,11 +1250,14 @@ packages:
   '@types/selectn@1.1.3':
     resolution: {integrity: sha512-LexO1MVMVC1fgfLJoHfwSmSAsXoCBx4R/spBtwihqbXrYrN8wCjM3xWvB+20jerFyRMZxhdfeeq1zK429IXBxw==}
 
-  '@types/send@0.17.4':
-    resolution: {integrity: sha512-x2EM6TJOybec7c52BX0ZspPodMsQUd5L6PRwOunVyVUhXiBSKf3AezDL8Dgvgt5o0UfKNfuA0eMLr2wLT4AiBA==}
+  '@types/send@0.17.6':
+    resolution: {integrity: sha512-Uqt8rPBE8SY0RK8JB1EzVOIZ32uqy8HwdxCnoCOsYrvnswqmFZ/k+9Ikidlk/ImhsdvBsloHbAlewb2IEBV/Og==}
 
-  '@types/serve-static@1.15.5':
-    resolution: {integrity: sha512-PDRk21MnK70hja/YF8AHfC7yIsiQHn1rcXx7ijCFBX/k+XQJhQT/gw3xekXKJvx+5SXaMMS8oqQy09Mzvz2TuQ==}
+  '@types/send@1.2.1':
+    resolution: {integrity: sha512-arsCikDvlU99zl1g69TcAB3mzZPpxgw0UQnaHeC1Nwb015xp8bknZv5rIfri9xTOcMuaVgvabfIRA7PSZVuZIQ==}
+
+  '@types/serve-static@1.15.10':
+    resolution: {integrity: sha512-tRs1dB+g8Itk72rlSI2ZrW6vZg0YrLI81iQSTkMmOqnqCaNr/8Ek4VwWcN5vZgCYWbg/JJSGBlUaYGAOP73qBw==}
 
   '@types/sinon@17.0.4':
     resolution: {integrity: sha512-RHnIrhfPO3+tJT0s7cFaXGZvsL4bbR3/k7z3P312qMS4JaS2Tk+KiwiLx1S0rQ56ERj00u1/BtdyVd0FY+Pdew==}
@@ -5742,7 +5745,7 @@ snapshots:
 
   '@types/ace@0.0.52': {}
 
-  '@types/body-parser@1.19.5':
+  '@types/body-parser@1.19.6':
     dependencies:
       '@types/connect': 3.4.38
       '@types/node': 18.19.130
@@ -5769,19 +5772,18 @@ snapshots:
 
   '@types/estree@1.0.8': {}
 
-  '@types/express-serve-static-core@4.17.41':
+  '@types/express-serve-static-core@5.1.0':
     dependencies:
       '@types/node': 18.19.130
-      '@types/qs': 6.9.11
+      '@types/qs': 6.14.0
       '@types/range-parser': 1.2.7
-      '@types/send': 0.17.4
+      '@types/send': 1.2.1
 
-  '@types/express@4.17.23':
+  '@types/express@5.0.4':
     dependencies:
-      '@types/body-parser': 1.19.5
-      '@types/express-serve-static-core': 4.17.41
-      '@types/qs': 6.9.11
-      '@types/serve-static': 1.15.5
+      '@types/body-parser': 1.19.6
+      '@types/express-serve-static-core': 5.1.0
+      '@types/serve-static': 1.15.10
 
   '@types/flat@5.0.5': {}
 
@@ -5794,7 +5796,7 @@ snapshots:
 
   '@types/http-cache-semantics@4.0.4': {}
 
-  '@types/http-errors@2.0.4': {}
+  '@types/http-errors@2.0.5': {}
 
   '@types/jquery@3.5.33':
     dependencies:
@@ -5846,7 +5848,7 @@ snapshots:
 
   '@types/node-red@1.3.5':
     dependencies:
-      '@types/express': 4.17.23
+      '@types/express': 5.0.4
       '@types/node-red__editor-api': 1.3.5
       '@types/node-red__editor-client': 1.3.11
       '@types/node-red__registry': 1.3.10
@@ -5855,7 +5857,7 @@ snapshots:
 
   '@types/node-red__editor-api@1.3.5':
     dependencies:
-      '@types/express': 4.17.23
+      '@types/express': 5.0.4
       '@types/node-red__runtime': 1.3.7
 
   '@types/node-red__editor-client@1.3.11':
@@ -5868,20 +5870,20 @@ snapshots:
 
   '@types/node-red__registry@1.3.10':
     dependencies:
-      '@types/express': 4.17.23
+      '@types/express': 5.0.4
       '@types/node-red__runtime': 1.3.7
       '@types/node-red__util': 1.3.7
 
   '@types/node-red__registry@1.3.11':
     dependencies:
-      '@types/express': 4.17.23
+      '@types/express': 5.0.4
       '@types/node-red__runtime': 1.3.8
       '@types/node-red__util': 1.3.8
 
   '@types/node-red__runtime@1.3.7':
     dependencies:
       '@types/cors': 2.8.19
-      '@types/express': 4.17.23
+      '@types/express': 5.0.4
       '@types/node-red__editor-api': 1.3.5
       '@types/node-red__util': 1.3.7
       '@types/passport': 1.0.16
@@ -5889,7 +5891,7 @@ snapshots:
   '@types/node-red__runtime@1.3.8':
     dependencies:
       '@types/cors': 2.8.19
-      '@types/express': 4.17.23
+      '@types/express': 5.0.4
       '@types/node-red__editor-api': 1.3.5
       '@types/node-red__util': 1.3.8
       '@types/passport': 1.0.17
@@ -5914,13 +5916,13 @@ snapshots:
 
   '@types/passport@1.0.16':
     dependencies:
-      '@types/express': 4.17.23
+      '@types/express': 5.0.4
 
   '@types/passport@1.0.17':
     dependencies:
-      '@types/express': 4.17.23
+      '@types/express': 5.0.4
 
-  '@types/qs@6.9.11': {}
+  '@types/qs@6.14.0': {}
 
   '@types/range-parser@1.2.7': {}
 
@@ -5934,16 +5936,20 @@ snapshots:
 
   '@types/selectn@1.1.3': {}
 
-  '@types/send@0.17.4':
+  '@types/send@0.17.6':
     dependencies:
       '@types/mime': 1.3.5
       '@types/node': 18.19.130
 
-  '@types/serve-static@1.15.5':
+  '@types/send@1.2.1':
     dependencies:
-      '@types/http-errors': 2.0.4
-      '@types/mime': 1.3.5
       '@types/node': 18.19.130
+
+  '@types/serve-static@1.15.10':
+    dependencies:
+      '@types/http-errors': 2.0.5
+      '@types/node': 18.19.130
+      '@types/send': 0.17.6
 
   '@types/sinon@17.0.4':
     dependencies:
