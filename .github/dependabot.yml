@@ -14,6 +14,9 @@ updates:
         update-types:
           - "version-update:semver-major"
       - dependency-name: "lowdb"
+      - dependency-name: "@types/express" # keep inline with Node-RED's Express version
+        update-types:
+          - "version-update:semver-major"
       - dependency-name: "@types/node" # inline with minimal Node.js version support policy
         update-types:
           - "version-update:semver-major"
