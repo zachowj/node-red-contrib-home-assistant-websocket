@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  id-token: write # Required for OIDC
   contents: read
 
 jobs:
@@ -23,5 +24,3 @@ jobs:
         run: pnpm install && pnpm run build
       - name: Publish package on NPM
         run: pnpm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
