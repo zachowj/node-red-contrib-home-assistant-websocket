@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.79.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.79.0...v0.79.1) (2025-11-01)
+
+
+### Bug Fixes
+
+* Make sure the default of the entity state is a string for output properties ([86cada4](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/86cada4e8510de13a24b955ec657f30879d86230))
+
+
+### Continuous Integration
+
+* add pull-requests permission to CI workflow ([14e783c](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/14e783c3389523176f59c31cb8601eb47e27e2ec))
+* adjust permissions in CI and publish workflows ([f737333](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f7373338b8826777bcc676165bcd787ae2da1cad))
+* remove permissions from CI workflow and ensure OIDC is set in publish workflow ([466c748](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/466c7480f9b95bafd4296593612964700dd6bfa2))
+* update permissions for OIDC in CI workflow and remove from publish workflow ([583bf05](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/583bf0504c8a3fbd7db68fd1aacf25d02c53db4a))
+
 ## [0.79.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.78.2...v0.79.0) (2025-10-27)
 
 
