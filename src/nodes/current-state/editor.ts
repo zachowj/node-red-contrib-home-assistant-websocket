@@ -1,6 +1,11 @@
 import { EditorNodeDef, EditorRED } from 'node-red';
 
-import { ComparatorType, NodeType, TypedInputTypes } from '../../const';
+import {
+    ComparatorType,
+    EntityStateCastType,
+    NodeType,
+    TypedInputTypes,
+} from '../../const';
 import { hassAutocomplete } from '../../editor/components/hassAutocomplete';
 import * as ifState from '../../editor/components/ifstate';
 import * as haOutputs from '../../editor/components/output-properties';
@@ -68,7 +73,7 @@ const CurrentStateEditor: EditorNodeDef<CurrentStateEditorNodeProperties> = {
                 {
                     property: 'payload',
                     propertyType: TypedInputTypes.Message,
-                    value: '',
+                    value: EntityStateCastType.String,
                     valueType: 'entityState',
                 },
                 {

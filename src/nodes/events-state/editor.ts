@@ -4,6 +4,7 @@ import { IdSelectorType } from '../../common/const';
 import { TransformType } from '../../common/TransformState';
 import {
     ComparatorType,
+    EntityStateCastType,
     EntityType,
     NodeType,
     TypedInputTypes,
@@ -137,7 +138,7 @@ const EventsStateEditor: EditorNodeDef<EventsStateEditorNodeProperties> = {
                 {
                     property: 'payload',
                     propertyType: TypedInputTypes.Message,
-                    value: '',
+                    value: EntityStateCastType.String,
                     valueType: 'entityState',
                 },
                 {

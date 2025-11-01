@@ -144,9 +144,10 @@ export enum TimeUnit {
     Days = 'days',
 }
 
+// Order matters - used in dropdowns
 export enum EntityStateCastType {
+    String = 'string',
+    Number = 'number',
     Boolean = 'boolean',
     HA_Boolean = 'ha_boolean',
-    Number = 'number',
-    String = 'string',
 }
