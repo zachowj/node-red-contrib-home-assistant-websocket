@@ -86,8 +86,6 @@ jobs:
           cache: pnpm
       - name: pnpm install
         run: pnpm install
-      - name: build
-        run: pnpm run build
       - name: Pack
         run: pnpm pack
       - name: Upload Release Asset

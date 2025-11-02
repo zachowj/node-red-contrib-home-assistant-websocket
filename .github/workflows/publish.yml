@@ -3,6 +3,10 @@ on:
   workflow_call:
   workflow_dispatch:
 
+permissions:
+  id-token: write # Required for OIDC
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,6 +21,6 @@ jobs:
           node-version: "20"
           registry-url: "https://registry.npmjs.org"
       - name: Install dependencies and build 🔧
-        run: pnpm install && pnpm run build
+        run: pnpm install
       - name: Publish package on NPM
         run: pnpm publish
