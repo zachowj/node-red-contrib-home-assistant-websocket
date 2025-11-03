@@ -91,7 +91,7 @@
     "browser-sync": "^3.0.4",
     "cheerio": "^1.1.2",
     "chokidar": "^4.0.3",
-    "cssnano": "^7.1.1",
+    "cssnano": "^7.1.2",
     "del": "^6.1.1",
     "esbuild": "^0.25.11",
     "eslint": "^8.57.1",
