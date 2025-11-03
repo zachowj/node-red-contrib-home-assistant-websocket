@@ -26,7 +26,8 @@ export default function issueCheck(config: EventsStateNodeProperties): Issue[] {
     }
 
     // TODO: Can be remove during version 1.0.0 release
-    if (config.stateType !== TransformType.String) {
+    // @ts-expect-error: Deprecated config property
+    if (config.state_type !== TransformType.String) {
         issues.push({
             type: IssueType.DeprecatedConfig,
             message: RED._(
