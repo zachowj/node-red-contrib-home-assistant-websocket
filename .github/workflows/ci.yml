@@ -96,8 +96,21 @@ jobs:
   publish:
     needs: release-please
     if: ${{ needs.release-please.outputs.release_created }}
-    uses: zachowj/node-red-contrib-home-assistant-websocket/.github/workflows/publish.yml@main
-    secrets: inherit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+      - name: Install dependencies and build 🔧
+        run: pnpm install
+      - name: Publish package on NPM
+        run: pnpm publish
 
   publish-documentation:
     needs: release-please
