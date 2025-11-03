@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.79.4](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.79.3...v0.79.4) (2025-11-03)
+
+
+### Bug Fixes
+
+* **deprecated-settings:** update state type handling to use new property name ([ef6cf5a](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ef6cf5a0c16514c367cb806c1a4a0caf2acc0f56))
+
 ## [0.79.3](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.79.2...v0.79.3) (2025-11-03)
 
 
