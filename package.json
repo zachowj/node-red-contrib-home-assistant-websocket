@@ -19,7 +19,8 @@
     "lint": "eslint . && prettier --check {docs,src,test}/**/*.{css,js,ts,md,html}",
     "lint:fix": "eslint . --fix && prettier --write {docs,src,test}/**/*.{css,js,ts,md,html}",
     "prepare": "husky",
-    "prepublishOnly": "node build.js build",
+    "prepublishOnly": "pnpm run build",
+    "prepack": "pnpm run build",
     "test": "vitest --run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest"
