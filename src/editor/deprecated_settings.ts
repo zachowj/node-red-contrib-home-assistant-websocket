@@ -1,6 +1,7 @@
 import { EditorNodeInstance } from 'node-red';
 
 import { TransformType } from '../common/TransformState';
+import { NodeType } from '../const';
 import { i18n } from './i18n';
 import { HassNodeProperties } from './types';
 
@@ -126,10 +127,17 @@ function applyValues(
 function createStateTypeSelector(
     node: Record<string, unknown>,
 ): JQuery<HTMLElement> {
+    // NodeType.CurrentState: state_type
+    // NodeType.EventsState: stateType
+    // NodeType.PollState: stateType
+    // NodeType.TriggerState: stateType
+    const type =
+        node.type === NodeType.CurrentState ? 'state_type' : 'stateType';
+
     const htmlBlock = `
         <div class="form-row ha-deprecated">
-            <label for="node-input-state_type">${i18n('api-current-state.label.state_type')}</label>
-            <select type="text" id="node-input-state_type">
+            <label for="node-input-${type}">${i18n('api-current-state.label.state_type')}</label>
+            <select type="text" id="node-input-${type}">
                 <option value="str">${i18n('api-current-state.label.state_type_option.string')}</option>
                 <option value="num">${i18n('api-current-state.label.state_type_option.number')}</option>
                 <option value="habool">${i18n('api-current-state.label.state_type_option.boolean')}</option>
@@ -142,8 +150,8 @@ function createStateTypeSelector(
 
     const $html = $(htmlBlock);
     // Hide the state_type selector if the node is configured to use 'str' (string) type
-    const stateType = node.state_type ?? node.stateType ?? undefined;
-    if (stateType && stateType === TransformType.String) {
+    const stateType = node[type] as TransformType | undefined;
+    if (stateType === TransformType.String) {
         $html.filter('.form-row.ha-deprecated').hide();
     }
     return $html;
