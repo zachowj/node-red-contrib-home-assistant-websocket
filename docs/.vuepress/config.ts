@@ -131,6 +131,7 @@ export default defineUserConfig({
                         },
                         '/guide/output-properties',
                         '/guide/diagnostics',
+                        '/guide/issues',
                         '/guide/breaking-changes',
                     ],
                 },
