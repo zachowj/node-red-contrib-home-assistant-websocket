@@ -2,7 +2,7 @@
 
 ### Types of Output Properties
 
-#### entity\*\*
+#### entity
 
 Outputs the **full state object** from Home Assistant. This includes all attributes, state, entity ID, and other metadata.
 
