@@ -16,11 +16,7 @@ An array of tag ids to monitor for tag scanned events.
 
 An array of device ids to check when a configured tag is scanned.
 
-### Expose as
-
-- Type: `string`
-
-When an entity is selected a switch entity will be created in Home Assistant. Turning on and off this switch will disable/enable the nodes in Node-RED.
+<!-- @include: @snippets/node/expose-as.md -->
 
 ## Outputs
 

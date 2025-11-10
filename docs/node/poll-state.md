@@ -41,11 +41,7 @@ Convert the state of the entity to the selected type. Boolean will be converted 
 
 Output once on startup/deploy then on each interval
 
-### Expose to Home Assistant
-
-- Type: `boolean`
-
-Creates a switch within Home Assistant to enable/disable this node. This feature requires [Node-RED custom integration](https://github.com/zachowj/hass-node-red) to be installed in Home Assistant
+<!-- @include: @snippets/node/expose-as.md -->
 
 ## Outputs
 

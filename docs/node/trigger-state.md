@@ -64,11 +64,7 @@ Enable the input to be used to send a message to the node.
 
 Output debug information to the debug tab.
 
-### Expose to Home Assistant
-
-- Type: `boolean`
-
-Expose the node to Home Assistant.
+<!-- @include: @snippets/node/expose-as.md -->
 
 ## Input
 

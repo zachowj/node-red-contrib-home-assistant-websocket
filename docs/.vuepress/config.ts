@@ -7,6 +7,7 @@ import { searchPlugin } from '@vuepress/plugin-search';
 import { defaultTheme } from '@vuepress/theme-default';
 import { defineUserConfig } from 'vuepress';
 import { getDirname, path } from 'vuepress/utils';
+import { markdownIncludePlugin } from '@vuepress/plugin-markdown-include';
 
 const __dirname = getDirname(import.meta.url);
 
@@ -44,6 +45,13 @@ export default defineUserConfig({
             componentsDir: path.resolve(__dirname, './components'),
         }),
         searchPlugin(),
+        markdownIncludePlugin({
+            resolvePath: (str: string) =>
+                str.replace(
+                    /^@snippets/,
+                    path.resolve(__dirname, './snippets'),
+                ),
+        }),
     ],
     markdown: {
         importCode: {

@@ -33,11 +33,7 @@ A negative or positive amount of time to allow the event to be triggered before 
 
 A string to filter calendar items. If set, only calendar items whose summary contains this string will trigger events.
 
-### Expose to Home Assistant
-
-- Type: `boolean`
-
-Creates a switch within Home Assistant to enable/disable this node. This feature requires [Node-RED custom integration](https://github.com/zachowj/hass-node-red) to be installed in Home Assistant
+<!-- @include: @snippets/node/expose-as.md -->
 
 ## Outputs
 

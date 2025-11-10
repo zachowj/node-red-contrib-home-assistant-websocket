@@ -2,29 +2,35 @@
 
 ### Types of Output Properties
 
-#### **entity**
+#### entity\*\*
 
 Outputs the **full state object** from Home Assistant. This includes all attributes, state, entity ID, and other metadata.
 
 [About the state object](https://www.home-assistant.io/docs/configuration/state_object/#about-the-state-object)
 
-#### **entity id**
+#### entity id
 
 Outputs the **entity ID** of the triggered entity.
 
-#### **entity state**
+#### entity state
 
 Outputs the **current state** of the triggered entity.
 All states received from Home Assistant are strings, but you can apply common type conversions:
 
-- **number** – converts numeric strings to numbers
-- **boolean** – converts strings to boolean values based on the following rules:
-  - If the value is a number, it returns `true` for any non-zero number and `false` for zero.
-  - If the value is a string, it trims and lowercases the string, returning `true` for "true", `false` for "false", or attempts to convert numeric strings to a boolean based on their numeric value.
-  - For all other types or unrecognized values, it returns `false`.
+<!-- #region entity-state -->
 
-- **Home Assistant boolean** – converts `"y"`, `"yes"`, `"true"`, `"on"`, `"home"`, and `"open"` to `true` boolean values and everything else to `false`. These can be customized in the server node config settings.
+- **string** (default): No conversion is applied; the state remains as text.
+- **number**: Converts the state to a numeric value.
+- **boolean**: Converts the state to `true` or `false` using standard logic:
+  - If the value is already a boolean, it’s used as-is.
+  - Numbers: non-zero values become `true`, and `0` becomes `false`.
+  - Strings: `"true"` → `true`, `"false"` → `false`, numeric strings like `"1"` or `"42"` → `true`, and `"0"` → `false`.
+  - Any other or unrecognized value results in `false`.
 
-#### **config**
+- **Home Assistant [State Boolean](../node/config-server.md#state-boolean)**: Converts the state to `true` or `false` using the **Home Assistant truthy values** defined in the server configuration node.
+
+<!-- #endregion entity-state -->
+
+#### config
 
 Outputs the **node’s configuration properties**.

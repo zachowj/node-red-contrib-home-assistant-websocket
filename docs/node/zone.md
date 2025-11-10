@@ -47,3 +47,5 @@ The entity object of the device/person that triggered the update.
 - Type: `array`
 
 An array of zone entities where the device/person entity entered/left after an update of location.
+
+<!-- @include: @snippets/node/expose-as.md -->
