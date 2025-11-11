@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.80.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.79.4...v0.80.0) (2025-11-11)
+
+
+### Features
+
+* add Home Assistant Boolean type to state condition checks ([8b554ee](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/8b554ee354db60a2e25074657c6d718fa4fdc76f))
+* **config-server:** migrate Home Assistant state booleans to array format ([8b554ee](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/8b554ee354db60a2e25074657c6d718fa4fdc76f))
+
+
+### Documentation
+
+* add Issues Guide to explain state type deprecation and handling ([2cab1d7](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/2cab1d7072db31f15153921ff81fccf3f762814e))
+* add markdown include plugin and update documentation snippets for Home Assistant nodes ([d130cab](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d130cab8a86ce67631d99566d989d7752f24847d))
+* fix formatting of entity header in output properties guide ([13cdeb8](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/13cdeb8980dc901303f68160d5640b52b124e0c0))
+* update and clarify documentation for Home Assistant Boolean states ([8b554ee](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/8b554ee354db60a2e25074657c6d718fa4fdc76f))
+
+
+### Build System
+
+* **deps-dev:** bump esbuild from 0.25.12 to 0.27.0 ([#1914](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1914)) ([a857a3b](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a857a3b44738553b2a9e7688c0763171c567e416))
+* **deps:** bump axios from 1.13.1 to 1.13.2 ([#1913](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1913)) ([3ae698e](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/3ae698ef235d556a5bc4f60c59bdd386eadf3a64))
+* remove prepublishOnly script to streamline build process ([857d25c](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/857d25ca1136bdf677fb108abb9a20f03362f71d))
+* update Node.js version to 22 in documentation workflow ([85e4171](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/85e41719bd4d15bbdfcbeeca0aeef5cc4139f46e))
+* Update pnpm ([7cfc063](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/7cfc063f27a8e7506ddb092d873db0e6245914e4))
+
+
+### Miscellaneous Chores
+
+* enhance link script with environment detection and error handling ([170c8f8](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/170c8f84fb777ed2d96b0d94ca6d601642c6670e))
+* Update vuepress ([9d4c1a9](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/9d4c1a923a1b7d0d59bc570c8f80f6d73a8a47ee))
+
 ## [0.79.4](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.79.3...v0.79.4) (2025-11-03)
 
 
