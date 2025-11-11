@@ -33,7 +33,7 @@ export interface EntityBaseNodeProperties extends NodeProperties {
 export interface ServerNodeConfig extends NodeProperties {
     addon: boolean;
     rejectUnauthorizedCerts: boolean;
-    ha_boolean: string;
+    ha_boolean: string[];
     connectionDelay: boolean;
     cacheJson: boolean;
     heartbeat: boolean;

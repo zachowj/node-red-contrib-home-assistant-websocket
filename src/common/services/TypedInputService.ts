@@ -99,9 +99,7 @@ export default class TypedInputService {
                                 val = false;
                                 break;
                             }
-                            // TODO: convert from a pipe separated string to an array in the server config node
-                            const booleanValues = haBooleans.split('|');
-                            val = booleanValues.includes(props.entity?.state);
+                            val = haBooleans.includes(props.entity?.state);
                         }
                         break;
                     case EntityStateCastType.String:

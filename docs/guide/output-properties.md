@@ -27,7 +27,7 @@ All states received from Home Assistant are strings, but you can apply common ty
   - Strings: `"true"` → `true`, `"false"` → `false`, numeric strings like `"1"` or `"42"` → `true`, and `"0"` → `false`.
   - Any other or unrecognized value results in `false`.
 
-- **Home Assistant [State Boolean](../node/config-server.md#state-boolean)**: Converts the state to `true` or `false` using the **Home Assistant truthy values** defined in the server configuration node.
+- **Home Assistant [State Boolean](../node/config-server.md#state-boolean)**: Converts the state to `true` if it matches one of the configured true values (e.g., `"on"`, `"open"`, `"locked"`), otherwise `false`.
 
 <!-- #endregion entity-state -->
 

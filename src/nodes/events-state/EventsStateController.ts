@@ -214,7 +214,7 @@ export default class EventsStateController extends ExposeAsController {
 
         clearTimeout(this.#topics[eventMessage.entity_id].timeoutId);
 
-        if (config.ifState && !condition) {
+        if ((config.ifState || config.ifStateType === 'habool') && !condition) {
             this.status.setFailed(statusMessage);
             this.node.send([null, message]);
             return;

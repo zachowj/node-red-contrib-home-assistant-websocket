@@ -1,292 +1,296 @@
 <input type="hidden" id="node-input-version" />
+<div id="ha-server-settings">
+    <h3 data-i18n="config-server.label.connection_settings"></h3>
+    <div>
+        <div class="form-row">
+            <label
+                for="node-config-input-name"
+                data-i18n="config-server.label.name"
+            ></label>
+            <input type="text" id="node-config-input-name" />
+        </div>
 
-<div class="form-row">
-    <label
-        for="node-config-input-name"
-        data-i18n="config-server.label.name"
-    ></label>
-    <input type="text" id="node-config-input-name" />
-</div>
-
-<div class="form-row checkbox-option">
-    <input type="checkbox" id="node-config-input-addon" />
-    <label
-        for="node-config-input-addon"
-        data-i18n="config-server.label.using_add_on"
-    >
-    </label>
-</div>
-
-<div class="form-row addon checkbox-option">
-    <input type="checkbox" id="node-config-input-connectionDelay" />
-    <label
-        for="node-config-input-connectionDelay"
-        data-i18n="config-server.label.delay_connection_attempts"
-    >
-    </label>
-</div>
-
-<div id="server-info">
-    <div class="form-row">
-        <label
-            for="node-config-input-host"
-            data-i18n="config-server.label.base_url"
-        ></label>
-        <div style="width: 70%; display: inline-flex">
-            <input
-                type="text"
-                id="node-config-input-host"
-                placeholder="http://localhost:8123"
-                style="flex-grow: 1"
-            />
-            <a
-                id="discoverInstances"
-                class="red-ui-button"
-                style="margin-left: 10px"
+        <div class="form-row checkbox-option">
+            <input type="checkbox" id="node-config-input-addon" />
+            <label
+                for="node-config-input-addon"
+                data-i18n="config-server.label.using_add_on"
             >
-                <i class="fa fa-search"></i>
-            </a>
+            </label>
+        </div>
+
+        <div class="form-row addon checkbox-option">
+            <input type="checkbox" id="node-config-input-connectionDelay" />
+            <label
+                for="node-config-input-connectionDelay"
+                data-i18n="config-server.label.delay_connection_attempts"
+            >
+            </label>
+        </div>
+
+        <div id="server-info">
+            <div class="form-row">
+                <label
+                    for="node-config-input-host"
+                    data-i18n="config-server.label.base_url"
+                ></label>
+                <div style="width: 70%; display: inline-flex">
+                    <input
+                        type="text"
+                        id="node-config-input-host"
+                        placeholder="http://localhost:8123"
+                        style="flex-grow: 1"
+                    />
+                    <a
+                        id="discoverInstances"
+                        class="red-ui-button"
+                        style="margin-left: 10px"
+                    >
+                        <i class="fa fa-search"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="form-row">
+                <label
+                    id="access-token-label"
+                    for="node-config-input-access_token"
+                    data-i18n="config-server.label.access_token"
+                ></label>
+                <input
+                    type="text"
+                    id="node-config-input-access_token"
+                    placeholder="access token"
+                />
+            </div>
+
+            <div class="form-row checkbox-option">
+                <input type="checkbox" id="accept_unauthorized_certs" />
+                <label
+                    for="accept_unauthorized_certs"
+                    data-i18n="config-server.label.accept_all_certs"
+                >
+                </label>
+            </div>
+        </div>
+
+        <div class="form-row checkbox-option">
+            <input type="checkbox" id="node-config-input-heartbeat" />
+            <label
+                for="node-config-input-heartbeat"
+                data-i18n="config-server.label.enable_heartbeat"
+            ></label>
+        </div>
+
+        <div class="form-row" id="heartbeatIntervalRow">
+            <label
+                for="node-config-input-heartbeatInterval"
+                data-i18n="config-server.label.heartbeat_interval"
+            >
+            </label>
+            <div
+                style="
+                    vertical-align: text-bottom;
+                    width: 70%;
+                    display: inline-block;
+                "
+            >
+                <input
+                    type="number"
+                    id="node-config-input-heartbeatInterval"
+                    style="width: 30%"
+                    min="10"
+                />
+                <span data-i18n="config-server.label.seconds"></span>
+            </div>
         </div>
     </div>
-    <div class="form-row">
-        <label
-            id="access-token-label"
-            for="node-config-input-access_token"
-            data-i18n="config-server.label.access_token"
-        ></label>
-        <input
-            type="text"
-            id="node-config-input-access_token"
-            placeholder="access token"
-        />
+    <h3 data-i18n="config-server.label.config_settings"></h3>
+    <div>
+        <div class="form-row">
+            <div id="ha-boolean-list"></div>
+        </div>
+        <div class="form-row checkbox-option">
+            <input
+                type="checkbox"
+                id="node-config-input-enableGlobalContextStore"
+            />
+            <label
+                for="node-config-input-enableGlobalContextStore"
+                data-i18n="config-server.label.enable_global_context_store"
+            ></label>
+        </div>
     </div>
+    <h3 data-i18n="config-server.label.ui_settings"></h3>
+    <div>
+        <div class="form-row checkbox-option">
+            <input type="checkbox" id="node-config-input-cacheJson" />
+            <label
+                for="node-config-input-cacheJson"
+                data-i18n="config-server.label.cache_autocomplete_results"
+            >
+            </label>
+        </div>
 
-    <div class="form-row checkbox-option">
-        <input type="checkbox" id="accept_unauthorized_certs" />
-        <label
-            for="accept_unauthorized_certs"
-            data-i18n="config-server.label.accept_all_certs"
-        >
-        </label>
+        <div class="form-row">
+            <span data-i18n="config-server.label.id_selector"></span>
+        </div>
+
+        <div class="form-row">
+            <label
+                for="node-config-input-areaSelector"
+                data-i18n="config-server.label.area_selector"
+            ></label>
+            <select id="node-config-input-areaSelector">
+                <option
+                    value="id"
+                    data-i18n="config-server.label.selector_option.id"
+                ></option>
+                <option
+                    value="friendlyName"
+                    data-i18n="config-server.label.selector_option.friendly_name"
+                ></option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <label
+                for="node-config-input-deviceSelector"
+                data-i18n="config-server.label.device_selector"
+            ></label>
+            <select id="node-config-input-deviceSelector">
+                <option
+                    value="id"
+                    data-i18n="config-server.label.selector_option.id"
+                ></option>
+                <option
+                    value="friendlyName"
+                    data-i18n="config-server.label.selector_option.friendly_name"
+                ></option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <label
+                for="node-config-input-entitySelector"
+                data-i18n="config-server.label.entity_selector"
+            ></label>
+            <select id="node-config-input-entitySelector">
+                <option
+                    value="id"
+                    data-i18n="config-server.label.selector_option.id"
+                ></option>
+                <option
+                    value="friendlyName"
+                    data-i18n="config-server.label.selector_option.friendly_name"
+                ></option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <span data-i18n="config-server.label.status_title"></span>
+        </div>
+
+        <div class="form-row">
+            <label data-i18n="config-server.label.separator"></label>
+            <input id="node-config-input-statusSeparator" type="text" />
+        </div>
+
+        <div class="form-row">
+            <label data-i18n="config-server.label.year"></label>
+            <select id="node-config-input-statusYear">
+                <option
+                    value="hidden"
+                    data-i18n="config-server.label.date_option.hidden"
+                ></option>
+                <option
+                    value="numeric"
+                    data-i18n="config-server.label.date_option.numeric"
+                ></option>
+                <option
+                    value="2-digit"
+                    data-i18n="config-server.label.date_option.two_digit"
+                ></option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <label data-i18n="config-server.label.month"></label>
+            <select id="node-config-input-statusMonth">
+                <option
+                    value="hidden"
+                    data-i18n="config-server.label.date_option.hidden"
+                ></option>
+                <option
+                    value="numeric"
+                    data-i18n="config-server.label.date_option.numeric"
+                ></option>
+                <option
+                    value="2-digit"
+                    data-i18n="config-server.label.date_option.two_digit"
+                ></option>
+                <option
+                    value="long"
+                    data-i18n="config-server.label.date_option.long"
+                ></option>
+                <option
+                    value="short"
+                    data-i18n="config-server.label.date_option.short"
+                ></option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <label data-i18n="config-server.label.day"></label>
+            <select id="node-config-input-statusDay">
+                <option
+                    value="hidden"
+                    data-i18n="config-server.label.date_option.hidden"
+                ></option>
+                <option
+                    value="numeric"
+                    data-i18n="config-server.label.date_option.numeric"
+                ></option>
+                <option
+                    value="2-digit"
+                    data-i18n="config-server.label.date_option.two_digit"
+                ></option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <label data-i18n="config-server.label.hour_cycle"></label>
+            <select id="node-config-input-statusHourCycle">
+                <option
+                    value="default"
+                    data-i18n="config-server.label.hour_cycle_option.default"
+                ></option>
+                <option
+                    value="h12"
+                    data-i18n="config-server.label.hour_cycle_option.12_hour_format"
+                ></option>
+                <option
+                    value="h23"
+                    data-i18n="config-server.label.hour_cycle_option.24_hour_format"
+                ></option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <label data-i18n="config-server.label.time_format"> </label>
+            <select id="node-config-input-statusTimeFormat">
+                <option
+                    value="h:m"
+                    data-i18n="config-server.label.time_format_option.hour_min"
+                ></option>
+                <option
+                    value="h:m:s"
+                    data-i18n="config-server.label.time_format_option.hour_min_sec"
+                ></option>
+                <option
+                    value="h:m:s.ms"
+                    data-i18n="config-server.label.time_format_option.hour_min_sec_ms"
+                ></option>
+            </select>
+        </div>
     </div>
-</div>
-
-<div class="form-row">
-    <label
-        for="node-config-input-ha_boolean"
-        data-i18n="config-server.label.state_boolean_list"
-    ></label>
-    <input
-        type="text"
-        id="node-config-input-ha_boolean"
-        placeholder="y|yes|true|on|home|open"
-    />
-</div>
-
-<div class="form-row checkbox-option">
-    <input type="checkbox" id="node-config-input-heartbeat" />
-    <label
-        for="node-config-input-heartbeat"
-        data-i18n="config-server.label.enable_heartbeat"
-    ></label>
-</div>
-
-<div class="form-row" id="heartbeatIntervalRow">
-    <label
-        for="node-config-input-heartbeatInterval"
-        data-i18n="config-server.label.heartbeat_interval"
-    >
-    </label>
-    <div style="vertical-align: text-bottom; width: 70%; display: inline-block">
-        <input
-            type="number"
-            id="node-config-input-heartbeatInterval"
-            style="width: 30%"
-            min="10"
-        />
-        <span data-i18n="config-server.label.seconds"></span>
-    </div>
-</div>
-
-<div class="form-row checkbox-option">
-    <input type="checkbox" id="node-config-input-enableGlobalContextStore" />
-    <label
-        for="node-config-input-enableGlobalContextStore"
-        data-i18n="config-server.label.enable_global_context_store"
-    ></label>
-</div>
-
-<hr />
-
-<div class="form-row" data-i18n="config-server.label.ui_settings"></div>
-
-<div class="form-row checkbox-option">
-    <input type="checkbox" id="node-config-input-cacheJson" />
-    <label
-        for="node-config-input-cacheJson"
-        data-i18n="config-server.label.cache_autocomplete_results"
-    >
-    </label>
-</div>
-
-<div class="form-row">
-    <span data-i18n="config-server.label.id_selector"></span>
-</div>
-
-<div class="form-row">
-    <label
-        for="node-config-input-areaSelector"
-        data-i18n="config-server.label.area_selector"
-    ></label>
-    <select id="node-config-input-areaSelector">
-        <option
-            value="id"
-            data-i18n="config-server.label.selector_option.id"
-        ></option>
-        <option
-            value="friendlyName"
-            data-i18n="config-server.label.selector_option.friendly_name"
-        ></option>
-    </select>
-</div>
-
-<div class="form-row">
-    <label
-        for="node-config-input-deviceSelector"
-        data-i18n="config-server.label.device_selector"
-    ></label>
-    <select id="node-config-input-deviceSelector">
-        <option
-            value="id"
-            data-i18n="config-server.label.selector_option.id"
-        ></option>
-        <option
-            value="friendlyName"
-            data-i18n="config-server.label.selector_option.friendly_name"
-        ></option>
-    </select>
-</div>
-
-<div class="form-row">
-    <label
-        for="node-config-input-entitySelector"
-        data-i18n="config-server.label.entity_selector"
-    ></label>
-    <select id="node-config-input-entitySelector">
-        <option
-            value="id"
-            data-i18n="config-server.label.selector_option.id"
-        ></option>
-        <option
-            value="friendlyName"
-            data-i18n="config-server.label.selector_option.friendly_name"
-        ></option>
-    </select>
-</div>
-
-<div class="form-row">
-    <span data-i18n="config-server.label.status_title"></span>
-</div>
-
-<div class="form-row">
-    <label data-i18n="config-server.label.separator"></label>
-    <input id="node-config-input-statusSeparator" type="text" />
-</div>
-
-<div class="form-row">
-    <label data-i18n="config-server.label.year"></label>
-    <select id="node-config-input-statusYear">
-        <option
-            value="hidden"
-            data-i18n="config-server.label.date_option.hidden"
-        ></option>
-        <option
-            value="numeric"
-            data-i18n="config-server.label.date_option.numeric"
-        ></option>
-        <option
-            value="2-digit"
-            data-i18n="config-server.label.date_option.two_digit"
-        ></option>
-    </select>
-</div>
-
-<div class="form-row">
-    <label data-i18n="config-server.label.month"></label>
-    <select id="node-config-input-statusMonth">
-        <option
-            value="hidden"
-            data-i18n="config-server.label.date_option.hidden"
-        ></option>
-        <option
-            value="numeric"
-            data-i18n="config-server.label.date_option.numeric"
-        ></option>
-        <option
-            value="2-digit"
-            data-i18n="config-server.label.date_option.two_digit"
-        ></option>
-        <option
-            value="long"
-            data-i18n="config-server.label.date_option.long"
-        ></option>
-        <option
-            value="short"
-            data-i18n="config-server.label.date_option.short"
-        ></option>
-    </select>
-</div>
-
-<div class="form-row">
-    <label data-i18n="config-server.label.day"></label>
-    <select id="node-config-input-statusDay">
-        <option
-            value="hidden"
-            data-i18n="config-server.label.date_option.hidden"
-        ></option>
-        <option
-            value="numeric"
-            data-i18n="config-server.label.date_option.numeric"
-        ></option>
-        <option
-            value="2-digit"
-            data-i18n="config-server.label.date_option.two_digit"
-        ></option>
-    </select>
-</div>
-
-<div class="form-row">
-    <label data-i18n="config-server.label.hour_cycle"></label>
-    <select id="node-config-input-statusHourCycle">
-        <option
-            value="default"
-            data-i18n="config-server.label.hour_cycle_option.default"
-        ></option>
-        <option
-            value="h12"
-            data-i18n="config-server.label.hour_cycle_option.12_hour_format"
-        ></option>
-        <option
-            value="h23"
-            data-i18n="config-server.label.hour_cycle_option.24_hour_format"
-        ></option>
-    </select>
-</div>
-
-<div class="form-row">
-    <label data-i18n="config-server.label.time_format"> </label>
-    <select id="node-config-input-statusTimeFormat">
-        <option
-            value="h:m"
-            data-i18n="config-server.label.time_format_option.hour_min"
-        ></option>
-        <option
-            value="h:m:s"
-            data-i18n="config-server.label.time_format_option.hour_min_sec"
-        ></option>
-        <option
-            value="h:m:s.ms"
-            data-i18n="config-server.label.time_format_option.hour_min_sec_ms"
-        ></option>
-    </select>
 </div>

@@ -1,6 +1,7 @@
 import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 
 import ha, { NodeCategory } from '../../editor/ha';
+import { i18n } from '../../editor/i18n';
 import { formatDate } from '../../helpers/date';
 import { isNodeRedEnvVar } from '../../helpers/utils';
 import { Credentials } from '../../homeAssistant/index';
@@ -17,7 +18,7 @@ export interface ConfigServerEditorNodeProperties extends EditorNodeProperties {
     version: number;
     addon: boolean;
     rejectUnauthorizedCerts: boolean;
-    ha_boolean: string;
+    ha_boolean: string[];
     connectionDelay: boolean;
     cacheJson: boolean;
     heartbeat: boolean;
@@ -44,7 +45,7 @@ const ConfigServerEditor: EditorNodeDef<
         version: { value: RED.settings.get('serverVersion', 0) },
         addon: { value: false },
         rejectUnauthorizedCerts: { value: true },
-        ha_boolean: { value: 'y|yes|true|on|home|open' },
+        ha_boolean: { value: ['y', 'yes', 'true', 'on', 'home', 'open'] },
         connectionDelay: { value: true },
         cacheJson: { value: true },
         heartbeat: { value: false },
@@ -176,11 +177,45 @@ const ConfigServerEditor: EditorNodeDef<
                     });
             })
             .trigger('change');
+
+        $('#ha-boolean-list').editableList({
+            addButton: true,
+            removable: true,
+            sortable: false,
+            height: 'auto',
+            header: $('<div>').append(
+                i18n('config-server.label.state_boolean_list'),
+            ),
+            addItem: function (container, _, data: string[]) {
+                const row = $('<div/>').appendTo(container);
+                const input = $(
+                    '<input type="text" style="width: 100%"/>',
+                ).appendTo(row);
+                if (typeof data === 'string') {
+                    input.val(data);
+                }
+            },
+        });
+        // @ts-expect-error - addItems is missing in types
+        $('#ha-boolean-list').editableList('addItems', this.ha_boolean || []);
+
+        $('#ha-server-settings').accordion();
+        $('#node-config-dialog-edit-form').addClass('ha-config-server-editor');
     },
     oneditsave: function () {
         const addon = $('#node-config-input-addon').is(':checked');
         const $host = $('#node-config-input-host');
         const hostname = $host.val() as string;
+        const haBooleanList = new Set<string>();
+        $('#ha-boolean-list')
+            .editableList('items')
+            .each(function () {
+                const input = $('input', this).val();
+                if (input) {
+                    haBooleanList.add((input as string).toLowerCase().trim());
+                }
+            });
+        this.ha_boolean = Array.from(haBooleanList);
 
         if (addon) {
             this.addon = true;

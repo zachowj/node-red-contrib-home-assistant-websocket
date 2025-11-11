@@ -13,6 +13,8 @@
       "area_selector": "Area Selector",
       "base_url": "Base URL",
       "cache_autocomplete_results": "Cache autocomplete results",
+      "config_settings": "Config Settings",
+      "connection_settings": "Connection Settings",
       "date_option": {
         "hidden": "hidden",
         "long": "long",

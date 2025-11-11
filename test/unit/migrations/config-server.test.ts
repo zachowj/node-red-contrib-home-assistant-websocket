@@ -58,6 +58,11 @@ const VERSION_5 = {
     version: 5,
     enableGlobalContextStore: true,
 };
+const VERSION_6 = {
+    ...VERSION_5,
+    version: 6,
+    ha_boolean: ['y', 'yes', 'true', 'on', 'home', 'open'],
+};
 
 describe('Migrations - Server Config Node', function () {
     describe('Version 0', function () {
@@ -113,8 +118,16 @@ describe('Migrations - Server Config Node', function () {
         });
     });
 
+    describe('Version 6', function () {
+        it('should update version 5 to version 6', function () {
+            const migrate = migrations.find((m) => m.version === 6);
+            const migratedSchema = migrate?.up(VERSION_5);
+            expect(migratedSchema).toEqual(VERSION_6);
+        });
+    });
+
     it('should update an undefined version to current version', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
-        expect(migratedSchema).toEqual(VERSION_5);
+        expect(migratedSchema).toEqual(VERSION_6);
     });
 });

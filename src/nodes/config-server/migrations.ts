@@ -82,4 +82,23 @@ export default [
             return newSchema;
         },
     },
+    {
+        version: 6,
+        up: (schema: any) => {
+            const newSchema = {
+                ...schema,
+                version: 6,
+            };
+
+            // Migrate ha_boolean delimiter string to array of unique values
+            const haBoolArr = schema.ha_boolean
+                ? schema.ha_boolean.split('|')
+                : [];
+            const haBoolSet = new Set(
+                haBoolArr.map((item: string) => item.toLowerCase().trim()),
+            );
+            newSchema.ha_boolean = Array.from(haBoolSet);
+            return newSchema;
+        },
+    },
 ];

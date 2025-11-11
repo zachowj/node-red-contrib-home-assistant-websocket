@@ -141,7 +141,10 @@ const CurrentStateEditor: EditorNodeDef<CurrentStateEditorNodeProperties> = {
         renderDeprecatedSettings(this, [DeprecatedSettingType.StateType]);
     },
     oneditsave: function () {
-        const outputs = $('#node-input-halt_if').val() ? 2 : 1;
+        const useIfState =
+            $('#node-input-halt_if').val() !== '' ||
+            $('#node-input-halt_if_type').val() === 'habool';
+        const outputs = useIfState ? 2 : 1;
         $('#node-input-outputs').val(outputs);
         this.outputProperties = haOutputs.getOutputs();
     },

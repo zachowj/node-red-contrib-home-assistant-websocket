@@ -116,7 +116,11 @@ export default class PollStateController extends ExposeAsController {
         const statusMessage = `${entity.state}`;
 
         // Check 'if state' and send to correct output
-        if (this.node.config.ifState && !isIfState) {
+        if (
+            (this.node.config.ifState ||
+                this.node.config.ifStateType === 'habool') &&
+            !isIfState
+        ) {
             this.status.setFailed(statusMessage);
             this.node.send([null, message]);
             return;

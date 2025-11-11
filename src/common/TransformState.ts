@@ -5,12 +5,13 @@ export enum TransformType {
     Number = 'num',
     Regexp = 're',
     String = 'str',
+    Home_Assistant_Boolean_Values = 'ha_boolean_values',
 }
 
 export default class TransformState {
-    readonly #haBooleans: string;
+    readonly #haBooleans: string[];
 
-    constructor(haBooleans = 'y|yes|true|on|home|open') {
+    constructor(haBooleans = ['y', 'yes', 'true', 'on', 'home', 'open']) {
         this.#haBooleans = haBooleans;
     }
 
@@ -25,9 +26,11 @@ export default class TransformState {
             case TransformType.Boolean:
                 return !!value;
             case TransformType.Home_Assistant_Boolean: {
-                const regex = `^(${this.#haBooleans})$`;
+                const regex = `^(${this.#haBooleans.join('|')})$`;
                 return new RegExp(regex, 'i').test(value);
             }
+            case TransformType.Home_Assistant_Boolean_Values:
+                return this.#haBooleans;
             case TransformType.Regexp:
                 return new RegExp(value);
             case TransformType.List:

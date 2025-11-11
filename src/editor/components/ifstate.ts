@@ -1,3 +1,4 @@
+import { ComparatorType, TypedInputTypes } from '../../const';
 import { HATypedInputTypeOptions } from '../types';
 
 export const init = function (
@@ -8,19 +9,28 @@ export const init = function (
 ) {
     const $input = $(input);
     const $compare = $(compare);
-    const entityType = { value: 'entity', label: 'entity.' };
+    const typedInputOptionEntity = {
+        value: 'entity',
+        label: 'entity.',
+    } as const;
+    const typedInputOptionHaBoolean = {
+        value: 'habool',
+        label: 'Home Assistant State Boolean',
+        hasValue: false,
+    } as const;
     const defaultTypes: HATypedInputTypeOptions = [
-        'str',
-        'num',
-        'bool',
-        're',
-        'jsonata',
-        'msg',
-        'flow',
-        'global',
-        entityType,
+        TypedInputTypes.String,
+        TypedInputTypes.Number,
+        TypedInputTypes.Boolean,
+        TypedInputTypes.Regex,
+        TypedInputTypes.JSONata,
+        TypedInputTypes.Message,
+        TypedInputTypes.Flow,
+        TypedInputTypes.Global,
+        typedInputOptionEntity,
     ];
 
+    // Remove 'msg' from all but current-state node because other nodes won't have a msg context
     if (nodeName !== 'currentState') {
         defaultTypes.splice(5, 1);
     }
@@ -30,43 +40,49 @@ export const init = function (
     );
     const $clearIfState = $('#clearIfState');
 
+    function availableTypes(operator: string): HATypedInputTypeOptions {
+        switch (operator) {
+            case ComparatorType.Is:
+            case ComparatorType.IsNot:
+                break;
+            case ComparatorType.IsLessThan:
+            case ComparatorType.IsLessThanOrEqual:
+            case ComparatorType.IsGreaterThan:
+            case ComparatorType.IsGreaterThanOrEqual:
+                return [
+                    TypedInputTypes.Number,
+                    TypedInputTypes.JSONata,
+                    TypedInputTypes.Flow,
+                    TypedInputTypes.Global,
+                    typedInputOptionEntity,
+                ];
+            case ComparatorType.Includes:
+            case ComparatorType.DoesNotInclude:
+                return [
+                    TypedInputTypes.String,
+                    TypedInputTypes.JSONata,
+                    TypedInputTypes.Flow,
+                    TypedInputTypes.Global,
+                    typedInputOptionEntity,
+                    typedInputOptionHaBoolean,
+                ];
+            case ComparatorType.JSONata:
+                return [TypedInputTypes.JSONata];
+        }
+
+        return defaultTypes;
+    }
+
     $input.typedInput({
-        default: 'str',
-        types: defaultTypes,
+        default: TypedInputTypes.String,
+        types: availableTypes($compare.val() as string),
         typeField: type,
     });
 
     $compare.on('change', function () {
         const $this = $(this as HTMLSelectElement);
-        let types = defaultTypes;
-        let extraTypes: HATypedInputTypeOptions = [
-            'flow',
-            'global',
-            entityType,
-        ];
+        const types = availableTypes($this.val() as string);
 
-        if (defaultTypes.includes('msg')) {
-            extraTypes = ['msg', ...extraTypes];
-        }
-
-        switch ($this.val()) {
-            case 'is':
-            case 'is_not':
-                break;
-            case 'lt':
-            case 'lte':
-            case 'gt':
-            case 'gte':
-                types = ['num', 'jsonata', ...extraTypes];
-                break;
-            case 'includes':
-            case 'does_not_include':
-                types = ['str', 'jsonata', ...extraTypes];
-                break;
-            case 'jsonata':
-                types = ['jsonata'];
-                break;
-        }
         $input.typedInput('types', types);
     });
 
@@ -77,7 +93,7 @@ export const init = function (
     });
 
     $clearIfState.on('click', (e) => {
-        $input.typedInput('type', 'str');
+        $input.typedInput('type', TypedInputTypes.String);
         $input.typedInput('value', '');
         $(e.currentTarget).hide();
     });

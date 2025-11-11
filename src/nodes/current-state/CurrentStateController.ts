@@ -104,7 +104,11 @@ export default class CurrentStateController extends InputOutputController<
             },
         );
 
-        if (this.node.config.halt_if && !isIfState) {
+        if (
+            (this.node.config.halt_if ||
+                this.node.config.halt_if_type === 'habool') &&
+            !isIfState
+        ) {
             this.status.setFailed(entity.state.toString());
             send([null, message]);
             done();

@@ -55,6 +55,20 @@ interface TriggerStateEditorNodeProperties extends HassNodeProperties {
     state_type: undefined;
 }
 
+const typedInputOptionEntity = {
+    value: 'entity',
+    label: 'entity.',
+} as const;
+const typedInputOptionPrevEntity = {
+    value: 'prevEntity',
+    label: 'prev entity.',
+} as const;
+const typedInputOptionHabool = {
+    value: 'habool',
+    label: 'Home Assistant State Boolean',
+    hasValue: false,
+} as const;
+
 const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
     category: NodeCategory.HomeAssistant,
     color: NodeColor.HaBlue,
@@ -326,14 +340,9 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
                     'bool',
                     're',
                     'jsonata',
-                    {
-                        value: 'entity',
-                        label: 'entity.',
-                    },
-                    {
-                        value: 'prevEntity',
-                        label: 'prev entity.',
-                    },
+                    typedInputOptionEntity,
+                    typedInputOptionPrevEntity,
+                    typedInputOptionHabool,
                 ],
             });
 
@@ -463,14 +472,9 @@ const TriggerStateEditor: EditorNodeDef<TriggerStateEditorNodeProperties> = {
                         TypedInputTypes.Boolean,
                         TypedInputTypes.Regex,
                         TypedInputTypes.JSONata,
-                        {
-                            value: 'entity',
-                            label: 'entity.',
-                        },
-                        {
-                            value: 'prevEntity',
-                            label: 'prev entity.',
-                        },
+                        typedInputOptionEntity,
+                        typedInputOptionPrevEntity,
+                        typedInputOptionHabool,
                     ],
                 });
 

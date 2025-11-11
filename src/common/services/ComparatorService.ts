@@ -69,6 +69,11 @@ export default class ComparatorService {
                 entity,
                 prevEntity,
             });
+        } else if (comparatorValueDataType === 'habool') {
+            cValue = this.#transformState.transform(
+                TransformType.Home_Assistant_Boolean_Values,
+                '',
+            );
         } else if (comparatorValueDataType === 'bool') {
             cValue = comparatorValue === 'true';
         } else {

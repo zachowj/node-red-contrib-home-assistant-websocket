@@ -1,110 +1,197 @@
 # Server Config
 
-The Server Config node is used for configuring the connection to Home Assistant. This node manages the details of how Node-RED communicates with your Home Assistant instance, including server URL, authentication, and other connection settings.
+The **Server Config** node defines how Node-RED connects to your Home Assistant instance.
+It manages connection details, authentication, and various integration settings to ensure a stable connection between Node-RED and Home Assistant.
 
-## Config
+---
+
+## Connection Settings
 
 ### Name
 
-- Type: `string`
+- **Type:** `string`
 
-Label for this configuration, see details below for implications
+A user-defined label for this configuration.
+This name is also used as the **namespace** for related global context data (see [Context](#context)).
+
+---
 
 ### Using the Home Assistant Add-on
 
-- Type: `boolean`
+- **Type:** `boolean`
 
-If you're running Node-RED as a Hass.io Add-on check this. No other information is needed.
+If you’re running Node-RED as a **Home Assistant Add-on (Hass.io)**, enable this option.
+No additional configuration (such as URL or access token) is required.
+
+---
 
 ### Base URL
 
-- Type: `string`
+- **Type:** `string`
 
-The base URL and port of the Home Assistant instance can be reached at, for example: `http://192.168.0.100:8123` or `https://homeassistant.mysite.com`
+The base URL and port of your Home Assistant instance.
+
+**Examples:**
+
+- `http://192.168.0.100:8123`
+- `https://homeassistant.mysite.com`
+
+---
 
 ### Access Token
 
-- Type: `string`
+- **Type:** `string`
 
-Long-lived Access Token used to contact the API
+A **Long-Lived Access Token** used to authenticate with Home Assistant’s API.
 
-### Unauthorized SSL Certificates
+---
 
-- Type: `boolean`
+### Allow Unauthorized SSL Certificates
 
-This will allow you to use self-signed certificates. Only use this if you know what you're doing.
+- **Type:** `boolean`
 
-### State Boolean
+Allows Node-RED to accept **self-signed certificates** when connecting to Home Assistant.
 
-- Type: `string | delimited`
-
-A list of strings, not case sensitive, delimited by vertical pipe, |, that will return true for State Type Boolean.
+---
 
 ### Enable Heartbeat
 
-- Type: `boolean`
+- **Type:** `boolean`
 
-Heartbeat will send a ping message using the websocket connection to Home Assistant every X seconds. If a pong response is not received within 5 seconds Node-RED will attempt to reconnect to Home Assistant.
+Enables periodic **ping** messages sent through the WebSocket connection.
+If no **pong** response is received within 5 seconds, Node-RED automatically attempts to reconnect.
+
+---
 
 ### Heartbeat Interval
 
-- Type: `number`
+- **Type:** `number`
 
-The interval at which the ping message is sent to Home Assistant. The minimum value is 10 seconds.
+Specifies how often (in seconds) the heartbeat ping is sent.
+The **minimum value** is **10 seconds**.
+
+---
+
+## Config Settings
+
+### State Boolean
+
+- **Type:** `array of strings`
+
+Defines which strings should be interpreted as boolean `true` when comparing state values.
+Comparisons are **case-insensitive** and ignore surrounding whitespace.
+
+**Default values:**
+
+```
+["y", "yes", "on", "true", "home", "open"]
+```
+
+See [Home Assistant Boolean](../node/conditions.md#home-assistant-boolean) for more details.
+
+---
 
 ### Enable Global Context Store
 
-- Type: `boolean`
+- **Type:** `boolean`
 
-If enabled, the global context store will be used to store the Home Assistant connection, state, and service information. This allows you to use the information in other nodes using context functions.
+When enabled, Home Assistant connection data, states, and services are stored in the Node-RED **global context**.
+This allows other nodes or function nodes to access Home Assistant data directly.
 
-Example below
-
-## UI Settings
-
-### Cache Autocomplete Results
-
-Enables the caching of the JSON autocomplete requests. Enabling or disabling this may require a restart of Node-RED for it to take effect.
-
-### ID Selector Display
-
-Which text to show in the selector after the id has been chosen.
-
-### Status Date Format
-
-#### Separator
-
-A string that will appear in the status of an event node between the state and date string.
-
-#### Other options
-
-The other options are directly from [DateTimeFormat Options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat#options).
-
-## Details
-
-Every node requires a configuration attached to define how to contact Home Assistant, which is this config node's main purpose.
-
-### Context
-
-Each config node will also make some data available in the global context, the `Name` value in this node is used as, camelcase, and the namespace for those values
-
-Currently `states`, `services`, and `events` is made available in the global context. `states` is always set to all available states at startup and updated whenever state changes occur so it should be always up to date. `services` and `events` is only updated on initial deploy.
-
-### Context Example
-
-Say we have a config node with the name `Home Assistant`, with an entity set up in Home Assistant as `switch.my_switch`. This state would be available within function nodes and you could fetch using something like the below code
+**Example:**
 
 ```js
 const haCtx = global.get("homeassistant");
 const configCtx = haCtx.homeAssistant;
 const entityState = configCtx.states["switch.my_switch"];
-return entityState.state === "on" ? true : false;
+return entityState.state === "on";
 ```
+
+---
+
+## UI Settings
+
+### Cache Autocomplete Results
+
+- **Type:** `boolean`
+
+Caches JSON autocomplete results for faster UI performance.
+
+---
+
+### ID Selector Display
+
+Determines which text is shown in selectors after an entity ID has been chosen (for example, name, ID, or friendly name).
+
+---
+
+### Status Date Format
+
+#### Separator
+
+A string displayed between the **state** and **date** in an event node’s status text.
+
+#### Additional Options
+
+Supports all standard [DateTimeFormat Options](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat#options).
+
+---
+
+## Details
+
+Every Home Assistant node in Node-RED must reference a **Server Config** node.
+This configuration defines how Node-RED connects to and communicates with your Home Assistant instance.
+
+---
+
+### Context
+
+Each Server Config node also exposes data in the **global context**, using the configuration’s **Name** (converted to camelCase) as the namespace.
+
+The following context values are available:
+
+| Key        | Description                       | Update Behavior                               |
+| ---------- | --------------------------------- | --------------------------------------------- |
+| `states`   | All entity states                 | Always kept up to date as state changes occur |
+| `services` | Available Home Assistant services | Loaded on initial deploy                      |
+| `events`   | Available Home Assistant events   | Loaded on initial deploy                      |
+
+---
+
+### Context Example
+
+If your Server Config node is named **Home Assistant** and you have an entity `switch.my_switch`, you can access its state with:
+
+```js
+const haCtx = global.get("homeassistant");
+const configCtx = haCtx.homeAssistant;
+const entityState = configCtx.states["switch.my_switch"];
+return entityState.state === "on";
+```
+
+---
 
 ## Connection Issues
 
-Communication with Home Assistant is accomplished via a combination of WebSocket and the REST API if you are having trouble communicating with home assistant make sure you can access the API outside of node-red, but from the same server node-red is running on, using a REST client, curl, or any number of other methods to validate the connection
+Node-RED communicates with Home Assistant using both the **WebSocket** and **REST API**.
+
+If you encounter connection issues:
+
+1. Verify that the Home Assistant API is accessible **from the same host** running Node-RED.
+2. Test the connection using a REST client or command line:
+
+   ```bash
+   curl -H "Authorization: Bearer <YOUR_LONG_LIVED_ACCESS_TOKEN>" \
+        http://<home_assistant_host>:8123/api/
+   ```
+
+3. Confirm that your **Base URL** and **Access Token** are correct.
+4. Review the Node-RED logs for any connection or authentication errors.
+
+---
 
 ## References
 
-[Home Assistant REST API](https://home-assistant.io/developers/rest_api)
+- [Home Assistant REST API](https://home-assistant.io/developers/rest_api)
+- [Home Assistant Long-Lived Access Tokens](https://developers.home-assistant.io/docs/auth_api/#long-lived-access-token)
+- [Node-RED Context Documentation](https://nodered.org/docs/user-guide/context)

@@ -152,7 +152,11 @@ const PollStateEditor: EditorNodeDef<PollStateEditorNodeProperties> = {
         renderDeprecatedSettings(this, [DeprecatedSettingType.StateType]);
     },
     oneditsave: function () {
-        const outputs = $('#node-input-ifState').val() ? 2 : 1;
+        const outputs =
+            $('#node-input-ifState').val() ||
+            $('#node-input-ifStateType').val() === 'habool'
+                ? 2
+                : 1;
         $('#node-input-outputs').val(outputs);
         this.outputProperties = haOutputs.getOutputs();
     },
