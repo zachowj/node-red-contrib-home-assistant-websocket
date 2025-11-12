@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.80.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.80.0...v0.80.1) (2025-11-12)
+
+
+### Bug Fixes
+
+* **current-state:** Restore missing message context in conditional state handling ([b66dce2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/b66dce28d603a8031ad028bbf5423a618e8d5d9b)), closes [#1916](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1916)
+
+
+### Build System
+
+* **link.sh:** improve error messages and enhance library linking process ([41f8e89](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/41f8e8950decc4e13d2f5edba9271ddce24808a2))
+
 ## [0.80.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.79.4...v0.80.0) (2025-11-11)
 
 
