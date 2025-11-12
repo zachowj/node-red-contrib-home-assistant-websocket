@@ -96,21 +96,11 @@ jobs:
   publish:
     needs: release-please
     if: ${{ needs.release-please.outputs.release_created }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-      - name: Setup Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: "20"
-          registry-url: "https://registry.npmjs.org"
-      - name: Install dependencies and build 🔧
-        run: pnpm install
-      - name: Publish package on NPM
-        run: pnpm publish
+    uses: ./.github/workflows/publish.yml
+    permissions:
+      id-token: write # Must re-declare to allow OIDC in called workflow
+      contents: read
+    secrets: inherit
 
   publish-documentation:
     needs: release-please
