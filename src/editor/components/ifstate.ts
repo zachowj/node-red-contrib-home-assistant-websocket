@@ -41,6 +41,15 @@ export const init = function (
     const $clearIfState = $('#clearIfState');
 
     function availableTypes(operator: string): HATypedInputTypeOptions {
+        let extraTypes: HATypedInputTypeOptions = [
+            TypedInputTypes.Flow,
+            TypedInputTypes.Global,
+            typedInputOptionEntity,
+        ];
+        if (defaultTypes.includes(TypedInputTypes.Message)) {
+            extraTypes = [TypedInputTypes.Message, ...extraTypes];
+        }
+
         switch (operator) {
             case ComparatorType.Is:
             case ComparatorType.IsNot:
@@ -48,22 +57,19 @@ export const init = function (
             case ComparatorType.IsLessThan:
             case ComparatorType.IsLessThanOrEqual:
             case ComparatorType.IsGreaterThan:
-            case ComparatorType.IsGreaterThanOrEqual:
+            case ComparatorType.IsGreaterThanOrEqual: {
                 return [
                     TypedInputTypes.Number,
                     TypedInputTypes.JSONata,
-                    TypedInputTypes.Flow,
-                    TypedInputTypes.Global,
-                    typedInputOptionEntity,
+                    ...extraTypes,
                 ];
+            }
             case ComparatorType.Includes:
             case ComparatorType.DoesNotInclude:
                 return [
                     TypedInputTypes.String,
                     TypedInputTypes.JSONata,
-                    TypedInputTypes.Flow,
-                    TypedInputTypes.Global,
-                    typedInputOptionEntity,
+                    ...extraTypes,
                     typedInputOptionHaBoolean,
                 ];
             case ComparatorType.JSONata:
