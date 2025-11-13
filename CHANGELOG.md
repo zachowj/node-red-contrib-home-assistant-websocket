@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.80.2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.80.1...v0.80.2) (2025-11-13)
+
+
+### Bug Fixes
+
+* **comparator:** enhance number comparison logic and add related tests ([3bede3e](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/3bede3ec07d5fb0f4039434a5d5d30bd47228cf6)), closes [#1918](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1918)
+
+
+### Code Refactoring
+
+* **ifstate:** streamline availableTypes function and improve type handling ([bc8ab74](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/bc8ab74ea1007fbe3b3c485dfd3e5464c88ec924))
+
 ## [0.80.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.80.0...v0.80.1) (2025-11-12)
 
 
