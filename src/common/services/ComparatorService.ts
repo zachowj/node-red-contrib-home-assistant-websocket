@@ -94,11 +94,17 @@ export default class ComparatorService {
         switch (comparatorType) {
             case 'is':
             case 'is_not': {
-                // Datatype might be num, bool, str, re (regular expression)
-                const isMatch =
-                    comparatorValueDataType === 're'
-                        ? cValue.test(actualValue)
-                        : cValue === actualValue;
+                let isMatch: boolean;
+
+                if (comparatorValueDataType === 're') {
+                    isMatch = cValue.test(actualValue);
+                } else if (comparatorValueDataType === 'num') {
+                    const numActual = Number(actualValue);
+                    isMatch = !Number.isNaN(numActual) && numActual === cValue;
+                } else {
+                    isMatch = cValue === actualValue;
+                }
+
                 return comparatorType === 'is' ? isMatch : !isMatch;
             }
             case 'includes':

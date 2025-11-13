@@ -280,6 +280,94 @@ describe('Comparator Service', function () {
 
                     expect(result).toBe(false);
                 });
+
+                it('should return true when comparing string numbers to numbers', async function () {
+                    const result = await comparatorService.getComparatorResult(
+                        'is',
+                        '42',
+                        '42',
+                        'num',
+                    );
+
+                    expect(result).toBe(true);
+                });
+
+                it('should return true when comparing numeric string to number', async function () {
+                    const result = await comparatorService.getComparatorResult(
+                        'is',
+                        '42',
+                        42,
+                        'num',
+                    );
+
+                    expect(result).toBe(true);
+                });
+
+                it('should return false when actual value is NaN', async function () {
+                    const result = await comparatorService.getComparatorResult(
+                        'is',
+                        '42',
+                        'not a number',
+                        'num',
+                    );
+
+                    expect(result).toBe(false);
+                });
+
+                it('should return false when actual value cannot be converted to number', async function () {
+                    const result = await comparatorService.getComparatorResult(
+                        'is',
+                        '42',
+                        'abc',
+                        'num',
+                    );
+
+                    expect(result).toBe(false);
+                });
+
+                it('should return true when comparing floating point numbers', async function () {
+                    const result = await comparatorService.getComparatorResult(
+                        'is',
+                        '3.14',
+                        3.14,
+                        'num',
+                    );
+
+                    expect(result).toBe(true);
+                });
+
+                it('should return true when comparing negative numbers', async function () {
+                    const result = await comparatorService.getComparatorResult(
+                        'is',
+                        '-42',
+                        -42,
+                        'num',
+                    );
+
+                    expect(result).toBe(true);
+                });
+
+                it('should return true when comparing zero', async function () {
+                    const result = await comparatorService.getComparatorResult(
+                        'is',
+                        '0',
+                        0,
+                        'num',
+                    );
+
+                    expect(result).toBe(true);
+                });
+
+                it('should return true when comparing string zero to numeric zero', async function () {
+                    const result = await comparatorService.getComparatorResult(
+                        'is',
+                        '0',
+                        '0',
+                        'num',
+                    );
+
+                    expect(result).toBe(true);
+                });
             });
 
             describe('is not', function () {
@@ -300,6 +388,50 @@ describe('Comparator Service', function () {
                         'foo',
                         'bar',
                         'str',
+                    );
+
+                    expect(result).toBe(true);
+                });
+
+                it('should return false when comparing string numbers to numbers', async function () {
+                    const result = await comparatorService.getComparatorResult(
+                        'is_not',
+                        '42',
+                        '42',
+                        'num',
+                    );
+
+                    expect(result).toBe(false);
+                });
+
+                it('should return false when comparing numeric string to number', async function () {
+                    const result = await comparatorService.getComparatorResult(
+                        'is_not',
+                        '42',
+                        42,
+                        'num',
+                    );
+
+                    expect(result).toBe(false);
+                });
+
+                it('should return true when actual value is NaN', async function () {
+                    const result = await comparatorService.getComparatorResult(
+                        'is_not',
+                        '42',
+                        'not a number',
+                        'num',
+                    );
+
+                    expect(result).toBe(true);
+                });
+
+                it('should return true when comparing different numbers', async function () {
+                    const result = await comparatorService.getComparatorResult(
+                        'is_not',
+                        '42',
+                        100,
+                        'num',
                     );
 
                     expect(result).toBe(true);
