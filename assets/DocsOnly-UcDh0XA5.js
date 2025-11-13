@@ -1,0 +1,1 @@
+import{_ as o,c as s,o as c,f as t}from"./app-DL7QLekj.js";const n={},r={class:"docs-only"};function a(e,l){return c(),s("div",r,[t(e.$slots,"default")])}const d=o(n,[["render",a]]);export{d as default};
