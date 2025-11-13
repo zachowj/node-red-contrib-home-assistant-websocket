@@ -41,29 +41,32 @@ export const init = function (
     const $clearIfState = $('#clearIfState');
 
     function availableTypes(operator: string): HATypedInputTypeOptions {
-        let extraTypes: HATypedInputTypeOptions = [
+        const baseExtraTypes: HATypedInputTypeOptions = [
             TypedInputTypes.Flow,
             TypedInputTypes.Global,
             typedInputOptionEntity,
         ];
-        if (defaultTypes.includes(TypedInputTypes.Message)) {
-            extraTypes = [TypedInputTypes.Message, ...extraTypes];
-        }
+        const extraTypes: HATypedInputTypeOptions = defaultTypes.includes(
+            TypedInputTypes.Message,
+        )
+            ? [TypedInputTypes.Message, ...baseExtraTypes]
+            : baseExtraTypes;
 
         switch (operator) {
             case ComparatorType.Is:
             case ComparatorType.IsNot:
-                break;
+                return defaultTypes;
+
             case ComparatorType.IsLessThan:
             case ComparatorType.IsLessThanOrEqual:
             case ComparatorType.IsGreaterThan:
-            case ComparatorType.IsGreaterThanOrEqual: {
+            case ComparatorType.IsGreaterThanOrEqual:
                 return [
                     TypedInputTypes.Number,
                     TypedInputTypes.JSONata,
                     ...extraTypes,
                 ];
-            }
+
             case ComparatorType.Includes:
             case ComparatorType.DoesNotInclude:
                 return [
@@ -72,11 +75,13 @@ export const init = function (
                     ...extraTypes,
                     typedInputOptionHaBoolean,
                 ];
+
             case ComparatorType.JSONata:
                 return [TypedInputTypes.JSONata];
-        }
 
-        return defaultTypes;
+            default:
+                return defaultTypes;
+        }
     }
 
     $input.typedInput({
