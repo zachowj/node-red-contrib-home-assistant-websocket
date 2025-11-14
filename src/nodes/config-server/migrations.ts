@@ -91,9 +91,10 @@ export default [
             };
 
             // Migrate ha_boolean delimiter string to array of unique values
-            const haBoolArr = schema.ha_boolean
-                ? schema.ha_boolean.split('|')
-                : [];
+            let haBoolArr: string[] = [];
+            if (typeof schema.ha_boolean === 'string') {
+                haBoolArr = schema.ha_boolean.split('|');
+            }
             const haBoolSet = new Set(
                 haBoolArr.map((item: string) => item.toLowerCase().trim()),
             );
