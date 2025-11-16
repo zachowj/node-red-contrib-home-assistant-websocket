@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.80.3](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.80.2...v0.80.3) (2025-11-16)
+
+
+### Bug Fixes
+
+* **config-server:** improve ha_boolean migration to handle string input correctly ([d7c477c](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d7c477c11bd6950151ed8e4b7381eda1cbf9c3d7))
+* **current-state:** update checkForDuration logic to include 'habool' type condition ([44d5fe1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/44d5fe1bb8414204fdddcd1f14cec75c04966476)), closes [#1923](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1923)
+
 ## [0.80.2](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.80.1...v0.80.2) (2025-11-13)
 
 
