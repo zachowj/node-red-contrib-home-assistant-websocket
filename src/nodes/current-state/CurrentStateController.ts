@@ -123,7 +123,8 @@ export default class CurrentStateController extends InputOutputController<
     #checkForDuration(isIfState: boolean) {
         return (
             isIfState &&
-            this.node.config.halt_if.length > 0 &&
+            (this.node.config.halt_if.length > 0 ||
+                this.node.config.halt_if_type === 'habool') &&
             [
                 ComparatorType.Is,
                 ComparatorType.IsNot,
