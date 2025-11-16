@@ -79,6 +79,24 @@ export default class WaitUntil extends InputOutputController<
         );
     }
 
+    #validateAndConvertTimeout(result: unknown): number {
+        const timeout = Number(result);
+
+        if (
+            result === undefined ||
+            result === null ||
+            isNaN(timeout) ||
+            timeout < 0
+        ) {
+            throw new InputError(
+                ['ha-wait-until.error.invalid_timeout', { timeout }],
+                'ha-wait-until.error.error',
+            );
+        }
+
+        return timeout;
+    }
+
     async #onEntityChange(evt: {
         event: {
             entity_id: string;
@@ -205,6 +223,7 @@ export default class WaitUntil extends InputOutputController<
                     message,
                 },
             );
+            timeout = this.#validateAndConvertTimeout(timeout);
             config.timeout = timeout.toString();
         }
 
