@@ -84,7 +84,10 @@ export default class WaitUntil extends InputOutputController<
 
         if (result === null || isNaN(timeout) || timeout < 0) {
             throw new InputError(
-                ['ha-wait-until.error.invalid_timeout', { timeout }],
+                [
+                    'ha-wait-until.error.invalid_timeout',
+                    { timeout: String(result) },
+                ],
                 'ha-wait-until.error.error',
             );
         }
