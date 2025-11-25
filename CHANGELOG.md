@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.80.4](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.80.3...v0.80.4) (2025-11-19)
+
+
+### Bug Fixes
+
+* Handle undefined JSONata timeout values gracefully ([#1925](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1925)) ([146909a](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/146909a7019cff3fbfb4a4bb53d33e79a2a19d1b))
+
+
+### Build System
+
+* **deps-dev:** bump autoprefixer from 10.4.21 to 10.4.22 ([#1926](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1926)) ([ee9c7d4](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ee9c7d4afeb88a7ff63e8921befad26abbbb4f6c))
+* **deps-dev:** bump sass from 1.93.3 to 1.94.0 ([#1927](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1927)) ([afb069a](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/afb069a8f6fa0659ab17b728031bbe6329acad48))
+
 ## [0.80.3](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.80.2...v0.80.3) (2025-11-16)
 
 
