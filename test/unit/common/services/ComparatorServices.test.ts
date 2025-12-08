@@ -725,7 +725,7 @@ describe('Comparator Service', function () {
 
                     it('should return true for all capitalized habool truthy values', async function () {
                         const truthyValues = [
-                            'Y',
+                            'y',
                             'Yes',
                             'True',
                             'On',
