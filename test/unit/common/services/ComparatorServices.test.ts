@@ -666,34 +666,37 @@ describe('Comparator Service', function () {
             describe('Home Assistant State Boolean', function () {
                 describe('is in (includes)', function () {
                     it('should return true when comparing lowercase habool values', async function () {
-                        const result = await comparatorService.getComparatorResult(
-                            'includes',
-                            '',
-                            'true',
-                            'habool',
-                        );
+                        const result =
+                            await comparatorService.getComparatorResult(
+                                'includes',
+                                '',
+                                'true',
+                                'habool',
+                            );
 
                         expect(result).toBe(true);
                     });
 
                     it('should return true when comparing capitalized habool values', async function () {
-                        const result = await comparatorService.getComparatorResult(
-                            'includes',
-                            '',
-                            'True',
-                            'habool',
-                        );
+                        const result =
+                            await comparatorService.getComparatorResult(
+                                'includes',
+                                '',
+                                'True',
+                                'habool',
+                            );
 
                         expect(result).toBe(true);
                     });
 
                     it('should return true when comparing uppercase habool values', async function () {
-                        const result = await comparatorService.getComparatorResult(
-                            'includes',
-                            '',
-                            'TRUE',
-                            'habool',
-                        );
+                        const result =
+                            await comparatorService.getComparatorResult(
+                                'includes',
+                                '',
+                                'TRUE',
+                                'habool',
+                            );
 
                         expect(result).toBe(true);
                     });
@@ -765,34 +768,37 @@ describe('Comparator Service', function () {
                     });
 
                     it('should return true for habool values with surrounding whitespace', async function () {
-                        const result = await comparatorService.getComparatorResult(
-                            'includes',
-                            '',
-                            '  True  ',
-                            'habool',
-                        );
+                        const result =
+                            await comparatorService.getComparatorResult(
+                                'includes',
+                                '',
+                                '  True  ',
+                                'habool',
+                            );
 
                         expect(result).toBe(true);
                     });
 
                     it('should return false for non-habool values', async function () {
-                        const result = await comparatorService.getComparatorResult(
-                            'includes',
-                            '',
-                            'false',
-                            'habool',
-                        );
+                        const result =
+                            await comparatorService.getComparatorResult(
+                                'includes',
+                                '',
+                                'false',
+                                'habool',
+                            );
 
                         expect(result).toBe(false);
                     });
 
                     it('should return false for capitalized non-habool values', async function () {
-                        const result = await comparatorService.getComparatorResult(
-                            'includes',
-                            '',
-                            'False',
-                            'habool',
-                        );
+                        const result =
+                            await comparatorService.getComparatorResult(
+                                'includes',
+                                '',
+                                'False',
+                                'habool',
+                            );
 
                         expect(result).toBe(false);
                     });
@@ -800,56 +806,61 @@ describe('Comparator Service', function () {
 
                 describe('is not in (does_not_include)', function () {
                     it('should return false when comparing lowercase habool values', async function () {
-                        const result = await comparatorService.getComparatorResult(
-                            'does_not_include',
-                            '',
-                            'true',
-                            'habool',
-                        );
+                        const result =
+                            await comparatorService.getComparatorResult(
+                                'does_not_include',
+                                '',
+                                'true',
+                                'habool',
+                            );
 
                         expect(result).toBe(false);
                     });
 
                     it('should return false when comparing capitalized habool values', async function () {
-                        const result = await comparatorService.getComparatorResult(
-                            'does_not_include',
-                            '',
-                            'True',
-                            'habool',
-                        );
+                        const result =
+                            await comparatorService.getComparatorResult(
+                                'does_not_include',
+                                '',
+                                'True',
+                                'habool',
+                            );
 
                         expect(result).toBe(false);
                     });
 
                     it('should return false when comparing uppercase habool values', async function () {
-                        const result = await comparatorService.getComparatorResult(
-                            'does_not_include',
-                            '',
-                            'TRUE',
-                            'habool',
-                        );
+                        const result =
+                            await comparatorService.getComparatorResult(
+                                'does_not_include',
+                                '',
+                                'TRUE',
+                                'habool',
+                            );
 
                         expect(result).toBe(false);
                     });
 
                     it('should return true for non-habool values', async function () {
-                        const result = await comparatorService.getComparatorResult(
-                            'does_not_include',
-                            '',
-                            'false',
-                            'habool',
-                        );
+                        const result =
+                            await comparatorService.getComparatorResult(
+                                'does_not_include',
+                                '',
+                                'false',
+                                'habool',
+                            );
 
                         expect(result).toBe(true);
                     });
 
                     it('should return true for capitalized non-habool values', async function () {
-                        const result = await comparatorService.getComparatorResult(
-                            'does_not_include',
-                            '',
-                            'False',
-                            'habool',
-                        );
+                        const result =
+                            await comparatorService.getComparatorResult(
+                                'does_not_include',
+                                '',
+                                'False',
+                                'habool',
+                            );
 
                         expect(result).toBe(true);
                     });
