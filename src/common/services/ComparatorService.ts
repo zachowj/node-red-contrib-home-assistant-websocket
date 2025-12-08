@@ -109,7 +109,12 @@ export default class ComparatorService {
             }
             case 'includes':
             case 'does_not_include': {
-                const isIncluded = cValue.includes(actualValue);
+                // For habool comparisons, make the comparison case-insensitive
+                const valueToCheck =
+                    comparatorValueDataType === 'habool'
+                        ? actualValue?.toString().toLowerCase().trim()
+                        : actualValue;
+                const isIncluded = cValue.includes(valueToCheck);
                 return comparatorType === 'includes' ? isIncluded : !isIncluded;
             }
             case 'cont':
