@@ -35,7 +35,17 @@ Use the **output properties** for state conversion moving forward.
 
 Convert the state of the entity to the selected type. Boolean will be converted to true based on if the string is equal by default to (y|yes|true|on|home|open). Original value stored in msg.data.original_state
 
-### Output Initially
+### Output on change
+
+- Type: `boolean`
+
+When enabled, the node will output a message whenever the entity's state changes, in addition to the regular polling intervals. This ensures the node responds immediately to state changes that occur between polls, rather than waiting for the next scheduled poll.
+
+::: tip
+If you only want output when the entity's state changes (without polling), use the "events: state" or "trigger: state" nodes instead.
+:::
+
+### Output on connect
 
 - Type: `boolean`
 
