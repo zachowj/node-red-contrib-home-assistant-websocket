@@ -79,7 +79,10 @@ The **minimum value** is **10 seconds**.
 - **Type:** `array of strings`
 
 Defines which strings should be interpreted as boolean `true` when comparing state values.
-Comparisons are **case-insensitive** and ignore surrounding whitespace.
+
+When configured, state boolean values are normalized by converting to lowercase and trimming whitespace, so `"On"` and `"on"` become the same value and duplicates are removed.
+
+**Note:** Comparisons with entity states are case-sensitive. Entity states from official Home Assistant integrations are typically lowercase, but user-defined entities (like `input_text`) may have capitalized values that will not match.
 
 **Default values:**
 
