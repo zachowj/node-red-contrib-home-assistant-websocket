@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.80.4](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.80.3...v0.80.4) (2025-12-07)
+
+
+### Bug Fixes
+
+* Handle undefined JSONata timeout values gracefully ([#1925](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1925)) ([146909a](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/146909a7019cff3fbfb4a4bb53d33e79a2a19d1b))
+
+
+### Build System
+
+* **deps-dev:** bump @types/lodash from 4.17.20 to 4.17.21 ([#1937](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1937)) ([5321d7b](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/5321d7b77ffd5477d0c4040102497623f3de7c3e))
+* **deps-dev:** bump @types/node from 22.19.0 to 22.19.1 ([#1928](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1928)) ([667cb84](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/667cb8416e3f172e212e68088906a520d6797a08))
+* **deps-dev:** bump @vuepress/plugin-copy-code ([#1946](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1946)) ([2857067](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/285706743513cbb001cc4d483804679581850adb))
+* **deps-dev:** bump @vuepress/plugin-markdown-include ([#1947](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1947)) ([0e4d5df](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/0e4d5dfa25079d46d67c86fe0094ee633067475a))
+* **deps-dev:** bump @vuepress/plugin-prismjs ([#1945](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1945)) ([42860eb](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/42860eba725e9f3d55ff11b1e18677b6372fdb1a))
+* **deps-dev:** bump autoprefixer from 10.4.21 to 10.4.22 ([#1926](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1926)) ([ee9c7d4](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ee9c7d4afeb88a7ff63e8921befad26abbbb4f6c))
+* **deps-dev:** bump lint-staged from 16.2.6 to 16.2.7 ([#1935](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1935)) ([90431af](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/90431af53deb69fe1d62813c243bb175c3b67f45))
+* **deps-dev:** bump sass from 1.93.3 to 1.94.0 ([#1927](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1927)) ([afb069a](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/afb069a8f6fa0659ab17b728031bbe6329acad48))
+* **deps-dev:** bump sass from 1.94.0 to 1.94.2 ([#1939](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1939)) ([be382ab](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/be382abbdbe566cd875136356060a11b904a0b94))
+* **deps-dev:** bump vue from 3.5.24 to 3.5.25 ([#1938](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1938)) ([ad2b02a](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ad2b02a0dd8d1abc35437fb132da7568e9b4e71b))
+* **deps:** bump actions/checkout from 5 to 6 ([#1940](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1940)) ([84f98f0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/84f98f0ad04bc0242ba4847dde8e5065132f40f8))
+* **deps:** bump home-assistant-js-websocket from 9.5.0 to 9.6.0 ([#1936](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1936)) ([03bec8a](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/03bec8a92e82b9dba91be21dbaf3c11453a7eac8))
+
 ## [0.80.3](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.80.2...v0.80.3) (2025-11-16)
 
 
