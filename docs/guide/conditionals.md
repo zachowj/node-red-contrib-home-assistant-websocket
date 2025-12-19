@@ -158,8 +158,10 @@ By default:
 - **False values:** Any other value
 
 These true values are stored as an array, allowing you to use the [`in`](#in-and-not-in) and [`not in`](#in-and-not-in) operators for comparisons.
-::: tip
+::: tip Note
 
-Use this type when you want to check whether an entity’s state matches one of your configured “true” values (for example, when testing if a light is “on” or a door is “open”).
+Comparisons are case-sensitive. The configured state boolean values are normalized to lowercase when deployed, but entity state comparisons remain case-sensitive. Entity states from official Home Assistant integrations are typically lowercase, but user-defined entities (like `input_text`) may have capitalized values that will not match.
+
+Use this type when you want to check whether an entity’s state matches one of your configured “true” values (for example, when testing if a light is “on” or a door is “open”). For user-controlled entities with potentially capitalized states, consider using a static list or flow/global context value instead.
 
 :::
