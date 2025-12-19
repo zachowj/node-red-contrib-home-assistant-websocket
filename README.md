@@ -15,7 +15,7 @@ Documentation can be found [here](https://zachowj.github.io/node-red-contrib-hom
 Have Node-RED installed and working, if you need to
 install Node-RED see [here](https://nodered.org/docs/getting-started/installation).
 
-- [Node.js](https://nodejs.org) v18.2.0+
+- [Node.js](https://nodejs.org) v20+
 - [Node-RED](https://nodered.org/) v3.1.1+
 - [Home Assistant](https://home-assistant.io) v2024.3+
 
