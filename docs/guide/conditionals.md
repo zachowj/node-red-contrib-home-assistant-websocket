@@ -158,7 +158,7 @@ By default:
 - **False values:** Any other value
 
 These true values are stored as an array, allowing you to use the [`in`](#in-and-not-in) and [`not in`](#in-and-not-in) operators for comparisons.
-::: tip
+::: tip Note
 
 **Note:** Comparisons are case-sensitive. The configured state boolean values are normalized to lowercase when deployed, but entity state comparisons remain case-sensitive. Entity states from official Home Assistant integrations are typically lowercase, but user-defined entities (like `input_text`) may have capitalized values that will not match.
 
