@@ -17,8 +17,10 @@ enum OutputType {
     StateChange = 'stateChange',
 }
 
-interface SwitchNodeConstructor
-    extends InputOutputControllerOptions<SwitchNode, SwitchNodeProperties> {
+interface SwitchNodeConstructor extends InputOutputControllerOptions<
+    SwitchNode,
+    SwitchNodeProperties
+> {
     entityConfigEvents: Events;
     entityConfigNode: EntityConfigNode;
 }

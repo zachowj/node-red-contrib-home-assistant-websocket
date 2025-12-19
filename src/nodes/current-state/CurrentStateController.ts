@@ -13,11 +13,10 @@ import { HassEntity } from '../../types/home-assistant';
 import { NodeMessage } from '../../types/nodes';
 import { CurrentStateNode, CurrentStateNodeProperties } from '.';
 
-interface CurrentStateControllerConstructor
-    extends InputOutputControllerOptions<
-        CurrentStateNode,
-        CurrentStateNodeProperties
-    > {
+interface CurrentStateControllerConstructor extends InputOutputControllerOptions<
+    CurrentStateNode,
+    CurrentStateNodeProperties
+> {
     comparatorService: ComparatorService;
     homeAssistant: HomeAssistant;
     transformState: TransformState;

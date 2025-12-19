@@ -44,8 +44,7 @@ export interface WaitUntilProperties {
 }
 
 export interface WaitUntilNodeProperties
-    extends WaitUntilProperties,
-        BaseNodeProperties {}
+    extends WaitUntilProperties, BaseNodeProperties {}
 
 export interface WaitUntilNode extends BaseNode {
     config: WaitUntilNodeProperties;

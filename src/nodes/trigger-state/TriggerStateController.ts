@@ -58,11 +58,10 @@ interface ComparatorResult {
     comparatorResult: boolean;
 }
 
-export interface TriggerStateControllerConstructor
-    extends InputOutputControllerOptions<
-        TriggerStateNode,
-        TriggerStateProperties
-    > {
+export interface TriggerStateControllerConstructor extends InputOutputControllerOptions<
+    TriggerStateNode,
+    TriggerStateProperties
+> {
     comparatorService: ComparatorService;
     state?: State;
     transformState: TransformState;

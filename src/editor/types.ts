@@ -29,8 +29,9 @@ interface EditorWidgetEditableListButton {
     click: () => void;
 }
 
-export interface EditorWidgetEditableListOptions<T>
-    extends WidgetEditableListOptions<T> {
+export interface EditorWidgetEditableListOptions<
+    T,
+> extends WidgetEditableListOptions<T> {
     buttons: EditorWidgetEditableListButton[];
 }
 

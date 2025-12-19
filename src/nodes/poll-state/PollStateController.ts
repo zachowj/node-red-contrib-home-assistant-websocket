@@ -12,8 +12,7 @@ import { HassEntity } from '../../types/home-assistant';
 import { NodeMessage } from '../../types/nodes';
 import { PollStateNode } from '.';
 
-interface PollStateNodeConstructor
-    extends OutputControllerConstructor<PollStateNode> {
+interface PollStateNodeConstructor extends OutputControllerConstructor<PollStateNode> {
     comparatorService: ComparatorService;
     transformState: TransformState;
 }

@@ -17,8 +17,7 @@ import { HassStateChangedEvent } from '../../types/home-assistant';
 import { NodeMessage } from '../../types/nodes';
 import { EventsStateNode } from '.';
 
-interface EventsStateNodeConstructor
-    extends OutputControllerConstructor<EventsStateNode> {
+interface EventsStateNodeConstructor extends OutputControllerConstructor<EventsStateNode> {
     comparatorService: ComparatorService;
     transformState: TransformState;
 }

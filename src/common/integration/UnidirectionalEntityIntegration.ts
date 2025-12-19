@@ -40,8 +40,7 @@ export interface EntityMessage extends MessageBase {
     attributes?: Record<string, any>;
 }
 
-export interface UnidirectionalIntegrationConstructor
-    extends IntegrationConstructor {
+export interface UnidirectionalIntegrationConstructor extends IntegrationConstructor {
     deviceConfigNode?: DeviceConfigNode;
     entityConfigNode: EntityConfigNode;
 }

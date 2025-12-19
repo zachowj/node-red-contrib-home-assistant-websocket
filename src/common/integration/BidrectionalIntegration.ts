@@ -21,8 +21,9 @@ export interface ReceivedMessage {
     data: Record<string, any>;
 }
 
-interface BidirectionalIntegrationConstructor<T extends BaseNode>
-    extends IntegrationConstructor {
+interface BidirectionalIntegrationConstructor<
+    T extends BaseNode,
+> extends IntegrationConstructor {
     node: T;
 }
 

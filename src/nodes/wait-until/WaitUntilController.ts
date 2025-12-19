@@ -27,22 +27,20 @@ import { HassEntity } from '../../types/home-assistant';
 import { NodeDone, NodeSend } from '../../types/nodes';
 import { WaitUntilNode, WaitUntilNodeProperties, WaitUntilProperties } from '.';
 
-interface WaitUntilControllerConstructor
-    extends InputOutputControllerOptions<
-        WaitUntilNode,
-        WaitUntilNodeProperties
-    > {
+interface WaitUntilControllerConstructor extends InputOutputControllerOptions<
+    WaitUntilNode,
+    WaitUntilNodeProperties
+> {
     comparatorService: ComparatorService;
     clientEvents: ClientEvents;
     homeAssistant: HomeAssistant;
     jsonataService: JSONataService;
 }
 
-interface SavedConfig
-    extends Omit<
-        WaitUntilProperties,
-        'timeoutType' | 'blockInputOverrides' | 'outputProperties'
-    > {
+interface SavedConfig extends Omit<
+    WaitUntilProperties,
+    'timeoutType' | 'blockInputOverrides' | 'outputProperties'
+> {
     send: NodeSend;
     done: NodeDone;
 }

@@ -26,11 +26,10 @@ import { sortConditions } from './helpers';
 import { simpleComparison } from './operators';
 import { Rule } from './types';
 
-interface GetEntitiesControllerConstructor
-    extends InputOutputControllerOptions<
-        GetEntitiesNode,
-        GetEntitiesNodeProperties
-    > {
+interface GetEntitiesControllerConstructor extends InputOutputControllerOptions<
+    GetEntitiesNode,
+    GetEntitiesNodeProperties
+> {
     comparatorService: ComparatorService;
     homeAssistant: HomeAssistant;
 }
