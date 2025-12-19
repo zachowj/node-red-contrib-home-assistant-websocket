@@ -4,7 +4,7 @@ import * as cheerio from 'cheerio';
 import { spawn } from 'child_process';
 import chokidar from 'chokidar';
 import cssnano from 'cssnano';
-import del from 'del';
+import * as del from 'del';
 import esbuild from 'esbuild';
 import fastGlob from 'fast-glob';
 import fs from 'fs/promises';
@@ -223,7 +223,7 @@ const buildHandlebarsCached = async () => {
 // Utility Functions
 const clean = async (patterns) => {
     console.time(`Cleaning: ${patterns}`);
-    await del(patterns);
+    await del.deleteAsync(patterns);
     console.timeEnd(`Cleaning: ${patterns}`);
 };
 
