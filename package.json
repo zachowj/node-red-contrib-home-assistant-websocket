@@ -11,8 +11,8 @@
   },
   "packageManager": "pnpm@10.20.0",
   "scripts": {
-    "build": "node build.js build",
-    "dev": "node build.js start",
+    "build": "node build.mjs build",
+    "dev": "node build.mjs start",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "docs:lint": "prettier --write docs/{.vuepress/**,**}/*.{js,md,html}",
