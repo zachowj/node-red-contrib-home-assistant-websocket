@@ -30,7 +30,7 @@ interface EventsCalendarEditorNodeProperties extends EditorNodeProperties {
 const EventsCalendarEditor: EditorNodeDef<EventsCalendarEditorNodeProperties> =
     {
         category: NodeCategory.HomeAssistant,
-        color: NodeColor.Beta,
+        color: NodeColor.HaBlue,
         inputs: 0,
         outputs: 1,
         outputLabels: ['Calendar event triggered'],
@@ -75,7 +75,6 @@ const EventsCalendarEditor: EditorNodeDef<EventsCalendarEditorNodeProperties> =
             haServer.init(this, '#node-input-server');
             exposeNode.init(this);
             saveEntityType(EntityType.Switch, 'exposeAsEntityConfig');
-            $('#dialog-form').prepend(ha.betaWarning(1295));
 
             hassAutocomplete({
                 root: '#node-input-entityId',
