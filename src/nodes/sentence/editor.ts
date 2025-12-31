@@ -29,7 +29,7 @@ interface SentenceEditorNodeProperties extends EditorNodeProperties {
 
 const SentenceEditor: EditorNodeDef<SentenceEditorNodeProperties> = {
     category: NodeCategory.HomeAssistant,
-    color: NodeColor.Beta,
+    color: NodeColor.HaBlue,
     outputs: 1,
     outputLabels: '',
     icon: 'font-awesome/fa-comment-o',
@@ -86,8 +86,6 @@ const SentenceEditor: EditorNodeDef<SentenceEditorNodeProperties> = {
         haServer.init(this, '#node-input-server');
         exposeNode.init(this);
         saveEntityType(EntityType.Switch, 'exposeAsEntityConfig');
-
-        $('#dialog-form').prepend(ha.betaWarning(981));
 
         // Handle mode change
         // eslint-disable-next-line @typescript-eslint/no-this-alias
