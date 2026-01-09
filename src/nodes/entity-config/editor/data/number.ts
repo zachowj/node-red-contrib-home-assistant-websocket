@@ -39,6 +39,7 @@ const numberDeviceClasses = [
     DeviceClass.Speed,
     DeviceClass.SulphurDioxide,
     DeviceClass.Temperature,
+    DeviceClass.TemperatureDelta,
     DeviceClass.VolatileOrganicCompounds,
     DeviceClass.Voltage,
     DeviceClass.Volume,
