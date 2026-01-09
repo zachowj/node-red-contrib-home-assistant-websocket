@@ -46,6 +46,7 @@ const sensorDeviceClasses = [
     DeviceClass.Speed,
     DeviceClass.SulphurDioxide,
     DeviceClass.Temperature,
+    DeviceClass.TemperatureDelta,
     DeviceClass.Timestamp,
     DeviceClass.VolatileOrganicCompounds,
     DeviceClass.VolatileOrganicCompoundsParts,
