@@ -59,7 +59,7 @@
     "selectn": "^1.3.0",
     "slugify": "^1.6.6",
     "timestring": "^7.0.0",
-    "ws": "^8.18.3"
+    "ws": "^8.19.0"
   },
   "devDependencies": {
     "@types/debug": "^4.1.12",
