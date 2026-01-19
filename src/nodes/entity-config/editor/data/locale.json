@@ -72,6 +72,7 @@
           "switch": "switch",
           "tamper": "tamper",
           "temperature": "temperature",
+          "temperature_delta": "temperature delta",
           "timestamp": "timestamp",
           "update": "update",
           "vibration": "vibration",

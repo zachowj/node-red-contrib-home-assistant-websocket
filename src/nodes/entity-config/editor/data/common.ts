@@ -43,6 +43,7 @@ export enum DeviceClass {
     Speed = 'speed',
     SulphurDioxide = 'sulphur_dioxide',
     Temperature = 'temperature',
+    TemperatureDelta = 'temperature_delta',
     Timestamp = 'timestamp',
     VolatileOrganicCompounds = 'volatile_organic_compounds',
     VolatileOrganicCompoundsParts = 'volatile_organic_compounds_parts',
