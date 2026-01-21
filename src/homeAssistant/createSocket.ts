@@ -117,7 +117,16 @@ export default function createSocket({
         };
 
         const onError = (err: unknown) => {
-            const errMessage = err instanceof Error ? err.message : String(err);
+            let errMessage = 'Unknown error';
+            try {
+                if (err && typeof err === 'object' && 'message' in err) {
+                    errMessage = String((err as { message: unknown }).message);
+                } else if (err) {
+                    errMessage = String(err);
+                }
+            } catch {
+                errMessage = 'Error parsing error message';
+            }
             debug('[Auth Phase] WebSocket error', errMessage);
             // Remove both handlers to prevent double firing
             socket.off('close', onClose);
