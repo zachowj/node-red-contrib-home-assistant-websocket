@@ -116,8 +116,9 @@ export default function createSocket({
             setTimeout(() => connect(promResolve, promReject), 5000);
         };
 
-        const onError = (err: Error) => {
-            debug('[Auth Phase] WebSocket error', err.message);
+        const onError = (err: unknown) => {
+            const errMessage = err instanceof Error ? err.message : String(err);
+            debug('[Auth Phase] WebSocket error', errMessage);
             // Remove both handlers to prevent double firing
             socket.off('close', onClose);
             socket.off('error', onError);
