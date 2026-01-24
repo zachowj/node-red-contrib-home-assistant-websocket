@@ -118,7 +118,7 @@
     "node-red-node-test-helper": "^0.3.6",
     "postcss": "^8.5.6",
     "prettier": "^3.8.1",
-    "sass": "^1.97.2",
+    "sass": "^1.97.3",
     "typescript": "^5.9.3",
     "vitest": "^4.0.16",
     "vitest-mock-extended": "^3.1.0",
