@@ -94,7 +94,7 @@ Sample input
 
 ```JSON
 {
-    "action": "homeassistant.turn_on",
+    "action": "light.turn_on",
     "target": {
         "floor_id": ["first_floor"],
         "area_id": ["kitchen"],
