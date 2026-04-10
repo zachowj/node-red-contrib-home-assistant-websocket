@@ -22,8 +22,8 @@ import {
     subscribeEntities,
     subscribeServices,
 } from 'home-assistant-js-websocket';
-//import { cloneDeep } from 'lodash';
 
+// import { cloneDeep } from 'lodash';
 import {
     HA_EVENT_INTEGRATION,
     HA_EVENT_SERVICES_UPDATED,
@@ -613,23 +613,27 @@ export default class Websocket {
     }
 
     getAreas(): HassAreas {
-        //return cloneDeep(this.areas);
+        // return cloneDeep(this.areas);
         return structuredClone(this.areas);
     }
 
     getArea(areaId: string): HassArea | undefined {
-        //return cloneDeep(this.areas.find((area) => area.area_id === areaId));
-        return structuredClone(this.areas.find((area) => area.area_id === areaId));
+        // return cloneDeep(this.areas.find((area) => area.area_id === areaId));
+        return structuredClone(
+            this.areas.find((area) => area.area_id === areaId),
+        );
     }
 
     getDevices(): HassDevices {
-        //return cloneDeep(this.devices);
+        // return cloneDeep(this.devices);
         return structuredClone(this.devices);
     }
 
     getDevice(deviceId: string): HassDevice | undefined {
-        //return cloneDeep(this.devices.find((device) => device.id === deviceId));
-        return structuredClone(this.devices.find((device) => device.id === deviceId));
+        // return cloneDeep(this.devices.find((device) => device.id === deviceId));
+        return structuredClone(
+            this.devices.find((device) => device.id === deviceId),
+        );
     }
 
     async getDeviceActions(deviceId?: string): Promise<HassDeviceActions> {
@@ -689,60 +693,60 @@ export default class Websocket {
     }
 
     getEntities(): HassEntityRegistry {
-        //return cloneDeep(this.entities);
+        // return cloneDeep(this.entities);
         return structuredClone(this.entities);
     }
 
     getEntity(entityId: string): HassEntityRegistryEntry | undefined {
-        //return cloneDeep(this.entities.get(entityId));
+        // return cloneDeep(this.entities.get(entityId));
         return structuredClone(this.entities.get(entityId));
     }
 
     getFloors(): HassFloor[] {
-        //return cloneDeep(this.floors);
+        // return cloneDeep(this.floors);
         return structuredClone(this.floors);
     }
 
     getFloor(floorId: string): HassFloor | undefined {
-        /*return cloneDeep(
+        /* return cloneDeep(
             this.floors.find((floor) => floor.floor_id === floorId),
-        );*/
+        ); */
         return structuredClone(
             this.floors.find((floor) => floor.floor_id === floorId),
         );
     }
 
     getLabels(): HassLabel[] {
-        //return cloneDeep(this.labels);
+        // return cloneDeep(this.labels);
         return structuredClone(this.labels);
     }
 
     getLabel(labelId: string): HassLabel | undefined {
-        /*return cloneDeep(
+        /* return cloneDeep(
             this.labels.find((label) => label.label_id === labelId),
-        );*/
+        ); */
         return structuredClone(
             this.labels.find((label) => label.label_id === labelId),
         );
     }
 
     getStates(): HassEntities {
-        //return cloneDeep(this.states);
+        // return cloneDeep(this.states);
         return structuredClone(this.states);
     }
 
     getState(entityId: string): HassEntity | undefined {
-        //return cloneDeep(this.states[entityId]);
+        // return cloneDeep(this.states[entityId]);
         return structuredClone(this.states[entityId]);
     }
 
     getServices(): HassServices {
-        //return cloneDeep(this.services);
+        // return cloneDeep(this.services);
         return structuredClone(this.services);
     }
 
     getTag(tagId: string): HassTag | undefined {
-        //return cloneDeep(this.tags?.find((tag) => tag.id === tagId));
+        // return cloneDeep(this.tags?.find((tag) => tag.id === tagId));
         return structuredClone(this.tags?.find((tag) => tag.id === tagId));
     }
 
@@ -767,10 +771,10 @@ export default class Websocket {
         data?: { [key: string]: any },
         target?: HassServiceTarget,
     ): Promise<Record<string, unknown>> {
-        //const services = this.getServices();
+        // const services = this.getServices();
         const returnResponse = atLeastHaVersion(this.client.haVersion, 2023, 12)
-            //? !!services[domain]?.[service]?.response
-            ? !!this.services[domain]?.[service]?.response
+            ? // ? !!services[domain]?.[service]?.response
+              !!this.services[domain]?.[service]?.response
             : undefined;
 
         const serviceCall = {
