@@ -202,7 +202,7 @@ export default class WaitUntil extends InputOutputController<
                             e,
                             message,
                             this.node.context(),
-                            this.#homeAssistant.websocket.getStates(),
+                            this.#homeAssistant.websocket.getStatesRef(),
                         ),
                 );
         }

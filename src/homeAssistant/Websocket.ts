@@ -735,6 +735,10 @@ export default class Websocket {
         return structuredClone(this.states);
     }
 
+    getStatesRef(): Readonly<HassEntities> {
+        return this.states;
+    }
+
     getState(entityId: string): HassEntity | undefined {
         // return cloneDeep(this.states[entityId]);
         return structuredClone(this.states[entityId]);

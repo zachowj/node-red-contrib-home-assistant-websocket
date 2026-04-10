@@ -288,7 +288,7 @@ export default class TriggerStateController extends ExposeAsController {
                     output.messageValue,
                     eventMessage.event as NodeMessage,
                     this.node.context(),
-                    this.homeAssistant.websocket.getStates(),
+                    this.homeAssistant.websocket.getStatesRef(),
                 );
             }
 
