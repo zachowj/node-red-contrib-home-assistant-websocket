@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash';
+// import { cloneDeep } from 'lodash';
 import selectn from 'selectn';
 
 import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
@@ -288,7 +288,7 @@ export default class TriggerStateController extends ExposeAsController {
                     output.messageValue,
                     eventMessage.event as NodeMessage,
                     this.node.context(),
-                    this.homeAssistant.websocket.getStates(),
+                    this.homeAssistant.websocket.getStatesRef(),
                 );
             }
 
@@ -350,7 +350,8 @@ export default class TriggerStateController extends ExposeAsController {
             return;
         }
 
-        const eventMessage = cloneDeep(evt);
+        // const eventMessage = cloneDeep(evt);
+        const eventMessage = structuredClone(evt);
 
         if (!eventMessage.event.new_state) {
             return;

@@ -20,9 +20,9 @@
     "lint:fix": "eslint . --fix && prettier --write {docs,src,test}/**/*.{css,js,ts,md,html}",
     "prepare": "husky",
     "prepack": "pnpm run build",
-    "test": "vitest --run",
-    "test:coverage": "vitest run --coverage",
-    "test:watch": "vitest"
+    "test": "pnpm exec vitest --run",
+    "test:coverage": "pnpm exec vitest run --coverage",
+    "test:watch": "pnpm exec vitest"
   },
   "repository": {
     "type": "git",

@@ -12,7 +12,7 @@ export default function issueCheck(config: TagNodeProperties): Issue[] {
     if (!ha) {
         return issues;
     }
-    const states = ha.websocket.getStates();
+    const states = ha.websocket.getStatesRef();
     const tagStates = Object.values(states).filter((state) =>
         state.entity_id.startsWith('tag.'),
     );

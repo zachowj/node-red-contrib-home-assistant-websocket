@@ -150,7 +150,7 @@ export default class GetEntitiesController extends SendSplitController {
     ): Promise<HassEntity[]> {
         const currentTime = Date.now();
         const filteredEntities: HassEntity[] = [];
-        const states = this.#homeAssistant.websocket.getStates();
+        const states = this.#homeAssistant.websocket.getStatesRef();
         const sortedConditions = sortConditions(conditions);
 
         const stateKeys = Object.keys(states);

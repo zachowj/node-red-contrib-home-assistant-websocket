@@ -168,9 +168,8 @@ function getProperties(req: CustomRequest, res: Response): void {
     let flat: (string | string[])[] = [];
     const entityId = req.query.entityId?.toString();
 
-    const entity = entityId
-        ? req?.homeAssistant?.websocket.getState(entityId)
-        : req?.homeAssistant?.websocket.getStates();
+    const entities = req.homeAssistant?.websocket.getStates();
+    const entity = entityId ? entities?.[entityId] : entities;
 
     if (Array.isArray(entity)) {
         flat = Object.keys(flatten(entity)).filter(
@@ -178,7 +177,6 @@ function getProperties(req: CustomRequest, res: Response): void {
                 req?.query?.term && e.indexOf(req.query.term.toString()) !== -1,
         );
     } else {
-        const entities = req.homeAssistant?.websocket.getStates();
         if (!entities) {
             res.json([]);
             return;

@@ -1,6 +1,6 @@
 import { HassEntities } from 'home-assistant-js-websocket';
-import { cloneDeep } from 'lodash';
 
+// import { cloneDeep } from 'lodash';
 import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
 import OutputController, {
     OutputControllerConstructor,
@@ -104,7 +104,8 @@ export default class EventsStateController extends ExposeAsController {
         }
 
         const config = this.node.config;
-        const eventMessage = cloneDeep(evt);
+        // const eventMessage = cloneDeep(evt);
+        const eventMessage = structuredClone(evt);
         const entityId = eventMessage.entity_id;
         const oldEntity = eventMessage.event.old_state;
         const newEntity = eventMessage.event.new_state;

@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash';
+// import { cloneDeep } from 'lodash';
 import selectn from 'selectn';
 
 import { EntityStateCastType, TypedInputTypes } from '../../const';
@@ -74,7 +74,12 @@ export default class TypedInputService {
                 val = undefined;
                 break;
             case TypedInputTypes.Config: {
-                val = cloneDeep(
+                /* val = cloneDeep(
+                    value.length
+                        ? selectn(value, this.#nodeConfig)
+                        : this.#nodeConfig,
+                ); */
+                val = structuredClone(
                     value.length
                         ? selectn(value, this.#nodeConfig)
                         : this.#nodeConfig,

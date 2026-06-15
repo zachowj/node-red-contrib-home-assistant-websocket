@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash';
+// import { cloneDeep } from 'lodash';
 
 import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
 import OutputController from '../../common/controllers/OutputController';
@@ -35,7 +35,8 @@ export default class TagController extends ExposeAsController {
     public async onTagScanned(evt: HassTagScannedEvent): Promise<void> {
         if (!this.isEnabled) return;
 
-        const { event } = cloneDeep(evt);
+        // const { event } = cloneDeep(evt);
+        const { event } = structuredClone(evt);
         const { device_id: deviceId, tag_id: tagId } = event;
 
         if (!this.#isValidTag(tagId) || !this.#isValidDevice(deviceId)) return;

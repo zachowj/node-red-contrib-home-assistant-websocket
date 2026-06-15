@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "lib": ["es2018"],
+    "lib": ["es2022"],
     "module": "commonjs",
     "target": "es2018",
     "outDir": "./dist",

@@ -37,7 +37,7 @@ export default class ActionController extends InputOutputController<
             throw new NoConnectionError();
         }
 
-        const states = this.homeAssistant.websocket.getStates();
+        const states = this.homeAssistant.websocket.getStatesRef();
 
         const render = generateRenderTemplate(
             message,
@@ -245,7 +245,7 @@ export default class ActionController extends InputOutputController<
         const render = generateRenderTemplate(
             message,
             this.node.context(),
-            this.homeAssistant.websocket.getStates(),
+            this.homeAssistant.websocket.getStatesRef(),
         );
 
         const map: Record<string, string> = {

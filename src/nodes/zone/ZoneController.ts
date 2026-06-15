@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash';
+// import { cloneDeep } from 'lodash';
 
 import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
 import OutputController from '../../common/controllers/OutputController';
@@ -60,7 +60,8 @@ export default class Zone extends ExposeAsController {
             return;
         }
 
-        const { entity_id: entityId, event } = cloneDeep(evt);
+        // const { entity_id: entityId, event } = cloneDeep(evt);
+        const { entity_id: entityId, event } = structuredClone(evt);
 
         if (!event.old_state || !event.new_state) return;
 

@@ -1,6 +1,7 @@
 {
     "tabWidth": 4,
     "singleQuote": true,
+    "endOfLine": "lf",
     "overrides": [
         {
             "files": ["*.json", "*.md", "*.yaml", "*.yml"],

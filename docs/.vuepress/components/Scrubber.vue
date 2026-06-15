@@ -149,9 +149,9 @@ textarea {
 }
 
 button {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-        Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-        sans-serif;
+    font-family:
+        -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+        Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     font-size: 16px !important;
     border-radius: 4px;
     vertical-align: middle;

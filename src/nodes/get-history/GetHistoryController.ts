@@ -39,12 +39,12 @@ export default class GetHistoryController extends SendSplitController {
                 parsedMessage.entityId.value,
                 message,
                 this.node.context(),
-                this.homeAssistant.websocket.getStates(),
+                this.homeAssistant.websocket.getStatesRef(),
             );
         }
         if (parsedMessage.entityIdType.value === EntityFilterType.Regex) {
             const entities = Object.keys(
-                this.homeAssistant.websocket.getStates(),
+                this.homeAssistant.websocket.getStatesRef(),
             );
             const regex = new RegExp(entityId);
             entityId = entities

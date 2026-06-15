@@ -26,7 +26,7 @@ export default class ApiController extends InputOutputController<
         const renderTemplate = generateRenderTemplate(
             message,
             this.node.context(),
-            this.homeAssistant.websocket.getStates(),
+            this.homeAssistant.websocket.getStatesRef(),
         );
 
         let data;

@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { cloneDeep } from 'lodash';
+// import { cloneDeep } from 'lodash';
 import { NodeMessage } from 'node-red';
 import selectn from 'selectn';
 
@@ -100,7 +100,8 @@ export default class WaitUntil extends InputOutputController<
             old_state?: HassEntity;
         };
     }) {
-        const { event } = cloneDeep(evt);
+        // const { event } = cloneDeep(evt);
+        const { event } = structuredClone(evt);
 
         if (
             !this.#savedConfig ||
@@ -201,7 +202,7 @@ export default class WaitUntil extends InputOutputController<
                             e,
                             message,
                             this.node.context(),
-                            this.#homeAssistant.websocket.getStates(),
+                            this.#homeAssistant.websocket.getStatesRef(),
                         ),
                 );
         }
