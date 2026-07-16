@@ -37,8 +37,7 @@ export default class EditorContext {
         this.#node = node;
 
         const globalContext = this.#node.context().global.get(NAMESPACE) as
-            | HomeAssistantGlobalContext
-            | undefined;
+            HomeAssistantGlobalContext | undefined;
 
         if (!globalContext?.[this.#serverName]) {
             if (!globalContext) {
