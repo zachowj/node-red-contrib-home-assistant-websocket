@@ -28,7 +28,7 @@ export default class FireEventController extends InputOutputController<
                       parsedMessage.event.value,
                       message,
                       this.node.context(),
-                    this.homeAssistant.websocket.getStatesReadOnly(),
+                      this.homeAssistant.websocket.getStatesReadOnly(),
                   );
 
         let eventData: unknown;
