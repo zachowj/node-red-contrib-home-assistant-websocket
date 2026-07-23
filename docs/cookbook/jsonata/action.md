@@ -25,7 +25,7 @@ The _data object_ will vary, depending on the integration and service call, from
 
 Node-RED typically uses _msg.payload_ to pass values between nodes, however any field can be used. Most WebSocket nodes have _output properties_ that default to set _msg.data_ to the entity details, and therefore in the flow _following_ (not in) the node, `data.state` will typically provide the state value of the entity that was the subject of the _preceding_ WebSocket node.
 
-Within the WebSocket node itself, the entity data is accessed using the special JSONata _$entity()_ function, hence `$entity().state` would be used. In a similar manner, the _$entities()_ function can reference any Home Assistant entity, and `$entities('sensor.date_time').state` would return the state value of the given date_time sensor.
+Within the WebSocket node itself, the entity data is accessed using the special JSONata _$entity()_ function, hence `$entity().state`would be used. In a similar manner, the _$entities()_ function can reference any Home Assistant entity, and`$entities('sensor.date_time').state` would return the state value of the given date_time sensor.
 
 In JSONata, as well as using message fields or the entity functions, Node-RED provides functions to access environment variables using `$env('ENV_NAME')`. Global context can be read using `$globalContext(name[, store])` and flow context likewise as `$flowContext(name[, store])`.
 
