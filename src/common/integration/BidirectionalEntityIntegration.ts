@@ -30,9 +30,7 @@ export interface ValueChangedEvent {
 }
 
 export type HaEventMessage =
-    | StateChangeEvent
-    | TriggerEvent
-    | ValueChangedEvent;
+    StateChangeEvent | TriggerEvent | ValueChangedEvent;
 
 export interface StateChangePayload {
     state: boolean;

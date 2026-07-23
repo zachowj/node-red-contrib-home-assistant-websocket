@@ -1,12 +1,5 @@
 import { EventEmitter } from 'events';
-import {
-    afterEach,
-    beforeEach,
-    describe,
-    expect,
-    it,
-    vi,
-} from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mock, MockProxy } from 'vitest-mock-extended';
 
 import HomeAssistant from '../../../src/homeAssistant/HomeAssistant';

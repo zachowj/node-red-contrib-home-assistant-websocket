@@ -144,9 +144,7 @@ export default class HomeAssistant {
         return this.websocket.subscribeEvents(this.eventsList);
     }
 
-    async close(
-        { timeoutMs }: { timeoutMs?: number } = {},
-    ): Promise<void> {
+    async close({ timeoutMs }: { timeoutMs?: number } = {}): Promise<void> {
         const drainMs = timeoutMs ?? DEFAULT_CLOSE_DRAIN_TIMEOUT_MS;
         if (this.#entityRefs > 0) {
             debug(
