@@ -48,6 +48,7 @@ export interface UnidirectionalIntegrationConstructor extends IntegrationConstru
 export default class UnidirectionalIntegration extends Integration {
     protected readonly deviceConfigNode?: DeviceConfigNode;
     protected readonly entityConfigNode: EntityConfigNode;
+    #entityRefHeld = false;
 
     constructor(props: UnidirectionalIntegrationConstructor) {
         super(props);
@@ -67,13 +68,33 @@ export default class UnidirectionalIntegration extends Integration {
         super.init();
     }
 
+    protected markRegistered(): void {
+        this.registered = true;
+        if (!this.#entityRefHeld) {
+            this.homeAssistant.acquireEntityRef();
+            this.#entityRefHeld = true;
+        }
+    }
+
+    protected releaseEntityRef(): void {
+        if (!this.#entityRefHeld) {
+            return;
+        }
+        this.homeAssistant.releaseEntityRef();
+        this.#entityRefHeld = false;
+    }
+
     protected async onEntityConfigNodeClose(removed: boolean, done: NodeDone) {
-        if (this.registered && this.isIntegrationLoaded && removed) {
-            try {
+        try {
+            if (this.registered && this.isIntegrationLoaded && removed) {
                 await this.unregister();
-            } catch (err) {
-                done(err as Error);
             }
+        } catch (err) {
+            done(err as Error);
+            return;
+        } finally {
+            this.releaseEntityRef();
+            this.registered = false;
         }
         done();
     }
@@ -202,7 +223,7 @@ export default class UnidirectionalIntegration extends Integration {
             status?.setSuccess('home-assistant.status.registered'),
         );
 
-        this.registered = true;
+        this.markRegistered();
     }
 
     public setStatus(status: Status) {
@@ -339,7 +360,6 @@ export default class UnidirectionalIntegration extends Integration {
      */
     public getHaConfigFromContext(): Record<string, any> | undefined {
         return this.entityConfigNode.context().get('haConfig') as
-            | Record<string, any>
-            | undefined;
+            Record<string, any> | undefined;
     }
 }

@@ -23,9 +23,14 @@ export default function configServerNode(
     createHomeAssistantClient(this);
 
     this.on(NodeEvent.Close, (_removed: boolean, done: NodeDone) => {
-        closeHomeAssistant(this.id);
-        // @ts-expect-error - set context second argument is optional
-        this.context().global.set('homeassistant');
-        done();
+        closeHomeAssistant(this.id)
+            .catch((err: Error) => {
+                this.error(err);
+            })
+            .finally(() => {
+                // @ts-expect-error - set context second argument is optional
+                this.context().global.set('homeassistant');
+                done();
+            });
     });
 }
