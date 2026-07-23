@@ -76,7 +76,7 @@ export default class BidirectionalIntegration extends UnidirectionalEntityIntegr
             status?.setSuccess('home-assistant.status.registered'),
         );
 
-        this.registered = true;
+        this.markRegistered();
     }
 
     protected async unregister() {
