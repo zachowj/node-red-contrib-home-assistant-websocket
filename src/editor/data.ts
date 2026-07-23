@@ -89,8 +89,7 @@ export function getAutocomplete(serverId: string, type: any) {
 }
 
 export type AutocompleteType =
-    'entities' | 'properties' | 'trackers' | 'zones'
-    | 'calendars';
+    'entities' | 'properties' | 'trackers' | 'zones' | 'calendars';
 export function getAutocompleteData(serverId: string, type: AutocompleteType) {
     let list: { value: any; label: any }[] = [];
     switch (type) {
