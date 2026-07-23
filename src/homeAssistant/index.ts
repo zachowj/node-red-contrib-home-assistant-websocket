@@ -192,10 +192,10 @@ export function getHomeAssistant(
     );
 }
 
-export function closeHomeAssistant(nodeId: string): void {
+export async function closeHomeAssistant(nodeId: string): Promise<void> {
     const homeAssistant = homeAssistantConnections.get(nodeId);
     if (homeAssistant) {
-        homeAssistant.close();
+        await homeAssistant.close();
         homeAssistantConnections.delete(nodeId);
     }
 }
