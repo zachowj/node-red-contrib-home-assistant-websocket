@@ -13,15 +13,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
         with:
-          # Make sure the actual branch is checked out when running on pull requests
-          ref: ${{ github.head_ref }}
-          # This is important to fetch the changes to the previous commit
+          # Fork PRs: head_ref only exists on the head repo, not upstream origin
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Prettify code
+      - name: Prettify and commit (same-repo PR)
+        if: github.event.pull_request.head.repo.full_name == github.repository
         uses: creyD/prettier_action@v4.5
         with:
-          # This part is also where you can pass other options, for example:
           prettier_options: --write docs/**/*.md
           only_changed: True
           same_commit: True
+
+      - name: Check docs formatting (fork PR)
+        if: github.event.pull_request.head.repo.full_name != github.repository
+        uses: creyD/prettier_action@v4.5
+        with:
+          # GITHUB_TOKEN cannot push to a fork; check only
+          prettier_options: --check docs/**/*.md
+          only_changed: True
