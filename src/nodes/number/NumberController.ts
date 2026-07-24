@@ -29,8 +29,7 @@ export default class NumberController extends InputOutputController<
 
     async #onInputModeGet({ done, message, send }: InputProperties) {
         const value = this.#entityConfigNode?.state?.getLastPayload()?.state as
-            | string
-            | undefined;
+            string | undefined;
 
         this.status.setSuccess(value);
         await this.setCustomOutputs(

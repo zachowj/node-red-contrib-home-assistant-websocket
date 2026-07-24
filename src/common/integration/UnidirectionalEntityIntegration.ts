@@ -339,7 +339,6 @@ export default class UnidirectionalIntegration extends Integration {
      */
     public getHaConfigFromContext(): Record<string, any> | undefined {
         return this.entityConfigNode.context().get('haConfig') as
-            | Record<string, any>
-            | undefined;
+            Record<string, any> | undefined;
     }
 }

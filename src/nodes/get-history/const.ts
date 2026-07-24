@@ -1,9 +1,9 @@
 export enum OutputType {
-    'Array' = 'array',
-    'Split' = 'split',
+    Array = 'array',
+    Split = 'split',
 }
 
 export enum EntityFilterType {
-    'Equals' = 'equals',
-    'Regex' = 'regex',
+    Equals = 'equals',
+    Regex = 'regex',
 }
