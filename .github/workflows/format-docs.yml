@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           # Fork PRs: head_ref only exists on the head repo, not upstream origin
           repository: ${{ github.event.pull_request.head.repo.full_name }}
