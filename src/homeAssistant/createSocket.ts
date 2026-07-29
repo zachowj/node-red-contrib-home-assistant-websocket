@@ -13,6 +13,17 @@ import { ClientEvent } from './Websocket';
 
 const debug = Debug('home-assistant:socket');
 
+// Time budgets for the connect/auth handshake. A half-open connection -- the
+// server completes the TCP handshake but never finishes the WebSocket upgrade
+// (no 101 response), or upgrades but never sends auth_ok (e.g. a Home Assistant
+// wedged in uninterruptible I/O wait) -- otherwise fires no open/message/close/
+// error event, so the connect promise never settles and no retry ever runs. The
+// node then sits at 'connecting' indefinitely. These timeouts force a teardown
+// so the existing close/error retry path below fires as it does for every other
+// connection failure.
+const HANDSHAKE_TIMEOUT = 15000; // WS HTTP-upgrade (101) must complete within this
+const AUTH_TIMEOUT = 45000; // auth_ok must arrive within this after a connect attempt starts
+
 interface HaWebSocket extends WebSocket {
     haVersion: string;
 }
@@ -49,11 +60,32 @@ export default function createSocket({
         eventBus.emit(ClientEvent.Connecting);
 
         const socket = new WebSocket(url, {
+            handshakeTimeout: HANDSHAKE_TIMEOUT,
             rejectUnauthorized: rejectUnauthorizedCerts,
         }) as HaWebSocket;
 
         // If invalid auth, we will not try to reconnect.
         let invalidAuth = false;
+
+        // If auth_ok has not arrived in time, tear the socket down. terminate()
+        // (not close()) guarantees a prompt 'close' even on a wedged, half-open
+        // socket whose peer will never complete a closing handshake.
+        let authTimeout: ReturnType<typeof setTimeout> | undefined = setTimeout(
+            () => {
+                debug(
+                    '[Auth Phase] auth handshake timed out after %dms, terminating',
+                    AUTH_TIMEOUT,
+                );
+                socket.terminate();
+            },
+            AUTH_TIMEOUT,
+        );
+        const clearAuthTimeout = () => {
+            if (authTimeout) {
+                clearTimeout(authTimeout);
+                authTimeout = undefined;
+            }
+        };
 
         const onOpen = async () => {
             try {
@@ -78,6 +110,7 @@ export default function createSocket({
                     break;
 
                 case MSG_TYPE_AUTH_OK:
+                    clearAuthTimeout();
                     socket.off('open', onOpen);
                     socket.off('message', onMessage);
                     socket.off('close', onClose);
@@ -104,6 +137,7 @@ export default function createSocket({
         };
 
         const onClose = () => {
+            clearAuthTimeout();
             // If we are in error handler make sure close handler doesn't also fire.
             socket.off('close', onClose);
             if (invalidAuth) {
