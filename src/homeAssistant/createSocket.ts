@@ -114,7 +114,7 @@ export default function createSocket({
                     socket.off('open', onOpen);
                     socket.off('message', onMessage);
                     socket.off('close', onClose);
-                    socket.off('error', onClose);
+                    socket.off('error', onError);
                     socket.haVersion = message.ha_version;
                     // enable coalesce messages if supported
                     if (atLeastHaVersion(socket.haVersion, 2022, 9)) {
@@ -140,6 +140,7 @@ export default function createSocket({
             clearAuthTimeout();
             // If we are in error handler make sure close handler doesn't also fire.
             socket.off('close', onClose);
+            socket.off('error', onError);
             if (invalidAuth) {
                 promReject(ERR_INVALID_AUTH);
                 return;
@@ -149,10 +150,35 @@ export default function createSocket({
             setTimeout(() => connect(promResolve, promReject), 5000);
         };
 
+        const onError = (err: unknown) => {
+            let errMessage = 'Unknown error';
+            try {
+                if (err && typeof err === 'object' && 'message' in err) {
+                    errMessage = String((err as { message: unknown }).message);
+                } else if (err) {
+                    errMessage = String(err);
+                }
+            } catch {
+                errMessage = 'Error parsing error message';
+            }
+            debug('[Auth Phase] WebSocket error', errMessage);
+            // Remove both handlers to prevent double firing
+            socket.off('close', onClose);
+            socket.off('error', onError);
+
+            if (invalidAuth) {
+                promReject(ERR_INVALID_AUTH);
+                return;
+            }
+
+            // Retry connection after error
+            setTimeout(() => connect(promResolve, promReject), 5000);
+        };
+
         socket.on('open', onOpen);
         socket.on('message', onMessage);
         socket.on('close', onClose);
-        socket.on('error', onClose);
+        socket.on('error', onError);
     }
 
     return new Promise<HaWebSocket>((resolve, reject) => {
