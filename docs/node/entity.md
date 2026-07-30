@@ -56,11 +56,11 @@ Key/Value pair of attributes to update. The key should be a string and the value
 
 Determine how input values will be handled. When merge is selected the message object values will override the configuration values.
 
-### Resend state and attributes
+### Resend state, attributes, and available
 
 - Type: `boolean`
 
-When creating the entity in Home Assistant this will also send the last updated state and attributes then node sent to Home Assistant
+When creating the entity in Home Assistant this will also send the last updated state, attributes, and available value the node sent to Home Assistant
 
 ## Switch Configuration
 
