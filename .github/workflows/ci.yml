@@ -48,7 +48,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: pnpm
       - name: pnpm install
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
       - name: Install exact version of node-red
         run: pnpm add -D node-red@${{ matrix.node-red-version }}
       - name: pnpm lint
@@ -84,7 +84,7 @@ jobs:
         with:
           cache: pnpm
       - name: pnpm install
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
       - name: Pack
         run: pnpm pack
       - name: Upload Release Asset
