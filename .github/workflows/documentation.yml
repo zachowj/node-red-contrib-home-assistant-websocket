@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-      - run: pnpm install
+      - run: pnpm install --frozen-lockfile
       - run: pnpm docs:build
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
