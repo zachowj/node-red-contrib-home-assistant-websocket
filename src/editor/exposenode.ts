@@ -156,7 +156,7 @@ export function setupAvailableCompanionWarning() {
             const alertText = `
             <div id="availableCompanionAlert" class="ui-state-error ha-alert-box">
                 Available settings other than <code>bool</code>/<code>true</code> require the
-                <a href="https://github.com/zachowj/hass-node-red" target="_blank">
+                <a href="https://github.com/zachowj/hass-node-red" target="_blank" rel="noopener noreferrer">
                 Node-RED custom integration version ${COMPANION_MIN_VERSION_ENTITY_AVAILABLE}+
                 <i class="fa fa-external-link external-link"></i></a>.
             </div>`;
