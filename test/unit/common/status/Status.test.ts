@@ -1,4 +1,4 @@
-import { afterEach, beforeAll, describe, expect, it } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { mock, MockProxy, mockReset } from 'vitest-mock-extended';
 
 import Status from '../../../../src/common/status/Status';
@@ -12,6 +12,18 @@ describe('Status', function () {
         nodeStub = mock<BaseNode>();
         nodeStub.status.mockReturnValue();
         serverNodeConfigStub = mock<ServerNodeConfig>();
+    });
+
+    beforeEach(function () {
+        mockReset(nodeStub);
+        mockReset(serverNodeConfigStub);
+        nodeStub.status.mockReturnValue();
+        serverNodeConfigStub.statusSeparator = 'at ';
+        serverNodeConfigStub.statusYear = 'hidden';
+        serverNodeConfigStub.statusMonth = 'short';
+        serverNodeConfigStub.statusDay = 'numeric';
+        serverNodeConfigStub.statusHourCycle = 'h23';
+        serverNodeConfigStub.statusTimeFormat = 'h:m';
     });
 
     afterEach(function () {
@@ -43,6 +55,25 @@ describe('Status', function () {
             status.setText(expectedStatus.text);
 
             expect(nodeStub.status).toHaveBeenCalledWith(expectedStatus);
+        });
+    });
+
+    describe('setUnavailable', function () {
+        it('should use yellow ring', function () {
+            const status = new Status({
+                config: serverNodeConfigStub,
+                node: nodeStub,
+            });
+
+            status.setUnavailable('hello');
+
+            expect(nodeStub.status).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    fill: 'yellow',
+                    shape: 'ring',
+                    text: expect.stringContaining('hello'),
+                }),
+            );
         });
     });
 });

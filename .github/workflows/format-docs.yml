@@ -23,6 +23,7 @@ jobs:
         if: github.event.pull_request.head.repo.full_name == github.repository
         uses: creyD/prettier_action@v4.5
         with:
+          prettier_version: 3.9.6
           prettier_options: --write docs/**/*.md
           only_changed: True
           same_commit: True
@@ -32,5 +33,6 @@ jobs:
         uses: creyD/prettier_action@v4.5
         with:
           # GITHUB_TOKEN cannot push to a fork; check only
+          prettier_version: 3.9.6
           prettier_options: --check docs/**/*.md
           only_changed: True

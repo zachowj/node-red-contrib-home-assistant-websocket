@@ -7,6 +7,10 @@ export const INTEGRATION_LOADED = 'loaded';
 export const INTEGRATION_NOT_LOADED = 'notloaded';
 export const INTEGRATION_UNLOADED = 'unloaded';
 export const NO_VERSION = '0.0.0';
+/** Companion version that accepts optional contrib_version on nodered/version */
+export const COMPANION_MIN_VERSION_CONTRIB_HANDSHAKE = '4.2.4';
+/** Companion version that accepts optional `available` / state-less entity updates */
+export const COMPANION_MIN_VERSION_ENTITY_AVAILABLE = '4.2.4';
 export const STATE_CONNECTING = 0;
 export const STATE_CONNECTED = 1;
 export const STATE_DISCONNECTED = 2;

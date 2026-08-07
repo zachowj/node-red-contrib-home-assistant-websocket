@@ -32,6 +32,16 @@ export const inputs: NodeInputs = {
         configProp: 'stateType',
         default: TypedInputTypes.Message,
     },
+    available: {
+        messageProp: 'payload.available',
+        configProp: 'available',
+        default: 'true',
+    },
+    availableType: {
+        messageProp: 'payload.availableType',
+        configProp: 'availableType',
+        default: TypedInputTypes.Boolean,
+    },
     attributes: {
         messageProp: 'payload.attributes',
         configProp: 'attributes',
@@ -42,7 +52,7 @@ export const inputs: NodeInputs = {
 export const inputSchema: Joi.ObjectSchema = Joi.object({
     state: Joi.alternatives()
         .try(Joi.string(), Joi.boolean(), Joi.number())
-        .required(),
+        .optional(),
     stateType: Joi.string()
         .valid(
             TypedInputTypes.Message,
@@ -51,6 +61,18 @@ export const inputSchema: Joi.ObjectSchema = Joi.object({
             TypedInputTypes.JSONata,
             TypedInputTypes.String,
             TypedInputTypes.Number,
+            TypedInputTypes.Boolean,
+        )
+        .required(),
+    available: Joi.alternatives()
+        .try(Joi.string(), Joi.boolean(), Joi.number())
+        .required(),
+    availableType: Joi.string()
+        .valid(
+            TypedInputTypes.Message,
+            TypedInputTypes.Flow,
+            TypedInputTypes.Global,
+            TypedInputTypes.JSONata,
             TypedInputTypes.Boolean,
         )
         .required(),

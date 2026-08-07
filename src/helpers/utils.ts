@@ -268,3 +268,47 @@ export function parseValueToBoolean(value: unknown): boolean {
 
     return false;
 }
+
+/**
+ * Coerce a raw Available typed-input result using Home Assistant template
+ * `bool` vocabulary (https://www.home-assistant.io/template-functions/bool/).
+ * Call only when a value was present (not a missing msg/flow/global path).
+ * Returns undefined for unrecognized input — callers should reject.
+ */
+export function parseAvailableValue(value: unknown): boolean | undefined {
+    if (typeof value === 'boolean') {
+        return value;
+    }
+    if (typeof value === 'number') {
+        if (value === 1) {
+            return true;
+        }
+        if (value === 0) {
+            return false;
+        }
+        return undefined;
+    }
+    if (typeof value === 'string') {
+        const normalized = value.trim().toLowerCase();
+        if (
+            normalized === 'true' ||
+            normalized === 'yes' ||
+            normalized === 'on' ||
+            normalized === 'enable' ||
+            normalized === '1'
+        ) {
+            return true;
+        }
+        if (
+            normalized === 'false' ||
+            normalized === 'no' ||
+            normalized === 'off' ||
+            normalized === 'disable' ||
+            normalized === '0'
+        ) {
+            return false;
+        }
+        return undefined;
+    }
+    return undefined;
+}
