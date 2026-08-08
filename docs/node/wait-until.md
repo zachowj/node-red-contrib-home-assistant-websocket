@@ -97,4 +97,5 @@ If the received message has this property set to any value the node will be set 
 Value types:
 
 - `entity`: entity data of the triggered entity. Will be `undefined` if multiple entities are selected and the timeout occurs.
-- `config`: config properties of the node
+- `config`: config properties of the node.
+- `timeout`: set to `true` if node output was from timeout.
