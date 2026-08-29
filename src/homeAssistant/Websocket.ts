@@ -1,3 +1,4 @@
+import { compareVersions } from 'compare-versions';
 import Debug from 'debug';
 import { EventEmitter } from 'events';
 import {
@@ -25,6 +26,7 @@ import {
 import { cloneDeep } from 'lodash';
 
 import {
+    COMPANION_MIN_VERSION_CONTRIB_HANDSHAKE,
     HA_EVENT_INTEGRATION,
     HA_EVENT_SERVICES_UPDATED,
     HA_EVENTS,
@@ -53,6 +55,7 @@ import {
     HassTranslations,
     SubscriptionUnsubscribe,
 } from '../types/home-assistant';
+import packageVersion from '../version';
 import { Credentials, HaEvent } from './';
 import {
     subscribeAreaRegistry,
@@ -540,10 +543,27 @@ export default class Websocket {
         return this.tags ?? [];
     }
 
-    getIntegrationVersion(): Promise<string> {
-        return this.send<string>({
+    async getIntegrationVersion(): Promise<string> {
+        // Probe without contrib_version first: old companions reject unknown keys.
+        const version = await this.send<string>({
             type: 'nodered/version',
         });
+        if (
+            version &&
+            version !== NO_VERSION &&
+            compareVersions(version, COMPANION_MIN_VERSION_CONTRIB_HANDSHAKE) >=
+                0
+        ) {
+            try {
+                await this.send<string>({
+                    type: 'nodered/version',
+                    contrib_version: packageVersion,
+                });
+            } catch (e) {
+                debug(`Error announcing contrib version: ${e}`);
+            }
+        }
+        return version;
     }
 
     createIntegrationEvent(type: string, version?: string): void {
