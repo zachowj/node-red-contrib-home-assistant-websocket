@@ -1,6 +1,7 @@
 {
   "home-assistant": {
     "status": {
+      "companion_version": "companion version",
       "connected": "connected",
       "connecting": "connecting",
       "disabled": "DISABLED",
@@ -8,6 +9,7 @@
       "error": "error",
       "error_registering": "error registering",
       "failed": "failed",
+      "invalid_input": "invalid input",
       "jsonata_error": "JSONata error",
       "no_connection": "no connection",
       "off": "off",
@@ -20,6 +22,7 @@
       "state_change": "state change",
       "success": "success",
       "triggered": "triggered",
+      "unavailable": "Unavailable",
       "updated": "updated",
       "validation_error": "validation error"
     }

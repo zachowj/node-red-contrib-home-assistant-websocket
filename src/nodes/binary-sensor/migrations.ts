@@ -9,4 +9,16 @@ export default [
             return newSchema;
         },
     },
+    {
+        version: 1,
+        up: (schema: any) => {
+            const newSchema = {
+                ...schema,
+                version: 1,
+                available: schema.available ?? 'true',
+                availableType: schema.availableType ?? 'bool',
+            };
+            return newSchema;
+        },
+    },
 ];

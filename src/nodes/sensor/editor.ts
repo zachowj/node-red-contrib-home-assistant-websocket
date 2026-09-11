@@ -1,4 +1,9 @@
-import { EditorNodeDef, EditorRED, EditorWidgetTypedInputType } from 'node-red';
+import {
+    EditorNodeDef,
+    EditorNodeInstance,
+    EditorRED,
+    EditorWidgetTypedInputType,
+} from 'node-red';
 
 import { EntityType, NodeType } from '../../const';
 import * as haOutputs from '../../editor/components/output-properties';
@@ -25,6 +30,8 @@ interface SensorEditorNodeProperties extends HassNodeProperties {
     entityConfig: any;
     state: string;
     stateType: EditorWidgetTypedInputType;
+    available: string;
+    availableType: EditorWidgetTypedInputType;
     attributes: EntityAttribute[];
     inputOverride: string;
     outputProperties: OutputProperty[];
@@ -38,6 +45,14 @@ const stateTypes: HATypedInputTypeOptions = [
     'str',
     'num',
     'bool',
+];
+
+const availableTypes: HATypedInputTypeOptions = [
+    'msg',
+    'flow',
+    'global',
+    'bool',
+    'jsonata',
 ];
 
 const attributeTypes: HATypedInputTypeOptions = [
@@ -75,6 +90,20 @@ const SensorEditor: EditorNodeDef<SensorEditorNodeProperties> = {
         version: { value: RED.settings.get('haSensorVersion', 0) },
         state: { value: 'payload' },
         stateType: { value: 'msg' },
+        available: {
+            value: 'true',
+            validate: function (
+                this: EditorNodeInstance<SensorEditorNodeProperties>,
+                v: string,
+            ) {
+                return exposeNode.validateAvailableCompanion(
+                    v,
+                    this.availableType,
+                    this,
+                );
+            },
+        },
+        availableType: { value: 'bool' },
         attributes: { value: [] },
         inputOverride: { value: 'allow' },
         outputProperties: {
@@ -93,6 +122,14 @@ const SensorEditor: EditorNodeDef<SensorEditorNodeProperties> = {
             // @ts-expect-error - DefinitelyTyped is wrong typedInput can take a object as a parameter
             type: this.stateType,
         });
+        const $inputAvailable = $('#node-input-available');
+        $inputAvailable.typedInput({
+            types: availableTypes,
+            typeField: '#node-input-availableType',
+            // @ts-expect-error - DefinitelyTyped is wrong typedInput can take a object as a parameter
+            type: this.availableType,
+        });
+        exposeNode.setupAvailableCompanionWarning();
         saveEntityType(EntityType.Sensor);
         $('#attributes')
             .editableList({

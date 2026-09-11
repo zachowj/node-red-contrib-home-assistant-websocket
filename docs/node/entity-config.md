@@ -26,11 +26,11 @@ If the entity has already been registered with Home Assistant when no device was
 - Type: `string`
 - Values: `binary_sensor|button|sensor|switch`
 
-### Resend state and attributes
+### Resend state, attributes, and available
 
 - Type: `boolean`
 
-When the entity in Home Assistant is created the state and attributes will also be set. This is only applicable with certain entities nodes.
+When the entity in Home Assistant is created the last state, attributes, and available value will also be set. This is only applicable with certain entity nodes.
 
 ### Other Properties
 

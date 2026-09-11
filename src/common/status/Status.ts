@@ -140,4 +140,14 @@ export default class Status<T extends BaseNode = BaseNode> {
             text: this.translateText(text),
         });
     }
+
+    public setUnavailable(
+        text: i18nKeyandParams = 'home-assistant.status.unavailable',
+    ): void {
+        this.set({
+            fill: StatusColor.Yellow,
+            shape: StatusShape.Ring,
+            text: this.translateText(text),
+        });
+    }
 }

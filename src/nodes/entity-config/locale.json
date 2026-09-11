@@ -3,7 +3,7 @@
     "label": {
       "device": "Device",
       "name": "Name",
-      "resend": "Resend state and attributes",
+      "resend": "Resend state, attributes, and available",
       "server": "Server",
       "show_debug": "Show debug information",
       "type": "Type",

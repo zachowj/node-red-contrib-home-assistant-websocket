@@ -10,7 +10,7 @@ describe('getExposedSettings', function () {
         expect(result).toEqual({
             settings: {
                 haSensorVersion: {
-                    value: 0,
+                    value: 1,
                     exportable: true,
                 },
             },
