@@ -121,7 +121,7 @@
     "sass": "^1.97.3",
     "typescript": "^5.9.3",
     "vitest": "^4.1.11",
-    "vitest-mock-extended": "^3.1.0",
+    "vitest-mock-extended": "^5.1.1",
     "vue": "^3.5.42",
     "vuepress": "^2.0.0-rc.26",
     "yargs": "^18.0.0"
