@@ -5,8 +5,9 @@ import FileAsync from 'lowdb/adapters/FileAsync';
 import { RED } from '../../globals';
 
 export interface LastPayloadData {
-    state: string | number | boolean;
-    attributes: Record<string, any>;
+    state?: string | number | boolean;
+    attributes?: Record<string, any>;
+    available?: boolean;
 }
 
 export interface NodeData {

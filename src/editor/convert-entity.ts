@@ -90,8 +90,11 @@ const convertToSeperateEntityNode = (data: EntityProperties, newId: string) => {
                     data.entityType === EntityType.Sensor
                         ? NodeType.Sensor
                         : NodeType.BinarySensor,
+                version: 1,
                 state: data.state ?? 'payload',
                 stateType: data.stateType ?? 'msg',
+                available: 'true',
+                availableType: 'bool',
                 attributes: data.attributes ?? [],
                 inputOverride: data.inputOverride ?? 'allow',
                 outputProperties:

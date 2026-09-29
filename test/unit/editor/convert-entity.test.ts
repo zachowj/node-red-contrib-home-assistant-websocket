@@ -80,9 +80,12 @@ const EXPECTED_BASE_NODE = {
 const EXPECTED_SENSOR_NODE = {
     ...EXPECTED_BASE_NODE,
     type: NodeType.Sensor,
+    version: 1,
     outputs: 1,
     state: 'payload',
     stateType: 'msg',
+    available: 'true',
+    availableType: 'bool',
     attributes: [],
     inputOverride: 'allow',
 };

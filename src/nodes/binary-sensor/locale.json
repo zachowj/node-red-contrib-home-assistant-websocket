@@ -17,8 +17,9 @@
         "merge": "merge"
       },
       "name": "Name",
-      "resend": "Resend state and attributes",
-      "state": "State"
+      "resend": "Resend state, attributes, and available",
+      "state": "State",
+      "available": "Available"
     }
   }
 }

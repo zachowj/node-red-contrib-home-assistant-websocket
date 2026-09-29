@@ -7,6 +7,7 @@ import {
     getEntitiesFromJsonata,
     getTimeInMilliseconds,
     isNodeRedEnvVar,
+    parseAvailableValue,
     parseTime,
     parseValueToBoolean,
     shouldInclude,
@@ -333,6 +334,52 @@ describe('utils', function () {
         it('should return false for undefined and null', () => {
             expect(parseValueToBoolean(undefined as any)).toBe(false);
             expect(parseValueToBoolean(null as any)).toBe(false);
+        });
+    });
+
+    describe('parseAvailableValue', () => {
+        it('should return booleans as-is', () => {
+            expect(parseAvailableValue(true)).toBe(true);
+            expect(parseAvailableValue(false)).toBe(false);
+        });
+
+        it('should follow HA bool for 0 and 1 only among numbers', () => {
+            expect(parseAvailableValue(0)).toBe(false);
+            expect(parseAvailableValue(1)).toBe(true);
+            expect(parseAvailableValue(2)).toBeUndefined();
+            expect(parseAvailableValue(-1)).toBeUndefined();
+            expect(parseAvailableValue(Number.NaN)).toBeUndefined();
+            expect(
+                parseAvailableValue(Number.POSITIVE_INFINITY),
+            ).toBeUndefined();
+        });
+
+        it('should follow HA bool true strings', () => {
+            expect(parseAvailableValue('true')).toBe(true);
+            expect(parseAvailableValue('YES')).toBe(true);
+            expect(parseAvailableValue(' on ')).toBe(true);
+            expect(parseAvailableValue('enable')).toBe(true);
+            expect(parseAvailableValue('1')).toBe(true);
+        });
+
+        it('should follow HA bool false strings', () => {
+            expect(parseAvailableValue('false')).toBe(false);
+            expect(parseAvailableValue('NO')).toBe(false);
+            expect(parseAvailableValue('off')).toBe(false);
+            expect(parseAvailableValue('disable')).toBe(false);
+            expect(parseAvailableValue('0')).toBe(false);
+        });
+
+        it('should reject unrecognized values', () => {
+            expect(parseAvailableValue(undefined)).toBeUndefined();
+            expect(parseAvailableValue(null)).toBeUndefined();
+            expect(parseAvailableValue('')).toBeUndefined();
+            expect(parseAvailableValue('   ')).toBeUndefined();
+            expect(parseAvailableValue('unknown')).toBeUndefined();
+            expect(parseAvailableValue('unavailable')).toBeUndefined();
+            expect(parseAvailableValue('foo')).toBeUndefined();
+            expect(parseAvailableValue({})).toBeUndefined();
+            expect(parseAvailableValue([])).toBeUndefined();
         });
     });
 });

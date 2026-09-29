@@ -1,6 +1,7 @@
 import { compareVersions } from 'compare-versions';
 
 import { EntityType } from '../../const';
+import { companionSupportsEntityAvailable } from '../../helpers/entityAvailable';
 import { debugToClient } from '../../helpers/node';
 import { DeviceConfigNode } from '../../nodes/device-config/index';
 import { EntityConfigNode } from '../../nodes/entity-config/index';
@@ -31,6 +32,7 @@ export interface DiscoveryMessage extends MessageBase {
     remove?: boolean;
     state?: any;
     attributes?: Record<string, any>;
+    available?: boolean;
     device_info?: DeviceInfo;
 }
 
@@ -38,6 +40,7 @@ export interface EntityMessage extends MessageBase {
     type: MessageType.Entity;
     state?: any;
     attributes?: Record<string, any>;
+    available?: boolean;
 }
 
 export interface UnidirectionalIntegrationConstructor extends IntegrationConstructor {
@@ -138,6 +141,14 @@ export default class UnidirectionalIntegration extends Integration {
             const lastPayload = state.getLastPayload();
             if (lastPayload) {
                 data = { ...lastPayload };
+                // Old companions reject unknown `available` on discovery
+                if (
+                    !companionSupportsEntityAvailable(
+                        this.homeAssistant.integrationVersion,
+                    )
+                ) {
+                    delete data.available;
+                }
             }
         }
 
@@ -170,16 +181,31 @@ export default class UnidirectionalIntegration extends Integration {
     }
 
     protected getEntityPayload(
-        state?: State,
+        state?: any,
         attributes?: Record<string, any>,
+        available?: boolean,
     ): EntityMessage {
-        return {
+        const message: EntityMessage = {
             type: MessageType.Entity,
             server_id: this.entityConfigNode.config.server,
             node_id: this.entityConfigNode.id,
-            state,
-            attributes,
         };
+        if (state !== undefined) {
+            message.state = state;
+        }
+        if (attributes !== undefined) {
+            message.attributes = attributes;
+        }
+        // Include available when resolved and the companion schema accepts it.
+        if (
+            available !== undefined &&
+            companionSupportsEntityAvailable(
+                this.homeAssistant.integrationVersion,
+            )
+        ) {
+            message.available = available;
+        }
+        return message;
     }
 
     protected async register() {
@@ -232,21 +258,39 @@ export default class UnidirectionalIntegration extends Integration {
 
     public async updateStateAndAttributes(
         state: any,
-        attributes: Record<string, any>,
+        attributes: Record<string, any> | undefined,
+        available?: boolean,
     ) {
-        const payload = this.getEntityPayload(state, attributes);
+        const payload = this.getEntityPayload(state, attributes, available);
         try {
             await this.homeAssistant.websocket.send(payload);
         } catch (err) {
+            const message =
+                err instanceof Error
+                    ? err.message
+                    : typeof err === 'string'
+                      ? err
+                      : JSON.stringify(err);
             this.entityConfigNode.error(
-                `Error updating entity. Error Message: ${err}`,
+                `Error updating entity. Error Message: ${message}`,
             );
         }
         if (this.entityConfigNode.config.resend) {
-            const lastPayload = {
-                state,
-                attributes,
-            };
+            const previous = this.state.getLastPayload() ?? {};
+            const lastPayload: {
+                state?: any;
+                attributes?: Record<string, any>;
+                available?: boolean;
+            } = { ...previous };
+            if (state !== undefined) {
+                lastPayload.state = state;
+            }
+            if (attributes !== undefined) {
+                lastPayload.attributes = attributes;
+            }
+            if (available !== undefined) {
+                lastPayload.available = available;
+            }
             this.state.setLastPayload(lastPayload);
         }
 

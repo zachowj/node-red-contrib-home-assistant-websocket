@@ -1,6 +1,11 @@
 import { EditorRED } from 'node-red';
 
-import { NO_VERSION, NodeType, ValueIntegrationMode } from '../const';
+import {
+    COMPANION_MIN_VERSION_ENTITY_AVAILABLE,
+    NO_VERSION,
+    NodeType,
+    ValueIntegrationMode,
+} from '../const';
 import { SentenceMode } from '../nodes/sentence/const';
 import { HassExposedConfig, HassNodeProperties } from './types';
 import * as haUtils from './utils';
@@ -32,13 +37,36 @@ function isEntityNode() {
     );
 }
 
-function getServerId(): string | undefined {
-    let selectedServer: string = $('#node-input-server').val() as string;
-    if (isEntityNode()) {
-        const entity: Record<string, any> = RED.nodes.node(
-            $('#node-input-entityConfig').val() as string,
-        ) as Record<string, any>;
+function getServerId(editorNode?: {
+    entityConfig?: string;
+    server?: string;
+}): string | undefined {
+    // Prefer live edit-dialog fields when present
+    let selectedServer = $('#node-input-server').val() as string | undefined;
+    const entityConfigFromDialog = $('#node-input-entityConfig').val() as
+        string | undefined;
+
+    if (entityConfigFromDialog && entityConfigFromDialog !== '_ADD_') {
+        const entity = RED.nodes.node(entityConfigFromDialog) as
+            Record<string, any> | undefined;
         selectedServer = entity?.server;
+    } else if (editorNode?.entityConfig) {
+        const entity = RED.nodes.node(editorNode.entityConfig) as
+            Record<string, any> | undefined;
+        selectedServer = entity?.server;
+    } else if (editorNode?.server) {
+        selectedServer = editorNode.server;
+    } else if (node && isEntityNode()) {
+        const entityConfigId = (
+            node as HassNodeProperties & {
+                entityConfig?: string;
+            }
+        ).entityConfig;
+        if (entityConfigId) {
+            const entity = RED.nodes.node(entityConfigId) as
+                Record<string, any> | undefined;
+            selectedServer = entity?.server;
+        }
     }
 
     if (!selectedServer || selectedServer === '_ADD_') {
@@ -48,8 +76,11 @@ function getServerId(): string | undefined {
     return selectedServer;
 }
 
-function getIntegrationVersion(): string {
-    const serverId = getServerId();
+function getIntegrationVersion(editorNode?: {
+    entityConfig?: string;
+    server?: string;
+}): string {
+    const serverId = getServerId(editorNode);
 
     if (serverId && version[serverId]) {
         return version[serverId];
@@ -58,8 +89,88 @@ function getIntegrationVersion(): string {
     return NO_VERSION;
 }
 
-export function isIntegrationLoaded() {
-    return getIntegrationVersion() !== NO_VERSION;
+export function isIntegrationLoaded(editorNode?: {
+    entityConfig?: string;
+    server?: string;
+}) {
+    return getIntegrationVersion(editorNode) !== NO_VERSION;
+}
+
+/**
+ * Whether the current Available typed-input is allowed for the connected
+ * companion. Default bool/true is always ok; custom settings need 4.2.4+.
+ * Used as a node `defaults` validate so the node is marked invalid (orange
+ * triangle) and deploy warns.
+ */
+export function validateAvailableCompanion(
+    available?: string,
+    availableType?: string,
+    editorNode?: HassNodeProperties & {
+        entityConfig?: string;
+        available?: string;
+        availableType?: string;
+    },
+): boolean {
+    const $available = $('#node-input-available');
+    if ($available.length) {
+        try {
+            available = String($available.typedInput('value') ?? '');
+            availableType = String($available.typedInput('type') ?? '');
+        } catch {
+            available =
+                ($('#node-input-available').val() as string) ?? available;
+            availableType =
+                ($('#node-input-availableType').val() as string) ??
+                availableType;
+        }
+    } else if (editorNode) {
+        available = available ?? editorNode.available;
+        availableType = availableType ?? editorNode.availableType;
+    }
+
+    const value = available ?? 'true';
+    const type = availableType ?? 'bool';
+    if (type === 'bool' && value === 'true') {
+        return true;
+    }
+    // Unknown companion version: allow save; runtime still gates custom use
+    if (!isIntegrationLoaded(editorNode)) {
+        return true;
+    }
+    return haUtils.compareVersion(
+        COMPANION_MIN_VERSION_ENTITY_AVAILABLE,
+        getIntegrationVersion(editorNode),
+    );
+}
+
+/**
+ * Warn when Available is not the default bool/true and companion is too old
+ * for optional available / availability-only entity updates.
+ */
+export function setupAvailableCompanionWarning() {
+    const $available = $('#node-input-available');
+    const update = () => {
+        const companionOk = validateAvailableCompanion();
+
+        if (!$('#availableCompanionAlert').length) {
+            const alertText = `
+            <div id="availableCompanionAlert" class="ui-state-error ha-alert-box">
+                Available settings other than <code>bool</code>/<code>true</code> require the
+                <a href="https://github.com/zachowj/hass-node-red" target="_blank" rel="noopener noreferrer">
+                Node-RED custom integration version ${COMPANION_MIN_VERSION_ENTITY_AVAILABLE}+
+                <i class="fa fa-external-link external-link"></i></a>.
+            </div>`;
+            $('#dialog-form').prepend(alertText);
+        }
+
+        $('#availableCompanionAlert').toggle(
+            isIntegrationLoaded() && !companionOk,
+        );
+    };
+
+    $available.on('change', update);
+    $('#node-input-availableType').on('change', update);
+    update();
 }
 
 function isAddNodeSelected(selector: 'entityConfig' | 'server') {
