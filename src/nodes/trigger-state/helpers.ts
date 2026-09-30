@@ -3,7 +3,7 @@ import HomeAssistant from '../../homeAssistant/HomeAssistant';
 import { HassStateChangedEvent } from '../../types/home-assistant';
 
 export function createStateChangeEvents(homeAssistant: HomeAssistant) {
-    const entities = homeAssistant.websocket.getStates();
+    const entities = homeAssistant.websocket.getStatesReadOnly();
 
     const events: HassStateChangedEvent[] = [];
     for (const entityId in entities) {
