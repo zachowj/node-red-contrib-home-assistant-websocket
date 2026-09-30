@@ -361,11 +361,21 @@ class IssueService {
     }
 
     #setIssue(nodeId: string, issues: Issue[]) {
-        if (isIssuesEqual(issues, this.#issues.get(nodeId) || [])) {
-            return;
-        }
+        const previous = this.#issues.get(nodeId);
+        const unchanged = isIssuesEqual(issues, previous || []);
+
+        // The checks above register listeners on the new issue objects. Always
+        // remove listeners from the previous objects before replacing them, even
+        // when the issue itself has not changed.
+        previous?.forEach((issue) => {
+            issue.unsubscribe?.();
+        });
 
         this.#issues.set(nodeId, issues);
+
+        if (unchanged) {
+            return;
+        }
 
         RED.log.debug(`[Home Assistant] Issue added: ${nodeId}`);
         this.#issuesUpdated();
