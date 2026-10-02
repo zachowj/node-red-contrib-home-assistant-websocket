@@ -9,7 +9,7 @@
   "engines": {
     "node": ">=20"
   },
-  "packageManager": "pnpm@10.20.0",
+  "packageManager": "pnpm@12.8.2",
   "scripts": {
     "build": "node build.mjs build",
     "dev": "node build.mjs start",
@@ -44,22 +44,22 @@
   },
   "dependencies": {
     "axios": "^1.20.0",
-    "bonjour-service": "^1.3.0",
+    "bonjour-service": "^1.4.4",
     "compare-versions": "^6.1.1",
     "cronosjs": "^1.7.1",
     "debug": "^4.4.3",
     "flat": "^5.0.2",
-    "geolib": "^3.3.4",
+    "geolib": "^3.3.14",
     "home-assistant-js-websocket": "^9.6.0",
-    "joi": "^17.13.3",
+    "joi": "^18.2.9",
     "jsonata": "2.1.0",
-    "lodash": "^4.17.23",
+    "lodash": "^4.18.1",
     "lowdb": "^1.0.0",
     "mustache": "4.2.0",
     "selectn": "^1.3.0",
-    "slugify": "^1.6.6",
+    "slugify": "^1.6.9",
     "timestring": "^7.0.0",
-    "ws": "^8.19.0"
+    "ws": "^8.22.0"
   },
   "devDependencies": {
     "@types/debug": "^4.1.12",
@@ -139,10 +139,5 @@
     "dist/**/*",
     "examples/",
     "resources/"
-  ],
-  "pnpm": {
-    "overrides": {
-      "jsonata": "2.1.0"
-    }
-  }
+  ]
 }

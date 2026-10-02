@@ -3,6 +3,10 @@ on:
   workflow_call:
   workflow_dispatch:
 
+permissions:
+  id-token: write # Required for OIDC trusted publishing
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,7 +18,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v7
         with:
-          node-version: "20"
+          node-version: "22"
           registry-url: "https://registry.npmjs.org"
       - name: Install dependencies and build 🔧
         run: pnpm install --frozen-lockfile
