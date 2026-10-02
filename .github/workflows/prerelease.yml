@@ -20,11 +20,45 @@ on:
 jobs:
   prerelease:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
 
     steps:
-      - name: Run release-please
-        uses: google-github-actions/release-please-action@v4
+      - uses: actions/checkout@v7
         with:
-          release-type: node
-          target-branch: ${{ github.event.inputs.branch }}
-          prerelease: ${{ github.event.inputs.prerelease }}
+          ref: ${{ inputs.branch }}
+      - name: Calculate prerelease version
+        id: version
+        env:
+          prerelease: ${{ inputs.prerelease }}
+        run: |
+          node <<'NODE' >> "$GITHUB_OUTPUT"
+          const fs = require('node:fs');
+          const version = JSON.parse(fs.readFileSync('package.json', 'utf8')).version;
+          const match = version.match(/^(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z.-]+))?$/);
+          if (!match) {
+            throw new Error(`Unsupported package version: ${version}`);
+          }
+
+          let [, major, minor, patch, currentPrerelease] = match;
+          const label = process.env.prerelease;
+          if (currentPrerelease) {
+            const [currentLabel, currentNumber] = currentPrerelease.split('.');
+            const nextNumber = currentLabel === label && /^\d+$/.test(currentNumber ?? '')
+              ? Number(currentNumber) + 1
+              : 0;
+            currentPrerelease = `${label}.${nextNumber}`;
+          } else {
+            patch = String(Number(patch) + 1);
+            currentPrerelease = `${label}.0`;
+          }
+
+          console.log(`release_as=${major}.${minor}.${patch}-${currentPrerelease}`);
+          NODE
+      - name: Run release-please
+        uses: googleapis/release-please-action@v5
+        with:
+          config-file: .github/release-please-prerelease-config.json
+          target-branch: ${{ inputs.branch }}
+          release-as: ${{ steps.version.outputs.release_as }}
