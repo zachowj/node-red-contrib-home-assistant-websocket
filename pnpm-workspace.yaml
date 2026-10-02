@@ -1,5 +1,6 @@
 allowBuilds:
   '@parcel/watcher': true
   esbuild: true
+  bcrypt: true
 overrides:
   jsonata: 2.1.0
