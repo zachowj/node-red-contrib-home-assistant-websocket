@@ -288,8 +288,8 @@ importers:
         specifier: ^2.0.0-rc.121
         version: 2.0.0-rc.121(@vueuse/core@14.1.0(vue@3.5.42(typescript@5.9.3)))(typescript@5.9.3)(vuepress@2.0.0-rc.26(@vuepress/bundler-vite@2.0.0-rc.26(@types/node@22.19.7)(sass@1.97.3)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.8.1))(supports-color@7.2.0)(typescript@5.9.3)(vue@3.5.42(typescript@5.9.3)))
       '@vuepress/plugin-register-components':
-        specifier: ^2.0.0-rc.118
-        version: 2.0.0-rc.118(vuepress@2.0.0-rc.26(@vuepress/bundler-vite@2.0.0-rc.26(@types/node@22.19.7)(sass@1.97.3)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.8.1))(supports-color@7.2.0)(typescript@5.9.3)(vue@3.5.42(typescript@5.9.3)))
+        specifier: ^2.0.0-rc.125
+        version: 2.0.0-rc.125(vuepress@2.0.0-rc.26(@vuepress/bundler-vite@2.0.0-rc.26(@types/node@22.19.7)(sass@1.97.3)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.8.1))(supports-color@7.2.0)(typescript@5.9.3)(vue@3.5.42(typescript@5.9.3)))
       '@vuepress/plugin-search':
         specifier: ^2.0.0-rc.118
         version: 2.0.0-rc.118(typescript@5.9.3)(vuepress@2.0.0-rc.26(@vuepress/bundler-vite@2.0.0-rc.26(@types/node@22.19.7)(sass@1.97.3)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.8.1))(supports-color@7.2.0)(typescript@5.9.3)(vue@3.5.42(typescript@5.9.3)))
@@ -1803,8 +1803,8 @@ packages:
     peerDependencies:
       vuepress: 2.0.0-rc.26
 
-  '@vuepress/plugin-register-components@2.0.0-rc.118':
-    resolution: {integrity: sha512-88ZvKvgnRFxV73P06E/E1aQeib7cvAJheAuyTPZJoOFc6IOwawBVV8BrmjQ0+pdz0OHaBg4cyJs6TbeeazL0yw==}
+  '@vuepress/plugin-register-components@2.0.0-rc.125':
+    resolution: {integrity: sha512-u2BKYm7/nDTPhIgMiZjN/g+/MvKnLLVNYHonOTNaPtnr3+gJLBKCpLOT5ggaaTD2rGm9cXgfaeOaxDaU84KUIw==}
     peerDependencies:
       vuepress: 2.0.0-rc.26
 
@@ -4080,10 +4080,6 @@ packages:
   picomatch@2.3.2:
     resolution: {integrity: sha512-V7+vQEJ06Z+c5tSye8S+nHUfI51xoXIXjHQ99cQtKUkQqqO1kO/KCJUfZXuB47h/YBlDhah2H3hdUGXn8ie0oA==}
     engines: {node: '>=8.6'}
-
-  picomatch@4.0.3:
-    resolution: {integrity: sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q==}
-    engines: {node: '>=12'}
 
   picomatch@4.0.7:
     resolution: {integrity: sha512-qcJu88Q2IWqJsDD529JKMdwGm/dvInW4HvQnRwiH9JtihJvzGOscDtHE3x1pBKeUOTysQ8kVmLnJ2kJu7yhcGA==}
@@ -6883,10 +6879,10 @@ snapshots:
       - '@vueuse/core'
       - typescript
 
-  '@vuepress/plugin-register-components@2.0.0-rc.118(vuepress@2.0.0-rc.26(@vuepress/bundler-vite@2.0.0-rc.26(@types/node@22.19.7)(sass@1.97.3)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.8.1))(supports-color@7.2.0)(typescript@5.9.3)(vue@3.5.42(typescript@5.9.3)))':
+  '@vuepress/plugin-register-components@2.0.0-rc.125(vuepress@2.0.0-rc.26(@vuepress/bundler-vite@2.0.0-rc.26(@types/node@22.19.7)(sass@1.97.3)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.8.1))(supports-color@7.2.0)(typescript@5.9.3)(vue@3.5.42(typescript@5.9.3)))':
     dependencies:
-      chokidar: 4.0.3
-      picomatch: 4.0.3
+      chokidar: 5.0.0
+      picomatch: 4.0.7
       vuepress: 2.0.0-rc.26(@vuepress/bundler-vite@2.0.0-rc.26(@types/node@22.19.7)(sass@1.97.3)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.8.1))(supports-color@7.2.0)(typescript@5.9.3)(vue@3.5.42(typescript@5.9.3))
 
   '@vuepress/plugin-search@2.0.0-rc.118(typescript@5.9.3)(vuepress@2.0.0-rc.26(@vuepress/bundler-vite@2.0.0-rc.26(@types/node@22.19.7)(sass@1.97.3)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.8.1))(supports-color@7.2.0)(typescript@5.9.3)(vue@3.5.42(typescript@5.9.3)))':
@@ -9617,8 +9613,6 @@ snapshots:
   picocolors@1.1.1: {}
 
   picomatch@2.3.2: {}
-
-  picomatch@4.0.3: {}
 
   picomatch@4.0.7: {}
 
