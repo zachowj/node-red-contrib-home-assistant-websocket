@@ -58,6 +58,7 @@ export default class TypedInputService {
                     break;
                 }
                 val = await this.#jsonata.evaluate(value, {
+                    context: props.context,
                     data: props.data,
                     entity: props.entity,
                     entityId: props.entityId,

@@ -343,6 +343,7 @@ export default class ActionController extends InputOutputController<
                     target,
                 },
                 results: response?.response,
+                context: response?.context,
             },
         );
 
