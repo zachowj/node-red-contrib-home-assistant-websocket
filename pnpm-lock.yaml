@@ -276,8 +276,8 @@ importers:
         specifier: ^2.0.0-rc.26
         version: 2.0.0-rc.26(@types/node@22.19.7)(sass@1.97.3)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.8.1)
       '@vuepress/plugin-copy-code':
-        specifier: ^2.0.0-rc.122
-        version: 2.0.0-rc.122(typescript@5.9.3)(vuepress@2.0.0-rc.26(@vuepress/bundler-vite@2.0.0-rc.26(@types/node@22.19.7)(sass@1.97.3)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.8.1))(supports-color@7.2.0)(typescript@5.9.3)(vue@3.5.42(typescript@5.9.3)))
+        specifier: ^2.0.0-rc.125
+        version: 2.0.0-rc.125(@vuepress/bundler-vite@2.0.0-rc.26(@types/node@22.19.7)(sass@1.97.3)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.8.1))(typescript@5.9.3)(vuepress@2.0.0-rc.26(@vuepress/bundler-vite@2.0.0-rc.26(@types/node@22.19.7)(sass@1.97.3)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.8.1))(supports-color@7.2.0)(typescript@5.9.3)(vue@3.5.42(typescript@5.9.3)))
       '@vuepress/plugin-google-analytics':
         specifier: ^2.0.0-rc.118
         version: 2.0.0-rc.118(vuepress@2.0.0-rc.26(@vuepress/bundler-vite@2.0.0-rc.26(@types/node@22.19.7)(sass@1.97.3)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.8.1))(supports-color@7.2.0)(typescript@5.9.3)(vue@3.5.42(typescript@5.9.3)))
@@ -1770,8 +1770,8 @@ packages:
     peerDependencies:
       vuepress: 2.0.0-rc.26
 
-  '@vuepress/plugin-copy-code@2.0.0-rc.122':
-    resolution: {integrity: sha512-tXcSLe9glH8JuvFgwy9NHL66/EwjGJf3MDWDQXLM9eV11hgXW9GBRPXxzFilecMd+d2UgDubrazhDbXDFCyrBg==}
+  '@vuepress/plugin-copy-code@2.0.0-rc.125':
+    resolution: {integrity: sha512-wm2EVnUmwEcu8boAbjYG+xdymr02kORdV18DsXwd/NpwlmbzcXUe8Qw/48qZBsa2bhxLTlnu3qjcARn1oFRQyQ==}
     peerDependencies:
       vuepress: 2.0.0-rc.26
 
@@ -6841,13 +6841,15 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  '@vuepress/plugin-copy-code@2.0.0-rc.122(typescript@5.9.3)(vuepress@2.0.0-rc.26(@vuepress/bundler-vite@2.0.0-rc.26(@types/node@22.19.7)(sass@1.97.3)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.8.1))(supports-color@7.2.0)(typescript@5.9.3)(vue@3.5.42(typescript@5.9.3)))':
+  '@vuepress/plugin-copy-code@2.0.0-rc.125(@vuepress/bundler-vite@2.0.0-rc.26(@types/node@22.19.7)(sass@1.97.3)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.8.1))(typescript@5.9.3)(vuepress@2.0.0-rc.26(@vuepress/bundler-vite@2.0.0-rc.26(@types/node@22.19.7)(sass@1.97.3)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.8.1))(supports-color@7.2.0)(typescript@5.9.3)(vue@3.5.42(typescript@5.9.3)))':
     dependencies:
-      '@vuepress/helper': 2.0.0-rc.122(typescript@5.9.3)(vuepress@2.0.0-rc.26(@vuepress/bundler-vite@2.0.0-rc.26(@types/node@22.19.7)(sass@1.97.3)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.8.1))(supports-color@7.2.0)(typescript@5.9.3)(vue@3.5.42(typescript@5.9.3)))
-      '@vueuse/core': 14.2.0(vue@3.5.42(typescript@5.9.3))
+      '@vuepress/helper': 2.0.0-rc.125(@vuepress/bundler-vite@2.0.0-rc.26(@types/node@22.19.7)(sass@1.97.3)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.8.1))(typescript@5.9.3)(vuepress@2.0.0-rc.26(@vuepress/bundler-vite@2.0.0-rc.26(@types/node@22.19.7)(sass@1.97.3)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.8.1))(supports-color@7.2.0)(typescript@5.9.3)(vue@3.5.42(typescript@5.9.3)))
+      '@vueuse/core': 14.4.0(vue@3.5.42(typescript@5.9.3))
       vue: 3.5.42(typescript@5.9.3)
       vuepress: 2.0.0-rc.26(@vuepress/bundler-vite@2.0.0-rc.26(@types/node@22.19.7)(sass@1.97.3)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.8.1))(supports-color@7.2.0)(typescript@5.9.3)(vue@3.5.42(typescript@5.9.3))
     transitivePeerDependencies:
+      - '@vuepress/bundler-vite'
+      - '@vuepress/bundler-webpack'
       - typescript
 
   '@vuepress/plugin-git@2.0.0-rc.121(typescript@5.9.3)(vuepress@2.0.0-rc.26(@vuepress/bundler-vite@2.0.0-rc.26(@types/node@22.19.7)(sass@1.97.3)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.8.1))(supports-color@7.2.0)(typescript@5.9.3)(vue@3.5.42(typescript@5.9.3)))':
