@@ -3,6 +3,7 @@ import { EditorNodeDef, EditorNodeProperties, EditorRED } from 'node-red';
 import ha, { NodeCategory } from '../../editor/ha';
 import { i18n } from '../../editor/i18n';
 import { formatDate } from '../../helpers/date';
+import { normalizeBaseUrl } from '../../helpers/url';
 import { isNodeRedEnvVar } from '../../helpers/utils';
 import { Credentials } from '../../homeAssistant/index';
 import { DateTimeFormatOptions } from '../../types/DateTimeFormatOptions';
@@ -205,7 +206,11 @@ const ConfigServerEditor: EditorNodeDef<
     oneditsave: function () {
         const addon = $('#node-config-input-addon').is(':checked');
         const $host = $('#node-config-input-host');
-        const hostname = $host.val() as string;
+        const hostname = normalizeBaseUrl($host.val() as string);
+        // Save the normalized base URL, a trailing slash breaks the connection
+        if (hostname) {
+            $host.val(hostname);
+        }
         const haBooleanList = new Set<string>();
         $('#ha-boolean-list')
             .editableList('items')
