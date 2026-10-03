@@ -148,6 +148,10 @@ Value types:
 - `results`: response from Home Assistant
 - `sent data`: data sent to Home Assistant
 
+The service call's context is available in JSONata output properties as
+`$outputData("context")`. Use `$outputData("context").id` to get the context ID
+for matching the action to the resulting Home Assistant state changes.
+
 ## References
 
 <info-panel-only>
