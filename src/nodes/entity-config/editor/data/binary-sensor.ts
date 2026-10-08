@@ -9,6 +9,7 @@ const binarySensorDeviceClasses = [
     'door',
     'garage_door',
     'gas',
+    'glass_break',
     'heat',
     'light',
     'lock',
