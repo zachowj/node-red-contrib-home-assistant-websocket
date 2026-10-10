@@ -78,7 +78,7 @@
     "@types/ws": "^8.18.1",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
-    "@vitest/coverage-v8": "^4.0.16",
+    "@vitest/coverage-v8": "^5.0.3",
     "@vuepress/bundler-vite": "^2.0.0-rc.26",
     "@vuepress/plugin-copy-code": "^2.0.0-rc.125",
     "@vuepress/plugin-google-analytics": "^2.0.0-rc.118",
