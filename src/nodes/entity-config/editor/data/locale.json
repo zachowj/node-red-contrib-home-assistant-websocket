@@ -29,6 +29,7 @@
           "enum": "enum",
           "frequency": "frequency",
           "garage_door": "garage door",
+          "glass_break": "glass break",
           "gas": "gas",
           "heat": "heat",
           "humidity": "humidity",
