@@ -1,8 +1,8 @@
 import { IdSelectorType } from '../../../common/const';
 import { SelectorType } from '../../../nodes/config-server/editor';
 import { VirtualSelectOption } from '../../../types/virtual-select';
-import { getUiSettings } from '../../haserver';
 import * as haServer from '../../haserver';
+import { getUiSettings } from '../../haserver';
 import { TargetData } from './IdSelector';
 
 export function createSelectOptions(
