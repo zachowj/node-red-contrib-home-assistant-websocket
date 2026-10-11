@@ -2,6 +2,44 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.82.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.81.0...v0.82.0) (2026-10-11)
+
+
+### Features
+
+* **action:** expose service call context to output properties ([2910cf7](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/2910cf740c9c19dead9c05f8a5e6b13be50981cc))
+* **binary sensor:** add "glass_break" binary sensor device class ([#2077](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2077)) ([390e864](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/390e864a869299ee8eb3f616fd59bd3cb8a00fb8))
+
+
+### Bug Fixes
+
+* **config-server:** strip trailing slashes from the base URL ([#2045](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2045)) ([f18dc3f](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f18dc3f9ce3043c8ee72c2fb54fa830d17078340))
+
+
+### Styles
+
+* **autosort:** reorder import statements in virtual-select.ts for clarity ([b8f9b65](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/b8f9b65d5172c7a869a4190596c4db86e80c16e6))
+
+
+### Build System
+
+* **deps-dev:** bump @types/debug from 4.1.12 to 4.1.13 ([#2072](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2072)) ([6bdc33e](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/6bdc33e1299a1ba99316ccb2b5e6341b614f4b27))
+* **deps-dev:** bump @vitest/coverage-v8 from 4.0.16 to 5.0.3 ([#2065](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2065)) ([caf1c8a](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/caf1c8afa49577fd30bc3adc019b7e11f9fd29a4))
+* **deps-dev:** bump @vuepress/plugin-copy-code ([#2071](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2071)) ([a3bf364](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a3bf3647413eba520409252ec992c2c00f65d214))
+* **deps-dev:** bump @vuepress/plugin-prismjs ([#2067](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2067)) ([20ac24d](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/20ac24d9fdfd6de29986ad836f166276a4334470))
+* **deps-dev:** bump @vuepress/plugin-register-components ([#2073](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2073)) ([4889a04](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/4889a04e32ad2b300cdbb8d09cd62a12d4121108))
+* **deps-dev:** bump esbuild from 0.27.2 to 0.28.2 ([#2066](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2066)) ([e0484e8](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/e0484e88f6ba3ff5318903a6cddd6c0ea04bdc8f))
+* **deps-dev:** bump eslint-plugin-prettier from 5.5.5 to 5.5.6 ([#2069](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2069)) ([651ead8](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/651ead89b7ce2397ce46b8127956dfbcbd5dca3a))
+* **deps-dev:** bump eslint-plugin-simple-import-sort ([#2070](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2070)) ([09daa58](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/09daa58bf1924934817e0ce57a012bb85d22d750))
+* **deps-dev:** bump lint-staged from 16.2.7 to 17.6.0 ([#2074](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2074)) ([ab820e9](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ab820e9759536eb0ab89213600c99ebc286f1beb))
+* **deps-dev:** bump markdown-it from 14.1.0 to 14.3.2 ([#2064](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2064)) ([0c40e55](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/0c40e553cf6097a16439335e0cc438ce5240a8c5))
+* **deps-dev:** bump sass from 1.97.3 to 1.105.1 ([#2068](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2068)) ([91d7b05](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/91d7b058770b0257c81750bf92fe6cb4d9332b8d))
+
+
+### Miscellaneous Chores
+
+* Update dependencies ([5256a60](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/5256a6028c00f5be9dcd47575e5b7e93bd645e2a))
+
 ## [0.81.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.80.3...v0.81.0) (2026-10-02)
 
 
