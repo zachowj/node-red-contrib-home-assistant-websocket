@@ -3,6 +3,7 @@ import { URL } from 'url';
 
 import ClientEvents from '../common/events/ClientEvents';
 import { RED } from '../globals';
+import { normalizeBaseUrl } from '../helpers/url';
 import Comms from '../nodes/config-server/Comms';
 import ConnectionLog from '../nodes/config-server/ConnectionLog';
 import EditorContext from '../nodes/config-server/EditorContext';
@@ -91,7 +92,7 @@ export function createHomeAssistantClient(
     return homeAssistant;
 }
 
-function createCredentials(
+export function createCredentials(
     credentials: Credentials,
     config: ServerNodeConfig,
 ): Credentials {
@@ -101,11 +102,14 @@ function createCredentials(
     }
     // eslint-disable-next-line camelcase
     let accessToken = credentials.access_token;
+    // Normalize before the base URL is compared or used so a trailing slash
+    // doesn't end up creating paths like `//api/websocket`
+    const baseUrl = normalizeBaseUrl(credentials.host);
 
     // Check if using HA Add-on and import proxy token
     const addonBaseUrls = ['http://hassio/homeassistant', SUPERVISOR_URL];
 
-    if (config.addon || addonBaseUrls.includes(credentials.host)) {
+    if (config.addon || addonBaseUrls.includes(baseUrl)) {
         if (!process.env.SUPERVISOR_TOKEN) {
             throw new Error('Supervisor token not found.');
         }
@@ -113,7 +117,8 @@ function createCredentials(
         // eslint-disable-next-line camelcase
         accessToken = process.env.SUPERVISOR_TOKEN;
     } else {
-        host = getBaseUrl(credentials.host);
+        validateBaseUrl(baseUrl);
+        host = baseUrl;
     }
 
     return {
@@ -158,12 +163,6 @@ function createWebsocketConfig(
         connectionDelay,
         heartbeatInterval: heartbeat,
     };
-}
-
-function getBaseUrl(url: string): string {
-    validateBaseUrl(url);
-
-    return url.trim();
 }
 
 function validateBaseUrl(baseUrl: string): string | void {
