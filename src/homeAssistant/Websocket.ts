@@ -736,6 +736,15 @@ export default class Websocket {
         return cloneDeep(this.states);
     }
 
+    /**
+     * Return the current state map for internal read-only consumers.
+     * Callers must not modify the returned object. Use getStates() when an
+     * independent snapshot is required.
+     */
+    getStatesReadOnly(): Readonly<HassEntities> {
+        return this.states;
+    }
+
     getState(entityId: string): HassEntity | undefined {
         return cloneDeep(this.states[entityId]);
     }
