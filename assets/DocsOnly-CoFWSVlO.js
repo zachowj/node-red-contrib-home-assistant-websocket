@@ -1,0 +1,1 @@
+import{d as e,f as t,s as n,t as r}from"./app-BbT8bBcL.js";var i={},a={class:`docs-only`};function o(r,i){return e(),n(`div`,a,[t(r.$slots,`default`)])}var s=r(i,[[`render`,o]]);export{s as default};
