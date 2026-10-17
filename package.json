@@ -92,7 +92,7 @@
     "cheerio": "^1.2.0",
     "chokidar": "^5.0.0",
     "cssnano": "^8.0.10",
-    "del": "^8.0.1",
+    "del": "^9.0.1",
     "esbuild": "^0.28.2",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.1.8",
