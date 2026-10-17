@@ -191,8 +191,8 @@ importers:
         specifier: ^3.3.14
         version: 3.3.14
       home-assistant-js-websocket:
-        specifier: ^9.6.0
-        version: 9.6.0
+        specifier: ^9.7.1
+        version: 9.7.1
       joi:
         specifier: ^18.2.9
         version: 18.2.9
@@ -3155,8 +3155,8 @@ packages:
   help-me@5.0.0:
     resolution: {integrity: sha512-7xgomUX6ADmcYzFik0HzAxh/73YlKR9bmFzf51CZwR+b6YtzU2m0u49hQCqV6SvlqIqsaxovfwdvbnsw3b/zpg==}
 
-  home-assistant-js-websocket@9.6.0:
-    resolution: {integrity: sha512-TK8HWW6UjCsUdjIBQRB2sBbEya0VniOBFqFjgqSznJiB7YriNgN8jghyThxOkgxwrnt2eN6oWoZMCTSp1o7H+w==}
+  home-assistant-js-websocket@9.7.1:
+    resolution: {integrity: sha512-zOAiyF+gUc/IsiswYdWKns6SCBbvWb8iJtMX9+Dk0wlbdfcp+I38T2Vx36krWeWMk/GPwoSiYwCs5hk/+Hsn7w==}
 
   hookable@5.5.3:
     resolution: {integrity: sha512-Yc+BQe8SvoXH1643Qez1zqLRmbA5rCL+sSmk6TVos0LWVfNIB7PGncdlId77WzLGSIB5KaWgTaNTs2lNVEI6VQ==}
@@ -8903,7 +8903,7 @@ snapshots:
 
   help-me@5.0.0: {}
 
-  home-assistant-js-websocket@9.6.0: {}
+  home-assistant-js-websocket@9.7.1: {}
 
   hookable@5.5.3: {}
 
