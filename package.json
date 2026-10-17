@@ -116,7 +116,7 @@
     "nock": "^14.0.17",
     "node-red": "^5.0.8",
     "node-red-node-test-helper": "^0.3.6",
-    "postcss": "^8.5.29",
+    "postcss": "^8.5.30",
     "prettier": "^3.9.9",
     "sass": "^1.105.1",
     "typescript": "^5.9.3",
