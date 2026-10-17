@@ -99,7 +99,7 @@
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-n": "^16.6.2",
-    "eslint-plugin-prettier": "^5.5.6",
+    "eslint-plugin-prettier": "^5.5.7",
     "eslint-plugin-promise": "^7.3.0",
     "eslint-plugin-simple-import-sort": "^14.0.0",
     "eslint-plugin-sort-requires": "^2.1.0",
