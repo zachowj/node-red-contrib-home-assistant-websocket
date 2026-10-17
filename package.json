@@ -50,7 +50,7 @@
     "debug": "^4.4.3",
     "flat": "^5.0.2",
     "geolib": "^3.3.14",
-    "home-assistant-js-websocket": "^9.6.0",
+    "home-assistant-js-websocket": "^9.7.1",
     "joi": "^18.2.9",
     "jsonata": "2.1.0",
     "lodash": "^4.18.1",
