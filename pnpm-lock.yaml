@@ -188,8 +188,8 @@ importers:
         specifier: ^5.0.2
         version: 5.0.2
       geolib:
-        specifier: ^3.3.14
-        version: 3.3.14
+        specifier: ^4.0.0
+        version: 4.0.0
       home-assistant-js-websocket:
         specifier: ^9.6.0
         version: 9.6.0
@@ -3008,8 +3008,8 @@ packages:
   functions-have-names@1.2.3:
     resolution: {integrity: sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==}
 
-  geolib@3.3.14:
-    resolution: {integrity: sha512-uQ1772h3OjhWvL/HhSRZTMjBKIKoc4wFksLDqzqOkuG/2TgBbTwFamU0Disx3sNFk/BOweHyhKoVaYDuLIpsxQ==}
+  geolib@4.0.0:
+    resolution: {integrity: sha512-q6xrjzO5epECM1FjYLPwAeK6FSgCrgcZeeAOMKJ5kjxyyqD+mhSXnQJGHkMb9ju9R2XFat8T0Iiuyje6VdQTow==}
 
   get-caller-file@2.0.5:
     resolution: {integrity: sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg==}
@@ -8693,7 +8693,7 @@ snapshots:
 
   functions-have-names@1.2.3: {}
 
-  geolib@3.3.14: {}
+  geolib@4.0.0: {}
 
   get-caller-file@2.0.5: {}
 
