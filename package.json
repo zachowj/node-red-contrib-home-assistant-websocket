@@ -90,7 +90,7 @@
     "autoprefixer": "^10.6.1",
     "browser-sync": "^3.0.4",
     "cheerio": "^1.2.0",
-    "chokidar": "^5.0.0",
+    "chokidar": "^6.0.0",
     "cssnano": "^8.0.10",
     "del": "^8.0.1",
     "esbuild": "^0.28.2",
