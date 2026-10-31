@@ -44,7 +44,7 @@ export default class Zone extends ExposeAsController {
     }
 
     #getZones() {
-        const entities = this.homeAssistant.websocket.getStates();
+        const entities = this.homeAssistant.websocket.getStatesReadOnly();
         const zones: HassEntity[] = [];
         for (const entityId in entities) {
             if (this.node.config.zones.includes(entityId)) {

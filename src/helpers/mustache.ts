@@ -32,13 +32,13 @@ function parseContext(key: string) {
 
 class CustomContext extends Context {
     readonly #nodeContext: NodeContext;
-    readonly #entities: HassEntities;
+    readonly #entities: Readonly<HassEntities>;
 
     constructor(
         view: any,
         parentContext: CustomContext | undefined,
         nodeContext: NodeContext,
-        entities: HassEntities,
+        entities: Readonly<HassEntities>,
     ) {
         super(view, parentContext);
         this.#nodeContext = nodeContext;
@@ -93,7 +93,7 @@ export function renderTemplate(
     str: string,
     message: NodeMessage,
     nodeContext: NodeContext,
-    entities: HassEntities,
+    entities: Readonly<HassEntities>,
     altTags = false,
 ): string {
     if (
@@ -115,7 +115,7 @@ export function renderTemplate(
 export function generateRenderTemplate(
     message: NodeMessage,
     context: NodeContext,
-    states: HassEntities,
+    states: Readonly<HassEntities>,
 ) {
     return (template: string, altTags = false) =>
         renderTemplate(template, message, context, states, altTags);
