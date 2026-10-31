@@ -9,7 +9,7 @@
   "engines": {
     "node": ">=20"
   },
-  "packageManager": "pnpm@12.8.2",
+  "packageManager": "pnpm@12.17.0",
   "scripts": {
     "build": "node build.mjs build",
     "dev": "node build.mjs start",
