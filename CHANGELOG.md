@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.82.1](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.82.0...v0.82.1) (2026-10-31)
+
+
+### Build System
+
+* **deps-dev:** bump chokidar from 5.0.0 to 6.0.0 ([#2088](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2088)) ([2d31b90](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/2d31b909459faa6ca8d66007805edec66df06155))
+* **deps-dev:** bump eslint-plugin-prettier from 5.5.6 to 5.5.7 ([#2081](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2081)) ([469ad8f](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/469ad8f51cb3dd5350e4f751eb0470f93d538aef))
+* **deps-dev:** bump markdown-it from 14.3.2 to 14.3.3 ([#2084](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2084)) ([b4113cb](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/b4113cb2eaabc451f84e8a4b0059b579053976d4))
+* **deps-dev:** bump pnpm from 12.8.2 to 12.17.0 ([18ad49d](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/18ad49d22f0e502ffbe6a538757425606aefed09))
+* **deps-dev:** bump postcss from 8.5.29 to 8.5.30 ([#2082](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2082)) ([0a614ad](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/0a614ad18432d23eae8511a3c3ae79b0ca82617c))
+
 ## [0.82.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.81.0...v0.82.0) (2026-10-11)
 
 
