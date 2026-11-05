@@ -8,6 +8,41 @@ This example demonstrates the basic use of some of these functions.
 
 @[code](@examples/cookbook/jsonata-examples/ws-functions.json)
 
+### Accessing node output data with _$outputData()_
+
+Use `$outputData()` to access values supplied by the current Home Assistant node while evaluating a JSONata expression. These values may not be present on the Node-RED message.
+
+- `$outputData()` returns an object containing the available values, excluding the message itself and any values that are `undefined`.
+- `$outputData("name")` returns the value for one named item. It returns `undefined` when that item is not available. The message can also be requested with `$outputData("message")`, although it is normally available as the expression context.
+
+For example, get an event type from the event data:
+
+```jsonata
+$outputData("eventData").event_type
+```
+
+The following names can be used when the current node provides them:
+
+| Name            | Description                                                                   |
+| --------------- | ----------------------------------------------------------------------------- |
+| `calendarItem`  | Calendar event being processed.                                               |
+| `context`       | Home Assistant context associated with an action response.                    |
+| `data`          | Data object supplied to the node, such as action data.                        |
+| `deviceId`      | Device ID associated with the current operation.                              |
+| `entity`        | Current Home Assistant entity state object.                                   |
+| `entityId`      | Entity ID associated with the current operation.                              |
+| `eventData`     | Home Assistant event data being processed.                                    |
+| `headers`       | HTTP request headers available to the node.                                   |
+| `message`       | Current Node-RED message; available by name but omitted from `$outputData()`. |
+| `params`        | Request parameters available to the node.                                     |
+| `prevEntity`    | Previous Home Assistant entity state, when available.                         |
+| `previousValue` | Previous value for the current entity operation, when available.              |
+| `results`       | Results produced by the current node operation.                               |
+| `triggerId`     | ID associated with the trigger that invoked the node.                         |
+| `value`         | Value supplied to or produced by the current node operation.                  |
+
+The exact set of values depends on the node and the expression being evaluated. Use `$exists($outputData("entity"))` to check whether a particular value is available.
+
 ### Reading entity state and entity attributes with _$entity()_ and _$prevEntity()_
 
 In nodes with _output properties_, a number of properties are typically set by default, or can be optionally set as:

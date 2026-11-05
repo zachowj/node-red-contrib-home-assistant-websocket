@@ -39,9 +39,24 @@ export type Provides<K extends keyof OutputData> = {
 };
 
 // Types whose value is read straight from a props key (others compute or read config).
-const PROP_BACKED_TYPES: Partial<
-    Record<TypedInputTypes, keyof TypedInputProps>
-> = {
+type PropBackedTypes = {
+    [TypedInputTypes.CalendarItem]: 'calendarItem';
+    [TypedInputTypes.Data]: 'data';
+    [TypedInputTypes.DeviceId]: 'deviceId';
+    [TypedInputTypes.Entity]: 'entity';
+    [TypedInputTypes.EntityState]: 'entity';
+    [TypedInputTypes.EventData]: 'eventData';
+    [TypedInputTypes.Headers]: 'headers';
+    [TypedInputTypes.Params]: 'params';
+    [TypedInputTypes.PrevEntity]: 'prevEntity';
+    [TypedInputTypes.PreviousValue]: 'previousValue';
+    [TypedInputTypes.Results]: 'results';
+    [TypedInputTypes.TimeSinceChangedMs]: 'entity';
+    [TypedInputTypes.TriggerId]: 'triggerId';
+    [TypedInputTypes.Value]: 'value';
+};
+
+const PROP_BACKED_TYPES: PropBackedTypes = {
     [TypedInputTypes.CalendarItem]: 'calendarItem',
     [TypedInputTypes.Data]: 'data',
     [TypedInputTypes.DeviceId]: 'deviceId',
@@ -60,13 +75,13 @@ const PROP_BACKED_TYPES: Partial<
 
 /** The props key a value type needs, or undefined if it needs none. */
 export function getRequiredProp(
-    valueType: string,
+    valueType: TypedInputTypes,
 ): keyof TypedInputProps | undefined {
-    return PROP_BACKED_TYPES[valueType as TypedInputTypes];
+    return PROP_BACKED_TYPES[valueType as keyof PropBackedTypes];
 }
 
 export default class TypedInputService {
-    readonly #nodeConfig: Record<string, any>;
+    readonly #nodeConfig: object;
     readonly #context: NodeRedContext;
     readonly #jsonata: JSONata;
 
@@ -75,7 +90,7 @@ export default class TypedInputService {
         context,
         jsonata,
     }: {
-        nodeConfig: Record<string, any>;
+        nodeConfig: object;
         context: NodeRedContext;
         jsonata: JSONata;
     }) {
@@ -115,16 +130,7 @@ export default class TypedInputService {
                     val = undefined;
                     break;
                 }
-                val = await this.#jsonata.evaluate(value, {
-                    context: props.context,
-                    data: props.data,
-                    entity: props.entity,
-                    entityId: props.entityId,
-                    eventData: props.eventData,
-                    message: props.message,
-                    prevEntity: props.prevEntity,
-                    results: props.results,
-                });
+                val = await this.#jsonata.evaluate(value, { ...props });
                 break;
             case TypedInputTypes.Number:
                 val = Number(value);
@@ -150,9 +156,15 @@ export default class TypedInputService {
                         break;
                     case EntityStateCastType.HA_Boolean:
                         {
-                            const serverConfigId = this.#nodeConfig.server;
-                            const serverConfig =
-                                getServerConfigNode(serverConfigId);
+                            const serverConfigId = selectn(
+                                'server',
+                                this.#nodeConfig,
+                            );
+                            const serverConfig = getServerConfigNode(
+                                typeof serverConfigId === 'string'
+                                    ? serverConfigId
+                                    : undefined,
+                            );
                             const haBooleans = serverConfig?.config.ha_boolean;
                             if (!haBooleans) {
                                 val = false;
@@ -169,27 +181,20 @@ export default class TypedInputService {
                         break;
                 }
                 break;
-            case TypedInputTypes.TimeSinceChangedMs:
-                val = props.entity?.last_changed
-                    ? Date.now() - new Date(props.entity.last_changed).getTime()
+            case TypedInputTypes.TimeSinceChangedMs: {
+                const lastChanged = props.entity?.last_changed;
+                const timestamp = lastChanged
+                    ? new Date(lastChanged).getTime()
+                    : Number.NaN;
+                val = Number.isFinite(timestamp)
+                    ? Date.now() - timestamp
                     : undefined;
                 break;
-            case TypedInputTypes.Data:
-            case TypedInputTypes.DeviceId:
-            case TypedInputTypes.Entity:
-            case TypedInputTypes.EventData:
-            case TypedInputTypes.Headers:
-            case TypedInputTypes.Params:
-            case TypedInputTypes.PrevEntity:
-            case TypedInputTypes.PreviousValue:
-            case TypedInputTypes.Results:
-            case TypedInputTypes.TriggerId:
-            case TypedInputTypes.Value:
-            case TypedInputTypes.CalendarItem:
-                val = props[valueType];
-                break;
-            default:
-                val = value;
+            }
+            default: {
+                const requiredProp = getRequiredProp(valueType);
+                val = requiredProp ? props[requiredProp] : value;
+            }
         }
         return val;
     }

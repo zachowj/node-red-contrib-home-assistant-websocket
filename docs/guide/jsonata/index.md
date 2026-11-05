@@ -57,6 +57,7 @@ There are several _additional_ Home Assistant functions added for use in JSONata
 - `$device(lookup)` returns a device based on a provided lookup value. The lookup value can be an entity ID or a device name.
 - `$entities()` returns all entities in the cache
 - `$entities(entity_id)` returns a single entity from cache matching the given entity_id
+- `$outputData([name])` returns the node-provided output data, or one named value. Available names depend on the node; see [Using `$outputData()`](../../cookbook/jsonata/functions.md#accessing-node-output-data-with-outputdata).
 
 ## Exposed [Lodash](https://lodash.com/) functions
 

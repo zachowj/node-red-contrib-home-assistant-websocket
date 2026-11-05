@@ -3,7 +3,9 @@ import { mock, MockProxy, mockReset } from 'vitest-mock-extended';
 
 import JSONataService from '../../../../src/common/services/JSONataService';
 import NodeRedContextService from '../../../../src/common/services/NodeRedContextService';
-import TypedInputService from '../../../../src/common/services/TypedInputService';
+import TypedInputService, {
+    getRequiredProp,
+} from '../../../../src/common/services/TypedInputService';
 import { EntityStateCastType, TypedInputTypes } from '../../../../src/const';
 
 const nodeConfig = {
@@ -174,7 +176,9 @@ describe('Typed Input Service', function () {
                     entityId: 'light.light',
                     eventData: { foo: 'bar3' },
                     message: { payload: 'bar' },
+                    headers: { authorization: 'token' },
                     prevEntity: { foo: 'bar4' } as never,
+                    triggerId: 'trigger-1',
                     results: 'hello',
                 };
                 jsonataServiceStub.evaluate
@@ -191,6 +195,26 @@ describe('Typed Input Service', function () {
                     objs,
                 );
                 expect(results).toEqual('bar');
+            });
+
+            it('should pass all supplied properties to JSONata', async function () {
+                const props = {
+                    message: { payload: 'bar' },
+                    headers: { authorization: 'token' },
+                    triggerId: 'trigger-1',
+                };
+                jsonataServiceStub.evaluate.mockResolvedValue('result');
+
+                await typedInputService.getValue(
+                    'outputData()',
+                    TypedInputTypes.JSONata,
+                    props,
+                );
+
+                expect(jsonataServiceStub.evaluate).toHaveBeenCalledWith(
+                    'outputData()',
+                    props,
+                );
             });
         });
 
@@ -254,14 +278,18 @@ describe('Typed Input Service', function () {
 
         describe('custom ouput properties', function () {
             const props: Partial<Record<TypedInputTypes, any>> = {
+                calendarItem: 'calendarItem_value',
                 data: 'data_value',
+                deviceId: 'deviceId_value',
                 entity: 'entity_value',
                 eventData: 'eventData_value',
                 headers: 'headers_value',
                 params: 'params_value',
+                previousValue: 'previousValue_value',
                 triggerId: 'triggerId_value',
                 prevEntity: 'prevEntity_value',
                 results: 'results_value',
+                value: 'value_value',
             };
 
             it('should return the prop value for a given prop', async function () {
@@ -274,6 +302,22 @@ describe('Typed Input Service', function () {
                     );
                     expect(results).toEqual(prop + '_value');
                 }
+            });
+
+            it('should declare the props required by prop-backed types', function () {
+                expect(getRequiredProp(TypedInputTypes.CalendarItem)).toBe(
+                    'calendarItem',
+                );
+                expect(getRequiredProp(TypedInputTypes.DeviceId)).toBe(
+                    'deviceId',
+                );
+                expect(getRequiredProp(TypedInputTypes.EntityState)).toBe(
+                    'entity',
+                );
+                expect(
+                    getRequiredProp(TypedInputTypes.TimeSinceChangedMs),
+                ).toBe('entity');
+                expect(getRequiredProp(TypedInputTypes.JSON)).toBeUndefined();
             });
         });
         describe('getValue - EntityState', () => {
@@ -322,6 +366,15 @@ describe('Typed Input Service', function () {
                     '',
                     TypedInputTypes.EntityState,
                     {},
+                );
+                expect(result).toBeUndefined();
+            });
+
+            it('should return undefined if last_changed is invalid', async () => {
+                const result = await typedInputService.getValue(
+                    '',
+                    TypedInputTypes.TimeSinceChangedMs,
+                    { entity: { last_changed: 'not-a-date' } },
                 );
                 expect(result).toBeUndefined();
             });
