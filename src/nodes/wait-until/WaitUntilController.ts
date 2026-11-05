@@ -270,6 +270,7 @@ export default class WaitUntil extends InputOutputController<
                         {
                             entity: state,
                             config: this.node.config,
+                            timeout: true,
                         },
                     );
 
