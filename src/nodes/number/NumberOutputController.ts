@@ -3,9 +3,12 @@ import { NodeMessage } from 'node-red';
 import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
 import OutputController from '../../common/controllers/OutputController';
 import ValueEntityIntegration from '../../common/integration/ValueEntityIntegration';
+import { Provides } from '../../common/services/TypedInputService';
 import { NumberNode } from '.';
 
-const ExposeAsController = ExposeAsMixin(OutputController<NumberNode>);
+const ExposeAsController = ExposeAsMixin(
+    OutputController<NumberNode, Provides<'value' | 'previousValue'>>,
+);
 export default class NumberOutputController extends ExposeAsController {
     protected integration?: ValueEntityIntegration;
 
@@ -18,7 +21,6 @@ export default class NumberOutputController extends ExposeAsController {
             this.node.config.outputProperties,
             message,
             {
-                config: this.node.config,
                 value,
                 previousValue,
             },

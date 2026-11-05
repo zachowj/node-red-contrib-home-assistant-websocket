@@ -4,6 +4,7 @@ import {
     setIntervalWithErrorHandling,
     setTimeoutWithErrorHandling,
 } from '../../common/errors/inputErrorHandler';
+import { Provides } from '../../common/services/TypedInputService';
 import { RED } from '../../globals';
 import { getTimeInMilliseconds } from '../../helpers/utils';
 import { EventsCalendarNode } from '.';
@@ -30,7 +31,9 @@ export interface QueuedCalendarEvent {
     event: CalendarItem; // The original CalendarEvent
 }
 
-const ExposeAsController = ExposeAsMixin(OutputController<EventsCalendarNode>);
+const ExposeAsController = ExposeAsMixin(
+    OutputController<EventsCalendarNode, Provides<'calendarItem'>>,
+);
 export default class EventsCalendarController extends ExposeAsController {
     static readonly OVERLAP_MS = 60_000; // 1 minutes
     static readonly POLL_INTERVAL_MS = 900_000; // Default 15 minutes

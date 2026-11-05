@@ -30,6 +30,7 @@ import InputError from '../errors/InputError';
 import UnidirectionalEntityIntegration, {
     EntityMessage,
 } from '../integration/UnidirectionalEntityIntegration';
+import { Provides } from '../services/TypedInputService';
 
 function formatAvailableValue(value: unknown): string {
     if (typeof value === 'string') {
@@ -80,7 +81,7 @@ interface Attribute {
 export default abstract class SensorBase<
     T extends SensorBaseNode,
     P extends SensorBaseNodeProperties,
-> extends InputOutputController<T, P> {
+> extends InputOutputController<T, P, Provides<'data'>> {
     protected readonly integration?: UnidirectionalEntityIntegration;
 
     async onInput({ parsedMessage, message, send, done }: InputProperties) {
@@ -192,7 +193,6 @@ export default abstract class SensorBase<
             this.node.config.outputProperties,
             message,
             {
-                config: this.node.config,
                 data: payload,
             },
         );

@@ -1,5 +1,6 @@
 import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
 import OutputController from '../../common/controllers/OutputController';
+import { Provides } from '../../common/services/TypedInputService';
 import { NodeMessage } from '../../types/nodes';
 import { WebhookNode } from '.';
 
@@ -9,7 +10,9 @@ interface WebhookResponse {
     params: Record<string, any>;
 }
 
-const ExposeAsController = ExposeAsMixin(OutputController<WebhookNode>);
+const ExposeAsController = ExposeAsMixin(
+    OutputController<WebhookNode, Provides<'data' | 'headers' | 'params'>>,
+);
 export default class WebhookController extends ExposeAsController {
     public async onReceivedMessage(data: WebhookResponse) {
         if (!this.isEnabled) return;
@@ -19,7 +22,6 @@ export default class WebhookController extends ExposeAsController {
             this.node.config.outputProperties,
             message,
             {
-                config: this.node.config,
                 data: data.payload,
                 headers: data.headers,
                 params: data.params,

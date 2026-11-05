@@ -170,11 +170,11 @@ describe('Typed Input Service', function () {
             it('should pass the correct properties to the JSONata service', async function () {
                 const objs = {
                     data: { foo: 'bar2' },
-                    entity: { foo: 'bar' },
+                    entity: { foo: 'bar' } as never,
                     entityId: 'light.light',
                     eventData: { foo: 'bar3' },
                     message: { payload: 'bar' },
-                    prevEntity: { foo: 'bar4' },
+                    prevEntity: { foo: 'bar4' } as never,
                     results: 'hello',
                 };
                 jsonataServiceStub.evaluate

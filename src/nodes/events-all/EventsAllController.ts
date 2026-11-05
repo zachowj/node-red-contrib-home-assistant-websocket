@@ -5,6 +5,7 @@ import OutputController, {
     OutputControllerConstructor,
 } from '../../common/controllers/OutputController';
 import ConfigError from '../../common/errors/ConfigError';
+import { Provides } from '../../common/services/TypedInputService';
 import { ClientEvent } from '../../homeAssistant/Websocket';
 import { DeepReadonly, HassEvent } from '../../types/home-assistant';
 import { NodeMessage } from '../../types/nodes';
@@ -12,7 +13,9 @@ import { EventsAllNode, HA_CLIENT } from '.';
 
 type EventsAllNodeConstructor = OutputControllerConstructor<EventsAllNode>;
 
-const ExposeAsController = ExposeAsMixin(OutputController<EventsAllNode>);
+const ExposeAsController = ExposeAsMixin(
+    OutputController<EventsAllNode, Provides<'eventData'>>,
+);
 export default class EventsAll extends ExposeAsController {
     #eventData: Record<string, any> | undefined;
 
@@ -69,7 +72,6 @@ export default class EventsAll extends ExposeAsController {
             this.node.config.outputProperties,
             message,
             {
-                config: this.node.config,
                 eventData: evt,
             },
         );

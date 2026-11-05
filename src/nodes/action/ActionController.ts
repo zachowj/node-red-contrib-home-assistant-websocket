@@ -8,6 +8,7 @@ import InputOutputController, {
 import InputError from '../../common/errors/InputError';
 import NoConnectionError from '../../common/errors/NoConnectionError';
 import { DataSource } from '../../common/services/InputService';
+import { Provides } from '../../common/services/TypedInputService';
 import { TypedInputTypes } from '../../const';
 import { RED } from '../../globals';
 import { generateRenderTemplate } from '../../helpers/mustache';
@@ -18,7 +19,8 @@ import { Queue, QueueItem } from './const';
 
 export default class ActionController extends InputOutputController<
     ActionNode,
-    ActionNodeProperties
+    ActionNodeProperties,
+    Provides<'data' | 'results' | 'context'>
 > {
     #queue: QueueItem[] = [];
     #hasDeprecatedWarned = false;
@@ -335,7 +337,6 @@ export default class ActionController extends InputOutputController<
             this.node.config.outputProperties,
             message,
             {
-                config: this.node.config,
                 data: {
                     domain,
                     service,

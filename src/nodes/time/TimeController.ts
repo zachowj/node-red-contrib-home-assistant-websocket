@@ -4,6 +4,7 @@ import selectn from 'selectn';
 import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
 import OutputController from '../../common/controllers/OutputController';
 import ConfigError from '../../common/errors/ConfigError';
+import { Provides } from '../../common/services/TypedInputService';
 import { TypedInputTypes } from '../../const';
 import { RED } from '../../globals';
 import { formatDate } from '../../helpers/date';
@@ -16,7 +17,9 @@ import { TimeNode, TimeNodeProperties } from '.';
 
 const DEFAULT_PROPERTY = 'state';
 
-const ExposeAsController = ExposeAsMixin(OutputController<TimeNode>);
+const ExposeAsController = ExposeAsMixin(
+    OutputController<TimeNode, Provides<'entity' | 'triggerId'>>,
+);
 export default class TimeController extends ExposeAsController {
     #cronjob: CronosTask | null = null;
     #isProcessing = false;
@@ -140,9 +143,7 @@ export default class TimeController extends ExposeAsController {
 
         const msg = {};
         await this.setCustomOutputs(this.node.config.outputProperties, msg, {
-            config: this.node.config,
             entity,
-            entityState: entity?.state,
             triggerId: entity?.entity_id,
         });
 

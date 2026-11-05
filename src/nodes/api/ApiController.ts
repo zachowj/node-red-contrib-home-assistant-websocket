@@ -4,6 +4,7 @@ import InputOutputController, {
 import InputError from '../../common/errors/InputError';
 import NoConnectionError from '../../common/errors/NoConnectionError';
 import { DataSource } from '../../common/services/InputService';
+import { Provides } from '../../common/services/TypedInputService';
 import { TypedInputTypes } from '../../const';
 import { generateRenderTemplate } from '../../helpers/mustache';
 import { ApiNode, ApiNodeProperties } from '.';
@@ -11,7 +12,8 @@ import { ApiMethod, ApiProtocol } from './const';
 
 export default class ApiController extends InputOutputController<
     ApiNode,
-    ApiNodeProperties
+    ApiNodeProperties,
+    Provides<'results'>
 > {
     protected async onInput({
         message,
@@ -118,7 +120,6 @@ export default class ApiController extends InputOutputController<
             message,
             {
                 results,
-                config: this.node.config,
             },
         );
 

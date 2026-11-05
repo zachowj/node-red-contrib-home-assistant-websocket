@@ -13,7 +13,10 @@ import JSONataService from '../services/JSONataService';
 import NodeRedContextService, {
     isContextLocation,
 } from '../services/NodeRedContextService';
-import TypedInputService from '../services/TypedInputService';
+import TypedInputService, {
+    getRequiredProp,
+    OutputData,
+} from '../services/TypedInputService';
 import Status from '../status/Status';
 
 function cloneValue<T>(value: T): T {
@@ -37,7 +40,10 @@ export interface OutputControllerConstructor<T extends BaseNode> {
     typedInputService: TypedInputService;
 }
 
-export default class OutputController<T extends BaseNode = BaseNode> {
+export default class OutputController<
+    T extends BaseNode = BaseNode,
+    E extends OutputData = OutputData,
+> {
     protected readonly contextService: NodeRedContextService;
     protected readonly homeAssistant: HomeAssistant;
     protected readonly jsonataService: JSONataService;
@@ -75,9 +81,16 @@ export default class OutputController<T extends BaseNode = BaseNode> {
     protected async setCustomOutputs(
         properties: OutputProperty[] = [],
         message: NodeMessage,
-        extras: Record<string, any>,
+        extras: E,
     ) {
         for (const item of properties) {
+            const requiredProp = getRequiredProp(item.valueType);
+            if (requiredProp && !(requiredProp in extras)) {
+                this.node.warn(
+                    `Custom Output Error (${item.propertyType}:${item.property}): "${item.valueType}" is not available for this node`,
+                );
+            }
+
             const value = await this.typedInputService.getValue(
                 item.value,
                 item.valueType,

@@ -7,6 +7,7 @@ import BidirectionalIntegration, {
     StateChangePayload,
     TriggerPayload,
 } from '../../common/integration/BidirectionalEntityIntegration';
+import { Provides } from '../../common/services/TypedInputService';
 import { RED } from '../../globals';
 import { NodeMessage } from '../../types/nodes';
 import { EntityConfigNode } from '../entity-config';
@@ -27,7 +28,8 @@ interface SwitchNodeConstructor extends InputOutputControllerOptions<
 
 export default class SwitchController extends InputOutputController<
     SwitchNode,
-    SwitchNodeProperties
+    SwitchNodeProperties,
+    Provides<'entity'>
 > {
     #entityConfigNode: EntityConfigNode;
     #integration: BidirectionalIntegration;
@@ -83,11 +85,9 @@ export default class SwitchController extends InputOutputController<
             this.node.config.outputProperties,
             message,
             {
-                config: this.node.config,
                 entity: {
                     state: this.#isSwitchEntityEnabled,
                 },
-                entityState: this.#isSwitchEntityEnabled,
             },
         );
 

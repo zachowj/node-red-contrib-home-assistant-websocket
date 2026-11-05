@@ -12,6 +12,7 @@ import { inputErrorHandler } from '../errors/inputErrorHandler';
 import { NodeEvent } from '../events/Events';
 import Integration from '../integration/Integration';
 import InputService, { ParsedMessage } from '../services/InputService';
+import { OutputData } from '../services/TypedInputService';
 import OutputController, {
     OutputControllerConstructor,
 } from './OutputController';
@@ -44,7 +45,8 @@ interface OptionalInput {
 export default class InputOutputController<
     T extends BaseNode,
     K extends NodeProperties,
-> extends OutputController<T> {
+    E extends OutputData = OutputData,
+> extends OutputController<T, E> {
     #optionalInputs = new Map<string, OptionalInput>();
 
     protected readonly inputService: InputService<K>;

@@ -1,5 +1,6 @@
 import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
 import OutputController from '../../common/controllers/OutputController';
+import { Provides } from '../../common/services/TypedInputService';
 import { TypedInputTypes } from '../../const';
 import { NodeMessage } from '../../types/nodes';
 import { SentenceNode } from '.';
@@ -11,7 +12,12 @@ interface SentenceResponse {
     responseId: number;
 }
 
-const ExposeAsController = ExposeAsMixin(OutputController<SentenceNode>);
+const ExposeAsController = ExposeAsMixin(
+    OutputController<
+        SentenceNode,
+        Provides<'triggerId' | 'results' | 'deviceId'>
+    >,
+);
 export default class SentenceController extends ExposeAsController {
     public async onReceivedMessage(data: SentenceResponse) {
         if (!this.isEnabled) return;
@@ -21,7 +27,6 @@ export default class SentenceController extends ExposeAsController {
             this.node.config.outputProperties,
             message,
             {
-                [TypedInputTypes.Config]: this.node.config,
                 [TypedInputTypes.TriggerId]: data.sentence,
                 [TypedInputTypes.Results]: data.result,
                 [TypedInputTypes.DeviceId]: data.deviceId,

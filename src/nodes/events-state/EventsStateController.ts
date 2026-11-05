@@ -6,6 +6,7 @@ import OutputController, {
 } from '../../common/controllers/OutputController';
 import ConfigError from '../../common/errors/ConfigError';
 import ComparatorService from '../../common/services/ComparatorService';
+import { Provides } from '../../common/services/TypedInputService';
 import TransformState from '../../common/TransformState';
 import {
     getTimeInMilliseconds,
@@ -29,7 +30,12 @@ enum State {
     Unavailable = 'unavailable',
 }
 
-const ExposeAsController = ExposeAsMixin(OutputController<EventsStateNode>);
+const ExposeAsController = ExposeAsMixin(
+    OutputController<
+        EventsStateNode,
+        Provides<'entity' | 'eventData' | 'prevEntity' | 'triggerId'>
+    >,
+);
 export default class EventsStateController extends ExposeAsController {
     #comparatorService: ComparatorService;
     #topics: Record<string, { timeoutId?: NodeJS.Timeout; active: boolean }> =
@@ -194,9 +200,7 @@ export default class EventsStateController extends ExposeAsController {
         const config = this.node.config;
         const message: NodeMessage = {};
         await this.setCustomOutputs(config.outputProperties, message, {
-            config,
             entity: eventMessage.event.new_state,
-            entityState: eventMessage.event.new_state?.state,
             eventData: eventMessage.event,
             prevEntity: eventMessage.event.old_state,
             triggerId: eventMessage.entity_id,

@@ -1,5 +1,6 @@
 import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
 import OutputController from '../../common/controllers/OutputController';
+import { Provides } from '../../common/services/TypedInputService';
 import { NodeMessage } from '../../types/nodes';
 import { DeviceNode } from '.';
 
@@ -7,7 +8,9 @@ interface DeviceTriggerEvent {
     description: string;
 }
 
-const ExposeAsController = ExposeAsMixin(OutputController<DeviceNode>);
+const ExposeAsController = ExposeAsMixin(
+    OutputController<DeviceNode, Provides<'eventData' | 'triggerId'>>,
+);
 export default class DeviceTriggerController extends ExposeAsController {
     public async onTrigger(data: DeviceTriggerEvent) {
         if (!this.isEnabled) return;
@@ -18,7 +21,6 @@ export default class DeviceTriggerController extends ExposeAsController {
             this.node.config.outputProperties,
             message,
             {
-                config: this.node.config,
                 eventData: data,
                 triggerId: this.node.config.device,
             },

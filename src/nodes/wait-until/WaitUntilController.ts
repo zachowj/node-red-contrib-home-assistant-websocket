@@ -13,6 +13,7 @@ import ClientEvents from '../../common/events/ClientEvents';
 import ComparatorService from '../../common/services/ComparatorService';
 import { DataSource } from '../../common/services/InputService';
 import JSONataService from '../../common/services/JSONataService';
+import { Provides } from '../../common/services/TypedInputService';
 import { TypedInputTypes } from '../../const';
 import { RED } from '../../globals';
 import { renderTemplate } from '../../helpers/mustache';
@@ -50,7 +51,8 @@ const resetSchema = Joi.object({
 
 export default class WaitUntil extends InputOutputController<
     WaitUntilNode,
-    WaitUntilNodeProperties
+    WaitUntilNodeProperties,
+    Provides<'entity'>
 > {
     #active = false;
     #comparatorService: ComparatorService;
@@ -147,7 +149,6 @@ export default class WaitUntil extends InputOutputController<
             this.#savedMessage ?? {},
             {
                 entity: event.new_state,
-                config: this.node.config,
             },
         );
 
@@ -269,7 +270,6 @@ export default class WaitUntil extends InputOutputController<
                         message,
                         {
                             entity: state,
-                            config: this.node.config,
                         },
                     );
 

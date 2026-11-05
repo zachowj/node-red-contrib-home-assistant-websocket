@@ -1,10 +1,13 @@
 import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
 import OutputController from '../../common/controllers/OutputController';
 import ValueEntityIntegration from '../../common/integration/ValueEntityIntegration';
+import { Provides } from '../../common/services/TypedInputService';
 import { NodeMessage } from '../../types/nodes';
 import { TextNode } from '.';
 
-const ExposeAsController = ExposeAsMixin(OutputController<TextNode>);
+const ExposeAsController = ExposeAsMixin(
+    OutputController<TextNode, Provides<'value' | 'previousValue'>>,
+);
 export default class TextController extends ExposeAsController {
     protected integration?: ValueEntityIntegration;
 
@@ -17,7 +20,6 @@ export default class TextController extends ExposeAsController {
             this.node.config.outputProperties,
             message,
             {
-                config: this.node.config,
                 value,
                 previousValue,
             },

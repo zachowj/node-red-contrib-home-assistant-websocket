@@ -6,6 +6,7 @@ import InputError from '../../common/errors/InputError';
 import NoConnectionError from '../../common/errors/NoConnectionError';
 import { IntegrationEvent } from '../../common/integration/Integration';
 import ValueEntityIntegration from '../../common/integration/ValueEntityIntegration';
+import { Provides } from '../../common/services/TypedInputService';
 import { ValueIntegrationMode } from '../../const';
 import { EntityConfigNode } from '../entity-config';
 import { TextNode, TextNodeProperties } from '.';
@@ -17,7 +18,8 @@ type TextControllerConstructor = InputOutputControllerOptions<
 
 export default class TextController extends InputOutputController<
     TextNode,
-    TextNodeProperties
+    TextNodeProperties,
+    Provides<'value' | 'previousValue'>
 > {
     protected integration?: ValueEntityIntegration;
     #entityConfigNode?: EntityConfigNode;
@@ -36,8 +38,8 @@ export default class TextController extends InputOutputController<
             this.node.config.outputProperties,
             message,
             {
-                config: this.node.config,
                 value,
+                previousValue: undefined,
             },
         );
 
@@ -92,7 +94,6 @@ export default class TextController extends InputOutputController<
             this.node.config.outputProperties,
             message,
             {
-                config: this.node.config,
                 value,
                 previousValue,
             },

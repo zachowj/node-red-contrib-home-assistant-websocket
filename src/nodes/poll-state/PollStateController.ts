@@ -5,6 +5,7 @@ import OutputController, {
 import ConfigError from '../../common/errors/ConfigError';
 import { getErrorData } from '../../common/errors/inputErrorHandler';
 import ComparatorService from '../../common/services/ComparatorService';
+import { Provides } from '../../common/services/TypedInputService';
 import TransformState, { TransformType } from '../../common/TransformState';
 import { TypedInputTypes } from '../../const';
 import { getTimeInMilliseconds } from '../../helpers/utils';
@@ -16,7 +17,9 @@ interface PollStateNodeConstructor extends OutputControllerConstructor<PollState
     transformState: TransformState;
 }
 
-const ExposeAsController = ExposeAsMixin(OutputController<PollStateNode>);
+const ExposeAsController = ExposeAsMixin(
+    OutputController<PollStateNode, Provides<'entity' | 'triggerId'>>,
+);
 export default class PollStateController extends ExposeAsController {
     #comparatorService: ComparatorService;
     #timer: NodeJS.Timeout | undefined;
@@ -96,9 +99,7 @@ export default class PollStateController extends ExposeAsController {
             this.node.config.outputProperties,
             message,
             {
-                config: this.node.config,
                 entity,
-                entityState: entity.state,
                 triggerId: this.node.config.entityId,
             },
         );

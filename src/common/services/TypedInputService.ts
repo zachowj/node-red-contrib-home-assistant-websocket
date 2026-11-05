@@ -3,8 +3,67 @@ import selectn from 'selectn';
 import { EntityStateCastType, TypedInputTypes } from '../../const';
 import { getServerConfigNode } from '../../helpers/node';
 import { parseValueToBoolean } from '../../helpers/utils';
+import { DeepReadonly, HassEntity } from '../../types/home-assistant';
+import { NodeMessage } from '../../types/nodes';
 import JSONata from './JSONataService';
 import NodeRedContext from './NodeRedContextService';
+
+type TypedInputEntity = DeepReadonly<
+    Omit<Partial<HassEntity>, 'state'> & { state?: unknown }
+>;
+
+/** Data a controller can hand to typed inputs; every key is read by `getValue`. */
+export interface TypedInputProps {
+    calendarItem?: unknown;
+    context?: unknown;
+    data?: unknown;
+    deviceId?: string | null;
+    entity?: TypedInputEntity | null;
+    entityId?: string;
+    eventData?: unknown;
+    headers?: Record<string, unknown>;
+    message?: NodeMessage;
+    params?: Record<string, unknown>;
+    prevEntity?: TypedInputEntity | null;
+    previousValue?: unknown;
+    results?: unknown;
+    triggerId?: string;
+    value?: unknown;
+}
+
+export type OutputData = Omit<TypedInputProps, 'message'>;
+
+/** Declares the keys a controller always passes (a value may still be undefined). */
+export type Provides<K extends keyof OutputData> = {
+    [P in K]: OutputData[P];
+};
+
+// Types whose value is read straight from a props key (others compute or read config).
+const PROP_BACKED_TYPES: Partial<
+    Record<TypedInputTypes, keyof TypedInputProps>
+> = {
+    [TypedInputTypes.CalendarItem]: 'calendarItem',
+    [TypedInputTypes.Data]: 'data',
+    [TypedInputTypes.DeviceId]: 'deviceId',
+    [TypedInputTypes.Entity]: 'entity',
+    [TypedInputTypes.EntityState]: 'entity',
+    [TypedInputTypes.EventData]: 'eventData',
+    [TypedInputTypes.Headers]: 'headers',
+    [TypedInputTypes.Params]: 'params',
+    [TypedInputTypes.PrevEntity]: 'prevEntity',
+    [TypedInputTypes.PreviousValue]: 'previousValue',
+    [TypedInputTypes.Results]: 'results',
+    [TypedInputTypes.TimeSinceChangedMs]: 'entity',
+    [TypedInputTypes.TriggerId]: 'triggerId',
+    [TypedInputTypes.Value]: 'value',
+};
+
+/** The props key a value type needs, or undefined if it needs none. */
+export function getRequiredProp(
+    valueType: string,
+): keyof TypedInputProps | undefined {
+    return PROP_BACKED_TYPES[valueType as TypedInputTypes];
+}
 
 export default class TypedInputService {
     readonly #nodeConfig: Record<string, any>;
@@ -28,7 +87,7 @@ export default class TypedInputService {
     async getValue(
         value: string,
         valueType: TypedInputTypes,
-        props: Record<string, any> = {},
+        props: TypedInputProps = {},
     ) {
         let val;
         switch (valueType) {
@@ -99,7 +158,9 @@ export default class TypedInputService {
                                 val = false;
                                 break;
                             }
-                            val = haBooleans.includes(props.entity?.state);
+                            val = haBooleans.includes(
+                                props.entity?.state as string,
+                            );
                         }
                         break;
                     case EntityStateCastType.String:

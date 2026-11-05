@@ -6,6 +6,7 @@ import InputError from '../../common/errors/InputError';
 import NoConnectionError from '../../common/errors/NoConnectionError';
 import { IntegrationEvent } from '../../common/integration/Integration';
 import ValueEntityIntegration from '../../common/integration/ValueEntityIntegration';
+import { Provides } from '../../common/services/TypedInputService';
 import { ValueIntegrationMode } from '../../const';
 import { EntityConfigNode } from '../entity-config';
 import { TimeEntityNode, TimeEntityNodeProperties } from '.';
@@ -17,7 +18,8 @@ type TimeEntityControllerConstructor = InputOutputControllerOptions<
 
 export default class TimeEntityController extends InputOutputController<
     TimeEntityNode,
-    TimeEntityNodeProperties
+    TimeEntityNodeProperties,
+    Provides<'value' | 'previousValue'>
 > {
     protected integration?: ValueEntityIntegration;
     #entityConfigNode?: EntityConfigNode;
@@ -37,8 +39,8 @@ export default class TimeEntityController extends InputOutputController<
             this.node.config.outputProperties,
             message,
             {
-                config: this.node.config,
                 value,
+                previousValue: undefined,
             },
         );
 
@@ -96,7 +98,6 @@ export default class TimeEntityController extends InputOutputController<
             this.node.config.outputProperties,
             message,
             {
-                config: this.node.config,
                 value,
                 previousValue,
             },

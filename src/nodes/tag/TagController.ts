@@ -1,5 +1,6 @@
 import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
 import OutputController from '../../common/controllers/OutputController';
+import { Provides } from '../../common/services/TypedInputService';
 import { TAGS_ALL } from '../../const';
 import { DeepReadonly, HassEvent } from '../../types/home-assistant';
 import { NodeMessage } from '../../types/nodes';
@@ -12,7 +13,9 @@ interface HassTagScannedEvent extends HassEvent {
     };
 }
 
-const ExposeAsController = ExposeAsMixin(OutputController<TagNode>);
+const ExposeAsController = ExposeAsMixin(
+    OutputController<TagNode, Provides<'eventData' | 'triggerId'>>,
+);
 export default class TagController extends ExposeAsController {
     #isValidTag(tag: string): boolean {
         return this.node.config.tags.some((t) => {
@@ -49,7 +52,6 @@ export default class TagController extends ExposeAsController {
 
         const msg: NodeMessage = {};
         await this.setCustomOutputs(this.node.config.outputProperties, msg, {
-            config: this.node.config,
             eventData,
             triggerId: tagId,
         });

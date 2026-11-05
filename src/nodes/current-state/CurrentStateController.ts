@@ -4,6 +4,7 @@ import InputOutputController, {
 } from '../../common/controllers/InputOutputController';
 import InputError from '../../common/errors/InputError';
 import ComparatorService from '../../common/services/ComparatorService';
+import { Provides } from '../../common/services/TypedInputService';
 import TransformState from '../../common/TransformState';
 import { ComparatorType } from '../../const';
 import { renderTemplate } from '../../helpers/mustache';
@@ -23,7 +24,8 @@ interface CurrentStateControllerConstructor extends InputOutputControllerOptions
 
 export default class CurrentStateController extends InputOutputController<
     CurrentStateNode,
-    CurrentStateNodeProperties
+    CurrentStateNodeProperties,
+    Provides<'entity' | 'triggerId'>
 > {
     #comparatorService: ComparatorService;
     #homeAssistant: HomeAssistant;
@@ -87,9 +89,7 @@ export default class CurrentStateController extends InputOutputController<
             this.node.config.outputProperties,
             message,
             {
-                config: this.node.config,
                 entity,
-                entityState: entity.state,
                 triggerId: entityId,
             },
         );

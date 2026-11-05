@@ -13,8 +13,8 @@ import HomeAssistant from '../../../../src/homeAssistant/HomeAssistant';
 import { BaseNode, OutputProperty } from '../../../../src/types/nodes';
 
 class TestController extends OutputController {
-    run(properties: OutputProperty[]) {
-        return this.setCustomOutputs(properties, {}, {});
+    run(properties: OutputProperty[], extras: Record<string, unknown> = {}) {
+        return this.setCustomOutputs(properties, {}, extras);
     }
 }
 
@@ -22,17 +22,18 @@ function setup(value: unknown) {
     const contextService = mock<NodeRedContextService>();
     const typedInputService = mock<TypedInputService>();
     typedInputService.getValue.mockResolvedValue(value);
+    const node = mock<BaseNode>();
 
     const controller = new TestController({
         homeAssistant: mock<HomeAssistant>(),
         jsonataService: mock<JSONataService>(),
         nodeRedContextService: contextService,
-        node: mock<BaseNode>(),
+        node,
         status: mock<Status>(),
         typedInputService,
     } as OutputControllerConstructor<BaseNode>);
 
-    return { controller, contextService };
+    return { controller, contextService, node };
 }
 
 const property = (valueType: TypedInputTypes): OutputProperty =>
@@ -44,6 +45,41 @@ const property = (valueType: TypedInputTypes): OutputProperty =>
     }) as OutputProperty;
 
 describe('OutputController.setCustomOutputs', function () {
+    it.each([
+        TypedInputTypes.Entity,
+        TypedInputTypes.EntityState,
+        TypedInputTypes.TimeSinceChangedMs,
+        TypedInputTypes.PrevEntity,
+        TypedInputTypes.EventData,
+        TypedInputTypes.Value,
+        TypedInputTypes.TriggerId,
+    ])('warns when %s data is not provided', async function (valueType) {
+        const { controller, node } = setup(undefined);
+
+        await controller.run([property(valueType)]);
+
+        expect(node.warn).toHaveBeenCalledWith(
+            expect.stringContaining('is not available for this node'),
+        );
+    });
+
+    it('does not warn when the key is present but undefined', async function () {
+        const { controller, node } = setup(undefined);
+
+        await controller.run([property(TypedInputTypes.PrevEntity)], {
+            prevEntity: undefined,
+        });
+
+        expect(node.warn).not.toHaveBeenCalled();
+    });
+
+    it('does not warn for types that need no props', async function () {
+        const { controller, node } = setup('x');
+
+        await controller.run([property(TypedInputTypes.String)]);
+
+        expect(node.warn).not.toHaveBeenCalled();
+    });
     it.each([
         TypedInputTypes.Entity,
         TypedInputTypes.PrevEntity,

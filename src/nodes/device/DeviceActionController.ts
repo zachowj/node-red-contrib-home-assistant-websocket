@@ -4,11 +4,13 @@ import InputOutputController, {
 import NoConnectionError from '../../common/errors/NoConnectionError';
 import NoIntegrationError from '../../common/errors/NoIntegrationError';
 import { MessageType } from '../../common/integration/Integration';
+import { Provides } from '../../common/services/TypedInputService';
 import { DeviceNode, DeviceNodeProperties } from '.';
 
 export default class DeviceAction extends InputOutputController<
     DeviceNode,
-    DeviceNodeProperties
+    DeviceNodeProperties,
+    Provides<'data'>
 > {
     async onInput({ message, send, done }: InputProperties) {
         if (!this.homeAssistant?.isConnected) {
@@ -37,7 +39,6 @@ export default class DeviceAction extends InputOutputController<
             this.node.config.outputProperties,
             message,
             {
-                config: this.node.config,
                 data: payload,
             },
         );

@@ -3,9 +3,12 @@ import { NodeMessage } from 'node-red';
 import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
 import OutputController from '../../common/controllers/OutputController';
 import ValueEntityIntegration from '../../common/integration/ValueEntityIntegration';
+import { Provides } from '../../common/services/TypedInputService';
 import { TimeEntityNode } from '.';
 
-const ExposeAsController = ExposeAsMixin(OutputController<TimeEntityNode>);
+const ExposeAsController = ExposeAsMixin(
+    OutputController<TimeEntityNode, Provides<'value' | 'previousValue'>>,
+);
 export default class TimeEntityController extends ExposeAsController {
     protected integration?: ValueEntityIntegration;
     // Triggers when a entity value changes in Home Assistant
@@ -17,7 +20,6 @@ export default class TimeEntityController extends ExposeAsController {
             this.node.config.outputProperties,
             message,
             {
-                config: this.node.config,
                 value,
                 previousValue,
             },

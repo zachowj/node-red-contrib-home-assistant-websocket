@@ -5,6 +5,7 @@ import InputOutputController, {
 import InputError from '../../common/errors/InputError';
 import NoConnectionError from '../../common/errors/NoConnectionError';
 import UnidirectionalIntegration from '../../common/integration/UnidirectionalEntityIntegration';
+import { Provides } from '../../common/services/TypedInputService';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
 import { UpdateConfigNode, UpdateConfigNodeProperties } from '.';
 
@@ -18,7 +19,7 @@ export interface UpdateConfigControllerOptions<
 export default class UpdateConfig<
     T extends UpdateConfigNode,
     P extends UpdateConfigNodeProperties,
-> extends InputOutputController<T, P> {
+> extends InputOutputController<T, P, Provides<never>> {
     readonly #homeAssistant: HomeAssistant;
     protected integration?: UnidirectionalIntegration;
 
@@ -58,9 +59,7 @@ export default class UpdateConfig<
         await this.setCustomOutputs(
             this.node.config.outputProperties,
             message,
-            {
-                config: this.node.config,
-            },
+            {},
         );
         send(message);
         done();

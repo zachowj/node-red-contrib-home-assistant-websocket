@@ -5,11 +5,13 @@ import InputError from '../../common/errors/InputError';
 import NoConnectionError from '../../common/errors/NoConnectionError';
 import { MessageType } from '../../common/integration/Integration';
 import { DataSource } from '../../common/services/InputService';
+import { Provides } from '../../common/services/TypedInputService';
 import { SentenceNode, SentenceNodeProperties } from '.';
 
 export default class SentenceController extends InputOutputController<
     SentenceNode,
-    SentenceNodeProperties
+    SentenceNodeProperties,
+    Provides<never>
 > {
     public async onInput({
         done,
@@ -49,9 +51,7 @@ export default class SentenceController extends InputOutputController<
         await this.setCustomOutputs(
             this.node.config.outputProperties,
             message,
-            {
-                config: this.node.config,
-            },
+            {},
         );
         this.status.setSuccess();
         send(message);
