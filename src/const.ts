@@ -135,6 +135,7 @@ export enum TypedInputTypes {
     Regex = 're',
     Value = 'value',
     PreviousValue = 'previousValue',
+    TimeSinceChangedMs = 'timeSinceChangedMs',
     CalendarItem = 'calendarItem',
     DeviceId = 'deviceId',
     Enviroment = 'env',

@@ -40,7 +40,7 @@ Use the **output properties** for state conversion moving forward.
 - Values: `string|number|boolean`
 - Default: `string`
 
-Convert the state of the entity to the selected type. Boolean will be converted to true based on if the string is equal by default to (`y|yes|true|on|home|open`). Original value stored in `msg.data.original_state`
+Convert the state of the entity to the selected type. Boolean will be converted to true based on if the string is equal by default to (`y|yes|true|on|home|open`).
 
 ### Block Input Overrides
 

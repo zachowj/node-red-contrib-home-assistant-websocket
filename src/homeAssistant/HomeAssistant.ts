@@ -3,7 +3,7 @@ import { EventEmitter } from 'events';
 import { HassEntities } from 'home-assistant-js-websocket';
 
 import { NO_VERSION } from '../const';
-import { HassTags } from '../types/home-assistant';
+import { DeepReadonly, HassTags } from '../types/home-assistant';
 import httpAPI from './Http';
 import websocketAPI, { ClientState } from './Websocket';
 
@@ -136,7 +136,7 @@ export default class HomeAssistant {
         return entities;
     }
 
-    getTags(): HassTags {
+    getTags(): DeepReadonly<HassTags> {
         return this?.websocket?.tags ?? [];
     }
 

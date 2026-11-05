@@ -142,12 +142,6 @@ const EventsStateEditor: EditorNodeDef<EventsStateEditorNodeProperties> = {
                     valueType: 'entityState',
                 },
                 {
-                    property: 'data',
-                    propertyType: TypedInputTypes.Message,
-                    value: '',
-                    valueType: 'eventData',
-                },
-                {
                     property: 'topic',
                     propertyType: TypedInputTypes.Message,
                     value: '',
@@ -212,7 +206,12 @@ const EventsStateEditor: EditorNodeDef<EventsStateEditorNodeProperties> = {
         });
 
         haOutputs.createOutputs(this.outputProperties, {
-            extraTypes: ['eventData', 'entityId', 'entityState'],
+            extraTypes: [
+                'eventData',
+                'entityId',
+                'entityState',
+                'timeSinceChangedMs',
+            ],
         });
 
         insertSocialBar('events-state');

@@ -1,10 +1,10 @@
 import OutputController from '../../common/controllers/OutputController';
-import { HassEntity } from '../../types/home-assistant';
+import { DeepReadonly, HassEntity } from '../../types/home-assistant';
 import { NodeMessage } from '../../types/nodes';
 import { ButtonNode } from '.';
 
 export default class ButtonController extends OutputController<ButtonNode> {
-    public async onTrigger(data: { entity: HassEntity }) {
+    public async onTrigger(data: { entity: DeepReadonly<HassEntity> }) {
         const message: NodeMessage = {};
         await this.setCustomOutputs(
             this.node.config.outputProperties,

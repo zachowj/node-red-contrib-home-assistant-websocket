@@ -1,8 +1,10 @@
-import { cloneDeep } from 'lodash';
-
 import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
 import OutputController from '../../common/controllers/OutputController';
-import { HassEntity, HassStateChangedEvent } from '../../types/home-assistant';
+import {
+    DeepReadonly,
+    HassEntity,
+    HassStateChangedEvent,
+} from '../../types/home-assistant';
 import { ZoneNode } from '.';
 import { getLocationData, getZoneData, inZone } from './helpers';
 
@@ -20,7 +22,10 @@ enum ZoneEvent {
 
 const ExposeAsController = ExposeAsMixin(OutputController<ZoneNode>);
 export default class Zone extends ExposeAsController {
-    #getValidZones(fromState: HassEntity, toState: HassEntity) {
+    #getValidZones(
+        fromState: DeepReadonly<HassEntity>,
+        toState: DeepReadonly<HassEntity>,
+    ) {
         const config = this.node.config;
         const fromLocationData = getLocationData(fromState);
         const toLocationData = getLocationData(toState);
@@ -45,22 +50,22 @@ export default class Zone extends ExposeAsController {
 
     #getZones() {
         const entities = this.homeAssistant.websocket.getStates();
-        const zones: HassEntity[] = [];
+        const zones: DeepReadonly<HassEntity>[] = [];
         for (const entityId in entities) {
             if (this.node.config.zones.includes(entityId)) {
-                zones.push(entities[entityId] as HassEntity);
+                zones.push(entities[entityId]);
             }
         }
 
         return zones;
     }
 
-    public onStateChanged(evt: HassStateChangedEvent) {
+    public onStateChanged(evt: DeepReadonly<HassStateChangedEvent>) {
         if (this.isEnabled === false) {
             return;
         }
 
-        const { entity_id: entityId, event } = cloneDeep(evt);
+        const { entity_id: entityId, event } = evt;
 
         if (!event.old_state || !event.new_state) return;
 
@@ -68,16 +73,12 @@ export default class Zone extends ExposeAsController {
 
         if (!zones.length) return;
 
-        if (event.new_state) {
-            event.new_state.timeSinceChangedMs =
-                Date.now() - new Date(event.new_state.last_changed).getTime();
-        }
-
+        // Message goes to the user, so it gets its own copy of the readonly data
         const msg = {
             topic: entityId,
             payload: event.new_state.state,
-            data: event,
-            zones,
+            data: structuredClone(event),
+            zones: structuredClone(zones),
         };
         const statusMessage = `${entityId} ${this.node.config.event} ${zones
             .map((z) => z.entity_id)

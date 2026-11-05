@@ -4,12 +4,11 @@ import InputOutputController, {
 } from '../../common/controllers/InputOutputController';
 import InputError from '../../common/errors/InputError';
 import ComparatorService from '../../common/services/ComparatorService';
-import TransformState, { TransformType } from '../../common/TransformState';
+import TransformState from '../../common/TransformState';
 import { ComparatorType } from '../../const';
 import { renderTemplate } from '../../helpers/mustache';
 import { getTimeInMilliseconds } from '../../helpers/utils';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
-import { HassEntity } from '../../types/home-assistant';
 import { NodeMessage } from '../../types/nodes';
 import { CurrentStateNode, CurrentStateNodeProperties } from '.';
 
@@ -50,34 +49,24 @@ export default class CurrentStateController extends InputOutputController<
             this.#homeAssistant.websocket.getStates(),
         );
 
-        const entity = this.#homeAssistant.websocket.getState(
-            entityId,
-        ) as HassEntity;
-        if (!entity) {
+        const state = this.#homeAssistant.websocket.getState(entityId);
+        if (!state) {
             throw new InputError(
                 `Entity could not be found in cache for entityId: ${entityId}`,
                 'not found',
             );
         }
 
-        if (entity) {
-            entity.timeSinceChangedMs =
-                Date.now() - new Date(entity.last_changed).getTime();
-        }
-
-        if (this.node.config.state_type !== TransformType.String) {
-            // Convert and save original state if needed
-            entity.original_state = entity.state as string;
-            entity.state = this.#transformState.transform(
-                this.node.config.state_type,
-                entity.state as string,
-            );
-        }
+        const entity = state;
+        const stateValue = this.#transformState.transform(
+            this.node.config.state_type,
+            entity.state,
+        );
 
         let isIfState = await this.#comparatorService.getComparatorResult(
             this.node.config.halt_if_compare,
             this.node.config.halt_if,
-            entity.state as string,
+            stateValue as string,
             this.node.config.halt_if_type,
             {
                 message,
@@ -88,7 +77,9 @@ export default class CurrentStateController extends InputOutputController<
         if (this.#checkForDuration(isIfState)) {
             const forDurationMs = await this.#getForDurationMs(message);
             if (forDurationMs > 0) {
-                isIfState = entity.timeSinceChangedMs > forDurationMs;
+                isIfState =
+                    Date.now() - new Date(entity.last_changed).getTime() >
+                    forDurationMs;
             }
         }
 

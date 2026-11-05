@@ -1,5 +1,4 @@
 import Joi from 'joi';
-import { cloneDeep } from 'lodash';
 import { NodeMessage } from 'node-red';
 import selectn from 'selectn';
 
@@ -23,7 +22,7 @@ import {
     shouldIncludeEvent,
 } from '../../helpers/utils';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
-import { HassEntity } from '../../types/home-assistant';
+import { DeepReadonly, HassEntity } from '../../types/home-assistant';
 import { NodeDone, NodeSend } from '../../types/nodes';
 import { WaitUntilNode, WaitUntilNodeProperties, WaitUntilProperties } from '.';
 
@@ -96,11 +95,11 @@ export default class WaitUntil extends InputOutputController<
     async #onEntityChange(evt: {
         event: {
             entity_id: string;
-            new_state?: HassEntity;
-            old_state?: HassEntity;
+            new_state?: DeepReadonly<HassEntity>;
+            old_state?: DeepReadonly<HassEntity>;
         };
     }) {
-        const { event } = cloneDeep(evt);
+        const { event } = evt;
 
         if (
             !this.#savedConfig ||
@@ -142,11 +141,6 @@ export default class WaitUntil extends InputOutputController<
         clearTimeout(this.#timeoutId);
         this.#active = false;
         this.status.setSuccess('ha-wait-until.status.true');
-
-        if (event.new_state) {
-            event.new_state.timeSinceChangedMs =
-                Date.now() - new Date(event.new_state.last_changed).getTime();
-        }
 
         await this.setCustomOutputs(
             this.node.config.outputProperties,
@@ -263,17 +257,11 @@ export default class WaitUntil extends InputOutputController<
 
             this.#timeoutId = setTimeoutWithErrorHandling(
                 async () => {
-                    let state: HassEntity | undefined;
+                    let state: DeepReadonly<HassEntity> | undefined;
                     if (this.#isSingleEntitySelected()) {
                         state = this.#homeAssistant.websocket.getState(
                             config.entities[IdSelectorType.Entity][0],
-                        ) as HassEntity;
-
-                        if (state) {
-                            state.timeSinceChangedMs =
-                                Date.now() -
-                                new Date(state.last_changed).getTime();
-                        }
+                        );
                     }
 
                     await this.setCustomOutputs(
@@ -316,7 +304,7 @@ export default class WaitUntil extends InputOutputController<
             await this.#onEntityChange({
                 event: {
                     entity_id: entityId,
-                    new_state: currentState as HassEntity,
+                    new_state: currentState,
                 },
             });
         }

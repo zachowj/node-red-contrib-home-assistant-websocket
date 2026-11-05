@@ -188,7 +188,7 @@ const WaitUntilEditor: EditorNodeDef<WaitUntilEditorNodeProperties> = {
             );
         });
         haOutputs.createOutputs(this.outputProperties, {
-            extraTypes: ['entity'],
+            extraTypes: ['entity', 'timeSinceChangedMs'],
         });
 
         insertSocialBar('wait-until');

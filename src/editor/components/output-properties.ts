@@ -45,7 +45,7 @@ const customTypes: { [key: string]: EditorWidgetTypedInputTypeDefinition } = {
     tagId: { value: 'triggerId', label: 'tag id', hasValue: false },
     timeSinceChangedMs: {
         value: 'timeSinceChangedMs',
-        label: 'timeSinceChangedMs',
+        label: 'time since changed (ms)',
         hasValue: false,
     },
     triggerId: { value: 'triggerId', label: 'trigger id', hasValue: false },

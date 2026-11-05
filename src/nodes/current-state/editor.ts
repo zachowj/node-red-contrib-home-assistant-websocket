@@ -76,12 +76,6 @@ const CurrentStateEditor: EditorNodeDef<CurrentStateEditorNodeProperties> = {
                     value: EntityStateCastType.String,
                     valueType: 'entityState',
                 },
-                {
-                    property: 'data',
-                    propertyType: TypedInputTypes.Message,
-                    value: '',
-                    valueType: 'entity',
-                },
             ],
             validate: haOutputs.validate,
         },
@@ -134,7 +128,12 @@ const CurrentStateEditor: EditorNodeDef<CurrentStateEditorNodeProperties> = {
         });
 
         haOutputs.createOutputs(this.outputProperties, {
-            extraTypes: ['entity', 'entityId', 'entityState'],
+            extraTypes: [
+                'entity',
+                'entityId',
+                'entityState',
+                'timeSinceChangedMs',
+            ],
         });
 
         insertSocialBar('current-state');

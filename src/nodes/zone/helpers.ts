@@ -1,6 +1,6 @@
 import { isPointWithinRadius, isValidCoordinate } from 'geolib';
 
-import { HassEntity } from '../../types/home-assistant';
+import { DeepReadonly, HassEntity } from '../../types/home-assistant';
 import { locationData } from './ZoneController';
 
 export function inZone(location: locationData, zone: locationData): boolean {
@@ -10,7 +10,9 @@ export function inZone(location: locationData, zone: locationData): boolean {
     return inZone;
 }
 
-export function getLocationData(entity: HassEntity): locationData | undefined {
+export function getLocationData(
+    entity: DeepReadonly<HassEntity>,
+): locationData | undefined {
     const coord = {
         latitude: entity.attributes.latitude,
         longitude: entity.attributes.longitude,
@@ -19,7 +21,9 @@ export function getLocationData(entity: HassEntity): locationData | undefined {
     return isValidCoordinate(coord) ? coord : undefined;
 }
 
-export function getZoneData(zone: HassEntity): locationData | undefined {
+export function getZoneData(
+    zone: DeepReadonly<HassEntity>,
+): locationData | undefined {
     const data = getLocationData(zone);
     if (data === undefined || zone?.attributes?.radius === undefined) return;
 

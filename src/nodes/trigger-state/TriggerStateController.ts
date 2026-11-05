@@ -8,12 +8,16 @@ import InputOutputController, {
 import ConfigError from '../../common/errors/ConfigError';
 import ComparatorService from '../../common/services/ComparatorService';
 import State from '../../common/State';
-import TransformState, { TransformType } from '../../common/TransformState';
+import TransformState from '../../common/TransformState';
 import { isRecord } from '../../helpers/assert';
 import { renderTemplate } from '../../helpers/mustache';
 import { containsMustache, shouldIncludeEvent } from '../../helpers/utils';
 import { HaEvent } from '../../homeAssistant';
-import { HassEntity, HassStateChangedEvent } from '../../types/home-assistant';
+import {
+    DeepReadonly,
+    HassEntity,
+    HassStateChangedEvent,
+} from '../../types/home-assistant';
 import { NodeMessage } from '../../types/nodes';
 import { TriggerStateNode, TriggerStateProperties } from '.';
 import {
@@ -42,13 +46,13 @@ interface CustomOutputsComparatorResult {
 
 interface TriggerEvent {
     entity_id: string;
-    new_state: HassEntity | null;
-    old_state: HassEntity | null;
+    new_state: DeepReadonly<HassEntity> | null;
+    old_state: DeepReadonly<HassEntity> | null;
 }
 
 interface TargetData {
     entityId: string;
-    state: HassEntity | TriggerEvent;
+    state: DeepReadonly<HassEntity> | TriggerEvent;
 }
 
 interface ComparatorResult {
@@ -90,9 +94,24 @@ export default class TriggerStateController extends ExposeAsController {
         return this.#state?.isEnabled() ?? true;
     }
 
+    #selectValue(path: string, source: unknown, castState: boolean) {
+        const value = selectn(path, source);
+        if (
+            castState &&
+            typeof value === 'string' &&
+            (path === 'new_state.state' || path === 'old_state.state')
+        ) {
+            return this.#transformState.transform(
+                this.node.config.stateType,
+                value,
+            );
+        }
+        return value;
+    }
+
     async #getConstraintComparatorResults(
         constraints: Constraint[],
-        eventMessage: HassStateChangedEvent,
+        eventMessage: DeepReadonly<HassStateChangedEvent>,
     ) {
         const comparatorResults: ComparatorResult[] = [];
 
@@ -108,9 +127,10 @@ export default class TriggerStateController extends ExposeAsController {
                 constraint,
                 eventMessage.event,
             );
-            const actualValue = selectn(
+            const actualValue = this.#selectValue(
                 constraint.propertyValue,
                 constraintTarget.state,
+                constraint.targetType === TargetType.ThisEntity,
             );
             const comparatorResult =
                 await this.#comparatorService.getComparatorResult(
@@ -156,7 +176,9 @@ export default class TriggerStateController extends ExposeAsController {
             : constraint.targetValue;
         const entity = isTargetThisEntity
             ? triggerEvent
-            : (this.homeAssistant.websocket.getState(entityId) as HassEntity);
+            : (this.homeAssistant.websocket.getState(
+                  entityId,
+              ) as DeepReadonly<HassEntity>);
 
         if (entity === null) {
             throw new ConfigError([
@@ -179,7 +201,7 @@ export default class TriggerStateController extends ExposeAsController {
                 old_state: null,
                 new_state: this.homeAssistant.websocket.getState(
                     entityId,
-                ) as HassEntity,
+                ) as DeepReadonly<HassEntity>,
             };
         }
 
@@ -188,7 +210,7 @@ export default class TriggerStateController extends ExposeAsController {
 
     async #getCustomOutputsComparatorResults(
         outputs: CustomOutput[],
-        eventMessage: HassStateChangedEvent,
+        eventMessage: DeepReadonly<HassStateChangedEvent>,
     ): Promise<CustomOutputsComparatorResult[]> {
         return outputs.reduce(
             async (acc, output) => {
@@ -203,9 +225,10 @@ export default class TriggerStateController extends ExposeAsController {
                     output.comparatorPropertyType !==
                     ComparatorPropertyType.Always
                 ) {
-                    result.actualValue = selectn(
+                    result.actualValue = this.#selectValue(
                         output.comparatorPropertyValue,
                         eventMessage.event,
+                        true,
                     );
                     result.comparatorMatched =
                         await this.#comparatorService.getComparatorResult(
@@ -231,14 +254,15 @@ export default class TriggerStateController extends ExposeAsController {
 
     #getDefaultMessageOutputs(
         comparatorResults: any,
-        eventMessage: HassStateChangedEvent,
+        eventMessage: DeepReadonly<HassStateChangedEvent>,
     ) {
         const { entity_id: entityId, event } = eventMessage;
 
+        // Messages go to the user, so they get their own copy of the readonly data
         const msg: DefaultMessage = {
             topic: entityId,
-            payload: event.new_state?.state,
-            data: eventMessage,
+            payload: structuredClone(event.new_state?.state),
+            data: structuredClone(eventMessage) as Record<string, unknown>,
         };
         let outputs;
 
@@ -247,7 +271,7 @@ export default class TriggerStateController extends ExposeAsController {
                 'constraint comparator: one or more comparators failed to match constraints, message will send on the failed output',
             );
 
-            msg.failedComparators = comparatorResults.failed;
+            msg.failedComparators = cloneDeep(comparatorResults.failed);
             outputs = [null, msg];
         } else {
             outputs = [msg, null];
@@ -261,7 +285,7 @@ export default class TriggerStateController extends ExposeAsController {
             comparatorMatched,
             actualValue,
         }: CustomOutputsComparatorResult,
-        eventMessage: HassStateChangedEvent,
+        eventMessage: DeepReadonly<HassStateChangedEvent>,
     ): Promise<Record<string, unknown> | null> {
         // If comparator did not match
         if (!comparatorMatched) {
@@ -273,8 +297,8 @@ export default class TriggerStateController extends ExposeAsController {
 
         let message: Record<string, unknown> = {
             topic: eventMessage.entity_id,
-            payload: eventMessage.event.new_state?.state,
-            data: eventMessage,
+            payload: structuredClone(eventMessage.event.new_state?.state),
+            data: structuredClone(eventMessage) as Record<string, unknown>,
         };
 
         if (
@@ -306,10 +330,10 @@ export default class TriggerStateController extends ExposeAsController {
                         'trigger-state.error.custom_output_message_needs_to_be_object',
                     );
                 }
-                message = payload;
+                message = cloneDeep(payload);
             } else {
                 message = {
-                    payload,
+                    payload: cloneDeep(payload),
                 };
             }
         }
@@ -342,7 +366,9 @@ export default class TriggerStateController extends ExposeAsController {
         return true;
     }
 
-    public async onEntityStateChanged(evt: HassStateChangedEvent) {
+    public async onEntityStateChanged(
+        evt: DeepReadonly<HassStateChangedEvent>,
+    ) {
         if (
             this.isEnabled === false ||
             !this.homeAssistant.isHomeAssistantRunning
@@ -350,9 +376,7 @@ export default class TriggerStateController extends ExposeAsController {
             return;
         }
 
-        const eventMessage = cloneDeep(evt);
-
-        if (!eventMessage.event.new_state) {
+        if (!evt.event.new_state) {
             return;
         }
 
@@ -360,7 +384,7 @@ export default class TriggerStateController extends ExposeAsController {
         const valid = Object.entries(this.node.config.entities).some(
             ([type, ids]) => {
                 return ids?.some((id) =>
-                    shouldIncludeEvent(eventMessage.entity_id, id, type),
+                    shouldIncludeEvent(evt.entity_id, id, type),
                 );
             },
         );
@@ -370,35 +394,7 @@ export default class TriggerStateController extends ExposeAsController {
             return;
         }
 
-        // Convert and save original state if needed
-        if (
-            eventMessage.event.old_state &&
-            this.node.config.stateType !== TransformType.String
-        ) {
-            eventMessage.event.old_state.original_state = eventMessage.event
-                .old_state.state as string;
-            eventMessage.event.old_state.state = this.#transformState.transform(
-                this.node.config.stateType,
-                eventMessage.event.old_state.state as string,
-            );
-        }
-        if (
-            eventMessage.event.new_state &&
-            this.node.config.stateType !== TransformType.String
-        ) {
-            eventMessage.event.new_state.original_state = eventMessage.event
-                .new_state.state as string;
-            eventMessage.event.new_state.state = this.#transformState.transform(
-                this.node.config.stateType,
-                eventMessage.event.new_state.state as string,
-            );
-        }
-
-        if (eventMessage.event.new_state) {
-            eventMessage.event.new_state.timeSinceChangedMs =
-                Date.now() -
-                new Date(eventMessage.event.new_state.last_changed).getTime();
-        }
+        const eventMessage = evt;
 
         const constraintComparatorResults =
             await this.#getConstraintComparatorResults(
@@ -412,7 +408,8 @@ export default class TriggerStateController extends ExposeAsController {
                 eventMessage,
             );
 
-        const stateString = eventMessage.event.new_state.state.toString();
+        const stateString =
+            eventMessage.event.new_state?.state.toString() ?? '';
         // If a constraint comparator failed we're done, also if no custom outputs to look at
         if (
             constraintComparatorResults.failed.length ||

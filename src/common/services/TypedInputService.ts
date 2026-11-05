@@ -1,4 +1,3 @@
-import { cloneDeep } from 'lodash';
 import selectn from 'selectn';
 
 import { EntityStateCastType, TypedInputTypes } from '../../const';
@@ -75,7 +74,7 @@ export default class TypedInputService {
                 val = undefined;
                 break;
             case TypedInputTypes.Config: {
-                val = cloneDeep(
+                val = structuredClone(
                     value.length
                         ? selectn(value, this.#nodeConfig)
                         : this.#nodeConfig,
@@ -108,6 +107,11 @@ export default class TypedInputService {
                         val = props.entity?.state;
                         break;
                 }
+                break;
+            case TypedInputTypes.TimeSinceChangedMs:
+                val = props.entity?.last_changed
+                    ? Date.now() - new Date(props.entity.last_changed).getTime()
+                    : undefined;
                 break;
             case TypedInputTypes.Data:
             case TypedInputTypes.DeviceId:

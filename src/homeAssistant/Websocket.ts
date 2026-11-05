@@ -23,7 +23,6 @@ import {
     subscribeEntities,
     subscribeServices,
 } from 'home-assistant-js-websocket';
-import { cloneDeep } from 'lodash';
 
 import {
     COMPANION_MIN_VERSION_CONTRIB_HANDSHAKE,
@@ -39,6 +38,7 @@ import {
 } from '../const';
 import { RED } from '../globals';
 import {
+    DeepReadonly,
     HassArea,
     HassAreas,
     HassDevice,
@@ -153,7 +153,7 @@ export default class Websocket {
         return this.#statesLoaded;
     }
 
-    #emitEvent(event: string, data?: any) {
+    #emitEvent(event: string, data?: DeepReadonly<object | string>) {
         return this.#eventBus.emit(event, data);
     }
 
@@ -280,14 +280,10 @@ export default class Websocket {
             this.#checkIfAllRegistriesLoaded();
             this.#emitEvent(HaEvent.DeviceRegistryUpdated, devices);
         });
-        subscribeEntityRegistry(this.client, (entities) => {
-            this.#isEntityRegistryLoaded = true;
-            entities.forEach((entity) =>
-                this.entities.set(entity.entity_id, entity),
-            );
-            this.#checkIfAllRegistriesLoaded();
-            this.#emitEvent(HaEvent.EntityRegistryUpdated, entities);
-        });
+        subscribeEntityRegistry(
+            this.client,
+            this.onClientEntityRegistry.bind(this),
+        );
         subscribeFloorRegistry(this.client, (floors) => {
             this.#isFloorRegistryLoaded = true;
             this.floors = floors;
@@ -439,6 +435,15 @@ export default class Websocket {
         }
     }
 
+    onClientEntityRegistry(entities: HassEntityRegistryEntry[]): void {
+        this.#isEntityRegistryLoaded = true;
+        this.entities = new Map(
+            entities.map((entity) => [entity.entity_id, entity]),
+        );
+        this.#checkIfAllRegistriesLoaded();
+        this.#emitEvent(HaEvent.EntityRegistryUpdated, entities);
+    }
+
     onClientServices(services: HassServices): void {
         if (!services || Object.keys(services).length === 0) {
             return;
@@ -485,7 +490,8 @@ export default class Websocket {
             const state = event?.event?.new_state;
             // Validate a minimum state_changed event
             if (state && entityId) {
-                this.states[entityId] = state;
+                // Replace the map so readers holding the old one see a stable snapshot
+                this.states = { ...this.states, [entityId]: state };
             } else {
                 debug(
                     `Not processing ${HaEvent.StateChanged} event: ${JSON.stringify(
@@ -593,7 +599,7 @@ export default class Websocket {
         this.resetClient();
     }
 
-    onClientError(data: unknown): void {
+    onClientError(data: DeepReadonly<object | string>): void {
         debug('events connection error, cleaning up connection');
         debug(data);
         this.#emitEvent(ClientEvent.Error, data);
@@ -632,20 +638,20 @@ export default class Websocket {
         this.#emitEvent(ClientEvent.Close);
     }
 
-    getAreas(): HassAreas {
-        return cloneDeep(this.areas);
+    getAreas(): DeepReadonly<HassAreas> {
+        return this.areas;
     }
 
-    getArea(areaId: string): HassArea | undefined {
-        return cloneDeep(this.areas.find((area) => area.area_id === areaId));
+    getArea(areaId: string): DeepReadonly<HassArea> | undefined {
+        return this.areas.find((area) => area.area_id === areaId);
     }
 
-    getDevices(): HassDevices {
-        return cloneDeep(this.devices);
+    getDevices(): DeepReadonly<HassDevices> {
+        return this.devices;
     }
 
-    getDevice(deviceId: string): HassDevice | undefined {
-        return cloneDeep(this.devices.find((device) => device.id === deviceId));
+    getDevice(deviceId: string): DeepReadonly<HassDevice> | undefined {
+        return this.devices.find((device) => device.id === deviceId);
     }
 
     async getDeviceActions(deviceId?: string): Promise<HassDeviceActions> {
@@ -704,48 +710,46 @@ export default class Websocket {
         return results.extra_fields;
     }
 
-    getEntities(): HassEntityRegistry {
-        return cloneDeep(this.entities);
+    getEntities(): DeepReadonly<HassEntityRegistry> {
+        return this.entities;
     }
 
-    getEntity(entityId: string): HassEntityRegistryEntry | undefined {
-        return cloneDeep(this.entities.get(entityId));
+    getEntity(
+        entityId: string,
+    ): DeepReadonly<HassEntityRegistryEntry> | undefined {
+        return this.entities.get(entityId);
     }
 
-    getFloors(): HassFloor[] {
-        return cloneDeep(this.floors);
+    getFloors(): DeepReadonly<HassFloor[]> {
+        return this.floors;
     }
 
-    getFloor(floorId: string): HassFloor | undefined {
-        return cloneDeep(
-            this.floors.find((floor) => floor.floor_id === floorId),
-        );
+    getFloor(floorId: string): DeepReadonly<HassFloor> | undefined {
+        return this.floors.find((floor) => floor.floor_id === floorId);
     }
 
-    getLabels(): HassLabel[] {
-        return cloneDeep(this.labels);
+    getLabels(): DeepReadonly<HassLabel[]> {
+        return this.labels;
     }
 
-    getLabel(labelId: string): HassLabel | undefined {
-        return cloneDeep(
-            this.labels.find((label) => label.label_id === labelId),
-        );
+    getLabel(labelId: string): DeepReadonly<HassLabel> | undefined {
+        return this.labels.find((label) => label.label_id === labelId);
     }
 
-    getStates(): HassEntities {
-        return cloneDeep(this.states);
+    getStates(): DeepReadonly<HassEntities> {
+        return this.states;
     }
 
-    getState(entityId: string): HassEntity | undefined {
-        return cloneDeep(this.states[entityId]);
+    getState(entityId: string): DeepReadonly<HassEntity> | undefined {
+        return this.states[entityId];
     }
 
-    getServices(): HassServices {
-        return cloneDeep(this.services);
+    getServices(): DeepReadonly<HassServices> {
+        return this.services;
     }
 
-    getTag(tagId: string): HassTag | undefined {
-        return cloneDeep(this.tags?.find((tag) => tag.id === tagId));
+    getTag(tagId: string): DeepReadonly<HassTag> | undefined {
+        return this.tags?.find((tag) => tag.id === tagId);
     }
 
     async getTranslations(

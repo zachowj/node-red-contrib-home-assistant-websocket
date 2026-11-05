@@ -11,6 +11,7 @@ import ComparatorService from '../../common/services/ComparatorService';
 import { ComparatorType, TypedInputTypes } from '../../const';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
 import {
+    DeepReadonly,
     HassArea,
     HassDevice,
     HassEntity,
@@ -41,9 +42,9 @@ export default class GetEntitiesController extends SendSplitController {
     #comparatorService: ComparatorService;
     #homeAssistant: HomeAssistant;
     // Store the current device and area to avoid multiple lookups
-    #currentDevice: HassDevice | undefined;
-    #currentArea: HassArea | undefined;
-    #currentFloor: HassFloor | undefined;
+    #currentDevice: DeepReadonly<HassDevice> | undefined;
+    #currentArea: DeepReadonly<HassArea> | undefined;
+    #currentFloor: DeepReadonly<HassFloor> | undefined;
 
     constructor(params: GetEntitiesControllerConstructor) {
         super(params);
@@ -68,7 +69,8 @@ export default class GetEntitiesController extends SendSplitController {
             'ha-get-entities.status.number_of_results',
             { count: entities.length },
         ];
-        let payload: number | HassEntity | HassEntity[] = [];
+        let payload:
+            number | DeepReadonly<HassEntity> | DeepReadonly<HassEntity>[] = [];
 
         switch (parsedMessage.outputType.value) {
             case OutputType.Count:
@@ -134,7 +136,8 @@ export default class GetEntitiesController extends SendSplitController {
         this.status.setSuccess(statusText);
 
         this.contextService.set(
-            payload,
+            // Websocket data is readonly, the user gets their own copy
+            structuredClone(payload),
             parsedMessage.outputLocationType.value,
             parsedMessage.outputLocation.value,
             message,
@@ -147,24 +150,17 @@ export default class GetEntitiesController extends SendSplitController {
     async #getEntities(
         conditions: Rule[],
         message: NodeMessage,
-    ): Promise<HassEntity[]> {
-        const currentTime = Date.now();
-        const filteredEntities: HassEntity[] = [];
+    ): Promise<DeepReadonly<HassEntity>[]> {
+        const filteredEntities: DeepReadonly<HassEntity>[] = [];
         const states = this.#homeAssistant.websocket.getStates();
         const sortedConditions = sortConditions(conditions);
 
         const stateKeys = Object.keys(states);
         for (let i = 0; i < stateKeys.length; i++) {
             const entityStateId = stateKeys[i];
-            const entityState = states[entityStateId] as HassEntity;
+            const entityState = states[entityStateId];
 
             this.#resetCurrent();
-
-            // TODO: Remove for version 1.0
-            if (entityState?.last_changed) {
-                entityState.timeSinceChangedMs =
-                    currentTime - new Date(entityState.last_changed).getTime();
-            }
 
             const entity = this.#homeAssistant.websocket.getEntity(
                 entityState.entity_id,
@@ -187,8 +183,8 @@ export default class GetEntitiesController extends SendSplitController {
 
     async #checkConditions(
         conditions: Rule[],
-        entityState: HassEntity,
-        entity: HassEntityRegistryEntry | undefined,
+        entityState: DeepReadonly<HassEntity>,
+        entity: DeepReadonly<HassEntityRegistryEntry> | undefined,
         message: NodeMessage,
     ): Promise<boolean> {
         for (let i = 0; i < conditions.length; i++) {
@@ -263,8 +259,8 @@ export default class GetEntitiesController extends SendSplitController {
 
     async #checkLabelCondition(
         rule: Rule,
-        entity: HassEntityRegistryEntry,
-        entityState: HassEntity,
+        entity: DeepReadonly<HassEntityRegistryEntry>,
+        entityState: DeepReadonly<HassEntity>,
         message: NodeMessage,
     ): Promise<boolean> {
         const value = await this.typedInputService.getValue(
@@ -273,7 +269,9 @@ export default class GetEntitiesController extends SendSplitController {
             { message, entity: entityState },
         );
 
-        const hasMatchingLabel = (labelIds: string[] | undefined): boolean => {
+        const hasMatchingLabel = (
+            labelIds: readonly string[] | undefined,
+        ): boolean => {
             if (!labelIds) return false;
 
             for (const labelId of labelIds) {
@@ -309,7 +307,7 @@ export default class GetEntitiesController extends SendSplitController {
     #getPropertyValue(
         condition: PropertySelectorType,
         property: string,
-        entity: HassEntityRegistryEntry | undefined,
+        entity: DeepReadonly<HassEntityRegistryEntry> | undefined,
     ) {
         if (!entity) return undefined;
 
@@ -325,7 +323,9 @@ export default class GetEntitiesController extends SendSplitController {
         }
     }
 
-    #getDevice(entity: HassEntityRegistryEntry): HassDevice | undefined {
+    #getDevice(
+        entity: DeepReadonly<HassEntityRegistryEntry>,
+    ): DeepReadonly<HassDevice> | undefined {
         if (!this.#currentDevice && entity.device_id) {
             this.#currentDevice = this.#homeAssistant.websocket.getDevice(
                 entity.device_id,
@@ -335,7 +335,9 @@ export default class GetEntitiesController extends SendSplitController {
         return this.#currentDevice;
     }
 
-    #getArea(entity: HassEntityRegistryEntry): HassArea | undefined {
+    #getArea(
+        entity: DeepReadonly<HassEntityRegistryEntry>,
+    ): DeepReadonly<HassArea> | undefined {
         if (this.#currentArea) {
             return this.#currentArea;
         }
@@ -358,7 +360,9 @@ export default class GetEntitiesController extends SendSplitController {
         return this.#currentArea;
     }
 
-    #getFloor(entity: HassEntityRegistryEntry): HassFloor | undefined {
+    #getFloor(
+        entity: DeepReadonly<HassEntityRegistryEntry>,
+    ): DeepReadonly<HassFloor> | undefined {
         if (this.#currentFloor) {
             return this.#currentFloor;
         }

@@ -152,7 +152,12 @@ const TimeEditor: EditorNodeDef<TimeEditorNodeProperties> = {
             .trigger('change');
 
         haOutputs.createOutputs(this.outputProperties, {
-            extraTypes: ['entityState', 'entityId', 'entity'],
+            extraTypes: [
+                'entityState',
+                'entityId',
+                'entity',
+                'timeSinceChangedMs',
+            ],
         });
 
         insertSocialBar('time');

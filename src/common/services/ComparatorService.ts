@@ -2,7 +2,7 @@ import { NodeMessage } from 'node-red';
 import selectn from 'selectn';
 
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
-import { HassEntity } from '../../types/home-assistant';
+import { DeepReadonly, HassEntity } from '../../types/home-assistant';
 import TransformState, { TransformType } from '../TransformState';
 import JSONataService from './JSONataService';
 import NodeRedContextService, {
@@ -43,8 +43,8 @@ export default class ComparatorService {
             prevEntity,
         }: {
             message?: NodeMessage;
-            entity?: HassEntity | null;
-            prevEntity?: HassEntity | null;
+            entity?: DeepReadonly<HassEntity> | null;
+            prevEntity?: DeepReadonly<HassEntity> | null;
         } = {},
     ): Promise<boolean> {
         let cValue;

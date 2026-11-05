@@ -6,7 +6,7 @@ import OutputController, {
 } from '../../common/controllers/OutputController';
 import ConfigError from '../../common/errors/ConfigError';
 import { ClientEvent } from '../../homeAssistant/Websocket';
-import { HassEvent } from '../../types/home-assistant';
+import { DeepReadonly, HassEvent } from '../../types/home-assistant';
 import { NodeMessage } from '../../types/nodes';
 import { EventsAllNode, HA_CLIENT } from '.';
 
@@ -51,7 +51,7 @@ export default class EventsAll extends ExposeAsController {
         }
     }
 
-    public async onHaEventsAll(evt: HassEvent) {
+    public async onHaEventsAll(evt: DeepReadonly<HassEvent>) {
         if (this.isEnabled === false) return;
 
         if (

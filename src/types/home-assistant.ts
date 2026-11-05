@@ -96,10 +96,17 @@ export type HassData = {
     [key: string]: any;
 };
 
+export type DeepReadonly<T> = T extends (...args: any[]) => any
+    ? T
+    : T extends ReadonlyMap<infer K, infer V>
+      ? ReadonlyMap<K, DeepReadonly<V>>
+      : T extends object
+        ? { readonly [K in keyof T]: DeepReadonly<T[K]> }
+        : T;
+
 export type HassEntity = Omit<HomeAssistantEntity, 'state'> & {
-    original_state: string;
+    original_state?: string;
     state: string | number | boolean | RegExp | string[];
-    timeSinceChangedMs: number;
 };
 
 export type HassEvent = HassEventBase & {

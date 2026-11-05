@@ -6,7 +6,7 @@ import { Node } from 'node-red';
 import { RED } from '../../globals';
 import { validEntityId } from '../../helpers/utils';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
-import { HassArea, HassDevice } from '../../types/home-assistant';
+import { DeepReadonly, HassArea, HassDevice } from '../../types/home-assistant';
 import JSONataError from '../errors/JSONataError';
 
 function evaluateJSONataExpression(
@@ -117,9 +117,9 @@ export default class JSONataService {
      * @param areaId - The ID of the area for which to retrieve the devices.
      * @returns An array of devices associated with the area, or an empty array if the area does not exist or has no associated devices.
      */
-    areaDevices(areaId: string): HassDevice[] {
+    areaDevices(areaId: string): DeepReadonly<HassDevice>[] {
         const areas = this.#homeAssistant?.websocket?.getArea(areaId);
-        const devicesInArea: HassDevice[] = [];
+        const devicesInArea: DeepReadonly<HassDevice>[] = [];
         if (areas) {
             const devices = this.#homeAssistant?.websocket?.getDevices();
             if (devices) {
@@ -186,8 +186,8 @@ export default class JSONataService {
      * @param lookup - The lookup value, which can be an area ID, an entity ID, or a device ID.
      * @returns The name of the area, or undefined if the lookup value does not match any area, entity, or device, or if the matched entity or device does not have an area.
      */
-    areas(lookup: string): HassArea | undefined;
-    areas(): HassArea[];
+    areas(lookup: string): DeepReadonly<HassArea> | undefined;
+    areas(): DeepReadonly<HassArea[]>;
     areas(lookup?: unknown): unknown {
         if (typeof lookup !== 'string') {
             return this.#homeAssistant?.websocket?.getAreas();
@@ -259,7 +259,7 @@ export default class JSONataService {
      * @param lookup - The lookup value, which can be an entity ID or a device name.
      * @returns The device associated with the entity or the device that matches the name, or undefined if the lookup value does not match any entity or device.
      */
-    device(lookup: string): HassDevice | undefined {
+    device(lookup: string): DeepReadonly<HassDevice> | undefined {
         const entities = this.#homeAssistant?.websocket?.getEntity(lookup);
         const devices = this.#homeAssistant?.websocket?.getDevices();
         if (entities) {

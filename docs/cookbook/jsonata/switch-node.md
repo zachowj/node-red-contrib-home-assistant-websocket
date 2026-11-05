@@ -10,15 +10,15 @@ This example shows how to use JSONata within the standard Switch node.
 
 ### Using JSONata in _switch routing_
 
-A Poll State node has been set up to return the entity state of a light switch every 10 seconds. This will return the entity state ("on" or "off") as the _msg.payload_ value. It will also return the fuller entity state details in _msg.data_, which includes the _'timeSinceChangedMs'_ field.
+A Poll State node has been set up to return the entity state of a light switch every 10 seconds. This will return the entity state ("on" or "off") as the _msg.payload_ value. It will also return the fuller entity state details in _msg.data_, which includes the _'last_changed'_ field used below to work out how long the light has been in its current state.
 
 **JSONata for the routing _property_**
 
 ```
-$round(data.timeSinceChangedMs/60000,0)
+$round(($millis() - $toMillis(data.last_changed))/60000,0)
 ```
 
-The routing rules will test against the given _property_. By default this would be the value held in msg.payload. Using a JSONata expression here allows for a computation on the time since changed field to convert this to minutes. Rounding is also being used, so 31 to 89 seconds would become 1 minute.
+The routing rules will test against the given _property_. By default this would be the value held in msg.payload. Using a JSONata expression here allows for a computation on the _last_changed_ time to convert this to minutes since the state changed. Rounding is also being used, so 31 to 89 seconds would become 1 minute.
 
 **Note** that the JSONata expression has access to the full incoming message. The value required was output from the Poll State node within the output property _msg.data_ field, and this has to be used here since the `$entity()` functions are not available outside of the WebSocket nodes.
 
@@ -41,7 +41,7 @@ data.state="on" ? 4 : 1
 3. In the third rule, the evaluation Property is not used. The test condition is the Boolean result of a JSONata expression. The routing path is taken only if the JSONata expression evaluates as `true`.
 
 ```
-data.timeSinceChangedMs < 60000
+$millis() - $toMillis(data.last_changed) < 60000
 ```
 
 The example is simplistic, however it shows that any incoming message property can be used within the expression.

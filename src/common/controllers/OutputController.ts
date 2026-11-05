@@ -1,3 +1,5 @@
+import { cloneDeep } from 'lodash';
+
 import { debugToClient } from '../../helpers/node';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
 import {
@@ -8,9 +10,23 @@ import {
 } from '../../types/nodes';
 import { NodeEvent } from '../events/Events';
 import JSONataService from '../services/JSONataService';
-import NodeRedContextService from '../services/NodeRedContextService';
+import NodeRedContextService, {
+    isContextLocation,
+} from '../services/NodeRedContextService';
 import TypedInputService from '../services/TypedInputService';
 import Status from '../status/Status';
+
+function cloneValue<T>(value: T): T {
+    // Primitives are immutable, objects may be readonly websocket data the user must get a copy of
+    if (typeof value !== 'object' || value === null) return value;
+
+    try {
+        return structuredClone(value);
+    } catch {
+        // JSONata results can hold values structuredClone rejects, e.g. functions
+        return cloneDeep(value);
+    }
+}
 
 export interface OutputControllerConstructor<T extends BaseNode> {
     homeAssistant: HomeAssistant;
@@ -73,7 +89,9 @@ export default class OutputController<T extends BaseNode = BaseNode> {
 
             try {
                 this.contextService.set(
-                    value,
+                    isContextLocation(item.valueType)
+                        ? value
+                        : cloneValue(value),
                     item.propertyType,
                     item.property,
                     message,

@@ -31,6 +31,10 @@ All states received from Home Assistant are strings, but you can apply common ty
 
 <!-- #endregion entity-state -->
 
+#### time since changed (ms)
+
+Outputs the **milliseconds since the entity's state last changed**, calculated from the entity's `last_changed` value when the message is sent. Available on nodes that output an entity.
+
 #### config
 
 Outputs the **node’s configuration properties**.

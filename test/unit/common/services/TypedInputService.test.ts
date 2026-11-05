@@ -222,6 +222,34 @@ describe('Typed Input Service', function () {
                     name: 'test node',
                 });
             });
+
+            it('returns a copy of the whole node config', async function () {
+                const results = await typedInputService.getValue(
+                    '',
+                    TypedInputTypes.Config,
+                );
+
+                expect(results).toEqual(nodeConfig);
+                expect(results).not.toBe(nodeConfig);
+            });
+
+            it('returns a copy of a nested config property', async function () {
+                const nested = { list: [1, 2] };
+                const service = new TypedInputService({
+                    nodeConfig: { nested },
+                    context: contextServiceStub,
+                    jsonata: jsonataServiceStub,
+                });
+
+                const results = await service.getValue(
+                    'nested',
+                    TypedInputTypes.Config,
+                );
+
+                expect(results).toEqual(nested);
+                expect(results).not.toBe(nested);
+                expect(results.list).not.toBe(nested.list);
+            });
         });
 
         describe('custom ouput properties', function () {
@@ -293,6 +321,29 @@ describe('Typed Input Service', function () {
                 const result = await typedInputService.getValue(
                     '',
                     TypedInputTypes.EntityState,
+                    {},
+                );
+                expect(result).toBeUndefined();
+            });
+        });
+
+        describe('getValue - TimeSinceChangedMs', () => {
+            it('should return the milliseconds since the entity last changed', async () => {
+                vi.useFakeTimers();
+                vi.setSystemTime(new Date('2024-01-01T00:01:00Z'));
+                const result = await typedInputService.getValue(
+                    '',
+                    TypedInputTypes.TimeSinceChangedMs,
+                    { entity: { last_changed: '2024-01-01T00:00:00Z' } },
+                );
+                vi.useRealTimers();
+                expect(result).toBe(60000);
+            });
+
+            it('should return undefined if entity is missing', async () => {
+                const result = await typedInputService.getValue(
+                    '',
+                    TypedInputTypes.TimeSinceChangedMs,
                     {},
                 );
                 expect(result).toBeUndefined();

@@ -100,12 +100,6 @@ const PollStateEditor: EditorNodeDef<PollStateEditorNodeProperties> = {
                     valueType: 'entityState',
                 },
                 {
-                    property: 'data',
-                    propertyType: TypedInputTypes.Message,
-                    value: '',
-                    valueType: 'entity',
-                },
-                {
                     property: 'topic',
                     propertyType: TypedInputTypes.Message,
                     value: '',
@@ -145,7 +139,12 @@ const PollStateEditor: EditorNodeDef<PollStateEditorNodeProperties> = {
             '#node-input-ifStateOperator',
         );
         haOutputs.createOutputs(this.outputProperties, {
-            extraTypes: ['entity', 'entityId', 'entityState'],
+            extraTypes: [
+                'entity',
+                'entityId',
+                'entityState',
+                'timeSinceChangedMs',
+            ],
         });
 
         insertSocialBar('poll-state');

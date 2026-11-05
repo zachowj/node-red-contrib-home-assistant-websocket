@@ -1,9 +1,7 @@
-import { cloneDeep } from 'lodash';
-
 import ExposeAsMixin from '../../common/controllers/ExposeAsMixin';
 import OutputController from '../../common/controllers/OutputController';
 import { TAGS_ALL } from '../../const';
-import { HassEvent } from '../../types/home-assistant';
+import { DeepReadonly, HassEvent } from '../../types/home-assistant';
 import { NodeMessage } from '../../types/nodes';
 import { TagNode } from '.';
 
@@ -32,10 +30,12 @@ export default class TagController extends ExposeAsController {
             ?.name;
     }
 
-    public async onTagScanned(evt: HassTagScannedEvent): Promise<void> {
+    public async onTagScanned(
+        evt: DeepReadonly<HassTagScannedEvent>,
+    ): Promise<void> {
         if (!this.isEnabled) return;
 
-        const { event } = cloneDeep(evt);
+        const { event } = evt;
         const { device_id: deviceId, tag_id: tagId } = event;
 
         if (!this.#isValidTag(tagId) || !this.#isValidDevice(deviceId)) return;

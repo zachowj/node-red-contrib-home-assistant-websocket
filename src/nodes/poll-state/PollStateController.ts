@@ -8,7 +8,6 @@ import ComparatorService from '../../common/services/ComparatorService';
 import TransformState, { TransformType } from '../../common/TransformState';
 import { TypedInputTypes } from '../../const';
 import { getTimeInMilliseconds } from '../../helpers/utils';
-import { HassEntity } from '../../types/home-assistant';
 import { NodeMessage } from '../../types/nodes';
 import { PollStateNode } from '.';
 
@@ -66,34 +65,26 @@ export default class PollStateController extends ExposeAsController {
             return;
         }
 
-        const entity = this.homeAssistant.websocket.getState(
+        const state = this.homeAssistant.websocket.getState(
             this.node.config.entityId,
-        ) as HassEntity;
-        if (!entity) {
+        );
+        if (!state) {
             throw new ConfigError([
                 'poll-state.error.entity_id_not_found',
                 { entity_id: this.node.config.entityId },
             ]);
         }
 
-        if (entity) {
-            entity.timeSinceChangedMs =
-                Date.now() - new Date(entity.last_changed).getTime();
-        }
-
-        if (this.node.config.stateType !== TransformType.String) {
-            // Convert and save original state if needed
-            entity.original_state = entity.state as string;
-            entity.state = this.#transformState.transform(
-                this.node.config.stateType as TransformType,
-                entity.state as string,
-            );
-        }
+        const entity = state;
+        const stateValue = this.#transformState.transform(
+            this.node.config.stateType as TransformType,
+            entity.state,
+        );
 
         const isIfState = await this.#comparatorService.getComparatorResult(
             this.node.config.ifStateOperator,
             this.node.config.ifState,
-            entity.state,
+            stateValue,
             this.node.config.ifStateType,
             {
                 entity,

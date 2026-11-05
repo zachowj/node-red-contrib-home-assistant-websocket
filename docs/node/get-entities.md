@@ -111,8 +111,7 @@ Sample output when the output type is an array:
       "id": "6c16e348494c42fb8c8e8bda92b20fb2",
       "parent_id": null,
       "user_id": null
-    },
-    "timeSinceChangedMs": 3466747
+    }
   }
 ]
 ```
@@ -140,12 +139,6 @@ Supported attributes of the state as set by Home Assistant.
 - **Type**: `string`
 
 ISO Date string representing the last time the entity state changed.
-
-### timeSinceChangedMs
-
-- **Type**: `number`
-
-Milliseconds since the last state change of the entity.
 
 ### last_updated
 

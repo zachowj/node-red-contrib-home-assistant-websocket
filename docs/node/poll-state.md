@@ -33,7 +33,7 @@ Use the **output properties** for state conversion moving forward.
 
 - Type: `string`
 
-Convert the state of the entity to the selected type. Boolean will be converted to true based on if the string is equal by default to (y|yes|true|on|home|open). Original value stored in msg.data.original_state
+Convert the state of the entity to the selected type. Boolean will be converted to true based on if the string is equal by default to (y|yes|true|on|home|open).
 
 ### Output on change
 
@@ -66,18 +66,6 @@ entity_id of changed entity
 - Type: `object`
 
 The last known state of the entity
-
-### data.timeSinceChanged
-
-- Type: `string`
-
-Human readable format string of time since last updated, example "1 hour ago"
-
-### data.timeSinceChangedMs
-
-- Type: `number`
-
-Number of milliseconds since last changed
 
 ## References
 
