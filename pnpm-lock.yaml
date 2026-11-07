@@ -163,7 +163,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  jsonata: 2.1.0
+  jsonata: 2.2.1
 
 importers:
 
@@ -197,8 +197,8 @@ importers:
         specifier: ^18.2.9
         version: 18.3.1
       jsonata:
-        specifier: 2.1.0
-        version: 2.1.0
+        specifier: 2.2.1
+        version: 2.2.1
       lodash:
         specifier: ^4.18.1
         version: 4.18.1
@@ -3487,8 +3487,8 @@ packages:
     resolution: {integrity: sha512-g1MWMLBiz8FKi1e4w0UyVL3w+iJceWAFBAaBnnGKOpNa5f8TLktkbre1+s6oICydWAm+HRUGTmI+//xv2hvXYA==}
     hasBin: true
 
-  jsonata@2.1.0:
-    resolution: {integrity: sha512-OCzaRMK8HobtX8fp37uIVmL8CY1IGc/a6gLsDqz3quExFR09/U78HUzWYr7T31UEB6+Eu0/8dkVD5fFDOl9a8w==}
+  jsonata@2.2.1:
+    resolution: {integrity: sha512-xd1uwUrKeIcJbsWhaoS3qAX4Ea8m0Mw0G5nlnAQvPT7TbZ5qaPdzBVTQia9KfyuyQm+nenfyjvzUDTRYHsC2sw==}
     engines: {node: '>= 8'}
 
   jsonfile@3.0.1:
@@ -6435,13 +6435,13 @@ snapshots:
     dependencies:
       '@types/node-red__registry': 1.3.10
       '@types/node-red__runtime': 1.3.7
-      jsonata: 2.1.0
+      jsonata: 2.2.1
 
   '@types/node-red__util@1.3.8':
     dependencies:
       '@types/node-red__registry': 1.3.11
       '@types/node-red__runtime': 1.3.8
-      jsonata: 2.1.0
+      jsonata: 2.2.1
 
   '@types/node@22.19.7':
     dependencies:
@@ -9226,7 +9226,7 @@ snapshots:
     dependencies:
       minimist: 1.2.8
 
-  jsonata@2.1.0: {}
+  jsonata@2.2.1: {}
 
   jsonfile@3.0.1:
     optionalDependencies:
