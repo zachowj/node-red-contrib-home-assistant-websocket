@@ -1,5 +1,3 @@
-const vitest = require('eslint-plugin-vitest');
-
 module.exports = {
     root: true,
     parserOptions: { sourceType: 'module' },
@@ -8,11 +6,11 @@ module.exports = {
         'standard',
         'plugin:prettier/recommended',
         'plugin:@typescript-eslint/recommended',
+        'plugin:@vitest/legacy-recommended',
     ],
     parser: '@typescript-eslint/parser',
     rules: {
         'prettier/prettier': 'error',
-        ...vitest.configs.recommended.rules,
         'simple-import-sort/imports': 'error',
         'simple-import-sort/exports': 'error',
         '@typescript-eslint/no-explicit-any': 'off',
@@ -24,7 +22,7 @@ module.exports = {
         ],
         'no-prototype-builtins': 'off',
     },
-    plugins: ['simple-import-sort', '@typescript-eslint', 'vitest'],
+    plugins: ['simple-import-sort', '@typescript-eslint'],
     overrides: [
         {
             files: ['**/*.js'],

@@ -13,8 +13,7 @@ describe('sensor availability integration', function () {
         const harness = createControllerHarness({ kind: 'sensor' });
         await harness.asyncInput({ payload: '21.4' });
 
-        expect(harness.websocket.send).toHaveBeenCalledOnce();
-        expect(harness.websocket.send).toHaveBeenCalledWith(
+        expect(harness.websocket.send).toHaveBeenCalledExactlyOnceWith(
             expect.objectContaining({
                 state: '21.4',
                 available: true,

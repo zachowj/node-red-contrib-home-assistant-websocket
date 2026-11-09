@@ -89,8 +89,9 @@ describe('SwitchEntityStatus', function () {
             };
             status.set();
 
-            expect(nodeStub.status).toHaveBeenCalledOnce();
-            expect(nodeStub.status).toHaveBeenCalledWith(expectedStatus);
+            expect(nodeStub.status).toHaveBeenCalledExactlyOnceWith(
+                expectedStatus,
+            );
         });
     });
 });
