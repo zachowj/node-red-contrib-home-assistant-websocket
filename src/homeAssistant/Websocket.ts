@@ -104,6 +104,7 @@ export enum ClientEvent {
     Running = 'ha_client:running',
     ServicesLoaded = 'ha_client:services_loaded',
     StatesLoaded = 'ha_client:states_loaded',
+    StatesUpdated = 'ha_client:states_updated',
 }
 
 export default class Websocket {
@@ -427,6 +428,7 @@ export default class Websocket {
         }
 
         this.states = entities;
+        this.#emitEvent(ClientEvent.StatesUpdated, this.states);
 
         if (!this.#statesLoaded) {
             this.#statesLoaded = true;

@@ -1,4 +1,5 @@
 import {
+    HassEntities,
     HassEntity as HomeAssistantEntity,
     HassServices,
 } from 'home-assistant-js-websocket';
@@ -6,9 +7,8 @@ import {
 import ClientEvents from '../../common/events/ClientEvents';
 import { HA_EVENT_SERVICES_UPDATED } from '../../const';
 import { toCamelCase } from '../../helpers/utils';
-import { Credentials, HaEvent } from '../../homeAssistant';
+import { Credentials } from '../../homeAssistant';
 import { ClientEvent } from '../../homeAssistant/Websocket';
-import { HassEntity, HassStateChangedEvent } from '../../types/home-assistant';
 import { ServerNode } from '../../types/nodes';
 
 interface HomeAssistantStatesContext {
@@ -70,9 +70,8 @@ export default class EditorContext {
             [ClientEvent.Connecting, this.#onHaConnecting],
             [ClientEvent.Error, this.#onHaError],
             [ClientEvent.Running, this.#onHaRunning],
-            [ClientEvent.StatesLoaded, this.#onHaStatesLoaded],
+            [ClientEvent.StatesUpdated, this.#onHaStatesUpdated],
             [HA_EVENT_SERVICES_UPDATED, this.#onHaServicesUpdated],
-            [`ha_events:${HaEvent.StateChanged}`, this.#onHaStateChanged],
         ]);
     }
 
@@ -85,12 +84,7 @@ export default class EditorContext {
         this.#setOnContext('isConnected', true);
     }
 
-    #onHaStateChanged(data: HassStateChangedEvent) {
-        const entity = data.event;
-        this.#setOnContext(`states["${entity.entity_id}"]`, entity.new_state);
-    }
-
-    #onHaStatesLoaded(states: HassEntity[]) {
+    #onHaStatesUpdated(states: HassEntities) {
         this.#setOnContext('states', states);
     }
 

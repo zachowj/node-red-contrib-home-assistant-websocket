@@ -1,11 +1,15 @@
 import { EventEmitter } from 'events';
 import { HassEntities, HassEvent } from 'home-assistant-js-websocket';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import ClientEvents from '../../../src/common/events/ClientEvents';
+import { Credentials } from '../../../src/homeAssistant';
 import Websocket, {
     WebsocketConfig,
 } from '../../../src/homeAssistant/Websocket';
+import EditorContext from '../../../src/nodes/config-server/EditorContext';
 import { HassEntityRegistryEntry } from '../../../src/types/home-assistant';
+import { ServerNode } from '../../../src/types/nodes';
 
 function entity(id: string, state: string) {
     return { entity_id: id, state, attributes: { list: [1] } };
@@ -40,6 +44,40 @@ describe('Websocket state access', function () {
         expect(websocket.getState('sensor.a')).toBe(newState);
         expect(websocket.getStates()).not.toBe(before);
         expect(before['sensor.a'].state).toBe('on');
+    });
+
+    it('keeps global context synchronized with entity subscription updates', function () {
+        const eventBus = new EventEmitter();
+        const contextSet = vi.fn();
+        const globalContext = {
+            get: vi.fn(),
+            set: contextSet,
+        };
+        const node = Object.assign(new EventEmitter(), {
+            config: { name: 'server' },
+            context: () => ({ global: globalContext }),
+            error: vi.fn(),
+        }) as unknown as ServerNode<Credentials>;
+        const clientEvents = new ClientEvents({ node, emitter: eventBus });
+        const editorContext = new EditorContext(node, clientEvents);
+
+        const websocket = new Websocket({} as WebsocketConfig, eventBus);
+        const initialStates = {
+            'sensor.a': entity('sensor.a', 'on'),
+        } as unknown as HassEntities;
+        const updatedStates = {
+            ...initialStates,
+            'sensor.a': entity('sensor.a', 'off'),
+        } as unknown as HassEntities;
+
+        websocket.onClientStates(initialStates);
+        websocket.onClientStates(updatedStates);
+
+        expect(editorContext).toBeInstanceOf(EditorContext);
+        expect(contextSet).toHaveBeenLastCalledWith(
+            'homeassistant.server.states',
+            updatedStates,
+        );
     });
 
     it('replaces the entity registry and drops removed entities', function () {
