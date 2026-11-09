@@ -1,4 +1,3 @@
-import { EventEmitter } from 'events';
 import { describe, expect, it, vi } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
@@ -9,12 +8,6 @@ import InputService from '../../src/common/services/InputService';
 import Status from '../../src/common/status/Status';
 import TransformState from '../../src/common/TransformState';
 import { TAGS_ALL, TypedInputTypes } from '../../src/const';
-import HomeAssistant from '../../src/homeAssistant/HomeAssistant';
-import HttpAPI from '../../src/homeAssistant/Http';
-import WebsocketAPI, {
-    ClientState,
-    WebsocketConfig,
-} from '../../src/homeAssistant/Websocket';
 import CurrentStateController from '../../src/nodes/current-state/CurrentStateController';
 import EventsAllController from '../../src/nodes/events-all/EventsAllController';
 import EventsStateController from '../../src/nodes/events-state/EventsStateController';
@@ -24,68 +17,16 @@ import TagController from '../../src/nodes/tag/TagController';
 import TriggerStateController from '../../src/nodes/trigger-state/TriggerStateController';
 import WaitUntilController from '../../src/nodes/wait-until/WaitUntilController';
 import ZoneController from '../../src/nodes/zone/ZoneController';
-import { NodeMessage } from '../../src/types/nodes';
 import { setupControllerTestHarnessGlobals } from '../helpers/controllerTestHarness';
+import {
+    entity,
+    FakeNode,
+    inputService,
+    seed,
+    sendInput,
+} from '../helpers/controllerTestUtils';
 
 setupControllerTestHarnessGlobals();
-
-class FakeNode extends EventEmitter {
-    id = 'node_1';
-    status = vi.fn();
-    debug = vi.fn();
-    warn = vi.fn();
-    error = vi.fn();
-    send = vi.fn();
-    constructor(public config: Record<string, any>) {
-        super();
-    }
-
-    context() {
-        return { get: vi.fn(), set: vi.fn() };
-    }
-}
-
-function entity(id: string, state: string, attributes = {}, lastChanged = '') {
-    const timestamp = lastChanged || new Date().toISOString();
-    return {
-        entity_id: id,
-        state,
-        attributes: { list: [1, 2], ...attributes },
-        last_changed: timestamp,
-        last_updated: timestamp,
-        context: { id: '1', parent_id: null, user_id: null },
-    };
-}
-
-function seed(states: Record<string, unknown>) {
-    const eventBus = new EventEmitter();
-    const websocket = new WebsocketAPI({} as WebsocketConfig, eventBus);
-    websocket.states = states as WebsocketAPI['states'];
-    websocket.connectionState = ClientState.Connected;
-    websocket.isHomeAssistantRunning = true;
-    const homeAssistant = new HomeAssistant({
-        websocketAPI: websocket,
-        httpAPI: mock<HttpAPI>(),
-        eventBus,
-    });
-
-    return { homeAssistant, websocket };
-}
-
-function inputService(parsed: Record<string, { value: unknown }>) {
-    const service = mock<InputService<any>>();
-    service.parse.mockReturnValue(parsed as never);
-    return service;
-}
-
-async function sendInput(node: FakeNode, message: NodeMessage) {
-    const send = vi.fn();
-    const done = vi.fn();
-    const handler = node.listeners('input')[0] as (...args: unknown[]) => void;
-    await handler(message, send, done);
-
-    return { send, done };
-}
 
 const outputProperty = (property: string, valueType: TypedInputTypes) => ({
     property,

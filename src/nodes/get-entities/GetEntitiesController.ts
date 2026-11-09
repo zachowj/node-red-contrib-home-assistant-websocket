@@ -269,39 +269,32 @@ export default class GetEntitiesController extends SendSplitController {
             { message, entity: entityState },
         );
 
-        const hasMatchingLabel = (
-            labelIds: readonly string[] | undefined,
-        ): boolean => {
-            if (!labelIds) return false;
+        const labelIds = [
+            ...(entity.labels ?? []),
+            ...(this.#getDevice(entity)?.labels ?? []),
+            ...(this.#getArea(entity)?.labels ?? []),
+        ];
+        const isNegativeComparison =
+            rule.logic === ComparatorType.IsNot ||
+            rule.logic === ComparatorType.DoesNotInclude;
+        const comparison =
+            rule.logic === ComparatorType.IsNot
+                ? ComparatorType.Is
+                : rule.logic === ComparatorType.DoesNotInclude
+                  ? ComparatorType.Includes
+                  : (rule.logic as ComparatorType);
+        const hasMatchingLabel = labelIds.some((labelId) => {
+            const label = this.#homeAssistant.websocket.getLabel(labelId);
+            if (!label) return false;
 
-            for (const labelId of labelIds) {
-                const label = this.#homeAssistant.websocket.getLabel(labelId);
-                if (!label) continue;
+            return simpleComparison(
+                comparison,
+                label[rule.property as keyof HassLabel] as string,
+                value,
+            );
+        });
 
-                const result = simpleComparison(
-                    rule.logic as ComparatorType,
-                    label[rule.property as keyof HassLabel] as string,
-                    value,
-                );
-
-                if (result) return true;
-            }
-
-            return false;
-        };
-
-        // Check entity labels
-        if (hasMatchingLabel(entity.labels)) return true;
-
-        // Check device labels
-        const device = this.#getDevice(entity);
-        if (hasMatchingLabel(device?.labels)) return true;
-
-        // Check area labels
-        const area = this.#getArea(entity);
-        if (hasMatchingLabel(area?.labels)) return true;
-
-        return false;
+        return isNegativeComparison ? !hasMatchingLabel : hasMatchingLabel;
     }
 
     #getPropertyValue(
