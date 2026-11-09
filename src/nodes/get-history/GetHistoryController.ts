@@ -57,10 +57,12 @@ export default class GetHistoryController extends SendSplitController {
             }
         }
 
+        const hasMessageDateOverride =
+            parsedMessage.startDate.source === DataSource.Message ||
+            parsedMessage.endDate.source === DataSource.Message;
         if (
-            this.node.config.useRelativeTime ||
-            // If the relative time is from the message, we need to check if it's a relative time
-            parsedMessage.relativeTime.source === DataSource.Message
+            parsedMessage.relativeTime.source === DataSource.Message ||
+            (this.node.config.useRelativeTime && !hasMessageDateOverride)
         ) {
             try {
                 const relativeTimeMs = timestring(relativeTime.value, 'ms');
