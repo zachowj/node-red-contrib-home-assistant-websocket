@@ -14,6 +14,28 @@ import {
     HassLabel,
 } from '../types/home-assistant';
 
+function subscribeRegistryUpdates<T>(
+    conn: Connection,
+    store: Store<T>,
+    fetchRegistry: (conn: Connection) => Promise<T>,
+    eventType: string,
+) {
+    return conn.subscribeEvents(
+        throttle(
+            () =>
+                fetchRegistry(conn)
+                    .then((state) => store.setState(state, true))
+                    .catch((error: unknown) => {
+                        if (conn.connected) {
+                            throw error;
+                        }
+                    }),
+            500,
+        ),
+        eventType,
+    );
+}
+
 export function subscribeAreaRegistry(
     conn: Connection,
     cb: (state: HassAreas) => void,
@@ -24,14 +46,10 @@ export function subscribeAreaRegistry(
         });
 
     const subscribeUpdates = (conn: Connection, store: Store<HassAreas>) =>
-        conn.subscribeEvents(
-            throttle(
-                () =>
-                    fetchAreaRegistry(conn).then((areas) =>
-                        store.setState(areas, true),
-                    ),
-                500,
-            ),
+        subscribeRegistryUpdates(
+            conn,
+            store,
+            fetchAreaRegistry,
             'area_registry_updated',
         );
 
@@ -56,14 +74,10 @@ export function subscribeDeviceRegistry(
         });
 
     const subscribeUpdates = (conn: Connection, store: Store<HassDevices>) =>
-        conn.subscribeEvents(
-            throttle(
-                () =>
-                    fetchDeviceRegistry(conn).then((devices) =>
-                        store.setState(devices, true),
-                    ),
-                500,
-            ),
+        subscribeRegistryUpdates(
+            conn,
+            store,
+            fetchDeviceRegistry,
             'device_registry_updated',
         );
 
@@ -89,14 +103,10 @@ export function subscribeEntityRegistry(
         conn: Connection,
         store: Store<HassEntityRegistryEntry[]>,
     ) =>
-        conn.subscribeEvents(
-            throttle(
-                () =>
-                    fetchEntityRegistry(conn).then((devices) =>
-                        store.setState(devices, true),
-                    ),
-                500,
-            ),
+        subscribeRegistryUpdates(
+            conn,
+            store,
+            fetchEntityRegistry,
             'entity_registry_updated',
         );
 
@@ -119,14 +129,10 @@ export function subscribeFloorRegistry(
         });
 
     const subscribeUpdates = (conn: Connection, store: Store<HassFloor[]>) =>
-        conn.subscribeEvents(
-            throttle(
-                () =>
-                    fetchFloorRegistry(conn).then((floors) =>
-                        store.setState(floors, true),
-                    ),
-                500,
-            ),
+        subscribeRegistryUpdates(
+            conn,
+            store,
+            fetchFloorRegistry,
             'floor_registry_updated',
         );
 
@@ -149,14 +155,10 @@ export function subscribeLabelRegistry(
         });
 
     const subscribeUpdates = (conn: Connection, store: Store<HassLabel[]>) =>
-        conn.subscribeEvents(
-            throttle(
-                () =>
-                    fetchLabelRegistry(conn).then((labels) =>
-                        store.setState(labels, true),
-                    ),
-                500,
-            ),
+        subscribeRegistryUpdates(
+            conn,
+            store,
+            fetchLabelRegistry,
             'label_registry_updated',
         );
 
