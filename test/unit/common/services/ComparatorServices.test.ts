@@ -14,6 +14,7 @@ import JSONataService from '../../../../src/common/services/JSONataService';
 import NodeRedContextService from '../../../../src/common/services/NodeRedContextService';
 import TransformState from '../../../../src/common/TransformState';
 import HomeAssistant from '../../../../src/homeAssistant/HomeAssistant';
+import Websocket from '../../../../src/homeAssistant/Websocket';
 import { HassEntity } from '../../../../src/types/home-assistant';
 
 describe('Comparator Service', function () {
@@ -734,8 +735,64 @@ describe('Comparator Service', function () {
             });
 
             describe('is in a Home Assistant group', function () {
-                it.skip('should return true when entity id is in group');
-                it.skip('should return false when entity id is not in group');
+                beforeEach(function () {
+                    homeAssistantStub.websocket = mock<Websocket>();
+                    vi.mocked(
+                        homeAssistantStub.websocket.getState,
+                    ).mockReturnValue({
+                        entity_id: 'group.lights',
+                        state: 'on',
+                        attributes: {
+                            entity_id: ['light.kitchen', 'light.hall'],
+                        },
+                        last_changed: '2024-01-01T00:00:00Z',
+                        last_updated: '2024-01-01T00:00:00Z',
+                        context: {
+                            id: 'context',
+                            user_id: null,
+                            parent_id: null,
+                        },
+                    });
+                });
+
+                it.each([
+                    ['light.kitchen', true],
+                    ['light.bedroom', false],
+                ])(
+                    'checks membership of %s',
+                    async function (entityId, expected) {
+                        const result =
+                            await comparatorService.getComparatorResult(
+                                'in_group',
+                                'group.lights',
+                                entityId,
+                                'str',
+                            );
+
+                        expect(
+                            homeAssistantStub.websocket.getState,
+                        ).toHaveBeenCalledWith('group.lights');
+                        expect(result).toBe(expected);
+                    },
+                );
+
+                it('returns false when the group does not exist', async function () {
+                    vi.mocked(
+                        homeAssistantStub.websocket.getState,
+                    ).mockReturnValue(undefined);
+
+                    const result = await comparatorService.getComparatorResult(
+                        'in_group',
+                        'group.missing',
+                        'light.kitchen',
+                        'str',
+                    );
+
+                    expect(
+                        homeAssistantStub.websocket.getState,
+                    ).toHaveBeenCalledWith('group.missing');
+                    expect(result).toBe(false);
+                });
             });
 
             describe('JSONata', function () {

@@ -209,16 +209,23 @@ describe('JSONata Service', function () {
                 },
             } as HassEntities;
 
-            it.skip('should return all entities', async function () {
-                vi.spyOn(
-                    homeAssistantStub.websocket,
-                    'getStates',
-                ).mockReturnValue(entities as unknown as HassEntities);
+            it('should return all entities', async function () {
+                const jsonataService = new JSONataService({
+                    node: nodeStub,
+                    homeAssistant: homeAssistantStub,
+                });
+                homeAssistantStub.websocket.getStates.mockReturnValue(
+                    entities as unknown as HassEntities,
+                );
                 const result = await jsonataService.evaluate(`$entities()`);
                 expect(result).toEqual(entities);
             });
 
-            it.skip('should return a single entity when passed an entitiy id', async function () {
+            it('should return a single entity when passed an entitiy id', async function () {
+                const jsonataService = new JSONataService({
+                    node: nodeStub,
+                    homeAssistant: homeAssistantStub,
+                });
                 homeAssistantStub.websocket.getState
                     .calledWith('light.kitchen')
                     .mockReturnValue(entities['light.kitchen']);

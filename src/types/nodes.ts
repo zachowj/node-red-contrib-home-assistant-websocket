@@ -57,7 +57,7 @@ export type OutputProperty = {
     valueType: TypedInputTypes;
 };
 
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ServerNode<T extends {}> extends Node<T> {
     config: ServerNodeConfig;
     exposedNodes: ExposedNodes;

@@ -10,7 +10,7 @@ type GetInstance<TBase> = TBase extends new (...args: any[]) => infer I
     : never;
 
 export type Constructor = new (...args: any[]) => any;
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type GConstructor<T = {}> = new (...args: any[]) => T;
 export type MergeCtor<A, B> = new (
     props: GetProps<A> & GetProps<B>,

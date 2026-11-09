@@ -170,10 +170,58 @@ describe('Node-RED Context Service', function () {
             });
         });
         describe('flow', function () {
-            it.skip('should set value in flow context');
+            it('should set value in flow context', function () {
+                nodeApiStub.util.parseContextStore = vi.fn().mockReturnValue({
+                    key: 'payload',
+                    store: 'persistent',
+                });
+                nodeContext.flow.set = vi.fn();
+                nodeContext.global.set = vi.fn();
+                nodeStub.context.mockReturnValue(nodeContext);
+
+                nodeRedContextService.set(
+                    'foo',
+                    ContextLocation.Flow,
+                    '#:(persistent)::payload',
+                );
+
+                expect(nodeApiStub.util.parseContextStore).toHaveBeenCalledWith(
+                    '#:(persistent)::payload',
+                );
+                expect(nodeContext.flow.set).toHaveBeenCalledWith(
+                    'payload',
+                    'foo',
+                    'persistent',
+                );
+                expect(nodeContext.global.set).not.toHaveBeenCalled();
+            });
         });
         describe('global', function () {
-            it.skip('should set value in global context');
+            it('should set value in global context', function () {
+                nodeApiStub.util.parseContextStore = vi.fn().mockReturnValue({
+                    key: 'payload',
+                    store: 'persistent',
+                });
+                nodeContext.flow.set = vi.fn();
+                nodeContext.global.set = vi.fn();
+                nodeStub.context.mockReturnValue(nodeContext);
+
+                nodeRedContextService.set(
+                    'foo',
+                    ContextLocation.Global,
+                    '#:(persistent)::payload',
+                );
+
+                expect(nodeApiStub.util.parseContextStore).toHaveBeenCalledWith(
+                    '#:(persistent)::payload',
+                );
+                expect(nodeContext.global.set).toHaveBeenCalledWith(
+                    'payload',
+                    'foo',
+                    'persistent',
+                );
+                expect(nodeContext.flow.set).not.toHaveBeenCalled();
+            });
         });
     });
 });

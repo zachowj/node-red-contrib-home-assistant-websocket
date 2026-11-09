@@ -14,6 +14,10 @@ module.exports = {
         'simple-import-sort/imports': 'error',
         'simple-import-sort/exports': 'error',
         '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/no-unused-vars': [
+            'error',
+            { caughtErrors: 'none' },
+        ],
         '@typescript-eslint/ban-ts-comment': [
             2,
             {
@@ -31,6 +35,7 @@ module.exports = {
                 'prettier/prettier': ['error'],
                 'sort-requires/sort-requires': 2,
                 'no-prototype-builtins': 'off',
+                '@typescript-eslint/no-require-imports': 'off',
                 '@typescript-eslint/no-var-requires': 'off',
             },
             plugins: ['sort-requires'],
