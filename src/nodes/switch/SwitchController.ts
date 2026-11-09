@@ -61,6 +61,7 @@ export default class SwitchController extends InputOutputController<
                 await this.#integration.updateHomeAssistant();
             } catch (e) {
                 done(e as Error);
+                return;
             }
             done();
             return;

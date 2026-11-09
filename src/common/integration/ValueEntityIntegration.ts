@@ -14,7 +14,11 @@ export default class ValueEntityIntegration extends BidirectionalEntityIntegrati
             const value = evt.value;
             const previousValue = this.state.getLastPayload()?.state;
 
-            this.updateValue(value);
+            this.updateValue(value).catch((err) => {
+                this.entityConfigNode.error(
+                    `Error updating entity. Error Message: ${err}`,
+                );
+            });
             this.entityConfigNode.emit(
                 IntegrationEvent.ValueChange,
                 value,
@@ -33,10 +37,10 @@ export default class ValueEntityIntegration extends BidirectionalEntityIntegrati
     }
 
     public async updateValue(value: string | number) {
+        await this.updateHomeAssistant(value);
         await this.state.setLastPayload({
             state: value,
             attributes: {},
         });
-        await this.updateHomeAssistant(value);
     }
 }

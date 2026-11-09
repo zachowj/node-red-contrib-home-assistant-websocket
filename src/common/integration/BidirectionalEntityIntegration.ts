@@ -95,13 +95,7 @@ export default class BidirectionalIntegration extends UnidirectionalEntityIntegr
             state: state ?? this.state.isEnabled(),
         };
 
-        try {
-            await this.homeAssistant.websocket.send(message);
-        } catch (err) {
-            this.entityConfigNode.error(
-                `Error updating entity. Error Message: ${err}`,
-            );
-        }
+        await this.homeAssistant.websocket.send(message);
     }
 
     protected onHaEventMessage(evt: HaEventMessage) {
@@ -120,7 +114,11 @@ export default class BidirectionalIntegration extends UnidirectionalEntityIntegr
                     state: evt.state,
                     changed: evt.state !== previousState,
                 });
-                this.updateHomeAssistant();
+                this.updateHomeAssistant().catch((err) => {
+                    this.entityConfigNode.error(
+                        `Error updating entity. Error Message: ${err}`,
+                    );
+                });
                 break;
             }
         }
