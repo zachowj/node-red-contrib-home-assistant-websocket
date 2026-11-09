@@ -67,7 +67,7 @@
     "@types/flat": "^5.0.5",
     "@types/jquery": "^3.5.34",
     "@types/jqueryui": "^1.12.25",
-    "@types/lodash": "^4.17.26",
+    "@types/lodash": "^4.17.27",
     "@types/lowdb": "^1.0.15",
     "@types/mustache": "^4.2.6",
     "@types/node": "^22.20.5",
