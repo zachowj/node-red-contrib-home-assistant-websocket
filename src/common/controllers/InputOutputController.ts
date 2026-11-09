@@ -12,6 +12,7 @@ import { inputErrorHandler } from '../errors/inputErrorHandler';
 import { NodeEvent } from '../events/Events';
 import Integration from '../integration/Integration';
 import InputService, { ParsedMessage } from '../services/InputService';
+import storageService from '../services/StorageService';
 import { OutputData } from '../services/TypedInputService';
 import OutputController, {
     OutputControllerConstructor,
@@ -64,6 +65,17 @@ export default class InputOutputController<
         send: NodeSend,
         done: NodeDone,
     ) {
+        try {
+            const pending = storageService.pending();
+            if (pending) await pending;
+            if (this.closed) {
+                done(new Error('Node closed before storage was ready'));
+                return;
+            }
+        } catch (error) {
+            inputErrorHandler(error, { done, status: this.status });
+            return;
+        }
         // Run optional inputs
         if (this.#optionalInputs.size) {
             for (const [, { schema, handler }] of this.#optionalInputs) {

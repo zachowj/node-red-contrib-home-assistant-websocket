@@ -3,7 +3,7 @@ import Joi from 'joi';
 import { createControllerDependencies } from '../../common/controllers/helpers';
 import InputService, { NodeInputs } from '../../common/services/InputService';
 import Status from '../../common/status/Status';
-import { RED } from '../../globals';
+import createNode from '../../helpers/createNode';
 import { migrate } from '../../helpers/migrate';
 import { getConfigNodes } from '../../helpers/node';
 import { getHomeAssistant } from '../../homeAssistant';
@@ -53,7 +53,7 @@ export default function UpdateConfig(
     this: UpdateConfigNode,
     config: UpdateConfigNodeProperties,
 ) {
-    RED.nodes.createNode(this, config);
+    createNode(this, config);
 
     this.config = migrate(config);
 

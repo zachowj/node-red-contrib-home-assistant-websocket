@@ -49,6 +49,28 @@ Find the add-on here: [Home Assistant Add-on](https://github.com/hassio-addons/a
 
 After deploying, you should see a green status box below the **Events: all** node, indicating connection (e.g., "connected" or "state_changed"). If the box is open and shows "connecting" or "disconnected," double-check the Base URL or access token.
 
+### Context Storage
+
+The Home Assistant nodes use a Node-RED global context store for node enabled states, entity last values, and hidden issues. Open the Home Assistant sidebar and select the database icon to choose a store. The Node-RED default store is used until another store is selected.
+
+::: warning
+The default Node-RED context store is normally memory-only. Unless the selected store persists its data, these values are lost when Node-RED restarts. The integration cannot determine whether every custom store is persistent. Filesystem stores can buffer writes, so a sudden shutdown may still lose recent changes.
+:::
+
+Configure a persistent store in Node-RED's `settings.js`, for example:
+
+```js
+contextStorage: {
+   default: 'memory',
+   memory: { module: 'memory' },
+   persistent: { module: 'localfilesystem' },
+},
+```
+
+Restart Node-RED after changing its context configuration, then select `persistent` in the sidebar. See [Node-RED context storage](https://nodered.org/docs/user-guide/context) for configuration and flush options.
+
+Existing Home Assistant storage is imported from `node-red-contrib-home-assistant-websocket.json`; the old file is retained as a backup. If the selected store is memory-only or its persistence is unknown, migration remains pending and the file is imported again after a restart. This lets you add and select a persistent store without losing the original data. Once the known `localfilesystem` store is selected, migration is marked complete. Changing stores copies the current data and replaces this integration's data in the destination; the source is left untouched. If a selected store is removed or cannot be read, select an available store and restart Node-RED. Data from the unavailable store cannot be copied automatically.
+
 - **Base URL:** The web address and port for accessing the Home Assistant frontend (e.g., http://localhost:8123, http://192.168.x.x, or http://example.duckdns.org).
 - **Access Token:** Generated in Home Assistant. See the [instructions below](#generate-access-token) for creating one.
 

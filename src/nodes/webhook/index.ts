@@ -4,7 +4,7 @@ import Events from '../../common/events/Events';
 import { IntegrationEvent } from '../../common/integration/Integration';
 import State from '../../common/State';
 import Status from '../../common/status/Status';
-import { RED } from '../../globals';
+import createNode from '../../helpers/createNode';
 import { migrate } from '../../helpers/migrate';
 import { getExposeAsConfigNode, getServerConfigNode } from '../../helpers/node';
 import { getHomeAssistant } from '../../homeAssistant';
@@ -35,7 +35,7 @@ export default function webhookNode(
     this: WebhookNode,
     config: WebhookNodeProperties,
 ) {
-    RED.nodes.createNode(this, config);
+    createNode(this, config);
     this.config = migrate(config);
 
     const serverConfigNode = getServerConfigNode(this.config.server);

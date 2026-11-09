@@ -7,7 +7,7 @@ import {
 } from '../../common/controllers/SensorBaseController';
 import InputService from '../../common/services/InputService';
 import Status from '../../common/status/Status';
-import { RED } from '../../globals';
+import createNode from '../../helpers/createNode';
 import { migrate } from '../../helpers/migrate';
 import { getConfigNodes } from '../../helpers/node';
 import { getHomeAssistant } from '../../homeAssistant';
@@ -21,7 +21,7 @@ export interface SensorNode extends SensorBaseNode {
 }
 
 export default function Sensor(this: SensorNode, config: NodeDef) {
-    RED.nodes.createNode(this, config);
+    createNode(this, config);
 
     this.config = migrate(config);
 

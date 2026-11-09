@@ -17,7 +17,7 @@ import {
     TimeUnit,
     TypedInputTypes,
 } from '../../const';
-import { RED } from '../../globals';
+import createNode from '../../helpers/createNode';
 import { migrate } from '../../helpers/migrate';
 import { getServerConfigNode } from '../../helpers/node';
 import { getHomeAssistant } from '../../homeAssistant';
@@ -196,7 +196,7 @@ export const defaultInputSchema = Joi.object({
 }).unknown(true);
 
 export default function waitUntilNode(this: WaitUntilNode, config: NodeDef) {
-    RED.nodes.createNode(this, config);
+    createNode(this, config);
 
     this.config = migrate(config);
     const serverConfigNode = getServerConfigNode(this.config.server);

@@ -12,7 +12,7 @@ import State from '../../common/State';
 import EventsStatus from '../../common/status/EventStatus';
 import { StatusColor, StatusShape } from '../../common/status/Status';
 import TransformState, { TransformType } from '../../common/TransformState';
-import { RED } from '../../globals';
+import createNode from '../../helpers/createNode';
 import { migrate } from '../../helpers/migrate';
 import { getExposeAsConfigNode, getServerConfigNode } from '../../helpers/node';
 import { getHomeAssistant } from '../../homeAssistant';
@@ -59,7 +59,7 @@ export default function triggerState(
     this: TriggerStateNode,
     config: TriggerStateProperties,
 ) {
-    RED.nodes.createNode(this, config);
+    createNode(this, config);
 
     this.config = migrate(config);
 
@@ -172,8 +172,18 @@ export default function triggerState(
         );
     }
 
-    if (controller.isEnabled && this.config.outputInitially) {
+    if (this.config.outputInitially) {
         const generateStateChanges = async () => {
+            try {
+                if (state) await state.ready;
+                else if (exposeAsConfigNode)
+                    await exposeAsConfigNode.state.ready;
+            } catch {
+                return;
+            }
+            if (state?.isClosed() || exposeAsConfigNode?.state.isClosed())
+                return;
+            if (!controller.isEnabled) return;
             const events = createStateChangeEvents(homeAssistant);
             for (const event of events) {
                 await controller.onEntityStateChanged(event).catch((e) => {

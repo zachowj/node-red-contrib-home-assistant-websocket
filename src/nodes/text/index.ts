@@ -9,7 +9,7 @@ import { IntegrationEvent } from '../../common/integration/Integration';
 import InputService, { NodeInputs } from '../../common/services/InputService';
 import Status from '../../common/status/Status';
 import { TypedInputTypes, ValueIntegrationMode } from '../../const';
-import { RED } from '../../globals';
+import createNode from '../../helpers/createNode';
 import { migrate } from '../../helpers/migrate';
 import { getConfigNodes, getExposeAsConfigNode } from '../../helpers/node';
 import { getHomeAssistant } from '../../homeAssistant/index';
@@ -60,7 +60,7 @@ export const inputSchema: Joi.ObjectSchema = Joi.object({
 });
 
 export default function textNode(this: TextNode, config: TextNodeProperties) {
-    RED.nodes.createNode(this, config);
+    createNode(this, config);
     this.config = migrate(config);
 
     const { entityConfigNode, serverConfigNode } = getConfigNodes(this);

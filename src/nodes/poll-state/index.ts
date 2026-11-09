@@ -6,7 +6,7 @@ import EventsStatus from '../../common/status/EventStatus';
 import { StatusColor, StatusShape } from '../../common/status/Status';
 import TransformState, { TransformType } from '../../common/TransformState';
 import { TimeUnit, TypedInputTypes } from '../../const';
-import { RED } from '../../globals';
+import createNode from '../../helpers/createNode';
 import { migrate } from '../../helpers/migrate';
 import { getExposeAsConfigNode, getServerConfigNode } from '../../helpers/node';
 import { getHomeAssistant } from '../../homeAssistant';
@@ -41,7 +41,7 @@ export default function pollStateNode(
     this: PollStateNode,
     config: PollStateNodeProperties,
 ) {
-    RED.nodes.createNode(this, config);
+    createNode(this, config);
 
     this.config = migrate(config);
 

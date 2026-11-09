@@ -44,6 +44,7 @@ export default class OutputController<
     T extends BaseNode = BaseNode,
     E extends OutputData = OutputData,
 > {
+    protected closed = false;
     protected readonly contextService: NodeRedContextService;
     protected readonly homeAssistant: HomeAssistant;
     protected readonly jsonataService: JSONataService;
@@ -118,6 +119,7 @@ export default class OutputController<
     }
 
     #preOnClose(removed: boolean, done: NodeDone) {
+        this.closed = true;
         this.node.debug(
             `closing node. Reason: ${
                 removed ? 'node deleted' : 'node re-deployed'

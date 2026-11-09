@@ -9,7 +9,7 @@ import InputService, {
     ParsedMessage,
 } from '../../common/services/InputService';
 import Status from '../../common/status/Status';
-import { RED } from '../../globals';
+import createNode from '../../helpers/createNode';
 import { migrate } from '../../helpers/migrate';
 import { getServerConfigNode } from '../../helpers/node';
 import { getHomeAssistant } from '../../homeAssistant';
@@ -107,7 +107,7 @@ export default function actionNode(
     this: ActionNode,
     config: ActionNodeProperties,
 ): void {
-    RED.nodes.createNode(this, config);
+    createNode(this, config);
 
     this.config = migrate(config);
     const serverConfigNode = getServerConfigNode(this.config.server);

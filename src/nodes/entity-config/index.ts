@@ -5,7 +5,7 @@ import ValueEntityIntegration from '../../common/integration/ValueEntityIntegrat
 import State from '../../common/State';
 import { EntityType } from '../../const';
 import { HassExposedConfig } from '../../editor/types';
-import { RED } from '../../globals';
+import createNode from '../../helpers/createNode';
 import { migrate } from '../../helpers/migrate';
 import { getNode, getServerConfigNode } from '../../helpers/node';
 import { getHomeAssistant } from '../../homeAssistant';
@@ -31,7 +31,7 @@ export default function entityConfigNode(
     this: EntityConfigNode,
     config: EntityConfigNodeProperties,
 ) {
-    RED.nodes.createNode(this, config);
+    createNode(this, config);
 
     this.config = migrate(config);
 

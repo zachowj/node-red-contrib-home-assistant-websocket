@@ -6,7 +6,12 @@ import { setRED } from '../../../../../src/globals';
 import { homeAssistantConnections } from '../../../../../src/homeAssistant';
 
 vi.mock('../../../../../src/common/services/StorageService', () => ({
-    default: { getIssues: () => [], saveIssues: () => {} },
+    default: {
+        getIssues: () => [],
+        saveIssues: () => Promise.resolve(),
+        whenReady: () => Promise.resolve(),
+        isReady: () => true,
+    },
 }));
 
 describe('IssueService listener cleanup', () => {

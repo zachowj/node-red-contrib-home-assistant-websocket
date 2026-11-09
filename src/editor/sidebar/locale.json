@@ -1,6 +1,30 @@
 {
   "home-assistant": {
     "sidebar": {
+      "storage": {
+        "title": "Home Assistant Context storage",
+        "label": "Store",
+        "default": "default",
+        "warning": "Some Home Assistant nodes save enabled states, last entity values, and hidden issue settings so they can restore them after a Node-RED restart. Choose a persistent context store to preserve these values; otherwise, they reset on restart.",
+        "persistence_warning": "Some Home Assistant nodes rely on saved enabled states and last entity values to restore their behavior after Node-RED restarts. Choose a persistent context store to preserve these values; otherwise, they reset.",
+        "choose_store": "Choose storage",
+        "ignore": "Ignore",
+        "persistent_warning": "The selected local filesystem store preserves saved Home Assistant node data across restarts. Writes may still be buffered and delayed.",
+        "context_docs": "Home Assistant context storage setup and example",
+        "waiting": "Waiting for a Home Assistant node before storage can be initialized.",
+        "failed": "Storage could not be initialized. Select an available store and restart Node-RED; data could not be copied from the previous store.",
+        "unavailable": "unavailable",
+        "confirm": "Copy current Home Assistant data to this store? Existing Home Assistant data in the destination will be replaced.",
+        "confirm_persistence": "I confirm this custom context store persists data across Node-RED restarts.",
+        "confirm_persistence_help": "Only confirm this if the store or its provider guarantees data is retained across restarts. Memory stores cannot be marked persistent.",
+        "save": "Save",
+        "cancel": "Cancel",
+        "failed_fetch": "Unable to load context stores.",
+        "failed_save": "Unable to change the context store.",
+        "saved": "Context store updated.",
+        "migration_completed": "Existing Home Assistant data was imported into the configured persistent context store.",
+        "migration_pending": "Only Home Assistant integration data is affected. It was loaded into a context store that may not survive a restart. The lowdb backup is retained, and migration will retry after restart until a persistent filesystem store is selected."
+      },
       "diagnostics": {
         "close": "Close",
         "copied": "Copied!",

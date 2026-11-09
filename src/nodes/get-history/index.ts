@@ -4,7 +4,7 @@ import { createControllerDependencies } from '../../common/controllers/helpers';
 import InputService, { NodeInputs } from '../../common/services/InputService';
 import { ContextLocation } from '../../common/services/NodeRedContextService';
 import Status from '../../common/status/Status';
-import { RED } from '../../globals';
+import createNode from '../../helpers/createNode';
 import { migrate } from '../../helpers/migrate';
 import { getServerConfigNode } from '../../helpers/node';
 import { getHomeAssistant } from '../../homeAssistant';
@@ -71,7 +71,7 @@ export default function getHistoryNode(
     this: GetHistoryNode,
     config: GetHistoryNodeProperties,
 ): void {
-    RED.nodes.createNode(this, config);
+    createNode(this, config);
 
     this.config = migrate(config);
     const serverConfigNode = getServerConfigNode(this.config.server);

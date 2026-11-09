@@ -69,6 +69,12 @@ export default abstract class Integration {
             [ClientEvent.Integration, this.#onHaIntegration],
         ]);
 
+        try {
+            await this.state.ready;
+        } catch {
+            return;
+        }
+        if (this.state.isClosed()) return;
         if (this.isIntegrationLoaded) {
             await this.register();
         }

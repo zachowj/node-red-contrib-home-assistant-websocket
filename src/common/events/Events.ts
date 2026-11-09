@@ -3,6 +3,7 @@ import { Node } from 'node-red';
 
 import { NodeDone } from '../../types/nodes';
 import { getErrorData } from '../errors/inputErrorHandler';
+import storageService from '../services/StorageService';
 import Status from '../status/Status';
 
 type EventHandler = (...args: any[]) => void | Promise<void>;
@@ -17,6 +18,7 @@ export enum NodeEvent {
 export default class Events {
     #listeners: EventsList = [];
     #status?: Status;
+    #closed = false;
 
     protected readonly node;
     protected readonly emitter;
@@ -32,6 +34,9 @@ export default class Events {
     #errorHandler(callback: EventHandler) {
         return async (...args: any) => {
             try {
+                const pending = storageService.pending();
+                if (pending) await pending;
+                if (this.#closed) return;
                 // eslint-disable-next-line n/no-callback-literal
                 await callback(...args);
             } catch (e) {
@@ -43,6 +48,7 @@ export default class Events {
     }
 
     #onClose(_removed: boolean, done: NodeDone) {
+        this.#closed = true;
         this.removeListeners();
         done();
     }

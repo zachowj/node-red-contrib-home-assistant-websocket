@@ -7,7 +7,7 @@ import InputService from '../../common/services/InputService';
 import State from '../../common/State';
 import EventsStatus from '../../common/status/EventStatus';
 import Status from '../../common/status/Status';
-import { RED } from '../../globals';
+import createNode from '../../helpers/createNode';
 import { migrate } from '../../helpers/migrate';
 import { getExposeAsConfigNode, getServerConfigNode } from '../../helpers/node';
 import { getHomeAssistant } from '../../homeAssistant';
@@ -42,7 +42,7 @@ export default function neviceNode(
     this: DeviceNode,
     config: DeviceNodeProperties,
 ) {
-    RED.nodes.createNode(this, config);
+    createNode(this, config);
 
     this.config = migrate(config);
     const serverConfigNode = getServerConfigNode(this.config.server);

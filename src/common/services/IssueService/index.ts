@@ -123,6 +123,7 @@ class IssueService {
     #nodesToCheck = new Map<string, BaseNodeProperties[]>();
     #issues = new Map<string, Issue[]>();
     #hiddenIssues: Set<string> = new Set();
+    #hiddenUpdates: Promise<void> = Promise.resolve();
     #updateHandlers: UpdateHandler[] = [];
     #tabs: Record<string, boolean | undefined> = {};
 
@@ -139,7 +140,13 @@ class IssueService {
             }
         }
 
-        this.#loadHiddenIssues();
+        storageService
+            .whenReady()
+            .then(() => {
+                this.#loadHiddenIssues();
+                this.#issuesUpdated();
+            })
+            .catch((error) => RED.log.error(error));
 
         RED.events.on(NodeRedEvent.FlowsStarted, (event: FlowsStartedEvent) => {
             this.#getTabInfo();
@@ -209,6 +216,12 @@ class IssueService {
     }
 
     #handlePeriodicCheck() {
+        if (!storageService.isReady()) return;
+        const update = this.#hiddenUpdates.then(() => this.#runPeriodicCheck());
+        this.#hiddenUpdates = update.catch((error) => RED.log.error(error));
+    }
+
+    async #runPeriodicCheck() {
         const nodes: NodeDef[] = [];
         const foundHiddenIssueNodes = new Set<string>();
 
@@ -226,7 +239,7 @@ class IssueService {
 
         // remove hidden issues that no longer exist
         this.#hiddenIssues = foundHiddenIssueNodes;
-        this.#saveHiddenIssues();
+        await this.#saveHiddenIssues();
         this.#performChecks(nodes);
     }
 
@@ -408,14 +421,30 @@ class IssueService {
         this.#updateHandlers.forEach((handler) => handler(issues));
     }
 
-    public toggleIssueHiddenStatus(nodeId: string) {
-        if (this.#hiddenIssues.has(nodeId)) {
+    public toggleIssueHiddenStatus(nodeId: string): Promise<void> {
+        const update = this.#hiddenUpdates.then(() =>
+            this.#toggleIssueHiddenStatus(nodeId),
+        );
+        this.#hiddenUpdates = update.catch(() => undefined);
+        return update;
+    }
+
+    async #toggleIssueHiddenStatus(nodeId: string) {
+        await storageService.whenReady();
+        const wasHidden = this.#hiddenIssues.has(nodeId);
+        if (wasHidden) {
             this.#hiddenIssues.delete(nodeId);
         } else {
             this.#hiddenIssues.add(nodeId);
         }
 
-        this.#saveHiddenIssues();
+        try {
+            await this.#saveHiddenIssues();
+        } catch (error) {
+            if (wasHidden) this.#hiddenIssues.add(nodeId);
+            else this.#hiddenIssues.delete(nodeId);
+            throw error;
+        }
         this.#issuesUpdated();
     }
 
@@ -424,7 +453,7 @@ class IssueService {
     }
 
     #saveHiddenIssues() {
-        storageService.saveIssues(Array.from(this.#hiddenIssues));
+        return storageService.saveIssues(Array.from(this.#hiddenIssues));
     }
 
     #addListener(

@@ -4,7 +4,7 @@ import { createControllerDependencies } from '../../common/controllers/helpers';
 import Events from '../../common/events/Events';
 import BidirectionalIntegration from '../../common/integration/BidirectionalEntityIntegration';
 import InputService, { NodeInputs } from '../../common/services/InputService';
-import { RED } from '../../globals';
+import createNode from '../../helpers/createNode';
 import { migrate } from '../../helpers/migrate';
 import { getConfigNodes } from '../../helpers/node';
 import { getHomeAssistant, HaEvent } from '../../homeAssistant';
@@ -38,7 +38,7 @@ export default function switchNode(
     this: SwitchNode,
     config: EntityBaseNodeProperties,
 ) {
-    RED.nodes.createNode(this, config);
+    createNode(this, config);
     this.config = migrate(config);
 
     const { entityConfigNode, serverConfigNode } = getConfigNodes(this);

@@ -1,6 +1,7 @@
 import { NodeDef } from 'node-red';
 
 import { RED } from '../../globals';
+import createNode from '../../helpers/createNode';
 import { migrate } from '../../helpers/migrate';
 import { Status, SwitchEntityStatus } from '../../helpers/status';
 import { checkValidServerConfig } from '../../helpers/utils';
@@ -15,7 +16,7 @@ interface EntityNode extends BaseNode {
 }
 
 export default function entityNode(this: EntityNode, config: NodeDef) {
-    RED.nodes.createNode(this, config);
+    createNode(this, config);
 
     this.config = migrate(config);
     checkValidServerConfig(this, this.config.server);

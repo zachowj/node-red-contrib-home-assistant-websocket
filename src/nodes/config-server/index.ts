@@ -1,5 +1,5 @@
 import { NodeEvent } from '../../common/events/Events';
-import { RED } from '../../globals';
+import createNode from '../../helpers/createNode';
 import { migrate } from '../../helpers/migrate';
 import {
     closeHomeAssistant,
@@ -16,7 +16,7 @@ export default function configServerNode(
     this: ServerNode<Credentials>,
     config: ServerNodeConfig,
 ) {
-    RED.nodes.createNode(this, config);
+    createNode(this, config);
     this.config = migrate(config);
     this.exposedNodes = {};
 

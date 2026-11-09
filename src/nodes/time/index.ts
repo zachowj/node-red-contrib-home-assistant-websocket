@@ -1,7 +1,7 @@
 import { createControllerDependencies } from '../../common/controllers/helpers';
 import ClientEvents from '../../common/events/ClientEvents';
 import EventsStatus from '../../common/status/EventStatus';
-import { RED } from '../../globals';
+import createNode from '../../helpers/createNode';
 import { migrate } from '../../helpers/migrate';
 import { getExposeAsConfigNode, getServerConfigNode } from '../../helpers/node';
 import { getHomeAssistant } from '../../homeAssistant/index';
@@ -38,7 +38,7 @@ export interface TimeNode extends BaseNode {
 }
 
 export default function timeNode(this: TimeNode, config: TimeNodeProperties) {
-    RED.nodes.createNode(this, config);
+    createNode(this, config);
     this.config = migrate(config);
 
     const serverConfigNode = getServerConfigNode(this.config.server);

@@ -4,6 +4,7 @@ import { NextFunction, Request, Response } from 'express';
 import flatten from 'flat';
 
 import issueService from './common/services/IssueService';
+import storageService from './common/services/StorageService';
 import { NO_VERSION } from './const';
 import { RED } from './globals';
 import { getEnvironmentData } from './helpers/diagnostics';
@@ -246,10 +247,18 @@ function getIntegrationVersion(req: CustomRequest, res: Response): void {
     });
 }
 
-function postHandleHiddenIssue(req: CustomRequest, res: Response): void {
+async function postHandleHiddenIssue(
+    req: CustomRequest,
+    res: Response,
+): Promise<void> {
     const issue = req.body.issue;
-    issueService.toggleIssueHiddenStatus(issue);
-    res.json({});
+    try {
+        await issueService.toggleIssueHiddenStatus(issue);
+        res.json({});
+    } catch (error) {
+        RED.log.error(error as Error);
+        res.status(500).json({ error: 'Unable to save hidden issue' });
+    }
 }
 
 function findServers(req: CustomRequest, res: Response): void {
@@ -317,4 +326,41 @@ export function createRoutes(): void {
     );
 
     RED.httpAdmin.post('/homeassistant/issues/hidden', postHandleHiddenIssue);
+    RED.httpAdmin.get(
+        '/homeassistant/storage',
+        RED.auth.needsPermission('flows.read'),
+        (_req: Request, res: Response) => {
+            res.json(storageService.getStoreInfo());
+        },
+    );
+    RED.httpAdmin.post(
+        '/homeassistant/storage',
+        RED.auth.needsPermission('flows.write'),
+        async (req: Request, res: Response) => {
+            const persistentAcknowledged = req.body?.persistentAcknowledged;
+            if (
+                typeof req.body?.store !== 'string' ||
+                !storageService
+                    .getStoreInfo()
+                    .stores.includes(req.body.store) ||
+                (persistentAcknowledged !== undefined &&
+                    typeof persistentAcknowledged !== 'boolean')
+            ) {
+                res.status(400).json({ error: 'Invalid context store' });
+                return;
+            }
+            try {
+                await storageService.setStore(
+                    req.body.store,
+                    persistentAcknowledged,
+                );
+                res.json(storageService.getStoreInfo());
+            } catch (error) {
+                RED.log.error(error as Error);
+                res.status(500).json({
+                    error: 'Unable to change context store',
+                });
+            }
+        },
+    );
 }

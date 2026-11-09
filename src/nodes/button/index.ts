@@ -1,7 +1,7 @@
 import { createControllerDependencies } from '../../common/controllers/helpers';
 import Events from '../../common/events/Events';
 import Status from '../../common/status/Status';
-import { RED } from '../../globals';
+import createNode from '../../helpers/createNode';
 import { migrate } from '../../helpers/migrate';
 import { getConfigNodes } from '../../helpers/node';
 import { getHomeAssistant, HaEvent } from '../../homeAssistant/index';
@@ -24,7 +24,7 @@ export default function buttonNode(
     this: ButtonNode,
     config: EntityBaseNodeProperties,
 ) {
-    RED.nodes.createNode(this, config);
+    createNode(this, config);
     this.config = migrate(config);
 
     const { entityConfigNode, serverConfigNode } = getConfigNodes(this);

@@ -1,4 +1,4 @@
-import { RED } from '../../globals';
+import createNode from '../../helpers/createNode';
 import { migrate } from '../../helpers/migrate';
 import { BaseNode, BaseNodeProperties } from '../../types/nodes';
 
@@ -17,6 +17,6 @@ export default function deviceConfigNode(
     this: DeviceConfigNode,
     config: DeviceConfigNodeProperties,
 ) {
-    RED.nodes.createNode(this, config);
+    createNode(this, config);
     this.config = migrate(config);
 }

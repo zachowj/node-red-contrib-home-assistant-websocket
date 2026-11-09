@@ -11,7 +11,7 @@ import InputService, { NodeInputs } from '../../common/services/InputService';
 import State from '../../common/State';
 import Status from '../../common/status/Status';
 import { TypedInputTypes } from '../../const';
-import { RED } from '../../globals';
+import createNode from '../../helpers/createNode';
 import { migrate } from '../../helpers/migrate';
 import { getExposeAsConfigNode, getServerConfigNode } from '../../helpers/node';
 import HomeAssistant from '../../homeAssistant/HomeAssistant';
@@ -77,7 +77,7 @@ export default function sentenceNode(
     this: SentenceNode,
     config: SentenceNodeProperties,
 ) {
-    RED.nodes.createNode(this, config);
+    createNode(this, config);
     this.config = migrate(config);
 
     const serverConfigNode = getServerConfigNode(this.config.server);

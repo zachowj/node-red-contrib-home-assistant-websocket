@@ -140,7 +140,11 @@ function setupTestRed() {
     };
     (nodeApiStub as any).settings = {
         userDir: '/tmp',
+        get: (key: string) =>
+            key.endsWith('.contextMigrationComplete') ? true : undefined,
+        set: vi.fn().mockResolvedValue(undefined),
     };
+    (nodeApiStub as any).log = { warn: vi.fn() };
     setRED(nodeApiStub);
 }
 
@@ -148,6 +152,27 @@ export function setupControllerTestHarnessGlobals() {
     beforeAll(async () => {
         setupTestRed();
         await storageService.init();
+        let value: unknown;
+        await storageService.attach({
+            context: () => ({
+                global: {
+                    get: (
+                        _key: string,
+                        _store: string,
+                        callback: (error: null, value: unknown) => void,
+                    ) => callback(null, value),
+                    set: (
+                        _key: string,
+                        data: unknown,
+                        _store: string,
+                        callback: (error: null) => void,
+                    ) => {
+                        value = structuredClone(data);
+                        callback(null);
+                    },
+                },
+            }),
+        } as any);
     });
 }
 

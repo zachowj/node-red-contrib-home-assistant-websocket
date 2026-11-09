@@ -7,7 +7,7 @@ import InputService, { NodeInputs } from '../../common/services/InputService';
 import Status from '../../common/status/Status';
 import TransformState from '../../common/TransformState';
 import { ComparatorType, TypedInputTypes } from '../../const';
-import { RED } from '../../globals';
+import createNode from '../../helpers/createNode';
 import { migrate } from '../../helpers/migrate';
 import { getServerConfigNode } from '../../helpers/node';
 import { getHomeAssistant } from '../../homeAssistant';
@@ -100,7 +100,7 @@ export default function getEntitiesNode(
     this: GetEntitiesNode,
     config: GetEntitiesNodeProperties,
 ): void {
-    RED.nodes.createNode(this, config);
+    createNode(this, config);
 
     this.config = migrate(config);
     const serverConfigNode = getServerConfigNode(this.config.server);

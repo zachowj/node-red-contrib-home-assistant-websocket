@@ -2,6 +2,7 @@ import { EditorRED } from 'node-red';
 
 import { setupDiagnosticButton } from './diagnostics-button';
 import { initStacks, refreshConfigs } from './stacks';
+import { setupStorageButton } from './storage-button';
 
 declare const RED: EditorRED;
 
@@ -34,4 +35,5 @@ export function initSidebar() {
     });
 
     setupDiagnosticButton();
+    setupStorageButton();
 }
