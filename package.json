@@ -87,7 +87,7 @@
     "@vuepress/plugin-register-components": "^2.0.0-rc.135",
     "@vuepress/plugin-search": "^2.0.0-rc.137",
     "@vuepress/theme-default": "^2.0.0-rc.137",
-    "autoprefixer": "^10.6.1",
+    "autoprefixer": "^10.6.2",
     "browser-sync": "^3.0.4",
     "cheerio": "^1.2.0",
     "chokidar": "^6.0.0",

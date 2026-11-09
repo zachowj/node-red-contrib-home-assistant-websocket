@@ -300,8 +300,8 @@ importers:
         specifier: ^2.0.0-rc.137
         version: 2.0.0-rc.137(@vuepress/bundler-vite@2.0.0-rc.31(@types/node@22.20.5)(@vue/compiler-sfc@3.5.43)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(markdown-it@14.3.3)(sass@1.105.1)(typescript@5.9.3)(vuepress@2.0.0-rc.31(@vue/compiler-sfc@3.5.43)(@vuepress/bundler-vite@2.0.0-rc.31(@types/node@22.20.5)(@vue/compiler-sfc@3.5.43)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(esbuild@0.28.2)(rolldown@1.2.13)(rollup@4.52.4)(supports-color@7.2.0)(typescript@5.9.3)(vite@8.3.4(@types/node@22.20.5)(esbuild@0.28.2)(sass@1.105.1)(terser@5.26.0)(yaml@2.9.1))(vue@3.5.43(typescript@5.9.3)))
       autoprefixer:
-        specifier: ^10.6.1
-        version: 10.6.1(postcss@8.5.30)
+        specifier: ^10.6.2
+        version: 10.6.2(postcss@8.5.30)
       browser-sync:
         specifier: ^3.0.4
         version: 3.0.4(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
@@ -2010,8 +2010,8 @@ packages:
   asynckit@0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
 
-  autoprefixer@10.6.1:
-    resolution: {integrity: sha512-cL1Qz6ADZhcEbny/8HPfe99J6HhNoYtpX2LFLIbhgGE7Q1hlQVkYFdetDN7Id3KiQxhDrHwzlHr/YQCnZ8+xSA==}
+  autoprefixer@10.6.2:
+    resolution: {integrity: sha512-VOw9/yGTGwPPgzFcODtcv6zhEPIeIWkRSe10L2ri2f5vZ7ID7lCt6jZzRF5/ubgOZ+szYydmEF5AYsA5jxX1tA==}
     engines: {node: ^10 || ^12 || >=14}
     hasBin: true
     peerDependencies:
@@ -6766,7 +6766,7 @@ snapshots:
       '@vuepress/core': 2.0.0-rc.31(@vue/compiler-sfc@3.5.43)(esbuild@0.28.2)(rolldown@1.2.13)(rollup@4.52.4)(supports-color@7.2.0)(typescript@5.9.3)(vite@8.3.4(@types/node@22.20.5)(esbuild@0.28.2)(sass@1.105.1)(terser@5.26.0)(yaml@2.9.1))
       '@vuepress/shared': 2.0.0-rc.31
       '@vuepress/utils': 2.0.0-rc.31(supports-color@7.2.0)
-      autoprefixer: 10.6.1(postcss@8.5.30)
+      autoprefixer: 10.6.2(postcss@8.5.30)
       connect-history-api-fallback: 2.0.0
       postcss: 8.5.30
       postcss-load-config: 6.0.1(postcss@8.5.30)(yaml@2.9.1)
@@ -7354,7 +7354,7 @@ snapshots:
 
   asynckit@0.4.0: {}
 
-  autoprefixer@10.6.1(postcss@8.5.30):
+  autoprefixer@10.6.2(postcss@8.5.30):
     dependencies:
       browserslist: 4.28.9
       caniuse-lite: 1.0.30001810
