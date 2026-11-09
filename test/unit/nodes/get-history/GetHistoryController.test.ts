@@ -9,9 +9,12 @@ import InputService, {
     DataSource,
     ParsedMessage,
 } from '../../../../src/common/services/InputService';
-import NodeRedContextService from '../../../../src/common/services/NodeRedContextService';
+import NodeRedContextService, {
+    ContextLocation,
+} from '../../../../src/common/services/NodeRedContextService';
 import Status from '../../../../src/common/status/Status';
 import HomeAssistant from '../../../../src/homeAssistant/HomeAssistant';
+import { ClientState } from '../../../../src/homeAssistant/Websocket';
 import {
     GetHistoryNode,
     GetHistoryNodeProperties,
@@ -52,16 +55,16 @@ describe('GetHistoryController', () => {
             relativeTime: '1 day',
             flatten: true,
             outputType: OutputType.Array,
-            outputLocationType: 'msg',
+            outputLocationType: ContextLocation.Msg,
             outputLocation: 'payload',
         });
         const homeAssistant = mockDeep<HomeAssistant>({
             isConnected: true,
             websocket: {
+                connectionState: ClientState.Connected,
                 getStates: () => ({}),
             },
         });
-        homeAssistant.websocket.isConnected = true;
         homeAssistant.http.getHistory.mockResolvedValue([]);
 
         const inputService = mock<InputService<GetHistoryNodeProperties>>();
