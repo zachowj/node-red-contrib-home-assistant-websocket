@@ -103,7 +103,7 @@
     "eslint-plugin-promise": "^7.3.0",
     "eslint-plugin-simple-import-sort": "^14.0.0",
     "eslint-plugin-sort-requires": "^2.1.0",
-    "@vitest/eslint-plugin": "^1.0.1",
+    "@vitest/eslint-plugin": "^1.6.28",
     "fast-glob": "^3.3.3",
     "handlebars": "^4.7.10",
     "html-minifier": "^4.0.0",
