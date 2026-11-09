@@ -165,7 +165,12 @@ export default class WaitUntil extends InputOutputController<
         clearTimeout(this.#timeoutId);
 
         const config: SavedConfig = {
-            entities: parsedMessage.entities.value,
+            entities: {
+                ...parsedMessage.entities.value,
+                [IdSelectorType.Entity]: [
+                    ...parsedMessage.entities.value[IdSelectorType.Entity],
+                ],
+            },
             property: parsedMessage.property.value,
             comparator: parsedMessage.comparator.value,
             value: parsedMessage.value.value,
@@ -228,13 +233,10 @@ export default class WaitUntil extends InputOutputController<
 
         this.#clientEvents.removeListeners();
         if (
-            parsedMessage.entities.value[IdSelectorType.Substring].length ===
-                0 &&
-            parsedMessage.entities.value[IdSelectorType.Regex].length === 0
+            config.entities[IdSelectorType.Substring].length === 0 &&
+            config.entities[IdSelectorType.Regex].length === 0
         ) {
-            for (const entity of parsedMessage.entities.value[
-                IdSelectorType.Entity
-            ]) {
+            for (const entity of config.entities[IdSelectorType.Entity]) {
                 const eventTopic = `ha_events:state_changed:${entity?.trim()}`;
                 this.#clientEvents.addListener(
                     eventTopic,
