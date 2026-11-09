@@ -122,7 +122,7 @@
     "typescript": "^5.9.3",
     "vitest": "^5.0.3",
     "vitest-mock-extended": "^5.1.1",
-    "vue": "^3.5.43",
+    "vue": "^3.5.45",
     "vuepress": "^2.0.0-rc.31",
     "yargs": "^18.2.0"
   },
