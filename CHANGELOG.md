@@ -2,6 +2,56 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.84.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.83.0...v0.84.0) (2026-11-09)
+
+
+### Features
+
+* add haBooleans support to TypedInputService and update createControllerDependencies ([54310f6](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/54310f6c033993800d74403494247d2b1120f39a)), closes [#1933](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1933)
+* add StatesUpdated event to ClientEvent enum and update Websocket state handling ([d60905d](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d60905d3315c405417e6f9f5b3990fd635b270d8)), closes [#2085](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2085) [#1908](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1908)
+* enhance label filtering logic in GetEntitiesController and add integration tests ([d3972da](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d3972daab7c7c0a6ae8216024c6c9dd35c1d2951)), closes [#2004](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2004)
+* export input schemas for various nodes and add comprehensive tests ([86f8b8e](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/86f8b8ec108c81e27de774aa3712c8851479047b))
+* implement subscribeRegistryUpdates function for streamlined registry updates and add unit tests for entity registry ([fe371c3](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/fe371c3a702c6cf5de2adacd842058d7d0bd755e)), closes [#2086](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2086) [#2042](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2042)
+* **storage:** use Node-RED context for persistent state ([24f28c0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/24f28c0c37954fde1d4688e57be5c0e9ccf73332))
+
+
+### Bug Fixes
+
+* **deps:** update dependency jsonata to v2.2.1 [security] ([#2092](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2092)) ([5a2a577](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/5a2a577baf4b92666adf8b98a99601a14a30c11c))
+* **deps:** update dependency jsonata to v2.2.2 ([#2111](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2111)) ([ca1f69c](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ca1f69c9c4a121fa0ec986eef5930817a5d56acf))
+* **get-history:** enhance GetHistoryController to support message date overrides and add unit tests ([e8efe30](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/e8efe30e644b893d44c432cff75a8636d5a0a373)), closes [#2016](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2016)
+* **sensor-base:** implement inputOverride handling in SensorBaseController and add unit tests ([3d09e39](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/3d09e397bd9b9d02bff8e241bf21ca045bd59815)), closes [#900](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/900)
+* **server:** update migration functions to preserve configured values during schema migration ([f43e1eb](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f43e1eb4bb4342d2a4282a1e18a8d860c494acfd)), closes [#2024](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2024)
+* **ValueEntityIntegration:** handle errors in updateValue and add unit tests ([f5a4bf6](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/f5a4bf670772a075742dacc0bfadd354e74e8292)), closes [#1287](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1287)
+* **wait-until:** prevent early return in onInput when inactive and add test for overlapping events ([6f6d884](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/6f6d88480384ad2548a3085e3fcd3e1e4de4b1b6)), closes [#1797](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1797)
+* **wait-until:** update entity handling in WaitUntilController and add unit tests ([d6cf41d](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d6cf41d8822005f373573efa087aea81daca8333)), closes [#1781](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/1781)
+
+
+### Code Refactoring
+
+* **tests:** update assertions to use 'toHaveBeenCalledExactlyOnceWith' for consistency ([ca2336f](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/ca2336fb5d08d4407a2d4723558043b4c7431a48))
+* update TypeScript eslint rules and improve tests ([83480f4](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/83480f4db6df2ed74af8b166899c13c0e938f4e2))
+
+
+### Tests
+
+* **GetHistory:** update outputLocationType to use ContextLocation and add ClientState import ([be9ee90](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/be9ee9077549763faacfa35bdbfb85d0141980f8))
+
+
+### Miscellaneous Chores
+
+* add dependencyDashboard setting to renovate configuration ([a28ec67](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a28ec67c9588af00da2f9e8cec0a8bf418de1f7c))
+* **deps:** replace dependency eslint-plugin-vitest with @vitest/eslint-plugin ^1.0.1 ([#2099](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2099)) ([0f87675](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/0f87675ca7bcd3b07f3f83192f1fdee8fc4d94e7))
+* **deps:** update dependency @types/jqueryui to ^1.12.25 ([#2100](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2100)) ([b1b26aa](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/b1b26aa82c72c2bdf18c111efc4a014048488243))
+* **deps:** update dependency @types/lodash to ^4.17.27 ([#2102](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2102)) ([a9eb7a6](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/a9eb7a695056096e242f7ab93bfa8de70b7ac1a8))
+* **deps:** update dependency @vitest/eslint-plugin to ^1.6.28 ([#2103](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2103)) ([d3e08ea](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/d3e08eaa267ecb9eefa7577a2524699693c6c552))
+* **deps:** update dependency @vuepress/plugin-markdown-include to v2.0.0-rc.137 ([#2104](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2104)) ([2796f6d](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/2796f6ddd5b7d9e0110c4e1935eb6aa5db7c3d82))
+* **deps:** update dependency autoprefixer to ^10.6.2 ([#2105](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2105)) ([760024b](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/760024bb29589e97fe3ac4b7a17025a31e7960c7))
+* **deps:** update dependency node-red to ^5.0.9 ([#2106](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2106)) ([75cf424](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/75cf42461e2b4bba19e39cb09b4375ed9beed82d))
+* **deps:** update dependency postcss to ^8.5.32 ([#2107](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2107)) ([b5ba8f4](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/b5ba8f44c65cedc9da0324bc62d8704deb0ad420))
+* **deps:** update dependency prettier to ^3.9.10 ([#2108](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2108)) ([424196c](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/424196c1a75f211b6ff5905aba7d2b7e04b52103))
+* **deps:** update dependency vue to ^3.5.45 ([#2109](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/issues/2109)) ([9d7d264](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/commit/9d7d264e3e7c9efdf10aa32badf848911484439a))
+
 ## [0.83.0](https://github.com/zachowj/node-red-contrib-home-assistant-websocket/compare/v0.82.0...v0.83.0) (2026-11-05)
 
 
