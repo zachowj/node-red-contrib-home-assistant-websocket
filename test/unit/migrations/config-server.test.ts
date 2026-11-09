@@ -130,4 +130,42 @@ describe('Migrations - Server Config Node', function () {
         const migratedSchema = migrate(VERSION_UNDEFINED);
         expect(migratedSchema).toEqual(VERSION_6);
     });
+
+    it('should preserve configured values when migrating a schema without a version', function () {
+        const configuredSchema = {
+            ...VERSION_UNDEFINED,
+            ha_boolean: ['custom', 'true'],
+            heartbeat: true,
+            heartbeatInterval: 60,
+            areaSelector: 'id',
+            deviceSelector: 'id',
+            entitySelector: 'id',
+            statusSeparator: 'at ',
+            statusYear: 'numeric',
+            statusMonth: 'long',
+            statusDay: '2-digit',
+            statusHourCycle: 'h12',
+            statusTimeFormat: 'H:mm',
+            enableGlobalContextStore: false,
+        };
+
+        const migratedSchema = migrate(configuredSchema);
+
+        expect(migratedSchema).toMatchObject({
+            version: 6,
+            ha_boolean: ['custom', 'true'],
+            heartbeat: true,
+            heartbeatInterval: 60,
+            areaSelector: 'id',
+            deviceSelector: 'id',
+            entitySelector: 'id',
+            statusSeparator: 'at ',
+            statusYear: 'numeric',
+            statusMonth: 'long',
+            statusDay: '2-digit',
+            statusHourCycle: 'h12',
+            statusTimeFormat: 'H:mm',
+            enableGlobalContextStore: false,
+        });
+    });
 });

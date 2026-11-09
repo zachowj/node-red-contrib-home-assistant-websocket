@@ -36,8 +36,12 @@ export default [
             const newSchema = {
                 ...schema,
                 version: 2,
-                heartbeat: false,
-                heartbeatInterval: 30,
+                heartbeat:
+                    schema.heartbeat !== undefined ? schema.heartbeat : false,
+                heartbeatInterval:
+                    schema.heartbeatInterval !== undefined
+                        ? schema.heartbeatInterval
+                        : 30,
             };
             return newSchema;
         },
@@ -48,9 +52,18 @@ export default [
             const newSchema = {
                 ...schema,
                 version: 3,
-                areaSelector: 'friendlyName',
-                deviceSelector: 'friendlyName',
-                entitySelector: 'friendlyName',
+                areaSelector:
+                    schema.areaSelector !== undefined
+                        ? schema.areaSelector
+                        : 'friendlyName',
+                deviceSelector:
+                    schema.deviceSelector !== undefined
+                        ? schema.deviceSelector
+                        : 'friendlyName',
+                entitySelector:
+                    schema.entitySelector !== undefined
+                        ? schema.entitySelector
+                        : 'friendlyName',
             };
             return newSchema;
         },
@@ -61,12 +74,30 @@ export default [
             const newSchema = {
                 ...schema,
                 version: 4,
-                statusSeparator: 'at: ',
-                statusYear: 'hidden',
-                statusMonth: 'short',
-                statusDay: 'numeric',
-                statusHourCycle: 'h23',
-                statusTimeFormat: 'h:m',
+                statusSeparator:
+                    schema.statusSeparator !== undefined
+                        ? schema.statusSeparator
+                        : 'at: ',
+                statusYear:
+                    schema.statusYear !== undefined
+                        ? schema.statusYear
+                        : 'hidden',
+                statusMonth:
+                    schema.statusMonth !== undefined
+                        ? schema.statusMonth
+                        : 'short',
+                statusDay:
+                    schema.statusDay !== undefined
+                        ? schema.statusDay
+                        : 'numeric',
+                statusHourCycle:
+                    schema.statusHourCycle !== undefined
+                        ? schema.statusHourCycle
+                        : 'h23',
+                statusTimeFormat:
+                    schema.statusTimeFormat !== undefined
+                        ? schema.statusTimeFormat
+                        : 'h:m',
             };
             return newSchema;
         },
@@ -77,7 +108,10 @@ export default [
             const newSchema = {
                 ...schema,
                 version: 5,
-                enableGlobalContextStore: true,
+                enableGlobalContextStore:
+                    schema.enableGlobalContextStore !== undefined
+                        ? schema.enableGlobalContextStore
+                        : true,
             };
             return newSchema;
         },
@@ -94,6 +128,8 @@ export default [
             let haBoolArr: string[] = [];
             if (typeof schema.ha_boolean === 'string') {
                 haBoolArr = schema.ha_boolean.split('|');
+            } else if (Array.isArray(schema.ha_boolean)) {
+                haBoolArr = schema.ha_boolean;
             }
             const haBoolSet = new Set(
                 haBoolArr.map((item: string) => item.toLowerCase().trim()),
