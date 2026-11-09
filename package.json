@@ -117,7 +117,7 @@
     "node-red": "^5.0.9",
     "node-red-node-test-helper": "^0.3.6",
     "postcss": "^8.5.32",
-    "prettier": "^3.9.9",
+    "prettier": "^3.9.10",
     "sass": "^1.105.1",
     "typescript": "^5.9.3",
     "vitest": "^5.0.3",
