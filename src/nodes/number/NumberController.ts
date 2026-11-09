@@ -71,7 +71,7 @@ export default class NumberController extends InputOutputController<
             },
         );
 
-        if (typeof value !== 'number') {
+        if (typeof value !== 'number' || !Number.isFinite(value)) {
             throw new InputError(
                 'ha-number.error.value_not_number',
                 'home-assistant.status.error',
@@ -124,19 +124,24 @@ export default class NumberController extends InputOutputController<
 
     // keep the number in range if min/max is set in the entity config
     #getValidatedValue(value: number): number {
-        const min = Number(
-            this.integration?.getEntityHomeAssistantConfigValue('min_value'),
-        );
-        const max = Number(
-            this.integration?.getEntityHomeAssistantConfigValue('max_value'),
-        );
-        if (min && value < min) {
+        const min = this.#getLimit('min_value');
+        const max = this.#getLimit('max_value');
+        if (min !== undefined && value < min) {
             value = min;
         }
-        if (max && value > max) {
+        if (max !== undefined && value > max) {
             value = max;
         }
 
         return value;
+    }
+
+    #getLimit(key: string): number | undefined {
+        const raw = this.integration?.getEntityHomeAssistantConfigValue(key);
+        if (raw === undefined || raw === '') {
+            return undefined;
+        }
+        const limit = Number(raw);
+        return Number.isFinite(limit) ? limit : undefined;
     }
 }
