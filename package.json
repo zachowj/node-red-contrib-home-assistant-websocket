@@ -114,7 +114,7 @@
     "markdown-it-inline-comments": "^1.0.1",
     "merge-json": "0.1.0-b.3",
     "nock": "^14.0.17",
-    "node-red": "^5.0.8",
+    "node-red": "^5.0.9",
     "node-red-node-test-helper": "^0.3.6",
     "postcss": "^8.5.30",
     "prettier": "^3.9.9",
