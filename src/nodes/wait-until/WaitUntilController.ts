@@ -135,7 +135,7 @@ export default class WaitUntil extends InputOutputController<
             },
         );
 
-        if (!result) {
+        if (!result || !this.#active) {
             return;
         }
 
