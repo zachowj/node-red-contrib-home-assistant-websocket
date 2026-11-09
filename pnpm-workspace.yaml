@@ -3,4 +3,4 @@ allowBuilds:
   esbuild: true
   bcrypt: true
 overrides:
-  jsonata: 2.2.1
+  jsonata: 2.2.2

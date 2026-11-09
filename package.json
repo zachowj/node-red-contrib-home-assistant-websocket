@@ -52,7 +52,7 @@
     "geolib": "^3.3.14",
     "home-assistant-js-websocket": "^9.6.0",
     "joi": "^18.2.9",
-    "jsonata": "2.2.1",
+    "jsonata": "2.2.2",
     "lodash": "^4.18.1",
     "mustache": "4.2.0",
     "selectn": "^1.3.0",
