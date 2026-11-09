@@ -57,7 +57,7 @@ const inputs: NodeInputs = {
 };
 
 // convert enum to array of strings
-const inputSchema: Joi.ObjectSchema = Joi.object({
+export const inputSchema: Joi.ObjectSchema = Joi.object({
     outputType: Joi.string()
         .valid(...Object.values(OutputType))
         .label('OutputType'),

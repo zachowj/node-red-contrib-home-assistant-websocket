@@ -39,7 +39,7 @@ export interface TriggerStateNode extends BaseNode {
     config: TriggerStateProperties;
 }
 
-const testingSchema = Joi.object({
+export const testingSchema = Joi.object({
     payload: Joi.object({
         entity_id: Joi.string().required(),
         old_state: Joi.object({
@@ -51,7 +51,7 @@ const testingSchema = Joi.object({
     }),
 }).unknown(true);
 
-const enableSchema = Joi.object({
+export const enableSchema = Joi.object({
     payload: Joi.string().valid(ENABLE, DISABLE),
 }).unknown(true);
 

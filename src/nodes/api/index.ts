@@ -71,7 +71,7 @@ const inputs: NodeInputs = {
     },
 };
 
-const inputSchema: Joi.ObjectSchema = Joi.object({
+export const inputSchema: Joi.ObjectSchema = Joi.object({
     protocol: Joi.string().valid(...Object.values(ApiProtocol)),
     method: Joi.string().valid(...Object.values(ApiMethod)),
     path: Joi.string().allow(''),

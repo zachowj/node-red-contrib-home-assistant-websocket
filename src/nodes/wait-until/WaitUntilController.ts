@@ -45,7 +45,7 @@ interface SavedConfig extends Omit<
     done: NodeDone;
 }
 
-const resetSchema = Joi.object({
+export const resetSchema = Joi.object({
     reset: Joi.any().required(),
 }).unknown(true);
 

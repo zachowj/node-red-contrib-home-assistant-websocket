@@ -46,7 +46,7 @@ const inputs: NodeInputs = {
     },
 };
 
-const inputSchema: Joi.ObjectSchema = Joi.object({
+export const inputSchema: Joi.ObjectSchema = Joi.object({
     template: Joi.string().required(),
     resultsLocation: Joi.string(),
     resultsLocationType: Joi.string().valid(

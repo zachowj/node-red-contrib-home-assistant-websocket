@@ -156,7 +156,7 @@ function transformInput(
     return parsedMessage;
 }
 
-const defaultInputSchema = Joi.object({
+export const defaultInputSchema = Joi.object({
     entities: Joi.object({
         entity: Joi.array().items(Joi.string()),
         substring: Joi.array().items(Joi.string()),

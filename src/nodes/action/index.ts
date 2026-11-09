@@ -91,7 +91,7 @@ function transformInput(
     return parsedMessage;
 }
 
-const inputSchema: Joi.ObjectSchema = Joi.object({
+export const inputSchema: Joi.ObjectSchema = Joi.object({
     action: Joi.string().required(),
     data: Joi.alternatives(Joi.string().allow(''), Joi.object()).required(),
     target: Joi.object().keys({

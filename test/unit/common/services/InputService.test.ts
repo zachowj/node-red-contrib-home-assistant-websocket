@@ -259,6 +259,29 @@ describe('Input Service', function () {
             expect(result).toBe(true);
         });
 
+        it('validates coercible values without replacing parsed values or applying defaults', function () {
+            const schema = Joi.object({
+                foo: Joi.number(),
+                fallback: Joi.string().default('default'),
+            });
+            const inputService = new InputService<TestNode>({
+                nodeConfig,
+                schema,
+            });
+            const parsedMessage: ParsedMessage = {
+                foo: { key: 'foo', value: '42', source: DataSource.Message },
+                fallback: {
+                    key: 'fallback',
+                    value: undefined,
+                    source: DataSource.Missing,
+                },
+            };
+
+            expect(inputService.validate(parsedMessage)).toBe(true);
+            expect(parsedMessage.foo.value).toBe('42');
+            expect(parsedMessage.fallback.value).toBeUndefined();
+        });
+
         it('should throw ValidationError if required properties are not set', function () {
             const schema = Joi.object({
                 foo: Joi.string().required(),

@@ -41,7 +41,7 @@ const inputs: NodeInputs = {
     },
 };
 
-const inputSchema: Joi.ObjectSchema = Joi.object({
+export const inputSchema: Joi.ObjectSchema = Joi.object({
     entityId: Joi.string().required(),
 });
 
