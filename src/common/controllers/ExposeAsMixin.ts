@@ -2,6 +2,7 @@ import { HaEvent } from '../../homeAssistant';
 import { EntityConfigNode } from '../../nodes/entity-config';
 import { GConstructor } from '../../types/mixins';
 import { NodeMessage } from '../../types/nodes';
+import { getErrorData } from '../errors/inputErrorHandler';
 import Events from '../events/Events';
 import { TriggerPayload } from '../integration/BidirectionalEntityIntegration';
 import OutputController from './OutputController';
@@ -84,10 +85,13 @@ export default function ExposeAsMixin<
         }
 
         public enableExposeAs(enable = true) {
-            this.exposeAsConfigNode?.integration.updateStateAndAttributes(
-                enable,
-                {},
-            );
+            this.exposeAsConfigNode?.integration
+                .updateStateAndAttributes(enable, {})
+                .catch((err) => {
+                    this.node.error(
+                        `Error updating entity. Error Message: ${getErrorData(err).error.message}`,
+                    );
+                });
             this.exposeAsConfigNode?.state.setEnabled(enable);
         }
     };

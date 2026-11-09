@@ -14,7 +14,10 @@ export default class HomeAssistantError extends BaseError {
     constructor(haError: HaError, statusMessage?: i18nKeyandParams) {
         super({
             data: haError.message,
-            statusMessage,
+            statusMessage:
+                haError.code === 'invalid_format'
+                    ? 'home-assistant.status.validation_error'
+                    : statusMessage,
             name: 'HomeAssistantError',
         });
     }

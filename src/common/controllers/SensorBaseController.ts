@@ -187,6 +187,9 @@ export default abstract class SensorBase<
                 throw new HomeAssistantError(err, 'home-assistant.error.error');
             }
 
+            if (err instanceof Error) {
+                throw err;
+            }
             throw new Error(`Error updating entity. ${JSON.stringify(err)}`);
         }
 

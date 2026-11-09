@@ -1,5 +1,6 @@
 import { HaEvent } from '../../homeAssistant/index';
 import { SubscriptionUnsubscribe } from '../../types/home-assistant';
+import { getErrorData } from '../errors/inputErrorHandler';
 import State from '../State';
 import { createHaConfig } from './helpers';
 import { MessageType } from './Integration';
@@ -116,7 +117,7 @@ export default class BidirectionalIntegration extends UnidirectionalEntityIntegr
                 });
                 this.updateHomeAssistant().catch((err) => {
                     this.entityConfigNode.error(
-                        `Error updating entity. Error Message: ${err}`,
+                        `Error updating entity. Error Message: ${getErrorData(err).error.message}`,
                     );
                 });
                 break;

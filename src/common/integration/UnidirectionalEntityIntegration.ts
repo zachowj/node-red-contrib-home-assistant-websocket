@@ -262,19 +262,8 @@ export default class UnidirectionalIntegration extends Integration {
         available?: boolean,
     ) {
         const payload = this.getEntityPayload(state, attributes, available);
-        try {
-            await this.homeAssistant.websocket.send(payload);
-        } catch (err) {
-            const message =
-                err instanceof Error
-                    ? err.message
-                    : typeof err === 'string'
-                      ? err
-                      : JSON.stringify(err);
-            this.entityConfigNode.error(
-                `Error updating entity. Error Message: ${message}`,
-            );
-        }
+        // Resend only what Home Assistant accepted
+        await this.homeAssistant.websocket.send(payload);
         if (this.entityConfigNode.config.resend) {
             const previous = this.state.getLastPayload() ?? {};
             const lastPayload: {
