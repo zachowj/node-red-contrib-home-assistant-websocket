@@ -84,19 +84,23 @@ export default class TypedInputService {
     readonly #nodeConfig: object;
     readonly #context: NodeRedContext;
     readonly #jsonata: JSONata;
+    readonly #haBooleans?: string[];
 
     constructor({
         nodeConfig,
         context,
         jsonata,
+        haBooleans,
     }: {
         nodeConfig: object;
         context: NodeRedContext;
         jsonata: JSONata;
+        haBooleans?: string[];
     }) {
         this.#nodeConfig = nodeConfig;
         this.#context = context;
         this.#jsonata = jsonata;
+        this.#haBooleans = haBooleans;
     }
 
     async getValue(
@@ -156,23 +160,23 @@ export default class TypedInputService {
                         break;
                     case EntityStateCastType.HA_Boolean:
                         {
-                            const serverConfigId = selectn(
-                                'server',
-                                this.#nodeConfig,
-                            );
-                            const serverConfig = getServerConfigNode(
-                                typeof serverConfigId === 'string'
-                                    ? serverConfigId
-                                    : undefined,
-                            );
-                            const haBooleans = serverConfig?.config.ha_boolean;
+                            let haBooleans = this.#haBooleans;
                             if (!haBooleans) {
-                                val = false;
-                                break;
+                                const serverConfigId = selectn(
+                                    'server',
+                                    this.#nodeConfig,
+                                );
+                                const serverConfig = getServerConfigNode(
+                                    typeof serverConfigId === 'string'
+                                        ? serverConfigId
+                                        : undefined,
+                                );
+                                haBooleans = serverConfig?.config.ha_boolean;
                             }
-                            val = haBooleans.includes(
-                                props.entity?.state as string,
-                            );
+                            val =
+                                haBooleans?.includes(
+                                    props.entity?.state as string,
+                                ) ?? false;
                         }
                         break;
                     case EntityStateCastType.String:

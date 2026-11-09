@@ -66,7 +66,11 @@ export default function switchNode(
         inputService,
         node: this,
         status,
-        ...createControllerDependencies(this, homeAssistant),
+        ...createControllerDependencies(
+            this,
+            homeAssistant,
+            serverConfigNode.config.ha_boolean,
+        ),
     });
 
     entityConfigEvents.addListeners(controller, [

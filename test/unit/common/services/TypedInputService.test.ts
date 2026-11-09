@@ -321,6 +321,23 @@ describe('Typed Input Service', function () {
             });
         });
         describe('getValue - EntityState', () => {
+            it('should use injected HA boolean values without a server ID', async () => {
+                const service = new TypedInputService({
+                    nodeConfig: { entityConfig: 'entity-config' },
+                    context: contextServiceStub,
+                    jsonata: jsonataServiceStub,
+                    haBooleans: ['on', 'yes'],
+                });
+
+                const result = await service.getValue(
+                    EntityStateCastType.HA_Boolean,
+                    TypedInputTypes.EntityState,
+                    { entity: { state: 'on' } },
+                );
+
+                expect(result).toBe(true);
+            });
+
             it('should return entity state as string by default', async () => {
                 const entity = { state: 'on' };
                 const result = await typedInputService.getValue(

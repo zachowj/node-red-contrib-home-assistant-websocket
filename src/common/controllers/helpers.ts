@@ -17,6 +17,7 @@ import EventsStatus from '../status/EventStatus';
 export function createControllerDependencies(
     node: BaseNode,
     homeAssistant: HomeAssistant,
+    haBooleans?: string[],
 ) {
     const jsonataService = new JSONataService({
         homeAssistant,
@@ -27,6 +28,7 @@ export function createControllerDependencies(
         nodeConfig: node.config,
         context: nodeRedContextService,
         jsonata: jsonataService,
+        haBooleans,
     });
 
     return {
