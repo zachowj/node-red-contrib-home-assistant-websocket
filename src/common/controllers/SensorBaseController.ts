@@ -84,6 +84,14 @@ export default abstract class SensorBase<
 > extends InputOutputController<T, P, Provides<'data'>> {
     protected readonly integration?: UnidirectionalEntityIntegration;
 
+    constructor(params: SensorBaseControllerOptions<T, P>) {
+        super(params);
+
+        if (this.node.config.inputOverride === 'block') {
+            this.inputService.disableInputOverrides();
+        }
+    }
+
     async onInput({ parsedMessage, message, send, done }: InputProperties) {
         if (!this.integration?.isConnected) {
             throw new NoConnectionError();
