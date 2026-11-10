@@ -6,6 +6,8 @@ import { debugToClient } from '../../helpers/node';
 import { DeviceConfigNode } from '../../nodes/device-config/index';
 import { EntityConfigNode } from '../../nodes/entity-config/index';
 import { NodeDone } from '../../types/nodes';
+import { isHomeAssistantApiError } from '../errors/HomeAssistantError';
+import { getErrorData } from '../errors/inputErrorHandler';
 import { NodeEvent } from '../events/Events';
 import State from '../State';
 import Status from '../status/Status';
@@ -232,14 +234,15 @@ export default class UnidirectionalIntegration extends Integration {
             `Registering ${this.entityConfigNode.config.entityType} with HA`,
         );
         try {
-            await this.homeAssistant.websocket.send(payload);
+            await this.sendDiscovery(payload, (discovery) =>
+                this.homeAssistant.websocket.send(discovery),
+            );
         } catch (err) {
             this.status.forEach((status) =>
                 status.setFailed('home-assistant.status.error_registering'),
             );
-            const message = err instanceof Error ? err.message : err;
             this.entityConfigNode.error(
-                `Error registering entity. Error Message: ${message}`,
+                `Error registering entity. Error Message: ${getErrorData(err).error.message}`,
             );
             return;
         }
@@ -252,6 +255,36 @@ export default class UnidirectionalIntegration extends Integration {
         this.markRegistered();
     }
 
+    /**
+     * Send a discovery payload. If Home Assistant rejects the stored state it
+     * carries, drop that state and retry once without it.
+     */
+    protected async sendDiscovery<T>(
+        payload: DiscoveryMessage,
+        send: (payload: DiscoveryMessage) => Promise<T>,
+    ): Promise<T> {
+        try {
+            return await send(payload);
+        } catch (err) {
+            if (
+                payload.state === undefined ||
+                !isHomeAssistantApiError(err) ||
+                err.code !== 'invalid_format'
+            ) {
+                throw err;
+            }
+            this.entityConfigNode.warn(
+                `Home Assistant rejected the saved state, registering without it: ${err.message}`,
+            );
+            const lastPayload = { ...this.state.getLastPayload() };
+            delete lastPayload.state;
+            await this.state.setLastPayload(lastPayload);
+            const withoutState = { ...payload };
+            delete withoutState.state;
+            return send(withoutState);
+        }
+    }
+
     public setStatus(status: Status) {
         this.status.push(status);
     }
@@ -262,19 +295,8 @@ export default class UnidirectionalIntegration extends Integration {
         available?: boolean,
     ) {
         const payload = this.getEntityPayload(state, attributes, available);
-        try {
-            await this.homeAssistant.websocket.send(payload);
-        } catch (err) {
-            const message =
-                err instanceof Error
-                    ? err.message
-                    : typeof err === 'string'
-                      ? err
-                      : JSON.stringify(err);
-            this.entityConfigNode.error(
-                `Error updating entity. Error Message: ${message}`,
-            );
-        }
+        // Resend only what Home Assistant accepted
+        await this.homeAssistant.websocket.send(payload);
         if (this.entityConfigNode.config.resend) {
             const previous = this.state.getLastPayload() ?? {};
             const lastPayload: {

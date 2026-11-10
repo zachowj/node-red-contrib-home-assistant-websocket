@@ -797,6 +797,32 @@ export default class Websocket {
             throw new Error('Client is not connected');
         }
         debug(`Send: ${JSON.stringify(data)}`);
-        return this.client?.sendMessagePromise(data);
+        return this.client
+            ?.sendMessagePromise<Results>(data)
+            .catch((err: unknown) => {
+                throw normalizeSendError(err);
+            });
     }
+}
+
+// The library rejects a lost connection with the whole result message or a
+// bare error code, not the { code, message } it uses for API errors
+function normalizeSendError(err: unknown): unknown {
+    // Queued message rejected after a failed reconnect; the library gives no message
+    if (err === ERR_CONNECTION_LOST) {
+        return { code: ERR_CONNECTION_LOST, message: 'Connection lost' };
+    }
+    // In-flight message rejected on disconnect with the full
+    // { type: 'result', success: false, error } message
+    if (
+        typeof err === 'object' &&
+        err !== null &&
+        'type' in err &&
+        err.type === 'result' &&
+        'error' in err
+    ) {
+        return err.error;
+    }
+    // API errors already arrive as { code, message }
+    return err;
 }

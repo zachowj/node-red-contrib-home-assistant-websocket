@@ -1,5 +1,6 @@
 import { HaEvent } from '../../homeAssistant/index';
 import { SubscriptionUnsubscribe } from '../../types/home-assistant';
+import { getErrorData } from '../errors/inputErrorHandler';
 import State from '../State';
 import { createHaConfig } from './helpers';
 import { MessageType } from './Integration';
@@ -55,19 +56,19 @@ export default class BidirectionalIntegration extends UnidirectionalEntityIntegr
             this.entityConfigNode.debug(
                 `Registering ${this.entityConfigNode.config.entityType} node with Home Assistant`,
             );
-            this.#unsubscribe =
-                await this.homeAssistant.websocket.subscribeMessage(
+            this.#unsubscribe = await this.sendDiscovery(payload, (discovery) =>
+                this.homeAssistant.websocket.subscribeMessage(
                     this.onHaEventMessage.bind(this),
-                    payload,
+                    discovery,
                     { resubscribe: false },
-                );
+                ),
+            );
         } catch (err) {
             this.status.forEach((status) =>
                 status.setFailed('home-assistant.status.error_registering'),
             );
-            const message = err instanceof Error ? err.message : err;
             this.entityConfigNode.error(
-                `Error registering entity. Error Message: ${message}`,
+                `Error registering entity. Error Message: ${getErrorData(err).error.message}`,
             );
             return;
         }
@@ -116,7 +117,7 @@ export default class BidirectionalIntegration extends UnidirectionalEntityIntegr
                 });
                 this.updateHomeAssistant().catch((err) => {
                     this.entityConfigNode.error(
-                        `Error updating entity. Error Message: ${err}`,
+                        `Error updating entity. Error Message: ${getErrorData(err).error.message}`,
                     );
                 });
                 break;

@@ -141,6 +141,13 @@ export default abstract class SensorBase<
         state = await this.typedInputService.getValue(state, stateType, {
             message,
         });
+        // JSON sends NaN and Infinity as null, which HA shows as unknown
+        if (typeof state === 'number' && !Number.isFinite(state)) {
+            throw new InputError(
+                ['home-assistant.error.state_not_finite', { value: state }],
+                'home-assistant.status.validation_error',
+            );
+        }
 
         const attributes = await this.#resolveAttributes(
             parsedMessage,
@@ -187,6 +194,9 @@ export default abstract class SensorBase<
                 throw new HomeAssistantError(err, 'home-assistant.error.error');
             }
 
+            if (err instanceof Error) {
+                throw err;
+            }
             throw new Error(`Error updating entity. ${JSON.stringify(err)}`);
         }
 

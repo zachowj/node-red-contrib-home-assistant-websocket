@@ -8,6 +8,7 @@
       "invalid_auth": "Invalid access token for WebSocket",
       "invalid_available": "Available value \"__value__\" is invalid; expected a boolean (true/false, yes/no, on/off, enable/disable, 0/1)",
       "invalid_state": "Invalid state",
+      "state_not_finite": "State __value__ is not a finite number",
       "companion_version_required": "Available needs Node-RED Companion __min_version__ or higher (connected: __version__). Upgrade the companion, or set Available to constant true.",
       "no_connection": "No connection to Home Assistant",
       "pattern_not_matched": "Pattern not matched",
