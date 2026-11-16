@@ -106,7 +106,7 @@
     "handlebars": "^4.7.10",
     "html-minifier": "^4.0.0",
     "husky": "^9.1.7",
-    "lint-staged": "^17.6.0",
+    "lint-staged": "^17.6.1",
     "markdown-it": "^14.3.3",
     "markdown-it-container": "^4.0.0",
     "markdown-it-inline-comments": "^1.0.1",
