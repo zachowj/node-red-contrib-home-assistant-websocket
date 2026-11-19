@@ -1,4 +1,5 @@
 import { HaEvent } from '../../homeAssistant';
+import { getErrorData } from '../errors/inputErrorHandler';
 import State from '../State';
 import BidirectionalEntityIntegration, {
     HaEventMessage,
@@ -16,7 +17,7 @@ export default class ValueEntityIntegration extends BidirectionalEntityIntegrati
 
             this.updateValue(value).catch((err) => {
                 this.entityConfigNode.error(
-                    `Error updating entity. Error Message: ${err}`,
+                    `Error updating entity. Error Message: ${getErrorData(err).error.message}`,
                 );
             });
             this.entityConfigNode.emit(

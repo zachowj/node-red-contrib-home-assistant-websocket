@@ -18,7 +18,9 @@ export function getErrorData(e: unknown) {
         statusMessage = RED._('home-assistant.status.validation_error');
         e.message = RED._(e.message);
     } else if (isHomeAssistantApiError(e)) {
-        e = new HomeAssistantError(e);
+        const haError = new HomeAssistantError(e);
+        statusMessage = haError.statusMessage;
+        e = haError;
     } else if (e instanceof BaseError) {
         statusMessage = e.statusMessage;
     } else if (e instanceof Error) {

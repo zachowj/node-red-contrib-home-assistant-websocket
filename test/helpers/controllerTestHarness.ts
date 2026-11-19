@@ -198,6 +198,7 @@ function createBaseConfig(kind: NodeKind) {
 export interface ControllerHarness {
     homeAssistant: HomeAssistant;
     node: MockRuntimeNode;
+    state: State;
     websocket: MockProxy<WebsocketAPI>;
     asyncInput(message: NodeMessage): Promise<{
         done: ReturnType<typeof vi.fn<NodeDone>>;
@@ -210,10 +211,12 @@ export function createControllerHarness({
     kind,
     configOverrides,
     integrationVersion = '4.2.4',
+    resend = false,
 }: {
     kind: NodeKind;
     configOverrides?: Record<string, any>;
     integrationVersion?: string;
+    resend?: boolean;
 }): ControllerHarness {
     const node = new MockRuntimeNode();
     node.config = {
@@ -241,7 +244,7 @@ export function createControllerHarness({
             kind === 'sensor' ? EntityType.Sensor : EntityType.BinarySensor,
         server: 'server_1',
         deviceConfig: '',
-        resend: false,
+        resend,
         haConfig: [],
     } as EntityConfigNodeProperties;
 
@@ -297,6 +300,7 @@ export function createControllerHarness({
     return {
         homeAssistant,
         node,
+        state,
         websocket,
         async asyncInput(message: NodeMessage) {
             const send = vi.fn<NodeSend>();

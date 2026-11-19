@@ -1,10 +1,16 @@
 import { EventEmitter } from 'events';
-import { HassEntities, HassEvent } from 'home-assistant-js-websocket';
+import {
+    Connection,
+    ERR_CONNECTION_LOST,
+    HassEntities,
+    HassEvent,
+} from 'home-assistant-js-websocket';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import ClientEvents from '../../../src/common/events/ClientEvents';
 import { Credentials } from '../../../src/homeAssistant';
 import Websocket, {
+    ClientState,
     WebsocketConfig,
 } from '../../../src/homeAssistant/Websocket';
 import EditorContext from '../../../src/nodes/config-server/EditorContext';
@@ -96,5 +102,55 @@ describe('Websocket state access', function () {
         expect(websocket.getEntity('sensor.a')).toBeDefined();
         expect(websocket.getEntities()).not.toBe(before);
         expect(before.has('sensor.b')).toBe(true);
+    });
+});
+
+describe('Websocket send errors', function () {
+    function connectedWebsocket(rejection: unknown) {
+        const websocket = new Websocket(
+            {} as WebsocketConfig,
+            new EventEmitter(),
+        );
+        websocket.connectionState = ClientState.Connected;
+        websocket.client = {
+            sendMessagePromise: vi.fn().mockRejectedValue(rejection),
+        } as unknown as Connection;
+        return websocket;
+    }
+
+    it.each([
+        {
+            name: 'in-flight request when the connection drops',
+            rejection: {
+                type: 'result',
+                success: false,
+                error: {
+                    code: ERR_CONNECTION_LOST,
+                    message: 'Connection lost',
+                },
+            },
+        },
+        {
+            name: 'queued request when reconnecting fails',
+            rejection: ERR_CONNECTION_LOST,
+        },
+    ])(
+        'rejects a lost connection as an API error: $name',
+        async function ({ rejection }) {
+            await expect(
+                connectedWebsocket(rejection).send({ type: 'test' }),
+            ).rejects.toEqual({
+                code: ERR_CONNECTION_LOST,
+                message: 'Connection lost',
+            });
+        },
+    );
+
+    it('passes API errors through unchanged', async function () {
+        const apiError = { code: 'invalid_format', message: 'Not a number' };
+
+        await expect(
+            connectedWebsocket(apiError).send({ type: 'test' }),
+        ).rejects.toBe(apiError);
     });
 });
