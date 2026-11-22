@@ -109,7 +109,7 @@ const ActionEditor: EditorNodeDef<ActionEditorNodeProperties> = {
             idSelector.refreshOptions();
             const services = haServer.getServices();
             // @ts-expect-error - VirtualSelect is not recognized
-            $haAction[0].setOptions(buildDomainServices(services));
+            $haAction[0].setOptions(buildDomainServices(services), true);
         });
 
         // Action selector
