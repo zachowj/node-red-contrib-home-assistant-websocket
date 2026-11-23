@@ -8,6 +8,10 @@
   "packageRules": [
     {
       "matchManagers": ["npm"],
+      "minimumReleaseAge": "3 days"
+    },
+    {
+      "matchManagers": ["npm"],
       "matchPackageNames": ["flat"],
       "matchUpdateTypes": ["major"],
       "enabled": false
