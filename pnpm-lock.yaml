@@ -372,8 +372,8 @@ importers:
         specifier: ^14.0.17
         version: 14.0.17
       node-red:
-        specifier: ^5.0.9
-        version: 5.0.9(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)
+        specifier: ^5.0.10
+        version: 5.0.10(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)
       node-red-node-test-helper:
         specifier: ^0.3.6
         version: 0.3.6(supports-color@7.2.0)
@@ -872,23 +872,23 @@ packages:
     resolution: {integrity: sha512-jCs9ldd7NwzpgXDIf6P3+NrHh9/sD6CQdxHyjQI+h/6rDNo88ypBxxz45UDuZHz9r3tNz7N/VInSVoVdtXEI4A==}
     engines: {node: ^14.21.3 || >=16}
 
-  '@node-red/editor-api@5.0.9':
-    resolution: {integrity: sha512-BCVQOqrZc2RYayjtFAPWmHxLyO337NddTmadN6WlO9x55yHclmhxEN4F9g1his5Sl+KTBFLetd018bW8hpC+aw==}
+  '@node-red/editor-api@5.0.10':
+    resolution: {integrity: sha512-MJNCxfdPLLX9O8YwDyJ+KbbJo2P78l6ZuYUf2nRnGsPkSJICWRMVm+4lnEQ18dLdb3LQdGFqbkfrDU6B2OOuMQ==}
 
-  '@node-red/editor-client@5.0.9':
-    resolution: {integrity: sha512-qPOo3YrzZ6CHlqlShsMl8N3RIU7mw+0Rh7Gzkiv8vtdgE4GkSTsT/Y+nJhaOpASGLnSUrEv0qqOdJG8QqpiH/A==}
+  '@node-red/editor-client@5.0.10':
+    resolution: {integrity: sha512-0biuFY6IA2LRtW1qR31stb+BdJgV/AdNJo55AA+cv5lKaoaRjyXiYBMUhJ4BDg71OJHjfKWs0JMk1IMlq4n5fw==}
 
-  '@node-red/nodes@5.0.9':
-    resolution: {integrity: sha512-xRuuS1tb1AaxXeoP6uevfvBkivCOtimE6mG3Dl6Rls7ABrVfsAiPsCsykv4WXVufUujIALOwqqxU7CZzApjubw==}
+  '@node-red/nodes@5.0.10':
+    resolution: {integrity: sha512-gPNWXdEn5gFdeb+ahaa+Ern0UGnvxt08ngWmBvb0dlpx3X13HYg8A15QQCgochCRlLcnhojjpApYk9O/fkuk/w==}
 
-  '@node-red/registry@5.0.9':
-    resolution: {integrity: sha512-qPv6UUzeYgjfoykLT5wuiILdQS9ugfJ9K0O1V2MCJlT6Ja/ymaZFZ0bK53+M52Ghh4b1r1A2IXbsc9PnEbR26Q==}
+  '@node-red/registry@5.0.10':
+    resolution: {integrity: sha512-jfcvqPuXjMcUA/YzR+FQ3UK6OtstlyeDnchmalH+8PGGahCKTQpuZHqgESgqpV16dsueJaS+FQ8mXVA0/kOoUw==}
 
-  '@node-red/runtime@5.0.9':
-    resolution: {integrity: sha512-Ncg3Q/Q09ugmNRwW4GBUWfO8L0Vs0zWWuLJeIfUgqtLBwxFBSpGzWv7+3WtDC49B9i9DBppcoJztLP0n4ERnkg==}
+  '@node-red/runtime@5.0.10':
+    resolution: {integrity: sha512-x65zzoOZtbYV+xXnH74+v88QKmgARViopiWnXrcp4ZX6sEf9bx7+IrbrianxHgu2LI/FlnJT0bcsar4LEKFCkQ==}
 
-  '@node-red/util@5.0.9':
-    resolution: {integrity: sha512-ZwpLlE9sRUK0eM5F0c3FTWsUaHrjtIA18P/HbM+JrLoVMYU9O1HFy+5gIEHL63YsFJtFUlb15Hp05VpEWe9XsA==}
+  '@node-red/util@5.0.10':
+    resolution: {integrity: sha512-MzuufrPT0NrwL3zJVCotzS9qkrirYA6zS9uo0VjdK7VkZCNK0QtNb6tn20ic7Z5lkJXNdh/nNHq7/8dJyKyt2Q==}
 
   '@node-rs/bcrypt-android-arm-eabi@1.10.7':
     resolution: {integrity: sha512-8dO6/PcbeMZXS3VXGEtct9pDYdShp2WBOWlDvSbcRwVqyB580aCBh0BEFmKYtXLzLvUK8Wf+CG3U6sCdILW1lA==}
@@ -1568,9 +1568,6 @@ packages:
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
-
-  '@tybys/wasm-util@0.10.1':
-    resolution: {integrity: sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg==}
 
   '@tybys/wasm-util@0.10.4':
     resolution: {integrity: sha512-W3c4gRigFS0T/Ma4qIYF3GDAc5AQdHb1yL5znJT1Zv1YaD9Kitx656wBjvr19qbiosmZT8lWDM5BEMynUqX65A==}
@@ -2319,6 +2316,9 @@ packages:
   axios@1.20.0:
     resolution: {integrity: sha512-r8aOh8j9cGKpgQAqpzrUHnSIc6a59Y3Xf/cv8sy1DrHCkZHzQGEuoq1tARk6qSyDdtQGSDgpb9kFlruzPvrgwg==}
 
+  axios@1.21.1:
+    resolution: {integrity: sha512-6eI5Q/Y4u/Um9dDlsRoq5pY2rxnUTv+L4PpLitnbk/i4jb3MxLZ5CsN5Ih3IysbeRYK4pR+P7qfMsOQl9fwwFQ==}
+
   bail@2.0.2:
     resolution: {integrity: sha512-0xO6mYd7JB2YesxDKplafRpsiOzPt9V02ddPCLbY1xYGPOX24NTyN50qnUxgCPcSoYMhKpAuBTjQoRZCAkUDRw==}
 
@@ -2368,6 +2368,10 @@ packages:
 
   body-parser@1.20.8:
     resolution: {integrity: sha512-JNcyFQ64OiijEkPzUBTCe+hyPXUD/3LEldGQ6iF5LR1w00mx9o7xtDWHXBY2iItjdCFGoilOLNQbH943ut7pHA==}
+    engines: {node: '>= 0.8', npm: 1.2.8000 || >= 1.4.16}
+
+  body-parser@1.20.9:
+    resolution: {integrity: sha512-FISIQxV5u91Y9gvuFq3q/tA/qTqLJn3AhRcEvyozyhJTh5OBFFtv827AdHU7Rbyct4r+Ba1/99oFa1Y3yuFsdw==}
     engines: {node: '>= 0.8', npm: 1.2.8000 || >= 1.4.16}
 
   bonjour-service@1.4.4:
@@ -3259,6 +3263,15 @@ packages:
       debug:
         optional: true
 
+  follow-redirects@1.16.3:
+    resolution: {integrity: sha512-toOSoqN6d51Wjf1aOFJYcoVv1aND9rj/CwjLU0Vz40oDuSpWDayCeKe4JpL5NL0WdFvoOOCI3BRo69HahjbR1A==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+
   for-each@0.3.5:
     resolution: {integrity: sha512-dKx12eRCVIzqCxFGplyFKJMPvLEWgmNtUrpTiJIR5u97zEhRG8ySrtboPHZXx7daLxQVrl643cTzbab2tkQjxg==}
     engines: {node: '>= 0.4'}
@@ -3510,10 +3523,11 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  i18next@25.8.14:
-    resolution: {integrity: sha512-paMUYkfWJMsWPeE/Hejcw+XLhHrQPehem+4wMo+uELnvIwvCG019L9sAIljwjCmEMtFQQO3YeitJY8Kctei3iA==}
+  i18next@27.1.3:
+    resolution: {integrity: sha512-Qih5Erw8m9qJPmuNUjoSiBctutYkfgg+mhzLaQ7xbn2Y9e2tsB8dNhYyMB00fUfBRt6v0UTFjPPCSROJPn93JQ==}
+    engines: {node: '>=22'}
     peerDependencies:
-      typescript: ^5
+      typescript: ^5 || ^6 || ^7
     peerDependenciesMeta:
       typescript:
         optional: true
@@ -3909,9 +3923,6 @@ packages:
     resolution: {integrity: sha512-iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw==}
     engines: {node: '>=10'}
 
-  lodash.clonedeep@4.5.0:
-    resolution: {integrity: sha512-H5ZhCF25riFd9uB5UCkVKo61m3S/xZk1x4wA6yp/L3RFP6Z/eHH1ymQcGLo7J3GMPfm0V/7m1tryHuGVxpqEBQ==}
-
   lodash.get@4.4.2:
     resolution: {integrity: sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==}
     deprecated: This package is deprecated. Use the optional chaining (?.) operator instead.
@@ -4139,8 +4150,8 @@ packages:
   muggle-string@0.4.1:
     resolution: {integrity: sha512-VNTrAak/KhO2i8dqqnqnAHOa3cYBwXEZe9h+D5h/1ZqFSTEFHdM65lR7RoIqq3tBBYavsOXV84NoHXZ0AkPyqQ==}
 
-  multer@2.4.0:
-    resolution: {integrity: sha512-7dqa0ZcFfzbefdTuIkzOSMvZWC0J7FLqBOjJUZvDCXShIURWKxAyTT1wHhnE5q19c7jOJf43IYYKjBmZVZmvhg==}
+  multer@2.5.0:
+    resolution: {integrity: sha512-BsqOzYGVq49JcW2IzoSAxeKYRevb+dGGPPWleOR8Lrlk4igwxu1/9pwSXlByhCb7MVZDrNJFC0IBP5/O5nLYRw==}
     engines: {node: '>= 10.16.0'}
 
   multicast-dns@7.2.5:
@@ -4183,8 +4194,8 @@ packages:
   node-addon-api@7.1.1:
     resolution: {integrity: sha512-5m3bsyrjFWE1xf7nz7YXdN4udnVtXK6/Yfgn5qnahL6bCkf2yKt4k3nuTKAtT4r3IG8JNR2ncsIMdZuAzJjHQQ==}
 
-  node-red-admin@4.1.8:
-    resolution: {integrity: sha512-Wub/nsDlWJtqXQncuLbW5rgypbzR6n5CdkJxLeYX20l63H7CQfLgwQ0sTlTz3F9RrH2PikHfamFgZQfQhc978A==}
+  node-red-admin@4.1.9:
+    resolution: {integrity: sha512-7tPT+RfFgWsWEe7zxsmRMA78MexUAHoN6Qf38OwKLJxohpRon6tty6HWtYdqJwpJaE52amCmuxYMveXI2Qic8w==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -4192,8 +4203,8 @@ packages:
     resolution: {integrity: sha512-zLmHw6CPcrMvH2SNNKZ0shgD2adbp8W0Kwa86l/lSYWyCOgPnbFSK+IBB7qoEY91zytgSM6RNwVcwITihTkBGA==}
     engines: {node: '>=14'}
 
-  node-red@5.0.9:
-    resolution: {integrity: sha512-FT0tNNusFK7go9KvoKzjNPmzgrGCbBhd0UZFWUQHgVDzkzgNwvZAJfb4XNvIBBrfCTTV564/Z8wGs3Tv//ivKQ==}
+  node-red@5.0.10:
+    resolution: {integrity: sha512-KK+WemMU3bI1Z+A1OfIObYwd6NvSQ9S+whm0YEBo0FOYLQoox6LIA3x6yk/53/VdNmUTSguMdrQXiqoGlN5zPw==}
     engines: {node: '>=22.9'}
     hasBin: true
 
@@ -4221,8 +4232,8 @@ packages:
   nostics@1.3.0:
     resolution: {integrity: sha512-wzRsrJwNlFbqIRQt8aCeL2WE8USip/uuvGSOZV1D02CxX8ABTMbw8IywKjH7yWHETMXbWJI4OBpihg9rmz2Vyg==}
 
-  npm@11.21.1:
-    resolution: {integrity: sha512-YTzL6QBEJXyHcTu0JiUc7RKMp+mzlJtl7rGLmERaXUQeFHIMc9atdr6G9M9C8vDWbv40epoTQAzNL2/PtZVDhQ==}
+  npm@11.21.2:
+    resolution: {integrity: sha512-7HPApk+AflMUavSseL1Pm6CnYqMIHk53x+KmuhqmTDqPkjPMgxIpTPcTqsE91EKNw4gFBJV9fnXiSdGm1DXq9A==}
     engines: {node: ^20.17.0 || >=22.9.0}
     hasBin: true
     bundledDependencies:
@@ -6215,7 +6226,7 @@ snapshots:
     dependencies:
       '@emnapi/core': 1.8.1
       '@emnapi/runtime': 1.8.1
-      '@tybys/wasm-util': 0.10.1
+      '@tybys/wasm-util': 0.10.4
     optional: true
 
   '@napi-rs/wasm-runtime@1.2.6(@emnapi/core@2.0.0-beta.2)(@emnapi/runtime@2.0.0-beta.2)':
@@ -6227,19 +6238,19 @@ snapshots:
 
   '@noble/hashes@1.8.0': {}
 
-  '@node-red/editor-api@5.0.9(supports-color@7.2.0)(typescript@5.9.3)':
+  '@node-red/editor-api@5.0.10(supports-color@7.2.0)(typescript@5.9.3)':
     dependencies:
-      '@node-red/editor-client': 5.0.9
-      '@node-red/util': 5.0.9(typescript@5.9.3)
+      '@node-red/editor-client': 5.0.10
+      '@node-red/util': 5.0.10(typescript@5.9.3)
       bcryptjs: 3.0.3
-      body-parser: 1.20.8(supports-color@7.2.0)
+      body-parser: 1.20.9(supports-color@7.2.0)
       clone: 2.1.2
       cors: 2.8.6
       express: 4.22.3(supports-color@7.2.0)
       express-session: 1.19.0(supports-color@7.2.0)
       memorystore: 1.6.8(supports-color@7.2.0)
       mime: 3.0.0
-      multer: 2.4.0
+      multer: 2.5.0
       mustache: 4.2.0
       oauth2orize: 1.12.0(supports-color@7.2.0)
       passport: 0.7.0
@@ -6254,14 +6265,14 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@node-red/editor-client@5.0.9': {}
+  '@node-red/editor-client@5.0.10': {}
 
-  '@node-red/nodes@5.0.9(supports-color@7.2.0)':
+  '@node-red/nodes@5.0.10(supports-color@7.2.0)':
     dependencies:
       acorn: 8.19.0
       acorn-walk: 8.3.5
       ajv: 8.20.0
-      body-parser: 1.20.8(supports-color@7.2.0)
+      body-parser: 1.20.9(supports-color@7.2.0)
       cheerio: 1.0.0-rc.10
       content-type: 1.0.5
       cookie: 0.7.2
@@ -6280,7 +6291,7 @@ snapshots:
       js-yaml: 4.3.2
       media-typer: 1.1.0
       mqtt: 5.15.2(supports-color@7.2.0)
-      multer: 2.4.0
+      multer: 2.5.0
       mustache: 4.2.0
       node-watch: 0.7.4
       on-headers: 1.1.0
@@ -6293,12 +6304,12 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@node-red/registry@5.0.9(typescript@5.9.3)':
+  '@node-red/registry@5.0.10(typescript@5.9.3)':
     dependencies:
-      '@node-red/util': 5.0.9(typescript@5.9.3)
+      '@node-red/util': 5.0.10(typescript@5.9.3)
       clone: 2.1.2
       fs-extra: 11.4.1
-      npm: 11.21.1
+      npm: 11.21.2
       semver: 7.8.5
       tar: 7.5.22
       uglify-js: 3.19.3
@@ -6306,10 +6317,10 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  '@node-red/runtime@5.0.9(supports-color@7.2.0)(typescript@5.9.3)':
+  '@node-red/runtime@5.0.10(supports-color@7.2.0)(typescript@5.9.3)':
     dependencies:
-      '@node-red/registry': 5.0.9(typescript@5.9.3)
-      '@node-red/util': 5.0.9(typescript@5.9.3)
+      '@node-red/registry': 5.0.10(typescript@5.9.3)
+      '@node-red/util': 5.0.10(typescript@5.9.3)
       async-mutex: 0.5.0
       clone: 2.1.2
       cronosjs: 1.7.1
@@ -6323,13 +6334,13 @@ snapshots:
       - supports-color
       - typescript
 
-  '@node-red/util@5.0.9(typescript@5.9.3)':
+  '@node-red/util@5.0.10(typescript@5.9.3)':
     dependencies:
       chalk: 4.1.2
       fs-extra: 11.4.1
-      i18next: 25.8.14(typescript@5.9.3)
+      i18next: 27.1.3(typescript@5.9.3)
       json-stringify-safe: 5.0.1
-      lodash.clonedeep: 4.5.0
+      lodash: 4.18.1
       moment: 2.31.0
       moment-timezone: 0.5.48
     transitivePeerDependencies:
@@ -6743,11 +6754,6 @@ snapshots:
   '@socket.io/component-emitter@3.1.2': {}
 
   '@standard-schema/spec@1.1.0': {}
-
-  '@tybys/wasm-util@0.10.1':
-    dependencies:
-      tslib: 2.8.1
-    optional: true
 
   '@tybys/wasm-util@0.10.4':
     dependencies:
@@ -7992,6 +7998,16 @@ snapshots:
       - debug
       - supports-color
 
+  axios@1.21.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0):
+    dependencies:
+      follow-redirects: 1.16.3(debug@4.4.3(supports-color@7.2.0))
+      form-data: 4.0.6
+      https-proxy-agent: 5.0.1(supports-color@7.2.0)
+      proxy-from-env: 2.1.0
+    transitivePeerDependencies:
+      - debug
+      - supports-color
+
   bail@2.0.2: {}
 
   balanced-match@1.0.2: {}
@@ -8041,6 +8057,23 @@ snapshots:
       - supports-color
 
   body-parser@1.20.8(supports-color@7.2.0):
+    dependencies:
+      bytes: 3.1.2
+      content-type: 1.0.5
+      debug: 2.6.9(supports-color@7.2.0)
+      depd: 2.0.0
+      destroy: 1.2.0
+      http-errors: 2.0.1
+      iconv-lite: 0.4.24
+      on-finished: 2.4.1
+      qs: 6.16.0
+      raw-body: 2.5.3
+      type-is: 1.6.18
+      unpipe: 1.0.0
+    transitivePeerDependencies:
+      - supports-color
+
+  body-parser@1.20.9(supports-color@7.2.0):
     dependencies:
       bytes: 3.1.2
       content-type: 1.0.5
@@ -9225,6 +9258,10 @@ snapshots:
     optionalDependencies:
       debug: 4.4.3(supports-color@7.2.0)
 
+  follow-redirects@1.16.3(debug@4.4.3(supports-color@7.2.0)):
+    optionalDependencies:
+      debug: 4.4.3(supports-color@7.2.0)
+
   for-each@0.3.5:
     dependencies:
       is-callable: 1.2.7
@@ -9561,9 +9598,7 @@ snapshots:
 
   husky@9.1.7: {}
 
-  i18next@25.8.14(typescript@5.9.3):
-    dependencies:
-      '@babel/runtime': 7.29.10
+  i18next@27.1.3(typescript@5.9.3):
     optionalDependencies:
       typescript: 5.9.3
 
@@ -9911,8 +9946,6 @@ snapshots:
     dependencies:
       p-locate: 5.0.0
 
-  lodash.clonedeep@4.5.0: {}
-
   lodash.get@4.4.2: {}
 
   lodash.isfinite@3.3.2: {}
@@ -10152,7 +10185,7 @@ snapshots:
 
   muggle-string@0.4.1: {}
 
-  multer@2.4.0:
+  multer@2.5.0:
     dependencies:
       append-field: 1.0.0
       busboy: 1.6.0
@@ -10196,10 +10229,10 @@ snapshots:
   node-addon-api@7.1.1:
     optional: true
 
-  node-red-admin@4.1.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0):
+  node-red-admin@4.1.9(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0):
     dependencies:
       ansi-colors: 4.1.3
-      axios: 1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+      axios: 1.21.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
       bcryptjs: 3.0.3
       cli-table: 0.3.11
       enquirer: 2.4.1
@@ -10225,18 +10258,18 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  node-red@5.0.9(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3):
+  node-red@5.0.10(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3):
     dependencies:
-      '@node-red/editor-api': 5.0.9(supports-color@7.2.0)(typescript@5.9.3)
-      '@node-red/nodes': 5.0.9(supports-color@7.2.0)
-      '@node-red/runtime': 5.0.9(supports-color@7.2.0)(typescript@5.9.3)
-      '@node-red/util': 5.0.9(typescript@5.9.3)
+      '@node-red/editor-api': 5.0.10(supports-color@7.2.0)(typescript@5.9.3)
+      '@node-red/nodes': 5.0.10(supports-color@7.2.0)
+      '@node-red/runtime': 5.0.10(supports-color@7.2.0)(typescript@5.9.3)
+      '@node-red/util': 5.0.10(typescript@5.9.3)
       basic-auth: 2.0.1
       bcryptjs: 3.0.3
       cors: 2.8.6
       express: 4.22.3(supports-color@7.2.0)
       fs-extra: 11.4.1
-      node-red-admin: 4.1.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+      node-red-admin: 4.1.9(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
       nopt: 5.0.0
       semver: 7.8.5
     optionalDependencies:
@@ -10262,7 +10295,7 @@ snapshots:
 
   nostics@1.3.0: {}
 
-  npm@11.21.1: {}
+  npm@11.21.2: {}
 
   nth-check@2.1.1:
     dependencies:
