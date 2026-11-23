@@ -99,7 +99,14 @@ export default function createSocket({
         const onMessage = (data: WebSocket.RawData, isBinary: boolean) => {
             if (isBinary) return;
 
-            const message = JSON.parse(data.toString());
+            let message;
+            try {
+                message = JSON.parse(data.toString());
+            } catch (err) {
+                debug('[Auth Phase] Received invalid JSON', err);
+                socket.close();
+                return;
+            }
 
             debug('[Auth Phase] Received', message);
 
