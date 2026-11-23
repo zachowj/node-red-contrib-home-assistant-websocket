@@ -282,8 +282,8 @@ importers:
         specifier: 2.0.0-rc.139
         version: 2.0.0-rc.139(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(markdown-it@14.3.3)(typescript@5.9.3)(vuepress@2.0.0-rc.31(@vue/compiler-sfc@3.5.45)(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(esbuild@0.28.2)(rolldown@1.2.13)(rollup@4.52.4)(supports-color@7.2.0)(typescript@5.9.3)(vite@8.3.8(@types/node@22.20.5)(esbuild@0.28.2)(sass@1.105.1)(terser@5.26.0)(yaml@2.9.1))(vue@3.5.45(typescript@5.9.3)))
       '@vuepress/plugin-prismjs':
-        specifier: ^2.0.0-rc.138
-        version: 2.0.0-rc.138(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(@vueuse/core@15.0.0(vue@3.5.45(typescript@5.9.3)))(typescript@5.9.3)(vuepress@2.0.0-rc.31(@vue/compiler-sfc@3.5.45)(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(esbuild@0.28.2)(rolldown@1.2.13)(rollup@4.52.4)(supports-color@7.2.0)(typescript@5.9.3)(vite@8.3.8(@types/node@22.20.5)(esbuild@0.28.2)(sass@1.105.1)(terser@5.26.0)(yaml@2.9.1))(vue@3.5.45(typescript@5.9.3)))
+        specifier: ^2.0.0-rc.139
+        version: 2.0.0-rc.139(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(@vueuse/core@15.0.0(vue@3.5.45(typescript@5.9.3)))(typescript@5.9.3)(vuepress@2.0.0-rc.31(@vue/compiler-sfc@3.5.45)(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(esbuild@0.28.2)(rolldown@1.2.13)(rollup@4.52.4)(supports-color@7.2.0)(typescript@5.9.3)(vite@8.3.8(@types/node@22.20.5)(esbuild@0.28.2)(sass@1.105.1)(terser@5.26.0)(yaml@2.9.1))(vue@3.5.45(typescript@5.9.3)))
       '@vuepress/plugin-register-components':
         specifier: ^2.0.0-rc.135
         version: 2.0.0-rc.135(vuepress@2.0.0-rc.31(@vue/compiler-sfc@3.5.45)(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(esbuild@0.28.2)(rolldown@1.2.13)(rollup@4.52.4)(supports-color@7.2.0)(typescript@5.9.3)(vite@8.3.8(@types/node@22.20.5)(esbuild@0.28.2)(sass@1.105.1)(terser@5.26.0)(yaml@2.9.1))(vue@3.5.45(typescript@5.9.3)))
@@ -1976,21 +1976,6 @@ packages:
       '@vuepress/bundler-webpack':
         optional: true
 
-  '@vuepress/helper@2.0.0-rc.138':
-    resolution: {integrity: sha512-juiYgKF9i6HrLwH+chiZLFXXTH7JMkDSEy5rjbXd+YyVqljcxpdyrXO9iCATlLx7WHxu6MBvurXBTyL6Hm1z+w==}
-    peerDependencies:
-      '@vuepress/bundler-rspack': 2.0.0-rc.32
-      '@vuepress/bundler-vite': 2.0.0-rc.32
-      '@vuepress/bundler-webpack': 2.0.0-rc.32
-      vuepress: 2.0.0-rc.32
-    peerDependenciesMeta:
-      '@vuepress/bundler-rspack':
-        optional: true
-      '@vuepress/bundler-vite':
-        optional: true
-      '@vuepress/bundler-webpack':
-        optional: true
-
   '@vuepress/helper@2.0.0-rc.139':
     resolution: {integrity: sha512-vfPCqTOlTvHawviU0fZdFzmmqT/e+JHTTMJg8GYoTlC4ouccyBI8/9LXNy4r+rYlIQyIzvc+HWAYDVvXd/AekQ==}
     peerDependencies:
@@ -2016,10 +2001,10 @@ packages:
       '@vueuse/core':
         optional: true
 
-  '@vuepress/highlighter-helper@2.0.0-rc.138':
-    resolution: {integrity: sha512-ROCXu2e5utUVYkzHex3grDENzwFO+vmj77RHgaQU9w1Zy3cNaE4p2uWMOy4YyVmex2wvISzSOczyEZubeVfxcA==}
+  '@vuepress/highlighter-helper@2.0.0-rc.139':
+    resolution: {integrity: sha512-G0d62RKZgGkHhVKsZhWRbFGlU0gGbGB/0tFxNZtfud6UvIv3+i5RZ3dz2p6T7wuol9wnJjjI+/cJMgog+0dO7w==}
     peerDependencies:
-      '@vuepress/helper': 2.0.0-rc.138
+      '@vuepress/helper': 2.0.0-rc.139
       '@vueuse/core': ^15.0.0
       vuepress: 2.0.0-rc.32
     peerDependenciesMeta:
@@ -2102,8 +2087,8 @@ packages:
     peerDependencies:
       vuepress: 2.0.0-rc.31
 
-  '@vuepress/plugin-prismjs@2.0.0-rc.138':
-    resolution: {integrity: sha512-B6wWk/esyENm7yLvR2mihLOySuvk687upuOs5Afc7KgFKOxfY5fwasV9mb/AoCzS7a19c4cByEs3isBZpW+jeA==}
+  '@vuepress/plugin-prismjs@2.0.0-rc.139':
+    resolution: {integrity: sha512-Ydfhffc4r4XxRPx7m8npnykPoeYG+ccoX6msnJaEUcTaaziS08qhqnEFF/nfKIPtUMYiv1ekkcoRojXkzTf+Dg==}
     peerDependencies:
       vuepress: 2.0.0-rc.32
 
@@ -7454,20 +7439,6 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  '@vuepress/helper@2.0.0-rc.138(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(typescript@5.9.3)(vuepress@2.0.0-rc.31(@vue/compiler-sfc@3.5.45)(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(esbuild@0.28.2)(rolldown@1.2.13)(rollup@4.52.4)(supports-color@7.2.0)(typescript@5.9.3)(vite@8.3.8(@types/node@22.20.5)(esbuild@0.28.2)(sass@1.105.1)(terser@5.26.0)(yaml@2.9.1))(vue@3.5.45(typescript@5.9.3)))':
-    dependencies:
-      '@vue/shared': 3.5.45
-      '@vueuse/core': 15.0.0(vue@3.5.45(typescript@5.9.3))
-      cheerio: 1.2.0
-      fflate: 0.8.3
-      gray-matter: 4.0.3
-      vue: 3.5.45(typescript@5.9.3)
-      vuepress: 2.0.0-rc.31(@vue/compiler-sfc@3.5.45)(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(esbuild@0.28.2)(rolldown@1.2.13)(rollup@4.52.4)(supports-color@7.2.0)(typescript@5.9.3)(vite@8.3.8(@types/node@22.20.5)(esbuild@0.28.2)(sass@1.105.1)(terser@5.26.0)(yaml@2.9.1))(vue@3.5.45(typescript@5.9.3))
-    optionalDependencies:
-      '@vuepress/bundler-vite': 2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1)
-    transitivePeerDependencies:
-      - typescript
-
   '@vuepress/helper@2.0.0-rc.139(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(typescript@5.9.3)(vuepress@2.0.0-rc.31(@vue/compiler-sfc@3.5.45)(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(esbuild@0.28.2)(rolldown@1.2.13)(rollup@4.52.4)(supports-color@7.2.0)(typescript@5.9.3)(vite@8.3.8(@types/node@22.20.5)(esbuild@0.28.2)(sass@1.105.1)(terser@5.26.0)(yaml@2.9.1))(vue@3.5.45(typescript@5.9.3)))':
     dependencies:
       '@vue/shared': 3.5.45
@@ -7489,9 +7460,9 @@ snapshots:
     optionalDependencies:
       '@vueuse/core': 15.0.0(vue@3.5.45(typescript@5.9.3))
 
-  '@vuepress/highlighter-helper@2.0.0-rc.138(abe7347de99672083f24e989a466b3af)':
+  '@vuepress/highlighter-helper@2.0.0-rc.139(7b0d8b17058d72120cbf1bf9206b69de)':
     dependencies:
-      '@vuepress/helper': 2.0.0-rc.138(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(typescript@5.9.3)(vuepress@2.0.0-rc.31(@vue/compiler-sfc@3.5.45)(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(esbuild@0.28.2)(rolldown@1.2.13)(rollup@4.52.4)(supports-color@7.2.0)(typescript@5.9.3)(vite@8.3.8(@types/node@22.20.5)(esbuild@0.28.2)(sass@1.105.1)(terser@5.26.0)(yaml@2.9.1))(vue@3.5.45(typescript@5.9.3)))
+      '@vuepress/helper': 2.0.0-rc.139(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(typescript@5.9.3)(vuepress@2.0.0-rc.31(@vue/compiler-sfc@3.5.45)(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(esbuild@0.28.2)(rolldown@1.2.13)(rollup@4.52.4)(supports-color@7.2.0)(typescript@5.9.3)(vite@8.3.8(@types/node@22.20.5)(esbuild@0.28.2)(sass@1.105.1)(terser@5.26.0)(yaml@2.9.1))(vue@3.5.45(typescript@5.9.3)))
       vuepress: 2.0.0-rc.31(@vue/compiler-sfc@3.5.45)(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(esbuild@0.28.2)(rolldown@1.2.13)(rollup@4.52.4)(supports-color@7.2.0)(typescript@5.9.3)(vite@8.3.8(@types/node@22.20.5)(esbuild@0.28.2)(sass@1.105.1)(terser@5.26.0)(yaml@2.9.1))(vue@3.5.45(typescript@5.9.3))
     optionalDependencies:
       '@vueuse/core': 15.0.0(vue@3.5.45(typescript@5.9.3))
@@ -7691,10 +7662,10 @@ snapshots:
       - '@vueuse/core'
       - typescript
 
-  '@vuepress/plugin-prismjs@2.0.0-rc.138(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(@vueuse/core@15.0.0(vue@3.5.45(typescript@5.9.3)))(typescript@5.9.3)(vuepress@2.0.0-rc.31(@vue/compiler-sfc@3.5.45)(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(esbuild@0.28.2)(rolldown@1.2.13)(rollup@4.52.4)(supports-color@7.2.0)(typescript@5.9.3)(vite@8.3.8(@types/node@22.20.5)(esbuild@0.28.2)(sass@1.105.1)(terser@5.26.0)(yaml@2.9.1))(vue@3.5.45(typescript@5.9.3)))':
+  '@vuepress/plugin-prismjs@2.0.0-rc.139(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(@vueuse/core@15.0.0(vue@3.5.45(typescript@5.9.3)))(typescript@5.9.3)(vuepress@2.0.0-rc.31(@vue/compiler-sfc@3.5.45)(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(esbuild@0.28.2)(rolldown@1.2.13)(rollup@4.52.4)(supports-color@7.2.0)(typescript@5.9.3)(vite@8.3.8(@types/node@22.20.5)(esbuild@0.28.2)(sass@1.105.1)(terser@5.26.0)(yaml@2.9.1))(vue@3.5.45(typescript@5.9.3)))':
     dependencies:
-      '@vuepress/helper': 2.0.0-rc.138(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(typescript@5.9.3)(vuepress@2.0.0-rc.31(@vue/compiler-sfc@3.5.45)(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(esbuild@0.28.2)(rolldown@1.2.13)(rollup@4.52.4)(supports-color@7.2.0)(typescript@5.9.3)(vite@8.3.8(@types/node@22.20.5)(esbuild@0.28.2)(sass@1.105.1)(terser@5.26.0)(yaml@2.9.1))(vue@3.5.45(typescript@5.9.3)))
-      '@vuepress/highlighter-helper': 2.0.0-rc.138(abe7347de99672083f24e989a466b3af)
+      '@vuepress/helper': 2.0.0-rc.139(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(typescript@5.9.3)(vuepress@2.0.0-rc.31(@vue/compiler-sfc@3.5.45)(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(esbuild@0.28.2)(rolldown@1.2.13)(rollup@4.52.4)(supports-color@7.2.0)(typescript@5.9.3)(vite@8.3.8(@types/node@22.20.5)(esbuild@0.28.2)(sass@1.105.1)(terser@5.26.0)(yaml@2.9.1))(vue@3.5.45(typescript@5.9.3)))
+      '@vuepress/highlighter-helper': 2.0.0-rc.139(7b0d8b17058d72120cbf1bf9206b69de)
       prismjs: 1.30.0
       vuepress: 2.0.0-rc.31(@vue/compiler-sfc@3.5.45)(@vuepress/bundler-vite@2.0.0-rc.32(@types/markdown-it@14.2.0)(@types/node@22.20.5)(@vue/compiler-sfc@3.5.45)(esbuild@0.28.2)(rollup@4.52.4)(sass@1.105.1)(supports-color@7.2.0)(terser@5.26.0)(typescript@5.9.3)(yaml@2.9.1))(esbuild@0.28.2)(rolldown@1.2.13)(rollup@4.52.4)(supports-color@7.2.0)(typescript@5.9.3)(vite@8.3.8(@types/node@22.20.5)(esbuild@0.28.2)(sass@1.105.1)(terser@5.26.0)(yaml@2.9.1))(vue@3.5.45(typescript@5.9.3))
     transitivePeerDependencies:
